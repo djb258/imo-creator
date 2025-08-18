@@ -3,11 +3,5 @@
     "api/llm.ts": {
       "runtime": "edge"
     }
-  },
-  "env": {
-    "ANTHROPIC_API_KEY": "@anthropic-api-key",
-    "OPENAI_API_KEY": "@openai-api-key", 
-    "LLM_PROVIDER": "@llm-provider",
-    "ALLOW_ORIGIN": "@allow-origin"
   }
 }

@@ -49,9 +49,12 @@ uvicorn src.server.main:app --port 7002 --reload
 ```
 
 **Production (Vercel):**
-- **Can deploy without API keys** - app runs normally with copy-to-clipboard fallback
-- **Add API keys later** in Vercel Dashboard → Project Settings → Environment Variables
-- Configure `ALLOW_ORIGIN` for CORS security
+- **Deploy immediately** - no API keys required, app works with copy-to-clipboard fallback
+- **Add API keys later** in Vercel Dashboard → Project Settings → Environment Variables:
+  - `ANTHROPIC_API_KEY` = `sk-ant-your-key` (optional)
+  - `OPENAI_API_KEY` = `sk-your-key` (optional) 
+  - `LLM_DEFAULT_PROVIDER` = `openai` or `anthropic` (optional)
+  - `ALLOW_ORIGIN` = `https://your-domain.vercel.app` (optional, for CORS)
 - LLM Settings panel shows real-time key status
 
 **Request Format:**
