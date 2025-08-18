@@ -5,20 +5,96 @@ const SLUG = new URL(location.href).searchParams.get('slug') || 'example';
 // LLM endpoint configuration
 const LLM_URL = new URLSearchParams(location.search).get('llm') || '/api/llm';
 
-// LLM API function
-async function callLLM({system, prompt, json = false, model}) {
+// LLM Settings state
+let llmSettings = {
+    provider: 'auto',
+    model: '',
+    expectJson: true
+};
+
+// Initialize LLM Settings UI
+function initLLMSettings() {
+    // Create LLM Settings panel HTML
+    const settingsHTML = `
+        <div id="llm-settings" style="
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            background: white; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 12px; 
+            font-size: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 220px;
+        ">
+            <div style="font-weight: bold; margin-bottom: 8px; color: #333;">LLM Settings</div>
+            <div style="margin-bottom: 6px;">
+                <label>Provider:</label>
+                <select id="llm-provider" style="margin-left: 8px; font-size: 11px;">
+                    <option value="auto">Auto</option>
+                    <option value="anthropic">Anthropic</option>
+                    <option value="openai">OpenAI</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 6px;">
+                <label>Model:</label>
+                <input id="llm-model" type="text" placeholder="Optional" style="margin-left: 8px; width: 120px; font-size: 11px;">
+            </div>
+            <div style="margin-bottom: 8px;">
+                <label>
+                    <input id="llm-expect-json" type="checkbox" checked style="margin-right: 4px;">
+                    Expect JSON
+                </label>
+            </div>
+            <div style="font-size: 10px; color: #666; border-top: 1px solid #eee; padding-top: 6px;">
+                Endpoint: <code style="background: #f5f5f5; padding: 1px 3px; border-radius: 2px;">${LLM_URL}</code>
+            </div>
+        </div>
+    `;
+    
+    // Add to page if not already present
+    if (!document.getElementById('llm-settings')) {
+        document.body.insertAdjacentHTML('beforeend', settingsHTML);
+        
+        // Bind event listeners
+        document.getElementById('llm-provider').addEventListener('change', (e) => {
+            llmSettings.provider = e.target.value;
+        });
+        
+        document.getElementById('llm-model').addEventListener('input', (e) => {
+            llmSettings.model = e.target.value;
+        });
+        
+        document.getElementById('llm-expect-json').addEventListener('change', (e) => {
+            llmSettings.expectJson = e.target.checked;
+        });
+    }
+}
+
+// LLM API function with settings support
+async function callLLM({system, prompt, json, provider, model}) {
     try {
+        // Use explicit parameters or fall back to UI settings
+        const finalJson = json !== undefined ? json : llmSettings.expectJson;
+        const finalProvider = provider && provider !== 'auto' ? provider : (llmSettings.provider !== 'auto' ? llmSettings.provider : undefined);
+        const finalModel = model || llmSettings.model || undefined;
+        
         const requestBody = {
             prompt,
-            json,
+            json: finalJson,
             max_tokens: 1024
         };
         
         if (system) {
             requestBody.system = system;
         }
-        if (model) {
-            requestBody.model = model;
+        if (finalProvider) {
+            requestBody.provider = finalProvider;
+        }
+        if (finalModel) {
+            requestBody.model = finalModel;
         }
         
         const response = await fetch(LLM_URL, {
@@ -44,8 +120,8 @@ async function callLLM({system, prompt, json = false, model}) {
         console.warn('LLM endpoint failed:', error.message);
         // Fallback to copy-to-clipboard
         const fallbackPrompt = system ? `${system}\n\n${prompt}` : prompt;
-        navigator.clipboard.writeText(fallbackPrompt);
-        alert('LLM endpoint unavailable. Prompt copied to clipboard instead.');
+        await navigator.clipboard.writeText(fallbackPrompt);
+        alert('LLM unavailable — prompt copied to clipboard. ' + (error?.message || ''));
         return null;
     }
 }
@@ -72,6 +148,7 @@ async function loadData() {
 
     updateUI();
     loadMermaidDiagram();
+    initLLMSettings();
 }
 
 function parseYAML(text) {
@@ -506,7 +583,7 @@ Return only valid JSON.`;
             const currentFields = JSON.parse(editor.value || '{}');
             const mergedFields = { ...currentFields, ...responseData };
             editor.value = JSON.stringify(mergedFields, null, 2);
-            alert('LLM response merged into editor! Review and save when ready.');
+            alert(`LLM response from ${result.provider} (${result.model}) merged into editor! Review and save when ready.`);
         } catch (e) {
             console.warn('Failed to parse LLM response:', e);
             alert('LLM responded but format was unexpected. Check console for details.');
@@ -819,7 +896,7 @@ async function draftFromLLMMiddle() {
             const currentFields = JSON.parse(editor.value || '{}');
             const mergedFields = { ...currentFields, ...responseData };
             editor.value = JSON.stringify(mergedFields, null, 2);
-            alert('LLM response merged into editor! Review and save when ready.');
+            alert(`LLM response from ${result.provider} (${result.model}) merged into editor! Review and save when ready.`);
         } catch (e) {
             console.warn('Failed to parse LLM response:', e);
             alert('LLM responded but format was unexpected. Check console for details.');
@@ -1079,7 +1156,7 @@ async function draftFromLLMOutput() {
             const currentFields = JSON.parse(editor.value || '{}');
             const mergedFields = { ...currentFields, ...responseData };
             editor.value = JSON.stringify(mergedFields, null, 2);
-            alert('LLM response merged into editor! Review and save when ready.');
+            alert(`LLM response from ${result.provider} (${result.model}) merged into editor! Review and save when ready.`);
         } catch (e) {
             console.warn('Failed to parse LLM response:', e);
             alert('LLM responded but format was unexpected. Check console for details.');

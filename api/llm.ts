@@ -1,10 +1,11 @@
 export const runtime = 'edge';
 
 interface LLMRequest {
+  provider?: 'anthropic' | 'openai';
+  model?: string;
   system?: string;
   prompt: string;
   json?: boolean;
-  model?: string;
   max_tokens?: number;
 }
 
@@ -36,7 +37,7 @@ export default async function handler(request: Request): Promise<Response> {
 
   try {
     const body: LLMRequest = await request.json();
-    const { system, prompt, json = false, model, max_tokens = 1024 } = body;
+    const { provider: requestedProvider, model, system, prompt, json = false, max_tokens = 1024 } = body;
 
     if (!prompt) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {
@@ -45,23 +46,69 @@ export default async function handler(request: Request): Promise<Response> {
       });
     }
 
-    // Determine provider
+    // Provider selection algorithm
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
     const openaiKey = process.env.OPENAI_API_KEY;
-    const preferredProvider = process.env.LLM_PROVIDER || 'anthropic';
+    const defaultProvider = process.env.LLM_DEFAULT_PROVIDER || 'openai';
     
     let provider: string;
-    if (preferredProvider === 'openai' && openaiKey) {
-      provider = 'openai';
-    } else if (preferredProvider === 'anthropic' && anthropicKey) {
+    
+    // 1. If provider explicitly requested
+    if (requestedProvider) {
+      provider = requestedProvider;
+      if (provider === 'anthropic' && !anthropicKey) {
+        return new Response(JSON.stringify({ error: 'Anthropic API key not configured' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      if (provider === 'openai' && !openaiKey) {
+        return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+    // 2. Infer from model name
+    else if (model) {
+      if (model.toLowerCase().includes('claude')) {
+        provider = 'anthropic';
+      } else if (model.toLowerCase().includes('gpt') || model.toLowerCase().startsWith('o')) {
+        provider = 'openai';
+      } else {
+        provider = defaultProvider;
+      }
+    }
+    // 3. Use default provider
+    else if (defaultProvider === 'anthropic' && anthropicKey) {
       provider = 'anthropic';
-    } else if (anthropicKey) {
-      provider = 'anthropic';
-    } else if (openaiKey) {
+    } else if (defaultProvider === 'openai' && openaiKey) {
       provider = 'openai';
-    } else {
-      return new Response(JSON.stringify({ error: 'No API key configured' }), {
-        status: 502,
+    }
+    // 4. Use whichever single key is available
+    else if (anthropicKey && !openaiKey) {
+      provider = 'anthropic';
+    } else if (openaiKey && !anthropicKey) {
+      provider = 'openai';
+    }
+    // 5. Error: no provider available
+    else {
+      return new Response(JSON.stringify({ error: 'No provider/key available' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    // Validate selected provider has key
+    if (provider === 'anthropic' && !anthropicKey) {
+      return new Response(JSON.stringify({ error: 'Anthropic API key not configured' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    if (provider === 'openai' && !openaiKey) {
+      return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
+        status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -148,13 +195,16 @@ export default async function handler(request: Request): Promise<Response> {
       const defaultModel = 'gpt-4o-mini';
       const openaiModel = model || defaultModel;
       
+      const messages: any[] = [];
+      if (system) {
+        messages.push({ role: 'system', content: system });
+      }
+      messages.push({ role: 'user', content: prompt });
+      
       const openaiBody: any = {
         model: openaiModel,
         max_tokens,
-        messages: [
-          ...(system ? [{ role: 'system', content: system }] : []),
-          { role: 'user', content: prompt },
-        ],
+        messages,
       };
       
       if (json) {
@@ -162,9 +212,9 @@ export default async function handler(request: Request): Promise<Response> {
         // Ensure JSON instruction in system message
         const jsonInstruction = 'You must respond with valid JSON only.';
         if (system) {
-          openaiBody.messages[0].content += ' ' + jsonInstruction;
+          messages[0].content += ' ' + jsonInstruction;
         } else {
-          openaiBody.messages.unshift({ role: 'system', content: jsonInstruction });
+          messages.unshift({ role: 'system', content: jsonInstruction });
         }
       }
 

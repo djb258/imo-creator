@@ -29,13 +29,16 @@ uvicorn src.server.main:app --port 7002 --reload
 
 ## LLM Endpoint & Env
 
-The UI supports LLM-assisted prompt generation with dual deployment:
+The UI supports LLM-assisted prompt generation with **concurrent Anthropic and OpenAI support**:
 
 **Local Development:**
 ```bash
 # Copy and configure environment
 cp .env.example .env
-# Add your API key: ANTHROPIC_API_KEY=sk-ant-xxx or OPENAI_API_KEY=sk-xxx
+# Add BOTH API keys for full functionality:
+# ANTHROPIC_API_KEY=sk-ant-xxx
+# OPENAI_API_KEY=sk-xxx
+# LLM_DEFAULT_PROVIDER=openai
 
 # Run with LLM support
 uvicorn src.server.main:app --port 7002 --reload
@@ -45,9 +48,28 @@ uvicorn src.server.main:app --port 7002 --reload
 ```
 
 **Production (Vercel):**
-- Set environment variables in Vercel dashboard
+- Set environment variables in Vercel dashboard (both providers supported)
 - Deploy automatically calls `/api/llm` serverless function
 - Configure `ALLOW_ORIGIN` for CORS security
+
+**Request Format:**
+```json
+{
+  "provider": "anthropic" | "openai",     // optional: auto-select if omitted
+  "model": "claude-3-5-sonnet-20240620",  // optional: provider-specific model
+  "system": "You are a helpful assistant", // optional
+  "prompt": "Generate a JSON schema",     // required
+  "json": true,                          // optional: expect JSON response
+  "max_tokens": 1024                     // optional
+}
+```
+
+**Provider Selection Algorithm:**
+1. If `provider` specified → use it (error if API key missing)
+2. Else if `model` starts with "claude" → anthropic, "gpt"/"o" → openai  
+3. Else use `LLM_DEFAULT_PROVIDER` (error if key missing)
+4. Else use whichever single API key is available
+5. Else error: no provider/key available
 
 **Fallback:** If LLM endpoint unavailable, buttons fall back to copy-to-clipboard prompts.
 

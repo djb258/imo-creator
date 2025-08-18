@@ -119,34 +119,59 @@ async def generate_visuals(slug: str):
 
 @app.post("/llm")
 async def llm_endpoint(request: Request):
-    """LLM endpoint mirroring Vercel function"""
+    """LLM endpoint mirroring Vercel function with concurrent provider support"""
     try:
         body = await request.json()
         
+        requested_provider = body.get("provider")
+        model = body.get("model")
         system = body.get("system")
         prompt = body.get("prompt")
         json_mode = body.get("json", False)
-        model = body.get("model")
         max_tokens = body.get("max_tokens", 1024)
         
         if not prompt:
             return JSONResponse({"error": "Prompt is required"}, status_code=400)
         
-        # Determine provider
+        # Provider selection algorithm
         anthropic_key = os.getenv("ANTHROPIC_API_KEY")
         openai_key = os.getenv("OPENAI_API_KEY")
-        preferred_provider = os.getenv("LLM_PROVIDER", "anthropic")
+        default_provider = os.getenv("LLM_DEFAULT_PROVIDER", "openai")
         
-        if preferred_provider == "openai" and openai_key:
-            provider = "openai"
-        elif preferred_provider == "anthropic" and anthropic_key:
+        # 1. If provider explicitly requested
+        if requested_provider:
+            provider = requested_provider
+            if provider == "anthropic" and not anthropic_key:
+                return JSONResponse({"error": "Anthropic API key not configured"}, status_code=400)
+            if provider == "openai" and not openai_key:
+                return JSONResponse({"error": "OpenAI API key not configured"}, status_code=400)
+        # 2. Infer from model name
+        elif model:
+            if "claude" in model.lower():
+                provider = "anthropic"
+            elif "gpt" in model.lower() or model.lower().startswith("o"):
+                provider = "openai"
+            else:
+                provider = default_provider
+        # 3. Use default provider
+        elif default_provider == "anthropic" and anthropic_key:
             provider = "anthropic"
-        elif anthropic_key:
-            provider = "anthropic"
-        elif openai_key:
+        elif default_provider == "openai" and openai_key:
             provider = "openai"
+        # 4. Use whichever single key is available
+        elif anthropic_key and not openai_key:
+            provider = "anthropic"
+        elif openai_key and not anthropic_key:
+            provider = "openai"
+        # 5. Error: no provider available
         else:
-            return JSONResponse({"error": "No API key configured"}, status_code=502)
+            return JSONResponse({"error": "No provider/key available"}, status_code=400)
+        
+        # Validate selected provider has key
+        if provider == "anthropic" and not anthropic_key:
+            return JSONResponse({"error": "Anthropic API key not configured"}, status_code=400)
+        if provider == "openai" and not openai_key:
+            return JSONResponse({"error": "OpenAI API key not configured"}, status_code=400)
         
         if provider == "anthropic":
             default_model = "claude-3-5-sonnet-20240620"
