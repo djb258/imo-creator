@@ -53,6 +53,16 @@
       "label": "api: run",
       "type": "shell",
       "command": "uvicorn src.server.main:app --port 7002 --reload"
+    },
+    {
+      "label": "api: run with LLM",
+      "type": "shell", 
+      "command": "uvicorn src.server.main:app --port 7002 --reload --env-file .env"
+    },
+    {
+      "label": "vercel: dev",
+      "type": "shell",
+      "command": "vercel dev"
     }
   ],
   "inputs": [
