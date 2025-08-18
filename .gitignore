@@ -1,14 +1,25 @@
-.venv/
+# Python
 __pycache__/
-.pytest_cache/
-.DS_Store
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
+*.py[cod]
+*.class
+
+# Virtual Environment
+.venv/
 venv/
 ENV/
-build/
-dist/
-*.egg-info/
+env/
+
+# Environment Variables
+.env
+
+# Vercel
+.vercel/
+public/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
