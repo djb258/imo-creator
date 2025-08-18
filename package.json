@@ -1,0 +1,17 @@
+{
+  "name": "imo-creator",
+  "version": "1.0.0",
+  "description": "IMO Creator Blueprint App with LLM-assisted prompt generation",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "echo 'Static files served by Vercel'"
+  },
+  "keywords": ["blueprint", "automation", "llm", "anthropic", "openai"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
