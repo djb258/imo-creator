@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/llm.ts": {
-      "runtime": "edge"
-    }
-  }
-}
