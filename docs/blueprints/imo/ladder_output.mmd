@@ -1,0 +1,12 @@
+flowchart TD
+    classDef done fill:#22c55e,stroke:#15803d,color:#fff;
+    classDef wip fill:#f59e0b,stroke:#b45309,color:#111;
+    classDef todo fill:#ef4444,stroke:#7f1d1d,color:#fff;
+
+    output_frame["frame [frame]<br/>Who gets what (and why now)<br/>(1 fields)"]:::todo
+    output_destinations["destinations [what]<br/>Destinations & consumers<br/>(3 fields)"]:::todo
+    output_frame --> output_destinations
+    output_promotion["promotion [contract]<br/>Output schema, promotion gate, audit<br/>(3 fields)"]:::wip
+    output_destinations --> output_promotion
+    output_publish["publish [steps]<br/>UPSERT, notifications, retention, events<br/>(4 fields)"]:::done
+    output_promotion --> output_publish

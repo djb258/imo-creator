@@ -1,0 +1,148 @@
+{
+  "slug": "imo",
+  "overall": {
+    "done": 2,
+    "total": 15,
+    "percent": 13
+  },
+  "buckets": {
+    "input": {
+      "one_liner": "todo",
+      "sources": "wip",
+      "contract": "todo",
+      "intake_steps": "todo",
+      "fixtures": "todo"
+    },
+    "middle": {
+      "frame": "todo",
+      "state_machine": "todo",
+      "gates": "todo",
+      "transform": "todo",
+      "tests": "todo",
+      "staging": "done"
+    },
+    "output": {
+      "frame": "todo",
+      "destinations": "todo",
+      "promotion": "wip",
+      "publish": "done"
+    }
+  },
+  "todo": {
+    "input": [
+      {
+        "key": "one_liner",
+        "title": "What do we accept/reject?",
+        "status": "todo",
+        "missing": [
+          "one_liner"
+        ]
+      },
+      {
+        "key": "sources",
+        "title": "Source strategy, triggers, prechecks",
+        "status": "wip",
+        "missing": [
+          "sources"
+        ]
+      },
+      {
+        "key": "contract",
+        "title": "Input schema & idempotency",
+        "status": "todo",
+        "missing": [
+          "schema_ref",
+          "idempotency_key"
+        ]
+      },
+      {
+        "key": "intake_steps",
+        "title": "Intake steps & params",
+        "status": "todo",
+        "missing": [
+          "steps"
+        ]
+      },
+      {
+        "key": "fixtures",
+        "title": "Examples & acceptance",
+        "status": "todo",
+        "missing": [
+          "fixtures",
+          "asserts"
+        ]
+      }
+    ],
+    "middle": [
+      {
+        "key": "frame",
+        "title": "What value we add",
+        "status": "todo",
+        "missing": [
+          "one_liner"
+        ]
+      },
+      {
+        "key": "state_machine",
+        "title": "States & owners",
+        "status": "todo",
+        "missing": [
+          "states",
+          "start",
+          "terminal"
+        ]
+      },
+      {
+        "key": "gates",
+        "title": "Validation gates & invariants (HEIR-capable)",
+        "status": "todo",
+        "missing": [
+          "gates"
+        ]
+      },
+      {
+        "key": "transform",
+        "title": "Transform / enrich (idempotent)",
+        "status": "todo",
+        "missing": [
+          "steps"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Fixtures & simulator",
+        "status": "todo",
+        "missing": [
+          "fixtures",
+          "asserts"
+        ]
+      }
+    ],
+    "output": [
+      {
+        "key": "frame",
+        "title": "Who gets what (and why now)",
+        "status": "todo",
+        "missing": [
+          "one_liner"
+        ]
+      },
+      {
+        "key": "destinations",
+        "title": "Destinations & consumers",
+        "status": "todo",
+        "missing": [
+          "destinations"
+        ]
+      },
+      {
+        "key": "promotion",
+        "title": "Output schema, promotion gate, audit",
+        "status": "wip",
+        "missing": [
+          "schema_ref"
+        ]
+      }
+    ]
+  }
+}

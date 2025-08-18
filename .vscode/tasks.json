@@ -1,0 +1,66 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "bp: score example",
+      "type": "shell",
+      "command": "python tools/blueprint_score.py example"
+    },
+    {
+      "label": "bp: visuals example",
+      "type": "shell",
+      "command": "python tools/blueprint_visual.py example"
+    },
+    {
+      "label": "bp: score ${input:slug}",
+      "type": "shell",
+      "command": "python tools/blueprint_score.py ${input:slug}"
+    },
+    {
+      "label": "bp: visuals ${input:slug}",
+      "type": "shell",
+      "command": "python tools/blueprint_visual.py ${input:slug}"
+    },
+    {
+      "label": "ui: overview",
+      "type": "shell",
+      "command": "echo docs/blueprints/ui/overview.html"
+    },
+    {
+      "label": "ui: input",
+      "type": "shell",
+      "command": "echo docs/blueprints/ui/input.html"
+    },
+    {
+      "label": "ui: middle",
+      "type": "shell",
+      "command": "echo docs/blueprints/ui/middle.html"
+    },
+    {
+      "label": "ui: output",
+      "type": "shell",
+      "command": "echo docs/blueprints/ui/output.html"
+    },
+    {
+      "label": "sim: run ${input:slug}",
+      "type": "shell",
+      "command": "python tools/simflow/run.py --slug ${input:slug} --runs 2 --reset",
+      "options": {
+        "env": {}
+      }
+    },
+    {
+      "label": "api: run",
+      "type": "shell",
+      "command": "uvicorn src.server.main:app --port 7002 --reload"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "slug",
+      "type": "promptString",
+      "description": "Blueprint slug name",
+      "default": "example"
+    }
+  ]
+}

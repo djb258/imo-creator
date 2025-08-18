@@ -1,0 +1,228 @@
+process: example
+version: 1.0.0
+mission:
+  north_star: "Prove the Blueprint app shell end-to-end."
+  success_metrics: 
+    - "Plan→Scaffold under 10m"
+    - "Sim passes idempotency"
+    - "Publish dry-run ok"
+  constraints: 
+    - "No external DB yet"
+    - "Static UI"
+  risks: []
+universals:
+  triggers: []
+  gates: []
+  idempotency: 
+    key: null
+  retries: 
+    max: 0
+    backoff: none
+    timeout_ms: null
+  observe: 
+    events: []
+    metrics: []
+    redact: []
+  security: 
+    secrets: []
+    scopes: []
+  data_policy: 
+    classification: internal
+    retention: P30D
+  limits: 
+    qps: null
+    budget_usd: null
+    slo_ms: null
+  errors: 
+    on_fail: retry
+  human: 
+    approval_required: false
+buckets:
+  input:
+    stages:
+      - key: one_liner
+        title: "What do we accept/reject?"
+        kind: frame
+        fields: 
+          one_liner: "Accept roster CSV; reject malformed/oversized"
+        required_fields: 
+          - "one_liner"
+      - key: sources
+        title: "Sources, triggers, prechecks"
+        kind: what
+        fields: 
+          sources: 
+            - "CSV upload"
+          triggers: 
+            - "manual"
+          prechecks: 
+            - "size<50MB"
+          trust_boundary: "Internet→Garage"
+        required_fields: 
+          - "sources"
+      - key: contract
+        title: "Input schema & idempotency"
+        kind: contract
+        fields: 
+          schema_ref: "docs/schemas/example_input.schema.json"
+          idempotency_key: "{file_sha256}"
+        required_fields: 
+          - "schema_ref"
+          - "idempotency_key"
+        milestones: 
+          seeds_process_id: true
+      - key: intake_steps
+        title: "Intake steps & params"
+        kind: steps
+        fields: 
+          steps: 
+            - "ingest"
+            - "validate_shape"
+          retries: 
+            max: 3
+            backoff: "exponential"
+          timeout_ms: 60000
+          limits: 
+            qps: null
+        required_fields: 
+          - "steps"
+      - key: fixtures
+        title: "Examples & acceptance"
+        kind: tests
+        fields: 
+          fixtures: 
+            - "good.csv"
+            - "bad.csv"
+          asserts: 
+            - "accepted"
+            - "rejected"
+        required_fields: 
+          - "fixtures"
+          - "asserts"
+  middle:
+    stages:
+      - key: frame
+        title: "What value we add"
+        kind: frame
+        fields: 
+          one_liner: "Normalize + validate to canonical shape"
+        required_fields: 
+          - "one_liner"
+      - key: state_machine
+        title: "States & owners"
+        kind: what
+        fields: 
+          states: 
+            - "transform"
+            - "validate"
+          start: "transform"
+          terminal: 
+            - "validate"
+          owners: 
+            - "backend"
+        required_fields: 
+          - "states"
+          - "start"
+          - "terminal"
+      - key: gates
+        title: "Validation gates & invariants"
+        kind: contract
+        fields: 
+          gates: 
+            - "email_valid"
+          invariants: []
+          approvals: []
+        required_fields: 
+          - "gates"
+      - key: transform
+        title: "Transform / enrich (idempotent)"
+        kind: steps
+        fields: 
+          steps: 
+            - "map_columns"
+            - "normalize_email"
+          lookups: []
+          retries: 
+            max: 3
+            backoff: "exponential"
+          timeout_ms: 120000
+          budget_usd: 5
+        required_fields: 
+          - "steps"
+      - key: tests
+        title: "Fixtures & simulator"
+        kind: tests
+        fields: 
+          fixtures: 
+            - "happy"
+            - "negative"
+          asserts: 
+            - "pass"
+            - "fail"
+        required_fields: 
+          - "fixtures"
+          - "asserts"
+      - key: staging
+        title: "Stage to working store + events"
+        kind: wire
+        fields: 
+          working_store: "neon (later)"
+          write_kind: "upsert"
+          document_keys: 
+            - "natural_key"
+          events: 
+            - "middle.step.start"
+            - "middle.step.done"
+            - "middle.step.error"
+        required_fields: 
+          - "working_store"
+          - "events"
+  output:
+    stages:
+      - key: frame
+        title: "Who gets what (and why now)"
+        kind: frame
+        fields: 
+          one_liner: "Publish clean roster to dashboard + file export"
+        required_fields: 
+          - "one_liner"
+      - key: destinations
+        title: "Destinations & consumers"
+        kind: what
+        fields: 
+          destinations: 
+            - "dashboard:view roster"
+          consumers: 
+            - "Ops"
+          side_effects: []
+        required_fields: 
+          - "destinations"
+      - key: promotion
+        title: "Output schema, promotion gate, audit"
+        kind: contract
+        fields: 
+          schema_ref: "docs/schemas/example_output.schema.json"
+          promotion_gate: "validator.status=='pass'"
+          audit: 
+            - "run_id"
+            - "hash"
+            - "actor"
+        required_fields: 
+          - "schema_ref"
+          - "promotion_gate"
+          - "audit"
+        milestones: 
+          sets_promotion_gate: true
+      - key: publish
+        title: "UPSERT, notifications, retention, events"
+        kind: steps
+        fields: 
+          upsert_rule: "ON CONFLICT (natural_key) DO UPDATE"
+          notifications: []
+          retention: "P30D"
+          events: 
+            - "output.promoted"
+            - "notify.sent"
+        required_fields: 
+          - "upsert_rule"
+          - "events"
