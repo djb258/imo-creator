@@ -142,9 +142,17 @@ async def llm_endpoint(request: Request):
         if requested_provider:
             provider = requested_provider
             if provider == "anthropic" and not anthropic_key:
-                return JSONResponse({"error": "Anthropic API key not configured"}, status_code=400)
+                return JSONResponse({
+                    "error": "Anthropic API key not configured",
+                    "help": "Add ANTHROPIC_API_KEY=sk-ant-xxx to your .env file",
+                    "provider": "anthropic"
+                }, status_code=502)
             if provider == "openai" and not openai_key:
-                return JSONResponse({"error": "OpenAI API key not configured"}, status_code=400)
+                return JSONResponse({
+                    "error": "OpenAI API key not configured",
+                    "help": "Add OPENAI_API_KEY=sk-xxx to your .env file", 
+                    "provider": "openai"
+                }, status_code=502)
         # 2. Infer from model name
         elif model:
             if "claude" in model.lower():
@@ -163,15 +171,26 @@ async def llm_endpoint(request: Request):
             provider = "anthropic"
         elif openai_key and not anthropic_key:
             provider = "openai"
-        # 5. Error: no provider available
+        # 5. No provider available - graceful degradation
         else:
-            return JSONResponse({"error": "No provider/key available"}, status_code=400)
+            return JSONResponse({
+                "error": "No API keys configured yet. Add ANTHROPIC_API_KEY and/or OPENAI_API_KEY to .env file.",
+                "help": "Copy .env.example to .env and add your API keys"
+            }, status_code=502)
         
-        # Validate selected provider has key
+        # Validate selected provider has key - with helpful messages
         if provider == "anthropic" and not anthropic_key:
-            return JSONResponse({"error": "Anthropic API key not configured"}, status_code=400)
+            return JSONResponse({
+                "error": "Anthropic API key not configured",
+                "help": "Add ANTHROPIC_API_KEY=sk-ant-xxx to your .env file",
+                "provider": "anthropic"
+            }, status_code=502)
         if provider == "openai" and not openai_key:
-            return JSONResponse({"error": "OpenAI API key not configured"}, status_code=400)
+            return JSONResponse({
+                "error": "OpenAI API key not configured", 
+                "help": "Add OPENAI_API_KEY=sk-xxx to your .env file",
+                "provider": "openai"
+            }, status_code=502)
         
         if provider == "anthropic":
             default_model = "claude-3-5-sonnet-20240620"

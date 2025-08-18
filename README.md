@@ -33,14 +33,15 @@ The UI supports LLM-assisted prompt generation with **concurrent Anthropic and O
 
 **Local Development:**
 ```bash
-# Copy and configure environment
+# Copy environment template
 cp .env.example .env
-# Add BOTH API keys for full functionality:
+
+# (Optional) Add API keys for full functionality:
 # ANTHROPIC_API_KEY=sk-ant-xxx
 # OPENAI_API_KEY=sk-xxx
 # LLM_DEFAULT_PROVIDER=openai
 
-# Run with LLM support
+# Run server (works without API keys, shows helpful messages)
 uvicorn src.server.main:app --port 7002 --reload
 
 # Use LLM endpoint
@@ -48,9 +49,10 @@ uvicorn src.server.main:app --port 7002 --reload
 ```
 
 **Production (Vercel):**
-- Set environment variables in Vercel dashboard (both providers supported)
-- Deploy automatically calls `/api/llm` serverless function
+- **Can deploy without API keys** - app runs normally with copy-to-clipboard fallback
+- **Add API keys later** in Vercel Dashboard → Project Settings → Environment Variables
 - Configure `ALLOW_ORIGIN` for CORS security
+- LLM Settings panel shows real-time key status
 
 **Request Format:**
 ```json

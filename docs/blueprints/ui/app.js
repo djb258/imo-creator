@@ -50,6 +50,9 @@ function initLLMSettings() {
             </div>
             <div style="font-size: 10px; color: #666; border-top: 1px solid #eee; padding-top: 6px;">
                 Endpoint: <code style="background: #f5f5f5; padding: 1px 3px; border-radius: 2px;">${LLM_URL}</code>
+                <div id="llm-status" style="margin-top: 4px; color: #999;">
+                    <span>Status: </span><span id="llm-status-text">Checking...</span>
+                </div>
             </div>
         </div>
     `;
@@ -70,6 +73,39 @@ function initLLMSettings() {
         document.getElementById('llm-expect-json').addEventListener('change', (e) => {
             llmSettings.expectJson = e.target.checked;
         });
+        
+        // Check LLM endpoint status
+        checkLLMStatus();
+    }
+}
+
+// Check if LLM endpoint is available and what providers are configured
+async function checkLLMStatus() {
+    try {
+        const response = await fetch(LLM_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: 'test' })
+        });
+        
+        const result = await response.json();
+        const statusEl = document.getElementById('llm-status-text');
+        
+        if (response.ok) {
+            statusEl.textContent = `Ready (${result.provider})`;
+            statusEl.style.color = '#28a745';
+        } else if (result.error && (result.error.includes('API key not configured') || result.error.includes('No API keys configured'))) {
+            statusEl.textContent = 'No API keys configured';
+            statusEl.style.color = '#ffc107';
+            statusEl.title = result.help || 'Add API keys to enable LLM assistance';
+        } else {
+            statusEl.textContent = 'Error: ' + result.error;
+            statusEl.style.color = '#dc3545';
+        }
+    } catch (error) {
+        const statusEl = document.getElementById('llm-status-text');
+        statusEl.textContent = 'Endpoint unavailable';
+        statusEl.style.color = '#dc3545';
     }
 }
 
@@ -118,10 +154,18 @@ async function callLLM({system, prompt, json, provider, model}) {
         return result;
     } catch (error) {
         console.warn('LLM endpoint failed:', error.message);
-        // Fallback to copy-to-clipboard
+        // Fallback to copy-to-clipboard with helpful message
         const fallbackPrompt = system ? `${system}\n\n${prompt}` : prompt;
         await navigator.clipboard.writeText(fallbackPrompt);
-        alert('LLM unavailable — prompt copied to clipboard. ' + (error?.message || ''));
+        
+        // Show helpful message based on error
+        let message = 'LLM unavailable — prompt copied to clipboard. ';
+        if (error.message.includes('API key not configured') || error.message.includes('No API keys configured')) {
+            message += 'Add API keys to Vercel environment variables to enable LLM assistance.';
+        } else {
+            message += error?.message || '';
+        }
+        alert(message);
         return null;
     }
 }

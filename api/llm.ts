@@ -57,14 +57,22 @@ export default async function handler(request: Request): Promise<Response> {
     if (requestedProvider) {
       provider = requestedProvider;
       if (provider === 'anthropic' && !anthropicKey) {
-        return new Response(JSON.stringify({ error: 'Anthropic API key not configured' }), {
-          status: 400,
+        return new Response(JSON.stringify({ 
+          error: 'Anthropic API key not configured',
+          help: 'Add ANTHROPIC_API_KEY=sk-ant-xxx to Vercel environment variables',
+          provider: 'anthropic'
+        }), {
+          status: 502,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
       if (provider === 'openai' && !openaiKey) {
-        return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
-          status: 400,
+        return new Response(JSON.stringify({ 
+          error: 'OpenAI API key not configured',
+          help: 'Add OPENAI_API_KEY=sk-xxx to Vercel environment variables',
+          provider: 'openai'
+        }), {
+          status: 502,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
@@ -91,24 +99,35 @@ export default async function handler(request: Request): Promise<Response> {
     } else if (openaiKey && !anthropicKey) {
       provider = 'openai';
     }
-    // 5. Error: no provider available
+    // 5. No provider available - graceful degradation
     else {
-      return new Response(JSON.stringify({ error: 'No provider/key available' }), {
-        status: 400,
+      return new Response(JSON.stringify({ 
+        error: 'No API keys configured yet. Add ANTHROPIC_API_KEY and/or OPENAI_API_KEY to Vercel environment variables.',
+        help: 'Go to Vercel Dashboard → Project Settings → Environment Variables'
+      }), {
+        status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
     
-    // Validate selected provider has key
+    // Validate selected provider has key - with helpful messages
     if (provider === 'anthropic' && !anthropicKey) {
-      return new Response(JSON.stringify({ error: 'Anthropic API key not configured' }), {
-        status: 400,
+      return new Response(JSON.stringify({ 
+        error: 'Anthropic API key not configured',
+        help: 'Add ANTHROPIC_API_KEY=sk-ant-xxx to Vercel environment variables',
+        provider: 'anthropic'
+      }), {
+        status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
     if (provider === 'openai' && !openaiKey) {
-      return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
-        status: 400,
+      return new Response(JSON.stringify({ 
+        error: 'OpenAI API key not configured',
+        help: 'Add OPENAI_API_KEY=sk-xxx to Vercel environment variables',
+        provider: 'openai'
+      }), {
+        status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
