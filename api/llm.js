@@ -1,34 +1,29 @@
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(request) {
+export default async function handler(req, res) {
+  // CORS headers
   const corsHeaders = {
     'Access-Control-Allow-Origin': process.env.ALLOW_ORIGIN || '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders });
+  // Set CORS headers
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const body = await request.json();
-    const { provider: requestedProvider, model, system, prompt, json = false, max_tokens = 1024 } = body;
+    const { provider: requestedProvider, model, system, prompt, json = false, max_tokens = 1024 } = req.body;
 
     if (!prompt) {
-      return new Response(JSON.stringify({ error: 'Prompt is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return res.status(400).json({ error: 'Prompt is required' });
     }
 
     // Provider selection algorithm
@@ -42,23 +37,17 @@ export default async function handler(request) {
     if (requestedProvider) {
       provider = requestedProvider;
       if (provider === 'anthropic' && !anthropicKey) {
-        return new Response(JSON.stringify({ 
+        return res.status(502).json({ 
           error: 'Anthropic API key not configured',
           help: 'Add ANTHROPIC_API_KEY=sk-ant-xxx to Vercel environment variables',
           provider: 'anthropic'
-        }), {
-          status: 502,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
       if (provider === 'openai' && !openaiKey) {
-        return new Response(JSON.stringify({ 
+        return res.status(502).json({ 
           error: 'OpenAI API key not configured',
           help: 'Add OPENAI_API_KEY=sk-xxx to Vercel environment variables',
           provider: 'openai'
-        }), {
-          status: 502,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
     }
@@ -86,34 +75,25 @@ export default async function handler(request) {
     }
     // 5. No provider available - graceful degradation
     else {
-      return new Response(JSON.stringify({ 
+      return res.status(502).json({ 
         error: 'No API keys configured yet. Add ANTHROPIC_API_KEY and/or OPENAI_API_KEY to Vercel environment variables.',
         help: 'Go to Vercel Dashboard → Project Settings → Environment Variables'
-      }), {
-        status: 502,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
     
-    // Validate selected provider has key - with helpful messages
+    // Validate selected provider has key
     if (provider === 'anthropic' && !anthropicKey) {
-      return new Response(JSON.stringify({ 
+      return res.status(502).json({ 
         error: 'Anthropic API key not configured',
         help: 'Add ANTHROPIC_API_KEY=sk-ant-xxx to Vercel environment variables',
         provider: 'anthropic'
-      }), {
-        status: 502,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
     if (provider === 'openai' && !openaiKey) {
-      return new Response(JSON.stringify({ 
+      return res.status(502).json({ 
         error: 'OpenAI API key not configured',
         help: 'Add OPENAI_API_KEY=sk-xxx to Vercel environment variables',
         provider: 'openai'
-      }), {
-        status: 502,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -262,18 +242,12 @@ export default async function handler(request) {
       }
     }
 
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json(result);
 
   } catch (error) {
     console.error('LLM API error:', error);
-    return new Response(JSON.stringify({ 
+    return res.status(502).json({ 
       error: error instanceof Error ? error.message : 'Unknown error' 
-    }), {
-      status: 502,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 }
