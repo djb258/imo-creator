@@ -1,23 +1,8 @@
-export const runtime = 'edge';
+export const config = {
+  runtime: 'edge',
+};
 
-interface LLMRequest {
-  provider?: 'anthropic' | 'openai';
-  model?: string;
-  system?: string;
-  prompt: string;
-  json?: boolean;
-  max_tokens?: number;
-}
-
-interface LLMResponse {
-  text?: string;
-  json?: any;
-  model: string;
-  provider: string;
-  error?: string;
-}
-
-export default async function handler(request: Request): Promise<Response> {
+export default async function handler(request) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': process.env.ALLOW_ORIGIN || '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -36,7 +21,7 @@ export default async function handler(request: Request): Promise<Response> {
   }
 
   try {
-    const body: LLMRequest = await request.json();
+    const body = await request.json();
     const { provider: requestedProvider, model, system, prompt, json = false, max_tokens = 1024 } = body;
 
     if (!prompt) {
@@ -51,7 +36,7 @@ export default async function handler(request: Request): Promise<Response> {
     const openaiKey = process.env.OPENAI_API_KEY;
     const defaultProvider = process.env.LLM_DEFAULT_PROVIDER || 'openai';
     
-    let provider: string;
+    let provider;
     
     // 1. If provider explicitly requested
     if (requestedProvider) {
@@ -132,13 +117,13 @@ export default async function handler(request: Request): Promise<Response> {
       });
     }
 
-    let result: LLMResponse;
+    let result;
 
     if (provider === 'anthropic') {
       const defaultModel = 'claude-3-5-sonnet-20240620';
       const anthropicModel = model || defaultModel;
       
-      const anthropicBody: any = {
+      const anthropicBody = {
         model: anthropicModel,
         max_tokens,
         messages: [{ role: 'user', content: prompt }],
@@ -166,7 +151,7 @@ export default async function handler(request: Request): Promise<Response> {
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
-          'x-api-key': anthropicKey!,
+          'x-api-key': anthropicKey,
           'anthropic-version': '2023-06-01',
           'content-type': 'application/json',
         },
@@ -214,13 +199,13 @@ export default async function handler(request: Request): Promise<Response> {
       const defaultModel = 'gpt-4o-mini';
       const openaiModel = model || defaultModel;
       
-      const messages: any[] = [];
+      const messages = [];
       if (system) {
         messages.push({ role: 'system', content: system });
       }
       messages.push({ role: 'user', content: prompt });
       
-      const openaiBody: any = {
+      const openaiBody = {
         model: openaiModel,
         max_tokens,
         messages,
