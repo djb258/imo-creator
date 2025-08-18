@@ -2,6 +2,54 @@ let manifest = null;
 let progress = null;
 const SLUG = new URL(location.href).searchParams.get('slug') || 'example';
 
+// LLM endpoint configuration
+const LLM_URL = new URLSearchParams(location.search).get('llm') || '/api/llm';
+
+// LLM API function
+async function callLLM({system, prompt, json = false, model}) {
+    try {
+        const requestBody = {
+            prompt,
+            json,
+            max_tokens: 1024
+        };
+        
+        if (system) {
+            requestBody.system = system;
+        }
+        if (model) {
+            requestBody.model = model;
+        }
+        
+        const response = await fetch(LLM_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            throw new Error(result.error);
+        }
+        
+        return result;
+    } catch (error) {
+        console.warn('LLM endpoint failed:', error.message);
+        // Fallback to copy-to-clipboard
+        const fallbackPrompt = system ? `${system}\n\n${prompt}` : prompt;
+        navigator.clipboard.writeText(fallbackPrompt);
+        alert('LLM endpoint unavailable. Prompt copied to clipboard instead.');
+        return null;
+    }
+}
+
 async function loadData() {
     try {
         const manifestResponse = await fetch(`../${SLUG}/manifest.yaml`);
@@ -414,7 +462,7 @@ function updateGuidance(stageKey) {
     });
 }
 
-function draftFromLLM() {
+async function draftFromLLM() {
     // Check if we're on middle page
     if (currentMiddleStage) {
         return draftFromLLMMiddle();
@@ -445,8 +493,25 @@ Return only JSON for fields.integrate:
 Return only valid JSON.`;
     }
     
-    navigator.clipboard.writeText(prompt);
-    alert('LLM prompt copied to clipboard! Paste into your LLM, then paste the JSON response back here.');
+    // Try LLM endpoint first, fallback to clipboard
+    const result = await callLLM({
+        prompt,
+        json: true
+    });
+    
+    if (result && (result.json || result.text)) {
+        const editor = document.getElementById('json-editor');
+        try {
+            const responseData = result.json || JSON.parse(result.text);
+            const currentFields = JSON.parse(editor.value || '{}');
+            const mergedFields = { ...currentFields, ...responseData };
+            editor.value = JSON.stringify(mergedFields, null, 2);
+            alert('LLM response merged into editor! Review and save when ready.');
+        } catch (e) {
+            console.warn('Failed to parse LLM response:', e);
+            alert('LLM responded but format was unexpected. Check console for details.');
+        }
+    }
 }
 
 function tightenFields() {
@@ -711,7 +776,7 @@ function updateMiddleGuidance(stageKey) {
     });
 }
 
-function draftFromLLMMiddle() {
+async function draftFromLLMMiddle() {
     if (!currentMiddleStage) return;
     
     const slug = middleManifest?.process || 'imo';
@@ -741,8 +806,25 @@ function draftFromLLMMiddle() {
             prompt = `Generate appropriate fields for ${stageKey} stage (${currentMiddleStage.title}). Return only valid JSON.`;
     }
     
-    navigator.clipboard.writeText(prompt);
-    alert('LLM prompt copied to clipboard! Paste into your LLM, then paste the JSON response back here.');
+    // Try LLM endpoint first, fallback to clipboard
+    const result = await callLLM({
+        prompt,
+        json: true
+    });
+    
+    if (result && (result.json || result.text)) {
+        const editor = document.getElementById('json-editor');
+        try {
+            const responseData = result.json || JSON.parse(result.text);
+            const currentFields = JSON.parse(editor.value || '{}');
+            const mergedFields = { ...currentFields, ...responseData };
+            editor.value = JSON.stringify(mergedFields, null, 2);
+            alert('LLM response merged into editor! Review and save when ready.');
+        } catch (e) {
+            console.warn('Failed to parse LLM response:', e);
+            alert('LLM responded but format was unexpected. Check console for details.');
+        }
+    }
 }
 
 function saveMiddleStage() {
@@ -959,47 +1041,8 @@ function updateOutputGuidance(stageKey) {
     });
 }
 
-function draftFromLLM() {
-    // Check if we're on output page
-    if (currentOutputStage) {
-        return draftFromLLMOutput();
-    }
-    
-    // Check if we're on middle page
-    if (currentMiddleStage) {
-        return draftFromLLMMiddle();
-    }
-    
-    if (!currentStage) return;
-    
-    const mode = currentStage.fields?.mode || 'design';
-    let prompt = '';
-    
-    if (currentStage.key === 'sources' && mode === 'design') {
-        prompt = `Draft a schema_draft and 2 sample_records for ${inputManifest.process} canonical input.
-Return only JSON for fields.design:
-{
-  "schema_draft": { ... },
-  "sample_records": [ ... ]
-}`;
-    } else if (currentStage.key === 'sources' && mode === 'integrate') {
-        prompt = `Propose provider, external_schema_ref, and mapping from external to canonical.
-Return only JSON for fields.integrate:
-{
-  "provider": "...",
-  "external_schema_ref": "...",
-  "mapping": [{"from": "ext.field", "to": "canonical.field"}, ...]
-}`;
-    } else {
-        prompt = `Generate appropriate fields for ${currentStage.key} stage (${currentStage.title}).
-Return only valid JSON.`;
-    }
-    
-    navigator.clipboard.writeText(prompt);
-    alert('LLM prompt copied to clipboard! Paste into your LLM, then paste the JSON response back here.');
-}
 
-function draftFromLLMOutput() {
+async function draftFromLLMOutput() {
     if (!currentOutputStage) return;
     
     const slug = outputManifest?.process || 'imo';
@@ -1023,8 +1066,25 @@ function draftFromLLMOutput() {
             prompt = `Generate appropriate fields for ${stageKey} stage (${currentOutputStage.title}). Return only valid JSON.`;
     }
     
-    navigator.clipboard.writeText(prompt);
-    alert('LLM prompt copied to clipboard! Paste into your LLM, then paste the JSON response back here.');
+    // Try LLM endpoint first, fallback to clipboard
+    const result = await callLLM({
+        prompt,
+        json: true
+    });
+    
+    if (result && (result.json || result.text)) {
+        const editor = document.getElementById('json-editor');
+        try {
+            const responseData = result.json || JSON.parse(result.text);
+            const currentFields = JSON.parse(editor.value || '{}');
+            const mergedFields = { ...currentFields, ...responseData };
+            editor.value = JSON.stringify(mergedFields, null, 2);
+            alert('LLM response merged into editor! Review and save when ready.');
+        } catch (e) {
+            console.warn('Failed to parse LLM response:', e);
+            alert('LLM responded but format was unexpected. Check console for details.');
+        }
+    }
 }
 
 function saveStage() {

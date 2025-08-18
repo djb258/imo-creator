@@ -1,12 +1,26 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import PlainTextResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import yaml
 import json
 import subprocess
 import sys
+import os
+import requests
+from typing import Optional
 
 app = FastAPI(title="Blueprint API")
+
+# CORS configuration
+allow_origin = os.getenv("ALLOW_ORIGIN", "http://localhost:7002")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[allow_origin, "http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE_DIR = Path(__file__).parent.parent.parent
 BLUEPRINTS_DIR = BASE_DIR / "docs" / "blueprints"
@@ -103,10 +117,173 @@ async def generate_visuals(slug: str):
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
+@app.post("/llm")
+async def llm_endpoint(request: Request):
+    """LLM endpoint mirroring Vercel function"""
+    try:
+        body = await request.json()
+        
+        system = body.get("system")
+        prompt = body.get("prompt")
+        json_mode = body.get("json", False)
+        model = body.get("model")
+        max_tokens = body.get("max_tokens", 1024)
+        
+        if not prompt:
+            return JSONResponse({"error": "Prompt is required"}, status_code=400)
+        
+        # Determine provider
+        anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+        openai_key = os.getenv("OPENAI_API_KEY")
+        preferred_provider = os.getenv("LLM_PROVIDER", "anthropic")
+        
+        if preferred_provider == "openai" and openai_key:
+            provider = "openai"
+        elif preferred_provider == "anthropic" and anthropic_key:
+            provider = "anthropic"
+        elif anthropic_key:
+            provider = "anthropic"
+        elif openai_key:
+            provider = "openai"
+        else:
+            return JSONResponse({"error": "No API key configured"}, status_code=502)
+        
+        if provider == "anthropic":
+            default_model = "claude-3-5-sonnet-20240620"
+            anthropic_model = model or default_model
+            
+            anthropic_body = {
+                "model": anthropic_model,
+                "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": prompt}]
+            }
+            
+            if system:
+                anthropic_body["system"] = system
+            
+            if json_mode:
+                anthropic_body["tools"] = [{
+                    "name": "json_response",
+                    "description": "Return the response as valid JSON",
+                    "input_schema": {
+                        "type": "object",
+                        "properties": {
+                            "response": {"type": "object", "description": "The JSON response"}
+                        },
+                        "required": ["response"]
+                    }
+                }]
+                anthropic_body["tool_choice"] = {"type": "tool", "name": "json_response"}
+            
+            response = requests.post(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": anthropic_key,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                },
+                json=anthropic_body,
+                timeout=30
+            )
+            
+            if not response.ok:
+                error_data = response.json()
+                raise Exception(error_data.get("error", {}).get("message", "Anthropic API error"))
+            
+            result = response.json()
+            
+            if json_mode and result.get("content") and result["content"][0].get("type") == "tool_use":
+                return JSONResponse({
+                    "json": result["content"][0]["input"]["response"],
+                    "model": anthropic_model,
+                    "provider": "anthropic"
+                })
+            else:
+                text = result.get("content", [{}])[0].get("text", "")
+                if json_mode:
+                    try:
+                        parsed_json = json.loads(text)
+                        return JSONResponse({
+                            "json": parsed_json,
+                            "model": anthropic_model,
+                            "provider": "anthropic"
+                        })
+                    except json.JSONDecodeError:
+                        pass
+                
+                return JSONResponse({
+                    "text": text,
+                    "model": anthropic_model,
+                    "provider": "anthropic"
+                })
+        
+        else:  # OpenAI
+            default_model = "gpt-4o-mini"
+            openai_model = model or default_model
+            
+            messages = []
+            if system:
+                messages.append({"role": "system", "content": system})
+            messages.append({"role": "user", "content": prompt})
+            
+            openai_body = {
+                "model": openai_model,
+                "max_tokens": max_tokens,
+                "messages": messages
+            }
+            
+            if json_mode:
+                openai_body["response_format"] = {"type": "json_object"}
+                # Ensure JSON instruction
+                json_instruction = "You must respond with valid JSON only."
+                if system:
+                    messages[0]["content"] += " " + json_instruction
+                else:
+                    messages.insert(0, {"role": "system", "content": json_instruction})
+            
+            response = requests.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {openai_key}",
+                    "Content-Type": "application/json"
+                },
+                json=openai_body,
+                timeout=30
+            )
+            
+            if not response.ok:
+                error_data = response.json()
+                raise Exception(error_data.get("error", {}).get("message", "OpenAI API error"))
+            
+            result = response.json()
+            text = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+            
+            if json_mode:
+                try:
+                    parsed_json = json.loads(text)
+                    return JSONResponse({
+                        "json": parsed_json,
+                        "model": openai_model,
+                        "provider": "openai"
+                    })
+                except json.JSONDecodeError:
+                    pass
+            
+            return JSONResponse({
+                "text": text,
+                "model": openai_model,
+                "provider": "openai"
+            })
+    
+    except Exception as error:
+        print(f"LLM API error: {error}")
+        return JSONResponse({"error": str(error)}, status_code=502)
+
 @app.get("/")
 async def root():
     return {"message": "Blueprint API", "endpoints": [
         "/blueprints/{slug}/manifest",
         "/blueprints/{slug}/score",
-        "/blueprints/{slug}/visuals"
+        "/blueprints/{slug}/visuals",
+        "/llm"
     ]}

@@ -27,6 +27,30 @@ python tools/blueprint_visual.py example
 uvicorn src.server.main:app --port 7002 --reload
 ```
 
+## LLM Endpoint & Env
+
+The UI supports LLM-assisted prompt generation with dual deployment:
+
+**Local Development:**
+```bash
+# Copy and configure environment
+cp .env.example .env
+# Add your API key: ANTHROPIC_API_KEY=sk-ant-xxx or OPENAI_API_KEY=sk-xxx
+
+# Run with LLM support
+uvicorn src.server.main:app --port 7002 --reload
+
+# Use LLM endpoint
+# Open docs/blueprints/ui/input.html?llm=http://localhost:7002/llm
+```
+
+**Production (Vercel):**
+- Set environment variables in Vercel dashboard
+- Deploy automatically calls `/api/llm` serverless function
+- Configure `ALLOW_ORIGIN` for CORS security
+
+**Fallback:** If LLM endpoint unavailable, buttons fall back to copy-to-clipboard prompts.
+
 ## Structure
 - `docs/blueprints/example/` - Example manifest and generated files
 - `docs/blueprints/ui/` - Static HTML UI pages
