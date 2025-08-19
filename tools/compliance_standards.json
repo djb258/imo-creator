@@ -1,0 +1,107 @@
+{
+  "standards": {
+    "imo_creator_compliance": {
+      "version": "1.0",
+      "description": "IMO Creator repository compliance standards",
+      "categories": {
+        "git_repo": {
+          "name": "Git Repository",
+          "description": "Must be a valid git repository",
+          "weight": 5,
+          "required": true
+        },
+        "python_project": {
+          "name": "Python Project Structure", 
+          "description": "Proper Python project organization",
+          "weight": 15,
+          "requirements": {
+            "has_dependencies": "requirements.txt or pyproject.toml",
+            "has_src_structure": "src/ directory organization", 
+            "has_main_entry": "Main entry point (main.py/app.py)"
+          }
+        },
+        "documentation": {
+          "name": "Documentation",
+          "description": "Essential project documentation",
+          "weight": 20,
+          "requirements": {
+            "has_readme": "README.md file",
+            "has_license": "LICENSE file",
+            "has_contributing": "CONTRIBUTING.md file"
+          }
+        },
+        "ci_cd": {
+          "name": "CI/CD Pipeline",
+          "description": "Automated testing and deployment",
+          "weight": 15,
+          "requirements": {
+            "has_ci": "GitHub Actions or other CI system"
+          }
+        },
+        "testing": {
+          "name": "Testing Setup", 
+          "description": "Test infrastructure and coverage",
+          "weight": 15,
+          "requirements": {
+            "has_test_dir": "tests/ directory",
+            "has_test_files": "Test files (test_*.py)"
+          }
+        },
+        "deployment_config": {
+          "name": "Deployment Configuration",
+          "description": "Production deployment setup",
+          "weight": 10,
+          "requirements": {
+            "has_deployment": "vercel.json, Dockerfile, or similar"
+          }
+        },
+        "code_quality": {
+          "name": "Code Quality Tools",
+          "description": "Linting and formatting configuration",
+          "weight": 10,
+          "requirements": {
+            "has_quality_config": "ruff, black, or other tools configured"
+          }
+        },
+        "fastapi_compliance": {
+          "name": "FastAPI Compliance",
+          "description": "FastAPI best practices",
+          "weight": 10,
+          "requirements": {
+            "has_fastapi": "FastAPI in dependencies",
+            "has_uvicorn": "ASGI server (uvicorn)",
+            "has_cors": "CORS middleware configured"
+          }
+        }
+      },
+      "scoring": {
+        "excellent": 95,
+        "good": 85,
+        "acceptable": 70,
+        "needs_improvement": 50
+      },
+      "exit_codes": {
+        "compliant": 0,
+        "non_compliant": 1,
+        "error": 2
+      }
+    }
+  },
+  "templates": {
+    "quick_fixes": {
+      "add_github_actions": ".github/workflows/ci.yml",
+      "add_vercel_config": "vercel.json", 
+      "add_requirements": "requirements.txt",
+      "add_license": "LICENSE",
+      "add_contributing": "CONTRIBUTING.md",
+      "add_readme": "README.md"
+    },
+    "commands": {
+      "init_git": "git init",
+      "add_python_gitignore": "curl -s https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore > .gitignore",
+      "install_quality_tools": "pip install ruff black pytest",
+      "create_src_structure": "mkdir -p src tests",
+      "run_compliance_check": "python tools/repo_compliance_check.py ."
+    }
+  }
+}
