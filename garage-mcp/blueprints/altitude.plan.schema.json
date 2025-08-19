@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Altitude Plan Schema",
+  "type": "object",
+  "required": ["plan_id", "version", "stages"],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "Unique plan identifier"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Plan version (semver)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Plan description"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage_id", "altitude", "steps"],
+        "properties": {
+          "stage_id": {
+            "type": "string",
+            "pattern": "^[A-Z]\\d+$",
+            "description": "Stage identifier (e.g., A1, B1, C1)"
+          },
+          "altitude": {
+            "type": "integer",
+            "enum": [30000, 20000, 10000, 5000],
+            "description": "Operating altitude"
+          },
+          "orchestrator": {
+            "type": "string",
+            "description": "Orchestrator agent ID"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["step_id", "agent_id", "action"],
+              "properties": {
+                "step_id": {
+                  "type": "string",
+                  "pattern": "^[a-z_]+$",
+                  "description": "Step identifier"
+                },
+                "agent_id": {
+                  "type": "string",
+                  "description": "Agent role ID to invoke"
+                },
+                "action": {
+                  "type": "string",
+                  "description": "Action to perform"
+                },
+                "args": {
+                  "type": "object",
+                  "description": "Arguments for the action"
+                },
+                "when": {
+                  "type": "string",
+                  "description": "Conditional expression"
+                },
+                "on_error": {
+                  "type": "string",
+                  "enum": ["continue", "stop", "retry", "escalate"],
+                  "default": "stop",
+                  "description": "Error handling strategy"
+                },
+                "retry_count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5,
+                  "default": 0,
+                  "description": "Number of retry attempts"
+                },
+                "timeout": {
+                  "type": "integer",
+                  "minimum": 1000,
+                  "description": "Timeout in milliseconds"
+                }
+              }
+            }
+          },
+          "parallel": {
+            "type": "boolean",
+            "default": false,
+            "description": "Execute steps in parallel"
+          }
+        }
+      }
+    },
+    "error_handling": {
+      "type": "object",
+      "properties": {
+        "max_errors": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 3,
+          "description": "Maximum errors before plan abort"
+        },
+        "escalation_policy": {
+          "type": "string",
+          "enum": ["immediate", "after_retries", "never"],
+          "default": "after_retries",
+          "description": "When to escalate errors"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

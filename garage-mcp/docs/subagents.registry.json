@@ -1,0 +1,106 @@
+{
+  "version": "1.0.0",
+  "agents": [
+    {
+      "role_id": "overall-orchestrator",
+      "name": "Overall Orchestrator",
+      "type": "orchestrator",
+      "altitude": 30000,
+      "domain": "overall",
+      "capabilities": ["routing", "delegation", "coordination"],
+      "global_path": ".claude/agents/00_overall_orchestrator.md",
+      "description": "Routes requests to appropriate domain orchestrators"
+    },
+    {
+      "role_id": "input-orchestrator",
+      "name": "Input Orchestrator",
+      "type": "orchestrator",
+      "altitude": 20000,
+      "domain": "input",
+      "capabilities": ["validation", "mapping", "coordination"],
+      "global_path": ".claude/agents/input/10_input_orchestrator.md",
+      "description": "Coordinates input processing: mapper → validator"
+    },
+    {
+      "role_id": "input-subagent-mapper",
+      "name": "Input Mapper",
+      "type": "subagent",
+      "altitude": 20000,
+      "domain": "input",
+      "capabilities": ["data_mapping", "transformation", "normalization"],
+      "global_path": ".claude/agents/input/11_input_subagent_mapper.md",
+      "description": "Maps and transforms input data"
+    },
+    {
+      "role_id": "input-subagent-validator",
+      "name": "Input Validator",
+      "type": "subagent",
+      "altitude": 20000,
+      "domain": "input",
+      "capabilities": ["validation", "schema_checking", "error_detection"],
+      "global_path": ".claude/agents/input/12_input_subagent_validator.md",
+      "description": "Validates input against schemas and rules"
+    },
+    {
+      "role_id": "middle-orchestrator",
+      "name": "Middle Orchestrator",
+      "type": "orchestrator",
+      "altitude": 10000,
+      "domain": "middle",
+      "capabilities": ["database_coordination", "enforcement", "promotion"],
+      "global_path": ".claude/agents/middle/20_middle_orchestrator.md",
+      "description": "Coordinates middle processing: db → enforcer → conditional apply"
+    },
+    {
+      "role_id": "middle-subagent-db",
+      "name": "Database Agent",
+      "type": "subagent",
+      "altitude": 10000,
+      "domain": "middle",
+      "capabilities": ["database_operations", "dry_run", "rollback", "apply"],
+      "dependencies": ["neon", "postgres"],
+      "global_path": ".claude/agents/middle/21_middle_subagent_db_neon.md",
+      "description": "Handles database operations with plan/dry-run/apply modes"
+    },
+    {
+      "role_id": "middle-subagent-enforcer",
+      "name": "Enforcer Agent",
+      "type": "subagent",
+      "altitude": 10000,
+      "domain": "middle",
+      "capabilities": ["rule_enforcement", "promotion_decision", "gating"],
+      "global_path": ".claude/agents/middle/22_middle_subagent_enforcer.md",
+      "description": "Enforces business rules and makes promotion decisions"
+    },
+    {
+      "role_id": "output-orchestrator",
+      "name": "Output Orchestrator",
+      "type": "orchestrator",
+      "altitude": 5000,
+      "domain": "output",
+      "capabilities": ["notification", "reporting", "artifact_generation"],
+      "global_path": ".claude/agents/output/30_output_orchestrator.md",
+      "description": "Coordinates output processing: notifier → reporter"
+    },
+    {
+      "role_id": "output-subagent-notifier",
+      "name": "Notifier Agent",
+      "type": "subagent",
+      "altitude": 5000,
+      "domain": "output",
+      "capabilities": ["email", "slack", "webhook", "alerts"],
+      "global_path": ".claude/agents/output/31_output_subagent_notifier.md",
+      "description": "Sends notifications across channels"
+    },
+    {
+      "role_id": "output-subagent-reporter",
+      "name": "Reporter Agent",
+      "type": "subagent",
+      "altitude": 5000,
+      "domain": "output",
+      "capabilities": ["report_generation", "artifact_creation", "summary"],
+      "global_path": ".claude/agents/output/32_output_subagent_reporter.md",
+      "description": "Generates reports and artifacts"
+    }
+  ]
+}

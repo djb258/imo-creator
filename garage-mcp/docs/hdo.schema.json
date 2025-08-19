@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GarageMCP-HDO",
+  "type": "object",
+  "required": [
+    "stage",
+    "process_id",
+    "blueprint_id",
+    "ttl",
+    "validated",
+    "promoted_to",
+    "timestamp_last_touched",
+    "payload",
+    "log",
+    "meta"
+  ],
+  "properties": {
+    "stage": {
+      "type": "string",
+      "enum": ["input", "middle", "output"],
+      "description": "Current processing stage"
+    },
+    "process_id": {
+      "type": "string",
+      "pattern": "^PROC-[a-z0-9_]+-\\d{8}-\\d{6}-\\d{3,6}$",
+      "description": "Unique process identifier"
+    },
+    "blueprint_id": {
+      "type": "string",
+      "description": "Blueprint identifier for this process"
+    },
+    "ttl": {
+      "type": "integer",
+      "minimum": 60,
+      "description": "Time to live in seconds"
+    },
+    "validated": {
+      "type": "boolean",
+      "description": "Whether the HDO has been validated"
+    },
+    "promoted_to": {
+      "type": ["string", "null"],
+      "description": "Stage this HDO was promoted to"
+    },
+    "timestamp_last_touched": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modification timestamp"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Process-specific data payload"
+    },
+    "log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "level", "message"],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARN", "ERROR"]
+          },
+          "message": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "altitude": {
+            "type": "integer"
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Processing log entries"
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "plan_id",
+        "plan_version",
+        "plan_hash",
+        "idempotency_key"
+      ],
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$",
+          "description": "Plan identifier"
+        },
+        "plan_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Plan version (semver)"
+        },
+        "plan_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA256 hash of plan content"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "pattern": "^IDEM-PROC-[a-z0-9_]+-\\d{8}-\\d{6}-\\d{3,6}$",
+          "description": "Idempotency key for duplicate detection"
+        },
+        "error_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of errors encountered"
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of retry attempts"
+        },
+        "parent_process_id": {
+          "type": "string",
+          "pattern": "^PROC-[a-z0-9_]+-\\d{8}-\\d{6}-\\d{3,6}$",
+          "description": "Parent process ID if spawned from another process"
+        }
+      },
+      "description": "Process metadata"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["error_id", "timestamp", "message"],
+        "properties": {
+          "error_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "message": {
+            "type": "string"
+          },
+          "stack_trace": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+          }
+        }
+      },
+      "description": "Error entries"
+    },
+    "promotion": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": ["PROMOTE", "REJECT", "PENDING"],
+          "description": "Promotion decision"
+        },
+        "enforcer_result": {
+          "type": "object",
+          "description": "Result from enforcer agent"
+        },
+        "promoted_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When promotion occurred"
+        },
+        "rejected_reason": {
+          "type": "string",
+          "description": "Reason for rejection if applicable"
+        }
+      },
+      "description": "Promotion information"
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Generated artifacts"
+    }
+  }
+}
