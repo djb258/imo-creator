@@ -8,7 +8,9 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(rm:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git clean:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
