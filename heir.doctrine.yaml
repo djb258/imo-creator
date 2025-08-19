@@ -1,0 +1,46 @@
+meta:
+  app_name: "imo-creator"
+  repo_slug: "djb258/imo-creator"
+  stack: ["Next.js", "FastAPI", "Postgres", "Tailwind"]
+  llm:
+    providers:
+      - openai
+      - anthropic
+    default: "openai"
+
+doctrine:
+  unique_id: "imo-${TIMESTAMP}-${RANDOM_HEX}"
+  process_id: "imo-process-${SESSION_ID}"
+  schema_version: "HEIR/1.0"
+  blueprint_version_hash: "${AUTO_SHA256_OF_CANON}"
+  agent_execution_signature: "${AUTO_HASH(llm+tools)}"
+
+deliverables:
+  repos:
+    - name: "imo-creator"
+      visibility: private
+  services:
+    - name: "mcp"
+      port: 7001
+    - name: "sidecar"
+      port: 8000
+  env:
+    IMOCREATOR_MCP_URL: "http://localhost:7001"
+    IMOCREATOR_SIDECAR_URL: "http://localhost:8000"
+    IMOCREATOR_BEARER_TOKEN: "local-dev-only"
+    LLM_DEFAULT_PROVIDER: "openai"
+
+contracts:
+  acceptance:
+    - "All HEIR checks pass in CI"
+    - "Sidecar event emitted on app start and on each action"
+    - "MCP bay exposes tools listed under build.actions.mcp_tools"
+
+build:
+  actions:
+    mcp_tools: ["heir.check", "sidecar.event", "intake.mapping.validate"]
+    ci_checks: ["python -m packages.heir.checks"]
+    telemetry_events: ["app.start", "blueprint.validated", "action.invoked"]
+  prompts:
+    - id: "claude_repo_scaffold"
+    - id: "cursor_impl_tasks"

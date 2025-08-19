@@ -1,0 +1,2 @@
+# Optional dependencies for HEIR compliance module
+toml>=0.10.2

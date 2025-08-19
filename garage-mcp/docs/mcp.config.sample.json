@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "garage-mcp": {
+      "command": "uvicorn",
+      "args": ["services.mcp.main:app", "--port", "7001"],
+      "env": {
+        "BAY": "frontend"
+      }
+    }
+  }
+}

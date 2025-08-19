@@ -78,8 +78,119 @@ uvicorn src.server.main:app --port 7002 --reload
 
 **Fallback:** If LLM endpoint unavailable, buttons fall back to copy-to-clipboard prompts.
 
+## HEIR/MCP Integration
+
+This app includes HEIR (Hierarchical Error-handling, ID management, and Reporting) and MCP (Model Context Protocol) integration:
+
+### Quick Start
+```bash
+# Run HEIR validation checks
+make check
+# or
+python -m packages.heir.checks
+
+# Start MCP server (port 7001)
+make run-mcp
+
+# Start Sidecar event logger (port 8000)
+make run-sidecar
+
+# Test endpoints
+curl http://localhost:7001/heir/check -X POST -H "Content-Type: application/json" -d '{"ssot": {"meta": {"app_name": "test"}, "doctrine": {}}}'
+curl http://localhost:8000/events -X POST -H "Content-Type: application/json" -d '{"type": "test.event", "payload": {"message": "hello"}, "tags": {"source": "curl"}}'
+```
+
+### Service Architecture
+- **MCP Server** (`:7001`): HEIR validation endpoint `/heir/check`
+- **Sidecar Server** (`:8000`): Event logging to `./logs/sidecar.ndjson`  
+- **Main API** (`:7002`): Blueprint management and LLM endpoints
+
+### API Examples
+```bash
+# Check HEIR compliance
+curl -X POST http://localhost:7001/heir/check \
+  -H "Content-Type: application/json" \
+  -d '{"ssot": {"meta": {"app_name": "imo-creator"}, "doctrine": {"schema_version": "HEIR/1.0"}}}'
+
+# Log telemetry event  
+curl -X POST http://localhost:8000/events \
+  -H "Content-Type: application/json" \
+  -d '{"type": "app.start", "payload": {"version": "1.0.0"}, "tags": {"env": "dev"}}'
+
+# View recent events
+curl http://localhost:8000/events/recent?limit=5
+
+# Test SSOT ID generation
+curl -X POST http://localhost:7002/api/ssot/save \
+  -H "Content-Type: application/json" \
+  -d '{"ssot":{"meta":{"app_name":"IMO Creator","stage":"overview"}}}'
+
+# Test subagent registry
+curl http://localhost:7002/api/subagents
+```
+
+## Smoke Tests (After Vercel Deploy)
+
+### 1. ID Stamping Test
+```bash
+# Test that IDs get stamped automatically
+curl -s -X POST https://imo-creator.vercel.app/api/ssot/save \
+  -H 'content-type: application/json' \
+  -d '{"ssot":{"meta":{"app_name":"IMO Creator","stage":"overview"}}}' | jq
+
+# Expected: .ssot.doctrine.unique_id, .ssot.doctrine.process_id, .ssot.doctrine.blueprint_version_hash
+```
+
+### 2. Subagent Registry Test  
+```bash
+# Test subagent enumeration (from garage-mcp or fallback)
+curl -s https://imo-creator.vercel.app/api/subagents | jq
+
+# Expected: { "items": [ { "id": "...", "bay": "...", "desc": "..." }, ... ] }
+```
+
+## Vercel Environment Variables
+
+Add these in Vercel → Project → Settings → Environment Variables:
+
+```bash
+# Required for ID generation
+DOCTRINE_DB=shq
+DOCTRINE_SUBHIVE=03
+DOCTRINE_APP=imo
+DOCTRINE_VER=1
+
+# Optional garage-mcp integration
+GARAGE_MCP_URL=https://your-mcp.example.com
+GARAGE_MCP_TOKEN=your-token-here
+SUBAGENT_REGISTRY_PATH=/registry/subagents
+
+# Existing LLM keys
+IMOCREATOR_OPENAI_API_KEY=sk-your-key
+IMOCREATOR_ANTHROPIC_API_KEY=sk-ant-your-key
+
+# Optional UI feature flag
+NEXT_PUBLIC_SHOW_SUBAGENTS=true
+```
+
+**HEIR/MCP Features:**
+- **Doctrine file**: `heir.doctrine.yaml` defines app metadata and compliance requirements
+- **ID Generation**: Automatic stamping of `unique_id`, `process_id`, and `blueprint_version_hash`
+- **Subagent Registry**: `/api/subagents` endpoint with garage-mcp integration and fallback
+- **SSOT Processing**: `/api/ssot/save` endpoint for doctrine-safe ID stamping
+- **MCP Server**: Validates SSOT configurations via `/heir/check` endpoint
+- **Sidecar Logger**: Captures telemetry events in structured NDJSON format
+- **Typed Models**: Pydantic models for request/response validation
+- **CI Integration**: Automated HEIR compliance validation in GitHub Actions
+- **Event Streaming**: Real-time event logging to `./logs/sidecar.ndjson`
+
 ## Structure
 - `docs/blueprints/example/` - Example manifest and generated files
 - `docs/blueprints/ui/` - Static HTML UI pages
 - `tools/` - Scorer and visual generator
 - `src/server/` - Optional FastAPI backend
+- `packages/heir/` - HEIR compliance validation
+- `packages/sidecar/` - Event emission for telemetry
+- `heir.doctrine.yaml` - HEIR metadata and compliance configuration
+- `src/server/blueprints/` - ID generation and versioning utilities
+- `src/server/infra/` - Subagent registry client with garage-mcp integration

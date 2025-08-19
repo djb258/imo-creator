@@ -1,0 +1,67 @@
+name: HEIR Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  heir-checks:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml requests
+    
+    - name: Run HEIR validation checks
+      run: |
+        python -m packages.heir.checks
+    
+    - name: Check for HEIR doctrine file
+      run: |
+        if [ ! -f "heir.doctrine.yaml" ]; then
+          echo "❌ HEIR doctrine file not found"
+          exit 1
+        fi
+        echo "✅ HEIR doctrine file exists"
+    
+    - name: Validate manifest integration
+      run: |
+        python -c "
+        import yaml
+        import sys
+        
+        # Check IMO manifest for HEIR fields
+        try:
+            with open('docs/blueprints/imo/manifest.yaml', 'r') as f:
+                manifest = yaml.safe_load(f)
+            
+            # Check for HEIR-capable gates
+            middle_stages = manifest.get('buckets', {}).get('middle', {}).get('stages', [])
+            gates_stage = next((s for s in middle_stages if s.get('key') == 'gates'), None)
+            
+            if gates_stage and 'heir_ruleset_id' in gates_stage.get('fields', {}):
+                print('✅ HEIR integration found in gates stage')
+            else:
+                print('❌ HEIR integration missing in gates stage')
+                sys.exit(1)
+        except Exception as e:
+            print(f'❌ Failed to validate manifest: {e}')
+            sys.exit(1)
+        "
+    
+    - name: Emit CI check event
+      if: always()
+      run: |
+        # This would emit to sidecar in production
+        echo "Would emit: heir.check.ci with status=${{ job.status }}"
