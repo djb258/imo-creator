@@ -10,7 +10,36 @@ import os
 import requests
 from typing import Optional
 
+# Import HEIR packages
+try:
+    from packages.sidecar import emit_event
+    from packages.heir import HEIRValidator
+    HEIR_ENABLED = True
+except ImportError:
+    HEIR_ENABLED = False
+    print("HEIR packages not available - running in basic mode")
+
+# Import ID generation and subagent registry
+try:
+    from src.server.blueprints.ids import ensure_ids
+    from src.server.blueprints.versioning import stamp_version_hash
+    from src.server.infra.subagents import list_subagents
+    DOCTRINE_ENABLED = True
+except ImportError:
+    DOCTRINE_ENABLED = False
+    print("Doctrine features not available")
+
 app = FastAPI(title="Blueprint API")
+
+# Emit app start event if HEIR is enabled
+if HEIR_ENABLED:
+    @app.on_event("startup")
+    async def startup_event():
+        emit_event("app.start", {
+            "mode": "fastapi",
+            "heir_enabled": True,
+            "port": 7002
+        })
 
 # CORS configuration
 allow_origin = os.getenv("ALLOW_ORIGIN", "http://localhost:7002")
@@ -50,6 +79,21 @@ async def put_manifest(slug: str, body: bytes):
     
     with open(manifest_path, 'wb') as f:
         f.write(body)
+    
+    # Emit blueprint validation event if HEIR is enabled
+    if HEIR_ENABLED:
+        try:
+            manifest_dict = yaml.safe_load(body.decode())
+            validator = HEIRValidator(BASE_DIR)
+            emit_event("blueprint.validated", {
+                "blueprint_id": slug,
+                "validation": {
+                    "valid": True,
+                    "process": manifest_dict.get('process', 'unknown')
+                }
+            })
+        except Exception as e:
+            print(f"Failed to emit validation event: {e}")
     
     return {"message": f"Manifest saved for {slug}", "path": str(manifest_path)}
 
@@ -237,6 +281,13 @@ async def llm_endpoint(request: Request):
             result = response.json()
             
             if json_mode and result.get("content") and result["content"][0].get("type") == "tool_use":
+                # Emit action invoked event if HEIR is enabled
+                if HEIR_ENABLED:
+                    emit_event("action.invoked", {
+                        "action": "llm.completion",
+                        "params": {"provider": "anthropic", "model": anthropic_model, "json_mode": True}
+                    })
+                
                 return JSONResponse({
                     "json": result["content"][0]["input"]["response"],
                     "model": anthropic_model,
@@ -254,6 +305,13 @@ async def llm_endpoint(request: Request):
                         })
                     except json.JSONDecodeError:
                         pass
+                
+                # Emit action invoked event if HEIR is enabled
+                if HEIR_ENABLED:
+                    emit_event("action.invoked", {
+                        "action": "llm.completion",
+                        "params": {"provider": "anthropic", "model": anthropic_model, "json_mode": json_mode}
+                    })
                 
                 return JSONResponse({
                     "text": text,
@@ -313,6 +371,13 @@ async def llm_endpoint(request: Request):
                 except json.JSONDecodeError:
                     pass
             
+            # Emit action invoked event if HEIR is enabled
+            if HEIR_ENABLED:
+                emit_event("action.invoked", {
+                    "action": "llm.completion",
+                    "params": {"provider": "openai", "model": openai_model, "json_mode": json_mode}
+                })
+            
             return JSONResponse({
                 "text": text,
                 "model": openai_model,
@@ -323,11 +388,93 @@ async def llm_endpoint(request: Request):
         print(f"LLM API error: {error}")
         return JSONResponse({"error": str(error)}, status_code=502)
 
+@app.post("/heir/check")
+async def heir_check():
+    """Run HEIR validation checks"""
+    if not HEIR_ENABLED:
+        return JSONResponse({"error": "HEIR not enabled"}, status_code=501)
+    
+    validator = HEIRValidator(BASE_DIR)
+    success = validator.run_all_checks()
+    
+    emit_event("heir.check", {
+        "check_type": "api",
+        "status": "passed" if success else "failed",
+        "details": {
+            "errors": validator.errors,
+            "warnings": validator.warnings
+        }
+    })
+    
+    return {
+        "success": success,
+        "errors": validator.errors,
+        "warnings": validator.warnings
+    }
+
 @app.get("/")
 async def root():
-    return {"message": "Blueprint API", "endpoints": [
+    endpoints = [
         "/blueprints/{slug}/manifest",
         "/blueprints/{slug}/score",
         "/blueprints/{slug}/visuals",
         "/llm"
-    ]}
+    ]
+    
+    if HEIR_ENABLED:
+        endpoints.append("/heir/check")
+    
+    if DOCTRINE_ENABLED:
+        endpoints.extend(["/api/ssot/save", "/api/subagents"])
+    
+    return {
+        "message": "Blueprint API",
+        "heir_enabled": HEIR_ENABLED,
+        "doctrine_enabled": DOCTRINE_ENABLED,
+        "endpoints": endpoints
+    }
+
+@app.post("/api/ssot/save")
+async def save_ssot(payload: dict):
+    """Save SSOT with doctrine-safe IDs and version hash"""
+    if not DOCTRINE_ENABLED:
+        return JSONResponse({"error": "Doctrine features not available"}, status_code=501)
+    
+    try:
+        ssot = payload.get("ssot") or {}
+        ssot = ensure_ids(ssot)
+        ssot = stamp_version_hash(ssot)
+        
+        # Emit event if HEIR is enabled
+        if HEIR_ENABLED:
+            emit_event("ssot.saved", {
+                "unique_id": ssot.get("doctrine", {}).get("unique_id"),
+                "process_id": ssot.get("doctrine", {}).get("process_id"),
+                "version_hash": ssot.get("doctrine", {}).get("blueprint_version_hash")
+            })
+        
+        return {"ok": True, "ssot": ssot}
+        
+    except Exception as e:
+        return JSONResponse({"error": f"Failed to process SSOT: {str(e)}"}, status_code=500)
+
+@app.get("/api/subagents")
+async def api_subagents():
+    """Get subagent registry from garage-mcp with fallback"""
+    if not DOCTRINE_ENABLED:
+        return JSONResponse({"error": "Doctrine features not available"}, status_code=501)
+    
+    try:
+        items = list_subagents()
+        
+        # Emit event if HEIR is enabled
+        if HEIR_ENABLED:
+            emit_event("subagents.listed", {
+                "count": len(items),
+                "source": "garage-mcp" if os.getenv("GARAGE_MCP_URL") else "fallback"
+            })
+        
+        return {"items": items}
+        
+    except Exception as e:
+        return JSONResponse({"error": f"Failed to fetch subagents: {str(e)}"}, status_code=500)
