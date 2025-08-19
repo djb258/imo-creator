@@ -8,9 +8,13 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(rm:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\scraping-tool"
+    ]
   }
 }

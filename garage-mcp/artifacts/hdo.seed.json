@@ -1,0 +1,53 @@
+{
+  "stage": "input",
+  "process_id": "PROC-clients_intake-20250819-140000-001",
+  "blueprint_id": "clients_intake",
+  "ttl": 3600,
+  "validated": false,
+  "promoted_to": null,
+  "timestamp_last_touched": "2025-08-19T14:00:00.000Z",
+  "payload": {
+    "raw_input": {
+      "client_name": "Acme Corporation",
+      "contact_email": "contact@acme.com",
+      "phone": "+1-555-0123",
+      "address": "123 Main St, Anytown, USA",
+      "industry": "Technology",
+      "company_size": "50-100",
+      "annual_revenue": "5M-10M",
+      "source": "website_form",
+      "priority": "high"
+    },
+    "intake_metadata": {
+      "submitted_at": "2025-08-19T13:55:00.000Z",
+      "ip_address": "192.168.1.100",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      "referrer": "https://search.google.com",
+      "session_id": "sess_abc123def456"
+    }
+  },
+  "log": [
+    {
+      "timestamp": "2025-08-19T14:00:00.000Z",
+      "level": "INFO",
+      "message": "HDO created for client intake process",
+      "step": "initialization"
+    }
+  ],
+  "meta": {
+    "plan_id": "clients_intake",
+    "plan_version": "1.0.0",
+    "plan_hash": "sha256:abc123def456789...",
+    "idempotency_key": "IDEM-PROC-clients_intake-20250819-140000-001",
+    "error_count": 0,
+    "retry_count": 0
+  },
+  "errors": [],
+  "promotion": {
+    "decision": "PENDING",
+    "enforcer_result": null,
+    "promoted_at": null,
+    "rejected_reason": null
+  },
+  "artifacts": {}
+}

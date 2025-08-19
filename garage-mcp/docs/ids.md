@@ -1,178 +1,216 @@
-# HEIR-Aligned ID System for Garage-MCP
+# Garage-MCP ID System
+## Unified Identification Standards with HEIR Integration
+
+---
 
 ## Overview
-This document defines the ID numbering system that aligns with HEIR (Hierarchical Error-handling, ID management, and Reporting) doctrine while integrating with Garage-MCP's orchestration capabilities.
+The Garage-MCP ID system provides deterministic, hierarchical identification for all system entities. This system is fully compatible with HEIR doctrine numbering while adding operational identifiers for process tracking.
 
-## ID Format Specifications
+---
 
-### unique_id Format
-```
-<db_code>-<hive><subhive>-<entity>-<YYYYMMDD>-<ULID26>
-```
+## Core ID Formats
+
+### 1. Unique ID Format
+**Pattern:** `<db_code>-<hive><subhive>-<entity>-<YYYYMMDD>-<ULID26>`
 
 **Components:**
-- `db_code`: Database identifier (e.g., "shq", "prod", "test")
-- `hive`: Primary domain (2 digits, e.g., "03")  
-- `subhive`: Subdomain (2 digits, e.g., "01")
-- `entity`: Entity type (e.g., "blueprint", "process", "agent")
-- `YYYYMMDD`: Creation date
+- `db_code`: 2-3 character database identifier (e.g., SHQ, CLT, PAY)
+- `hive`: 2-digit hive code (01-99)
+- `subhive`: 2-digit subhive code (00-99)
+- `entity`: Entity type code (3-6 characters)
+- `YYYYMMDD`: Date stamp
 - `ULID26`: 26-character ULID for uniqueness
 
 **Examples:**
-```
-shq-0301-blueprint-20250819-01HXMZK9QJRW8P3N2VXKDT7YSZ
-prod-0302-process-20250819-01HXMZKA1MFGX9T8QWER2BASDT  
-test-0303-agent-20250819-01HXMZKB2NGHT4R9LQWE3CDSFR
-```
+- `SHQ-0101-USER-20250819-01J5X4K8Z9ABCDEFGHJKMNPQRST`
+- `CLT-0203-ORDER-20250819-01J5X4K8Z9ABCDEFGHJKMNPQRST`
 
-### process_id Format
-```
-PROC-<plan_id>-<YYYYMMDD>-<HHMMSS>-<seq3..6>
-```
+### 2. Process ID Format
+**Pattern:** `PROC-<plan_id>-<YYYYMMDD>-<HHMMSS>-<seq>`
+
+**Regex:** `^PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$`
 
 **Components:**
 - `PROC`: Fixed prefix
-- `plan_id`: Plan identifier (alphanumeric + underscore)
-- `YYYYMMDD`: Execution date
-- `HHMMSS`: Execution time  
-- `seq3..6`: Sequential number (3-6 digits)
+- `plan_id`: Lowercase alphanumeric plan identifier
+- `YYYYMMDD`: Date component
+- `HHMMSS`: Time component
+- `seq`: Sequential number (3-6 digits, zero-padded)
 
 **Examples:**
-```
-PROC-altitude_orchestration-20250819-143022-001
-PROC-client_intake-20250819-143025-002
-PROC-data_migration_v2-20250819-143030-1001
-```
+- `PROC-clients_intake-20250819-143052-001`
+- `PROC-payment_flow-20250819-090000-000342`
 
-### idempotency_key Format
-```
-IDEM-<process_id>
-```
+### 3. Idempotency Key Format
+**Pattern:** `IDEM-<process_id>`
 
-**Components:**
-- `IDEM`: Fixed prefix
-- `process_id`: Full process ID (see above)
+**Regex:** `^IDEM-PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$`
 
 **Examples:**
-```
-IDEM-PROC-altitude_orchestration-20250819-143022-001
-IDEM-PROC-client_intake-20250819-143025-002
-```
+- `IDEM-PROC-clients_intake-20250819-143052-001`
+- `IDEM-PROC-payment_flow-20250819-090000-000342`
 
-## Authoritative Regex Patterns
+---
 
-### process_id Validation
-```regex
-^PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$
-```
+## HEIR Doctrine Section Numbers
+The system respects HEIR's existing doctrine numbering:
 
-### idempotency_key Validation  
-```regex
-^IDEM-PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$
-```
+**Format:** `[database].[subhive].[subsubhive].[section].[sequence]`
 
-### unique_id Validation
-```regex
-^[a-z0-9]+-\d{4}-[a-z0-9_]+-\d{8}-[0-9A-HJKMNP-TV-Z]{26}$
-```
+**Examples from HEIR doctrine:**
+- `1.05.00.10.009` - Section Number Format doctrine
+- `1.2.1.33.001` - ORBT Diagnostic Mode
+- `1.2.1.32.004` - Universal Rule 4 (centralized error routing)
+- `2.1.2.0.231` - Conditional Autonomy doctrine
+
+### Section Range Categories
+- **10–19:** Structure/Format rules
+- **20–29:** Process operations
+- **30–39:** Compliance requirements
+- **40–49:** Monitoring protocols
+- **50–59:** Security standards
+
+---
 
 ## Generation Rules
 
-### Deterministic Generation
-1. **Process Sequence**: Use atomic database sequence per plan_id and date
-2. **ULID Generation**: Use standard ULID library with current timestamp
-3. **Date Formatting**: Always use UTC timezone for consistency
-4. **Plan ID Normalization**: Lowercase, replace spaces with underscores
+### Process ID Generation
+1. Obtain exclusive lock on `shq.process_seq` table
+2. Get next sequence for plan_id + date combination
+3. Format as `PROC-{plan_id}-{date}-{time}-{seq}`
+4. Store in `shq.process_registry` for audit
 
-### Storage Requirements
-- `shq.id_registry`: Vault for unique_id tracking
-- `shq.process_seq`: Atomic sequence generation  
-- `shq.process_registry`: Process audit trail
-- `shq.master_error_log`: Error tracking with ID correlation
+### Unique ID Generation
+1. Generate ULID using standard algorithm
+2. Combine with entity metadata
+3. Format as `{db}-{hive}{subhive}-{entity}-{date}-{ulid}`
+4. Store in `shq.id_registry` for uniqueness check
 
-## Integration with Orchestration
+### Idempotency Key Generation
+1. Take complete process_id
+2. Prepend with `IDEM-`
+3. Use for duplicate request detection
 
-### HDO (Hierarchical Data Object)
-```json
-{
-  "process_id": "PROC-altitude_orchestration-20250819-143022-001",
-  "meta": {
-    "idempotency_key": "IDEM-PROC-altitude_orchestration-20250819-143022-001",
-    "plan_id": "altitude_orchestration",
-    "plan_version": "1.0.0",
-    "plan_hash": "sha256:abc123..."
-  }
-}
-```
+---
 
-### Error Correlation
-Every error in `shq.master_error_log` includes:
-- `process_id`: Links to orchestration execution
-- `error_id`: Unique identifier for error instance  
-- `blueprint_id`: Associated blueprint/plan
-- `agent_id`: Responsible agent/orchestrator
+## Storage Tables
 
-### Altitude Mapping
-- **30k**: `overall-orchestrator` (process routing)
-- **20k**: `input-orchestrator` (intake processing)
-- **10k**: `middle-orchestrator` (business logic)
-- **5k**: `output-orchestrator` (result delivery)
+### ID Registry (`shq.id_registry`)
+Stores all generated unique IDs for deduplication:
+- `unique_id`: Primary key
+- `entity_type`: Type of entity
+- `created_at`: Generation timestamp
+- `metadata`: Additional context
+
+### Process Registry (`shq.process_registry`)
+Tracks all process executions:
+- `process_id`: Primary key
+- `plan_id`: Associated plan
+- `started_at`: Process start time
+- `completed_at`: Process end time
+- `status`: Current status
+- `idempotency_key`: For duplicate detection
+
+### Process Sequence (`shq.process_seq`)
+Manages atomic sequence generation:
+- `plan_id`: Plan identifier
+- `date`: Date component
+- `last_seq`: Last issued sequence
+- `updated_at`: Last update time
+
+---
 
 ## Compatible Extensions
 
-### HEIR Semantic Extensions
-- **Strike Escalation**: Track success rates (85%/95%/100%)
-- **Agent Hierarchies**: Map agents to altitude levels
-- **Domain Boundaries**: Enforce tool namespace restrictions
-- **Compliance Metrics**: Automated HEIR doctrine validation
+### Error IDs
+For HEIR error logging compatibility:
+`ERR-<process_id>-<uuid8>`
 
-### Garage-MCP Specific
-- **Bay Integration**: Map bays to hive/subhive structure
-- **Tool Namespace**: Align with existing core/intake/domains
-- **Driver Abstraction**: Support multiple database backends
-- **Event Correlation**: Link MCP events to process IDs
+### Agent IDs
+For agent identification:
+`AGT-<role>-<altitude>-<version>`
 
-## Implementation Notes
+### Blueprint IDs
+For plan identification:
+`BLP-<domain>-<name>-<version>`
 
-### Database Tables
-```sql
--- ID Registry (unique_id vault)
-CREATE TABLE shq.id_registry (
-    unique_id TEXT PRIMARY KEY,
-    entity_type TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    metadata JSONB
-);
+---
 
--- Process Sequence (atomic generation)  
-CREATE TABLE shq.process_seq (
-    plan_id TEXT NOT NULL,
-    date_key TEXT NOT NULL,
-    last_seq INTEGER DEFAULT 0,
-    PRIMARY KEY (plan_id, date_key)
-);
+## Usage Examples
 
--- Process Registry (audit trail)
-CREATE TABLE shq.process_registry (
-    process_id TEXT PRIMARY KEY, 
-    plan_id TEXT NOT NULL,
-    started_at TIMESTAMPTZ DEFAULT NOW(),
-    completed_at TIMESTAMPTZ,
-    status TEXT DEFAULT 'running',
-    hdo_snapshot JSONB
-);
-```
-
-### Generation Functions
+### Python ID Generation
 ```python
-def generate_process_id(plan_id: str) -> str:
-    """Generate HEIR-compliant process ID with atomic sequence"""
-    
-def generate_idempotency_key(process_id: str) -> str:
-    """Generate idempotency key from process ID"""
-    
-def generate_unique_id(db_code: str, hive: str, subhive: str, entity: str) -> str:
-    """Generate unique ID with ULID component"""
+from scripts.id_tools import (
+    make_unique_id,
+    make_process_id,
+    make_idempotency_key
+)
+
+# Generate unique ID
+unique_id = make_unique_id(
+    db_code='SHQ',
+    hive='01',
+    subhive='01',
+    entity='USER'
+)
+
+# Generate process ID
+process_id = make_process_id(
+    plan_id='clients_intake'
+)
+
+# Generate idempotency key
+idem_key = make_idempotency_key(process_id)
 ```
 
-This ID system ensures full compatibility with HEIR doctrine while supporting Garage-MCP's orchestration and error handling requirements.
+### SQL ID Generation
+```sql
+-- Generate process ID
+SELECT shq.next_process_id('clients_intake');
+
+-- Check uniqueness
+SELECT shq.is_unique_id('SHQ-0101-USER-20250819-...');
+
+-- Get idempotency key
+SELECT 'IDEM-' || process_id FROM shq.process_registry;
+```
+
+---
+
+## Validation
+
+### Process ID Validation
+```javascript
+const processIdRegex = /^PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$/;
+const isValid = processIdRegex.test(processId);
+```
+
+### Idempotency Key Validation
+```javascript
+const idemKeyRegex = /^IDEM-PROC-[a-z0-9_]+-\d{8}-\d{6}-\d{3,6}$/;
+const isValid = idemKeyRegex.test(idempotencyKey);
+```
+
+### Unique ID Validation
+```python
+import re
+
+pattern = r'^[A-Z]{2,3}-\d{4}-[A-Z]{3,6}-\d{8}-[0-9A-Z]{26}$'
+is_valid = bool(re.match(pattern, unique_id))
+```
+
+---
+
+## Best Practices
+
+1. **Always validate IDs** before storage or use
+2. **Use idempotency keys** for all state-changing operations
+3. **Store process context** with all generated IDs
+4. **Maintain audit trail** in registry tables
+5. **Check uniqueness** before ID assignment
+6. **Use atomic sequences** for process IDs
+7. **Include metadata** for troubleshooting
+
+---
+
+*This ID system ensures deterministic, traceable identification across all Garage-MCP operations while maintaining full compatibility with HEIR doctrine numbering standards.*

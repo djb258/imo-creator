@@ -1,77 +1,73 @@
 {
   "version": "1.0.0",
-  "description": "Agent role to implementation path bindings for project-specific customization",
-  "project_id": "garage-mcp",
+  "project": "garage-mcp",
   "bindings": {
     "input-subagent-mapper": {
-      "role_id": "input-subagent-mapper",
-      "implementation_path": ".claude/agents/input/11_input_subagent_mapper.md",
-      "implementation_id": "default-mapper",
-      "override_reason": "Standard input mapping for MCP data ingestion"
+      "implementation": ".claude/agents/input/11_input_subagent_mapper.md",
+      "global_fallback": "~/.claude/agents/input/11_input_subagent_mapper.md",
+      "config": {
+        "timeout": 30000,
+        "retry_count": 3
+      }
     },
     "input-subagent-validator": {
-      "role_id": "input-subagent-validator", 
-      "implementation_path": ".claude/agents/input/12_input_subagent_validator.md",
-      "implementation_id": "default-validator",
-      "override_reason": "Standard validation with HEIR compliance checking"
+      "implementation": ".claude/agents/input/12_input_subagent_validator.md",
+      "global_fallback": "~/.claude/agents/input/12_input_subagent_validator.md",
+      "config": {
+        "timeout": 20000,
+        "strict_mode": true
+      }
     },
     "middle-subagent-db": {
-      "role_id": "middle-subagent-db",
-      "implementation_path": ".claude/agents/middle/21_middle_subagent_db_neon.md", 
-      "implementation_id": "neon-db",
-      "override_reason": "Neon PostgreSQL for cloud-native database operations"
+      "implementation": ".claude/agents/middle/21_middle_subagent_db_neon.md",
+      "global_fallback": "~/.claude/agents/middle/21_middle_subagent_db_neon.md",
+      "config": {
+        "driver": "neon",
+        "connection_pool_size": 10,
+        "timeout": 60000
+      }
     },
     "middle-subagent-enforcer": {
-      "role_id": "middle-subagent-enforcer",
-      "implementation_path": ".claude/agents/middle/22_middle_subagent_enforcer.md",
-      "implementation_id": "default-enforcer", 
-      "override_reason": "Business logic enforcement with promotion gating"
+      "implementation": ".claude/agents/middle/22_middle_subagent_enforcer.md",
+      "global_fallback": "~/.claude/agents/middle/22_middle_subagent_enforcer.md",
+      "config": {
+        "enforcement_level": "strict",
+        "auto_promote_threshold": 0.95
+      }
     },
     "output-subagent-notifier": {
-      "role_id": "output-subagent-notifier",
-      "implementation_path": ".claude/agents/output/31_output_subagent_notifier.md",
-      "implementation_id": "default-notifier",
-      "override_reason": "Event notification via sidecar service integration"
+      "implementation": ".claude/agents/output/31_output_subagent_notifier.md",
+      "global_fallback": "~/.claude/agents/output/31_output_subagent_notifier.md",
+      "config": {
+        "channels": ["email", "slack"],
+        "rate_limit": 100
+      }
     },
     "output-subagent-reporter": {
-      "role_id": "output-subagent-reporter", 
-      "implementation_path": ".claude/agents/output/32_output_subagent_reporter.md",
-      "implementation_id": "default-reporter",
-      "override_reason": "Artifact generation with git integration"
+      "implementation": ".claude/agents/output/32_output_subagent_reporter.md",
+      "global_fallback": "~/.claude/agents/output/32_output_subagent_reporter.md",
+      "config": {
+        "formats": ["json", "pdf", "csv"],
+        "artifact_path": "./artifacts"
+      }
     }
   },
-  "orchestrator_bindings": {
+  "orchestrators": {
     "overall-orchestrator": {
-      "implementation_path": ".claude/agents/00_overall_orchestrator.md",
-      "altitude": 30000,
-      "description": "Top-level orchestration and routing"
+      "implementation": ".claude/agents/00_overall_orchestrator.md",
+      "global_fallback": "~/.claude/agents/00_overall_orchestrator.md"
     },
     "input-orchestrator": {
-      "implementation_path": ".claude/agents/input/10_input_orchestrator.md", 
-      "altitude": 20000,
-      "description": "Input stage orchestration (mapper → validator)"
+      "implementation": ".claude/agents/input/10_input_orchestrator.md",
+      "global_fallback": "~/.claude/agents/input/10_input_orchestrator.md"
     },
     "middle-orchestrator": {
-      "implementation_path": ".claude/agents/middle/20_middle_orchestrator.md",
-      "altitude": 10000, 
-      "description": "Middle stage orchestration (db → enforcer)"
+      "implementation": ".claude/agents/middle/20_middle_orchestrator.md",
+      "global_fallback": "~/.claude/agents/middle/20_middle_orchestrator.md"
     },
     "output-orchestrator": {
-      "implementation_path": ".claude/agents/output/30_output_orchestrator.md",
-      "altitude": 5000,
-      "description": "Output stage orchestration (notifier → reporter)"
+      "implementation": ".claude/agents/output/30_output_orchestrator.md",
+      "global_fallback": "~/.claude/agents/output/30_output_orchestrator.md"
     }
-  },
-  "binding_rules": {
-    "allow_runtime_override": false,
-    "require_agent_file_exists": true,
-    "validate_role_compatibility": true,
-    "enforce_altitude_sequence": true
-  },
-  "metadata": {
-    "created_at": "2025-08-19T12:00:00Z",
-    "updated_at": "2025-08-19T12:00:00Z",
-    "created_by": "garage-mcp-setup",
-    "binding_hash": "sha256:placeholder-for-validation"
   }
 }

@@ -1,184 +1,106 @@
 {
   "version": "1.0.0",
-  "registry": {
-    "input-subagent-mapper": {
+  "agents": [
+    {
+      "role_id": "overall-orchestrator",
+      "name": "Overall Orchestrator",
+      "type": "orchestrator",
+      "altitude": 30000,
+      "domain": "overall",
+      "capabilities": ["routing", "delegation", "coordination"],
+      "global_path": ".claude/agents/00_overall_orchestrator.md",
+      "description": "Routes requests to appropriate domain orchestrators"
+    },
+    {
+      "role_id": "input-orchestrator",
+      "name": "Input Orchestrator",
+      "type": "orchestrator",
+      "altitude": 20000,
+      "domain": "input",
+      "capabilities": ["validation", "mapping", "coordination"],
+      "global_path": ".claude/agents/input/10_input_orchestrator.md",
+      "description": "Coordinates input processing: mapper → validator"
+    },
+    {
       "role_id": "input-subagent-mapper",
       "name": "Input Mapper",
-      "category": "input",
+      "type": "subagent",
       "altitude": 20000,
-      "capabilities": [
-        "Data mapping and transformation",
-        "Input normalization",
-        "Schema validation",
-        "Format conversion"
-      ],
-      "implementations": [
-        {
-          "id": "default-mapper",
-          "path": ".claude/agents/input/11_input_subagent_mapper.md",
-          "version": "1.0.0",
-          "description": "Default input mapping implementation",
-          "tags": ["mapping", "normalization"],
-          "default": true
-        }
-      ],
-      "dependencies": ["validation-schema", "mapping-rules"],
-      "constraints": {
-        "timeout_seconds": 120,
-        "max_retries": 2,
-        "required_tools": ["fs_read", "intake_mapping_normalize"]
-      }
+      "domain": "input",
+      "capabilities": ["data_mapping", "transformation", "normalization"],
+      "global_path": ".claude/agents/input/11_input_subagent_mapper.md",
+      "description": "Maps and transforms input data"
     },
-    "input-subagent-validator": {
-      "role_id": "input-subagent-validator", 
+    {
+      "role_id": "input-subagent-validator",
       "name": "Input Validator",
-      "category": "input",
+      "type": "subagent",
       "altitude": 20000,
-      "capabilities": [
-        "Input validation",
-        "Schema compliance checking",
-        "Data quality assessment",
-        "Error reporting"
-      ],
-      "implementations": [
-        {
-          "id": "default-validator",
-          "path": ".claude/agents/input/12_input_subagent_validator.md",
-          "version": "1.0.0", 
-          "description": "Default input validation implementation",
-          "tags": ["validation", "compliance"],
-          "default": true
-        }
-      ],
-      "dependencies": ["validation-schema", "quality-rules"],
-      "constraints": {
-        "timeout_seconds": 90,
-        "max_retries": 1,
-        "required_tools": ["intake_mapping_validate", "heir_check"]
-      }
+      "domain": "input",
+      "capabilities": ["validation", "schema_checking", "error_detection"],
+      "global_path": ".claude/agents/input/12_input_subagent_validator.md",
+      "description": "Validates input against schemas and rules"
     },
-    "middle-subagent-db": {
+    {
+      "role_id": "middle-orchestrator",
+      "name": "Middle Orchestrator",
+      "type": "orchestrator",
+      "altitude": 10000,
+      "domain": "middle",
+      "capabilities": ["database_coordination", "enforcement", "promotion"],
+      "global_path": ".claude/agents/middle/20_middle_orchestrator.md",
+      "description": "Coordinates middle processing: db → enforcer → conditional apply"
+    },
+    {
       "role_id": "middle-subagent-db",
       "name": "Database Agent",
-      "category": "middle", 
+      "type": "subagent",
       "altitude": 10000,
-      "capabilities": [
-        "Database operations",
-        "Transaction management", 
-        "Query execution",
-        "Data persistence",
-        "Plan/apply pattern"
-      ],
-      "implementations": [
-        {
-          "id": "neon-db",
-          "path": ".claude/agents/middle/21_middle_subagent_db_neon.md",
-          "version": "1.0.0",
-          "description": "Neon PostgreSQL database implementation",
-          "tags": ["postgresql", "neon", "cloud"],
-          "default": true
-        }
-      ],
-      "dependencies": ["database-connection", "transaction-manager"],
-      "constraints": {
-        "timeout_seconds": 300,
-        "max_retries": 3, 
-        "required_tools": ["domains_db_migrate", "domains_db_backup"]
-      }
+      "domain": "middle",
+      "capabilities": ["database_operations", "dry_run", "rollback", "apply"],
+      "dependencies": ["neon", "postgres"],
+      "global_path": ".claude/agents/middle/21_middle_subagent_db_neon.md",
+      "description": "Handles database operations with plan/dry-run/apply modes"
     },
-    "middle-subagent-enforcer": {
+    {
       "role_id": "middle-subagent-enforcer",
-      "name": "Business Logic Enforcer",
-      "category": "middle",
-      "altitude": 10000, 
-      "capabilities": [
-        "Business rule enforcement",
-        "Policy validation",
-        "Constraint checking",
-        "Approval gating",
-        "Promotion decisions"
-      ],
-      "implementations": [
-        {
-          "id": "default-enforcer",
-          "path": ".claude/agents/middle/22_middle_subagent_enforcer.md", 
-          "version": "1.0.0",
-          "description": "Default business logic enforcer",
-          "tags": ["rules", "policy", "gating"],
-          "default": true
-        }
-      ],
-      "dependencies": ["business-rules", "policy-engine"],
-      "constraints": {
-        "timeout_seconds": 180,
-        "max_retries": 2,
-        "required_tools": ["heir_check", "intake_mapping_validate"]
-      }
+      "name": "Enforcer Agent",
+      "type": "subagent",
+      "altitude": 10000,
+      "domain": "middle",
+      "capabilities": ["rule_enforcement", "promotion_decision", "gating"],
+      "global_path": ".claude/agents/middle/22_middle_subagent_enforcer.md",
+      "description": "Enforces business rules and makes promotion decisions"
     },
-    "output-subagent-notifier": {
-      "role_id": "output-subagent-notifier", 
-      "name": "Output Notifier",
-      "category": "output",
+    {
+      "role_id": "output-orchestrator",
+      "name": "Output Orchestrator",
+      "type": "orchestrator",
       "altitude": 5000,
-      "capabilities": [
-        "Notification dispatch",
-        "Event publishing",
-        "Status reporting",
-        "Alert management"
-      ],
-      "implementations": [
-        {
-          "id": "default-notifier",
-          "path": ".claude/agents/output/31_output_subagent_notifier.md",
-          "version": "1.0.0",
-          "description": "Default notification implementation", 
-          "tags": ["notifications", "events"],
-          "default": true
-        }
-      ],
-      "dependencies": ["notification-service", "event-bus"],
-      "constraints": {
-        "timeout_seconds": 60,
-        "max_retries": 3,
-        "required_tools": ["sidecar_event", "domains_frontend_deploy"]
-      }
+      "domain": "output",
+      "capabilities": ["notification", "reporting", "artifact_generation"],
+      "global_path": ".claude/agents/output/30_output_orchestrator.md",
+      "description": "Coordinates output processing: notifier → reporter"
     },
-    "output-subagent-reporter": {
+    {
+      "role_id": "output-subagent-notifier",
+      "name": "Notifier Agent",
+      "type": "subagent",
+      "altitude": 5000,
+      "domain": "output",
+      "capabilities": ["email", "slack", "webhook", "alerts"],
+      "global_path": ".claude/agents/output/31_output_subagent_notifier.md",
+      "description": "Sends notifications across channels"
+    },
+    {
       "role_id": "output-subagent-reporter",
-      "name": "Output Reporter", 
-      "category": "output",
+      "name": "Reporter Agent",
+      "type": "subagent",
       "altitude": 5000,
-      "capabilities": [
-        "Report generation",
-        "Artifact creation",
-        "Result formatting",
-        "Output delivery"
-      ],
-      "implementations": [
-        {
-          "id": "default-reporter",
-          "path": ".claude/agents/output/32_output_subagent_reporter.md",
-          "version": "1.0.0",
-          "description": "Default reporting implementation",
-          "tags": ["reporting", "artifacts"], 
-          "default": true
-        }
-      ],
-      "dependencies": ["report-templates", "artifact-store"],
-      "constraints": {
-        "timeout_seconds": 120,
-        "max_retries": 2,
-        "required_tools": ["fs_write", "git_commit"]
-      }
+      "domain": "output",
+      "capabilities": ["report_generation", "artifact_creation", "summary"],
+      "global_path": ".claude/agents/output/32_output_subagent_reporter.md",
+      "description": "Generates reports and artifacts"
     }
-  },
-  "orchestration_rules": {
-    "altitude_sequence": [30000, 20000, 10000, 5000],
-    "delegation_only": true,
-    "error_escalation": {
-      "insert_to_error_log": true,
-      "reraise_with_error_id": true,
-      "max_cascade_depth": 3
-    }
-  }
+  ]
 }
