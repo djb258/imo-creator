@@ -29,7 +29,22 @@ except ImportError:
     DOCTRINE_ENABLED = False
     print("Doctrine features not available")
 
+# Import error logging and database
+try:
+    from src.server.db.neon import init_migrations
+    from src.server.routes import errors as errors_routes
+    ERROR_LOGGING_ENABLED = True
+except ImportError:
+    ERROR_LOGGING_ENABLED = False
+    print("Error logging not available - NEON_DATABASE_URL may not be set")
+
 app = FastAPI(title="Blueprint API")
+
+# Database initialization
+if ERROR_LOGGING_ENABLED:
+    @app.on_event("startup")
+    def _init_db():
+        init_migrations()
 
 # Emit app start event if HEIR is enabled
 if HEIR_ENABLED:
@@ -427,10 +442,14 @@ async def root():
     if DOCTRINE_ENABLED:
         endpoints.extend(["/api/ssot/save", "/api/subagents"])
     
+    if ERROR_LOGGING_ENABLED:
+        endpoints.append("/api/errors/log")
+    
     return {
         "message": "Blueprint API",
         "heir_enabled": HEIR_ENABLED,
         "doctrine_enabled": DOCTRINE_ENABLED,
+        "error_logging_enabled": ERROR_LOGGING_ENABLED,
         "endpoints": endpoints
     }
 
@@ -478,3 +497,7 @@ async def api_subagents():
         
     except Exception as e:
         return JSONResponse({"error": f"Failed to fetch subagents: {str(e)}"}, status_code=500)
+
+# Include error logging router
+if ERROR_LOGGING_ENABLED:
+    app.include_router(errors_routes.router)
