@@ -1,0 +1,15 @@
+[bay]
+name = "database"
+description = "Database management and operations bay"
+enabled = true
+
+[modules]
+domains = ["db"]
+
+[tools]
+migrate = { module = "domains.db", enabled = true }
+upgrade = { module = "domains.db", enabled = true }
+seed = { module = "domains.db", enabled = true }
+snapshot = { module = "domains.db", enabled = true }
+backup = { module = "domains.db", enabled = true }
+restore = { module = "domains.db", enabled = true }

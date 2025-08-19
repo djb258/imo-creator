@@ -1,0 +1,66 @@
+# Database Configuration for Firebase, BigQuery, Neon
+# Environment variables should be set for sensitive credentials
+
+[data_adapter]
+enabled_drivers = ["firebase", "bigquery", "neon"]
+default_pipeline_timeout = 300  # seconds
+max_batch_size = 1000
+enable_cross_db_queries = true
+
+[firebase]
+# Set FIREBASE_PROJECT_ID and FIREBASE_SERVICE_ACCOUNT_KEY environment variables
+collection_prefix = "garage_"
+realtime_enabled = true
+max_connections = 10
+timeout = 30
+
+[bigquery]
+# Set GOOGLE_CLOUD_PROJECT_ID and GOOGLE_APPLICATION_CREDENTIALS environment variables
+dataset_id = "garage_analytics"
+location = "US"
+job_timeout = 300
+max_query_size_gb = 10
+
+[neon]
+# Set NEON_API_KEY and NEON_PROJECT_ID environment variables
+database_name = "garage_db"
+connection_pooling = true
+max_connections = 20
+ssl_mode = "require"
+
+# Data Pipeline Configurations
+[pipelines.realtime_analytics]
+name = "Real-time Analytics Pipeline"
+source = "firebase"
+target = "bigquery"
+source_table = "user_events"
+target_table = "events_raw"
+enabled = true
+batch_interval = 60  # seconds
+
+[pipelines.analytics_to_app]
+name = "Analytics to Application DB"
+source = "bigquery"
+target = "neon"
+source_table = "user_metrics_aggregated"
+target_table = "user_dashboard_metrics"
+enabled = true
+schedule = "0 */6 * * *"  # Every 6 hours
+
+# Transform Rules
+[transform_rules.firebase_to_bigquery]
+field_mappings = { "user_id" = "user_uuid", "timestamp" = "event_time" }
+exclude_fields = ["_internal", "temp_data"]
+computed_fields = { "processed_at" = "timestamp", "data_source" = "firebase" }
+
+[transform_rules.bigquery_to_neon]
+field_mappings = { "user_uuid" = "user_id", "event_time" = "last_activity" }
+exclude_fields = ["raw_data", "processing_metadata"]
+field_transforms = { "user_email" = "lowercase" }
+
+# API Rate Limits
+[rate_limits]
+firebase_reads_per_minute = 1000
+bigquery_queries_per_hour = 100
+neon_connections = 50
+cross_db_queries_per_hour = 20
