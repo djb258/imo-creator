@@ -8,7 +8,10 @@ import subprocess
 import sys
 import os
 import requests
-from typing import Optional
+import hashlib
+import time
+import base64
+from typing import Optional, Dict, Any
 
 app = FastAPI(title="Blueprint API")
 
@@ -323,11 +326,153 @@ async def llm_endpoint(request: Request):
         print(f"LLM API error: {error}")
         return JSONResponse({"error": str(error)}, status_code=502)
 
+# SSOT processing utilities
+def _ts_ms() -> int:
+    return int(time.time() * 1000)
+
+def _rand16(seed: str) -> str:
+    h = hashlib.sha256(seed.encode('utf8')).digest()
+    return base64.b64encode(h[:10]).decode().replace('=', '').replace('+', '-').replace('/', '_')
+
+def _compact_ts(ts_ms: int) -> str:
+    import datetime
+    t = datetime.datetime.utcfromtimestamp(ts_ms / 1000)
+    return f"{t.year:04d}{t.month:02d}{t.day:02d}-{t.hour:02d}{t.minute:02d}{t.second:02d}"
+
+def generate_unique_id(ssot: Dict[str, Any]) -> str:
+    db = os.getenv("DOCTRINE_DB", "shq")
+    subhive = os.getenv("DOCTRINE_SUBHIVE", "03")
+    app = os.getenv("DOCTRINE_APP", "imo")
+    ts_ms = ssot.get("meta", {}).get("_created_at_ms", _ts_ms())
+    app_name = (ssot.get("meta", {}).get("app_name", "imo-creator") or "").strip()
+    seed = f"{db}|{subhive}|{app}|{app_name}|{ts_ms}"
+    r = _rand16(seed)
+    return f"{db}-{subhive}-{app}-{_compact_ts(ts_ms)}-{r}"
+
+def generate_process_id(ssot: Dict[str, Any]) -> str:
+    db = os.getenv("DOCTRINE_DB", "shq")
+    subhive = os.getenv("DOCTRINE_SUBHIVE", "03")
+    app = os.getenv("DOCTRINE_APP", "imo")
+    ver = os.getenv("DOCTRINE_VER", "1")
+    
+    stage = (ssot.get("meta", {}).get("stage", "overview") or "").lower()
+    ts_ms = ssot.get("meta", {}).get("_created_at_ms", _ts_ms())
+    ymd = _compact_ts(ts_ms).split("-")[0]
+    return f"{db}.{subhive}.{app}.V{ver}.{ymd}.{stage}"
+
+def ensure_ids(ssot: Dict[str, Any]) -> Dict[str, Any]:
+    ssot = dict(ssot or {})
+    meta = dict(ssot.get("meta", {}))
+    
+    if not meta.get("_created_at_ms"):
+        meta["_created_at_ms"] = _ts_ms()
+    ssot["meta"] = meta
+    
+    doctrine = dict(ssot.get("doctrine", {}))
+    if not doctrine.get("unique_id"):
+        doctrine["unique_id"] = generate_unique_id(ssot)
+    if not doctrine.get("process_id"):
+        doctrine["process_id"] = generate_process_id(ssot)
+    if not doctrine.get("schema_version"):
+        doctrine["schema_version"] = "HEIR/1.0"
+    ssot["doctrine"] = doctrine
+    
+    return ssot
+
+def _scrub(o):
+    OMIT = {"timestamp_last_touched", "_created_at_ms", "blueprint_version_hash"}
+    
+    if isinstance(o, dict):
+        result = {}
+        for k in sorted(o.keys()):
+            if k not in OMIT:
+                result[k] = _scrub(o[k])
+        return result
+    elif isinstance(o, list):
+        return [_scrub(v) for v in o]
+    else:
+        return o
+
+def stamp_version_hash(ssot: Dict[str, Any]) -> Dict[str, Any]:
+    canon = json.dumps(_scrub(ssot))
+    h = hashlib.sha256(canon.encode('utf8')).hexdigest()
+    
+    ssot = dict(ssot)
+    doctrine = dict(ssot.get("doctrine", {}))
+    doctrine["blueprint_version_hash"] = h
+    ssot["doctrine"] = doctrine
+    
+    return ssot
+
+@app.post("/api/ssot/save")
+async def save_ssot(request: Request):
+    """SSOT processing with doctrine-safe IDs"""
+    try:
+        body = await request.json()
+        ssot = body.get("ssot", {})
+        ssot = ensure_ids(ssot)
+        ssot = stamp_version_hash(ssot)
+        
+        return JSONResponse({"ok": True, "ssot": ssot})
+    except Exception as error:
+        print(f"SSOT processing error: {error}")
+        return JSONResponse({"error": f"Failed to process SSOT: {str(error)}"}, status_code=500)
+
+@app.get("/api/subagents")
+async def get_subagents():
+    """Subagent registry with garage-mcp integration"""
+    BASE = os.getenv("GARAGE_MCP_URL")
+    TOKEN = os.getenv("GARAGE_MCP_TOKEN")
+    PATH = os.getenv("SUBAGENT_REGISTRY_PATH", "/registry/subagents")
+    
+    FALLBACK = [
+        {"id": "validate-ssot", "bay": "frontend", "desc": "Validate SSOT against HEIR schema"},
+        {"id": "heir-check", "bay": "backend", "desc": "Run HEIR checks on blueprint"},
+        {"id": "register-blueprint", "bay": "backend", "desc": "Persist + emit registration event"},
+    ]
+    
+    # If no garage-mcp URL configured, return fallback
+    if not BASE:
+        return JSONResponse({"items": FALLBACK})
+    
+    try:
+        headers = {"Content-Type": "application/json"}
+        if TOKEN:
+            headers["Authorization"] = f"Bearer {TOKEN}"
+        
+        response = requests.get(f"{BASE}{PATH}", headers=headers, timeout=5)
+        
+        if not response.ok:
+            raise Exception(f"HTTP {response.status_code}: {response.reason}")
+        
+        data = response.json()
+        items = data if isinstance(data, list) else data.get("items", [])
+        
+        processed_items = []
+        for item in items:
+            processed_items.append({
+                "id": item.get("id") or item.get("name", "unknown"),
+                "bay": item.get("bay") or item.get("namespace", "unknown"),
+                "desc": item.get("description") or item.get("desc", "")
+            })
+        
+        # Return processed items or fallback if empty
+        return JSONResponse({
+            "items": processed_items if processed_items else FALLBACK
+        })
+        
+    except Exception as error:
+        print(f"Garage-MCP fetch error: {error}")
+        # Gracefully fall back to static list
+        return JSONResponse({"items": FALLBACK})
+
 @app.get("/")
 async def root():
     return {"message": "Blueprint API", "endpoints": [
         "/blueprints/{slug}/manifest",
         "/blueprints/{slug}/score",
         "/blueprints/{slug}/visuals",
-        "/llm"
+        "/llm",
+        "/api/ssot/save",
+        "/api/subagents"
     ]}
