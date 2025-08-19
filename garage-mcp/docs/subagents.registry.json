@@ -1,0 +1,184 @@
+{
+  "version": "1.0.0",
+  "registry": {
+    "input-subagent-mapper": {
+      "role_id": "input-subagent-mapper",
+      "name": "Input Mapper",
+      "category": "input",
+      "altitude": 20000,
+      "capabilities": [
+        "Data mapping and transformation",
+        "Input normalization",
+        "Schema validation",
+        "Format conversion"
+      ],
+      "implementations": [
+        {
+          "id": "default-mapper",
+          "path": ".claude/agents/input/11_input_subagent_mapper.md",
+          "version": "1.0.0",
+          "description": "Default input mapping implementation",
+          "tags": ["mapping", "normalization"],
+          "default": true
+        }
+      ],
+      "dependencies": ["validation-schema", "mapping-rules"],
+      "constraints": {
+        "timeout_seconds": 120,
+        "max_retries": 2,
+        "required_tools": ["fs_read", "intake_mapping_normalize"]
+      }
+    },
+    "input-subagent-validator": {
+      "role_id": "input-subagent-validator", 
+      "name": "Input Validator",
+      "category": "input",
+      "altitude": 20000,
+      "capabilities": [
+        "Input validation",
+        "Schema compliance checking",
+        "Data quality assessment",
+        "Error reporting"
+      ],
+      "implementations": [
+        {
+          "id": "default-validator",
+          "path": ".claude/agents/input/12_input_subagent_validator.md",
+          "version": "1.0.0", 
+          "description": "Default input validation implementation",
+          "tags": ["validation", "compliance"],
+          "default": true
+        }
+      ],
+      "dependencies": ["validation-schema", "quality-rules"],
+      "constraints": {
+        "timeout_seconds": 90,
+        "max_retries": 1,
+        "required_tools": ["intake_mapping_validate", "heir_check"]
+      }
+    },
+    "middle-subagent-db": {
+      "role_id": "middle-subagent-db",
+      "name": "Database Agent",
+      "category": "middle", 
+      "altitude": 10000,
+      "capabilities": [
+        "Database operations",
+        "Transaction management", 
+        "Query execution",
+        "Data persistence",
+        "Plan/apply pattern"
+      ],
+      "implementations": [
+        {
+          "id": "neon-db",
+          "path": ".claude/agents/middle/21_middle_subagent_db_neon.md",
+          "version": "1.0.0",
+          "description": "Neon PostgreSQL database implementation",
+          "tags": ["postgresql", "neon", "cloud"],
+          "default": true
+        }
+      ],
+      "dependencies": ["database-connection", "transaction-manager"],
+      "constraints": {
+        "timeout_seconds": 300,
+        "max_retries": 3, 
+        "required_tools": ["domains_db_migrate", "domains_db_backup"]
+      }
+    },
+    "middle-subagent-enforcer": {
+      "role_id": "middle-subagent-enforcer",
+      "name": "Business Logic Enforcer",
+      "category": "middle",
+      "altitude": 10000, 
+      "capabilities": [
+        "Business rule enforcement",
+        "Policy validation",
+        "Constraint checking",
+        "Approval gating",
+        "Promotion decisions"
+      ],
+      "implementations": [
+        {
+          "id": "default-enforcer",
+          "path": ".claude/agents/middle/22_middle_subagent_enforcer.md", 
+          "version": "1.0.0",
+          "description": "Default business logic enforcer",
+          "tags": ["rules", "policy", "gating"],
+          "default": true
+        }
+      ],
+      "dependencies": ["business-rules", "policy-engine"],
+      "constraints": {
+        "timeout_seconds": 180,
+        "max_retries": 2,
+        "required_tools": ["heir_check", "intake_mapping_validate"]
+      }
+    },
+    "output-subagent-notifier": {
+      "role_id": "output-subagent-notifier", 
+      "name": "Output Notifier",
+      "category": "output",
+      "altitude": 5000,
+      "capabilities": [
+        "Notification dispatch",
+        "Event publishing",
+        "Status reporting",
+        "Alert management"
+      ],
+      "implementations": [
+        {
+          "id": "default-notifier",
+          "path": ".claude/agents/output/31_output_subagent_notifier.md",
+          "version": "1.0.0",
+          "description": "Default notification implementation", 
+          "tags": ["notifications", "events"],
+          "default": true
+        }
+      ],
+      "dependencies": ["notification-service", "event-bus"],
+      "constraints": {
+        "timeout_seconds": 60,
+        "max_retries": 3,
+        "required_tools": ["sidecar_event", "domains_frontend_deploy"]
+      }
+    },
+    "output-subagent-reporter": {
+      "role_id": "output-subagent-reporter",
+      "name": "Output Reporter", 
+      "category": "output",
+      "altitude": 5000,
+      "capabilities": [
+        "Report generation",
+        "Artifact creation",
+        "Result formatting",
+        "Output delivery"
+      ],
+      "implementations": [
+        {
+          "id": "default-reporter",
+          "path": ".claude/agents/output/32_output_subagent_reporter.md",
+          "version": "1.0.0",
+          "description": "Default reporting implementation",
+          "tags": ["reporting", "artifacts"], 
+          "default": true
+        }
+      ],
+      "dependencies": ["report-templates", "artifact-store"],
+      "constraints": {
+        "timeout_seconds": 120,
+        "max_retries": 2,
+        "required_tools": ["fs_write", "git_commit"]
+      }
+    }
+  },
+  "orchestration_rules": {
+    "altitude_sequence": [30000, 20000, 10000, 5000],
+    "delegation_only": true,
+    "error_escalation": {
+      "insert_to_error_log": true,
+      "reraise_with_error_id": true,
+      "max_cascade_depth": 3
+    }
+  }
+}

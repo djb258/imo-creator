@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Garage-MCP Sub-Agent Registry Schema",
+  "description": "Schema for sub-agent registry with stable role IDs and swappable implementations",
+  "type": "object",
+  "required": ["version", "registry"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Registry schema version"
+    },
+    "registry": {
+      "type": "object",
+      "description": "Registry of available sub-agents",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["role_id", "name", "category", "altitude", "capabilities", "implementations"],
+        "properties": {
+          "role_id": {
+            "type": "string",
+            "description": "Stable role identifier"
+          },
+          "name": {
+            "type": "string", 
+            "description": "Human-readable name"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["input", "middle", "output", "orchestrator"],
+            "description": "Agent category"
+          },
+          "altitude": {
+            "type": "integer",
+            "enum": [5000, 10000, 20000, 30000],
+            "description": "Orchestration altitude level"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Agent capabilities list"
+          },
+          "implementations": {
+            "type": "array",
+            "description": "Available implementations",
+            "items": {
+              "type": "object",
+              "required": ["id", "path", "version", "description"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Implementation identifier"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path to agent file"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Implementation version"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Implementation description"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "description": "Implementation tags"
+                },
+                "default": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Default implementation for this role"
+                }
+              }
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Required dependencies or tools"
+          },
+          "constraints": {
+            "type": "object",
+            "description": "Execution constraints",
+            "properties": {
+              "timeout_seconds": {"type": "integer", "minimum": 1},
+              "max_retries": {"type": "integer", "minimum": 0},
+              "required_tools": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "orchestration_rules": {
+      "type": "object",
+      "description": "Orchestration execution rules",
+      "properties": {
+        "altitude_sequence": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "description": "Required altitude execution sequence"
+        },
+        "delegation_only": {
+          "type": "boolean",
+          "default": true,
+          "description": "Orchestrators must delegate, not perform IO directly"
+        },
+        "error_escalation": {
+          "type": "object",
+          "description": "Error handling and escalation rules",
+          "properties": {
+            "insert_to_error_log": {"type": "boolean", "default": true},
+            "reraise_with_error_id": {"type": "boolean", "default": true},
+            "max_cascade_depth": {"type": "integer", "minimum": 1, "default": 3}
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

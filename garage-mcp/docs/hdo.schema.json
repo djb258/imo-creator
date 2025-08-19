@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GarageMCP-HDO",
+  "description": "Hierarchical Data Object schema for Garage-MCP orchestration with HEIR-aligned ID patterns",
+  "type": "object",
+  "required": [
+    "stage",
+    "process_id", 
+    "blueprint_id",
+    "ttl",
+    "validated",
+    "promoted_to",
+    "timestamp_last_touched",
+    "payload",
+    "log",
+    "meta"
+  ],
+  "properties": {
+    "stage": {
+      "type": "string",
+      "enum": ["input", "middle", "output"],
+      "description": "Current orchestration stage"
+    },
+    "process_id": {
+      "type": "string",
+      "pattern": "^PROC-[a-z0-9_]+-\\d{8}-\\d{6}-\\d{3,6}$",
+      "description": "HEIR-compliant process identifier"
+    },
+    "blueprint_id": {
+      "type": "string",
+      "description": "Associated blueprint/plan identifier"
+    },
+    "ttl": {
+      "type": "integer",
+      "minimum": 60,
+      "description": "Time-to-live in seconds"
+    },
+    "validated": {
+      "type": "boolean",
+      "description": "Validation status of current stage"
+    },
+    "promoted_to": {
+      "type": ["string", "null"],
+      "description": "Next stage if promoted, null otherwise"
+    },
+    "timestamp_last_touched": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last modification"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Stage-specific data payload"
+    },
+    "log": {
+      "type": "array",
+      "description": "Execution log entries",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "agent_id", "action", "status"],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Agent or orchestrator identifier"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action performed"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["started", "completed", "failed", "skipped"]
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error_id": {
+            "type": ["string", "null"],
+            "description": "Error identifier if status is failed"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional action details"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["plan_id", "plan_version", "plan_hash", "idempotency_key"],
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "description": "Plan identifier used in process_id"
+        },
+        "plan_version": {
+          "type": "string",
+          "description": "Version of the orchestration plan"
+        },
+        "plan_hash": {
+          "type": "string",
+          "description": "SHA256 hash of plan content"
+        },
+        "idempotency_key": {
+          "type": "string", 
+          "pattern": "^IDEM-PROC-[a-z0-9_]+-\\d{8}-\\d{6}-\\d{3,6}$",
+          "description": "HEIR-compliant idempotency key"
+        },
+        "altitude_trace": {
+          "type": "object",
+          "description": "Altitude-based execution trace",
+          "properties": {
+            "30k_overall": {
+              "type": "object",
+              "description": "Overall orchestrator execution",
+              "properties": {
+                "started_at": {"type": "string", "format": "date-time"},
+                "completed_at": {"type": ["string", "null"], "format": "date-time"},
+                "status": {"type": "string", "enum": ["running", "completed", "failed"]}
+              }
+            },
+            "20k_input": {
+              "type": "object", 
+              "description": "Input orchestrator execution"
+            },
+            "10k_middle": {
+              "type": "object",
+              "description": "Middle orchestrator execution"  
+            },
+            "5k_output": {
+              "type": "object",
+              "description": "Output orchestrator execution"
+            }
+          }
+        },
+        "error_context": {
+          "type": "object",
+          "description": "Error handling context",
+          "properties": {
+            "last_error_id": {"type": ["string", "null"]},
+            "error_count": {"type": "integer", "minimum": 0},
+            "retry_count": {"type": "integer", "minimum": 0},
+            "max_retries": {"type": "integer", "minimum": 0, "default": 3}
+          }
+        },
+        "agent_bindings": {
+          "type": "object",
+          "description": "Agent role to implementation bindings",
+          "properties": {
+            "input-subagent-mapper": {"type": "string"},
+            "input-subagent-validator": {"type": "string"},
+            "middle-subagent-db": {"type": "string"}, 
+            "middle-subagent-enforcer": {"type": "string"},
+            "output-subagent-notifier": {"type": "string"},
+            "output-subagent-reporter": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
