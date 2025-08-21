@@ -1,6 +1,10 @@
-# Blueprint App Shell
+# IMO-Creator
 
 A 4-page planning app with SSOT manifest, flex ladder stages, and visual progress tracking.
+
+## Cockpit & Lens
+- Lens: /lens
+- Cockpit: /cockpit?repo=<owner/repo>&mode=factory|mechanic
 
 ## Features
 - **4-Page UI**: Overview with progress visual, Input/Middle/Output pages

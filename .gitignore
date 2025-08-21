@@ -23,3 +23,5 @@ public/
 # OS
 .DS_Store
 Thumbs.db
+
+.imo/local/
