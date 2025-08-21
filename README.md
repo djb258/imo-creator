@@ -239,6 +239,7 @@ profiles:
 ## 🎛️ Repo-Lens Web Interface
 
 ### Navigation Routes
+- **`/launchpad`** - 3-window launcher (Code, Wiki, Ops with persistent positioning)
 - **`/lens`** - Repository browser and action selector
 - **`/cockpit?repo=owner/repo&mode=factory|mechanic`** - Per-repository command center
 
