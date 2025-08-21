@@ -295,6 +295,46 @@ def test_import():
         
         return fixes
     
+    def fix_documentation_wiki(self) -> List[bool]:
+        """Add deep wiki documentation structure"""
+        fixes = []
+        
+        # Check if wiki already exists
+        wiki_dir = self.repo_path / "docs" / "wiki"
+        if not wiki_dir.exists():
+            # Run wiki generator script
+            wiki_script = self.imo_creator_path / "tools" / "wiki_generator.sh"
+            if wiki_script.exists():
+                try:
+                    import subprocess
+                    result = subprocess.run(
+                        ["bash", str(wiki_script), str(self.repo_path), self.repo_path.name],
+                        capture_output=True,
+                        text=True
+                    )
+                    if result.returncode == 0:
+                        print("Generated deep wiki documentation")
+                        fixes.append(True)
+                    else:
+                        print(f"Wiki generation failed: {result.stderr}")
+                        fixes.append(False)
+                except Exception as e:
+                    print(f"Error running wiki generator: {e}")
+                    # Fallback: create basic wiki structure
+                    wiki_dir.mkdir(parents=True, exist_ok=True)
+                    readme = self.repo_path / "docs" / "README.md"
+                    if not readme.exists():
+                        readme.parent.mkdir(parents=True, exist_ok=True)
+                        readme.write_text("# Project Wiki\n\nDeep documentation structure.\n")
+                        fixes.append(True)
+            else:
+                print("Wiki generator script not found")
+                fixes.append(False)
+        else:
+            print("Wiki documentation already exists")
+        
+        return fixes
+    
     def fix_deployment_config(self) -> bool:
         """Fix deployment configuration"""
         if (self.repo_path / "vercel.json").exists():
@@ -345,7 +385,8 @@ python_files = ["test_*.py", "*_test.py"]
             ("testing", self.fix_testing),
             ("deployment_config", lambda: [self.fix_deployment_config()]),
             ("code_quality", self.fix_code_quality),
-            ("compliance_monitoring", self.fix_compliance_monitoring)
+            ("compliance_monitoring", self.fix_compliance_monitoring),
+            ("documentation_wiki", self.fix_documentation_wiki)
         ]
         
         for category_name, fix_func in fix_categories:

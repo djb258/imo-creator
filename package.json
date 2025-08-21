@@ -1,14 +1,30 @@
 {
   "name": "imo-creator",
-  "version": "1.0.0",
-  "description": "IMO Creator Blueprint App with LLM-assisted prompt generation",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Unified repository compliance and orchestration system with Factory/Mechanic architecture",
   "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "mkdir -p public && cp index.html public/ && cp -r docs public/",
-    "start": "echo 'Static files served by Vercel'"
+    "dev": "node factory/ui/dev.js",
+    "build": "node factory/ui/build.js",
+    "init": "bash factory/ui/init.sh",
+    "recall": "bash mechanic/recall/recall.sh",
+    "env:check": "node scripts/env-check.mjs",
+    "compliance:check": "python tools/repo_compliance_check.py",
+    "compliance:fix": "python tools/repo_compliance_fixer.py",
+    "audit": "python simple_garage_bay.py",
+    "orchestrate": "python tools/repo_mcp_orchestrator.py",
+    "vercel:dev": "vercel dev",
+    "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/"
   },
-  "keywords": ["blueprint", "automation", "llm", "anthropic", "openai"],
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.0",
+    "firebase-admin": "^12.0.0",
+    "undici": "^6.19.8"
+  },
+  "devDependencies": {},
+  "keywords": ["compliance", "orchestration", "garage-mcp", "heir", "imo-creator", "factory", "mechanic"],
   "author": "",
   "license": "MIT",
   "engines": {

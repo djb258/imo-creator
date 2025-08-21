@@ -1,0 +1,32 @@
+{
+  "timestamp": "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\scraping-tool\\imo-creator",
+  "target": "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\scraping-tool\\hivemind-command-center",
+  "imo_creator": {
+    "compliance_score": 100.0,
+    "checks": {
+      "git_repo": true,
+      "python_project": true,
+      "documentation": true,
+      "ci_cd": true,
+      "testing": true,
+      "deployment_config": true,
+      "code_quality": true,
+      "fastapi_compliance": true,
+      "documentation:_found": true,
+      "license_file:_found": true,
+      "contribution_guidelines:_found": true,
+      "ci/cd_pipeline:_found": true,
+      "python_dependencies:_found": true,
+      "test_directory:_found": true,
+      "deployment_config:_found": true
+    },
+    "heartbeat_installed": true,
+    "config_present": true
+  },
+  "summary": {
+    "total_issues": 0,
+    "recommendations_available": false,
+    "fully_compliant": true,
+    "monitoring_enabled": true
+  }
+}
