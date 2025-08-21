@@ -91,13 +91,17 @@ if [ -n "$MISSING_FILES" ]; then
   echo "[Recall] Run compliance fixer to add them: python tools/repo_compliance_fixer.py $TARGET"
 fi
 
-# Generate deep wiki if not present
+# Generate deep wiki with branch specifications if not present
 if [ ! -d "$TARGET/docs/wiki" ]; then
-  echo "[Recall] Generating deep wiki documentation..."
-  bash tools/wiki_generator.sh "$TARGET" "$(basename "$TARGET")"
-  echo "[Recall] ✅ Added deep wiki structure"
+  echo "[Recall] Generating deep wiki with branch specifications..."
+  bash tools/deep_wiki_generator.sh "$TARGET" "$(basename "$TARGET")"
+  echo "[Recall] ✅ Added deep wiki system with branch architecture"
+elif [ ! -f "$TARGET/docs/branches/schema.json" ]; then
+  echo "[Recall] Upgrading existing wiki to branch specification system..."
+  bash tools/deep_wiki_generator.sh "$TARGET" "$(basename "$TARGET")"
+  echo "[Recall] ✅ Upgraded to branch-driven wiki system"
 else
-  echo "[Recall] Wiki already exists - preserving existing content"
+  echo "[Recall] Branch-driven wiki already exists - preserving existing content"
 fi
 
 echo "[Recall] ✅ Recall complete"

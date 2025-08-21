@@ -1,0 +1,6 @@
+# Root structure of the Christmas tree
+root:
+  - outreach-root
+  - ops-root
+  - data-root
+  - api-root

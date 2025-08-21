@@ -137,9 +137,9 @@ JSON
 # Copy compliance check script
 cp "templates/imo-compliance-check.py" "$TARGET/imo-compliance-check.py" 2>/dev/null || echo "[Factory] Note: Compliance check script not found in templates/"
 
-# Generate deep wiki
-echo "[Factory] Generating deep wiki documentation..."
-bash tools/wiki_generator.sh "$TARGET" "$APP_NAME"
+# Generate deep wiki with branch specifications
+echo "[Factory] Generating deep wiki with branch specifications..."
+bash tools/deep_wiki_generator.sh "$TARGET" "$APP_NAME"
 
 echo "[Factory] ✅ Created $TARGET with deep wiki"
 echo "[Factory] Next steps:"

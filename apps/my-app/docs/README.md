@@ -1,23 +1,36 @@
-# Project Wiki (Deep)
+# Deep Wiki System
 
-## Navigation
-- [[00-overview/index.md|📊 Overview]]
-- [[10-input/index.md|📥 Input Layer]]
-- [[20-middle/index.md|⚙️ Middle Layer]]
-- [[30-output/index.md|📤 Output Layer]]
-- [[40-agents/index.md|🤖 Agents]]
-- [[50-environment/index.md|🔐 Environment]]
-- [[60-operations/index.md|🚀 Operations]]
-- [[70-troubleshooting/index.md|🔧 Troubleshooting]]
+## Core Navigation
+- [[wiki/00-overview/index.md|📊 System Overview]]
+- [[wiki/branches/README.md|🌲 Branch Architecture]]
+- [[wiki/10-input/index.md|📥 Input Layer]]
+- [[wiki/20-middle/index.md|⚙️ Middle Layer]]
+- [[wiki/30-output/index.md|📤 Output Layer]]
+- [[wiki/40-agents/index.md|🤖 Agent System]]
+- [[wiki/50-environment/index.md|🔐 Environment]]
+- [[wiki/60-operations/index.md|🚀 Operations]]
+- [[wiki/70-troubleshooting/index.md|🔧 Troubleshooting]]
 
-## Quick Links
-- [API Documentation](wiki/00-overview/api.md)
-- [Deployment Guide](wiki/60-operations/deployment.md)
-- [Error Codes](wiki/70-troubleshooting/error-codes.md)
-- [Agent Registry](wiki/40-agents/registry.md)
+## Branch Specifications
+This repository uses YAML-driven branch specifications for systematic documentation:
+- Branch definitions in `docs/branches/*.yml`
+- Schema validation via `docs/branches/schema.json` 
+- Auto-generated wiki pages via `npm run docs`
 
-## Search
-Use `Ctrl+F` or navigate through categories above.
+## Quick Commands
+```bash
+npm run docs         # Generate wiki from branch specs
+npm run docs:watch   # Auto-regenerate on changes
+npm run env:check    # Validate environment
+```
+
+## Architecture Patterns
+Each branch follows the Input → Middle → Output pattern with:
+- **Altitude assignment** (30k/20k/10k/5k)
+- **Tool profiles** (db, deploy, messaging, etc.)
+- **Contract definitions** (API endpoints)
+- **SLA specifications**
+- **Risk assessments**
 
 ---
-*Generated with IMO Creator v2.0*
+*Deep Wiki System - Generated with IMO Creator v2.0*

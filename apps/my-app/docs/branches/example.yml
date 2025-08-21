@@ -1,0 +1,23 @@
+branch_id: my-app-main
+title: my-app → Main Processing
+parent_id: api-root
+altitude: "10k"            # 30k/20k/10k/5k
+contracts: ["/health", "/version", "/heir/status"]
+
+input:
+  sources: ["api", "queue", "webhook"]
+  schema:  ["request", "payload"]
+  guards:  ["env:check", "heir:intake", "rate-limit"]
+
+middle:
+  steps:   ["validate", "transform", "process", "store"]
+  validators: ["schema-validate", "business-rules", "state-check"]
+
+output:
+  destinations: ["response", "webhook", "queue"]
+  sLAs: ["<200ms p95", "99.9% uptime", "idempotent"]
+
+tools_profile: ["db", "deploy", "logging"]
+metrics: ["request_count", "latency_p95", "error_rate"]
+risks:   ["database-timeout", "memory-leak", "rate-limits"]
+dashboards: ["{{DASHBOARD_URL}}", "{{METRICS_URL}}"]

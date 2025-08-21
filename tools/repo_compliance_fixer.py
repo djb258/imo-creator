@@ -301,9 +301,11 @@ def test_import():
         
         # Check if wiki already exists
         wiki_dir = self.repo_path / "docs" / "wiki"
-        if not wiki_dir.exists():
-            # Run wiki generator script
-            wiki_script = self.imo_creator_path / "tools" / "wiki_generator.sh"
+        branch_schema = self.repo_path / "docs" / "branches" / "schema.json"
+        
+        if not wiki_dir.exists() or not branch_schema.exists():
+            # Run enhanced deep wiki generator script
+            wiki_script = self.imo_creator_path / "tools" / "deep_wiki_generator.sh"
             if wiki_script.exists():
                 try:
                     import subprocess
@@ -313,7 +315,7 @@ def test_import():
                         text=True
                     )
                     if result.returncode == 0:
-                        print("Generated deep wiki documentation")
+                        print("Generated deep wiki with branch specifications")
                         fixes.append(True)
                     else:
                         print(f"Wiki generation failed: {result.stderr}")
@@ -325,13 +327,13 @@ def test_import():
                     readme = self.repo_path / "docs" / "README.md"
                     if not readme.exists():
                         readme.parent.mkdir(parents=True, exist_ok=True)
-                        readme.write_text("# Project Wiki\n\nDeep documentation structure.\n")
+                        readme.write_text("# Project Wiki\n\nBranch-driven documentation system.\n")
                         fixes.append(True)
             else:
-                print("Wiki generator script not found")
+                print("Deep wiki generator script not found")
                 fixes.append(False)
         else:
-            print("Wiki documentation already exists")
+            print("Branch-driven wiki system already exists")
         
         return fixes
     
