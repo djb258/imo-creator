@@ -24,12 +24,17 @@
             <button id="copy-scaffold" class="primary" onclick="copyClaudeScaffold()">Copy Claude Scaffold</button>
         </div>
 
-        <div class="actions" style="margin-top: 10px;">
-            <button onclick="openAllWindows()">🖥️ Open All Monitors</button>
-            <button onclick="window.open('/input', 'input-window', 'width=1200,height=800')">📥 Input Window</button>
-            <button onclick="window.open('/middle', 'middle-window', 'width=1200,height=800')">⚙️ Middle Window</button>
-            <button onclick="window.open('/output', 'output-window', 'width=1200,height=800')">📤 Output Window</button>
-        </div>
+        <section id="factory-launchers" style="margin-top: 1rem;">
+            <h3>Factory Launchers</h3>
+            <div class="actions">
+                <button onclick="window.open('/overview','_blank','noopener')">Open Overview</button>
+                <button onclick="window.open('/input','_blank','noopener')">Open Input</button>
+                <button onclick="window.open('/middle','_blank','noopener')">Open Middle</button>
+                <button onclick="window.open('/output','_blank','noopener')">Open Output</button>
+            </div>
+        </section>
+
+        <div id="llm-status" style="font-size:0.9rem;opacity:0.8;margin-top:10px;"></div>
 
         <div class="bucket-cards">
             <div class="card">
@@ -108,11 +113,11 @@ flowchart LR
     <script>
         mermaid.initialize({ startOnLoad: true });
         
-        function openAllWindows() {
-            window.open('/input', 'input-window', 'width=1200,height=800,left=0,top=0');
-            window.open('/middle', 'middle-window', 'width=1200,height=800,left=1220,top=0');
-            window.open('/output', 'output-window', 'width=1200,height=800,left=0,top=820');
+        function llmStatus() {
+            const el = document.getElementById('llm-status');
+            if (el) el.textContent = 'LLM Keys: optional. Set OPENAI_API_KEY / ANTHROPIC_API_KEY in Vercel env.';
         }
+        llmStatus();
     </script>
 </body>
 </html>
