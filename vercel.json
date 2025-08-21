@@ -1,15 +1,19 @@
 {
-  "version": 2,
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/",          "destination": "/docs/blueprints/ui/overview.html" },
+    { "source": "/overview",  "destination": "/docs/blueprints/ui/overview.html" },
+    { "source": "/input",     "destination": "/docs/blueprints/ui/input.html" },
+    { "source": "/middle",    "destination": "/docs/blueprints/ui/middle.html" },
+    { "source": "/output",    "destination": "/docs/blueprints/ui/output.html" }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
-      ]
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x",
+      "memory": 512,
+      "maxDuration": 10
     }
-  ]
+  }
 }

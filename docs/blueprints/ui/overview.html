@@ -24,6 +24,13 @@
             <button id="copy-scaffold" class="primary" onclick="copyClaudeScaffold()">Copy Claude Scaffold</button>
         </div>
 
+        <div class="actions" style="margin-top: 10px;">
+            <button onclick="openAllWindows()">🖥️ Open All Monitors</button>
+            <button onclick="window.open('/input', 'input-window', 'width=1200,height=800')">📥 Input Window</button>
+            <button onclick="window.open('/middle', 'middle-window', 'width=1200,height=800')">⚙️ Middle Window</button>
+            <button onclick="window.open('/output', 'output-window', 'width=1200,height=800')">📤 Output Window</button>
+        </div>
+
         <div class="bucket-cards">
             <div class="card">
                 <h3>Input <span id="input-badge" class="small-badge badge todo">0%</span></h3>
@@ -100,6 +107,12 @@ flowchart LR
     <script src="app.js"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
+        
+        function openAllWindows() {
+            window.open('/input', 'input-window', 'width=1200,height=800,left=0,top=0');
+            window.open('/middle', 'middle-window', 'width=1200,height=800,left=1220,top=0');
+            window.open('/output', 'output-window', 'width=1200,height=800,left=0,top=820');
+        }
     </script>
 </body>
 </html>
