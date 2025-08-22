@@ -438,9 +438,9 @@ function renderInputPage() {
     const slug = new URL(location.href).searchParams.get('slug') || 'imo';
     
     Promise.all([
-        fetch(`../${slug}/manifest.yaml`).then(r => r.text()),
-        fetch(`../${slug}/progress.json`).then(r => r.ok ? r.json() : null),
-        fetch(`../${slug}/ladder_input.mmd`).then(r => r.ok ? r.text() : null)
+        fetch(`/docs/blueprints/${slug}/manifest.yaml`).then(r => r.text()),
+        fetch(`/docs/blueprints/${slug}/progress.json`).then(r => r.ok ? r.json() : null),
+        fetch(`/docs/blueprints/${slug}/ladder_input.mmd`).then(r => r.ok ? r.text() : null)
     ]).then(([manifestYaml, progress, ladderMmd]) => {
         inputManifest = parseYAML(manifestYaml);
         
@@ -755,9 +755,9 @@ function renderMiddlePage() {
     const slug = new URL(location.href).searchParams.get('slug') || 'imo';
     
     Promise.all([
-        fetch(`../${slug}/manifest.yaml`).then(r => r.text()),
-        fetch(`../${slug}/progress.json`).then(r => r.ok ? r.json() : null),
-        fetch(`../${slug}/ladder_middle.mmd`).then(r => r.ok ? r.text() : null)
+        fetch(`/docs/blueprints/${slug}/manifest.yaml`).then(r => r.text()),
+        fetch(`/docs/blueprints/${slug}/progress.json`).then(r => r.ok ? r.json() : null),
+        fetch(`/docs/blueprints/${slug}/ladder_middle.mmd`).then(r => r.ok ? r.text() : null)
     ]).then(([manifestYaml, progress, ladderMmd]) => {
         middleManifest = parseYAML(manifestYaml);
         
@@ -1006,7 +1006,7 @@ function runSimulator() {
     const slug = new URL(location.href).searchParams.get('slug') || 'imo';
     
     // Check if simflow exists
-    fetch('../../tools/simflow/run.py', { method: 'HEAD' })
+    fetch('/tools/simflow/run.py', { method: 'HEAD' })
         .then(res => {
             if (res.ok) {
                 const feedback = document.getElementById('save-feedback');
@@ -1035,9 +1035,9 @@ function renderOutputPage() {
     const slug = new URL(location.href).searchParams.get('slug') || 'imo';
     
     Promise.all([
-        fetch(`../${slug}/manifest.yaml`).then(r => r.text()),
-        fetch(`../${slug}/progress.json`).then(r => r.ok ? r.json() : null),
-        fetch(`../${slug}/ladder_output.mmd`).then(r => r.ok ? r.text() : null)
+        fetch(`/docs/blueprints/${slug}/manifest.yaml`).then(r => r.text()),
+        fetch(`/docs/blueprints/${slug}/progress.json`).then(r => r.ok ? r.json() : null),
+        fetch(`/docs/blueprints/${slug}/ladder_output.mmd`).then(r => r.ok ? r.text() : null)
     ]).then(([manifestYaml, progress, ladderMmd]) => {
         outputManifest = parseYAML(manifestYaml);
         
