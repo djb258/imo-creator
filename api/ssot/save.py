@@ -1,3 +1,4 @@
+from http.server import BaseHTTPRequestHandler
 import json
 import os
 import time
@@ -79,23 +80,33 @@ def stamp_version_hash(ssot):
     
     return ssot
 
-def handler(request):
-    """POST /api/ssot/save - Process and stamp SSOT with IDs"""
-    if request.method != 'POST':
-        return (405, {"Content-Type": "application/json"}, json.dumps({"error": "Method not allowed"}))
+class handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length).decode('utf-8') if content_length else '{}'
+            data = json.loads(body)
+            ssot = data.get('ssot', {})
+            
+            ssot = ensure_ids(ssot)
+            ssot = stamp_version_hash(ssot)
+            
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({"ok": True, "ssot": ssot}).encode('utf-8'))
+            
+        except Exception as e:
+            self.send_response(500)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": f"Failed to process SSOT: {str(e)}"}).encode('utf-8'))
     
-    try:
-        body = request.body.decode('utf-8') if request.body else '{}'
-        data = json.loads(body)
-        ssot = data.get('ssot', {})
-        
-        ssot = ensure_ids(ssot)
-        ssot = stamp_version_hash(ssot)
-        
-        return (200, {"Content-Type": "application/json"}, json.dumps({"ok": True, "ssot": ssot}))
-        
-    except Exception as e:
-        return (500, {"Content-Type": "application/json"}, json.dumps({"error": f"Failed to process SSOT: {str(e)}"}))
-
-def __vercel_handler__(request):
-    return handler(request)
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()

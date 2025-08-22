@@ -172,7 +172,7 @@ async function callLLM({system, prompt, json, provider, model}) {
 
 async function loadData() {
     try {
-        const manifestResponse = await fetch(`../${SLUG}/manifest.yaml`);
+        const manifestResponse = await fetch(`/docs/blueprints/${SLUG}/manifest.yaml`);
         if (manifestResponse.ok) {
             const manifestText = await manifestResponse.text();
             manifest = parseYAML(manifestText);
@@ -182,7 +182,7 @@ async function loadData() {
     }
 
     try {
-        const progressResponse = await fetch(`../${SLUG}/progress.json`);
+        const progressResponse = await fetch(`/docs/blueprints/${SLUG}/progress.json`);
         if (progressResponse.ok) {
             progress = await progressResponse.json();
         }
@@ -287,7 +287,7 @@ function updateUI() {
 }
 
 function exportYAML() {
-    fetch(`../${SLUG}/manifest.yaml`)
+    fetch(`/docs/blueprints/${SLUG}/manifest.yaml`)
         .then(res => res.text())
         .then(text => {
             const blob = new Blob([text], { type: 'text/yaml' });
@@ -327,7 +327,7 @@ function copyClaudeScaffold() {
         return;
     }
     
-    fetch(`../${SLUG}/manifest.yaml`)
+    fetch(`/docs/blueprints/${SLUG}/manifest.yaml`)
         .then(res => res.text())
         .then(manifestYaml => {
             const prompt = `Create a complete scaffold implementation for this blueprint.
@@ -415,7 +415,7 @@ Please generate:
 }
 
 function loadMermaidDiagram() {
-    fetch(`../${SLUG}/tree_overview.mmd`)
+    fetch(`/docs/blueprints/${SLUG}/tree_overview.mmd`)
         .then(res => res.ok ? res.text() : null)
         .then(text => {
             if (text) {
@@ -1311,5 +1311,11 @@ ${yamlContent}</textarea>
         <code>python tools/blueprint_visual.py ${slug}</code>
     `;
 }
+
+// Expose functions globally for button onclick handlers
+window.exportYAML = exportYAML;
+window.exportJSON = exportJSON;
+window.copyClaudeScaffold = copyClaudeScaffold;
+window.copyBucketPrompt = copyBucketPrompt;
 
 document.addEventListener('DOMContentLoaded', loadData);

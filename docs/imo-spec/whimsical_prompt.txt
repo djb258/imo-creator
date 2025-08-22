@@ -1,0 +1,114 @@
+Draw a Christmas tree-shaped flow diagram with the following specifications:
+
+🎄 VISUAL STYLE:
+- Shape the overall diagram like a Christmas tree
+- Place the entry point at the top (star)
+- Arrange pages in tiers going down
+- Gatekeepers should be ornaments (circles with 🚪)
+- Guards should be candy canes
+- Validators should be gift boxes
+- Telemetry points should be twinkling lights
+
+🎯 LABELING:
+- Clearly label all guards with their IDs
+- Show gatekeeper enforcement levels
+- Indicate required vs optional validators
+- Mark telemetry collection points
+
+📊 FLOW DATA:
+{
+  "entrypoint": "overview",
+  "pages": {
+    "overview": {
+      "id": "overview",
+      "title": "Blueprint Overview",
+      "type": "dashboard",
+      "guards": ["auth", "health_check"],
+      "validators": ["manifest_present", "progress_valid"],
+      "next": ["input", "middle", "output"],
+      "telemetry": {
+        "events": ["page_view", "button_click", "export_action"],
+        "required": true
+      }
+    },
+    "input": {
+      "id": "input",
+      "title": "Input Processing",
+      "type": "workflow",
+      "guards": ["auth", "permission_write"],
+      "validators": ["schema_valid", "idempotency_check"],
+      "gatekeeper": "input_gate",
+      "next": ["middle"],
+      "telemetry": {
+        "events": ["stage_start", "stage_complete", "validation_error"],
+        "required": true
+      }
+    },
+    "middle": {
+      "id": "middle",
+      "title": "Transformation Pipeline",
+      "type": "workflow",
+      "guards": ["auth", "permission_transform"],
+      "validators": ["transform_valid", "heir_compliance"],
+      "gatekeeper": "middle_gate",
+      "next": ["output"],
+      "telemetry": {
+        "events": ["transform_start", "transform_complete", "pipeline_error"],
+        "required": true
+      }
+    },
+    "output": {
+      "id": "output",
+      "title": "Output Distribution",
+      "type": "workflow",
+      "guards": ["auth", "permission_publish"],
+      "validators": ["output_schema_valid", "publish_ready"],
+      "gatekeeper": "output_gate",
+      "next": ["overview"],
+      "telemetry": {
+        "events": ["publish_start", "publish_complete", "distribution_error"],
+        "required": true
+      }
+    }
+  },
+  "gatekeepers": {
+    "input_gate": {
+      "type": "validator",
+      "rules": ["schema_congruence", "vin_format", "version_lock"],
+      "enforcement": "strict"
+    },
+    "middle_gate": {
+      "type": "transformer",
+      "rules": ["heir_compliance", "data_integrity", "audit_trail"],
+      "enforcement": "strict"
+    },
+    "output_gate": {
+      "type": "publisher",
+      "rules": ["final_validation", "signature_present", "telemetry_complete"],
+      "enforcement": "strict"
+    }
+  },
+  "kill_switches": {
+    "emergency_stop": {
+      "trigger": "manual",
+      "scope": "all",
+      "action": "halt_and_rollback"
+    },
+    "compliance_violation": {
+      "trigger": "automatic",
+      "scope": "current_flow",
+      "action": "quarantine"
+    }
+  }
+}
+
+🎨 COLOR SCHEME:
+- Entry point: Gold star
+- Pages: Green boxes
+- Gatekeepers: Red/orange ornaments
+- Guards: Red/white candy canes
+- Validators: Wrapped presents
+- Telemetry: Yellow lights
+- Connections: Silver tinsel
+
+Please create this as a festive yet functional flow diagram that maintains technical accuracy while embracing the holiday theme!

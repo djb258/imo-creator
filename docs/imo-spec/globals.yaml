@@ -1,0 +1,132 @@
+# Global Configuration for IMO Factory + Garage
+schema_version: HEIR/1.0
+environment: production
+
+# VIN Format Rules
+vin_format:
+  pattern: "^[A-Z]{3}-\\d{4}-\\d{2}-[A-Z]+-[A-Z]+-V\\d+$"
+  example: "IMO-2025-01-FACTORY-GARAGE-V1"
+  components:
+    prefix: "IMO"
+    year: "YYYY"
+    month: "MM"
+    system: "[FACTORY|GARAGE|HYBRID]"
+    mode: "[DEV|STAGING|PROD]"
+    version: "V[0-9]+"
+
+# HEIR Schema Congruence
+schema_congruence:
+  STAMPED:
+    description: "Single Truth And Manifest Protocol for Event Delivery"
+    required_fields:
+      - schema_version
+      - vin
+      - metadata.created_at
+      - metadata.stamped
+    validation: strict
+  
+  SPVPET:
+    description: "Schema Protocol Validation for Process Event Tracking"
+    required_fields:
+      - flow.entrypoint
+      - flow.pages
+      - flow.gatekeepers
+    validation: strict
+  
+  STACKED:
+    description: "Staged Tracking And Compliance Key for Event Distribution"
+    required_fields:
+      - compliance.heir_rules
+      - compliance.orbt_version
+      - compliance.enforcement_level
+    validation: strict
+
+# Gatekeeper Configuration
+gatekeepers:
+  default_timeout_ms: 5000
+  retry_policy:
+    max_attempts: 3
+    backoff_ms: [100, 500, 1000]
+  enforcement:
+    development: warn
+    staging: block
+    production: block_and_alert
+
+# Validator Rules
+validators:
+  manifest_present:
+    type: file_exists
+    path: "docs/blueprints/{slug}/manifest.yaml"
+    required: true
+  
+  schema_valid:
+    type: json_schema
+    schema_ref: "#/definitions/ssot_schema"
+    required: true
+  
+  heir_compliance:
+    type: custom
+    handler: "scripts/factory/heir-validator.ts"
+    required: true
+
+# Version Lock Policy
+version_lock:
+  orbt_version: "1.0.0"
+  heir_version: "1.0"
+  factory_version: "2.0.0"
+  garage_version: "1.5.0"
+  enforcement: strict
+
+# Kill Switch Configuration
+kill_switches:
+  emergency:
+    enabled: true
+    trigger_file: ".imo/EMERGENCY_STOP"
+    action: halt_all_processes
+  
+  compliance:
+    enabled: true
+    threshold_violations: 3
+    window_seconds: 60
+    action: quarantine_and_alert
+
+# Telemetry Requirements
+telemetry:
+  minimum_events:
+    - page_view
+    - flow_start
+    - flow_complete
+    - error_occurred
+  
+  required_metadata:
+    - timestamp
+    - session_id
+    - user_id
+    - vin
+    - page_id
+  
+  sink:
+    type: "file"
+    path: ".imo/telemetry.jsonl"
+    rotation: "daily"
+
+# Health Check Thresholds
+health_thresholds:
+  critical:
+    - gatekeeper_missing
+    - validator_failed
+    - vin_invalid
+    - schema_violation
+  
+  warning:
+    - telemetry_incomplete
+    - version_mismatch
+    - slow_response
+  
+  pass:
+    min_score: 0.8
+    required_checks:
+      - all_gatekeepers_present
+      - all_validators_passing
+      - vin_format_valid
+      - schema_congruent

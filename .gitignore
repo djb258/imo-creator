@@ -23,3 +23,6 @@ public/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local workspace registry  
+.imo/local/

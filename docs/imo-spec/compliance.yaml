@@ -1,0 +1,260 @@
+# HEIR/ORBT Compliance Configuration
+schema_version: HEIR/1.0
+compliance_id: "IMO-COMPLIANCE-2025-01"
+last_audit: "2025-01-22T00:00:00Z"
+
+# HEIR Rules Enforcement
+heir_enforcement:
+  STAMPED:
+    rule: "Single Truth And Manifest Protocol for Event Delivery"
+    checks:
+      - id: stamped_manifest
+        description: "Ensure manifest.yaml exists and is stamped"
+        script: "scripts/factory/check-stamped.ts"
+        severity: critical
+      
+      - id: stamped_ssot
+        description: "Verify SSOT has unique_id and process_id"
+        script: "scripts/factory/check-ssot.ts"
+        severity: critical
+      
+      - id: stamped_events
+        description: "All events must have correlation_id"
+        script: "scripts/factory/check-events.ts"
+        severity: critical
+  
+  SPVPET:
+    rule: "Schema Protocol Validation for Process Event Tracking"
+    checks:
+      - id: schema_validation
+        description: "Validate against JSON Schema"
+        script: "scripts/factory/validate-schema.ts"
+        severity: critical
+      
+      - id: process_tracking
+        description: "Track all process state changes"
+        script: "scripts/factory/track-process.ts"
+        severity: warning
+      
+      - id: event_protocol
+        description: "Events follow protocol structure"
+        script: "scripts/factory/validate-events.ts"
+        severity: critical
+  
+  STACKED:
+    rule: "Staged Tracking And Compliance Key for Event Distribution"
+    checks:
+      - id: stage_tracking
+        description: "Track progress through stages"
+        script: "scripts/factory/track-stages.ts"
+        severity: warning
+      
+      - id: compliance_key
+        description: "Verify compliance signature"
+        script: "scripts/factory/check-compliance-key.ts"
+        severity: critical
+      
+      - id: event_distribution
+        description: "Ensure events are distributed correctly"
+        script: "scripts/factory/check-distribution.ts"
+        severity: warning
+
+# ORBT Configuration
+orbt_config:
+  version: "1.0.0"
+  mode: "strict"
+  
+  orchestration:
+    max_parallel_flows: 10
+    timeout_seconds: 300
+    retry_policy:
+      max_attempts: 3
+      backoff_strategy: "exponential"
+  
+  repository:
+    scan_paths:
+      - "src/"
+      - "factory/"
+      - "garage/"
+      - "mechanic/"
+    ignore_patterns:
+      - "*.test.ts"
+      - "*.spec.ts"
+      - "node_modules/"
+  
+  blueprint:
+    required_files:
+      - "manifest.yaml"
+      - "progress.json"
+      - "tree_overview.mmd"
+    validation_level: "strict"
+  
+  telemetry:
+    enabled: true
+    batch_size: 100
+    flush_interval_ms: 5000
+    destinations:
+      - type: "file"
+        path: ".imo/telemetry.jsonl"
+      - type: "console"
+        level: "error"
+
+# Gatekeeper Requirements
+gatekeeper_requirements:
+  input_gate:
+    validators:
+      - schema_validator
+      - idempotency_checker
+      - permission_validator
+    min_pass_rate: 1.0
+    block_on_failure: true
+  
+  middle_gate:
+    validators:
+      - transform_validator
+      - heir_compliance_checker
+      - data_integrity_validator
+    min_pass_rate: 1.0
+    block_on_failure: true
+  
+  output_gate:
+    validators:
+      - output_schema_validator
+      - signature_validator
+      - telemetry_validator
+    min_pass_rate: 1.0
+    block_on_failure: true
+
+# Validator Specifications
+validators:
+  schema_validator:
+    type: "json_schema"
+    config:
+      strict_mode: true
+      additional_properties: false
+  
+  idempotency_checker:
+    type: "custom"
+    script: "scripts/factory/idempotency.ts"
+    config:
+      key_field: "idempotency_key"
+      storage: ".imo/idempotency.db"
+  
+  permission_validator:
+    type: "rbac"
+    config:
+      roles_file: "config/roles.yaml"
+      permissions_file: "config/permissions.yaml"
+  
+  heir_compliance_checker:
+    type: "custom"
+    script: "scripts/factory/heir-compliance.ts"
+    config:
+      rules: ["STAMPED", "SPVPET", "STACKED"]
+      enforcement: "strict"
+
+# Version Lock Enforcement
+version_locks:
+  dependencies:
+    zod: "^3.22.0"
+    typescript: "^5.0.0"
+    "@types/node": "^20.0.0"
+  
+  factory_components:
+    factory_ui: "2.0.0"
+    factory_api: "1.5.0"
+    factory_validator: "1.2.0"
+  
+  garage_components:
+    garage_bay: "1.5.0"
+    garage_mcp: "1.0.0"
+    garage_tools: "1.3.0"
+
+# Kill Switch Configuration
+kill_switches:
+  compliance_violation:
+    enabled: true
+    triggers:
+      - heir_violation
+      - schema_invalid
+      - gatekeeper_bypass
+    action: "halt_and_quarantine"
+    notification:
+      channels: ["console", "file"]
+      message: "COMPLIANCE VIOLATION: Flow halted"
+  
+  emergency_stop:
+    enabled: true
+    trigger_file: ".imo/EMERGENCY_STOP"
+    action: "immediate_halt"
+    cleanup: true
+
+# Telemetry Minimum Requirements
+telemetry_requirements:
+  mandatory_events:
+    flow_start:
+      fields: ["timestamp", "flow_id", "vin", "user_id"]
+    
+    page_transition:
+      fields: ["timestamp", "from_page", "to_page", "flow_id"]
+    
+    validation_result:
+      fields: ["timestamp", "validator", "result", "errors"]
+    
+    flow_complete:
+      fields: ["timestamp", "flow_id", "duration_ms", "result"]
+    
+    error_occurred:
+      fields: ["timestamp", "error_type", "error_message", "stack_trace"]
+  
+  sampling:
+    rate: 1.0  # 100% for compliance
+    debug_mode: false
+
+# Audit Trail Requirements
+audit_trail:
+  enabled: true
+  retention_days: 90
+  
+  tracked_actions:
+    - flow_execution
+    - validation_results
+    - gatekeeper_decisions
+    - compliance_checks
+    - kill_switch_triggers
+  
+  storage:
+    type: "file"
+    path: ".imo/audit/"
+    format: "jsonl"
+    rotation: "daily"
+
+# Health Check Configuration
+health_checks:
+  frequency_seconds: 60
+  
+  checks:
+    - id: "vin_format"
+      type: "regex"
+      pattern: "^[A-Z]{3}-\\d{4}-\\d{2}-[A-Z]+-[A-Z]+-V\\d+$"
+      severity: "critical"
+    
+    - id: "schema_congruence"
+      type: "custom"
+      script: "scripts/factory/check-congruence.ts"
+      severity: "critical"
+    
+    - id: "gatekeeper_presence"
+      type: "existence"
+      targets: ["input_gate", "middle_gate", "output_gate"]
+      severity: "critical"
+    
+    - id: "validator_status"
+      type: "functional"
+      script: "scripts/factory/test-validators.ts"
+      severity: "warning"
+    
+    - id: "telemetry_active"
+      type: "heartbeat"
+      threshold_ms: 5000
+      severity: "warning"

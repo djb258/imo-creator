@@ -1,0 +1,70 @@
+flowchart TB
+    %% HEIR/ORBT Compliant Flow Diagram
+    %% Generated from flow.json
+
+    %% Styles
+    classDef pageNode fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef gateNode fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#000;
+    classDef entryNode fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px,color:#000;
+    classDef telemetryNode fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,color:#000;
+
+    %% Page Nodes
+    overview["Blueprint Overview\n[dashboard]"]:::entryNode
+    overview_guards{{"Guards: auth, health_check"}}
+    overview_guards -.-> overview
+    overview_validators{{"Validators: manifest_present, progress_valid"}}
+    overview_validators -.-> overview
+    overview_telemetry(["📊 Telemetry"]):::telemetryNode
+    overview -.-> overview_telemetry
+    input["Input Processing\n[workflow]"]:::pageNode
+    input_guards{{"Guards: auth, permission_write"}}
+    input_guards -.-> input
+    input_validators{{"Validators: schema_valid, idempotency_check"}}
+    input_validators -.-> input
+    input_telemetry(["📊 Telemetry"]):::telemetryNode
+    input -.-> input_telemetry
+    middle["Transformation Pipeline\n[workflow]"]:::pageNode
+    middle_guards{{"Guards: auth, permission_transform"}}
+    middle_guards -.-> middle
+    middle_validators{{"Validators: transform_valid, heir_compliance"}}
+    middle_validators -.-> middle
+    middle_telemetry(["📊 Telemetry"]):::telemetryNode
+    middle -.-> middle_telemetry
+    output["Output Distribution\n[workflow]"]:::pageNode
+    output_guards{{"Guards: auth, permission_publish"}}
+    output_guards -.-> output
+    output_validators{{"Validators: output_schema_valid, publish_ready"}}
+    output_validators -.-> output
+    output_telemetry(["📊 Telemetry"]):::telemetryNode
+    output -.-> output_telemetry
+
+    %% Gatekeeper Nodes
+    input_gate[["🚪 input_gate\n[validator]\nEnforcement: strict"]]:::gateNode
+    input_gate_rules{{"Rules:\nschema_congruence\nvin_format\nversion_lock"}}
+    input_gate_rules -.-> input_gate
+    middle_gate[["🚪 middle_gate\n[transformer]\nEnforcement: strict"]]:::gateNode
+    middle_gate_rules{{"Rules:\nheir_compliance\ndata_integrity\naudit_trail"}}
+    middle_gate_rules -.-> middle_gate
+    output_gate[["🚪 output_gate\n[publisher]\nEnforcement: strict"]]:::gateNode
+    output_gate_rules{{"Rules:\nfinal_validation\nsignature_present\ntelemetry_complete"}}
+    output_gate_rules -.-> output_gate
+
+    %% Connections
+    overview --> input
+    overview --> middle
+    overview --> output
+    input ==> input_gate
+    input_gate ==> middle
+    middle ==> middle_gate
+    middle_gate ==> output
+    output ==> output_gate
+    output_gate ==> overview
+
+    %% Legend
+    subgraph Legend
+        L1["📄 Page"]:::pageNode
+        L2[["🚪 Gatekeeper"]]:::gateNode
+        L3["🚀 Entry Point"]:::entryNode
+        L4{{"Guards/Validators"}}
+        L5(["📊 Telemetry"]):::telemetryNode
+    end

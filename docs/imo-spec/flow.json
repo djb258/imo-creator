@@ -1,0 +1,32 @@
+{
+  "schema_version": "HEIR/1.0",
+  "vin": "IMO-2025-01-FACTORY-GARAGE-V1",
+  "metadata": {
+    "created_at": "2025-01-22T00:00:00Z",
+    "author": "imo-creator",
+    "environment": "production",
+    "stamped": true
+  },
+  "flow": {
+    "entrypoint": "overview",
+    "pages": {
+      "overview": {
+        "id": "overview",
+        "title": "Blueprint Overview", 
+        "type": "dashboard",
+        "guards": ["auth", "health_check"],
+        "validators": ["manifest_present", "progress_valid"],
+        "next": ["input", "middle", "output"],
+        "telemetry": {"events": ["page_view", "button_click"], "required": true}
+      }
+    },
+    "gatekeepers": {
+      "input_gate": {"type": "validator", "rules": ["schema_congruence"], "enforcement": "strict"}
+    }
+  },
+  "compliance": {
+    "heir_rules": ["STAMPED", "SPVPET", "STACKED"],
+    "orbt_version": "1.0.0",
+    "enforcement_level": "strict"
+  }
+}

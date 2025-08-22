@@ -2,6 +2,12 @@
 
 A 4-page planning app with SSOT manifest, flex ladder stages, and visual progress tracking.
 
+## Cockpit & Lens
+- Repo‑Lens: /lens
+- New Repo Wizard: /new
+- Cockpit (per repo): /cockpit?repo=<owner/repo>&mode=factory|mechanic
+- Launchpad (3 windows): /launchpad
+
 ## Features
 - **4-Page UI**: Overview with progress visual, Input/Middle/Output pages
 - **SSOT Manifest**: YAML-based configuration with flexible stages per bucket

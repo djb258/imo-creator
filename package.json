@@ -16,14 +16,31 @@
     "audit": "python simple_garage_bay.py",
     "orchestrate": "python tools/repo_mcp_orchestrator.py",
     "vercel:dev": "vercel dev",
-    "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/"
+    "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/ && cp -r api public/",
+    "factory:validate": "tsx scripts/factory/validate-spec.ts",
+    "factory:check": "tsx scripts/factory/factory-check.ts",
+    "factory:export": "tsx scripts/factory/factory-export.ts",
+    "factory:diagram": "tsx scripts/factory/flow-to-mermaid.ts",
+    "garage:start": "tsx scripts/garage/garage-entrypoint.ts",
+    "garage:scan": "tsx scripts/garage/garage-scan.ts",
+    "spec:validate": "tsx scripts/factory/validate-spec.ts",
+    "spec:visualize": "tsx scripts/factory/flow-to-mermaid.ts",
+    "precommit": "npm run factory:check",
+    "ci:validate": "npm run factory:check && npm run factory:export"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.0",
     "firebase-admin": "^12.0.0",
-    "undici": "^6.19.8"
+    "undici": "^6.19.8",
+    "zod": "^3.22.0",
+    "js-yaml": "^4.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
   "keywords": ["compliance", "orchestration", "garage-mcp", "heir", "imo-creator", "factory", "mechanic"],
   "author": "",
   "license": "MIT",

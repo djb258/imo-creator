@@ -1,0 +1,168 @@
+{
+  "page_id": "overview",
+  "schema_version": "HEIR/1.0",
+  "metadata": {
+    "title": "Blueprint Overview",
+    "description": "Central dashboard for blueprint management",
+    "created_at": "2025-01-22T00:00:00Z",
+    "type": "dashboard"
+  },
+  "guards": [
+    {
+      "id": "auth",
+      "type": "authentication",
+      "required": true,
+      "config": {
+        "min_level": "read"
+      }
+    },
+    {
+      "id": "health_check",
+      "type": "system",
+      "required": true,
+      "config": {
+        "check_file": ".imo/health.json",
+        "min_score": 0.8
+      }
+    }
+  ],
+  "validators": [
+    {
+      "id": "manifest_present",
+      "type": "file_exists",
+      "path": "docs/blueprints/{slug}/manifest.yaml",
+      "required": true
+    },
+    {
+      "id": "progress_valid",
+      "type": "json_valid",
+      "path": "docs/blueprints/{slug}/progress.json",
+      "required": false
+    }
+  ],
+  "components": [
+    {
+      "id": "header",
+      "type": "header",
+      "props": {
+        "title": "Blueprint App",
+        "readiness_badge": true
+      }
+    },
+    {
+      "id": "actions",
+      "type": "action_bar",
+      "actions": [
+        {
+          "id": "export_yaml",
+          "label": "Export Manifest (YAML)",
+          "handler": "exportYAML",
+          "telemetry": true
+        },
+        {
+          "id": "export_json",
+          "label": "Export Manifest (JSON)",
+          "handler": "exportJSON",
+          "telemetry": true
+        },
+        {
+          "id": "copy_scaffold",
+          "label": "Copy Claude Scaffold",
+          "handler": "copyClaudeScaffold",
+          "telemetry": true
+        }
+      ]
+    },
+    {
+      "id": "factory_launchers",
+      "type": "launcher_section",
+      "launchers": [
+        {
+          "id": "open_overview",
+          "label": "Open Overview",
+          "target": "/overview",
+          "window": "_blank"
+        },
+        {
+          "id": "open_input",
+          "label": "Open Input",
+          "target": "/input",
+          "window": "_blank"
+        },
+        {
+          "id": "open_middle",
+          "label": "Open Middle",
+          "target": "/middle",
+          "window": "_blank"
+        },
+        {
+          "id": "open_output",
+          "label": "Open Output",
+          "target": "/output",
+          "window": "_blank"
+        }
+      ]
+    },
+    {
+      "id": "bucket_cards",
+      "type": "card_grid",
+      "cards": [
+        {
+          "id": "input_card",
+          "title": "Input",
+          "description": "Ingestion and validation",
+          "badge": "input-badge",
+          "action": "copyBucketPrompt('input')"
+        },
+        {
+          "id": "middle_card",
+          "title": "Middle",
+          "description": "Processing and transformation",
+          "badge": "middle-badge",
+          "action": "copyBucketPrompt('middle')"
+        },
+        {
+          "id": "output_card",
+          "title": "Output",
+          "description": "Publishing and distribution",
+          "badge": "output-badge",
+          "action": "copyBucketPrompt('output')"
+        }
+      ]
+    },
+    {
+      "id": "mermaid_diagram",
+      "type": "visualization",
+      "source": "tree_overview.mmd",
+      "renderer": "mermaid"
+    }
+  ],
+  "navigation": {
+    "next": [
+      {
+        "id": "to_input",
+        "label": "Input Page →",
+        "target": "/input"
+      },
+      {
+        "id": "to_middle",
+        "label": "Middle Page →",
+        "target": "/middle"
+      },
+      {
+        "id": "to_output",
+        "label": "Output Page →",
+        "target": "/output"
+      }
+    ]
+  },
+  "telemetry": {
+    "enabled": true,
+    "events": [
+      "page_view",
+      "button_click",
+      "export_action",
+      "navigation_click"
+    ]
+  }
+}
