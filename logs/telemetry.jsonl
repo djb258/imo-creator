@@ -1,0 +1,24 @@
+{"timestamp": "2025-01-22T11:55:00Z", "event_type": "flow_start", "page_id": "overview", "success": true, "session_id": "session-abc123", "vin": "IMO-2025-01-FACTORY-GARAGE-V1"}
+{"timestamp": "2025-01-22T11:55:01Z", "event_type": "page_enter", "page_id": "overview", "success": true, "duration_ms": 120, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:15Z", "event_type": "page_exit", "page_id": "overview", "success": true, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:16Z", "event_type": "guard_result", "gatekeeper_id": "input_gate", "success": false, "error": "Schema validation failed for required field", "duration_ms": 85, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:20Z", "event_type": "page_enter", "page_id": "input", "success": true, "duration_ms": 200, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:25Z", "event_type": "validation_result", "page_id": "input", "success": false, "error": "Invalid data format in payload", "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:30Z", "event_type": "page_exit", "page_id": "input", "success": true, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:31Z", "event_type": "guard_result", "gatekeeper_id": "middle_gate", "success": true, "duration_ms": 45, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:32Z", "event_type": "page_enter", "page_id": "middle", "success": true, "duration_ms": 150, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:40Z", "event_type": "page_exit", "page_id": "middle", "success": true, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:41Z", "event_type": "guard_result", "gatekeeper_id": "output_gate", "success": false, "error": "HEIR signature validation failed", "duration_ms": 120, "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:55:45Z", "event_type": "error_occurred", "page_id": "output", "success": false, "error": "Signature missing from HEIR compliance header", "session_id": "session-abc123"}
+{"timestamp": "2025-01-22T11:56:00Z", "event_type": "flow_start", "page_id": "overview", "success": true, "session_id": "session-def456", "vin": "IMO-2025-01-FACTORY-GARAGE-V1"}
+{"timestamp": "2025-01-22T11:56:01Z", "event_type": "page_enter", "page_id": "overview", "success": true, "duration_ms": 95, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:10Z", "event_type": "page_exit", "page_id": "overview", "success": true, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:11Z", "event_type": "guard_result", "gatekeeper_id": "input_gate", "success": true, "duration_ms": 65, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:12Z", "event_type": "page_enter", "page_id": "input", "success": true, "duration_ms": 180, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:20Z", "event_type": "validation_result", "page_id": "input", "success": true, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:25Z", "event_type": "page_exit", "page_id": "input", "success": true, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:26Z", "event_type": "guard_result", "gatekeeper_id": "middle_gate", "success": true, "duration_ms": 40, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:27Z", "event_type": "page_enter", "page_id": "middle", "success": true, "duration_ms": 130, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:35Z", "event_type": "page_exit", "page_id": "middle", "success": true, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:36Z", "event_type": "guard_result", "gatekeeper_id": "output_gate", "success": false, "error": "Final validation timeout", "duration_ms": 300, "session_id": "session-def456"}
+{"timestamp": "2025-01-22T11:56:40Z", "event_type": "error_occurred", "page_id": "output", "success": false, "error": "Network timeout during signature validation", "session_id": "session-def456"}

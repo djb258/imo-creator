@@ -8,6 +8,28 @@ A 4-page planning app with SSOT manifest, flex ladder stages, and visual progres
 - Cockpit (per repo): /cockpit?repo=<owner/repo>&mode=factory|mechanic
 - Launchpad (3 windows): /launchpad
 
+## 🎄 Visualization Dashboard
+- **Flow Visualization**: Christmas tree-style interactive flow diagram
+- **Health Monitoring**: Real-time health status with color-coded nodes
+- **Telemetry Heat Map**: Runtime failure pattern overlay
+- **Mermaid Export**: Static diagram generation and export
+
+```bash
+# Launch visualization dashboard
+pnpm garage:viz
+
+# Refresh health data from static checks
+pnpm garage:scan
+```
+
+Dashboard Features:
+- 🟢 **Green nodes**: All checks passing (healthy)
+- 🟡 **Yellow nodes**: Warnings detected (functional)  
+- 🔴 **Red nodes**: Critical issues (requires attention)
+- 📊 **Interactive sidebar**: Click nodes for detailed health information
+- 🔥 **Heat map overlay**: Toggle telemetry failure visualization
+- 📋 **Mermaid fallback**: Export diagrams for documentation
+
 ## Features
 - **4-Page UI**: Overview with progress visual, Input/Middle/Output pages
 - **SSOT Manifest**: YAML-based configuration with flexible stages per bucket

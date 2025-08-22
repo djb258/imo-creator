@@ -1,0 +1,79 @@
+{
+  "overall": "warn",
+  "timestamp": "2025-01-22T12:00:00Z",
+  "checks": {
+    "vin_format": {
+      "status": "pass",
+      "message": "VIN format IMO-2025-01-FACTORY-GARAGE-V1 is valid"
+    },
+    "schema_congruence": {
+      "status": "pass",
+      "message": "All schemas congruent with HEIR/ORBT specification"
+    },
+    "gatekeeper_presence": {
+      "status": "warn",
+      "message": "2 of 3 gatekeepers are active and healthy"
+    },
+    "validator_status": {
+      "status": "fail",
+      "message": "Schema validation failing for input_gate"
+    },
+    "telemetry_active": {
+      "status": "pass",
+      "message": "Telemetry heartbeat received 30 seconds ago"
+    },
+    "heir_compliance": {
+      "status": "warn",
+      "message": "STAMPED: pass, SPVPET: warn, STACKED: pass"
+    },
+    "gatekeeper_input_gate": {
+      "status": "warn",
+      "message": "Schema validation warnings detected"
+    },
+    "gatekeeper_middle_gate": {
+      "status": "pass",
+      "message": "All HEIR compliance checks passing"
+    },
+    "gatekeeper_output_gate": {
+      "status": "fail",
+      "message": "Signature validation failed - missing HEIR signature"
+    }
+  },
+  "pages": {
+    "overview": {
+      "status": "pass",
+      "guards_status": "pass",
+      "validators_status": "pass",
+      "telemetry_status": "pass",
+      "issues": []
+    },
+    "input": {
+      "status": "warn",
+      "guards_status": "pass",
+      "validators_status": "warn",
+      "telemetry_status": "pass",
+      "issues": [
+        "Schema validation producing warnings",
+        "Idempotency check response time > 200ms"
+      ]
+    },
+    "middle": {
+      "status": "pass",
+      "guards_status": "pass",
+      "validators_status": "pass",
+      "telemetry_status": "pass",
+      "issues": []
+    },
+    "output": {
+      "status": "fail",
+      "guards_status": "pass",
+      "validators_status": "fail",
+      "telemetry_status": "pass",
+      "issues": [
+        "Output schema validation failed",
+        "HEIR signature missing from output",
+        "Telemetry correlation ID not found"
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-flow__node-custom {
+  background: transparent;
+  border: none;
+}
+
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.health-glow-pass {
+  filter: drop-shadow(0 0 8px #10b981);
+}
+
+.health-glow-warn {
+  filter: drop-shadow(0 0 8px #f59e0b);
+}
+
+.health-glow-fail {
+  filter: drop-shadow(0 0 8px #ef4444);
+}
