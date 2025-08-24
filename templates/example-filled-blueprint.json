@@ -1,0 +1,195 @@
+{
+  "project_slug": "world-class-ecommerce",
+  "created_at": "2025-01-22T15:30:00Z",
+  "created_by": "Claude Code Assistant",
+  "status_flags": {
+    "is_filled": true,
+    "is_validated": true,
+    "is_whimsical_ready": true
+  },
+  "meta": {
+    "unique_id": "DB/IMO/COMMERCE/PROC-20250122-153000-WCE1",
+    "process_id": "IMO-world-class-ecommerce-001",
+    "blueprint_version_hash": "sha256:a1b2c3d4e5f67890",
+    "doctrine": ["BARTON", "ORBT", "HEIR", "STAMPED/SPVPET/STACKED"]
+  },
+  "altitudes": {
+    "30000": {
+      "project_name": "World-Class E-commerce Platform",
+      "objective": "Build a scalable, modern e-commerce platform that handles 100k+ concurrent users, processes payments securely, and provides exceptional UX with AI-powered recommendations",
+      "success_criteria": [
+        "Achieve 99.9% uptime SLA",
+        "Handle 100,000+ concurrent users",
+        "Process 10,000+ transactions per minute",
+        "Deploy MVP in 8 weeks",
+        "Achieve <2s page load times globally"
+      ],
+      "stakeholders": [
+        "Product Manager (Sarah)",
+        "Engineering Lead (Alex)",
+        "UI/UX Designer (Maria)",
+        "DevOps Engineer (David)",
+        "QA Lead (Jennifer)",
+        "Business Stakeholder (CEO)"
+      ]
+    },
+    "20000": {
+      "components": [
+        "Next.js Frontend with Tailwind",
+        "Node.js API Server",
+        "PostgreSQL Database",
+        "Redis Cache Layer",
+        "Stripe Payment Processing",
+        "AWS S3 File Storage",
+        "Elasticsearch Search Engine",
+        "Docker Containerization"
+      ],
+      "roles": [
+        "Frontend Developer",
+        "Backend Developer",
+        "Full-Stack Developer",
+        "DevOps Engineer",
+        "QA Engineer",
+        "Product Manager"
+      ],
+      "stages": [
+        "Planning & Design",
+        "Core Development",
+        "Integration Testing",
+        "Performance Optimization",
+        "Security Hardening",
+        "Production Deployment"
+      ],
+      "inputs": [
+        "Business requirements document",
+        "UI/UX design mockups",
+        "API specifications",
+        "Database schema designs",
+        "Security compliance requirements"
+      ],
+      "outputs": [
+        "Deployed e-commerce platform",
+        "API documentation",
+        "User guides",
+        "Admin dashboard",
+        "Performance monitoring setup"
+      ]
+    },
+    "10000": {
+      "steps": [
+        "Set up development environment with Docker",
+        "Create database schema and migrations",
+        "Build authentication and user management",
+        "Implement product catalog with search",
+        "Add shopping cart functionality",
+        "Integrate payment processing",
+        "Build order management system",
+        "Create admin dashboard",
+        "Implement recommendation engine",
+        "Set up monitoring and logging"
+      ],
+      "apis_services": [
+        "Stripe Payment API",
+        "SendGrid Email Service",
+        "AWS S3 Storage API",
+        "Elasticsearch Search API",
+        "Google Analytics API",
+        "Social Media Login APIs",
+        "Inventory Management API",
+        "Shipping Provider APIs"
+      ],
+      "decision_points": [
+        "PostgreSQL vs MongoDB for product data",
+        "Server-side vs client-side rendering strategy", 
+        "Microservices vs monolithic architecture",
+        "Self-hosted vs managed Elasticsearch",
+        "Custom vs third-party recommendation engine"
+      ],
+      "llms": [
+        "Claude for code review and optimization",
+        "GPT-4 for documentation generation",
+        "GitHub Copilot for development assistance",
+        "AI-powered product recommendations"
+      ],
+      "compliance": [
+        "PCI DSS for payment processing",
+        "GDPR for EU customer data",
+        "CCPA for California residents",
+        "SOC 2 Type II certification",
+        "WCAG 2.1 AA accessibility"
+      ]
+    },
+    "5000": {
+      "documentation_plan": [
+        "API documentation with OpenAPI",
+        "User onboarding guides",
+        "Admin dashboard tutorials",
+        "Deployment runbooks",
+        "Troubleshooting guides",
+        "Architecture decision records"
+      ],
+      "agent_roles": {
+        "claude": "Code review, optimization, and architectural guidance",
+        "project_gpt": "Project coordination, sprint planning, and stakeholder communication",
+        "whimsical_gpt": "System diagrams, user journey maps, and visual documentation",
+        "sidecar": "Performance monitoring, error tracking, and usage analytics",
+        "heir": "Security compliance validation and audit trail maintenance"
+      },
+      "handoffs": [
+        "Design → Frontend Dev: Mockups approved and design system ready",
+        "Frontend → Backend: API contracts defined and UI components complete",
+        "Backend → DevOps: Services containerized and health checks implemented",
+        "QA → DevOps: All tests passing and performance benchmarks met",
+        "DevOps → Product: Production deployment successful and monitoring active"
+      ],
+      "firebreak_queue": {
+        "location": "GitHub Issues with 'P0-Critical' label",
+        "policy": "Address within 2 hours, escalate to engineering lead if unresolved"
+      }
+    }
+  },
+  "trunk_root": {
+    "doctrine_foundation": ["BARTON", "ORBT"],
+    "schema_enforcement": [
+      "STAMPED (Neon) - User data and transactions",
+      "SPVPET (Firebase) - Analytics and user events",
+      "STACKED (BigQuery) - Business intelligence and reporting"
+    ],
+    "telemetry": {
+      "emit_at_every_stage": true,
+      "sink": [
+        "Sidecar → Neon (structured logs)",
+        "Sidecar → Firebase (user events)",
+        "Sidecar → BigQuery (analytics pipeline)"
+      ]
+    }
+  },
+  "whimsical_outputs": {
+    "generate_mind_map": true,
+    "generate_flowchart": true,
+    "generate_agent_map": true,
+    "generate_sequence_diagram": true
+  },
+  "handoff_to_whimsical": true,
+  "notion_links": {
+    "project_page": "https://notion.so/ecommerce-project-hub",
+    "backlog_board": "https://notion.so/ecommerce-sprint-backlog",
+    "diagrams_doc": "https://notion.so/ecommerce-system-diagrams"
+  },
+  "visual_embedding": {
+    "iframe_target": "https://world-class-ecommerce.vercel.app/embed",
+    "preferred_height_px": 800,
+    "whimsical_diagram_ids": [
+      "system-architecture-001",
+      "user-journey-map-002",
+      "api-flow-diagram-003"
+    ]
+  },
+  "diagram_trace_tags": [
+    "ecommerce",
+    "next.js",
+    "payments",
+    "scalability",
+    "ai-recommendations"
+  ]
+}

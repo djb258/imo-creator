@@ -3,7 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    appDir: true,
     typedRoutes: true
   },
   images: {
@@ -22,7 +21,7 @@ const nextConfig = {
     }
     
     // Optimize bundle splitting
-    if (!isServer) {
+    if (!isServer && config.optimization.splitChunks) {
       config.optimization.splitChunks.cacheGroups = {
         ...config.optimization.splitChunks.cacheGroups,
         vendor: {
