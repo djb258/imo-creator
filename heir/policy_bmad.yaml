@@ -40,3 +40,5 @@ factory_garage:
   factory_check_required: true
   garage_scan_on_push: true
   health_gate_enforced: true
+
+lanes: ["risk:low","risk:default","risk:high"]

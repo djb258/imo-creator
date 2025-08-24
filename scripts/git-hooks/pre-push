@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-# HEIR/ORBT trace validation before push
+# Owners-only emergency bypass
+if [[ "${BMAD_BYPASS:-0}" == "1" ]]; then
+  echo "[BMAD] Emergency bypass set. A postmortem task will be required in CI."
+  exit 0
+fi
 TRACE=$(git log -1 --pretty=%B | sed -n 's/.*BMAD_TRACE_ID=\([^ ]*\).*/\1/p')
-test -n "$TRACE" || { 
-  echo "[HEIR/ORBT] Missing BMAD_TRACE_ID in last commit body."
-  exit 1
-}
-test -f "logs/bmad/${TRACE}.json" || { 
-  echo "[HEIR/ORBT] No BMAD log for TRACE $TRACE (run make bmad-bench)."
-  exit 1
-}
+test -n "$TRACE" || { echo "Missing BMAD_TRACE_ID in last commit body."; exit 1; }
+test -f "logs/bmad/${TRACE}.json" || { echo "No BMAD log for TRACE $TRACE (run make bmad-bench)."; exit 1; }

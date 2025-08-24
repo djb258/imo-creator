@@ -144,3 +144,14 @@ os.system('./bmad/measure.sh python script.py')
 - Validation script: `scripts/heir_bmad_check.py`
 - Factory integration: `factory/spec.yaml`
 - Garage health: `health.json`
+
+## Lanes & thresholds
+- `risk:high` label => perf drift max 2%
+- `risk:default` (no label) => 5%
+- `risk:low` => 10%
+## Escape hatches
+- `BMAD_MODE=refactor` raises file cap in pre-commit but still requires tests and BMAD trace.
+- `BMAD_ALLOW_MULTI=1` explicit override (logged by hooks).
+- `BMAD_BYPASS=1` (owners only): CI requires "postmortem" label on PR.
+## Commit template
+Run once: `git config commit.template .gitmessage`

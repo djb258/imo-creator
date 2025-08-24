@@ -1,0 +1,10 @@
+scenarios:
+  - name: cold_start
+    runs: 1
+    cmd: "npm test || make test || echo no-tests"
+  - name: hot_path
+    runs: 3
+    cmd: "npm run test:hot || echo todo"
+  - name: load_n10
+    runs: 10
+    cmd: "npm run test:smoke || echo todo"

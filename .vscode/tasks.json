@@ -63,6 +63,16 @@
       "label": "vercel: dev",
       "type": "shell",
       "command": "vercel dev"
+    },
+    { 
+      "label": "BMAD: Bench", 
+      "type": "shell", 
+      "command": "BMAD_TRACE_ID=BMAD-${RANDOM} make bmad-bench CMD='npm test || make test || echo no-tests'" 
+    },
+    { 
+      "label": "BMAD: Analyze Last", 
+      "type": "shell", 
+      "command": "make bmad-analyze" 
     }
   ],
   "inputs": [
