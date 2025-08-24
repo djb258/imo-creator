@@ -40,3 +40,21 @@ run-full-stack:
 	@cd garage-mcp && python -m services.mcp.main &
 	@echo "3. Starting main API..."
 	@uvicorn src.server.main:app --port 7002 --reload
+
+# BMAD targets
+hooks:
+	mkdir -p .git/hooks && cp -R scripts/git-hooks/* .git/hooks/ 2>/dev/null || true && chmod +x .git/hooks/*
+
+bmad-bench:
+	./bmad/measure.sh bash -lc '$(CMD)'
+
+bmad-analyze:
+	./bmad/analyze.sh
+
+bmad-do:
+	./bmad/do.sh $(ACTION) $(ARGS)
+
+bmad-baseline:
+	./bmad/measure.sh make test || ./bmad/measure.sh npm test || true
+
+.PHONY: hooks bmad-bench bmad-analyze bmad-do bmad-baseline

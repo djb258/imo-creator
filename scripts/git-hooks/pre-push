@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# HEIR/ORBT trace validation before push
+TRACE=$(git log -1 --pretty=%B | sed -n 's/.*BMAD_TRACE_ID=\([^ ]*\).*/\1/p')
+test -n "$TRACE" || { 
+  echo "[HEIR/ORBT] Missing BMAD_TRACE_ID in last commit body."
+  exit 1
+}
+test -f "logs/bmad/${TRACE}.json" || { 
+  echo "[HEIR/ORBT] No BMAD log for TRACE $TRACE (run make bmad-bench)."
+  exit 1
+}

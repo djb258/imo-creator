@@ -44,7 +44,10 @@
     "plasmic:sync": "plasmic sync",
     "plasmic:auth": "plasmic auth",
     "plasmic:init": "plasmic init",
-    "plasmic:watch": "plasmic watch"
+    "plasmic:watch": "plasmic watch",
+    "bmad:bench": "bash -lc './bmad/measure.sh npm test'",
+    "bmad:analyze": "./bmad/analyze.sh",
+    "heir:check": "python3 scripts/heir_bmad_check.py"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",

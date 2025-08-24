@@ -1,0 +1,17 @@
+# List smallest testable targets to "break down"
+targets:
+  - name: api.healthcheck
+    cmd: "npm run test:health || make test"
+  - name: ui.landing
+    cmd: "npm run test:ui || echo 'todo'"
+  - name: factory.validate
+    cmd: "npm run factory:check"
+  - name: garage.scan
+    cmd: "npm run garage:scan"
+  - name: heir.compliance
+    cmd: "python -m packages.heir.checks"
+  - name: orbt.policy
+    cmd: "python scripts/heir_bmad_check.py"
+notes: |
+  Add minimal, isolated checks here. These are invoked by CI to measure deltas.
+  HEIR/ORBT integration ensures all traces comply with policy.

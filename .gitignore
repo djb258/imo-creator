@@ -26,3 +26,7 @@ Thumbs.db
 
 # Local workspace registry  
 .imo/local/
+
+# BMAD
+logs/bmad/
+.bmad_snapshot/

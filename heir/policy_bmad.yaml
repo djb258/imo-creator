@@ -1,0 +1,42 @@
+# HEIR/ORBT Policy Configuration for BMAD Integration
+required_fields: 
+  - trace_id
+  - process_id
+  - blueprint_id
+  - agent_id
+  - duration_s
+  - exit_code
+  - ts
+
+event_order_enforced: true
+allow_warn_only: false
+
+# HEIR compliance rules
+heir_rules:
+  - type: VIN_FORMAT
+    pattern: "^IMO-\\d{4}-\\d{2}-[A-Z]+-[A-Z]+-V\\d+$"
+    required: true
+  - type: STAMPED
+    enforcement: strict
+  - type: SPVPET
+    validation: true
+  - type: STACKED
+    layers: 3
+
+# ORBT policy extensions
+orbt_policies:
+  - name: atomic_fixes
+    max_files_per_commit: 3
+    override_var: BMAD_ALLOW_MULTI
+  - name: trace_required
+    all_commits: true
+    format: "BMAD_TRACE_ID=BMAD-*"
+  - name: performance_regression
+    max_allowed_percent: 10
+    baseline_required: true
+
+# Factory/Garage integration
+factory_garage:
+  factory_check_required: true
+  garage_scan_on_push: true
+  health_gate_enforced: true

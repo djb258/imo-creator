@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+MSG_FILE="$1"
+# HEIR/ORBT compliance: ensure BMAD trace in commits
+grep -q 'BMAD_TRACE_ID=' "$MSG_FILE" || { 
+  echo "[HEIR/ORBT] Commit message must include BMAD_TRACE_ID=..."
+  echo "Example: feat: add feature BMAD_TRACE_ID=BMAD-12345"
+  exit 1
+}

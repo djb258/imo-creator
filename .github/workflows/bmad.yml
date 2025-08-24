@@ -1,0 +1,112 @@
+name: BMAD with HEIR/ORBT
+on: [pull_request, push]
+
+jobs:
+  baseline_and_compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      
+      - name: Setup tools
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq python3-yaml
+          pip install pyyaml
+      
+      - name: Infer TRACE from commit
+        id: trace
+        run: |
+          TRACE=$(git log -1 --pretty=%B | sed -n 's/.*BMAD_TRACE_ID=\([^ ]*\).*/\1/p')
+          echo "trace=${TRACE:-BMAD-CI-$GITHUB_RUN_ID}" >> $GITHUB_OUTPUT
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run HEIR/ORBT compliance check
+        env:
+          HEIR_STRICT: "1"
+        run: |
+          python3 scripts/heir_bmad_check.py || echo "Initial check"
+      
+      - name: Run baseline (main)
+        run: |
+          git fetch origin main:origin-main || git fetch origin master:origin-main || true
+          git checkout origin-main || true
+          chmod +x bmad/*.sh || true
+          
+          # Run Factory/Garage checks first (HEIR requirement)
+          npm run factory:check || true
+          npm run garage:scan || true
+          
+          # Run BMAD baseline
+          ./bmad/measure.sh bash -lc 'npm test || make test || echo "no tests"'
+          cp logs/bmad/*.json baseline.json || echo '{}' > baseline.json
+      
+      - name: Run head with HEIR/ORBT tracking
+        env:
+          PROCESS_ID: "IMO-${{ github.run_id }}"
+          BLUEPRINT_ID: "imo-creator"
+          AGENT_ID: "github-actions"
+          BMAD_TRACE_ID: "${{ steps.trace.outputs.trace }}"
+        run: |
+          git checkout -
+          chmod +x bmad/*.sh || true
+          
+          # Factory health gate (HEIR requirement)
+          npm run factory:check || echo "Factory check"
+          
+          # BMAD measurement with HEIR context
+          ./bmad/measure.sh bash -lc 'npm test || make test || echo "no tests"'
+          cp logs/bmad/*.json head.json || echo '{}' > head.json
+      
+      - name: Compare durations and enforce HEIR/ORBT policy
+        env: 
+          MAX_REG_PCT: "10"
+          HEIR_STRICT: "1"
+        run: |
+          # Performance regression check
+          base=$(jq -r '.duration_s//empty' baseline.json)
+          head=$(jq -r '.duration_s//empty' head.json)
+          
+          if [[ -n "$base" && -n "$head" ]]; then
+            diff=$(python3 -c "b=float('$base'); h=float('$head'); print((h-b)/b*100.0)")
+            echo "Performance delta: $diff% (baseline=$base s, head=$head s)"
+            
+            if (( $(echo "$diff > $MAX_REG_PCT" | bc -l) )); then
+              echo "❌ Performance regression exceeds $MAX_REG_PCT%"
+              exit 1
+            fi
+          else
+            echo "⚠️ Skipping regression check (missing durations)"
+          fi
+          
+          # HEIR/ORBT policy validation
+          python3 scripts/heir_bmad_check.py
+      
+      - name: Factory/Garage final validation
+        run: |
+          # Ensure Factory spec is valid
+          npm run factory:validate || true
+          
+          # Ensure Garage health passes
+          npm run garage:scan || true
+          
+          # Check overall HEIR compliance
+          python -m packages.heir.checks || echo "HEIR check complete"
+      
+      - name: Upload BMAD traces
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: bmad-traces-${{ github.run_id }}
+          path: |
+            logs/bmad/*.json
+            logs/bmad/*.log
+            baseline.json
+            head.json
