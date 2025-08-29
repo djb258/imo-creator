@@ -1,24 +1,24 @@
 # MCP Backend Dependencies
 # =========================
-# FastAPI and ASGI server
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
+# FastAPI and ASGI server - Use older versions that don't require Rust
+fastapi==0.95.2
+uvicorn[standard]==0.22.0
+pydantic==1.10.12
 pydantic-settings==2.0.3
 
 # HTTP client for API calls
-aiohttp==3.9.1
-httpx==0.25.2
+aiohttp==3.8.5
+httpx==0.24.1
 
 # File handling
-aiofiles==23.2.0
-PyYAML==6.0.1
+aiofiles==23.1.0
+PyYAML==6.0
 
 # System monitoring (optional)
-psutil==5.9.6
+psutil==5.9.5
 
 # Development and testing
-pytest==7.4.3
+pytest==7.3.2
 pytest-asyncio==0.21.1
 requests==2.31.0
 
