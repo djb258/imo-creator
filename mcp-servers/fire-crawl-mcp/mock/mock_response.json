@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for fire-crawl-scraper",
+    "operation": "scrape_single",
+    "timestamp": "2025-08-29T18:13:30.810Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-FRCWL-EXEC-01",
+  "execution_time_ms": 915,
+  "compliance_status": "COMPLIANT"
+}

@@ -1,0 +1,1081 @@
+{
+  "results": [
+    {
+      "serverName": "abacus-mcp",
+      "totalScore": 0,
+      "maxScore": 100,
+      "percentage": 0,
+      "issues": [
+        "❌ Missing tool_manifest.json",
+        "❌ Missing mock directory",
+        "❌ Missing middleware directory",
+        "❌ Missing README.md",
+        "❌ Missing tools directory",
+        "❌ Missing server.js"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 0,
+            "max": 25
+          },
+          "issues": [
+            "❌ Missing tool_manifest.json"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing mock directory"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 0,
+            "max": 20
+          },
+          "issues": [
+            "❌ Missing middleware directory"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing README.md"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 0,
+            "max": 10
+          },
+          "issues": [
+            "❌ Missing tools directory"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing server.js"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "apify-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "bigquery-mcp",
+      "totalScore": 0,
+      "maxScore": 100,
+      "percentage": 0,
+      "issues": [
+        "❌ Missing tool_manifest.json",
+        "❌ Missing mock directory",
+        "❌ Missing middleware directory",
+        "❌ Missing README.md",
+        "❌ Missing tools directory",
+        "❌ Missing server.js"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 0,
+            "max": 25
+          },
+          "issues": [
+            "❌ Missing tool_manifest.json"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing mock directory"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 0,
+            "max": 20
+          },
+          "issues": [
+            "❌ Missing middleware directory"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing README.md"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 0,
+            "max": 10
+          },
+          "issues": [
+            "❌ Missing tools directory"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing server.js"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "ctb-parser",
+      "totalScore": 95,
+      "maxScore": 100,
+      "percentage": 95,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "❌ Server.js not using tool handler",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 5,
+            "max": 10
+          },
+          "issues": [
+            "❌ Server.js not using tool handler"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "email-validator",
+      "totalScore": 95,
+      "maxScore": 100,
+      "percentage": 95,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "❌ Server.js not using tool handler",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 5,
+            "max": 10
+          },
+          "issues": [
+            "❌ Server.js not using tool handler"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "fire-crawl-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "firebase-mcp",
+      "totalScore": 0,
+      "maxScore": 100,
+      "percentage": 0,
+      "issues": [
+        "❌ Missing tool_manifest.json",
+        "❌ Missing mock directory",
+        "❌ Missing middleware directory",
+        "❌ Missing README.md",
+        "❌ Missing tools directory",
+        "❌ Missing server.js"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 0,
+            "max": 25
+          },
+          "issues": [
+            "❌ Missing tool_manifest.json"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing mock directory"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 0,
+            "max": 20
+          },
+          "issues": [
+            "❌ Missing middleware directory"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing README.md"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 0,
+            "max": 10
+          },
+          "issues": [
+            "❌ Missing tools directory"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing server.js"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "github-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "n8n-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "neon-mcp",
+      "totalScore": 86,
+      "maxScore": 100,
+      "percentage": 86,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "❌ Missing usage examples",
+        "❌ Missing health check documentation",
+        "❌ Missing compliance documentation",
+        "❌ Server.js not using tool handler",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 6,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing usage examples",
+            "❌ Missing health check documentation",
+            "❌ Missing compliance documentation"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 5,
+            "max": 10
+          },
+          "issues": [
+            "❌ Server.js not using tool handler"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "plasmic-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "playwright-mcp",
+      "totalScore": 0,
+      "maxScore": 100,
+      "percentage": 0,
+      "issues": [
+        "❌ Missing tool_manifest.json",
+        "❌ Missing mock directory",
+        "❌ Missing middleware directory",
+        "❌ Missing README.md",
+        "❌ Missing tools directory",
+        "❌ Missing server.js"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 0,
+            "max": 25
+          },
+          "issues": [
+            "❌ Missing tool_manifest.json"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing mock directory"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 0,
+            "max": 20
+          },
+          "issues": [
+            "❌ Missing middleware directory"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing README.md"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 0,
+            "max": 10
+          },
+          "issues": [
+            "❌ Missing tools directory"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 0,
+            "max": 15
+          },
+          "issues": [
+            "❌ Missing server.js"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "render-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "vercel-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    },
+    {
+      "serverName": "whimsical-mcp",
+      "totalScore": 100,
+      "maxScore": 100,
+      "percentage": 100,
+      "issues": [
+        "✅ Tool manifest complete",
+        "✅ Mock infrastructure complete",
+        "✅ Middleware structure complete",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
+        "✅ Health endpoint implemented",
+        "✅ Kill switch implemented"
+      ],
+      "breakdown": {
+        "manifest": {
+          "score": {
+            "current": 25,
+            "max": 25
+          },
+          "issues": [
+            "✅ Tool manifest complete"
+          ]
+        },
+        "mocks": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Mock infrastructure complete"
+          ]
+        },
+        "middleware": {
+          "score": {
+            "current": 20,
+            "max": 20
+          },
+          "issues": [
+            "✅ Middleware structure complete"
+          ]
+        },
+        "docs": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Documentation complete"
+          ]
+        },
+        "structure": {
+          "score": {
+            "current": 10,
+            "max": 10
+          },
+          "issues": [
+            "✅ Tool logic properly separated"
+          ]
+        },
+        "health": {
+          "score": {
+            "current": 15,
+            "max": 15
+          },
+          "issues": [
+            "✅ Health endpoint implemented",
+            "✅ Kill switch implemented"
+          ]
+        }
+      }
+    }
+  ],
+  "overallPercentage": 72
+}

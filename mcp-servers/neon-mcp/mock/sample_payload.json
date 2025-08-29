@@ -1,0 +1,7 @@
+{
+  "unique_id": "HEIR-2024-12-NEONDB-EXEC-01",
+  "process_id": "PRC-NEONDB00-1756491210816",
+  "orbt_layer": 2,
+  "blueprint_version": "v1.0.0-3d47d9c1",
+  "operation": "execute_query"
+}

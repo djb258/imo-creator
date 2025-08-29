@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for render-infrastructure-manager",
+    "operation": "list_services",
+    "timestamp": "2025-08-29T18:13:30.821Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-RDRMC-EXEC-01",
+  "execution_time_ms": 582,
+  "compliance_status": "COMPLIANT"
+}

@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for ctb-parser",
+    "operation": "parse_ctb",
+    "timestamp": "2025-08-29T18:13:30.806Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-CTBPSR-EXEC-01",
+  "execution_time_ms": 518,
+  "compliance_status": "COMPLIANT"
+}

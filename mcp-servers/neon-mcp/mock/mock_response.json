@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for neon-db-manager",
+    "operation": "execute_query",
+    "timestamp": "2025-08-29T18:13:30.816Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-NEONDB-EXEC-01",
+  "execution_time_ms": 944,
+  "compliance_status": "COMPLIANT"
+}

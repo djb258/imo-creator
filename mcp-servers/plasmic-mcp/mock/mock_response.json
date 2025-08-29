@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for plasmic-component-manager",
+    "operation": "sync_components",
+    "timestamp": "2025-08-29T18:13:30.818Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-PLSMIC-EXEC-01",
+  "execution_time_ms": 270,
+  "compliance_status": "COMPLIANT"
+}

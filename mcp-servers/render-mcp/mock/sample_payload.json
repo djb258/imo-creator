@@ -1,0 +1,7 @@
+{
+  "unique_id": "HEIR-2024-12-RDRMC-EXEC-01",
+  "process_id": "PRC-RDRMC000-1756491210820",
+  "orbt_layer": 3,
+  "blueprint_version": "v1.0.0-e299c092",
+  "operation": "list_services"
+}

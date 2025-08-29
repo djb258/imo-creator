@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for email-validator",
+    "operation": "validate_email",
+    "timestamp": "2025-08-29T18:13:30.808Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-EMLVLD-EXEC-01",
+  "execution_time_ms": 870,
+  "compliance_status": "COMPLIANT"
+}

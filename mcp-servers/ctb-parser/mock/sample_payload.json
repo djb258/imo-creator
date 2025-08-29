@@ -1,0 +1,7 @@
+{
+  "unique_id": "HEIR-2024-12-CTBPSR-EXEC-01",
+  "process_id": "PRC-CTBPSR00-1756491210806",
+  "orbt_layer": 4,
+  "blueprint_version": "v1.0.0-5dedba22",
+  "operation": "parse_ctb"
+}

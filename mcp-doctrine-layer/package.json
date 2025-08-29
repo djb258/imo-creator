@@ -1,0 +1,15 @@
+{
+  "name": "mcp-doctrine-layer",
+  "version": "1.0.0",
+  "description": "MCP Doctrine Layer - Universal logging and compliance framework",
+  "main": "templates/simple_mcp_tool.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["mcp", "doctrine", "heir", "orbt", "compliance", "logging"],
+  "author": "Claude Code",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.11.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "data": {
+    "message": "Mock response for n8n-workflow-manager",
+    "operation": "list_workflows",
+    "timestamp": "2025-08-29T18:13:30.814Z",
+    "mock_mode": true
+  },
+  "unique_id": "HEIR-2024-12-N8NWFL-EXEC-01",
+  "execution_time_ms": 996,
+  "compliance_status": "COMPLIANT"
+}
