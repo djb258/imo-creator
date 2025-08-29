@@ -19,7 +19,7 @@ import tempfile
 import asyncio
 from typing import Optional, Dict, Any
 from pathlib import Path
-import yaml
+from ruamel.yaml import YAML
 import aiofiles
 import logging
 
@@ -162,7 +162,8 @@ class CTBParserService:
             async with aiofiles.open(meta_file_path, 'r', encoding='utf-8') as f:
                 yaml_content = await f.read()
             
-            metadata = yaml.safe_load(yaml_content)
+            yaml_parser = YAML(typ='safe')
+            metadata = yaml_parser.load(yaml_content)
             
             log_processing_step(logger, "metadata_extraction", "completed",
                                keys=list(metadata.keys()) if metadata else [])

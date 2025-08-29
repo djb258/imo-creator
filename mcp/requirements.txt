@@ -12,7 +12,7 @@ httpx==0.23.0
 
 # File handling
 aiofiles==22.1.0
-PyYAML==5.4.1
+ruamel.yaml==0.17.21
 
 # System monitoring (optional)
 psutil==5.9.0
