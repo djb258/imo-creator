@@ -30,6 +30,30 @@ Dashboard Features:
 - 🔥 **Heat map overlay**: Toggle telemetry failure visualization
 - 📋 **Mermaid fallback**: Export diagrams for documentation
 
+## 📋 Project Blueprint Template
+- **Comprehensive Planning**: Multi-altitude project blueprint template
+- **Whimsical Integration**: Automatic diagram generation for mind maps, flowcharts
+- **Validation System**: Built-in schema validation and completeness checking
+- **Agent Coordination**: Structured handoffs between Claude, GPT, and other agents
+
+```bash
+# Copy and fill out project blueprint template
+cp templates/imo_project_blueprint.json my-project-blueprint.json
+
+# Validate blueprint completeness and compliance
+pnpm factory:validate-blueprint my-project-blueprint.json
+
+# Submit to Whimsical GPT for visual generation
+```
+
+Blueprint Features:
+- 🛩️ **30,000ft Vision**: Strategic objectives and success criteria
+- ✈️ **20,000ft Architecture**: System components and team roles  
+- 🚁 **10,000ft Implementation**: Detailed steps and decision points
+- 🏃 **5,000ft Execution**: Documentation plans and agent handoffs
+- 🎨 **Visual Outputs**: Mind maps, flowcharts, sequence diagrams
+- 📊 **Progress Tracking**: Completeness scoring and validation
+
 ## Features
 - **4-Page UI**: Overview with progress visual, Input/Middle/Output pages
 - **SSOT Manifest**: YAML-based configuration with flexible stages per bucket

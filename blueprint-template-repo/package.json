@@ -1,0 +1,40 @@
+{
+  "name": "imo-project-blueprint-template",
+  "version": "1.0.0",
+  "description": "Comprehensive project planning blueprint with Whimsical integration",
+  "keywords": [
+    "project-planning",
+    "blueprint",
+    "template",
+    "whimsical",
+    "visualization",
+    "multi-altitude",
+    "heir",
+    "orbt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/imo-blueprint-template.git"
+  },
+  "scripts": {
+    "install": "npm install --save-dev zod tsx typescript @types/node",
+    "validate": "tsx scripts/validate.ts blueprint.json",
+    "check-completeness": "tsx scripts/validate.ts blueprint.json --completeness-only",
+    "generate-example": "cp templates/examples/ecommerce-blueprint.json my-project-blueprint.json",
+    "export-whimsical": "tsx scripts/export-whimsical.ts blueprint.json",
+    "setup": "npm install && npm run validate"
+  },
+  "dependencies": {
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT",
+  "templateRepository": true
+}

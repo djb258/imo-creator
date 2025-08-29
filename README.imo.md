@@ -1,0 +1,109 @@
+# IMO/CTB/MCP Kit Integration
+
+This repository is wired with the IMO Creator Kit, providing standardized tooling for IMO validation, CTB linting, and Plasmic synchronization with MCP orchestration.
+
+## Submodule Management
+
+The IMO Creator Kit is referenced as a Git submodule at `.imo-kit`. 
+
+### Initial Setup (when submodule is available)
+```bash
+# Add the submodule (replace <ORG> with your GitHub organization)
+git submodule add -b v1 https://github.com/<ORG>/imo-creator-kit .imo-kit
+git submodule update --init --recursive
+```
+
+### Update the Kit
+```bash
+# Pull latest changes from the kit repository
+git submodule update --remote --merge .imo-kit
+
+# Commit the updated reference
+git add .imo-kit
+git commit -m "kit bump: update IMO creator kit to latest"
+```
+
+## Configuration
+
+### Environment Variables
+Copy `.env.example` to `.env` and configure:
+- `PLASMIC_PROJECT_ID`: Your Plasmic project identifier
+- `PLASMIC_AUTH_TOKEN`: Plasmic authentication token
+- `MCP_URL`: MCP endpoint URL
+- `MCP_TOKEN`: MCP authentication token
+
+### GitHub Secrets
+Configure these repository secrets:
+- `CTB_DISABLE`: Set to `1` to disable CTB linting
+- `MCP_DISABLE`: Set to `1` to disable MCP calls
+- `PLASMIC_PROJECT_ID`: Your Plasmic project ID
+- `PLASMIC_AUTH_TOKEN`: Plasmic auth token
+- `MCP_URL`: MCP endpoint
+- `MCP_TOKEN`: MCP auth token
+
+## Workflow Features
+
+### Standards Check Workflow
+The `.github/workflows/standards.yml` workflow runs on:
+- Pull requests to `main` branch
+- Manual workflow dispatch
+
+It performs:
+1. **IMO Validation**: Validates IMO compliance via `.imo-kit/scripts/validate-imo.sh`
+2. **CTB Linting**: Lints the Whimsical blueprint at `ctb/ctb_blueprint.yaml` (unless `CTB_DISABLE=1`)
+3. **Plasmic Sync**: Syncs with Plasmic when PR has `ui-sync` label
+4. **MCP Operations**: Calls MCP for Plasmic/PR operations when `ui-sync` label is present (unless `MCP_DISABLE=1`)
+
+### PR Labels
+- `ui-sync`: Triggers Plasmic synchronization and MCP operations
+
+## Local Development
+
+Use the Makefile targets for local validation:
+```bash
+# Validate IMO compliance
+make imo
+
+# Lint CTB blueprint
+make ctb
+
+# Sync with Plasmic (requires env vars)
+make plasmic
+```
+
+## Kill Switches
+
+To disable specific checks:
+- **CTB**: Set GitHub secret `CTB_DISABLE=1`
+- **MCP**: Set GitHub secret `MCP_DISABLE=1`
+
+## Project Structure
+
+```
+.
+├── .imo-kit/              # IMO Creator Kit submodule (when added)
+├── .github/
+│   └── workflows/
+│       └── standards.yml  # CI/CD workflow for standards checks
+├── imo/
+│   └── trace.json        # IMO trace configuration
+├── ctb/
+│   └── ctb_blueprint.yaml # CTB Whimsical blueprint
+├── .env.example          # Environment variables template
+├── .gitsubmodules.info   # Submodule documentation
+├── Makefile              # Local dev helpers
+└── README.imo.md         # This file
+```
+
+## Post-Setup Steps
+
+1. **Enable Plasmic Push-to-GitHub**: Configure Plasmic to push to this repository in PR mode
+2. **Configure GitHub Secrets**: Add all required secrets to your repository settings
+3. **Update Organization**: Replace `<ORG>` in `.gitsubmodules.info` with your actual GitHub organization
+4. **Add Submodule**: When the kit repository is available, add it as documented above
+
+## Maintenance
+
+- **Update Kit**: Run `git submodule update --remote --merge .imo-kit` periodically
+- **Monitor Workflows**: Check GitHub Actions for workflow runs and failures
+- **Label PRs**: Add `ui-sync` label to PRs that need Plasmic synchronization

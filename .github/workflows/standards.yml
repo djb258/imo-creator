@@ -1,0 +1,42 @@
+name: Standards (IMO+CTB+UI)
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - run: echo "CTB_DISABLE=${{ secrets.CTB_DISABLE }}" >> $GITHUB_ENV
+      - run: echo "MCP_DISABLE=${{ secrets.MCP_DISABLE }}" >> $GITHUB_ENV
+      
+      - name: IMO validate
+        run: ./.imo-kit/scripts/validate-imo.sh
+      
+      - name: CTB lint (Whimsical blueprint)
+        if: env.CTB_DISABLE != '1'
+        run: ./.imo-kit/scripts/lint-ctb.sh ./ctb/ctb_blueprint.yaml
+      
+      - name: Plasmic sanity sync
+        if: contains(join(github.event.pull_request.labels.*.name, ','), 'ui-sync')
+        env:
+          PLASMIC_PROJECT_ID: ${{ secrets.PLASMIC_PROJECT_ID }}
+          PLASMIC_AUTH_TOKEN: ${{ secrets.PLASMIC_AUTH_TOKEN }}
+        run: ./.imo-kit/scripts/plasmic-sync.sh
+      
+      - name: Call MCP (Plasmic/PR ops)
+        if: env.MCP_DISABLE != '1' && contains(join(github.event.pull_request.labels.*.name, ','), 'ui-sync')
+        env:
+          MCP_URL: ${{ secrets.MCP_URL }}
+          MCP_TOKEN: ${{ secrets.MCP_TOKEN }}
+        run: ./.imo-kit/scripts/call-mcp.sh

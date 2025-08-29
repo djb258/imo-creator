@@ -1,0 +1,47 @@
+# CTB Blueprint Configuration
+# ===========================
+# Whimsical-compatible blueprint for IMO Creator
+# Replace placeholder values with your actual CTB keys
+
+version: "1.0"
+metadata:
+  name: "IMO Creator CTB Blueprint"
+  description: "Component-Tree-Blueprint configuration for UI synchronization"
+  created: "2025-08-29"
+  
+# CTB Keys - Replace with your actual values
+ctb_keys:
+  # Primary identifier for your Whimsical board
+  board_id: "YOUR_WHIMSICAL_BOARD_ID"
+  
+  # Component registry endpoint
+  registry_url: "YOUR_CTB_REGISTRY_URL"
+  
+  # Authentication token for CTB services
+  auth_token: "YOUR_CTB_AUTH_TOKEN"
+
+# Component definitions
+components:
+  # Add your component mappings here
+  # Example:
+  # - id: "nav-header"
+  #   type: "navigation"
+  #   plasmic_id: "PLASMIC_COMPONENT_ID"
+  #   whimsical_ref: "WHIMSICAL_ELEMENT_ID"
+
+# Tree structure
+tree:
+  root: "app"
+  branches: []
+  
+# Blueprint validation rules
+validation:
+  strict_mode: true
+  allow_orphans: false
+  require_plasmic_sync: true
+
+# Synchronization settings
+sync:
+  auto_sync: false
+  sync_on_pr: true
+  sync_labels: ["ui-sync"]

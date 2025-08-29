@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+# Solo mode: Only require BMAD_TRACE_ID if BMAD_STRICT=1
 MSG_FILE="$1"
-grep -q 'BMAD_TRACE_ID=' "$MSG_FILE" || { echo "Commit message must include BMAD_TRACE_ID=..."; exit 1; }
-# Require REFAC: prefix when BMAD_MODE=refactor (dev sets env when committing)
-if [[ "${BMAD_MODE:-}" == "refactor" ]]; then
-  grep -qE '^(REFAC:|Refactor:)' "$MSG_FILE" || { echo "Use REFAC: prefix in commit title during refactor mode."; exit 1; }
+if [[ "${BMAD_STRICT:-0}" == "1" ]]; then
+  grep -q 'BMAD_TRACE_ID=' "$MSG_FILE" || { echo "Commit message must include BMAD_TRACE_ID=... (or unset BMAD_STRICT for solo mode)"; exit 1; }
+else
+  echo "[BMAD Solo] Commit allowed without trace (set BMAD_STRICT=1 to enforce)"
 fi

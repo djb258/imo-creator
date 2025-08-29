@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "schema": "imo-trace-v1",
+  "metadata": {
+    "project": "imo-creator",
+    "created": "2025-08-29",
+    "description": "IMO Creator project with CTB and MCP integration"
+  },
+  "traces": [],
+  "compliance": {
+    "imo": true,
+    "ctb": true,
+    "mcp": true,
+    "plasmic": true
+  },
+  "config": {
+    "submodule": ".imo-kit",
+    "workflows": [".github/workflows/standards.yml"],
+    "blueprints": ["ctb/ctb_blueprint.yaml"]
+  }
+}

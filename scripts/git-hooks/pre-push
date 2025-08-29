@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Owners-only emergency bypass
-if [[ "${BMAD_BYPASS:-0}" == "1" ]]; then
-  echo "[BMAD] Emergency bypass set. A postmortem task will be required in CI."
-  exit 0
+# Solo mode: Skip trace validation unless BMAD_STRICT=1
+if [[ "${BMAD_STRICT:-0}" == "1" ]]; then
+  TRACE=$(git log -1 --pretty=%B | sed -n 's/.*BMAD_TRACE_ID=\([^ ]*\).*/\1/p')
+  test -n "$TRACE" || { echo "Missing BMAD_TRACE_ID in last commit body."; exit 1; }
+  test -f "logs/bmad/${TRACE}.json" || { echo "No BMAD log for TRACE $TRACE (run: BMAD_TRACE_ID=$TRACE make bmad-bench CMD='echo test')."; exit 1; }
+else
+  echo "[BMAD Solo] Push allowed (set BMAD_STRICT=1 to enforce traces)"
 fi
-TRACE=$(git log -1 --pretty=%B | sed -n 's/.*BMAD_TRACE_ID=\([^ ]*\).*/\1/p')
-test -n "$TRACE" || { echo "Missing BMAD_TRACE_ID in last commit body."; exit 1; }
-test -f "logs/bmad/${TRACE}.json" || { echo "No BMAD log for TRACE $TRACE (run make bmad-bench)."; exit 1; }

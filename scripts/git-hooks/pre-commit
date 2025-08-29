@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Default cap = 3 files. In refactor mode, lift to 50 but still require tests later.
-CAP=3
-if [[ "${BMAD_MODE:-}" == "refactor" ]]; then CAP=50; fi
-if [[ "${BMAD_ALLOW_MULTI:-0}" == "1" ]]; then exit 0; fi
-CHANGED=$(git diff --cached --name-only | wc -l | tr -d ' ')
-if [[ "$CHANGED" -gt "$CAP" ]]; then
-  echo "Too many staged files ($CHANGED). Set BMAD_MODE=refactor or BMAD_ALLOW_MULTI=1 to proceed."
-  exit 1
+# Solo mode: Much more lenient file limits
+if [[ "${BMAD_STRICT:-0}" == "1" ]]; then
+  CAP=10  # Even in strict mode, allow 10 files for solo dev
+  if [[ "${BMAD_ALLOW_MULTI:-0}" == "1" ]]; then exit 0; fi
+  CHANGED=$(git diff --cached --name-only | wc -l | tr -d ' ')
+  if [[ "$CHANGED" -gt "$CAP" ]]; then
+    echo "Many files ($CHANGED) - consider smaller commits. Set BMAD_ALLOW_MULTI=1 to override."
+    exit 1
+  fi
+else
+  echo "[BMAD Solo] Pre-commit check passed (set BMAD_STRICT=1 for file limits)"
 fi

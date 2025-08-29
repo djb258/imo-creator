@@ -1,24 +1,37 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run vercel:build",
-  "outputDirectory": "public",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/",          "destination": "/docs/blueprints/ui/overview.html" },
-    { "source": "/overview",  "destination": "/docs/blueprints/ui/overview.html" },
-    { "source": "/input",     "destination": "/docs/blueprints/ui/input.html" },
-    { "source": "/middle",    "destination": "/docs/blueprints/ui/middle.html" },
-    { "source": "/output",    "destination": "/docs/blueprints/ui/output.html" }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "functions": {
+    "src/pages/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "DATABASE_HOST": "@database-host",
+    "DATABASE_USERNAME": "@database-username", 
+    "DATABASE_PASSWORD": "@database-password",
+    "DATABASE_NAME": "@database-name",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "@clerk-publishable-key",
+    "CLERK_SECRET_KEY": "@clerk-secret-key",
+    "NEXT_PUBLIC_SENTRY_DSN": "@sentry-dsn",
+    "BMAD_STRICT": "0"
+  },
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/trpc/(.*)",
+      "destination": "/api/trpc/$1"
     }
   ]
 }

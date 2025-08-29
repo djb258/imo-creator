@@ -57,4 +57,14 @@ bmad-do:
 bmad-baseline:
 	./bmad/measure.sh make test || ./bmad/measure.sh npm test || true
 
-.PHONY: hooks bmad-bench bmad-analyze bmad-do bmad-baseline
+# IMO/CTB/MCP Kit targets
+imo:
+	./.imo-kit/scripts/validate-imo.sh
+
+ctb:
+	./.imo-kit/scripts/lint-ctb.sh ./ctb/ctb_blueprint.yaml
+
+plasmic:
+	./.imo-kit/scripts/plasmic-sync.sh
+
+.PHONY: hooks bmad-bench bmad-analyze bmad-do bmad-baseline imo ctb plasmic

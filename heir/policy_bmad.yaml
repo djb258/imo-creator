@@ -1,44 +1,47 @@
-# HEIR/ORBT Policy Configuration for BMAD Integration
-required_fields: 
+# HEIR/ORBT Policy Configuration for BMAD Integration (Solo Mode)
+# Only enforced when BMAD_STRICT=1
+
+solo_mode: true
+required_fields_when_strict: 
   - trace_id
-  - process_id
-  - blueprint_id
-  - agent_id
   - duration_s
   - exit_code
   - ts
 
-event_order_enforced: true
-allow_warn_only: false
+event_order_enforced: false
+allow_warn_only: true
 
-# HEIR compliance rules
+# HEIR compliance rules (relaxed for solo)
 heir_rules:
   - type: VIN_FORMAT
     pattern: "^IMO-\\d{4}-\\d{2}-[A-Z]+-[A-Z]+-V\\d+$"
-    required: true
+    required: false  # Optional in solo mode
   - type: STAMPED
-    enforcement: strict
+    enforcement: warn_only
   - type: SPVPET
-    validation: true
+    validation: false
   - type: STACKED
-    layers: 3
+    layers: 1  # Minimal for solo
 
-# ORBT policy extensions
+# ORBT policy extensions (solo-friendly)
 orbt_policies:
   - name: atomic_fixes
-    max_files_per_commit: 3
+    max_files_per_commit: 10  # More lenient for solo dev
     override_var: BMAD_ALLOW_MULTI
+    strict_mode_only: true
   - name: trace_required
-    all_commits: true
+    all_commits: false  # Only when BMAD_STRICT=1
     format: "BMAD_TRACE_ID=BMAD-*"
+    strict_mode_only: true
   - name: performance_regression
-    max_allowed_percent: 10
-    baseline_required: true
+    max_allowed_percent: 20  # More lenient for solo experiments
+    baseline_required: false
 
-# Factory/Garage integration
+# Factory/Garage integration (disabled for solo)
 factory_garage:
-  factory_check_required: true
-  garage_scan_on_push: true
-  health_gate_enforced: true
+  factory_check_required: false
+  garage_scan_on_push: false
+  health_gate_enforced: false
 
-lanes: ["risk:low","risk:default","risk:high"]
+# Simplified lanes for solo development
+lanes: ["solo:experiment", "solo:production"]

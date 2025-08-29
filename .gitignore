@@ -30,3 +30,4 @@ Thumbs.db
 # BMAD
 logs/bmad/
 .bmad_snapshot/
+node_modules

@@ -1,0 +1,15 @@
+# IMO Creator Kit Submodule Information
+# =======================================
+# This file documents the intended submodule configuration
+# Replace <ORG> with your actual GitHub organization
+
+origin: https://github.com/<ORG>/imo-creator-kit
+branch: v1
+path: .imo-kit
+
+# To add the submodule when available:
+# git submodule add -b v1 https://github.com/<ORG>/imo-creator-kit .imo-kit
+# git submodule update --init --recursive
+
+# To update the submodule:
+# git submodule update --remote --merge .imo-kit

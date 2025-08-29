@@ -1,0 +1,86 @@
+{
+  "project_slug": "your-project-name",
+  "created_at": "2025-08-22T12:00:00Z",
+  "created_by": "Project GPT",
+  "status_flags": {
+    "is_filled": false,
+    "is_validated": false,
+    "is_whimsical_ready": false
+  },
+  "meta": {
+    "unique_id": "DB/HIVE/SUB/PROC-YYYYMMDD-HHMMSS-XXXX",
+    "process_id": "IMO-{project_slug}-{increment}",
+    "blueprint_version_hash": "sha256:...",
+    "doctrine": ["BARTON", "ORBT", "HEIR", "STAMPED/SPVPET/STACKED"]
+  },
+  "altitudes": {
+    "30000": {
+      "project_name": "",
+      "objective": "",
+      "success_criteria": [],
+      "stakeholders": []
+    },
+    "20000": {
+      "components": [],
+      "roles": [],
+      "stages": [],
+      "inputs": [],
+      "outputs": []
+    },
+    "10000": {
+      "steps": [],
+      "apis_services": [],
+      "decision_points": [],
+      "llms": [],
+      "compliance": []
+    },
+    "5000": {
+      "documentation_plan": [],
+      "agent_roles": {
+        "claude": "",
+        "project_gpt": "",
+        "whimsical_gpt": "",
+        "sidecar": "",
+        "heir": ""
+      },
+      "handoffs": [],
+      "firebreak_queue": {
+        "location": "",
+        "policy": ""
+      }
+    }
+  },
+  "trunk_root": {
+    "doctrine_foundation": ["BARTON", "ORBT"],
+    "schema_enforcement": [
+      "STAMPED (Neon)",
+      "SPVPET (Firebase)",
+      "STACKED (BigQuery)"
+    ],
+    "telemetry": {
+      "emit_at_every_stage": true,
+      "sink": ["Sidecar → Neon", "Sidecar → Firebase"]
+    }
+  },
+  "whimsical_outputs": {
+    "generate_mind_map": true,
+    "generate_flowchart": true,
+    "generate_agent_map": true,
+    "generate_sequence_diagram": true
+  },
+  "handoff_to_whimsical": true,
+  "notion_links": {
+    "project_page": "https://notion.so/your-project",
+    "backlog_board": "https://notion.so/your-backlog",
+    "diagrams_doc": "https://notion.so/your-diagrams"
+  },
+  "visual_embedding": {
+    "iframe_target": "https://yourapp.dev/embed",
+    "preferred_height_px": 600,
+    "whimsical_diagram_ids": [
+      "diagram-id-01",
+      "diagram-id-02"
+    ]
+  },
+  "diagram_trace_tags": []
+}
