@@ -22,7 +22,10 @@
       "Bash(npm install:*)",
       "Bash(git submodule add:*)",
       "Bash(git commit:*)",
-      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore: wire IMO/CTB/MCP kit + Plasmic (submodule + workflow)\n\n- Added GitHub workflow for IMO/CTB/UI standards checks\n- Created IMO trace.json and CTB blueprint.yaml stubs\n- Added .gitsubmodules.info for future submodule setup\n- Updated Makefile with imo, ctb, plasmic targets\n- Added README.imo.md with setup instructions\n- Created .env.example template for configuration\n\nBMAD_TRACE_ID=IMO-KIT-WIRE\")"
+      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore: wire IMO/CTB/MCP kit + Plasmic (submodule + workflow)\n\n- Added GitHub workflow for IMO/CTB/UI standards checks\n- Created IMO trace.json and CTB blueprint.yaml stubs\n- Added .gitsubmodules.info for future submodule setup\n- Updated Makefile with imo, ctb, plasmic targets\n- Added README.imo.md with setup instructions\n- Created .env.example template for configuration\n\nBMAD_TRACE_ID=IMO-KIT-WIRE\")",
+      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore(ctb): add Whimsical CTB schema + PR linting\")",
+      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore(ctb): add Whimsical CTB schema + PR linting\n\nBMAD_TRACE_ID=CTB-WHIMSICAL-INTEGRATION\")",
+      "Bash(BMAD_TRACE_ID=CTB-WHIMSICAL-INTEGRATION ./bmad/measure.sh echo \"CTB integration complete\")"
     ],
     "deny": [],
     "ask": [],
