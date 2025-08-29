@@ -1,10 +1,10 @@
 # MCP Backend Dependencies
 # =========================
-# FastAPI and ASGI server - Compatible versions for Python 3.13
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
-pydantic-settings==2.1.0
+# FastAPI and ASGI server - Python 3.13 compatible without Rust
+fastapi==0.100.1
+uvicorn[standard]==0.23.0
+pydantic==2.0.3
+pydantic-settings==2.0.3
 
 # HTTP client for API calls
 httpx==0.23.0
