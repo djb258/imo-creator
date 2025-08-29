@@ -102,8 +102,39 @@ To disable specific checks:
 3. **Update Organization**: Replace `<ORG>` in `.gitsubmodules.info` with your actual GitHub organization
 4. **Add Submodule**: When the kit repository is available, add it as documented above
 
+## CTB (Component-Tree-Blueprint) Integration
+
+### CTB Blueprint Management
+- **Edit CTB**: Modify `/ctb/ctb_blueprint.yaml` with your Whimsical board structure
+- **Schema Validation**: CTB blueprint is validated against JSON schema during CI/CD
+- **Local Validation**: Run `make ctb` or `npm run ctb:lint` for immediate feedback
+
+### CTB Configuration
+The CTB blueprint includes:
+- `star.name`: Blueprint identifier
+- `branches[].name`: Branch names with nested `nodes[].label` structure  
+- `IMO`: IMO compliance settings and trace ID
+- `ORBT`: ORBT policy configuration and tracking
+
+### CTB Workflow
+- **Automatic Linting**: CTB validation runs on all PRs that modify CTB files
+- **Kill Switch**: Set GitHub secret `CTB_DISABLE=1` to disable CTB validation
+- **Artifacts**: Validation results and CTB files uploaded as `ctb-check` artifacts
+- **Schema Sources**: Prefers `.imo-kit/schemas/ctb_blueprint.schema.json`, falls back to local schema
+
+### CTB Commands
+```bash
+# Validate CTB blueprint locally
+make ctb
+npm run ctb:lint
+
+# Install dependencies for validation
+npm install
+```
+
 ## Maintenance
 
 - **Update Kit**: Run `git submodule update --remote --merge .imo-kit` periodically
 - **Monitor Workflows**: Check GitHub Actions for workflow runs and failures
 - **Label PRs**: Add `ui-sync` label to PRs that need Plasmic synchronization
+- **CTB Kill Switch**: Use `CTB_DISABLE=1` repository secret to bypass CTB validation

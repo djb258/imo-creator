@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ctb-blueprint-schema",
+  "title": "CTB Blueprint Schema",
+  "description": "JSON Schema for Component-Tree-Blueprint YAML files",
+  "type": "object",
+  "required": ["version", "star", "branches", "IMO", "ORBT"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "star": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Blueprint star name"
+        }
+      }
+    },
+    "branches": {
+      "type": "array",
+      "description": "Blueprint branches",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "nodes"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Branch name"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label"],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Node label"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Node identifier"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Node type"
+                },
+                "children": {
+                  "type": "array",
+                  "description": "Child nodes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "IMO": {
+      "type": "object",
+      "required": ["version", "compliance"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "IMO version"
+        },
+        "compliance": {
+          "type": "boolean",
+          "description": "IMO compliance status"
+        },
+        "trace_id": {
+          "type": "string",
+          "description": "IMO trace identifier"
+        }
+      }
+    },
+    "ORBT": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "ORBT enabled status"
+        },
+        "policy_level": {
+          "type": "string",
+          "enum": ["strict", "standard", "loose"],
+          "description": "ORBT policy level"
+        },
+        "tracking": {
+          "type": "boolean",
+          "description": "ORBT tracking enabled"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Blueprint name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Blueprint description"
+        },
+        "created": {
+          "type": "string",
+          "description": "Creation date"
+        }
+      }
+    },
+    "ctb_keys": {
+      "type": "object",
+      "properties": {
+        "board_id": {
+          "type": "string",
+          "description": "Whimsical board identifier"
+        },
+        "registry_url": {
+          "type": "string",
+          "description": "Component registry URL"
+        },
+        "auth_token": {
+          "type": "string",
+          "description": "Authentication token"
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "description": "Component definitions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Component identifier"
+          },
+          "type": {
+            "type": "string",
+            "description": "Component type"
+          },
+          "plasmic_id": {
+            "type": "string",
+            "description": "Plasmic component identifier"
+          },
+          "whimsical_ref": {
+            "type": "string",
+            "description": "Whimsical element reference"
+          }
+        }
+      }
+    },
+    "tree": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "string",
+          "description": "Root node"
+        },
+        "branches": {
+          "type": "array",
+          "description": "Tree branches"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "strict_mode": {
+          "type": "boolean",
+          "description": "Enable strict validation mode"
+        },
+        "allow_orphans": {
+          "type": "boolean",
+          "description": "Allow orphaned nodes"
+        },
+        "require_plasmic_sync": {
+          "type": "boolean",
+          "description": "Require Plasmic synchronization"
+        }
+      }
+    },
+    "sync": {
+      "type": "object",
+      "properties": {
+        "auto_sync": {
+          "type": "boolean",
+          "description": "Enable automatic synchronization"
+        },
+        "sync_on_pr": {
+          "type": "boolean",
+          "description": "Sync on pull requests"
+        },
+        "sync_labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Labels that trigger sync"
+        }
+      }
+    }
+  }
+}

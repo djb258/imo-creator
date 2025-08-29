@@ -62,7 +62,7 @@ imo:
 	./.imo-kit/scripts/validate-imo.sh
 
 ctb:
-	./.imo-kit/scripts/lint-ctb.sh ./ctb/ctb_blueprint.yaml
+	npm run ctb:lint
 
 plasmic:
 	./.imo-kit/scripts/plasmic-sync.sh

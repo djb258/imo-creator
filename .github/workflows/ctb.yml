@@ -1,0 +1,76 @@
+name: CTB Lint
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'ctb/**'
+      - '.github/workflows/ctb.yml'
+      - 'scripts/ctb-validate.mjs'
+  workflow_dispatch:
+
+jobs:
+  ctb-lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check CTB disable flag
+        run: echo "CTB_DISABLE=${{ secrets.CTB_DISABLE }}" >> $GITHUB_ENV
+      
+      - name: Run CTB validation
+        if: env.CTB_DISABLE != '1'
+        run: npm run ctb:lint
+        continue-on-error: true
+        id: ctb-validation
+      
+      - name: Prepare validation log
+        if: always()
+        run: |
+          echo "## CTB Validation Results" > ctb-validation.log
+          echo "**Status:** $([ ${{ steps.ctb-validation.outcome }} == 'success' ] && echo '✅ Passed' || echo '❌ Failed')" >> ctb-validation.log
+          echo "**Timestamp:** $(date -u)" >> ctb-validation.log
+          echo "**CTB Disabled:** ${{ env.CTB_DISABLE == '1' && 'Yes' || 'No' }}" >> ctb-validation.log
+          echo "" >> ctb-validation.log
+          if [ -f "ctb/ctb_blueprint.yaml" ]; then
+            echo "### Blueprint Summary" >> ctb-validation.log
+            echo "\`\`\`yaml" >> ctb-validation.log
+            head -20 ctb/ctb_blueprint.yaml >> ctb-validation.log
+            echo "\`\`\`" >> ctb-validation.log
+          fi
+      
+      - name: Upload CTB artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctb-check
+          path: |
+            ctb/
+            ctb-validation.log
+          retention-days: 30
+      
+      - name: CTB validation summary
+        if: always()
+        run: |
+          if [ "${{ env.CTB_DISABLE }}" == "1" ]; then
+            echo "⚠️ CTB validation was skipped (CTB_DISABLE=1)"
+          elif [ "${{ steps.ctb-validation.outcome }}" == "success" ]; then
+            echo "✅ CTB blueprint validation passed!"
+          else
+            echo "❌ CTB blueprint validation failed!"
+            exit 1
+          fi

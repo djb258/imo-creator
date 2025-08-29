@@ -4,6 +4,29 @@
 # Replace placeholder values with your actual CTB keys
 
 version: "1.0"
+star:
+  name: "IMO Creator Blueprint"
+
+branches:
+  - name: "main-ui-flow"
+    nodes:
+      - label: "Landing Page"
+        id: "landing"
+        type: "page"
+        children: []
+
+# IMO Compliance
+IMO:
+  version: "1.0"
+  compliance: true
+  trace_id: "IMO-CTB-INTEGRATION"
+
+# ORBT Configuration  
+ORBT:
+  enabled: true
+  policy_level: "standard"
+  tracking: true
+
 metadata:
   name: "IMO Creator CTB Blueprint"
   description: "Component-Tree-Blueprint configuration for UI synchronization"
