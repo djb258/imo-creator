@@ -7,7 +7,7 @@ Service for interacting with GitHub API.
 Handles PR comments, repository information, and other GitHub operations.
 """
 
-import aiohttp
+import httpx
 from typing import Dict, Any, Optional, List
 import logging
 
@@ -50,7 +50,7 @@ class GitHubService:
                     repo=repo_name, pr=pr_number)
         
         try:
-            async with aiohttp.ClientSession() as session:
+            async with httpx.AsyncClient() as client:
                 url = f"{self.api_url}/repos/{repo_name}/issues/{pr_number}/comments"
                 
                 payload = {
@@ -82,7 +82,7 @@ class GitHubService:
             Repository information or None if not found
         """
         try:
-            async with aiohttp.ClientSession() as session:
+            async with httpx.AsyncClient() as client:
                 url = f"{self.api_url}/repos/{repo_name}"
                 
                 async with session.get(url, headers=self.headers) as response:
@@ -108,7 +108,7 @@ class GitHubService:
             List of changed files
         """
         try:
-            async with aiohttp.ClientSession() as session:
+            async with httpx.AsyncClient() as client:
                 url = f"{self.api_url}/repos/{repo_name}/pulls/{pr_number}/files"
                 
                 async with session.get(url, headers=self.headers) as response:

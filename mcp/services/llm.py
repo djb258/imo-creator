@@ -14,7 +14,7 @@ This service:
 5. Integrates suggestions back into CTB data
 """
 
-import aiohttp
+import httpx
 import json
 from typing import Dict, Any, Optional, List
 import logging
@@ -342,7 +342,7 @@ Guidelines:
             LLM response text
         """
         try:
-            async with aiohttp.ClientSession() as session:
+            async with httpx.AsyncClient() as client:
                 payload = {
                     "model": self.model,
                     "messages": [
@@ -357,17 +357,17 @@ Guidelines:
                 if not settings.LLM_API_KEY or settings.DEBUG:
                     return self._get_mock_llm_response(prompt)
                 
-                async with session.post(
+                response = await client.post(
                     f"{self.api_url}/chat/completions",
                     headers=self.headers,
                     json=payload
-                ) as response:
-                    
-                    if response.status != 200:
-                        raise Exception(f"LLM API error: {response.status}")
-                    
-                    result = await response.json()
-                    return result["choices"][0]["message"]["content"]
+                )
+                
+                if response.status_code != 200:
+                    raise Exception(f"LLM API error: {response.status_code}")
+                
+                result = response.json()
+                return result["choices"][0]["message"]["content"]
                     
         except Exception as e:
             logger.error(f"LLM API call failed: {e}")

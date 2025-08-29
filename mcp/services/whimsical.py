@@ -13,7 +13,7 @@ This service:
 4. Returns update status and diagram URLs
 """
 
-import aiohttp
+import httpx
 from typing import Dict, Any, Optional
 import logging
 import json
@@ -302,7 +302,7 @@ class WhimsicalService:
         
         try:
             # Simulate API call (replace with real Whimsical API)
-            async with aiohttp.ClientSession() as session:
+            async with httpx.AsyncClient() as client:
                 # Placeholder URL - replace with actual Whimsical API endpoint
                 api_url = f"{self.base_url}/projects/{project_id}/diagrams"
                 
