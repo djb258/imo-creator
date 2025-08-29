@@ -9,8 +9,7 @@ Handles environment variables, settings validation, and service configuration.
 
 import os
 from typing import List, Optional
-from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings, validator
 import logging
 
 
@@ -67,8 +66,7 @@ class Settings(BaseSettings):
     RATE_LIMIT_REQUESTS: int = 100
     RATE_LIMIT_WINDOW: int = 3600  # 1 hour
     
-    @field_validator("ENVIRONMENT")
-    @classmethod
+    @validator("ENVIRONMENT")
     def validate_environment(cls, v):
         """Validate environment setting"""
         valid_environments = ["development", "staging", "production"]
@@ -76,8 +74,7 @@ class Settings(BaseSettings):
             raise ValueError(f"ENVIRONMENT must be one of: {valid_environments}")
         return v
     
-    @field_validator("LOG_LEVEL")
-    @classmethod
+    @validator("LOG_LEVEL")
     def validate_log_level(cls, v):
         """Validate log level setting"""
         valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -85,8 +82,7 @@ class Settings(BaseSettings):
             raise ValueError(f"LOG_LEVEL must be one of: {valid_levels}")
         return v.upper()
     
-    @field_validator("ALLOWED_ORIGINS", mode="before")
-    @classmethod
+    @validator("ALLOWED_ORIGINS", pre=True)
     def validate_allowed_origins(cls, v):
         """Parse ALLOWED_ORIGINS from string if needed"""
         if isinstance(v, str):
@@ -149,11 +145,10 @@ class Settings(BaseSettings):
         
         return headers
     
-    model_config = {
-        "env_prefix": "MCP_",
-        "env_file": ".env",
-        "case_sensitive": True
-    }
+    class Config:
+        env_prefix = "MCP_"
+        env_file = ".env"
+        case_sensitive = True
 
 
 # Global settings instance
