@@ -1,0 +1,263 @@
+{
+  "sub_agent_manifest_version": "1.0.0",
+  "heir_compliance": "v2.1",
+  "orbt_policy": "v3.2",
+  "classification": "system_critical_infrastructure",
+  
+  "agent_registry": {
+    "schema_version": "1.0.0",
+    "last_updated": "2024-12-29T10:30:00Z",
+    "registry_authority": "IMO_Creator_Doctrine_Enforcer",
+    "compliance_status": "FULLY_COMPLIANT"
+  },
+  
+  "registered_agents": [
+    {
+      "agent_id": "neon-db-writer-v2",
+      "agent_name": "Neon Database Writer Agent",
+      "version": "2.1.0",
+      "classification": "database_operation_agent",
+      "heir_system_code": "NEONWRT",
+      "orbt_layer_range": {
+        "minimum": 4,
+        "maximum": 6,
+        "preferred": 5
+      },
+      "capabilities": [
+        "postgresql_write_operations",
+        "schema_validation",
+        "transaction_management",
+        "connection_pooling"
+      ],
+      "security_profile": {
+        "risk_level": "HIGH",
+        "pii_handling": "restricted",
+        "audit_level": "comprehensive",
+        "encryption_required": true
+      },
+      "compliance_requirements": {
+        "unique_id_mandatory": true,
+        "process_lineage_tracking": true,
+        "blueprint_version_validation": true,
+        "mantis_logging": "full_audit_trail"
+      },
+      "operational_constraints": {
+        "rate_limit": "50_operations_per_minute",
+        "concurrent_limit": 5,
+        "timeout_seconds": 120,
+        "retry_policy": "exponential_backoff"
+      },
+      "fallback_protocols": {
+        "connection_failure": "activate_backup_pool",
+        "rate_limit_exceeded": "queue_with_priority",
+        "security_violation": "immediate_kill_switch"
+      }
+    },
+    
+    {
+      "agent_id": "apify-scraper-v1",
+      "agent_name": "Apify Web Scraper Agent", 
+      "version": "1.3.2",
+      "classification": "external_api_agent",
+      "heir_system_code": "APFYSC",
+      "orbt_layer_range": {
+        "minimum": 3,
+        "maximum": 6,
+        "preferred": 4
+      },
+      "capabilities": [
+        "web_scraping",
+        "data_extraction",
+        "actor_management",
+        "result_processing"
+      ],
+      "security_profile": {
+        "risk_level": "MODERATE",
+        "pii_handling": "scrub_mandatory",
+        "audit_level": "standard",
+        "encryption_required": true
+      },
+      "compliance_requirements": {
+        "unique_id_mandatory": true,
+        "process_lineage_tracking": true,
+        "blueprint_version_validation": true,
+        "mantis_logging": "standard_audit"
+      },
+      "operational_constraints": {
+        "rate_limit": "10_operations_per_minute",
+        "concurrent_limit": 3,
+        "timeout_seconds": 300,
+        "memory_limit_mb": 512
+      },
+      "fallback_protocols": {
+        "api_failure": "retry_with_backoff",
+        "rate_limit_exceeded": "queue_and_delay",
+        "data_quality_failure": "trigger_alternative_source"
+      }
+    },
+    
+    {
+      "agent_id": "email-validator-v1",
+      "agent_name": "Email Validation Utility Agent",
+      "version": "1.0.5",
+      "classification": "utility_agent",
+      "heir_system_code": "EMLVAL",
+      "orbt_layer_range": {
+        "minimum": 5,
+        "maximum": 7,
+        "preferred": 6
+      },
+      "capabilities": [
+        "email_syntax_validation",
+        "domain_verification",
+        "smtp_validation",
+        "deliverability_check"
+      ],
+      "security_profile": {
+        "risk_level": "LOW",
+        "pii_handling": "hash_after_validation",
+        "audit_level": "minimal",
+        "encryption_required": false
+      },
+      "compliance_requirements": {
+        "unique_id_mandatory": true,
+        "process_lineage_tracking": false,
+        "blueprint_version_validation": false,
+        "mantis_logging": "minimal_audit"
+      },
+      "operational_constraints": {
+        "rate_limit": "200_operations_per_minute",
+        "concurrent_limit": 10,
+        "timeout_seconds": 30,
+        "batch_size_limit": 100
+      },
+      "fallback_protocols": {
+        "dns_failure": "syntax_validation_only",
+        "smtp_unreachable": "domain_validation_only",
+        "timeout": "return_partial_result"
+      }
+    },
+    
+    {
+      "agent_id": "whimsical-updater-v1",
+      "agent_name": "Whimsical Diagram Update Agent",
+      "version": "1.1.0", 
+      "classification": "external_integration_agent",
+      "heir_system_code": "WHMSUP",
+      "orbt_layer_range": {
+        "minimum": 4,
+        "maximum": 6,
+        "preferred": 5
+      },
+      "capabilities": [
+        "diagram_creation",
+        "mindmap_updates",
+        "flowchart_generation",
+        "collaboration_sync"
+      ],
+      "security_profile": {
+        "risk_level": "MODERATE",
+        "pii_handling": "not_applicable",
+        "audit_level": "standard",
+        "encryption_required": true
+      },
+      "compliance_requirements": {
+        "unique_id_mandatory": true,
+        "process_lineage_tracking": true,
+        "blueprint_version_validation": true,
+        "mantis_logging": "standard_audit"
+      },
+      "operational_constraints": {
+        "rate_limit": "20_operations_per_minute",
+        "concurrent_limit": 2,
+        "timeout_seconds": 180,
+        "diagram_size_limit": "50mb"
+      },
+      "fallback_protocols": {
+        "api_failure": "local_backup_generation",
+        "rate_limit_exceeded": "queue_with_priority",
+        "diagram_too_large": "compress_and_retry"
+      }
+    }
+  ],
+  
+  "agent_communication_matrix": {
+    "inter_agent_protocols": {
+      "message_passing": {
+        "format": "HEIR_compliant_json",
+        "encryption": "AES_256",
+        "authentication": "agent_certificate_based"
+      },
+      "shared_state_management": {
+        "storage": "encrypted_redis_cluster",
+        "expiration_policy": "24_hours_default",
+        "conflict_resolution": "timestamp_priority"
+      },
+      "coordination_patterns": {
+        "sequential_execution": "process_id_chaining",
+        "parallel_execution": "shared_unique_id_prefix",
+        "conditional_execution": "orbt_layer_based_routing"
+      }
+    }
+  },
+  
+  "escalation_protocols": {
+    "agent_failure_cascade": {
+      "single_agent_failure": "activate_fallback_agent",
+      "multiple_agent_failure": "trigger_human_intervention",
+      "system_wide_failure": "emergency_kill_switch"
+    },
+    "compliance_violations": {
+      "minor_violation": "log_and_continue",
+      "major_violation": "pause_and_notify",
+      "critical_violation": "immediate_shutdown_and_alert"
+    },
+    "performance_degradation": {
+      "response_time_threshold": "15_seconds",
+      "error_rate_threshold": "5_percent",
+      "escalation_action": "activate_performance_monitoring"
+    }
+  },
+  
+  "deployment_specifications": {
+    "container_requirements": {
+      "base_image": "alpine:3.18",
+      "security_scanning": "mandatory",
+      "vulnerability_threshold": "zero_critical",
+      "update_policy": "automatic_security_patches"
+    },
+    "resource_allocation": {
+      "cpu_limit": "1000m",
+      "memory_limit": "1Gi",
+      "storage_limit": "10Gi",
+      "network_policy": "restricted_egress"
+    },
+    "monitoring_integration": {
+      "health_checks": "30_second_intervals",
+      "metrics_collection": "prometheus_compatible",
+      "log_aggregation": "mantis_integration",
+      "alerting": "slack_and_email"
+    }
+  },
+  
+  "governance_framework": {
+    "change_management": {
+      "version_control": "semantic_versioning",
+      "approval_process": "peer_review_plus_security_review",
+      "rollback_capability": "automatic_on_failure",
+      "testing_requirements": "integration_tests_mandatory"
+    },
+    "security_compliance": {
+      "code_scanning": "sonarqube_integration",
+      "dependency_checking": "snyk_scanning",
+      "secrets_management": "vault_integration",
+      "access_control": "rbac_with_audit_trail"
+    },
+    "operational_excellence": {
+      "sla_targets": "99.9_percent_uptime",
+      "performance_benchmarks": "sub_second_response_times",
+      "capacity_planning": "auto_scaling_enabled",
+      "disaster_recovery": "multi_region_deployment"
+    }
+  }
+}

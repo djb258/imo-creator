@@ -1,0 +1,356 @@
+{
+  "orbt_repair_protocol_version": "3.2.1",
+  "classification": "system_critical_emergency_response",
+  "heir_compliance": "v2.1",
+  "authority": "executive_mandate",
+
+  "repair_triggers": {
+    "critical_violations": [
+      {
+        "trigger_id": "ORBT_LAYER_SPOOFING",
+        "severity": "EMERGENCY", 
+        "description": "Unauthorized attempt to manipulate ORBT layer assignments",
+        "immediate_response": "kill_switch_activation",
+        "escalation_path": "c_level_emergency_alert"
+      },
+      {
+        "trigger_id": "PROCESS_LINEAGE_CORRUPTION",
+        "severity": "CRITICAL",
+        "description": "Process lineage integrity failure detected",
+        "immediate_response": "cascade_termination",
+        "escalation_path": "security_team_immediate"
+      },
+      {
+        "trigger_id": "HEIR_ID_GENERATION_FAILURE", 
+        "severity": "CRITICAL",
+        "description": "HEIR unique ID system compromise detected",
+        "immediate_response": "system_isolation",
+        "escalation_path": "executive_security_alert"
+      },
+      {
+        "trigger_id": "BLUEPRINT_VERSION_TAMPERING",
+        "severity": "HIGH",
+        "description": "Blueprint version validation bypass attempt",
+        "immediate_response": "process_quarantine",
+        "escalation_path": "orbt_repair_team"
+      }
+    ],
+
+    "performance_degradation": [
+      {
+        "trigger_id": "VALIDATION_TIMEOUT_CASCADE",
+        "threshold": "50_consecutive_failures",
+        "description": "Systematic validation pipeline breakdown",
+        "immediate_response": "activate_backup_validation",
+        "escalation_path": "engineering_emergency"
+      },
+      {
+        "trigger_id": "DATABASE_WRITE_FAILURE_PATTERN",
+        "threshold": "20_failures_per_minute", 
+        "description": "MCP registry database connection failure",
+        "immediate_response": "activate_backup_registry",
+        "escalation_path": "database_team_alert"
+      }
+    ],
+
+    "compliance_violations": [
+      {
+        "trigger_id": "REPEATED_CLEARANCE_VIOLATIONS",
+        "threshold": "5_violations_per_hour_per_user",
+        "description": "Systematic ORBT clearance violation pattern",
+        "immediate_response": "user_account_suspension",
+        "escalation_path": "hr_security_review"
+      },
+      {
+        "trigger_id": "AUDIT_TRAIL_CORRUPTION",
+        "severity": "HIGH",
+        "description": "Mantis audit trail integrity failure",
+        "immediate_response": "backup_audit_activation", 
+        "escalation_path": "compliance_team_immediate"
+      }
+    ]
+  },
+
+  "response_protocols": {
+    "kill_switch_activation": {
+      "execution_time_seconds": 2,
+      "scope": "all_mcp_tools_system_wide",
+      "actions": [
+        {
+          "step": 1,
+          "action": "immediate_process_termination",
+          "target": "all_active_mcp_processes"
+        },
+        {
+          "step": 2, 
+          "action": "database_connection_severance",
+          "target": "all_write_operations"
+        },
+        {
+          "step": 3,
+          "action": "user_session_invalidation",
+          "target": "all_authenticated_sessions"
+        },
+        {
+          "step": 4,
+          "action": "forensic_snapshot_capture",
+          "target": "system_state_memory_logs"
+        }
+      ],
+      "notification_targets": [
+        "ceo@company.com",
+        "security-emergency@company.com",
+        "it-director@company.com"
+      ]
+    },
+
+    "cascade_termination": {
+      "execution_time_seconds": 5,
+      "scope": "process_lineage_tree",
+      "actions": [
+        {
+          "step": 1,
+          "action": "identify_process_children",
+          "target": "corrupted_process_lineage"
+        },
+        {
+          "step": 2,
+          "action": "terminate_child_processes",
+          "target": "all_descendant_processes"
+        },
+        {
+          "step": 3,
+          "action": "quarantine_process_data",
+          "target": "affected_database_records"
+        },
+        {
+          "step": 4,
+          "action": "trigger_lineage_rebuild",
+          "target": "clean_backup_state"
+        }
+      ]
+    },
+
+    "system_isolation": {
+      "execution_time_seconds": 10,
+      "scope": "entire_mcp_infrastructure",
+      "actions": [
+        {
+          "step": 1,
+          "action": "network_egress_blocking",
+          "target": "all_external_api_calls"
+        },
+        {
+          "step": 2,
+          "action": "database_write_suspension",
+          "target": "all_persistence_operations"
+        },
+        {
+          "step": 3,
+          "action": "service_mesh_isolation",
+          "target": "mcp_service_cluster"
+        },
+        {
+          "step": 4,
+          "action": "emergency_read_only_mode",
+          "target": "system_wide_operations"
+        }
+      ]
+    }
+  },
+
+  "repair_procedures": {
+    "lineage_integrity_repair": {
+      "procedure_id": "LIR_v2.1",
+      "estimated_duration_minutes": 15,
+      "prerequisites": [
+        "system_isolation_active",
+        "backup_validation_confirmed",
+        "executive_approval_obtained"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "description": "Export clean process lineage from last known good backup",
+          "command": "pg_dump --table=process_lineage --where=\"created_at < '${last_good_timestamp}'\""
+        },
+        {
+          "step": 2,
+          "description": "Validate exported lineage integrity",
+          "command": "node ./repair-scripts/validate-lineage.js --input=${backup_file}"
+        },
+        {
+          "step": 3,
+          "description": "Purge corrupted lineage data",
+          "command": "DELETE FROM process_lineage WHERE created_at >= '${corruption_timestamp}'"
+        },
+        {
+          "step": 4,
+          "description": "Restore clean lineage data",
+          "command": "psql --file=${validated_backup} --single-transaction"
+        },
+        {
+          "step": 5,
+          "description": "Rebuild lineage indexes",
+          "command": "REINDEX TABLE process_lineage;"
+        },
+        {
+          "step": 6,
+          "description": "Execute lineage integrity validation",
+          "command": "node ./validation/lineage-integrity-check.js --full-scan"
+        }
+      ],
+      "validation_criteria": [
+        "zero_orphaned_processes",
+        "consistent_parent_child_relationships",
+        "timestamp_chronological_order",
+        "unique_process_ids_maintained"
+      ]
+    },
+
+    "heir_id_system_restoration": {
+      "procedure_id": "HIR_v2.1", 
+      "estimated_duration_minutes": 25,
+      "prerequisites": [
+        "kill_switch_active",
+        "system_code_registry_backup_confirmed",
+        "c_level_authorization"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "description": "Backup current HEIR ID registry state",
+          "command": "pg_dump heir_unique_id_registry > ./backups/heir_pre_repair_$(date +%s).sql"
+        },
+        {
+          "step": 2,
+          "description": "Reset HEIR ID generation counters",
+          "command": "UPDATE heir_unique_id_registry SET status='RETIRED' WHERE generation_timestamp >= '${compromise_timestamp}'"
+        },
+        {
+          "step": 3,
+          "description": "Regenerate system-critical HEIR IDs",
+          "command": "node ./repair-scripts/regenerate-heir-ids.js --system-critical-only"
+        },
+        {
+          "step": 4,
+          "description": "Validate new HEIR ID uniqueness",
+          "command": "SELECT unique_id, COUNT(*) FROM heir_unique_id_registry GROUP BY unique_id HAVING COUNT(*) > 1"
+        },
+        {
+          "step": 5,
+          "description": "Update process lineage with new HEIR IDs",
+          "command": "node ./repair-scripts/update-process-heir-ids.js --dry-run=false"
+        }
+      ],
+      "rollback_procedure": {
+        "trigger": "validation_failure",
+        "steps": [
+          "RESTORE heir_unique_id_registry FROM backup",
+          "ROLLBACK all process_lineage updates",
+          "TRIGGER emergency_manual_intervention"
+        ]
+      }
+    }
+  },
+
+  "escalation_matrix": {
+    "emergency_contacts": {
+      "c_level_emergency": {
+        "primary": "ceo@company.com",
+        "secondary": "cto@company.com", 
+        "escalation_time_minutes": 2,
+        "communication_method": ["email", "sms", "voice_call"]
+      },
+      "security_team_immediate": {
+        "primary": "security-lead@company.com",
+        "secondary": "security-team@company.com",
+        "escalation_time_minutes": 1,
+        "communication_method": ["slack_emergency", "email"]
+      },
+      "engineering_emergency": {
+        "primary": "engineering-director@company.com",
+        "secondary": "on-call-engineer@company.com",
+        "escalation_time_minutes": 3,
+        "communication_method": ["slack", "email"]
+      }
+    },
+
+    "automated_alerts": {
+      "slack_channels": [
+        "#mcp-emergency-alerts",
+        "#security-incidents", 
+        "#engineering-critical"
+      ],
+      "monitoring_systems": [
+        "datadog_critical_alert",
+        "pagerduty_executive_escalation",
+        "opsgenie_security_incident"
+      ]
+    }
+  },
+
+  "post_repair_validation": {
+    "mandatory_checks": [
+      {
+        "check_name": "system_integrity_validation",
+        "command": "node ./validation/full-system-check.js",
+        "pass_criteria": "zero_critical_violations"
+      },
+      {
+        "check_name": "performance_baseline_verification", 
+        "command": "./bmad/measure.sh full_system_benchmark",
+        "pass_criteria": "within_10_percent_baseline"
+      },
+      {
+        "check_name": "heir_orbt_compliance_audit",
+        "command": "node ./compliance/heir-orbt-audit.js --full-scope",
+        "pass_criteria": "100_percent_compliance"
+      }
+    ],
+    
+    "sign_off_requirements": {
+      "technical_sign_off": "Engineering Director + Security Lead",
+      "executive_sign_off": "CTO or CEO",
+      "compliance_sign_off": "Chief Compliance Officer",
+      "documentation_required": [
+        "incident_timeline",
+        "root_cause_analysis", 
+        "preventive_measures_implemented",
+        "lessons_learned_document"
+      ]
+    }
+  },
+
+  "system_hardening_post_repair": {
+    "immediate_hardening": [
+      {
+        "action": "rotate_all_api_keys",
+        "systems": ["whimsical", "github", "render", "database"]
+      },
+      {
+        "action": "reset_all_user_sessions",
+        "scope": "system_wide"
+      },
+      {
+        "action": "enable_enhanced_monitoring",
+        "duration": "72_hours"
+      }
+    ],
+    
+    "long_term_improvements": [
+      {
+        "improvement": "implement_multi_factor_heir_validation",
+        "timeline": "within_2_weeks"
+      },
+      {
+        "improvement": "deploy_honeypot_orbt_layers",
+        "timeline": "within_1_week" 
+      },
+      {
+        "improvement": "enhance_process_lineage_checksums",
+        "timeline": "within_3_days"
+      }
+    ]
+  }
+}

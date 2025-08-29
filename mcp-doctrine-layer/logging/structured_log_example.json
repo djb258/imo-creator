@@ -1,0 +1,468 @@
+{
+  "mantis_logging_examples_version": "1.0.0",
+  "classification": "system_documentation",
+  "heir_compliance": "v2.1",
+  "orbt_policy": "v3.2",
+  "purpose": "Reference examples for all MCP tool logging patterns",
+
+  "basic_tool_execution_log": {
+    "timestamp": "2024-12-29T10:30:45.123Z",
+    "unique_id": "HEIR-2024-12-NEONWRT-EXEC-01",
+    "process_id": "PRC-NEONWR01-1703851800000", 
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 4,
+    "user_clearance": 5,
+    "log_level": "INFO",
+    "event_category": "tool_execution",
+    "event_type": "neon_database_write",
+    "message": "Successfully wrote user data to Neon database",
+    "structured_data": {
+      "operation_details": {
+        "table_name": "users",
+        "records_inserted": 1,
+        "query_hash": "sha256:a1b2c3d4e5f6",
+        "transaction_id": "txn_abc123"
+      },
+      "performance_metrics": {
+        "execution_time_ms": 234,
+        "connection_time_ms": 45,
+        "query_time_ms": 189,
+        "memory_usage_mb": 12
+      },
+      "data_validation": {
+        "schema_valid": true,
+        "pii_scrubbed": true,
+        "constraints_checked": true
+      }
+    },
+    "tool_name": "neon-writer",
+    "tool_version": "2.1.0",
+    "user_context": {
+      "user_id": "usr_67890",
+      "department": "engineering",
+      "session_id": "sess_xyz789",
+      "clearance_level": 5
+    },
+    "security_flags": ["PII_SCRUBBED", "ENCRYPTED_IN_TRANSIT"],
+    "compliance_status": "COMPLIANT",
+    "execution_time_ms": 234,
+    "memory_usage_mb": 12,
+    "network_calls": 1,
+    "correlation_id": "MANTIS-1703851845123-a1b2c3d4",
+    "source_system": "neon-mcp-server",
+    "data_classification": "INTERNAL"
+  },
+
+  "security_violation_log": {
+    "timestamp": "2024-12-29T10:35:22.456Z",
+    "unique_id": "HEIR-2024-12-SECURITY-ALERT-99",
+    "process_id": "PRC-MCPBK001-1703852122456",
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 2,
+    "user_clearance": 6,
+    "log_level": "FATAL",
+    "event_category": "security_violation",
+    "event_type": "UNAUTHORIZED_ORBT_ACCESS",
+    "message": "User attempted to access ORBT Layer 2 with insufficient clearance",
+    "structured_data": {
+      "violation_details": {
+        "attempted_layer": 2,
+        "user_clearance": 6,
+        "required_clearance": 2,
+        "tool_requested": "executive-data-export",
+        "violation_severity": "CRITICAL"
+      },
+      "user_behavior_analysis": {
+        "recent_failed_attempts": 3,
+        "escalation_pattern": true,
+        "anomalous_access_time": true,
+        "geo_location_suspicious": false
+      },
+      "automated_response": {
+        "action_taken": "IMMEDIATE_ACCOUNT_SUSPENSION",
+        "kill_switch_activated": true,
+        "security_team_alerted": true,
+        "executive_notification_sent": true
+      },
+      "forensic_evidence": {
+        "ip_address": "192.168.1.100",
+        "user_agent": "Mozilla/5.0 Claude-Code MCP Client",
+        "request_headers": {
+          "x-heir-unique-id": "HEIR-2024-12-SECURITY-ALERT-99",
+          "x-orbt-layer": "2",
+          "authorization": "Bearer [REDACTED]"
+        },
+        "payload_hash": "sha256:malicious_attempt_detected",
+        "system_state_snapshot": "captured_at_violation_time"
+      }
+    },
+    "tool_name": "executive-data-export",
+    "tool_version": "1.0.5",
+    "user_context": {
+      "user_id": "usr_suspicious",
+      "department": "unknown",
+      "session_id": "sess_violation",
+      "clearance_level": 6,
+      "account_status": "SUSPENDED"
+    },
+    "security_flags": ["SECURITY_VIOLATION", "IMMEDIATE_ATTENTION", "KILL_SWITCH_TRIGGERED"],
+    "compliance_status": "VIOLATION",
+    "source_system": "mcp-security-monitor",
+    "data_classification": "RESTRICTED"
+  },
+
+  "performance_regression_log": {
+    "timestamp": "2024-12-29T10:40:15.789Z",
+    "unique_id": "HEIR-2024-12-APFYSC-PERF-03",
+    "process_id": "PRC-APFYSC01-1703852415789",
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 5,
+    "user_clearance": 5,
+    "log_level": "WARN", 
+    "event_category": "performance_tracking",
+    "event_type": "performance_regression",
+    "message": "Apify scraping operation exceeded baseline performance by 45%",
+    "structured_data": {
+      "performance_analysis": {
+        "operation_name": "linkedin_profile_scrape",
+        "current_duration_ms": 3456,
+        "baseline_duration_ms": 2380,
+        "performance_delta_percent": 45.2,
+        "regression_threshold_percent": 10,
+        "regression_severity": "MODERATE"
+      },
+      "resource_utilization": {
+        "cpu_usage_percent": 78,
+        "memory_peak_mb": 256,
+        "memory_average_mb": 189,
+        "network_bytes_in": 1048576,
+        "network_bytes_out": 2048
+      },
+      "external_dependencies": {
+        "apify_api_response_time_ms": 2100,
+        "apify_api_calls": 3,
+        "apify_api_failures": 0,
+        "rate_limit_encounters": 1
+      },
+      "bmad_metrics": {
+        "baseline_source": "rolling_7_day_median",
+        "sample_size": 42,
+        "confidence_interval": 95,
+        "regression_probability": 0.87
+      }
+    },
+    "tool_name": "apify-scraper",
+    "tool_version": "1.3.2", 
+    "user_context": {
+      "user_id": "usr_data_eng",
+      "department": "data_engineering",
+      "session_id": "sess_scraping_job_456"
+    },
+    "execution_time_ms": 3456,
+    "memory_usage_mb": 256,
+    "network_calls": 3,
+    "source_system": "apify-mcp-server",
+    "data_classification": "INTERNAL"
+  },
+
+  "compliance_audit_log": {
+    "timestamp": "2024-12-29T10:45:30.012Z",
+    "unique_id": "HEIR-2024-12-AUDIT-SYSTEM-07",
+    "process_id": "PRC-AUDIT001-1703852730012",
+    "blueprint_version": "v1.2.3", 
+    "orbt_layer": 3,
+    "user_clearance": 3,
+    "log_level": "AUDIT",
+    "event_category": "compliance_audit",
+    "event_type": "heir_orbt_compliance_check",
+    "message": "Automated HEIR/ORBT compliance audit completed successfully",
+    "structured_data": {
+      "audit_scope": {
+        "audit_id": "AUD-2024-12-29-001",
+        "audit_type": "automated_daily_compliance",
+        "systems_audited": ["neon-mcp-server", "apify-mcp-server", "whimsical-mcp-server"],
+        "time_range": {
+          "start": "2024-12-29T00:00:00.000Z",
+          "end": "2024-12-29T10:45:30.012Z"
+        }
+      },
+      "compliance_results": {
+        "total_tool_invocations": 1847,
+        "heir_compliant": 1847,
+        "orbt_compliant": 1845,
+        "process_lineage_intact": 1847,
+        "audit_trail_complete": 1847,
+        "compliance_rate_percent": 99.89
+      },
+      "violations_detected": [
+        {
+          "violation_id": "VIOL-001",
+          "tool_name": "email-validator",
+          "unique_id": "HEIR-2024-12-EMLVAL-BATCH-42",
+          "violation_type": "MISSING_PROCESS_LINEAGE",
+          "severity": "MODERATE",
+          "remediation_status": "AUTO_RESOLVED"
+        },
+        {
+          "violation_id": "VIOL-002", 
+          "tool_name": "whimsical-updater",
+          "unique_id": "HEIR-2024-12-WHMSUP-EXEC-18",
+          "violation_type": "ORBT_LAYER_MISMATCH",
+          "severity": "LOW",
+          "remediation_status": "PENDING_MANUAL_REVIEW"
+        }
+      ],
+      "remediation_actions": {
+        "automatic_fixes_applied": 1,
+        "manual_review_required": 1,
+        "escalation_triggered": false
+      },
+      "next_audit_scheduled": "2024-12-30T10:45:30.000Z"
+    },
+    "user_context": {
+      "auditor_type": "AUTOMATED_SYSTEM",
+      "audit_authority": "COMPLIANCE_FRAMEWORK",
+      "trigger": "SCHEDULED_DAILY_AUDIT"
+    },
+    "security_flags": ["AUDIT_TRAIL", "COMPLIANCE_RECORD"],
+    "compliance_status": "COMPLIANT",
+    "source_system": "compliance-audit-engine",
+    "data_classification": "RESTRICTED",
+    "retention_days": 2555
+  },
+
+  "mcp_server_health_check": {
+    "timestamp": "2024-12-29T10:50:00.345Z",
+    "unique_id": "HEIR-2024-12-HEALTH-SYS-01",
+    "process_id": "PRC-HEALTH01-1703853000345",
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 7,
+    "user_clearance": 7,
+    "log_level": "INFO",
+    "event_category": "system_health",
+    "event_type": "mcp_server_status_check",
+    "message": "MCP server health check completed - all systems operational",
+    "structured_data": {
+      "health_check_results": {
+        "neon_mcp_server": {
+          "status": "HEALTHY",
+          "response_time_ms": 45,
+          "active_connections": 8,
+          "connection_pool_available": 15,
+          "last_error": null,
+          "uptime_hours": 168.5
+        },
+        "apify_mcp_server": {
+          "status": "HEALTHY", 
+          "response_time_ms": 123,
+          "rate_limit_remaining": 850,
+          "rate_limit_reset": "2024-12-29T11:00:00.000Z",
+          "last_error": null,
+          "uptime_hours": 168.5
+        },
+        "whimsical_mcp_server": {
+          "status": "DEGRADED",
+          "response_time_ms": 2340,
+          "api_rate_limit": "approaching_limit",
+          "last_error": "timeout_on_diagram_generation",
+          "uptime_hours": 167.8
+        },
+        "email_validator_mcp": {
+          "status": "HEALTHY",
+          "response_time_ms": 12,
+          "cache_hit_rate_percent": 87.5,
+          "validation_queue_size": 0,
+          "uptime_hours": 168.5
+        }
+      },
+      "system_metrics": {
+        "total_requests_last_hour": 2847,
+        "average_response_time_ms": 187,
+        "error_rate_percent": 0.12,
+        "cache_hit_rate_percent": 78.9
+      },
+      "recommendations": [
+        {
+          "system": "whimsical_mcp_server", 
+          "issue": "elevated_response_times",
+          "recommendation": "investigate_api_throttling",
+          "priority": "MEDIUM"
+        }
+      ]
+    },
+    "user_context": {
+      "monitor_type": "AUTOMATED_SYSTEM",
+      "check_frequency": "every_5_minutes",
+      "alert_threshold": "degraded_performance"
+    },
+    "source_system": "mcp-health-monitor",
+    "data_classification": "INTERNAL"
+  },
+
+  "distributed_tracing_example": {
+    "timestamp": "2024-12-29T10:55:12.678Z",
+    "unique_id": "HEIR-2024-12-TRACE-DISTRIBUTED-01",
+    "process_id": "PRC-TRACE001-1703853312678",
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 5,
+    "user_clearance": 5,
+    "log_level": "INFO",
+    "event_category": "distributed_operation",
+    "event_type": "multi_service_workflow",
+    "message": "Multi-service workflow: GitHub repo analysis -> CTB parsing -> Whimsical update",
+    "structured_data": {
+      "workflow_stages": [
+        {
+          "stage": 1,
+          "service": "github-mcp-server",
+          "operation": "repository_analysis",
+          "duration_ms": 234,
+          "status": "completed",
+          "output_hash": "sha256:repo_analysis_abc123"
+        },
+        {
+          "stage": 2,
+          "service": "ctb-parser-mcp-server", 
+          "operation": "parse_ctb_structure",
+          "duration_ms": 456,
+          "status": "completed", 
+          "input_hash": "sha256:repo_analysis_abc123",
+          "output_hash": "sha256:ctb_structure_def456"
+        },
+        {
+          "stage": 3,
+          "service": "whimsical-mcp-server",
+          "operation": "update_diagram",
+          "duration_ms": 1823,
+          "status": "completed",
+          "input_hash": "sha256:ctb_structure_def456",
+          "output_hash": "sha256:diagram_update_ghi789"
+        }
+      ],
+      "workflow_metrics": {
+        "total_duration_ms": 2513,
+        "services_involved": 3,
+        "data_transfer_kb": 45,
+        "cache_hits": 2,
+        "cache_misses": 1
+      }
+    },
+    "trace_id": "trace_distributed_workflow_xyz789",
+    "span_id": "span_orchestrator_main",
+    "parent_span_id": null,
+    "correlation_id": "MANTIS-1703853312678-distributed",
+    "tool_name": "workflow-orchestrator",
+    "tool_version": "1.0.0",
+    "user_context": {
+      "user_id": "usr_workflow_mgr",
+      "department": "engineering",
+      "workflow_id": "wf_github_ctb_whimsical_001"
+    },
+    "execution_time_ms": 2513,
+    "network_calls": 3,
+    "source_system": "workflow-orchestrator",
+    "data_classification": "INTERNAL"
+  },
+
+  "error_with_stack_trace": {
+    "timestamp": "2024-12-29T11:00:45.901Z",
+    "unique_id": "HEIR-2024-12-ERROR-RECOVERY-01",
+    "process_id": "PRC-ERROR001-1703853645901",
+    "blueprint_version": "v1.2.3",
+    "orbt_layer": 6,
+    "user_clearance": 6,
+    "log_level": "ERROR",
+    "event_category": "system_error",
+    "event_type": "database_connection_failure",
+    "message": "Neon database connection failed - activating backup connection pool",
+    "structured_data": {
+      "error_details": {
+        "error_type": "DatabaseConnectionError",
+        "error_code": "CONN_TIMEOUT",
+        "error_message": "Connection to neon-db-primary timed out after 30000ms",
+        "stack_trace": [
+          "DatabaseConnectionError: Connection timeout",
+          "    at NeonClient.connect (/opt/neon-mcp/src/client.js:45:12)",
+          "    at async DatabasePool.getConnection (/opt/neon-mcp/src/pool.js:89:18)",
+          "    at async ToolHandler.executeWrite (/opt/neon-mcp/src/tools/writer.js:123:24)"
+        ],
+        "connection_details": {
+          "host": "neon-db-primary.render.com",
+          "port": 5432,
+          "database": "production",
+          "ssl_mode": "require",
+          "timeout_ms": 30000
+        }
+      },
+      "recovery_actions": {
+        "primary_action": "FAILOVER_TO_BACKUP_POOL",
+        "backup_connections_available": 5,
+        "estimated_recovery_time_ms": 2000,
+        "user_impact": "MINIMAL_DELAY",
+        "monitoring_escalation": false
+      },
+      "system_health": {
+        "primary_pool_status": "DOWN",
+        "backup_pool_status": "ACTIVE", 
+        "connection_success_rate_last_hour": 0.987,
+        "average_response_time_ms": 145
+      }
+    },
+    "tool_name": "neon-writer",
+    "tool_version": "2.1.0",
+    "user_context": {
+      "user_id": "usr_batch_process",
+      "operation": "bulk_data_insert"
+    },
+    "security_flags": ["SYSTEM_RECOVERY", "FAILOVER_ACTIVATED"],
+    "compliance_status": "COMPLIANT",
+    "source_system": "neon-mcp-server",
+    "data_classification": "INTERNAL"
+  },
+
+  "usage_patterns": {
+    "basic_info_log": {
+      "javascript": "logger.info('User data updated successfully', { unique_id: 'HEIR-2024-12-TEST-01', process_id: 'PRC-TEST001-001', user_context: { user_id: 'usr_123' } });",
+      "result": "Standard info log with HEIR compliance"
+    },
+    
+    "tool_execution_tracking": {
+      "javascript": "const trackingId = logger.startPerformanceTracking('neon_write', uniqueId); /* ... tool execution ... */ await logger.endPerformanceTracking(trackingId, { db_query_count: 3 });",
+      "result": "Automatic performance metrics collection with BMAD integration"
+    },
+    
+    "security_incident": {
+      "javascript": "await logger.logSecurityViolation({ violation_type: 'UNAUTHORIZED_ACCESS', severity: 'HIGH', unique_id: heirId, user_context: userCtx, source_ip: '192.168.1.100' });",
+      "result": "Automatic security team alerts and kill switch evaluation"
+    },
+    
+    "distributed_tracing": {
+      "javascript": "await logger.info('Service call completed', { unique_id: heirId, trace_id: 'trace-abc-123', span_id: 'span-def-456', parent_span_id: 'span-parent-789' });",
+      "result": "OpenTelemetry-compatible distributed tracing"
+    }
+  },
+
+  "integration_examples": {
+    "mcp_tool_wrapper": {
+      "description": "How to integrate Mantis logging into an MCP tool",
+      "code": {
+        "setup": "const { MantisLogger } = require('./logging/log_wrapper'); const logger = new MantisLogger({ service_name: 'neon-mcp-server', heir_system_code: 'NEONWRT' });",
+        "tool_start": "const trackingId = logger.startPerformanceTracking('database_write', unique_id); await logger.info('Starting database write operation', { unique_id, process_id, tool_name: 'neon-writer' });",
+        "tool_success": "await logger.logToolExecution({ tool_name: 'neon-writer', unique_id, process_id, execution_start: startTime, execution_end: Date.now(), success: true, result_data: { records_written: 5 } });",
+        "tool_error": "await logger.logToolExecution({ tool_name: 'neon-writer', unique_id, process_id, execution_start: startTime, execution_end: Date.now(), success: false, error_details: { error: 'Connection timeout' } });"
+      }
+    },
+
+    "render_mcp_server_integration": {
+      "description": "Environment configuration for Render MCP servers",
+      "environment_variables": {
+        "DATABASE_URL": "postgresql://user:pass@host:5432/mantis_logs",
+        "MANTIS_ENABLE_CONSOLE_OUTPUT": "true",
+        "MANTIS_ENABLE_DATABASE_LOGGING": "true", 
+        "MANTIS_SERVICE_NAME": "neon-mcp-server",
+        "MANTIS_HEIR_SYSTEM_CODE": "NEONWRT",
+        "MANTIS_DEFAULT_ORBT_LAYER": "5"
+      }
+    }
+  }
+}
