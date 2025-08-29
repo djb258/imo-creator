@@ -1,0 +1,80 @@
+# Render.com Deployment Configuration
+# ====================================
+# Configuration for deploying MCP Backend to Render.com
+
+services:
+  - type: web
+    name: mcp-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    
+    # Environment configuration
+    envVars:
+      - key: MCP_ENVIRONMENT
+        value: production
+      
+      - key: MCP_PORT
+        value: 10000
+      
+      - key: MCP_DEBUG  
+        value: false
+        
+      - key: MCP_LOG_LEVEL
+        value: INFO
+        
+      # GitHub Integration (set in Render dashboard)
+      - key: MCP_GITHUB_WEBHOOK_SECRET
+        sync: false  # Set manually in Render dashboard
+        
+      - key: MCP_GITHUB_TOKEN  
+        sync: false  # Set manually in Render dashboard
+        
+      # Whimsical Integration
+      - key: MCP_WHIMSICAL_API_KEY
+        sync: false  # Set manually in Render dashboard
+        
+      # LLM Integration  
+      - key: MCP_LLM_API_KEY
+        sync: false  # Set manually in Render dashboard
+        
+      - key: MCP_LLM_MODEL
+        value: gpt-4
+        
+      # Plasmic Integration (optional)
+      - key: MCP_PLASMIC_AUTH_TOKEN
+        sync: false
+        
+      - key: MCP_PLASMIC_PROJECT_ID
+        sync: false
+        
+      # Performance settings
+      - key: MCP_REPO_CLONE_TIMEOUT
+        value: 300
+        
+      - key: MCP_REPO_MAX_SIZE_MB
+        value: 100
+        
+      # CORS settings for production
+      - key: MCP_ALLOWED_ORIGINS
+        value: "https://your-domain.com,https://whimsical.com"
+    
+    # Health check configuration
+    healthCheckPath: /health/live
+    
+    # Resource allocation
+    plan: starter  # Can upgrade to standard/pro as needed
+    region: oregon  # Choose region closest to your users
+    
+    # Auto-deploy configuration  
+    autoDeploy: true
+    branch: main  # Deploy from main branch
+    
+    # Build configuration
+    buildFilter:
+      paths:
+        - mcp/**
+      ignoredPaths:
+        - README.md
+        - docs/**
+        - tests/**

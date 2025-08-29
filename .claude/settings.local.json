@@ -25,7 +25,9 @@
       "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore: wire IMO/CTB/MCP kit + Plasmic (submodule + workflow)\n\n- Added GitHub workflow for IMO/CTB/UI standards checks\n- Created IMO trace.json and CTB blueprint.yaml stubs\n- Added .gitsubmodules.info for future submodule setup\n- Updated Makefile with imo, ctb, plasmic targets\n- Added README.imo.md with setup instructions\n- Created .env.example template for configuration\n\nBMAD_TRACE_ID=IMO-KIT-WIRE\")",
       "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore(ctb): add Whimsical CTB schema + PR linting\")",
       "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"chore(ctb): add Whimsical CTB schema + PR linting\n\nBMAD_TRACE_ID=CTB-WHIMSICAL-INTEGRATION\")",
-      "Bash(BMAD_TRACE_ID=CTB-WHIMSICAL-INTEGRATION ./bmad/measure.sh echo \"CTB integration complete\")"
+      "Bash(BMAD_TRACE_ID=CTB-WHIMSICAL-INTEGRATION ./bmad/measure.sh echo \"CTB integration complete\")",
+      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"feat: implement comprehensive CTB structure system\n\n- Added CTBNode class with altitude-based hierarchy (40k-1k)\n- Implemented programmatic CTB creation with IMO/ORBT defaults\n- Added YAML serialization/deserialization with validation\n- Created scaffold generator for rapid CTB template creation\n- Built production-ready blueprint for IMO Creator project\n- Added comprehensive documentation and usage examples\n- Integrated with existing schema validation system\n\nBMAD_TRACE_ID=CTB-STRUCTURE-SYSTEM\")",
+      "Bash(BMAD_TRACE_ID=CTB-STRUCTURE-SYSTEM ./bmad/measure.sh echo \"CTB structure system implementation complete\")"
     ],
     "deny": [],
     "ask": [],
