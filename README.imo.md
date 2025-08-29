@@ -2,6 +2,10 @@
 
 This repository is wired with the IMO Creator Kit, providing standardized tooling for IMO validation, CTB linting, and Plasmic synchronization with MCP orchestration.
 
+## MCP Backend Integration
+
+This project includes a dedicated **MCP Backend Server** deployed at **https://imo-creator.onrender.com** that provides orchestration between GitHub repositories, Whimsical diagrams, Plasmic UIs, and LLMs.
+
 ## Submodule Management
 
 The IMO Creator Kit is referenced as a Git submodule at `.imo-kit`. 
@@ -29,8 +33,27 @@ git commit -m "kit bump: update IMO creator kit to latest"
 Copy `.env.example` to `.env` and configure:
 - `PLASMIC_PROJECT_ID`: Your Plasmic project identifier
 - `PLASMIC_AUTH_TOKEN`: Plasmic authentication token
-- `MCP_URL`: MCP endpoint URL
+- `MCP_URL`: MCP endpoint URL (https://imo-creator.onrender.com)
 - `MCP_TOKEN`: MCP authentication token
+
+### MCP Backend Environment Variables
+The MCP backend server requires these additional environment variables:
+```bash
+# GitHub Integration
+MCP_GITHUB_WEBHOOK_SECRET=your_webhook_secret
+MCP_GITHUB_TOKEN=your_github_token
+
+# Whimsical Integration  
+MCP_WHIMSICAL_API_KEY=your_whimsical_key
+
+# LLM Integration
+MCP_LLM_API_KEY=your_openai_or_anthropic_key
+MCP_LLM_MODEL=gpt-4  # or claude-3-5-sonnet
+
+# Plasmic Integration
+MCP_PLASMIC_PROJECT_ID=your_project_id
+MCP_PLASMIC_AUTH_TOKEN=your_auth_token
+```
 
 ### GitHub Secrets
 Configure these repository secrets:

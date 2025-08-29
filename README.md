@@ -130,9 +130,96 @@ uvicorn src.server.main:app --port 7002 --reload
 
 **Fallback:** If LLM endpoint unavailable, buttons fall back to copy-to-clipboard prompts.
 
+## MCP Backend Server
+
+This project includes a dedicated **MCP (Mission Control Processor) Backend** that orchestrates connections between GitHub repositories, Whimsical diagrams, Plasmic UIs, and LLMs. 
+
+### 🚀 Deployment
+The MCP backend is deployed at: **https://imo-creator.onrender.com**
+
+### 🏗️ Architecture
+The MCP backend provides a modular FastAPI service that handles:
+
+1. **GitHub Webhook Processing** - Receives repository change notifications
+2. **CTB Structure Parsing** - Analyzes CTB blueprints from repositories  
+3. **Whimsical Integration** - Updates diagrams with CTB structure visualization
+4. **LLM Enhancement** - Analyzes CTB structures and suggests improvements
+5. **Plasmic UI Generation** - Creates UI components from enhanced structures
+
+### 🔧 Local Development
+```bash
+# Navigate to MCP backend directory
+cd mcp/
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Start the MCP server
+python main.py
+# Server runs at http://localhost:8000
+```
+
+### 📡 API Endpoints
+
+**Health & Status:**
+- `GET /health` - Health check endpoint
+- `GET /api/status` - Detailed service status
+
+**GitHub Integration:**
+- `POST /webhooks/github` - GitHub webhook receiver (requires HMAC signature)
+
+**CTB Operations:**
+- `GET /api/ctb/parse?repo_url={url}&branch={branch}` - Parse CTB from repository
+- `GET /api/ctb/validate?repo_url={url}` - Validate CTB structure
+- `GET /api/ctb/summary?repo_url={url}` - Get CTB summary
+
+**Whimsical Integration:**
+- `POST /api/whimsical/update` - Update Whimsical diagram with CTB data
+
+**LLM Enhancement:**
+- `POST /api/llm/analyze` - Analyze CTB structure and suggest improvements
+
+### 🔐 Environment Variables
+Configure these for the MCP backend:
+
+```bash
+# GitHub Integration
+MCP_GITHUB_WEBHOOK_SECRET=your_webhook_secret
+MCP_GITHUB_TOKEN=your_github_token
+
+# Whimsical Integration  
+MCP_WHIMSICAL_API_KEY=your_whimsical_key
+
+# LLM Integration
+MCP_LLM_API_KEY=your_openai_or_anthropic_key
+MCP_LLM_MODEL=gpt-4  # or claude-3-5-sonnet
+
+# Plasmic Integration
+MCP_PLASMIC_PROJECT_ID=your_project_id
+MCP_PLASMIC_AUTH_TOKEN=your_auth_token
+```
+
+### 🔄 Workflow Integration
+The MCP backend integrates into the following workflow:
+
+1. **GitHub Push** → Webhook to MCP backend
+2. **MCP Backend** → Parses CTB structure from repository  
+3. **LLM Analysis** → Suggests CTB improvements and enhancements
+4. **Whimsical Update** → Updates diagrams with enhanced CTB structure
+5. **Plasmic Generation** → Creates UI components from final structure
+
+### 🛠️ Technical Details
+- **Framework**: FastAPI with async/await support
+- **HTTP Client**: httpx for external API calls
+- **YAML Processing**: ruamel.yaml for CTB parsing
+- **Deployment**: Render.com with Python 3.13
+- **Background Tasks**: Async task processing to avoid webhook timeouts
+- **Validation**: Pydantic models for request/response validation
+- **Logging**: Structured logging with request tracking
+
 ## HEIR/MCP Integration
 
-This app includes HEIR (Hierarchical Error-handling, ID management, and Reporting) and MCP (Model Context Protocol) integration:
+This app also includes HEIR (Hierarchical Error-handling, ID management, and Reporting) and legacy MCP integration:
 
 ### Quick Start
 ```bash
@@ -141,7 +228,7 @@ make check
 # or
 python -m packages.heir.checks
 
-# Start MCP server (port 7001)
+# Start legacy MCP server (port 7001)
 make run-mcp
 
 # Start Sidecar event logger (port 8000)
@@ -153,7 +240,8 @@ curl http://localhost:8000/events -X POST -H "Content-Type: application/json" -d
 ```
 
 ### Service Architecture
-- **MCP Server** (`:7001`): HEIR validation endpoint `/heir/check`
+- **New MCP Backend** (https://imo-creator.onrender.com): GitHub/Whimsical/Plasmic orchestration
+- **Legacy MCP Server** (`:7001`): HEIR validation endpoint `/heir/check`
 - **Sidecar Server** (`:8000`): Event logging to `./logs/sidecar.ndjson`  
 - **Main API** (`:7002`): Blueprint management and LLM endpoints
 
