@@ -1,0 +1,128 @@
+{
+  "tool_name": "github-actions-mcp",
+  "version": "1.0.0",
+  "description": "GitHub Actions CI/CD workflow management and monitoring",
+  "tools": [
+    {
+      "name": "trigger_workflow",
+      "description": "Trigger a GitHub Actions workflow run",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository in format 'owner/repo'"
+          },
+          "workflow_id": {
+            "type": "string", 
+            "description": "Workflow ID or filename"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Git ref (branch/tag)",
+            "default": "main"
+          },
+          "inputs": {
+            "type": "object",
+            "description": "Workflow input parameters"
+          }
+        },
+        "required": ["repo", "workflow_id"]
+      }
+    },
+    {
+      "name": "get_workflow_status",
+      "description": "Get status of workflow runs",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository in format 'owner/repo'"
+          },
+          "workflow_id": {
+            "type": "string",
+            "description": "Workflow ID or filename"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "in_progress", "completed"],
+            "description": "Filter by status"
+          },
+          "limit": {
+            "type": "number",
+            "default": 10,
+            "description": "Number of runs to return"
+          }
+        },
+        "required": ["repo"]
+      }
+    },
+    {
+      "name": "cancel_workflow_run",
+      "description": "Cancel a running workflow",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository in format 'owner/repo'"
+          },
+          "run_id": {
+            "type": "number",
+            "description": "Workflow run ID to cancel"
+          }
+        },
+        "required": ["repo", "run_id"]
+      }
+    },
+    {
+      "name": "get_deployment_status",
+      "description": "Get deployment status and environments",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository in format 'owner/repo'"
+          },
+          "environment": {
+            "type": "string",
+            "description": "Environment name (optional)"
+          }
+        },
+        "required": ["repo"]
+      }
+    }
+  ],
+  "manifest": {
+    "required_fields": [
+      "unique_id",
+      "process_id",
+      "orbt_layer",
+      "blueprint_version"
+    ]
+  },
+  "compliance_checklist": {
+    "heir_compliance": true,
+    "orbt_layer_5": true,
+    "mantis_logging": true,
+    "kill_switch": true,
+    "payload_validation": true
+  },
+  "orbt_escalation_matrix": {
+    "layer_1": "Read operations only",
+    "layer_2": "Basic CRUD operations",
+    "layer_3": "Business logic execution",
+    "layer_4": "Cross-system integration", 
+    "layer_5": "Full operational access",
+    "layer_6": "Administrative functions",
+    "layer_7": "System-level operations"
+  },
+  "heir_compliance": {
+    "unique_id": "HEIR-2024-12-GITHUB-ACTIONS-TOOLS-01",
+    "layer": 5,
+    "process_tracking": true,
+    "audit_trail": true
+  }
+}

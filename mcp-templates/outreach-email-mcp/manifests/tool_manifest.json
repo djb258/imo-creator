@@ -1,0 +1,155 @@
+{
+  "tool_name": "outreach-email-mcp",
+  "version": "1.0.0",
+  "description": "C-suite outreach email campaigns with PLE integration",
+  "tools": [
+    {
+      "name": "send_intro_email",
+      "description": "Send introduction email to C-suite executive",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "executive": {
+            "type": "object",
+            "properties": {
+              "email": {"type": "string", "format": "email"},
+              "name": {"type": "string"},
+              "title": {"type": "string", "enum": ["CEO", "CFO", "CHRO", "CTO", "CMO"]},
+              "company": {"type": "string"}
+            },
+            "required": ["email", "name", "title", "company"]
+          },
+          "campaign_type": {
+            "type": "string", 
+            "enum": ["ceo_intro", "cfo_intro", "hr_intro", "general"],
+            "description": "Type of introduction campaign"
+          },
+          "personalization": {
+            "type": "object",
+            "properties": {
+              "company_news": {"type": "string"},
+              "industry_insights": {"type": "string"},
+              "custom_message": {"type": "string"}
+            }
+          }
+        },
+        "required": ["executive", "campaign_type"]
+      }
+    },
+    {
+      "name": "trigger_sniper_campaign",
+      "description": "Launch targeted campaign for C-suite movement",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "movement_event": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "string", "enum": ["new_hire", "promotion", "departure"]},
+              "executive": {
+                "type": "object",
+                "properties": {
+                  "email": {"type": "string", "format": "email"},
+                  "name": {"type": "string"},
+                  "previous_title": {"type": "string"},
+                  "new_title": {"type": "string"},
+                  "company": {"type": "string"},
+                  "start_date": {"type": "string", "format": "date"}
+                }
+              },
+              "source": {"type": "string", "description": "PLE data source"}
+            },
+            "required": ["type", "executive"]
+          },
+          "campaign_timing": {
+            "type": "object",
+            "properties": {
+              "delay_days": {"type": "number", "minimum": 0, "maximum": 30},
+              "follow_up_sequence": {"type": "boolean"}
+            }
+          }
+        },
+        "required": ["movement_event"]
+      }
+    },
+    {
+      "name": "track_c_suite_movement", 
+      "description": "Monitor and log C-suite executive movements",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "company_list": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Companies to monitor"
+          },
+          "positions": {
+            "type": "array", 
+            "items": {"type": "string", "enum": ["CEO", "CFO", "CHRO", "CTO", "CMO"]},
+            "description": "C-suite positions to track"
+          },
+          "notification_threshold": {
+            "type": "number",
+            "description": "Hours after movement to trigger notification"
+          }
+        },
+        "required": ["company_list", "positions"]
+      }
+    },
+    {
+      "name": "get_campaign_analytics",
+      "description": "Get email campaign performance metrics",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "campaign_type": {"type": "string"},
+          "date_range": {
+            "type": "object",
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "manifest": {
+    "required_fields": [
+      "unique_id",
+      "process_id", 
+      "orbt_layer",
+      "blueprint_version"
+    ]
+  },
+  "compliance_checklist": {
+    "heir_compliance": true,
+    "orbt_layer_5": true,
+    "mantis_logging": true,
+    "kill_switch": true,
+    "payload_validation": true,
+    "can_spam_compliance": true,
+    "gdpr_compliance": true
+  },
+  "orbt_escalation_matrix": {
+    "layer_1": "Read operations only",
+    "layer_2": "Basic CRUD operations", 
+    "layer_3": "Business logic execution",
+    "layer_4": "Cross-system integration",
+    "layer_5": "Full operational access",
+    "layer_6": "Administrative functions",
+    "layer_7": "System-level operations"
+  },
+  "heir_compliance": {
+    "unique_id": "HEIR-2024-12-OUTREACH-EMAIL-TOOLS-01",
+    "layer": 5,
+    "process_tracking": true,
+    "audit_trail": true,
+    "email_compliance": true
+  },
+  "integration_endpoints": {
+    "instantly_api": "https://api.instantly.ai/",
+    "ple_webhook": "{{PLE_WEBHOOK_URL}}",
+    "crm_sync": "{{CRM_SYNC_ENDPOINT}}"
+  }
+}

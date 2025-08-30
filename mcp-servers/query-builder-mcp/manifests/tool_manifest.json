@@ -1,0 +1,108 @@
+{
+  "tool_name": "query-builder-mcp",
+  "version": "1.0.0",
+  "description": "Multi-database query builder for PostgreSQL, BigQuery, and Firebase",
+  "tools": [
+    {
+      "name": "execute_query",
+      "description": "Execute query on any of the 5 configured databases",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "type": "string",
+            "enum": ["neon", "marketing", "real_estate", "command_ops", "bigquery", "firebase"],
+            "description": "Target database"
+          },
+          "query": {
+            "oneOf": [
+              {"type": "string", "description": "SQL query for PostgreSQL/BigQuery"},
+              {"type": "object", "description": "Firestore query object"}
+            ]
+          },
+          "params": {
+            "type": "array",
+            "description": "Query parameters for SQL queries"
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "allowDestructive": {"type": "boolean"},
+              "dryRun": {"type": "boolean"},
+              "location": {"type": "string"}
+            }
+          }
+        },
+        "required": ["database", "query"]
+      }
+    },
+    {
+      "name": "cross_db_join",
+      "description": "Join data across different databases",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "leftDB": {"type": "string", "description": "Left database name"},
+          "leftQuery": {"description": "Left query"},
+          "rightDB": {"type": "string", "description": "Right database name"},
+          "rightQuery": {"description": "Right query"},
+          "joinType": {"type": "string", "enum": ["inner", "left"], "default": "inner"},
+          "joinOn": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2}
+        },
+        "required": ["leftDB", "leftQuery", "rightDB", "rightQuery", "joinOn"]
+      }
+    },
+    {
+      "name": "get_schema",
+      "description": "Get schema information for a database",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "type": "string",
+            "enum": ["neon", "marketing", "real_estate", "command_ops", "bigquery", "firebase"]
+          }
+        },
+        "required": ["database"]
+      }
+    },
+    {
+      "name": "get_stats",
+      "description": "Get query builder performance statistics",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  ],
+  "manifest": {
+    "required_fields": [
+      "unique_id",
+      "process_id",
+      "orbt_layer",
+      "blueprint_version"
+    ]
+  },
+  "compliance_checklist": {
+    "heir_compliance": true,
+    "orbt_layer_5": true,
+    "mantis_logging": true,
+    "kill_switch": true,
+    "payload_validation": true
+  },
+  "orbt_escalation_matrix": {
+    "layer_1": "Read operations only",
+    "layer_2": "Basic CRUD operations",
+    "layer_3": "Business logic execution",
+    "layer_4": "Cross-system integration",
+    "layer_5": "Full operational access",
+    "layer_6": "Administrative functions",
+    "layer_7": "System-level operations"
+  },
+  "heir_compliance": {
+    "unique_id": "HEIR-2024-12-QUERYBUILDER-TOOLS-01",
+    "layer": 5,
+    "process_tracking": true,
+    "audit_trail": true
+  }
+}
