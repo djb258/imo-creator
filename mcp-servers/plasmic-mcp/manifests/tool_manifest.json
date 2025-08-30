@@ -95,5 +95,48 @@
   },
   "orbt_escalation_matrix": {
     "layer_4": "Plasmic UI component management and code generation"
-  }
+  },
+  "tools": [
+    {
+      "name": "sync_components",
+      "description": "Syncs Plasmic components to codebase",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Plasmic project ID"
+          },
+          "branch": {
+            "type": "string",
+            "description": "Git branch"
+          }
+        },
+        "required": [
+          "project_id"
+        ]
+      }
+    },
+    {
+      "name": "publish_version",
+      "description": "Publishes a Plasmic version",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Project ID"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version tag"
+          }
+        },
+        "required": [
+          "project_id",
+          "version"
+        ]
+      }
+    }
+  ]
 }

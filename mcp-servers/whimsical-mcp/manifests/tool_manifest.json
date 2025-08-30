@@ -95,5 +95,53 @@
   },
   "orbt_escalation_matrix": {
     "layer_4": "Whimsical diagram and flowchart management"
-  }
+  },
+  "tools": [
+    {
+      "name": "update_diagram",
+      "description": "Updates a Whimsical diagram",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "diagram_id": {
+            "type": "string",
+            "description": "Diagram ID"
+          },
+          "updates": {
+            "type": "object",
+            "description": "Diagram updates"
+          }
+        },
+        "required": [
+          "diagram_id",
+          "updates"
+        ]
+      }
+    },
+    {
+      "name": "export_diagram",
+      "description": "Exports a diagram",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "diagram_id": {
+            "type": "string",
+            "description": "Diagram ID"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "png",
+              "svg",
+              "pdf"
+            ]
+          }
+        },
+        "required": [
+          "diagram_id",
+          "format"
+        ]
+      }
+    }
+  ]
 }

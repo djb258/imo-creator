@@ -96,5 +96,52 @@
   },
   "orbt_escalation_matrix": {
     "layer_5": "Advanced web scraping and data extraction using FireCrawl"
-  }
+  },
+  "tools": [
+    {
+      "name": "crawl_site",
+      "description": "Advanced site crawling with FireCrawl",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Base URL to crawl"
+          },
+          "max_depth": {
+            "type": "integer",
+            "description": "Max crawl depth"
+          },
+          "patterns": {
+            "type": "array",
+            "description": "URL patterns to follow"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "extract_structured_data",
+      "description": "Extract structured data from pages",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to extract from"
+          },
+          "schema": {
+            "type": "object",
+            "description": "Extraction schema"
+          }
+        },
+        "required": [
+          "url",
+          "schema"
+        ]
+      }
+    }
+  ]
 }

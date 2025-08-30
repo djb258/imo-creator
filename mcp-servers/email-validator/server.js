@@ -9,6 +9,7 @@ const { setupHealthChecking } = require('../../mcp-doctrine-layer/health/simple_
 const { setupKillSwitch } = require('../../mcp-doctrine-layer/emergency/kill_switch');
 const dns = require('dns').promises;
 const net = require('net');
+const toolHandler = require('./tools/tool_handler');
 
 /**
  * Email Validator MCP Tool

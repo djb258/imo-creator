@@ -1,7 +1,9 @@
 {
-  "unique_id": "HEIR-2024-12-GHUBMC-EXEC-01",
-  "process_id": "PRC-GHUBMC00-1756491210812",
-  "orbt_layer": 3,
-  "blueprint_version": "v1.0.0-d160f3e6",
-  "operation": "get_repository"
+  "unique_id": "HEIR-2024-12-GITHUB-CREATE-01",
+  "process_id": "PRC-GH000001-1703123456789",
+  "operation": "create_repository",
+  "name": "test-repo",
+  "description": "Test repository",
+  "orbt_layer": 5,
+  "blueprint_version": "v1.0.0-abcd1234"
 }

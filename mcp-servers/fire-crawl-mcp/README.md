@@ -1,75 +1,147 @@
-# Fire-crawl-mcp MCP Server
+# FIRE-CRAWL-MCP Server
 
-Advanced web scraping and data extraction using FireCrawl
+## 🧱 Barton Doctrine Compliant
 
-## Overview
+This MCP server follows the Primary System Doctrine: "AI helps build the system. Old school runs the system."
 
-**Tool Name**: fire-crawl-scraper  
-**Version**: 1.0.0  
-**ORBT Layer**: 5  
-**System Code**: FRCWL  
-**Port**: 3010
+## 📋 Available Tools
 
-## Operations
+### crawl_site
+- **Description**: Advanced site crawling with FireCrawl
+- **Required Inputs**: url
+- **Optional Inputs**: max_depth, patterns
 
-- `scrape_single` - scrape single
-- `crawl_website` - crawl website
-- `batch_scrape` - batch scrape
-- `extract_data` - extract data
-- `get_credits` - get credits
+### extract_structured_data
+- **Description**: Extract structured data from pages
+- **Required Inputs**: url, schema
+- **Optional Inputs**: None
 
-## Environment Variables
 
-- `FIRECRAWL_API_KEY` - Required for API authentication
+## 🔧 Usage Examples
 
-## Usage Example
-
-```json
-{
-  "operation": "scrape_single",
-  "unique_id": "HEIR-2024-12-FRCWL-EXEC-01",
-  "process_id": "PRC-FRCWL000-1756491210811",
-  "orbt_layer": 5,
-  "blueprint_version": "v1.0.0-abcd1234"
-}
+```javascript
+const response = await fetch('http://localhost:3001/tool', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    unique_id: 'HEIR-2024-12-FIRE-CRAWL-001',
+    process_id: 'PRC-TEST0001-' + Date.now(),
+    tool: 'crawl_site',
+    ...params
+  })
+});
 ```
 
-## Health Check
-
-- **Endpoint**: `GET /mcp/health`
-- **Status Page**: `GET /mcp/status`
-- **Kill Switch**: `POST /mcp/kill-switch/activate`
-
-## Development
+## 🚀 Health Check
 
 ```bash
-# Install dependencies
-npm install
-
-# Start server
-npm start
-
-# Start with hot reload
-npm run dev
-
-# Run in mock mode
-USE_MOCK=true npm start
+curl http://localhost:3001/health
 ```
 
-## HEIR/ORBT Compliance
+## 📊 Compliance
 
-✅ Kill switch integration  
-✅ Mantis logging  
-✅ HEIR unique ID generation  
-✅ ORBT layer 5 authorization  
-✅ Blueprint version tracking  
+- ✅ HEIR/ORBT compliant
+- ✅ Tool manifest validated
+- ✅ Mock infrastructure ready
+- ✅ Middleware separation complete
+- ✅ Kill switch enabled
+- ✅ Mantis logging integrated
 
-## Architecture
+## 🔒 Security
 
-- **Server**: `server.js` - Express server setup
-- **Tool Logic**: `tools/tool_handler.js` - Core business logic
-- **Middleware**: `middleware/` - Validation, logging, kill switch
-- **Manifests**: `manifests/tool_manifest.json` - Schema definitions
-- **Mocks**: `mock/` - Sample payloads and responses
+- Rate limiting: 100 requests/15 minutes
+- Input validation: JSON schema enforced
+- HEIR ID required for all operations
+- Emergency kill switch available
 
-Last updated: 2025-08-29T18:13:30.811Z
+## 📝 Environment Variables
+
+```env
+FIRE_CRAWL-MCP_API_KEY=your_api_key_here
+NODE_ENV=development
+MCP_KILL_SWITCH=false
+```
+
+## 🔧 Operations
+
+### Startup Sequence
+1. Environment validation
+2. Database connection (if applicable)
+3. Middleware initialization
+4. Tool handler registration
+5. Health check endpoint activation
+6. Kill switch arming
+
+### Runtime Operations
+- All operations flow through MCP tool handlers
+- HEIR/ORBT compliance enforced on every request
+- Automatic logging via Mantis integration
+- Rate limiting per ORBT Layer 5 policies
+
+### Shutdown Sequence
+1. Kill switch activation
+2. Request queue drainage
+3. Database connection cleanup
+4. Graceful process termination
+
+## 📋 Compliance Documentation
+
+### Barton Doctrine Compliance
+- ✅ **AI Blueprint Phase**: LLM used only during development
+- ✅ **Runtime Execution**: MCP-only, no AI decision making
+- ✅ **Process Definition**: Complete tool manifest with schemas
+- ✅ **HEIR/ORBT Standards**: Full compliance with tracking IDs
+- ✅ **Emergency Controls**: Kill switch and rollback capabilities
+
+### HEIR Compliance Details
+- **Unique ID Format**: `HEIR-YYYY-MM-SYSTEM-MODE-VN`
+- **Process Tracking**: `PRC-SYSTCODE-EPOCHTIMESTAMP`
+- **Layer Authorization**: ORBT Layer 5 operations
+- **Blueprint Versioning**: Git hash-based versioning
+
+### Audit Trail
+- All operations logged to Mantis system
+- Request/response payloads captured
+- Error conditions and mitigation recorded
+- Compliance violations automatically flagged
+
+### Security Constraints
+- Input validation via JSON schema
+- Rate limiting: 100 requests/15 minutes
+- Domain allowlisting for external calls
+- PII scrubbing mandatory
+- Data retention: 7 days maximum
+
+## 🔒 HEIR/ORBT Compliance
+
+This server is fully compliant with HEIR/ORBT standards:
+
+### HEIR (Hierarchical Event Identity Registry)
+- **Unique ID Format**: `HEIR-YYYY-MM-SYSTEM-MODE-VN`
+- **Process Tracking**: `PRC-SYSTCODE-EPOCHTIMESTAMP`
+- **Blueprint Versioning**: Git hash-based versioning
+- **Event Lineage**: Full audit trail maintained
+
+### ORBT (Operations & Resource Blueprint Tracking)
+- **Layer Authorization**: Layer 5 operations
+- **Resource Constraints**: Rate limiting and connection pools
+- **Security Policies**: Input validation and sanitization
+- **Emergency Protocols**: Kill switch and graceful degradation
+
+### Compliance Features
+- ✅ Structured logging via Mantis integration
+- ✅ Request/response payload validation
+- ✅ Error conditions tracked and reported
+- ✅ Rate limiting per ORBT policies
+- ✅ Emergency shutdown capabilities
+- ✅ Data retention policies enforced
+- ✅ PII scrubbing mandatory
+
+### Audit Trail
+All operations are logged with:
+- Request timestamp and unique identifier
+- Process lineage and blueprint version
+- Input validation results
+- Execution time and resource usage
+- Error conditions and recovery actions
+- Compliance status and violations

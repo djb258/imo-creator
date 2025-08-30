@@ -95,5 +95,47 @@
   },
   "orbt_escalation_matrix": {
     "layer_4": "CTB (Component Tree Blueprint) structure parsing and validation"
-  }
+  },
+  "tools": [
+    {
+      "name": "parse_ctb_structure",
+      "description": "Parses CTB altitude-based structure",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "yaml_content": {
+            "type": "string",
+            "description": "CTB YAML content"
+          },
+          "validate": {
+            "type": "boolean",
+            "description": "Validate structure"
+          }
+        },
+        "required": [
+          "yaml_content"
+        ]
+      }
+    },
+    {
+      "name": "generate_ctb_scaffold",
+      "description": "Generates CTB scaffold",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "project_name": {
+            "type": "string",
+            "description": "Project name"
+          },
+          "altitude_levels": {
+            "type": "array",
+            "description": "Altitude levels"
+          }
+        },
+        "required": [
+          "project_name"
+        ]
+      }
+    }
+  ]
 }

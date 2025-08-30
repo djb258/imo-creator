@@ -95,5 +95,47 @@
   },
   "orbt_escalation_matrix": {
     "layer_6": "Email validation and verification services"
-  }
+  },
+  "tools": [
+    {
+      "name": "validate_email",
+      "description": "Validates email addresses",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email to validate"
+          },
+          "check_mx": {
+            "type": "boolean",
+            "description": "Check MX records"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      }
+    },
+    {
+      "name": "bulk_validate",
+      "description": "Validates multiple emails",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "emails": {
+            "type": "array",
+            "description": "Email list"
+          },
+          "check_mx": {
+            "type": "boolean",
+            "description": "Check MX records"
+          }
+        },
+        "required": [
+          "emails"
+        ]
+      }
+    }
+  ]
 }

@@ -1,12 +1,14 @@
 {
-  "success": true,
-  "data": {
-    "message": "Mock response for apify-scraper",
-    "operation": "run_actor",
-    "timestamp": "2025-08-29T18:13:30.802Z",
-    "mock_mode": true
-  },
-  "unique_id": "HEIR-2024-12-APFYSC-EXEC-01",
-  "execution_time_ms": 1073,
-  "compliance_status": "COMPLIANT"
+  "status": "success",
+  "data": [
+    {
+      "title": "Product 1",
+      "price": "$99.99"
+    },
+    {
+      "title": "Product 2",
+      "price": "$149.99"
+    }
+  ],
+  "execution_time": "2.3s"
 }

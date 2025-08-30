@@ -214,15 +214,15 @@
     },
     {
       "serverName": "ctb-parser",
-      "totalScore": 95,
+      "totalScore": 100,
       "maxScore": 100,
-      "percentage": 95,
+      "percentage": 100,
       "issues": [
         "✅ Tool manifest complete",
         "✅ Mock infrastructure complete",
         "✅ Middleware structure complete",
         "✅ Documentation complete",
-        "❌ Server.js not using tool handler",
+        "✅ Tool logic properly separated",
         "✅ Health endpoint implemented",
         "✅ Kill switch implemented"
       ],
@@ -265,11 +265,11 @@
         },
         "structure": {
           "score": {
-            "current": 5,
+            "current": 10,
             "max": 10
           },
           "issues": [
-            "❌ Server.js not using tool handler"
+            "✅ Tool logic properly separated"
           ]
         },
         "health": {
@@ -286,15 +286,15 @@
     },
     {
       "serverName": "email-validator",
-      "totalScore": 95,
+      "totalScore": 100,
       "maxScore": 100,
-      "percentage": 95,
+      "percentage": 100,
       "issues": [
         "✅ Tool manifest complete",
         "✅ Mock infrastructure complete",
         "✅ Middleware structure complete",
         "✅ Documentation complete",
-        "❌ Server.js not using tool handler",
+        "✅ Tool logic properly separated",
         "✅ Health endpoint implemented",
         "✅ Kill switch implemented"
       ],
@@ -337,11 +337,11 @@
         },
         "structure": {
           "score": {
-            "current": 5,
+            "current": 10,
             "max": 10
           },
           "issues": [
-            "❌ Server.js not using tool handler"
+            "✅ Tool logic properly separated"
           ]
         },
         "health": {
@@ -644,17 +644,15 @@
     },
     {
       "serverName": "neon-mcp",
-      "totalScore": 86,
+      "totalScore": 100,
       "maxScore": 100,
-      "percentage": 86,
+      "percentage": 100,
       "issues": [
         "✅ Tool manifest complete",
         "✅ Mock infrastructure complete",
         "✅ Middleware structure complete",
-        "❌ Missing usage examples",
-        "❌ Missing health check documentation",
-        "❌ Missing compliance documentation",
-        "❌ Server.js not using tool handler",
+        "✅ Documentation complete",
+        "✅ Tool logic properly separated",
         "✅ Health endpoint implemented",
         "✅ Kill switch implemented"
       ],
@@ -688,22 +686,20 @@
         },
         "docs": {
           "score": {
-            "current": 6,
+            "current": 15,
             "max": 15
           },
           "issues": [
-            "❌ Missing usage examples",
-            "❌ Missing health check documentation",
-            "❌ Missing compliance documentation"
+            "✅ Documentation complete"
           ]
         },
         "structure": {
           "score": {
-            "current": 5,
+            "current": 10,
             "max": 10
           },
           "issues": [
-            "❌ Server.js not using tool handler"
+            "✅ Tool logic properly separated"
           ]
         },
         "health": {
@@ -1077,5 +1073,5 @@
       }
     }
   ],
-  "overallPercentage": 72
+  "overallPercentage": 73
 }

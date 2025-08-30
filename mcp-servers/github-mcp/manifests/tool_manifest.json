@@ -96,5 +96,91 @@
   },
   "orbt_escalation_matrix": {
     "layer_3": "GitHub repository management and operations"
-  }
+  },
+  "tools": [
+    {
+      "name": "create_repository",
+      "description": "Creates a new GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Repository description"
+          },
+          "private": {
+            "type": "boolean",
+            "description": "Private repository"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "create_issue",
+      "description": "Creates a GitHub issue",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository (owner/name)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Issue title"
+          },
+          "body": {
+            "type": "string",
+            "description": "Issue body"
+          }
+        },
+        "required": [
+          "repo",
+          "title"
+        ]
+      }
+    },
+    {
+      "name": "create_pull_request",
+      "description": "Creates a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "Repository (owner/name)"
+          },
+          "title": {
+            "type": "string",
+            "description": "PR title"
+          },
+          "body": {
+            "type": "string",
+            "description": "PR body"
+          },
+          "base": {
+            "type": "string",
+            "description": "Base branch"
+          },
+          "head": {
+            "type": "string",
+            "description": "Head branch"
+          }
+        },
+        "required": [
+          "repo",
+          "title",
+          "base",
+          "head"
+        ]
+      }
+    }
+  ]
 }

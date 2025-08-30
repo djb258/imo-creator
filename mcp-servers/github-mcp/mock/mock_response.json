@@ -1,12 +1,8 @@
 {
-  "success": true,
-  "data": {
-    "message": "Mock response for github-manager",
-    "operation": "get_repository",
-    "timestamp": "2025-08-29T18:13:30.812Z",
-    "mock_mode": true
-  },
-  "unique_id": "HEIR-2024-12-GHUBMC-EXEC-01",
-  "execution_time_ms": 795,
-  "compliance_status": "COMPLIANT"
+  "status": "success",
+  "repository": {
+    "id": "repo_123",
+    "full_name": "user/test-repo",
+    "html_url": "https://github.com/user/test-repo"
+  }
 }

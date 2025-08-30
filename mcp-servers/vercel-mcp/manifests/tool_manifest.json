@@ -95,5 +95,47 @@
   },
   "orbt_escalation_matrix": {
     "layer_3": "Vercel deployment and infrastructure management"
-  }
+  },
+  "tools": [
+    {
+      "name": "deploy_project",
+      "description": "Deploys a project to Vercel",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "project_name": {
+            "type": "string",
+            "description": "Project name"
+          },
+          "git_repo": {
+            "type": "string",
+            "description": "Git repository"
+          },
+          "production": {
+            "type": "boolean",
+            "description": "Deploy to production"
+          }
+        },
+        "required": [
+          "project_name"
+        ]
+      }
+    },
+    {
+      "name": "get_deployment_status",
+      "description": "Gets Vercel deployment status",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "deployment_id": {
+            "type": "string",
+            "description": "Deployment ID"
+          }
+        },
+        "required": [
+          "deployment_id"
+        ]
+      }
+    }
+  ]
 }

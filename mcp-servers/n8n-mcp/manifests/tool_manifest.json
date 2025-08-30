@@ -95,5 +95,43 @@
   },
   "orbt_escalation_matrix": {
     "layer_4": "N8N workflow automation management"
-  }
+  },
+  "tools": [
+    {
+      "name": "trigger_workflow",
+      "description": "Triggers an n8n workflow",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "description": "Workflow ID"
+          },
+          "data": {
+            "type": "object",
+            "description": "Workflow input data"
+          }
+        },
+        "required": [
+          "workflow_id"
+        ]
+      }
+    },
+    {
+      "name": "get_workflow_status",
+      "description": "Gets workflow execution status",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "execution_id": {
+            "type": "string",
+            "description": "Execution ID"
+          }
+        },
+        "required": [
+          "execution_id"
+        ]
+      }
+    }
+  ]
 }

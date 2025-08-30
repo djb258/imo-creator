@@ -8,6 +8,7 @@ const { SimpleMCPTool } = require('../../mcp-doctrine-layer/templates/simple_mcp
 const { setupHealthChecking } = require('../../mcp-doctrine-layer/health/simple_health_check');
 const { setupKillSwitch } = require('../../mcp-doctrine-layer/emergency/kill_switch');
 const { Pool } = require('pg');
+const toolHandler = require('./tools/tool_handler');
 
 /**
  * Neon Database MCP Tool

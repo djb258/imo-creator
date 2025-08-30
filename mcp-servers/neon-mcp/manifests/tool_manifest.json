@@ -96,5 +96,72 @@
   },
   "orbt_escalation_matrix": {
     "layer_2": "Neon PostgreSQL database operations"
-  }
+  },
+  "tools": [
+    {
+      "name": "execute_query",
+      "description": "Executes a PostgreSQL query on Neon",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "SQL query"
+          },
+          "params": {
+            "type": "array",
+            "description": "Query parameters"
+          },
+          "database": {
+            "type": "string",
+            "description": "Database name"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "insert_record",
+      "description": "Inserts a record into a table",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "Table name"
+          },
+          "data": {
+            "type": "object",
+            "description": "Record data"
+          },
+          "database": {
+            "type": "string",
+            "description": "Database name"
+          }
+        },
+        "required": [
+          "table",
+          "data"
+        ]
+      }
+    },
+    {
+      "name": "get_schema",
+      "description": "Gets database schema information",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "type": "string",
+            "description": "Database name"
+          }
+        },
+        "required": [
+          "database"
+        ]
+      }
+    }
+  ]
 }

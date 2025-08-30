@@ -1,12 +1,16 @@
 {
-  "success": true,
-  "data": {
-    "message": "Mock response for neon-db-manager",
-    "operation": "execute_query",
-    "timestamp": "2025-08-29T18:13:30.816Z",
-    "mock_mode": true
-  },
-  "unique_id": "HEIR-2024-12-NEONDB-EXEC-01",
-  "execution_time_ms": 944,
-  "compliance_status": "COMPLIANT"
+  "status": "success",
+  "rows": [
+    {
+      "id": 1,
+      "name": "User 1",
+      "email": "user1@example.com"
+    },
+    {
+      "id": 2,
+      "name": "User 2",
+      "email": "user2@example.com"
+    }
+  ],
+  "rowCount": 2
 }

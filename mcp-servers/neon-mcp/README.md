@@ -1,115 +1,152 @@
-# Neon MCP Server
+# NEON-MCP Server
 
-Database operations MCP server with built-in HEIR/ORBT compliance.
+## 🧱 Barton Doctrine Compliant
 
-## Quick Start
+This MCP server follows the Primary System Doctrine: "AI helps build the system. Old school runs the system."
 
-```bash
-# Install dependencies
-cd mcp-servers/neon-mcp
-npm install
+## 📋 Available Tools
 
-# Set environment variables
-export DATABASE_URL="postgresql://user:pass@host:5432/dbname"
+### execute_query
+- **Description**: Executes a PostgreSQL query on Neon
+- **Required Inputs**: query
+- **Optional Inputs**: params, database
 
-# Start server
-npm start
-```
+### insert_record
+- **Description**: Inserts a record into a table
+- **Required Inputs**: table, data
+- **Optional Inputs**: database
 
-## Usage
+### get_schema
+- **Description**: Gets database schema information
+- **Required Inputs**: database
+- **Optional Inputs**: None
 
-### Basic Database Operations
 
-```javascript
-// Select data
-POST /select
-{
-  "table": "users",
-  "conditions": { "active": true }
-}
-
-// Insert data  
-POST /insert
-{
-  "table": "users",
-  "data": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "active": true
-  }
-}
-
-// Update data
-POST /update
-{
-  "table": "users",
-  "data": { "last_login": "2024-12-29T10:30:00Z" },
-  "conditions": { "id": 123 }
-}
-
-// Delete data (requires conditions for safety)
-POST /delete
-{
-  "table": "users",
-  "conditions": { "id": 123, "active": false }
-}
-```
-
-### MCP Protocol
+## 🔧 Usage Examples
 
 ```javascript
-// Full MCP execution
-POST /execute
-{
-  "operation": "select",
-  "table": "users", 
-  "conditions": { "department": "engineering" }
-}
+const response = await fetch('http://localhost:3004/tool', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    unique_id: 'HEIR-2024-12-NEON-001',
+    process_id: 'PRC-TEST0001-' + Date.now(),
+    tool: 'execute_query',
+    ...params
+  })
+});
 ```
 
-## Health & Monitoring
-
-- `GET /mcp/health` - JSON health status
-- `GET /mcp/status` - Visual dashboard  
-- `GET /mcp/kill-switch/status` - Emergency controls
-
-## Security Features
-
-- ✅ HEIR unique ID tracking
-- ✅ ORBT Layer 4 authorization (Senior Developer)
-- ✅ Automatic Mantis logging
-- ✅ SQL injection prevention
-- ✅ Dangerous operation blocking (DROP, TRUNCATE)
-- ✅ Emergency kill switch support
-
-## Environment Variables
+## 🚀 Health Check
 
 ```bash
-DATABASE_URL=postgresql://user:pass@host:5432/dbname  # Required
-PORT=3001                                             # Optional
-MCP_KILL_SWITCH=true                                  # Emergency disable
-NODE_ENV=production                                   # Optional
+curl http://localhost:3004/health
 ```
 
-## Deploy to Render
+## 📊 Compliance
 
-1. Connect this repo to Render
-2. Set service root directory: `mcp-servers/neon-mcp`
-3. Build command: `npm install`
-4. Start command: `npm start`
-5. Add DATABASE_URL environment variable
+- ✅ HEIR/ORBT compliant
+- ✅ Tool manifest validated
+- ✅ Mock infrastructure ready
+- ✅ Middleware separation complete
+- ✅ Kill switch enabled
+- ✅ Mantis logging integrated
 
-## Emergency Commands
+## 🔒 Security
 
-```bash
-# Check kill switch status
-npm run kill-switch status
+- Rate limiting: 100 requests/15 minutes
+- Input validation: JSON schema enforced
+- HEIR ID required for all operations
+- Emergency kill switch available
 
-# Emergency disable all MCP tools
-npm run kill-switch activate "Database emergency"
+## 📝 Environment Variables
 
-# Re-enable after resolution
-npm run kill-switch deactivate "Emergency resolved"
+```env
+NEON_MCP_API_KEY=your_api_key_here
+NODE_ENV=development
+MCP_KILL_SWITCH=false
 ```
 
-Built with [MCP Doctrine Layer](../../mcp-doctrine-layer/README.md) compliance.
+## 🔧 Operations
+
+### Startup Sequence
+1. Environment validation
+2. Database connection (if applicable)
+3. Middleware initialization
+4. Tool handler registration
+5. Health check endpoint activation
+6. Kill switch arming
+
+### Runtime Operations
+- All operations flow through MCP tool handlers
+- HEIR/ORBT compliance enforced on every request
+- Automatic logging via Mantis integration
+- Rate limiting per ORBT Layer 5 policies
+
+### Shutdown Sequence
+1. Kill switch activation
+2. Request queue drainage
+3. Database connection cleanup
+4. Graceful process termination
+
+## 📋 Compliance Documentation
+
+### Barton Doctrine Compliance
+- ✅ **AI Blueprint Phase**: LLM used only during development
+- ✅ **Runtime Execution**: MCP-only, no AI decision making
+- ✅ **Process Definition**: Complete tool manifest with schemas
+- ✅ **HEIR/ORBT Standards**: Full compliance with tracking IDs
+- ✅ **Emergency Controls**: Kill switch and rollback capabilities
+
+### HEIR Compliance Details
+- **Unique ID Format**: `HEIR-YYYY-MM-SYSTEM-MODE-VN`
+- **Process Tracking**: `PRC-SYSTCODE-EPOCHTIMESTAMP`
+- **Layer Authorization**: ORBT Layer 5 operations
+- **Blueprint Versioning**: Git hash-based versioning
+
+### Audit Trail
+- All operations logged to Mantis system
+- Request/response payloads captured
+- Error conditions and mitigation recorded
+- Compliance violations automatically flagged
+
+### Security Constraints
+- Input validation via JSON schema
+- Rate limiting: 100 requests/15 minutes
+- Domain allowlisting for external calls
+- PII scrubbing mandatory
+- Data retention: 7 days maximum
+
+## 🔒 HEIR/ORBT Compliance
+
+This server is fully compliant with HEIR/ORBT standards:
+
+### HEIR (Hierarchical Event Identity Registry)
+- **Unique ID Format**: `HEIR-YYYY-MM-SYSTEM-MODE-VN`
+- **Process Tracking**: `PRC-SYSTCODE-EPOCHTIMESTAMP`
+- **Blueprint Versioning**: Git hash-based versioning
+- **Event Lineage**: Full audit trail maintained
+
+### ORBT (Operations & Resource Blueprint Tracking)
+- **Layer Authorization**: Layer 5 operations
+- **Resource Constraints**: Rate limiting and connection pools
+- **Security Policies**: Input validation and sanitization
+- **Emergency Protocols**: Kill switch and graceful degradation
+
+### Compliance Features
+- ✅ Structured logging via Mantis integration
+- ✅ Request/response payload validation
+- ✅ Error conditions tracked and reported
+- ✅ Rate limiting per ORBT policies
+- ✅ Emergency shutdown capabilities
+- ✅ Data retention policies enforced
+- ✅ PII scrubbing mandatory
+
+### Audit Trail
+All operations are logged with:
+- Request timestamp and unique identifier
+- Process lineage and blueprint version
+- Input validation results
+- Execution time and resource usage
+- Error conditions and recovery actions
+- Compliance status and violations

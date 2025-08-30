@@ -95,5 +95,51 @@
   },
   "orbt_escalation_matrix": {
     "layer_5": "Web scraping and data extraction using Apify platform"
-  }
+  },
+  "tools": [
+    {
+      "name": "scrape_website",
+      "description": "Scrapes data from a website using Apify",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to scrape"
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector"
+          },
+          "actor_id": {
+            "type": "string",
+            "description": "Apify actor ID"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "run_actor",
+      "description": "Runs an Apify actor",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string",
+            "description": "Actor ID"
+          },
+          "input": {
+            "type": "object",
+            "description": "Actor input"
+          }
+        },
+        "required": [
+          "actor_id"
+        ]
+      }
+    }
+  ]
 }

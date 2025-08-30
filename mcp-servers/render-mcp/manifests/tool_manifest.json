@@ -96,5 +96,48 @@
   },
   "orbt_escalation_matrix": {
     "layer_3": "Render cloud infrastructure management"
-  }
+  },
+  "tools": [
+    {
+      "name": "deploy_service",
+      "description": "Deploys a service to Render",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "service_name": {
+            "type": "string",
+            "description": "Service name"
+          },
+          "git_repo": {
+            "type": "string",
+            "description": "Git repository URL"
+          },
+          "branch": {
+            "type": "string",
+            "description": "Branch to deploy"
+          }
+        },
+        "required": [
+          "service_name",
+          "git_repo"
+        ]
+      }
+    },
+    {
+      "name": "get_service_status",
+      "description": "Gets Render service status",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Service ID"
+          }
+        },
+        "required": [
+          "service_id"
+        ]
+      }
+    }
+  ]
 }

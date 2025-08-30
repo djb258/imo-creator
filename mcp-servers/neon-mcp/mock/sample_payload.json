@@ -1,7 +1,9 @@
 {
-  "unique_id": "HEIR-2024-12-NEONDB-EXEC-01",
-  "process_id": "PRC-NEONDB00-1756491210816",
-  "orbt_layer": 2,
-  "blueprint_version": "v1.0.0-3d47d9c1",
-  "operation": "execute_query"
+  "unique_id": "HEIR-2024-12-NEON-QUERY-01",
+  "process_id": "PRC-NEON0001-1703123456789",
+  "operation": "execute_query",
+  "query": "SELECT * FROM users LIMIT 10",
+  "database": "production",
+  "orbt_layer": 5,
+  "blueprint_version": "v1.0.0-abcd1234"
 }
