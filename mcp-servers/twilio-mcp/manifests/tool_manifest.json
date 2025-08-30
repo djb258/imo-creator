@@ -1,0 +1,115 @@
+{
+  "tool_name": "twilio-mcp",
+  "version": "1.0.0", 
+  "description": "SMS and voice communication via Twilio API",
+  "tools": [
+    {
+      "name": "send_sms",
+      "description": "Send SMS message via Twilio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient phone number in E.164 format"
+          },
+          "message": {
+            "type": "string", 
+            "description": "SMS message content"
+          },
+          "from": {
+            "type": "string",
+            "description": "Twilio phone number (optional, uses default)"
+          }
+        },
+        "required": ["to", "message"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sid": {
+            "type": "string",
+            "description": "Twilio message SID"
+          },
+          "status": {
+            "type": "string", 
+            "description": "Message status"
+          },
+          "cost": {
+            "type": "string",
+            "description": "Message cost"
+          }
+        }
+      }
+    },
+    {
+      "name": "make_call",
+      "description": "Make voice call via Twilio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient phone number in E.164 format"
+          },
+          "message": {
+            "type": "string",
+            "description": "Voice message to speak (TTS)"
+          },
+          "from": {
+            "type": "string", 
+            "description": "Twilio phone number (optional, uses default)"
+          }
+        },
+        "required": ["to", "message"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sid": {
+            "type": "string",
+            "description": "Twilio call SID"
+          },
+          "status": {
+            "type": "string",
+            "description": "Call status"
+          },
+          "duration": {
+            "type": "string",
+            "description": "Call duration"
+          }
+        }
+      }
+    }
+  ],
+  "manifest": {
+    "required_fields": [
+      "unique_id",
+      "process_id",
+      "orbt_layer", 
+      "blueprint_version"
+    ]
+  },
+  "compliance_checklist": {
+    "heir_compliance": true,
+    "orbt_layer_5": true,
+    "mantis_logging": true,
+    "kill_switch": true,
+    "payload_validation": true
+  },
+  "orbt_escalation_matrix": {
+    "layer_1": "Read operations only",
+    "layer_2": "Basic CRUD operations",
+    "layer_3": "Business logic execution", 
+    "layer_4": "Cross-system integration",
+    "layer_5": "Full operational access",
+    "layer_6": "Administrative functions",
+    "layer_7": "System-level operations"
+  },
+  "heir_compliance": {
+    "unique_id": "HEIR-2024-12-TWILIO-TOOLS-01",
+    "layer": 5,
+    "process_tracking": true,
+    "audit_trail": true
+  }
+}

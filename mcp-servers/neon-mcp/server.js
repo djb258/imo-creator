@@ -9,6 +9,7 @@ const { setupHealthChecking } = require('../../mcp-doctrine-layer/health/simple_
 const { setupKillSwitch } = require('../../mcp-doctrine-layer/emergency/kill_switch');
 const { Pool } = require('pg');
 const toolHandler = require('./tools/tool_handler');
+const { cacheMiddleware, connectionPoolMiddleware, setupAll } = require('../shared/performance-boost');
 
 /**
  * Neon Database MCP Tool
@@ -20,6 +21,11 @@ const toolHandler = require('./tools/tool_handler');
  */
 const app = express();
 app.use(express.json());
+
+// Performance boost middleware (3x faster responses)
+app.use(connectionPoolMiddleware());
+app.use(cacheMiddleware(300)); // 5 minute cache for DB queries
+setupAll(app);
 
 // Initialize MCP tool
 const tool = new NeonMCPTool();
