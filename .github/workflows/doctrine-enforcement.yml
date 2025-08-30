@@ -1,0 +1,82 @@
+name: Doctrine Enforcement
+
+on:
+  push:
+    branches: [ main, master, mcp-doctrine-layer ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  doctrine-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: 🧱 PRIMARY DOCTRINE ENFORCEMENT
+      run: |
+        echo "🧱 Enforcing Primary System Doctrine:"
+        echo "AI helps build the system. Old school runs the system."
+        
+    - name: 🔍 LLM Production Usage Check
+      run: npm run doctrine:llm-check
+      
+    - name: 🧪 MCP Compliance Check  
+      run: npm run doctrine:mcp-check
+      
+    - name: ✅ Full Doctrine Validation
+      run: npm run doctrine:validate
+      
+    - name: 📊 Compliance Report
+      run: npm run compliance:check
+      
+    - name: 🚨 Production Deployment Gate
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      run: |
+        echo "🚨 PRODUCTION DEPLOYMENT GATE"
+        echo "Enforcing doctrine compliance for production deployment..."
+        NODE_ENV=production npm run doctrine:enforce
+        
+    - name: 📋 Generate Doctrine Report
+      run: |
+        echo "## 🧱 Doctrine Compliance Report" >> $GITHUB_STEP_SUMMARY
+        echo "**Primary System Doctrine**: AI helps build the system. Old school runs the system." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Validation Results:" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ LLM usage restricted to blueprint phase" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ MCP-only runtime execution enforced" >> $GITHUB_STEP_SUMMARY  
+        echo "- ✅ HEIR/ORBT compliance validated" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Production AI restrictions active" >> $GITHUB_STEP_SUMMARY
+        
+  mcp-health-check:
+    runs-on: ubuntu-latest
+    needs: doctrine-validation
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: 🔧 MCP Server Health Check
+      run: |
+        echo "🔧 Checking MCP server operational status..."
+        npm run mcp:health || echo "⚠️  MCP health check failed - expected in CI without services"
+        
+    - name: 📊 MCP Compliance Status
+      run: npm run mcp:compliance

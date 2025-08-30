@@ -59,7 +59,12 @@
     "test:basic": "node tests/basic-test-runner.js",
     "prod:start": "NODE_ENV=production npm run mcp:start",
     "docker:build": "docker build -t mcp-servers .",
-    "docker:dev": "docker-compose up -d"
+    "docker:dev": "docker-compose up -d",
+    "doctrine:validate": "node scripts/doctrine-enforcer.js validate",
+    "doctrine:enforce": "node scripts/doctrine-enforcer.js enforce",
+    "doctrine:llm-check": "node scripts/doctrine-enforcer.js llm-check",
+    "doctrine:mcp-check": "node scripts/doctrine-enforcer.js mcp-check",
+    "predeploy": "npm run doctrine:validate"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.31.4",

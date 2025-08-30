@@ -1,4 +1,26 @@
-# Blueprint App Shell
+# IMO-Creator Blueprint Garage
+
+## 🧱 **PRIMARY SYSTEM DOCTRINE (Top-Level Rule)**  
+**"AI helps build the system. Old school runs the system."**
+
+### Doctrine Enforcement Requirements:
+
+1. 🤖 **LLMs ONLY during blueprint phase** inside the `imo-creator` repo  
+2. 🧠 **Full process definition required**:
+   - `manifest.yaml` with altitude-coded logic (30k → 1k)
+   - `subagents.json` declaring MCP tools
+   - `heir/check.ts` or MCP validator to enforce structure
+3. 🧪 **All runtime execution → MCP servers** (Firebase, Neon, BigQuery, Apify, Render, etc.)
+4. ❌ **No LLM active during live production** unless explicitly doctrine-approved
+5. ✅ **Pre-deployment validation**:
+   - Retire all LLM subagents into `garage/`
+   - Strip Claude prompt scaffolding
+   - Run doctrine validation (`/heir/check`)
+   - Confirm MCP-only execution path
+
+---
+
+## Blueprint App Shell
 
 A 4-page planning app with SSOT manifest, flex ladder stages, and visual progress tracking.
 
