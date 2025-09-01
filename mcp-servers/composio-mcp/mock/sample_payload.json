@@ -1,0 +1,55 @@
+{
+  "unique_id": "HEIR-2024-12-COMPOSIO-REQ-123456",
+  "process_id": "PRC-COMPOSIO-1704067200",
+  "orbt_layer": 5,
+  "blueprint_version": "v1.0.0-abcd1234",
+  "tool": "execute_composio_tool",
+  "data": {
+    "toolkit": "github",
+    "tool": "create_repo",
+    "arguments": {
+      "name": "composio-test-repo",
+      "description": "Test repository created via Composio MCP server",
+      "private": false,
+      "auto_init": true,
+      "gitignore_template": "Node"
+    },
+    "user_id": "demo-user-123"
+  },
+  "composio_examples": {
+    "gmail_send": {
+      "toolkit": "gmail",
+      "tool": "send_email",
+      "arguments": {
+        "to": "recipient@example.com",
+        "subject": "Test Email via Composio",
+        "body": "This email was sent using the Composio MCP server integration."
+      }
+    },
+    "slack_message": {
+      "toolkit": "slack", 
+      "tool": "send_message",
+      "arguments": {
+        "channel": "#general",
+        "text": "Hello from Composio MCP server!"
+      }
+    },
+    "twilio_sms": {
+      "toolkit": "twilio",
+      "tool": "send_sms",
+      "arguments": {
+        "to": "+1234567890",
+        "message": "SMS sent via Composio integration"
+      }
+    },
+    "notion_create_page": {
+      "toolkit": "notion",
+      "tool": "create_page",
+      "arguments": {
+        "parent_id": "database-or-page-id",
+        "title": "New Page via Composio",
+        "content": "Page created using Composio MCP server"
+      }
+    }
+  }
+}

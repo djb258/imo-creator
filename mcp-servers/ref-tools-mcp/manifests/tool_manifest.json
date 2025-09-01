@@ -1,0 +1,207 @@
+{
+  "tool_name": "ref-tools-mcp",
+  "version": "1.0.0",
+  "description": "Documentation and reference lookup tools via Ref.tools API with HEIR/ORBT compliance",
+  "tools": [
+    {
+      "name": "search_documentation",
+      "description": "Search through technical documentation for APIs, frameworks, libraries, and services",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query for documentation (e.g., 'React hooks useEffect', 'PostgreSQL JOIN syntax')"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Maximum number of results to return",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 20
+          },
+          "include_code_examples": {
+            "type": "boolean",
+            "description": "Prioritize results with code examples",
+            "default": true
+          }
+        },
+        "required": ["query"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {"type": "string"},
+                "url": {"type": "string"},
+                "snippet": {"type": "string"},
+                "source": {"type": "string"},
+                "relevance_score": {"type": "number"}
+              }
+            }
+          },
+          "query_metadata": {
+            "type": "object",
+            "properties": {
+              "query": {"type": "string"},
+              "total_results": {"type": "number"},
+              "search_time_ms": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "read_documentation_url",
+      "description": "Read and extract content from a specific documentation URL",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the documentation page to read"
+          },
+          "extract_code_blocks": {
+            "type": "boolean",
+            "description": "Extract and highlight code blocks",
+            "default": true
+          },
+          "max_content_length": {
+            "type": "number",
+            "description": "Maximum content length in characters",
+            "default": 5000,
+            "minimum": 1000,
+            "maximum": 10000
+          }
+        },
+        "required": ["url"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "content": {"type": "string"},
+          "title": {"type": "string"},
+          "url": {"type": "string"},
+          "code_blocks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "language": {"type": "string"},
+                "code": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "get_api_reference",
+      "description": "Get API reference documentation for specific endpoints or methods",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "api_name": {
+            "type": "string",
+            "description": "Name of the API (e.g., 'GitHub API', 'Stripe API', 'OpenAI API')"
+          },
+          "endpoint_or_method": {
+            "type": "string",
+            "description": "Specific endpoint or method to look up"
+          },
+          "include_examples": {
+            "type": "boolean",
+            "description": "Include usage examples",
+            "default": true
+          }
+        },
+        "required": ["api_name", "endpoint_or_method"]
+      }
+    },
+    {
+      "name": "search_github_repos",
+      "description": "Search through public GitHub repositories for code examples and documentation",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query for GitHub repositories"
+          },
+          "language": {
+            "type": "string",
+            "description": "Programming language filter (optional)"
+          },
+          "max_repos": {
+            "type": "number",
+            "description": "Maximum number of repositories to return",
+            "default": 10,
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  ],
+  "manifest": {
+    "required_fields": [
+      "unique_id",
+      "process_id",
+      "orbt_layer",
+      "blueprint_version"
+    ]
+  },
+  "compliance_checklist": {
+    "heir_compliance": true,
+    "orbt_layer_5": true,
+    "mantis_logging": true,
+    "kill_switch": true,
+    "payload_validation": true,
+    "documentation_access": true
+  },
+  "orbt_escalation_matrix": {
+    "layer_1": "Read operations only",
+    "layer_2": "Basic CRUD operations",
+    "layer_3": "Business logic execution",
+    "layer_4": "Cross-system integration",
+    "layer_5": "Full operational access",
+    "layer_6": "Administrative functions",
+    "layer_7": "System-level operations"
+  },
+  "heir_compliance": {
+    "unique_id": "HEIR-2024-12-REFTOOLS-TOOLS-01",
+    "layer": 5,
+    "process_tracking": true,
+    "audit_trail": true,
+    "documentation_access_logging": true
+  },
+  "ref_tools_integration": {
+    "api_endpoint": "https://api.ref.tools",
+    "supported_features": [
+      "Technical documentation search",
+      "API reference lookup",
+      "Code example extraction",
+      "GitHub repository search",
+      "Token-efficient retrieval"
+    ],
+    "optimization_features": {
+      "session_deduplication": true,
+      "context_dropout": true,
+      "token_efficient_search": true,
+      "code_block_preservation": true
+    },
+    "documentation_coverage": [
+      "1000+ technical documentation sites",
+      "Public GitHub repositories",
+      "API documentation",
+      "Framework documentation",
+      "Library references"
+    ]
+  }
+}

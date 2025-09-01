@@ -1,0 +1,69 @@
+{
+  "unique_id": "HEIR-2024-12-REFTOOLS-REQ-123456",
+  "process_id": "PRC-REFTOOLS-1704067200",
+  "orbt_layer": 5,
+  "blueprint_version": "v1.0.0-abcd1234",
+  "tool": "search_documentation",
+  "data": {
+    "query": "React hooks useEffect cleanup function",
+    "max_results": 5,
+    "include_code_examples": true
+  },
+  "documentation_examples": {
+    "api_reference_lookup": {
+      "tool": "get_api_reference",
+      "data": {
+        "api_name": "GitHub API",
+        "endpoint_or_method": "create repository",
+        "include_examples": true
+      }
+    },
+    "read_documentation_url": {
+      "tool": "read_documentation_url", 
+      "data": {
+        "url": "https://reactjs.org/docs/hooks-effect.html",
+        "extract_code_blocks": true,
+        "max_content_length": 5000
+      }
+    },
+    "search_github_repos": {
+      "tool": "search_github_repos",
+      "data": {
+        "query": "React authentication hooks",
+        "language": "javascript",
+        "max_repos": 10
+      }
+    },
+    "database_documentation": {
+      "tool": "search_documentation",
+      "data": {
+        "query": "PostgreSQL JOIN syntax examples",
+        "max_results": 3,
+        "include_code_examples": true
+      }
+    },
+    "framework_lookup": {
+      "tool": "search_documentation", 
+      "data": {
+        "query": "Express.js middleware error handling",
+        "max_results": 5,
+        "include_code_examples": true
+      }
+    },
+    "api_integration_help": {
+      "tool": "get_api_reference",
+      "data": {
+        "api_name": "Stripe API",
+        "endpoint_or_method": "create payment intent",
+        "include_examples": true
+      }
+    }
+  },
+  "optimization_notes": {
+    "token_efficiency": "Responses optimized to 5k tokens maximum",
+    "session_deduplication": "Never returns repeated results in same session",
+    "content_dropout": "Uses search history to prioritize relevant sections",
+    "code_preservation": "Maintains exact code block formatting",
+    "rate_limiting": "30 requests per minute per process_id"
+  }
+}

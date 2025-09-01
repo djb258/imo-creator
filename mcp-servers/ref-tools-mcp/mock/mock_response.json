@@ -1,0 +1,127 @@
+{
+  "success": true,
+  "result": {
+    "query": "React hooks useEffect cleanup function",
+    "results": [
+      {
+        "title": "Using the Effect Hook - React",
+        "url": "https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup",
+        "snippet": "Effects may also optionally specify how to \"clean up\" after them by returning a function. For example, this component uses an effect to subscribe to a friend's online status, and cleans up by unsubscribing from it...",
+        "source": "reactjs.org",
+        "relevance_score": 0.95,
+        "code_examples": [
+          {
+            "language": "javascript",
+            "code": "useEffect(() => {\n  const subscription = props.source.subscribe();\n  return () => {\n    // Clean up the subscription\n    subscription.unsubscribe();\n  };\n});"
+          }
+        ]
+      },
+      {
+        "title": "useEffect cleanup function patterns",
+        "url": "https://dev.to/example/useeffect-cleanup-patterns",
+        "snippet": "Learn the most common patterns for cleaning up effects in React hooks, including event listeners, timers, and subscriptions...",
+        "source": "dev.to",
+        "relevance_score": 0.88,
+        "code_examples": [
+          {
+            "language": "javascript", 
+            "code": "useEffect(() => {\n  const timer = setInterval(() => {\n    console.log('Timer tick');\n  }, 1000);\n\n  return () => clearInterval(timer);\n}, []);"
+          }
+        ]
+      },
+      {
+        "title": "React Hooks: useEffect cleanup",
+        "url": "https://stackoverflow.com/questions/example/react-hooks-useeffect-cleanup",
+        "snippet": "How to properly clean up useEffect hooks to prevent memory leaks and unwanted side effects when components unmount...",
+        "source": "stackoverflow.com",
+        "relevance_score": 0.82,
+        "code_examples": []
+      }
+    ],
+    "total_results": 3,
+    "search_time_ms": 245,
+    "token_optimized": true,
+    "session_deduplicated": true
+  },
+  "heir_tracking": {
+    "unique_id": "HEIR-2024-12-REFTOOLS-REQ-123456",
+    "process_lineage": ["PRC-REFTOOLS-1704067200"],
+    "operation": "search_documentation",
+    "ref_tools_integration": true,
+    "documentation_access": true,
+    "token_optimized": true,
+    "timestamp": "2024-12-01T12:00:00.000Z"
+  },
+  "mock_examples": {
+    "api_reference_response": {
+      "success": true,
+      "result": {
+        "api_name": "GitHub API",
+        "endpoint_or_method": "create repository",
+        "documentation_results": [
+          {
+            "title": "Create a repository - GitHub Docs",
+            "url": "https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user",
+            "snippet": "Creates a new repository for the authenticated user. POST /user/repos",
+            "source": "docs.github.com",
+            "relevance_score": 0.98,
+            "code_examples": [
+              {
+                "language": "javascript",
+                "code": "const response = await fetch('https://api.github.com/user/repos', {\n  method: 'POST',\n  headers: {\n    'Authorization': `token ${token}`,\n    'Accept': 'application/vnd.github.v3+json'\n  },\n  body: JSON.stringify({\n    name: 'Hello-World',\n    description: 'This is your first repository',\n    private: false\n  })\n});"
+              }
+            ]
+          }
+        ],
+        "api_specific_formatting": true,
+        "search_metadata": {
+          "query_used": "GitHub API create repository API reference documentation",
+          "results_found": 1
+        }
+      }
+    },
+    "read_url_response": {
+      "success": true,
+      "result": {
+        "title": "Using the Effect Hook – React",
+        "url": "https://reactjs.org/docs/hooks-effect.html",
+        "content": "Effects with Cleanup\n\nEarlier, we looked at how to express side effects that don't require any cleanup. However, some effects do. For example, we might want to set up a subscription to some external data source. In that case, it is important to clean up so that we don't introduce a memory leak!\n\nLet's see how we can do this with classes and then with Hooks.\n\nExample Using Classes\n\nIn a React class, you would typically set up a subscription in componentDidMount, and clean it up in componentWillUnmount. For example, let's say we have a ChatAPI module that lets us subscribe to a friend's online status...",
+        "code_blocks": [
+          {
+            "language": "javascript",
+            "code": "class FriendStatus extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { isOnline: null };\n    this.handleStatusChange = this.handleStatusChange.bind(this);\n  }\n\n  componentDidMount() {\n    ChatAPI.subscribeToFriendStatus(\n      this.props.friend.id,\n      this.handleStatusChange\n    );\n  }\n\n  componentWillUnmount() {\n    ChatAPI.unsubscribeFromFriendStatus(\n      this.props.friend.id,\n      this.handleStatusChange\n    );\n  }\n\n  handleStatusChange(status) {\n    this.setState({\n      isOnline: status.isOnline\n    });\n  }\n\n  render() {\n    if (this.state.isOnline === null) {\n      return 'Loading...';\n    }\n    return this.state.isOnline ? 'Online' : 'Offline';\n  }\n}"
+          }
+        ],
+        "extracted_at": "2024-12-01T12:00:00.000Z",
+        "token_optimized": true,
+        "content_length": 4850
+      }
+    },
+    "github_search_response": {
+      "success": true,
+      "result": {
+        "query": "React authentication hooks",
+        "language_filter": "javascript",
+        "repositories": [
+          {
+            "name": "facebook/react",
+            "url": "https://github.com/facebook/react",
+            "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+            "stars": "220000",
+            "language": "javascript",
+            "relevance": 0.85
+          },
+          {
+            "name": "auth0/nextjs-auth0",
+            "url": "https://github.com/auth0/nextjs-auth0", 
+            "description": "Next.js SDK for signing in with Auth0",
+            "stars": "2100",
+            "language": "javascript",
+            "relevance": 0.92
+          }
+        ],
+        "total_repos": 2
+      }
+    }
+  }
+}
