@@ -359,10 +359,15 @@ class WhimsicalVisualizer:
         plantuml = self._generate_plantuml(analysis)
         (output_path / "architecture.puml").write_text(plantuml)
         
+        # Generate complete repository mind map
+        mindmap = self._generate_mindmap(analysis)
+        (output_path / "repository_mindmap.md").write_text(mindmap)
+        
         print(f"[INFO] Visual exports generated in {output_path}")
         print(f"  - whimsical_diagram.json: Import data for Whimsical")
         print(f"  - architecture.mmd: Mermaid diagram")
         print(f"  - architecture.puml: PlantUML diagram")
+        print(f"  - repository_mindmap.md: Complete repository mind map")
     
     def _generate_mermaid(self, analysis: Dict) -> str:
         """Generate Mermaid diagram from analysis"""
@@ -412,6 +417,309 @@ class WhimsicalVisualizer:
         lines.append("@enduml")
         
         return "\n".join(lines)
+    
+    def _generate_mindmap(self, analysis: Dict) -> str:
+        """Generate comprehensive repository mind map for Whimsical"""
+        
+        repo_name = analysis['name']
+        structure = analysis.get('structure', {})
+        mcp_servers = analysis.get('mcp_servers', [])
+        compliance = analysis.get('compliance', {})
+        
+        lines = [
+            f"# {repo_name} - Complete Repository Visualization",
+            "",
+            "## Core System Architecture"
+        ]
+        
+        # Analyze major directories and their purposes
+        major_dirs = self._analyze_major_directories(structure, analysis['path'])
+        
+        for dir_info in major_dirs:
+            if dir_info['name'] == 'mcp-servers' and mcp_servers:
+                lines.append(f"- **{dir_info['name']}/** - {dir_info['description']}")
+                # Add MCP server details
+                server_groups = self._group_mcp_servers(mcp_servers)
+                for group_name, servers in server_groups.items():
+                    lines.append(f"  - {group_name} - {', '.join([s['name'] for s in servers[:3]])}{'...' if len(servers) > 3 else ''}")
+            else:
+                lines.append(f"- **{dir_info['name']}/** - {dir_info['description']}")
+                # Add key files/subdirs
+                for subitem in dir_info.get('key_items', [])[:3]:
+                    lines.append(f"  - {subitem['name']} - {subitem['description']}")
+        
+        # Add compliance and system status
+        lines.extend([
+            "",
+            "## System Status",
+            f"- **Repository Type**: {self._determine_repo_type(analysis)}",
+            f"- **Compliance Score**: {compliance.get('score', 0):.1f}%",
+            f"- **MCP Servers**: {len(mcp_servers)} operational",
+            f"- **Architecture**: {'Production Ready' if compliance.get('score', 0) > 80 else 'In Development'}"
+        ])
+        
+        return "\n".join(lines)
+    
+    def _analyze_major_directories(self, structure: Dict, repo_path: str) -> List[Dict]:
+        """Analyze major directories and determine their purposes"""
+        
+        major_dirs = []
+        
+        # Directory purpose mappings based on common patterns
+        dir_purposes = {
+            'src': 'Main application source code with components, utilities, and business logic',
+            'mcp-servers': f'Model Context Protocol servers for service integrations and API connections',
+            'api': 'API endpoints, route handlers, and server-side business logic',
+            'tools': 'Repository automation, analysis, and development utility scripts',
+            'scripts': 'Build automation, deployment, and development workflow scripts',
+            'docs': 'Comprehensive documentation, specifications, and developer guides',
+            'tests': 'Automated test suites covering unit, integration, and system tests',
+            'garage-mcp': 'Comprehensive audit, compliance, and quality assurance system',
+            'bmad': 'Break/Measure/Analyze/Do performance tracking and optimization system',
+            'ctb': 'Concept Tree Blueprint system for architecture documentation',
+            'templates': 'Reusable project templates and boilerplate code generators',
+            'garage': 'Real-time system monitoring and visualization dashboard',
+            'pages': 'Next.js application pages and API route definitions',
+            'components': 'Reusable UI components and shared application modules',
+            'lib': 'Shared libraries, utilities, and configuration modules',
+            'public': 'Static assets, images, and publicly accessible files',
+            'config': 'Application configuration files and environment settings',
+            'middleware': 'Request/response processing and application middleware',
+            'heir': 'Hierarchical Event Identity Registry compliance and governance',
+            'logs': 'System logs, audit trails, and performance monitoring data',
+            'mcp-doctrine-layer': 'MCP governance framework and compliance enforcement',
+            'factory': 'Automated build and deployment infrastructure',
+            'shared': 'Common utilities and shared modules across multiple services'
+        }
+        
+        if 'children' in structure:
+            for child in structure['children']:
+                if child.get('type') == 'directory':
+                    dir_name = child['name']
+                    description = dir_purposes.get(dir_name, f'{dir_name.replace("-", " ").replace("_", " ").title()} directory')
+                    
+                    major_dirs.append({
+                        'name': dir_name,
+                        'description': description,
+                        'key_items': self._extract_key_items(child)
+                    })
+        
+        # Sort by importance (src, mcp-servers, api first)
+        priority_order = ['src', 'mcp-servers', 'api', 'garage-mcp', 'tools', 'scripts', 'docs']
+        
+        def sort_priority(dir_info):
+            if dir_info['name'] in priority_order:
+                return priority_order.index(dir_info['name'])
+            return 999
+        
+        major_dirs.sort(key=sort_priority)
+        
+        return major_dirs
+    
+    def _extract_key_items(self, directory: Dict) -> List[Dict]:
+        """Extract key files/subdirectories from a directory"""
+        
+        key_items = []
+        
+        if 'children' in directory:
+            for child in directory['children']:
+                if child.get('type') == 'file':
+                    # Important files to highlight
+                    important_files = {
+                        'server.js': 'Main server entry point',
+                        'package.json': 'Node.js project configuration',
+                        'README.md': 'Project documentation',
+                        'index.js': 'Module entry point',
+                        'index.ts': 'TypeScript module entry point',
+                        'config.py': 'Python configuration module',
+                        'main.py': 'Python application entry point',
+                        'Dockerfile': 'Container deployment configuration',
+                        'docker-compose.yml': 'Multi-container deployment setup'
+                    }
+                    
+                    if child['name'] in important_files:
+                        key_items.append({
+                            'name': child['name'],
+                            'description': important_files[child['name']]
+                        })
+                elif child.get('type') == 'directory' and not child.get('truncated'):
+                    # Important subdirectories
+                    key_items.append({
+                        'name': f"{child['name']}/",
+                        'description': f"{child['name'].replace('-', ' ').replace('_', ' ').title()} module"
+                    })
+        
+        return key_items[:5]  # Limit to top 5 items
+    
+    def _group_mcp_servers(self, servers: List[Dict]) -> Dict[str, List[Dict]]:
+        """Group MCP servers by category"""
+        
+        groups = {
+            'Database Integration': [],
+            'Web Services': [],
+            'Development Tools': [],
+            'Communication': [],
+            'Visualization': []
+        }
+        
+        for server in servers:
+            name = server['name'].lower()
+            if any(db in name for db in ['neon', 'firebase', 'bigquery', 'query-builder']):
+                groups['Database Integration'].append(server)
+            elif any(web in name for web in ['github', 'vercel', 'render', 'composio']):
+                groups['Web Services'].append(server)
+            elif any(tool in name for tool in ['ref-tools', 'apify', 'fire-crawl']):
+                groups['Development Tools'].append(server)
+            elif any(comm in name for comm in ['twilio', 'email']):
+                groups['Communication'].append(server)
+            elif any(viz in name for viz in ['whimsical', 'plasmic']):
+                groups['Visualization'].append(server)
+            else:
+                groups['Development Tools'].append(server)
+        
+        # Remove empty groups
+        return {k: v for k, v in groups.items() if v}
+    
+    def _determine_repo_type(self, analysis: Dict) -> str:
+        """Determine the type of repository based on structure"""
+        
+        structure = analysis.get('structure', {})
+        mcp_servers = analysis.get('mcp_servers', [])
+        
+        if len(mcp_servers) > 10:
+            return 'Multi-Service MCP Platform'
+        elif any('next.config.js' in str(child) for child in structure.get('children', [])):
+            return 'Full-Stack Next.js Application'
+        elif any('package.json' in str(child) for child in structure.get('children', [])):
+            return 'Node.js Application'
+        elif any('requirements.txt' in str(child) for child in structure.get('children', [])):
+            return 'Python Application'
+        else:
+            return 'Mixed Technology Stack'
+    
+    def render_to_whimsical_mcp(self, analysis: Dict) -> Dict:
+        """Send mind map to Whimsical MCP server for rendering"""
+        
+        mindmap = self._generate_mindmap(analysis)
+        
+        # Prepare MCP command for Whimsical rendering
+        mcp_command = {
+            "command": "render_mindmap",
+            "args": {
+                "markdown": mindmap,
+                "title": f"Repo Structure - {analysis['name']}"
+            }
+        }
+        
+        print(f"[INFO] Generated mind map for Whimsical MCP:")
+        print(json.dumps(mcp_command, indent=2))
+        
+        return mcp_command
+    
+    def send_to_composio_whimsical(self, analysis: Dict, workspace_id: str = None, user_id: str = None) -> Dict:
+        """Send repository mind map to Whimsical via Composio"""
+        
+        mindmap = self._generate_mindmap(analysis)
+        repo_name = analysis['name']
+        
+        # Prepare Composio payload for Whimsical integration
+        composio_payload = {
+            "unique_id": f"HEIR-2024-12-WHIMSICAL-{repo_name.upper()}-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+            "process_id": f"PRC-WHIMSICAL-{datetime.now().timestamp():.0f}",
+            "orbt_layer": 5,
+            "blueprint_version": "v1.0.0",
+            "tool": "execute_composio_tool",
+            "data": {
+                "toolkit": "whimsical",
+                "tool": "create_mindmap",
+                "arguments": {
+                    "workspace_id": workspace_id or "default",
+                    "title": f"{repo_name} - Complete Architecture",
+                    "description": f"Auto-generated repository visualization for {repo_name}",
+                    "content": {
+                        "type": "mindmap",
+                        "markdown": mindmap,
+                        "metadata": {
+                            "repository": repo_name,
+                            "mcp_servers": len(analysis.get('mcp_servers', [])),
+                            "compliance_score": analysis.get('compliance', {}).get('score', 0),
+                            "generated_at": datetime.now().isoformat(),
+                            "tool_version": "whimsical_visualizer_v1.2"
+                        }
+                    }
+                },
+                "user_id": user_id or "imo-creator-system"
+            }
+        }
+        
+        print(f"[INFO] Generated Composio payload for Whimsical:")
+        print(f"  - Repository: {repo_name}")
+        print(f"  - MCP Servers: {len(analysis.get('mcp_servers', []))}")
+        print(f"  - Compliance: {analysis.get('compliance', {}).get('score', 0):.1f}%")
+        print(f"  - Unique ID: {composio_payload['unique_id']}")
+        
+        return composio_payload
+    
+    def send_to_whimsical_mcp(self, analysis: Dict, workspace_id: str = None, user_id: str = None) -> bool:
+        """Send repository visualization directly to Whimsical MCP server"""
+        
+        whimsical_url = os.environ.get('WHIMSICAL_MCP_URL', 'http://localhost:3002/tool')
+        mindmap = self._generate_mindmap(analysis)
+        repo_name = analysis['name']
+        
+        # Create Whimsical MCP payload
+        payload = {
+            "unique_id": f"HEIR-2024-12-WHIMSICAL-{repo_name.upper()}-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+            "process_id": f"PRC-WHIMSICAL-{datetime.now().timestamp():.0f}",
+            "orbt_layer": 5,
+            "blueprint_version": "v1.0.0",
+            "tool": "create_mindmap",
+            "data": {
+                "workspaceId": workspace_id or "default",
+                "boardType": "mindmap",
+                "diagramData": {
+                    "title": f"{repo_name} - Complete Architecture",
+                    "description": f"Auto-generated repository visualization for {repo_name}",
+                    "content": mindmap,
+                    "metadata": {
+                        "repository": repo_name,
+                        "mcp_servers": len(analysis.get('mcp_servers', [])),
+                        "compliance_score": analysis.get('compliance', {}).get('score', 0),
+                        "generated_at": datetime.now().isoformat(),
+                        "tool_version": "whimsical_visualizer_v1.2"
+                    }
+                }
+            }
+        }
+        
+        try:
+            response = requests.post(whimsical_url, json=payload, timeout=30)
+            response.raise_for_status()
+            
+            result = response.json()
+            
+            if result.get('success'):
+                print(f"[SUCCESS] Repository visualization sent to Whimsical MCP server!")
+                print(f"  - Board created/updated in workspace: {workspace_id or 'default'}")
+                if 'result' in result and 'url' in result['result']:
+                    print(f"  - Whimsical URL: {result['result']['url']}")
+                return True
+            else:
+                print(f"[ERROR] Whimsical MCP request failed: {result.get('error', 'Unknown error')}")
+                return False
+                
+        except requests.exceptions.RequestException as e:
+            print(f"[ERROR] Failed to send to Whimsical MCP: {e}")
+            return False
+        except Exception as e:
+            print(f"[ERROR] Unexpected error: {e}")
+            return False
+    
+    def send_to_composio_api(self, analysis: Dict, workspace_id: str = None, user_id: str = None) -> bool:
+        """Send repository visualization - falls back to direct Whimsical since Composio lacks support"""
+        
+        print(f"[INFO] Composio doesn't support Whimsical toolkit - routing to direct Whimsical MCP server")
+        return self.send_to_whimsical_mcp(analysis, workspace_id, user_id)
 
 
 def integrate_with_garage_bay(repo_path: pathlib.Path, whimsical_config: Dict = None) -> Dict:
@@ -442,7 +750,12 @@ if __name__ == "__main__":
     parser.add_argument("repo_path", help="Path to repository")
     parser.add_argument("--api-key", help="Whimsical API key")
     parser.add_argument("--board-id", help="Whimsical board ID")
+    parser.add_argument("--workspace-id", help="Whimsical workspace ID for Composio")
+    parser.add_argument("--user-id", help="User ID for Composio")
     parser.add_argument("--export-only", action="store_true", help="Only export, don't sync")
+    parser.add_argument("--export", help="Export diagram to specific file (e.g. whimsical.json)")
+    parser.add_argument("--composio", action="store_true", help="Send to Whimsical via Composio")
+    parser.add_argument("--composio-payload", action="store_true", help="Generate Composio payload only")
     
     args = parser.parse_args()
     
@@ -458,7 +771,45 @@ if __name__ == "__main__":
     if args.export_only:
         output_dir = repo_path / ".whimsical"
         visualizer.generate_export(analysis, output_dir)
+    elif args.export:
+        # Export diagram data to specific file for GitHub Actions
+        diagram_data = visualizer._generate_diagram_data(analysis)
+        export_file = pathlib.Path(args.export)
+        export_file.write_text(json.dumps(diagram_data, indent=2))
+        print(f"[INFO] Diagram data exported to {export_file}")
+        print(f"  - Title: {diagram_data['title']}")
+        print(f"  - Nodes: {len(diagram_data['nodes'])}")
+        print(f"  - Metadata: MCP Servers: {diagram_data['metadata']['mcp_servers']}")
+        
+        # Also generate standard exports in .whimsical/
+        output_dir = repo_path / ".whimsical"
+        visualizer.generate_export(analysis, output_dir)
+    elif args.composio_payload:
+        # Generate Composio payload for manual use
+        payload = visualizer.send_to_composio_whimsical(analysis, args.workspace_id, args.user_id)
+        print("\n" + "="*60)
+        print("COMPOSIO PAYLOAD FOR WHIMSICAL")
+        print("="*60)
+        print(json.dumps(payload, indent=2))
+        print("\n" + "="*60)
+        print("USAGE: Send this payload to http://localhost:3001/tool")
+        print("="*60)
+    elif args.composio:
+        # Send via Composio (falls back to direct Whimsical MCP)
+        success = visualizer.send_to_composio_api(analysis, args.workspace_id, args.user_id)
+        if success:
+            print("\n✅ Repository visualization successfully sent to Whimsical!")
+        else:
+            print("\n❌ Failed to send repository visualization to Whimsical")
     else:
         visualizer.sync_with_whimsical(analysis)
         
-    print(json.dumps(analysis, indent=2))
+    if not args.composio_payload:
+        print("\n" + "="*50)
+        print("REPOSITORY ANALYSIS SUMMARY")
+        print("="*50)
+        print(f"Repository: {analysis['name']}")
+        print(f"MCP Servers: {len(analysis.get('mcp_servers', []))}")
+        print(f"Compliance Score: {analysis.get('compliance', {}).get('score', 0):.1f}%")
+        print(f"Architecture Type: {visualizer._determine_repo_type(analysis)}")
+        print("="*50)

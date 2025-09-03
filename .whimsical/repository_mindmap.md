@@ -1,0 +1,87 @@
+# imo-creator - Complete Repository Visualization
+
+## Core System Architecture
+- **src/** - Main application source code with components, utilities, and business logic
+  - app/ - App module
+  - cockpit/ - Cockpit module
+  - components/ - Components module
+- **mcp-servers/** - Model Context Protocol servers for service integrations and API connections
+  - Database Integration - bigquery-mcp, firebase-mcp, neon-mcp...
+  - Web Services - composio-mcp, github-actions-mcp, github-mcp...
+  - Development Tools - abacus-mcp, apify-mcp, ctb-parser...
+  - Communication - email-validator, twilio-mcp
+  - Visualization - plasmic-mcp, whimsical-mcp
+- **api/** - API endpoints, route handlers, and server-side business logic
+  - ssot/ - Ssot module
+- **garage-mcp/** - Comprehensive audit, compliance, and quality assurance system
+  - artifacts/ - Artifacts module
+  - bays/ - Bays module
+  - blueprints/ - Blueprints module
+- **tools/** - Repository automation, analysis, and development utility scripts
+  - config/ - Config module
+- **scripts/** - Build automation, deployment, and development workflow scripts
+  - bmad/ - Bmad module
+  - bootstrap/ - Bootstrap module
+  - factory/ - Factory module
+- **docs/** - Comprehensive documentation, specifications, and developer guides
+  - blueprints/ - Blueprints module
+  - imo-spec/ - Imo Spec module
+- **apps/** - Apps directory
+  - my-app/ - My App module
+- **blueprint-template-repo/** - Blueprint Template Repo directory
+  - docs/ - Docs module
+  - package.json - Node.js project configuration
+  - README.md - Project documentation
+- **bmad/** - Break/Measure/Analyze/Do performance tracking and optimization system
+- **ctb/** - Concept Tree Blueprint system for architecture documentation
+  - README.md - Project documentation
+- **docker/** - Docker directory
+- **factory/** - Automated build and deployment infrastructure
+  - ui/ - Ui module
+- **garage/** - Real-time system monitoring and visualization dashboard
+  - viz/ - Viz module
+- **garage_tools/** - Garage Tools directory
+- **heir/** - Hierarchical Event Identity Registry compliance and governance
+- **imo/** - Imo directory
+- **logs/** - System logs, audit trails, and performance monitoring data
+  - baseline/ - Baseline module
+  - bmad/ - Bmad module
+- **mcp/** - Mcp directory
+  - config.py - Python configuration module
+  - main.py - Python application entry point
+  - models/ - Models module
+- **mcp-doctrine-layer/** - MCP governance framework and compliance enforcement
+  - blueprint_rules/ - Blueprint Rules module
+  - emergency/ - Emergency module
+  - enforcement/ - Enforcement module
+- **mcp-templates/** - Mcp Templates directory
+  - outreach-email-mcp/ - Outreach Email Mcp module
+- **mcp-ts/** - Mcp Ts directory
+  - package.json - Node.js project configuration
+  - README.md - Project documentation
+  - src/ - Src module
+- **mechanic/** - Mechanic directory
+  - recall/ - Recall module
+- **packages/** - Packages directory
+  - heir/ - Heir module
+  - sidecar/ - Sidecar module
+- **pages/** - Next.js application pages and API route definitions
+  - api/ - Api module
+  - cockpit/ - Cockpit module
+  - launchpad/ - Launchpad module
+- **public/** - Static assets, images, and publicly accessible files
+  - icons/ - Icons module
+- **repo-lens/** - Repo Lens directory
+  - ui/ - Ui module
+- **shared/** - Common utilities and shared modules across multiple services
+- **templates/** - Reusable project templates and boilerplate code generators
+  - README.md - Project documentation
+  - whimsical-integration/ - Whimsical Integration module
+- **tests/** - Automated test suites covering unit, integration, and system tests
+  - blueprints/ - Blueprints module
+
+## System Status
+- **Repository Type**: Multi-Service MCP Platform
+- **Compliance Score**: 57.1%
+- **MCP Servers**: 22 operational
+- **Architecture**: In Development

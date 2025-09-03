@@ -2,14 +2,11 @@ name: Update Whimsical Diagram
 
 on:
   push:
-    branches: [ main, master, mcp-doctrine-layer ]
-  pull_request:
-    types: [ closed ]
-    branches: [ main, master ]
+    branches:
+      - '**'
 
 jobs:
   update-whimsical:
-    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     
     steps:
@@ -21,88 +18,26 @@ jobs:
       with:
         python-version: '3.11'
         
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests pyyaml
         
-    - name: Trigger Whimsical Update
+    - name: Generate Whimsical diagram data
+      run: |
+        python tools/whimsical_visualizer.py . --export whimsical.json
+        
+    - name: Push to Whimsical
       env:
-        WEBHOOK_URL: ${{ secrets.WHIMSICAL_WEBHOOK_URL }}
+        WHIMSICAL_API_KEY: ${{ secrets.WHIMSICAL_API_KEY }}
       run: |
-        if [ -n "$WEBHOOK_URL" ]; then
-          curl -X POST "$WEBHOOK_URL/trigger" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"repo_url\": \"${{ github.event.repository.clone_url }}\",
-              \"repo_name\": \"${{ github.event.repository.name }}\",
-              \"ref\": \"${{ github.ref_name }}\"
-            }" || echo "Webhook failed - continuing anyway"
-        else
-          echo "WHIMSICAL_WEBHOOK_URL secret not configured - using local analysis"
-        fi
+        python tools/push_whimsical.py whimsical.json
         
-    - name: Local Whimsical Analysis
-      run: |
-        python -c "
-        import json
-        import os
-        import pathlib
-        from datetime import datetime
-        
-        def analyze_imo_creator():
-            analysis = {
-                'name': 'imo-creator',
-                'updated_at': datetime.now().isoformat(),
-                'commit_sha': '${{ github.sha }}',
-                'branch': '${{ github.ref_name }}',
-                'structure': {},
-                'mcp_servers': [],
-                'compliance': {}
-            }
-            
-            # Count MCP servers
-            mcp_dir = pathlib.Path('mcp-servers')
-            if mcp_dir.exists():
-                servers = [d.name for d in mcp_dir.iterdir() if d.is_dir()]
-                analysis['mcp_servers'] = servers
-                analysis['structure']['mcp_server_count'] = len(servers)
-            
-            # Check for key files
-            key_files = {
-                'bmad': pathlib.Path('bmad').exists(),
-                'garage_bay': pathlib.Path('garage_bay.py').exists(),
-                'ctb_yaml': pathlib.Path('ctb.yaml').exists(),
-                'readme': pathlib.Path('README.md').exists(),
-                'whimsical_config': pathlib.Path('.whimsical/config.json').exists()
-            }
-            analysis['compliance'] = key_files
-            analysis['compliance']['score'] = sum(key_files.values()) / len(key_files) * 100
-            
-            # File count by extension
-            file_counts = {}
-            for file in pathlib.Path('.').rglob('*'):
-                if file.is_file() and not any(skip in str(file) for skip in ['.git', 'node_modules', '__pycache__', '.garage-venv']):
-                    ext = file.suffix or 'no_extension'
-                    file_counts[ext] = file_counts.get(ext, 0) + 1
-            
-            analysis['structure']['file_counts'] = dict(sorted(file_counts.items(), key=lambda x: x[1], reverse=True)[:10])
-            analysis['structure']['total_files'] = sum(file_counts.values())
-            
-            return analysis
-        
-        analysis = analyze_imo_creator()
-        print('IMO Creator Repository Analysis:')
-        print(json.dumps(analysis, indent=2))
-        
-        # Save analysis for potential Whimsical export
-        with open('whimsical_analysis.json', 'w') as f:
-            json.dump(analysis, f, indent=2)
-        "
-        
-    - name: Upload Analysis Artifact
+    - name: Upload diagram artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: whimsical-analysis
-        path: whimsical_analysis.json
+        name: whimsical-diagrams
+        path: |
+          whimsical.json
+          .whimsical/
         retention-days: 7
