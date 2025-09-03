@@ -1,0 +1,28 @@
+{
+  "enabled": true,
+  "webhook_url": "http://your-webhook-server:3007/webhook/github",
+  "board_id": "your_whimsical_board_id",
+  "auto_update": true,
+  "visualization_types": [
+    "architecture",
+    "mcp_servers",
+    "compliance",
+    "relationships"
+  ],
+  "update_triggers": [
+    "push",
+    "pull_request_merge"
+  ],
+  "exclusions": {
+    "paths": [
+      "node_modules/",
+      ".git/",
+      "venv/",
+      "__pycache__/"
+    ],
+    "files": [
+      "*.log",
+      "*.tmp"
+    ]
+  }
+}

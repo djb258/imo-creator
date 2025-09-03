@@ -1,0 +1,38 @@
+{
+  "enabled": true,
+  "webhook_url": "http://localhost:3007/webhook/github",
+  "board_id": "",
+  "auto_update": true,
+  "visualization_types": [
+    "architecture",
+    "mcp_servers",
+    "compliance",
+    "relationships"
+  ],
+  "update_triggers": [
+    "push",
+    "pull_request_merge"
+  ],
+  "exclusions": {
+    "paths": [
+      "node_modules/",
+      ".git/",
+      "venv/",
+      "__pycache__/",
+      ".whimsical/temp/",
+      "audit_results/",
+      ".garage-venv/"
+    ],
+    "files": [
+      "*.log",
+      "*.tmp",
+      "*.pid"
+    ]
+  },
+  "created_at": "2024-12-03T00:00:00Z",
+  "repository": "imo-creator",
+  "mcp_servers": {
+    "count": 11,
+    "compliance_target": 100
+  }
+}

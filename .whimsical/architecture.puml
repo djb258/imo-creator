@@ -1,0 +1,27 @@
+@startuml
+package "imo-creator" {
+  component [abacus-mcp] as abacus_mcp
+  component [apify-mcp] as apify_mcp
+  component [bigquery-mcp] as bigquery_mcp
+  component [composio-mcp] as composio_mcp
+  component [ctb-parser] as ctb_parser
+  component [email-validator] as email_validator
+  component [fire-crawl-mcp] as fire_crawl_mcp
+  component [firebase-mcp] as firebase_mcp
+  component [github-actions-mcp] as github_actions_mcp
+  component [github-mcp] as github_mcp
+  component [n8n-mcp] as n8n_mcp
+  component [neon-mcp] as neon_mcp
+  component [plasmic-mcp] as plasmic_mcp
+  component [playwright-mcp] as playwright_mcp
+  component [query-builder-mcp] as query_builder_mcp
+  component [ref-tools-mcp] as ref_tools_mcp
+  component [render-mcp] as render_mcp
+  component [shared] as shared
+  component [twilio-mcp] as twilio_mcp
+  component [vercel-mcp] as vercel_mcp
+  component [whimsical-github-webhook] as whimsical_github_webhook
+  component [whimsical-mcp] as whimsical_mcp
+  component [Compliance: 57.1%] as compliance
+}
+@enduml

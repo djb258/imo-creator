@@ -1,0 +1,646 @@
+{
+  "title": "imo-creator - Architecture Overview",
+  "type": "flowchart",
+  "nodes": [
+    {
+      "id": "repo_root",
+      "label": "imo-creator",
+      "type": "container",
+      "style": "primary",
+      "position": {
+        "x": 400,
+        "y": 50
+      }
+    },
+    {
+      "id": "mcp_abacus-mcp",
+      "label": "abacus-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 200,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_apify-mcp",
+      "label": "apify-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 350,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "scrape_website",
+          "run_actor"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_5": "Web scraping and data extraction using Apify platform"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_bigquery-mcp",
+      "label": "bigquery-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 500,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_composio-mcp",
+      "label": "composio-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 650,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "execute_composio_tool",
+          "get_available_tools",
+          "manage_connected_account",
+          "get_composio_stats"
+        ],
+        "compliance": {
+          "heir": {
+            "unique_id": "HEIR-2024-12-COMPOSIO-TOOLS-01",
+            "layer": 5,
+            "process_tracking": true,
+            "audit_trail": true,
+            "external_service_integration": true
+          },
+          "orbt": {
+            "layer_1": "Read operations only",
+            "layer_2": "Basic CRUD operations",
+            "layer_3": "Business logic execution",
+            "layer_4": "Cross-system integration",
+            "layer_5": "Full operational access",
+            "layer_6": "Administrative functions",
+            "layer_7": "System-level operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_ctb-parser",
+      "label": "ctb-parser",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 800,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "parse_ctb_structure",
+          "generate_ctb_scaffold"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_4": "CTB (Component Tree Blueprint) structure parsing and validation"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_email-validator",
+      "label": "email-validator",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 950,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "validate_email",
+          "bulk_validate"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_6": "Email validation and verification services"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_fire-crawl-mcp",
+      "label": "fire-crawl-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1100,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "crawl_site",
+          "extract_structured_data"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_5": "Advanced web scraping and data extraction using FireCrawl"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_firebase-mcp",
+      "label": "firebase-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1250,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_github-actions-mcp",
+      "label": "github-actions-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1400,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "trigger_workflow",
+          "get_workflow_status",
+          "cancel_workflow_run",
+          "get_deployment_status"
+        ],
+        "compliance": {
+          "heir": {
+            "unique_id": "HEIR-2024-12-GITHUB-ACTIONS-TOOLS-01",
+            "layer": 5,
+            "process_tracking": true,
+            "audit_trail": true
+          },
+          "orbt": {
+            "layer_1": "Read operations only",
+            "layer_2": "Basic CRUD operations",
+            "layer_3": "Business logic execution",
+            "layer_4": "Cross-system integration",
+            "layer_5": "Full operational access",
+            "layer_6": "Administrative functions",
+            "layer_7": "System-level operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_github-mcp",
+      "label": "github-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1550,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "create_repository",
+          "create_issue",
+          "create_pull_request"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_3": "GitHub repository management and operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_n8n-mcp",
+      "label": "n8n-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1700,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "trigger_workflow",
+          "get_workflow_status"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_4": "N8N workflow automation management"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_neon-mcp",
+      "label": "neon-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 1850,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "execute_query",
+          "insert_record",
+          "get_schema"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_2": "Neon PostgreSQL database operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_plasmic-mcp",
+      "label": "plasmic-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2000,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "sync_components",
+          "publish_version"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_4": "Plasmic UI component management and code generation"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_playwright-mcp",
+      "label": "playwright-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2150,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_query-builder-mcp",
+      "label": "query-builder-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2300,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "execute_query",
+          "cross_db_join",
+          "get_schema",
+          "get_stats"
+        ],
+        "compliance": {
+          "heir": {
+            "unique_id": "HEIR-2024-12-QUERYBUILDER-TOOLS-01",
+            "layer": 5,
+            "process_tracking": true,
+            "audit_trail": true
+          },
+          "orbt": {
+            "layer_1": "Read operations only",
+            "layer_2": "Basic CRUD operations",
+            "layer_3": "Business logic execution",
+            "layer_4": "Cross-system integration",
+            "layer_5": "Full operational access",
+            "layer_6": "Administrative functions",
+            "layer_7": "System-level operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_ref-tools-mcp",
+      "label": "ref-tools-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2450,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "search_documentation",
+          "read_documentation_url",
+          "get_api_reference",
+          "search_github_repos"
+        ],
+        "compliance": {
+          "heir": {
+            "unique_id": "HEIR-2024-12-REFTOOLS-TOOLS-01",
+            "layer": 5,
+            "process_tracking": true,
+            "audit_trail": true,
+            "documentation_access_logging": true
+          },
+          "orbt": {
+            "layer_1": "Read operations only",
+            "layer_2": "Basic CRUD operations",
+            "layer_3": "Business logic execution",
+            "layer_4": "Cross-system integration",
+            "layer_5": "Full operational access",
+            "layer_6": "Administrative functions",
+            "layer_7": "System-level operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_render-mcp",
+      "label": "render-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2600,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "deploy_service",
+          "get_service_status"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_3": "Render cloud infrastructure management"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_shared",
+      "label": "shared",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2750,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_twilio-mcp",
+      "label": "twilio-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 2900,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "send_sms",
+          "make_call"
+        ],
+        "compliance": {
+          "heir": {
+            "unique_id": "HEIR-2024-12-TWILIO-TOOLS-01",
+            "layer": 5,
+            "process_tracking": true,
+            "audit_trail": true
+          },
+          "orbt": {
+            "layer_1": "Read operations only",
+            "layer_2": "Basic CRUD operations",
+            "layer_3": "Business logic execution",
+            "layer_4": "Cross-system integration",
+            "layer_5": "Full operational access",
+            "layer_6": "Administrative functions",
+            "layer_7": "System-level operations"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_vercel-mcp",
+      "label": "vercel-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 3050,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "deploy_project",
+          "get_deployment_status"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_3": "Vercel deployment and infrastructure management"
+          }
+        }
+      }
+    },
+    {
+      "id": "mcp_whimsical-github-webhook",
+      "label": "whimsical-github-webhook",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 3200,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [],
+        "compliance": {}
+      }
+    },
+    {
+      "id": "mcp_whimsical-mcp",
+      "label": "whimsical-mcp",
+      "type": "service",
+      "style": "mcp",
+      "position": {
+        "x": 3350,
+        "y": 200
+      },
+      "metadata": {
+        "tools": [
+          "update_diagram",
+          "export_diagram"
+        ],
+        "compliance": {
+          "heir": "v2.1",
+          "orbt": {
+            "layer_4": "Whimsical diagram and flowchart management"
+          }
+        }
+      }
+    },
+    {
+      "id": "compliance_status",
+      "label": "Compliance: 57.1%",
+      "type": "status",
+      "style": "danger",
+      "position": {
+        "x": 700,
+        "y": 50
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "repo_root",
+      "target": "mcp_abacus-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_apify-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_bigquery-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_composio-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_ctb-parser",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_email-validator",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_fire-crawl-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_firebase-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_github-actions-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_github-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_n8n-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_neon-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_plasmic-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_playwright-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_query-builder-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_ref-tools-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_render-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_shared",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_twilio-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_vercel-mcp",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_whimsical-github-webhook",
+      "label": "contains"
+    },
+    {
+      "source": "repo_root",
+      "target": "mcp_whimsical-mcp",
+      "label": "contains"
+    }
+  ],
+  "metadata": {
+    "compliance_score": 57.14285714285714,
+    "mcp_servers": 22,
+    "last_updated": "2025-09-03T06:53:04.898759"
+  }
+}

@@ -1,0 +1,84 @@
+name: Update Whimsical Diagram
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    types: [ closed ]
+    branches: [ main, master ]
+
+jobs:
+  update-whimsical:
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pyyaml
+        
+    - name: Trigger Whimsical Update
+      env:
+        WEBHOOK_URL: ${{ secrets.WHIMSICAL_WEBHOOK_URL }}
+        WHIMSICAL_API_KEY: ${{ secrets.WHIMSICAL_API_KEY }}
+        WHIMSICAL_BOARD_ID: ${{ secrets.WHIMSICAL_BOARD_ID }}
+      run: |
+        curl -X POST "$WEBHOOK_URL/trigger" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repo_url": "${{ github.event.repository.clone_url }}",
+            "repo_name": "${{ github.event.repository.name }}",
+            "ref": "${{ github.ref_name }}"
+          }'
+          
+    - name: Local Whimsical Analysis
+      if: env.WHIMSICAL_API_KEY != ''
+      run: |
+        python -c "
+        import json
+        import os
+        import pathlib
+        import requests
+        from datetime import datetime
+        
+        # Simple repository analysis
+        def analyze_repo():
+            analysis = {
+                'name': '${{ github.event.repository.name }}',
+                'url': '${{ github.event.repository.html_url }}',
+                'updated_at': datetime.now().isoformat(),
+                'commit_sha': '${{ github.sha }}',
+                'branch': '${{ github.ref_name }}',
+                'structure': {}
+            }
+            
+            # Count files by type
+            root = pathlib.Path('.')
+            file_counts = {}
+            for file in root.rglob('*'):
+                if file.is_file() and not any(skip in str(file) for skip in ['.git', 'node_modules', '__pycache__']):
+                    ext = file.suffix or 'no_extension'
+                    file_counts[ext] = file_counts.get(ext, 0) + 1
+            
+            analysis['structure']['file_counts'] = file_counts
+            analysis['structure']['total_files'] = sum(file_counts.values())
+            
+            # Check for important files
+            important_files = ['README.md', 'package.json', 'requirements.txt', 'Dockerfile', 'Makefile']
+            analysis['structure']['important_files'] = [f for f in important_files if pathlib.Path(f).exists()]
+            
+            return analysis
+        
+        analysis = analyze_repo()
+        print('Repository Analysis:')
+        print(json.dumps(analysis, indent=2))
+        "
