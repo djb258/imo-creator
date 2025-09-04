@@ -1,5 +1,15 @@
 {
   "mcpServers": {
+    "lovable": {
+      "command": "node",
+      "args": ["./mcp-servers/lovable-mcp/dist/server.js"],
+      "env": {}
+    },
+    "composio": {
+      "command": "node", 
+      "args": ["./mcp-servers/composio-mcp/dist/server.js"],
+      "env": {}
+    },
     "render": {
       "url": "https://mcp.render.com/mcp",
       "headers": {

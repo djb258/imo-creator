@@ -66,16 +66,25 @@ app.get('/mcp/kill-switch', (req, res) => {
 app.get('/mcp/capabilities', (req, res) => {
   res.json({
     server: 'composio-mcp',
-    description: 'Universal AI agent integration platform with 100+ services',
+    description: 'Universal AI agent integration platform with 100+ services including Lovable.dev',
     features: [
       {
         name: 'Universal Tool Execution',
-        description: 'Execute tools from 100+ integrated services',
+        description: 'Execute tools from 100+ integrated services including UI generation',
         supported_toolkits: [
           'github', 'gmail', 'slack', 'twilio', 'stripe', 'notion',
           'hubspot', 'salesforce', 'discord', 'linear', 'jira',
           'google_calendar', 'google_drive', 'dropbox', 'asana',
-          'trello', 'monday', 'clickup', 'zendesk', 'intercom'
+          'trello', 'monday', 'clickup', 'zendesk', 'intercom',
+          'lovable'
+        ]
+      },
+      {
+        name: 'Lovable.dev UI Generation',
+        description: 'Create and manage UI projects via Lovable.dev integration',
+        capabilities: [
+          'create_project', 'get_project_status', 'get_project_details',
+          'scaffold_altitude_ui (CTB/Altitude integration)'
         ]
       },
       {

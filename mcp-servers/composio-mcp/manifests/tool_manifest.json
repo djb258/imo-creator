@@ -104,6 +104,153 @@
           }
         }
       }
+    },
+    {
+      "name": "lovable_create_project",
+      "description": "Create a new Lovable.dev project via Composio integration",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Natural language description of the UI/app to build"
+          },
+          "projectType": {
+            "type": "string",
+            "description": "Project framework type (react, nextjs, vue, etc.)",
+            "default": "react"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Optional GitHub repository URL to connect"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["public", "private"],
+            "description": "Project visibility setting",
+            "default": "private"
+          },
+          "context": {
+            "type": "string",
+            "description": "Additional context or requirements for the project"
+          }
+        },
+        "required": ["prompt"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Lovable.dev project identifier"
+          },
+          "project_url": {
+            "type": "string",
+            "description": "URL to access the created project"
+          },
+          "status": {
+            "type": "string",
+            "description": "Project creation status"
+          },
+          "lovable_metadata": {
+            "type": "object",
+            "description": "Lovable-specific metadata and settings"
+          }
+        }
+      }
+    },
+    {
+      "name": "lovable_get_project_status",
+      "description": "Check the build/deployment status of a Lovable.dev project",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Lovable.dev project ID to check"
+          }
+        },
+        "required": ["projectId"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Current project status (building, ready, error, etc.)"
+          },
+          "build_progress": {
+            "type": "number",
+            "description": "Build completion percentage"
+          },
+          "deployment_url": {
+            "type": "string",
+            "description": "Live deployment URL if available"
+          }
+        }
+      }
+    },
+    {
+      "name": "lovable_get_project_details",
+      "description": "Get comprehensive details about a Lovable.dev project",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Lovable.dev project ID to get details for"
+          }
+        },
+        "required": ["projectId"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "project_info": {
+            "type": "object",
+            "description": "Complete project information and metadata"
+          },
+          "repository": {
+            "type": "object",
+            "description": "Connected repository information"
+          },
+          "deployment": {
+            "type": "object",
+            "description": "Deployment configuration and URLs"
+          }
+        }
+      }
+    },
+    {
+      "name": "lovable_scaffold_altitude_ui",
+      "description": "Create Lovable.dev UI scaffolding based on CTB/Altitude specifications from this repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "framework": {
+            "type": "string",
+            "description": "Target framework for the UI (nextjs, react, vue)",
+            "default": "nextjs"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Created Lovable.dev project ID"
+          },
+          "scaffold_info": {
+            "type": "object",
+            "description": "Information about the generated UI structure"
+          },
+          "ctb_integration": {
+            "type": "object",
+            "description": "Details about CTB/Altitude specifications used"
+          }
+        }
+      }
     }
   ],
   "manifest": {
@@ -143,7 +290,8 @@
       "github", "gmail", "slack", "twilio", "stripe", "notion", 
       "hubspot", "salesforce", "discord", "linear", "jira",
       "google_calendar", "google_drive", "dropbox", "asana",
-      "trello", "monday", "clickup", "zendesk", "intercom"
+      "trello", "monday", "clickup", "zendesk", "intercom",
+      "lovable"
     ],
     "authentication_methods": [
       "oauth2", "api_key", "bearer_token", "basic_auth"

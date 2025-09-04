@@ -233,6 +233,274 @@ class ComposioHandler {
     }
   }
 
+  async lovable_create_project(payload) {
+    try {
+      const { prompt, projectType = 'react', repo, visibility = 'private', context } = payload.data;
+      
+      console.log('🎨 Creating Lovable.dev project via Composio');
+      
+      // Execute Lovable create project via Composio
+      const result = await this.composio.tools.execute('LOVABLE_CREATE_PROJECT', {
+        parameters: {
+          prompt,
+          project_type: projectType,
+          repository: repo,
+          visibility,
+          context
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          lovable_metadata: {
+            prompt,
+            project_type: projectType,
+            visibility,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'lovable_create_project',
+          external_service: 'lovable.dev',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'lovable_create_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'lovable_create_project',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async lovable_get_project_status(payload) {
+    try {
+      const { projectId } = payload.data;
+      
+      console.log(`📊 Getting Lovable.dev project status: ${projectId}`);
+      
+      const result = await this.composio.tools.execute('LOVABLE_GET_PROJECT_STATUS', {
+        parameters: { project_id: projectId },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          lovable_metadata: {
+            project_id: projectId,
+            checked_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'lovable_get_project_status',
+          external_service: 'lovable.dev',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'lovable_status_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'lovable_get_project_status',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async lovable_get_project_details(payload) {
+    try {
+      const { projectId } = payload.data;
+      
+      console.log(`📋 Getting Lovable.dev project details: ${projectId}`);
+      
+      const result = await this.composio.tools.execute('LOVABLE_GET_PROJECT_DETAILS', {
+        parameters: { project_id: projectId },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          lovable_metadata: {
+            project_id: projectId,
+            fetched_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'lovable_get_project_details',
+          external_service: 'lovable.dev',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'lovable_details_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'lovable_get_project_details',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async lovable_scaffold_altitude_ui(payload) {
+    try {
+      const { framework = 'nextjs' } = payload.data;
+      
+      // Read CTB/Altitude specifications
+      const ctbSpecs = this.readCTBSpecs();
+      
+      console.log('🏗️ Scaffolding Lovable.dev UI from CTB/Altitude specs');
+      
+      const prompt = `Create a comprehensive ${framework} application based on this CTB (Christmas Tree Backbone) and Altitude specification:
+
+${ctbSpecs}
+
+Please create:
+1. Strategic overview dashboard (30k altitude) - executive summary with KPIs
+2. Operational process pages (20k altitude) - workflow management and monitoring  
+3. Tactical forms and detail views (10k altitude) - user interactions and data entry
+4. Execution-level components and APIs (5k altitude) - technical implementation details
+5. Navigation structure following the CTB flow hierarchy
+6. Data visualization components for catalog items (databases, tools, MCPs)
+7. Information flow indicators between system components
+
+Requirements:
+- Modern, responsive design with professional UI/UX
+- Use ${framework} with TypeScript
+- Include appropriate UI library (Tailwind CSS, shadcn/ui, or Material-UI)
+- Implement proper routing for altitude levels (/30k, /20k, /10k, /5k)
+- Create reusable components for CTB visualization
+- Add data mock/sample data based on the specifications
+- Include proper error handling and loading states`;
+
+      const result = await this.composio.tools.execute('LOVABLE_CREATE_PROJECT', {
+        parameters: {
+          prompt,
+          project_type: framework,
+          visibility: 'private',
+          context: 'CTB/Altitude UI scaffolding based on repository specifications'
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          lovable_metadata: {
+            scaffold_type: 'altitude_ui',
+            framework,
+            based_on_ctb_specs: true,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'lovable_scaffold_altitude_ui',
+          external_service: 'lovable.dev',
+          ctb_integration: true,
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'lovable_scaffold_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'lovable_scaffold_altitude_ui',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  // Helper method to read CTB/Altitude specifications
+  readCTBSpecs() {
+    const fs = require('fs');
+    const path = require('path');
+    
+    const projectRoot = path.resolve(__dirname, '../../..');
+    const possiblePaths = [
+      path.join(projectRoot, 'docs/altitude/30k.md'),
+      path.join(projectRoot, 'docs/altitude/20k.md'),
+      path.join(projectRoot, 'docs/altitude/10k.md'),
+      path.join(projectRoot, 'docs/altitude/5k.md'),
+      path.join(projectRoot, 'docs/ctb_horiz.md'),
+      path.join(projectRoot, 'docs/catalog.md'),
+      path.join(projectRoot, 'docs/flows.md'),
+      path.join(projectRoot, 'spec/process_map.yaml'),
+      path.join(projectRoot, 'spec/process_map.json'),
+    ];
+
+    let combinedContent = '';
+    let foundFiles = [];
+
+    for (const filePath of possiblePaths) {
+      if (fs.existsSync(filePath)) {
+        try {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          const fileName = path.basename(filePath);
+          combinedContent += `\n## ${fileName}\n\n${content}\n`;
+          foundFiles.push(fileName);
+        } catch (error) {
+          // Skip files that can't be read
+          continue;
+        }
+      }
+    }
+
+    if (foundFiles.length === 0) {
+      return '# No CTB/Altitude specifications found\n\nPlease ensure your repository has CTB documentation in docs/altitude/ or spec/ directories.';
+    }
+
+    return `# CTB/Altitude Specification\n\nFound ${foundFiles.length} specification files: ${foundFiles.join(', ')}\n${combinedContent}`;
+  }
+
   async get_composio_stats(payload) {
     try {
       const { include_usage = false } = payload.data;
@@ -254,7 +522,8 @@ class ComposioHandler {
           total_toolkits: 100,
           authentication_methods: ['oauth2', 'api_key', 'bearer_token', 'basic_auth'],
           heir_orbt_compliant: true,
-          performance_caching: true
+          performance_caching: true,
+          lovable_integration: true
         }
       };
 
@@ -330,6 +599,14 @@ class ComposioHandler {
         return await this.manage_connected_account(payload);
       case 'get_composio_stats':
         return await this.get_composio_stats(payload);
+      case 'lovable_create_project':
+        return await this.lovable_create_project(payload);
+      case 'lovable_get_project_status':
+        return await this.lovable_get_project_status(payload);
+      case 'lovable_get_project_details':
+        return await this.lovable_get_project_details(payload);
+      case 'lovable_scaffold_altitude_ui':
+        return await this.lovable_scaffold_altitude_ui(payload);
       default:
         return {
           success: false,
@@ -338,7 +615,11 @@ class ComposioHandler {
             'execute_composio_tool', 
             'get_available_tools', 
             'manage_connected_account', 
-            'get_composio_stats'
+            'get_composio_stats',
+            'lovable_create_project',
+            'lovable_get_project_status', 
+            'lovable_get_project_details',
+            'lovable_scaffold_altitude_ui'
           ]
         };
     }
