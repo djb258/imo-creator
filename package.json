@@ -70,6 +70,9 @@
     "outreach:install": "npm install express cors pg dotenv ajv ajv-formats"
   },
   "dependencies": {
+    "@builder.io/cli": "^1.2.10",
+    "@builder.io/dev-tools": "^1.11.21",
+    "@builder.io/sdk": "^6.1.2",
     "@clerk/nextjs": "^6.31.4",
     "@clerk/themes": "^2.4.13",
     "@google-cloud/bigquery": "^8.1.1",

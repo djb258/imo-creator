@@ -251,6 +251,197 @@
           }
         }
       }
+    },
+    {
+      "name": "builder_io_create_space",
+      "description": "Create a new Builder.io space for organizing content models",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the space to create"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the space"
+          },
+          "organization_id": {
+            "type": "string",
+            "description": "Organization ID to create space in"
+          }
+        },
+        "required": ["name"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "description": "Created space identifier"
+          },
+          "space_name": {
+            "type": "string",
+            "description": "Name of the created space"
+          }
+        }
+      }
+    },
+    {
+      "name": "builder_io_create_model",
+      "description": "Create a content model within a Builder.io space",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "description": "Space ID to create model in"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the content model"
+          },
+          "model_type": {
+            "type": "string",
+            "enum": ["page", "section", "data"],
+            "description": "Type of content model",
+            "default": "page"
+          },
+          "schema": {
+            "type": "object",
+            "description": "Schema definition for the content model"
+          }
+        },
+        "required": ["space_id", "name"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "type": "string",
+            "description": "Created model identifier"
+          },
+          "model_name": {
+            "type": "string",
+            "description": "Name of the created model"
+          }
+        }
+      }
+    },
+    {
+      "name": "builder_io_create_content",
+      "description": "Create content within a Builder.io model",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "description": "Space ID containing the model"
+          },
+          "model_id": {
+            "type": "string",
+            "description": "Model ID to create content in"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the content entry"
+          },
+          "data": {
+            "type": "object",
+            "description": "Content data matching the model schema"
+          },
+          "published": {
+            "type": "boolean",
+            "description": "Whether to publish the content immediately",
+            "default": false
+          }
+        },
+        "required": ["space_id", "model_id", "name", "data"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "content_id": {
+            "type": "string",
+            "description": "Created content identifier"
+          },
+          "content_name": {
+            "type": "string",
+            "description": "Name of the created content"
+          }
+        }
+      }
+    },
+    {
+      "name": "builder_io_scaffold_altitude_cms",
+      "description": "Create Builder.io CMS structure based on CTB/Altitude specifications from this repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "description": "Builder.io space ID to create models in"
+          },
+          "framework": {
+            "type": "string",
+            "description": "Target framework for the CMS (nextjs, react, vue)",
+            "default": "nextjs"
+          }
+        },
+        "required": ["space_id"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "created_models": {
+            "type": "array",
+            "description": "List of altitude-level models created"
+          },
+          "ctb_integration": {
+            "type": "object",
+            "description": "Details about CTB/Altitude specifications used"
+          },
+          "schema_used": {
+            "type": "object",
+            "description": "Schema template used for the models"
+          }
+        }
+      }
+    },
+    {
+      "name": "builder_io_get_content",
+      "description": "Retrieve content from a Builder.io model",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "description": "Space ID containing the content"
+          },
+          "model_id": {
+            "type": "string",
+            "description": "Model ID to get content from"
+          },
+          "content_id": {
+            "type": "string",
+            "description": "Optional specific content ID to retrieve"
+          }
+        },
+        "required": ["space_id", "model_id"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "description": "Array of content entries"
+          },
+          "total_count": {
+            "type": "number",
+            "description": "Total number of content entries"
+          }
+        }
+      }
     }
   ],
   "manifest": {
@@ -291,7 +482,7 @@
       "hubspot", "salesforce", "discord", "linear", "jira",
       "google_calendar", "google_drive", "dropbox", "asana",
       "trello", "monday", "clickup", "zendesk", "intercom",
-      "lovable"
+      "lovable", "builder_io"
     ],
     "authentication_methods": [
       "oauth2", "api_key", "bearer_token", "basic_auth"

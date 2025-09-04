@@ -459,6 +459,347 @@ Requirements:
     }
   }
 
+  async builder_io_create_space(payload) {
+    try {
+      const { name, description, organization_id } = payload.data;
+      
+      console.log('🏗️ Creating Builder.io space via Composio');
+      
+      const result = await this.composio.tools.execute('BUILDER_IO_CREATE_SPACE', {
+        parameters: {
+          name,
+          description,
+          organizationId: organization_id
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          builder_metadata: {
+            space_name: name,
+            description,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'builder_io_create_space',
+          external_service: 'builder.io',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'builder_io_create_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'builder_io_create_space',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async builder_io_create_model(payload) {
+    try {
+      const { space_id, name, model_type = 'page', schema } = payload.data;
+      
+      console.log(`🏗️ Creating Builder.io ${model_type} model: ${name}`);
+      
+      const result = await this.composio.tools.execute('BUILDER_IO_CREATE_MODEL', {
+        parameters: {
+          spaceId: space_id,
+          name,
+          type: model_type,
+          schema
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          builder_metadata: {
+            model_name: name,
+            model_type,
+            space_id,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'builder_io_create_model',
+          external_service: 'builder.io',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'builder_io_model_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'builder_io_create_model',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async builder_io_create_content(payload) {
+    try {
+      const { space_id, model_id, name, data, published = false } = payload.data;
+      
+      console.log('🎨 Creating Builder.io content via Composio');
+      
+      const result = await this.composio.tools.execute('BUILDER_IO_CREATE_CONTENT', {
+        parameters: {
+          spaceId: space_id,
+          modelId: model_id,
+          name,
+          data,
+          published
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          builder_metadata: {
+            content_name: name,
+            model_id,
+            space_id,
+            published,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'builder_io_create_content',
+          external_service: 'builder.io',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'builder_io_content_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'builder_io_create_content',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async builder_io_scaffold_altitude_cms(payload) {
+    try {
+      const { space_id, framework = 'nextjs' } = payload.data;
+      
+      // Read CTB/Altitude specifications
+      const ctbSpecs = this.readCTBSpecs();
+      
+      console.log('🏗️ Scaffolding Builder.io CMS from CTB/Altitude specs');
+      
+      // Create models for each altitude level
+      const altitudeModels = [
+        { name: 'strategic_30k', level: '30k', description: 'Strategic overview and executive dashboards' },
+        { name: 'operational_20k', level: '20k', description: 'Operational processes and workflow management' },
+        { name: 'tactical_10k', level: '10k', description: 'Tactical forms and detailed user interactions' },
+        { name: 'execution_5k', level: '5k', description: 'Execution-level components and API integration' }
+      ];
+
+      // Create schema for CTB-based content models
+      const ctbSchema = {
+        fields: [
+          {
+            name: 'title',
+            type: 'string',
+            required: true,
+            helperText: 'Page title for this altitude level'
+          },
+          {
+            name: 'description', 
+            type: 'longText',
+            helperText: 'Description of processes at this altitude'
+          },
+          {
+            name: 'components',
+            type: 'list',
+            subFields: [
+              {
+                name: 'component_type',
+                type: 'string',
+                enum: ['dashboard', 'form', 'chart', 'table', 'workflow']
+              },
+              {
+                name: 'component_data',
+                type: 'object'
+              }
+            ]
+          },
+          {
+            name: 'navigation_links',
+            type: 'list',
+            subFields: [
+              {
+                name: 'label',
+                type: 'string'
+              },
+              {
+                name: 'url',
+                type: 'string'
+              },
+              {
+                name: 'altitude_level',
+                type: 'string'
+              }
+            ]
+          }
+        ]
+      };
+
+      // Create models via Composio
+      const modelResults = [];
+      for (const model of altitudeModels) {
+        try {
+          const modelResult = await this.composio.tools.execute('BUILDER_IO_CREATE_MODEL', {
+            parameters: {
+              spaceId: space_id,
+              name: model.name,
+              type: 'page',
+              schema: ctbSchema
+            },
+            entityId: payload.process_id
+          });
+          modelResults.push({ ...model, result: modelResult });
+        } catch (error) {
+          console.error(`Failed to create model ${model.name}:`, error);
+        }
+      }
+
+      return {
+        success: true,
+        result: {
+          space_id,
+          framework,
+          created_models: modelResults,
+          ctb_integration: true,
+          schema_used: ctbSchema,
+          builder_metadata: {
+            scaffold_type: 'altitude_cms',
+            framework,
+            altitude_models: altitudeModels.length,
+            based_on_ctb_specs: true,
+            created_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'builder_io_scaffold_altitude_cms',
+          external_service: 'builder.io',
+          ctb_integration: true,
+          models_created: modelResults.length,
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'builder_io_scaffold_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'builder_io_scaffold_altitude_cms',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
+  async builder_io_get_content(payload) {
+    try {
+      const { space_id, model_id, content_id } = payload.data;
+      
+      console.log(`📋 Getting Builder.io content: ${content_id || 'all'}`);
+      
+      const result = await this.composio.tools.execute('BUILDER_IO_GET_CONTENT', {
+        parameters: {
+          spaceId: space_id,
+          modelId: model_id,
+          contentId: content_id
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          ...result,
+          builder_metadata: {
+            space_id,
+            model_id,
+            content_id,
+            fetched_at: new Date().toISOString(),
+            via_composio: true
+          }
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          operation: 'builder_io_get_content',
+          external_service: 'builder.io',
+          timestamp: new Date().toISOString()
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        error_type: 'builder_io_get_content_error',
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          error_occurred: true,
+          operation: 'builder_io_get_content',
+          timestamp: new Date().toISOString()
+        }
+      };
+    }
+  }
+
   // Helper method to read CTB/Altitude specifications
   readCTBSpecs() {
     const fs = require('fs');
@@ -523,7 +864,8 @@ Requirements:
           authentication_methods: ['oauth2', 'api_key', 'bearer_token', 'basic_auth'],
           heir_orbt_compliant: true,
           performance_caching: true,
-          lovable_integration: true
+          lovable_integration: true,
+          builder_io_integration: true
         }
       };
 
@@ -607,6 +949,16 @@ Requirements:
         return await this.lovable_get_project_details(payload);
       case 'lovable_scaffold_altitude_ui':
         return await this.lovable_scaffold_altitude_ui(payload);
+      case 'builder_io_create_space':
+        return await this.builder_io_create_space(payload);
+      case 'builder_io_create_model':
+        return await this.builder_io_create_model(payload);
+      case 'builder_io_create_content':
+        return await this.builder_io_create_content(payload);
+      case 'builder_io_scaffold_altitude_cms':
+        return await this.builder_io_scaffold_altitude_cms(payload);
+      case 'builder_io_get_content':
+        return await this.builder_io_get_content(payload);
       default:
         return {
           success: false,
@@ -619,7 +971,12 @@ Requirements:
             'lovable_create_project',
             'lovable_get_project_status', 
             'lovable_get_project_details',
-            'lovable_scaffold_altitude_ui'
+            'lovable_scaffold_altitude_ui',
+            'builder_io_create_space',
+            'builder_io_create_model',
+            'builder_io_create_content',
+            'builder_io_scaffold_altitude_cms',
+            'builder_io_get_content'
           ]
         };
     }

@@ -76,7 +76,7 @@ app.get('/mcp/capabilities', (req, res) => {
           'hubspot', 'salesforce', 'discord', 'linear', 'jira',
           'google_calendar', 'google_drive', 'dropbox', 'asana',
           'trello', 'monday', 'clickup', 'zendesk', 'intercom',
-          'lovable'
+          'lovable', 'builder_io'
         ]
       },
       {
@@ -85,6 +85,14 @@ app.get('/mcp/capabilities', (req, res) => {
         capabilities: [
           'create_project', 'get_project_status', 'get_project_details',
           'scaffold_altitude_ui (CTB/Altitude integration)'
+        ]
+      },
+      {
+        name: 'Builder.io Visual CMS',
+        description: 'Create and manage content models and visual content via Builder.io',
+        capabilities: [
+          'create_space', 'create_model', 'create_content', 'get_content',
+          'scaffold_altitude_cms (CTB/Altitude CMS integration)'
         ]
       },
       {
