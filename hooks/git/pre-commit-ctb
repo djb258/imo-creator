@@ -1,0 +1,18 @@
+#!/bin/bash
+# Git pre-commit hook: Regenerate CTB if spec changed
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# Check if spec files changed
+if git diff --cached --name-only | grep -E "spec/process_map\.(yaml|json)$|tools/generate_ctb\.py$" > /dev/null; then
+    echo "[GIT] CTB spec changed, regenerating docs..."
+    
+    if [ -f "$REPO_ROOT/tools/generate_ctb.py" ]; then
+        cd "$REPO_ROOT"
+        python3 tools/generate_ctb.py spec/process_map.yaml 2>/dev/null || \
+        python3 tools/generate_ctb.py spec/process_map.json
+        
+        # Stage the updated docs
+        git add docs/ ui-build/ 2>/dev/null || true
+        echo "[GIT] ✓ CTB docs regenerated and staged"
+    fi
+fi

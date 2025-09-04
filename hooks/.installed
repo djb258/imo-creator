@@ -1,0 +1,13 @@
+Installation completed: Thu, Sep  4, 2025  8:03:19 AM
+Hooks directory: /c/Users/CUSTOM PC/Desktop/Cursor Builds/scraping-tool/imo-creator/hooks
+Version: 1.0.0
+
+Installed hooks:
+✓ garage-mcp/pre-process.sh
+✓ garage-mcp/post-process.sh  
+✓ imo-factory/new-project.sh
+✓ git/pre-commit-ctb
+
+Integration scripts:
+✓ factory/auto_seed_ctb.py
+✓ factory/garage_mcp_integration.py
