@@ -9,25 +9,26 @@
     "test": "echo \"Add tests here\" && exit 0"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@composio/core": "^0.1.48",
     "cors": "^2.8.5",
-    "@composio/core": "^3.0.0"
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
   "keywords": [
-    "mcp", 
-    "server", 
-    "composio", 
-    "ai-agents", 
+    "mcp",
+    "server",
+    "composio",
+    "ai-agents",
     "integration-platform",
     "github",
-    "gmail", 
+    "gmail",
     "slack",
     "external-services",
-    "heir", 
-    "orbt", 
+    "heir",
+    "orbt",
     "compliance"
   ],
   "author": "MCP Generator",

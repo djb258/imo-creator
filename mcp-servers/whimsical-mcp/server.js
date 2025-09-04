@@ -29,7 +29,7 @@ setupKillSwitch(app);
 
 // Setup health checking
 setupHealthChecking(app, {
-    'whimsical-updater': whimsicalTool
+    'whimsical-updater': tool
 });
 
 // Main MCP endpoint

@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Scrape Contract",
+  "description": "Contract for web scraping adapter - defines input/output schema",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "company_name": {
+          "type": "string",
+          "description": "Name of the company to scrape for executive contacts"
+        },
+        "target_roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["CEO", "CFO", "HR"]
+          },
+          "description": "Roles to search for at the company"
+        },
+        "domain": {
+          "type": "string",
+          "format": "hostname",
+          "description": "Company domain to focus scraping on"
+        },
+        "max_results": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 10,
+          "description": "Maximum number of contacts to return per role"
+        }
+      },
+      "required": ["company_name", "target_roles"]
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the scraping operation succeeded"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "full_name": {
+                "type": "string",
+                "description": "Full name of the contact"
+              },
+              "title": {
+                "type": "string",
+                "description": "Job title/position"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Email address if found"
+              },
+              "phone": {
+                "type": ["string", "null"],
+                "description": "Phone number if found"
+              },
+              "role_code": {
+                "type": "string",
+                "enum": ["CEO", "CFO", "HR"],
+                "description": "Mapped role code"
+              },
+              "confidence_score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Confidence in the accuracy of this contact data"
+              },
+              "source_url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL where this contact was found"
+              }
+            },
+            "required": ["full_name", "title", "role_code", "confidence_score"]
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "scraped_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when scraping was performed"
+            },
+            "scrape_duration_ms": {
+              "type": "integer",
+              "description": "Duration of scraping operation in milliseconds"
+            },
+            "pages_scraped": {
+              "type": "integer",
+              "description": "Number of pages scraped"
+            },
+            "total_contacts_found": {
+              "type": "integer",
+              "description": "Total contacts found before filtering"
+            }
+          }
+        },
+        "error": {
+          "type": ["object", "null"],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code for failed operations"
+            },
+            "message": {
+              "type": "string",
+              "description": "Human-readable error message"
+            }
+          }
+        }
+      },
+      "required": ["success"]
+    }
+  },
+  "required": ["request", "response"]
+}

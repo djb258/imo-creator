@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Verify Contract",
+  "description": "Contract for email verification adapter - validates email addresses",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "emails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "integer",
+                "description": "Database ID of the contact"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Email address to verify"
+              },
+              "full_name": {
+                "type": "string",
+                "description": "Full name for context (optional)"
+              }
+            },
+            "required": ["contact_id", "email"]
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "Batch of emails to verify"
+        },
+        "verification_level": {
+          "type": "string",
+          "enum": ["basic", "detailed"],
+          "default": "basic",
+          "description": "Level of verification to perform"
+        }
+      },
+      "required": ["emails"]
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the verification operation succeeded"
+        },
+        "verified_emails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "integer",
+                "description": "Database ID of the contact"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Email address that was verified"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["green", "yellow", "red", "gray"],
+                "description": "Verification status: green=valid, yellow=risky, red=invalid, gray=unknown"
+              },
+              "confidence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Confidence percentage in the verification result"
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "syntax_valid": {
+                    "type": "boolean",
+                    "description": "Whether email syntax is valid"
+                  },
+                  "domain_exists": {
+                    "type": "boolean",
+                    "description": "Whether the domain exists"
+                  },
+                  "mx_record_exists": {
+                    "type": "boolean",
+                    "description": "Whether MX records exist for domain"
+                  },
+                  "is_deliverable": {
+                    "type": ["boolean", "null"],
+                    "description": "Whether email is likely deliverable"
+                  },
+                  "is_disposable": {
+                    "type": "boolean",
+                    "description": "Whether email is from a disposable email service"
+                  },
+                  "is_role_account": {
+                    "type": "boolean",
+                    "description": "Whether email appears to be a role-based account"
+                  }
+                }
+              },
+              "risk_score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Risk score from 0 (safe) to 1 (high risk)"
+              },
+              "verified_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp when verification was performed"
+              }
+            },
+            "required": ["contact_id", "email", "status", "confidence", "verified_at"]
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "total_processed": {
+              "type": "integer",
+              "description": "Total number of emails processed"
+            },
+            "processing_duration_ms": {
+              "type": "integer",
+              "description": "Duration of verification operation in milliseconds"
+            },
+            "credits_used": {
+              "type": "integer",
+              "description": "API credits consumed (if applicable)"
+            },
+            "provider": {
+              "type": "string",
+              "description": "Verification service provider used"
+            }
+          }
+        },
+        "error": {
+          "type": ["object", "null"],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code for failed operations"
+            },
+            "message": {
+              "type": "string",
+              "description": "Human-readable error message"
+            }
+          }
+        }
+      },
+      "required": ["success"]
+    }
+  },
+  "required": ["request", "response"]
+}

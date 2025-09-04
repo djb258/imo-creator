@@ -1,0 +1,308 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Neon Database Contract",
+  "description": "Contract for Neon PostgreSQL database adapter - handles contact storage operations",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": ["insert_contacts", "update_verification", "get_contacts", "assign_slots", "bulk_update"],
+          "description": "Database operation to perform"
+        },
+        "data": {
+          "oneOf": [
+            {
+              "title": "Insert Contacts",
+              "type": "object",
+              "properties": {
+                "contacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "full_name": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email"
+                      },
+                      "phone": {
+                        "type": ["string", "null"]
+                      },
+                      "company_id": {
+                        "type": ["integer", "null"]
+                      },
+                      "role_code": {
+                        "type": "string",
+                        "enum": ["CEO", "CFO", "HR"]
+                      }
+                    },
+                    "required": ["full_name", "title", "email", "role_code"]
+                  }
+                }
+              },
+              "required": ["contacts"]
+            },
+            {
+              "title": "Update Verification",
+              "type": "object",
+              "properties": {
+                "verification_updates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contact_id": {
+                        "type": "integer"
+                      },
+                      "email_status": {
+                        "type": "string",
+                        "enum": ["green", "yellow", "red", "gray"]
+                      },
+                      "email_confidence": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "email_source_url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["contact_id", "email_status"]
+                  }
+                }
+              },
+              "required": ["verification_updates"]
+            },
+            {
+              "title": "Get Contacts",
+              "type": "object",
+              "properties": {
+                "filters": {
+                  "type": "object",
+                  "properties": {
+                    "company_id": {
+                      "type": "integer"
+                    },
+                    "role_code": {
+                      "type": "string",
+                      "enum": ["CEO", "CFO", "HR"]
+                    },
+                    "email_status": {
+                      "type": "string",
+                      "enum": ["green", "yellow", "red", "gray"]
+                    },
+                    "verified_only": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 100
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 0
+                }
+              }
+            },
+            {
+              "title": "Assign Slots",
+              "type": "object",
+              "properties": {
+                "slot_assignments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "company_id": {
+                        "type": "integer"
+                      },
+                      "role_code": {
+                        "type": "string",
+                        "enum": ["CEO", "CFO", "HR"]
+                      },
+                      "contact_id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": ["company_id", "role_code", "contact_id"]
+                  }
+                }
+              },
+              "required": ["slot_assignments"]
+            }
+          ]
+        }
+      },
+      "required": ["operation", "data"]
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the database operation succeeded"
+        },
+        "data": {
+          "oneOf": [
+            {
+              "title": "Insert Result",
+              "type": "object",
+              "properties": {
+                "inserted_contacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contact_id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "total_inserted": {
+                  "type": "integer"
+                },
+                "duplicates_skipped": {
+                  "type": "integer"
+                }
+              }
+            },
+            {
+              "title": "Query Result",
+              "type": "object",
+              "properties": {
+                "contacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contact_id": {
+                        "type": "integer"
+                      },
+                      "full_name": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": ["string", "null"]
+                      },
+                      "email_status": {
+                        "type": ["string", "null"]
+                      },
+                      "email_confidence": {
+                        "type": ["integer", "null"]
+                      },
+                      "company_id": {
+                        "type": ["integer", "null"]
+                      },
+                      "role_code": {
+                        "type": ["string", "null"]
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                },
+                "total_count": {
+                  "type": "integer"
+                },
+                "has_more": {
+                  "type": "boolean"
+                }
+              }
+            },
+            {
+              "title": "Update Result",
+              "type": "object",
+              "properties": {
+                "updated_count": {
+                  "type": "integer"
+                },
+                "failed_updates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contact_id": {
+                        "type": "integer"
+                      },
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "execution_time_ms": {
+              "type": "integer",
+              "description": "Query execution time in milliseconds"
+            },
+            "connection_pool_info": {
+              "type": "object",
+              "properties": {
+                "active_connections": {
+                  "type": "integer"
+                },
+                "idle_connections": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "error": {
+          "type": ["object", "null"],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Database error code"
+            },
+            "message": {
+              "type": "string",
+              "description": "Human-readable error message"
+            },
+            "sql_state": {
+              "type": "string",
+              "description": "PostgreSQL SQLSTATE error code"
+            }
+          }
+        }
+      },
+      "required": ["success"]
+    }
+  },
+  "required": ["request", "response"]
+}

@@ -4,8 +4,7 @@ class ComposioHandler {
   constructor() {
     this.composio = new Composio({
       apiKey: process.env.COMPOSIO_API_KEY,
-      baseURL: process.env.COMPOSIO_BASE_URL,
-      allowTracking: process.env.COMPOSIO_DISABLE_TELEMETRY !== 'true'
+      baseURL: process.env.COMPOSIO_BASE_URL || 'https://backend.composio.dev'
     });
     
     // Cache for tools and accounts
@@ -30,8 +29,8 @@ class ComposioHandler {
       
       // Execute tool via Composio SDK
       const result = await this.composio.tools.execute(toolName, {
-        userId: user_id || payload.process_id,
-        arguments: toolArgs
+        parameters: toolArgs,
+        entityId: user_id || payload.process_id
       });
 
       return {
