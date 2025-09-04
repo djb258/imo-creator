@@ -1,0 +1,135 @@
+---
+meta:
+  project: "IMO Creator"
+  version: "2025-09-04"
+  doctrine: ["ORBT", "STAMPED/SPVPET/STACKED", "Barton"]
+  owner: "Dave"
+ctb:
+  star: "⭐ Outreach & Doctrine System (40k Star)"
+  nodes:
+    - id: "node1"
+      label: "Node 1 — Company + People DB + PLE"
+    - id: "node2"
+      label: "Node 2 — Enrichment & Validation"
+    - id: "node3"
+      label: "Node 3 — Campaigns & Messaging"
+    - id: "node4"
+      label: "Node 4 — Compliance & Promotion"
+  order: ["node1","node2","node3","node4"]
+
+databases:
+  - name: "Neon"
+    role: "Vault (STAMPED)"
+    schemas:
+      - name: "shq"
+        tables:
+          - name: "dpr_doctrine"
+            id: "01.dpr.0001"
+          - name: "process_structure"
+            id: "01.proc.0001"
+      - name: "marketing"
+        tables:
+          - name: "company"
+            id: "04.co.0001"
+          - name: "people"
+            id: "04.pe.0001"
+          - name: "ple_slot"
+            id: "04.ple.0001"
+  - name: "Firebase"
+    role: "Working memory (SPVPET)"
+    collections:
+      - name: "agent_task"
+      - name: "agents_whiteboard"
+      - name: "error_log"
+  - name: "BigQuery"
+    role: "Analytics (STACKED)"
+    datasets:
+      - name: "outreach_analytics"
+        tables: ["events", "email_perf", "leads_funnel"]
+
+tools:
+  - name: "Lovable.dev"
+    purpose: "UI scaffolding + prompt workbench"
+  - name: "Cursor"
+    purpose: "Dev + repo automation"
+  - name: "Render Endpoint"
+    purpose: "API router (/ingest, /validate, /promote)"
+  - name: "Looker"
+    purpose: "Dashboards + oversight"
+
+mcps:
+  - name: "Apify MCP"
+    port: 3002
+    ops: ["run_actor","scrape_url","get_dataset","list_actors"]
+  - name: "Playwright MCP"
+    port: 3010
+    ops: ["browser_automation","capture"]
+  - name: "Garage-MCP"
+    port: 7001
+    ops: ["fs.read","exec.run","git.diff","heir.check"]
+
+altitudes:
+  a30k:
+    title: "30,000 ft — Strategic View"
+    summary: "End-to-end overview: inputs → orchestrators → enforcement → outputs."
+    lanes:
+      - name: "Inputs"
+        items: ["Apollo CSV / Ingestor", "Apify Scrapers", "Manual Form (Lovable)"]
+      - name: "Orchestration"
+        items: ["Mindpal Agents", "Render/Deerflow Endpoint", "Blueprint Registry"]
+      - name: "Enforcement"
+        items: ["Barton Doctrine validators", "STAMPED/SPVPET/STACKED", "Error Log / Mantis"]
+      - name: "Stores"
+        items: ["Firebase (working memory)", "Neon (vault)", "BigQuery (analytics)"]
+      - name: "Outputs"
+        items: ["Outreach Engine", "Looker/Lovable Dashboards", "Docs & Diagrams"]
+  a20k:
+    title: "20,000 ft — Operational Design"
+    stages:
+      - "Company & People DB + PLE slotting"
+      - "Enrichment & Validation (emails, EIN, roles)"
+      - "Campaign Assembly (cadence, tone, sniper/broad)"
+      - "Compliance & Promotion gates"
+    roles:
+      - "Owner: Dave"
+      - "Gatekeeper: Neon Validator Agent"
+      - "Builder: Lovable UI + Cursor"
+      - "Router: Make/Zapier/Render"
+  a10k:
+    title: "10,000 ft — Tactical System Flow"
+    steps:
+      - "S1: Ingest companies → assign company_unique_id"
+      - "S2: Slot CFO/CEO/HR → link people_unique_id"
+      - "S3: Enrich via Apify → validate email (MillionVerify)"
+      - "S4: Write to Firebase (SPVPET) → validate → promote to Neon (STAMPED)"
+      - "S5: Prepare campaigns → push to Instantly/HeyReach"
+      - "S6: Track outcomes → dashboards → feedback loop"
+    decisions:
+      - "Email valid?"
+      - "Doctrine pass?"
+      - "Auto-promote flagged?"
+  a5k:
+    title: "5,000 ft — Execution Details"
+    apis:
+      - "Render: /ingest, /validate, /promote"
+      - "Firebase collections: agent_task, agents_whiteboard, error_log"
+      - "Neon schemas: shq, marketing, clnt, dpr"
+    contracts:
+      - "Idempotency-Key required on write endpoints"
+      - "unique_id + process_id required in payloads"
+      - "Blueprint_version_hash + agent_execution_signature logged"
+    guardrails:
+      - "No direct Neon writes (gatekeeper only)"
+      - "TTL on Firebase whiteboard"
+      - "Auto-promote only if blueprint flag set"
+
+flows:
+  - from: "Apollo CSV"
+    to: "Ingestor → Firebase.agent_task"
+  - from: "Apify Scrapers"
+    to: "Enrichment → Firebase.agents_whiteboard"
+  - from: "Firebase (validated)"
+    to: "Neon.marketing.company / people / ple_slot"
+  - from: "Neon.vault"
+    to: "Campaign Engine → Instantly/HeyReach"
+---

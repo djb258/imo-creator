@@ -1,0 +1,56 @@
+name: Auto-regenerate CTB docs
+
+on:
+  push:
+    paths:
+      - 'spec/process_map.yaml'
+      - 'spec/process_map.json'
+      - 'tools/generate_ctb.py'
+  pull_request:
+    paths:
+      - 'spec/process_map.yaml'  
+      - 'spec/process_map.json'
+      - 'tools/generate_ctb.py'
+
+jobs:
+  regenerate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install PyYAML (optional)
+        run: pip install pyyaml
+        continue-on-error: true
+        
+      - name: Generate CTB docs
+        run: python tools/generate_ctb.py spec/process_map.yaml
+        
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet docs/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Commit regenerated docs
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "docs: auto-regenerate CTB and altitude pages
+          
+          Generated from spec changes in ${{ github.sha }}
+          
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+          "
+          git push
