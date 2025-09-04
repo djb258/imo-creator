@@ -76,7 +76,7 @@ app.get('/mcp/capabilities', (req, res) => {
           'hubspot', 'salesforce', 'discord', 'linear', 'jira',
           'google_calendar', 'google_drive', 'dropbox', 'asana',
           'trello', 'monday', 'clickup', 'zendesk', 'intercom',
-          'lovable', 'builder_io'
+          'lovable', 'builder_io', 'figma'
         ]
       },
       {
@@ -93,6 +93,16 @@ app.get('/mcp/capabilities', (req, res) => {
         capabilities: [
           'create_space', 'create_model', 'create_content', 'get_content',
           'scaffold_altitude_cms (CTB/Altitude CMS integration)'
+        ]
+      },
+      {
+        name: 'Figma Design Tools',
+        description: 'Export designs to code and sync with repository via Figma integration',
+        capabilities: [
+          'export_to_code (React/Vue/Angular generation)',
+          'create_design_system',
+          'sync_components',
+          'scaffold_from_altitude (CTB/Altitude integration)'
         ]
       },
       {

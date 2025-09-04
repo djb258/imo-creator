@@ -959,6 +959,14 @@ Requirements:
         return await this.builder_io_scaffold_altitude_cms(payload);
       case 'builder_io_get_content':
         return await this.builder_io_get_content(payload);
+      case 'figma_export_to_code':
+        return await this.figma_export_to_code(payload);
+      case 'figma_create_design_system':
+        return await this.figma_create_design_system(payload);
+      case 'figma_sync_components':
+        return await this.figma_sync_components(payload);
+      case 'figma_scaffold_from_altitude':
+        return await this.figma_scaffold_from_altitude(payload);
       default:
         return {
           success: false,
@@ -976,9 +984,208 @@ Requirements:
             'builder_io_create_model',
             'builder_io_create_content',
             'builder_io_scaffold_altitude_cms',
-            'builder_io_get_content'
+            'builder_io_get_content',
+            'figma_export_to_code',
+            'figma_create_design_system',
+            'figma_sync_components',
+            'figma_scaffold_from_altitude'
           ]
         };
+    }
+  }
+
+  // Figma Design Tools
+  async figma_export_to_code(payload) {
+    try {
+      const { fileKey, nodeIds, framework = 'react', outputFormat = 'tsx' } = payload.data;
+
+      // Mock: In production, would connect through Composio's Figma integration
+      const mockResult = {
+        components: [
+          {
+            name: 'Button',
+            code: `export const Button = ({ children, onClick }) => (\n  <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={onClick}>\n    {children}\n  </button>\n)`,
+            figma_node_id: nodeIds?.[0] || 'mock-node-id'
+          }
+        ],
+        styles: {
+          css: '.button { padding: 8px 16px; }',
+          tailwind_classes: 'px-4 py-2 bg-blue-500 text-white rounded'
+        },
+        framework,
+        outputFormat
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'figma',
+          method: 'export_to_code',
+          cached: false
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'figma_export_to_code', payload);
+    }
+  }
+
+  async figma_create_design_system(payload) {
+    try {
+      const { name, description, baseComponents = [], colorPalette, typography } = payload.data;
+
+      // Mock: Would create design system in Figma via Composio
+      const mockResult = {
+        design_system_id: `ds-${Date.now()}`,
+        name,
+        description,
+        figma_file_url: `https://figma.com/file/mock-${Date.now()}/${name.replace(/\s+/g, '-')}`,
+        components_created: baseComponents.length || 10,
+        styles_created: {
+          colors: colorPalette ? Object.keys(colorPalette).length : 8,
+          typography: typography ? Object.keys(typography).length : 6
+        }
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'figma',
+          method: 'create_design_system'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'figma_create_design_system', payload);
+    }
+  }
+
+  async figma_sync_components(payload) {
+    try {
+      const { sourceFileKey, targetRepo, syncMode = 'one-way', componentFilter } = payload.data;
+
+      // Mock: Would sync Figma components to code repository
+      const mockResult = {
+        sync_id: `sync-${Date.now()}`,
+        source_file: sourceFileKey,
+        target_repository: targetRepo,
+        components_synced: [
+          { name: 'Header', status: 'synced', changes: ['color', 'spacing'] },
+          { name: 'Footer', status: 'synced', changes: ['typography'] },
+          { name: 'Card', status: 'synced', changes: ['border-radius'] }
+        ],
+        sync_mode: syncMode,
+        timestamp: new Date().toISOString()
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'figma',
+          method: 'sync_components'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'figma_sync_components', payload);
+    }
+  }
+
+  async figma_scaffold_from_altitude(payload) {
+    try {
+      const { framework = 'figma' } = payload.data;
+      
+      // Read CTB/Altitude specifications
+      const ctbSpecs = this.readCTBSpecs();
+      
+      // Create Figma design structure from CTB specs
+      const figmaStructure = {
+        pages: [
+          {
+            name: '30k - Strategic',
+            frames: this.parseAltitudeLevel(ctbSpecs.altitude_30k, 'strategic')
+          },
+          {
+            name: '20k - Operational',
+            frames: this.parseAltitudeLevel(ctbSpecs.altitude_20k, 'operational')
+          },
+          {
+            name: '10k - Tactical',
+            frames: this.parseAltitudeLevel(ctbSpecs.altitude_10k, 'tactical')
+          },
+          {
+            name: '5k - Execution',
+            frames: this.parseAltitudeLevel(ctbSpecs.altitude_5k, 'execution')
+          }
+        ],
+        components: [
+          'NavigationTree',
+          'ProcessFlow',
+          'DataCatalog',
+          'ToolInventory'
+        ],
+        design_tokens: {
+          colors: {
+            strategic: '#1E40AF',
+            operational: '#059669',
+            tactical: '#DC2626',
+            execution: '#7C3AED'
+          },
+          spacing: {
+            xs: '4px',
+            sm: '8px',
+            md: '16px',
+            lg: '24px',
+            xl: '32px'
+          }
+        }
+      };
+
+      // Mock: Would create Figma file structure via Composio
+      const mockResult = {
+        figma_file_id: `figma-ctb-${Date.now()}`,
+        figma_file_url: `https://figma.com/file/mock-ctb-${Date.now()}/CTB-Altitude-Design`,
+        pages_created: figmaStructure.pages.length,
+        components_created: figmaStructure.components.length,
+        design_tokens_applied: true,
+        ctb_integration: {
+          process_map_loaded: !!ctbSpecs.process_map,
+          altitude_levels_created: 4,
+          catalog_imported: !!ctbSpecs.catalog
+        }
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        figma_structure: figmaStructure,
+        composio_metadata: {
+          service: 'figma',
+          method: 'scaffold_from_altitude'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'figma_scaffold_from_altitude', payload);
     }
   }
 }

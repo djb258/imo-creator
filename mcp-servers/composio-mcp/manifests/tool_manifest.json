@@ -442,6 +442,171 @@
           }
         }
       }
+    },
+    {
+      "name": "figma_export_to_code",
+      "description": "Export Figma designs to React/Vue/Angular code via Composio integration",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "fileKey": {
+            "type": "string",
+            "description": "Figma file key from the URL"
+          },
+          "nodeIds": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Specific node IDs to export"
+          },
+          "framework": {
+            "type": "string",
+            "enum": ["react", "vue", "angular", "svelte"],
+            "description": "Target framework for code generation",
+            "default": "react"
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": ["jsx", "tsx", "vue", "ts"],
+            "description": "Output file format",
+            "default": "tsx"
+          }
+        },
+        "required": ["fileKey"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "components": {
+            "type": "array",
+            "description": "Generated component code"
+          },
+          "styles": {
+            "type": "object",
+            "description": "Associated styles (CSS, Tailwind, etc.)"
+          }
+        }
+      }
+    },
+    {
+      "name": "figma_create_design_system",
+      "description": "Create a complete design system in Figma from specifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the design system"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the design system"
+          },
+          "baseComponents": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of base components to create"
+          },
+          "colorPalette": {
+            "type": "object",
+            "description": "Color palette definitions"
+          },
+          "typography": {
+            "type": "object",
+            "description": "Typography scale and styles"
+          }
+        },
+        "required": ["name"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "design_system_id": {
+            "type": "string",
+            "description": "Created design system identifier"
+          },
+          "figma_file_url": {
+            "type": "string",
+            "description": "URL to the Figma file"
+          }
+        }
+      }
+    },
+    {
+      "name": "figma_sync_components",
+      "description": "Sync Figma components with code repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "sourceFileKey": {
+            "type": "string",
+            "description": "Source Figma file key"
+          },
+          "targetRepo": {
+            "type": "string",
+            "description": "Target repository path"
+          },
+          "syncMode": {
+            "type": "string",
+            "enum": ["one-way", "two-way"],
+            "description": "Synchronization mode",
+            "default": "one-way"
+          },
+          "componentFilter": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Filter specific components to sync"
+          }
+        },
+        "required": ["sourceFileKey", "targetRepo"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sync_id": {
+            "type": "string",
+            "description": "Synchronization session ID"
+          },
+          "components_synced": {
+            "type": "array",
+            "description": "List of synced components with status"
+          }
+        }
+      }
+    },
+    {
+      "name": "figma_scaffold_from_altitude",
+      "description": "Create Figma design structure from CTB/Altitude specifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "framework": {
+            "type": "string",
+            "description": "Design framework approach",
+            "default": "figma"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "figma_file_id": {
+            "type": "string",
+            "description": "Created Figma file ID"
+          },
+          "figma_file_url": {
+            "type": "string",
+            "description": "URL to the Figma file"
+          },
+          "pages_created": {
+            "type": "number",
+            "description": "Number of pages created"
+          },
+          "ctb_integration": {
+            "type": "object",
+            "description": "CTB/Altitude integration details"
+          }
+        }
+      }
     }
   ],
   "manifest": {
@@ -482,7 +647,7 @@
       "hubspot", "salesforce", "discord", "linear", "jira",
       "google_calendar", "google_drive", "dropbox", "asana",
       "trello", "monday", "clickup", "zendesk", "intercom",
-      "lovable", "builder_io"
+      "lovable", "builder_io", "figma"
     ],
     "authentication_methods": [
       "oauth2", "api_key", "bearer_token", "basic_auth"
