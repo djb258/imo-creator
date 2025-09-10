@@ -607,6 +607,238 @@
           }
         }
       }
+    },
+    {
+      "name": "smartsheet_create_sheet",
+      "description": "Create a new Smartsheet with specified columns and configuration",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the new sheet"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {"type": "string"},
+                "type": {"type": "string", "enum": ["TEXT_NUMBER", "DATE", "CONTACT_LIST", "PICKLIST", "CHECKBOX"]},
+                "options": {"type": "array", "items": {"type": "string"}},
+                "primary": {"type": "boolean"}
+              }
+            },
+            "description": "Column definitions for the sheet"
+          },
+          "templateId": {
+            "type": "string",
+            "description": "Optional template ID to create from"
+          },
+          "folderLocation": {
+            "type": "string",
+            "description": "Folder to create the sheet in"
+          }
+        },
+        "required": ["name"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sheet_id": {
+            "type": "string",
+            "description": "ID of the created sheet"
+          },
+          "permalink": {
+            "type": "string",
+            "description": "Direct link to the sheet"
+          },
+          "columns_created": {
+            "type": "number",
+            "description": "Number of columns created"
+          }
+        }
+      }
+    },
+    {
+      "name": "smartsheet_get_sheets",
+      "description": "Retrieve list of available Smartsheets",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "includeAll": {
+            "type": "boolean",
+            "description": "Include all accessible sheets",
+            "default": false
+          },
+          "folderFilter": {
+            "type": "string",
+            "description": "Filter by specific folder ID"
+          },
+          "modifiedSince": {
+            "type": "string",
+            "description": "Only sheets modified since this date (ISO format)"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sheets": {
+            "type": "array",
+            "description": "Array of sheet objects"
+          },
+          "total_count": {
+            "type": "number",
+            "description": "Total number of sheets"
+          }
+        }
+      }
+    },
+    {
+      "name": "smartsheet_add_rows",
+      "description": "Add new rows to a Smartsheet",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "sheetId": {
+            "type": "string",
+            "description": "ID of the sheet to add rows to"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cells": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "columnId": {"type": "string"},
+                      "value": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Array of row objects to add"
+          },
+          "toTop": {
+            "type": "boolean",
+            "description": "Add rows to top of sheet",
+            "default": false
+          },
+          "parentId": {
+            "type": "string",
+            "description": "Parent row ID for hierarchical placement"
+          },
+          "siblingId": {
+            "type": "string",
+            "description": "Sibling row ID for positioning"
+          }
+        },
+        "required": ["sheetId", "rows"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "rows_added": {
+            "type": "number",
+            "description": "Number of rows successfully added"
+          },
+          "added_row_ids": {
+            "type": "array",
+            "description": "IDs of the newly added rows"
+          }
+        }
+      }
+    },
+    {
+      "name": "smartsheet_update_rows",
+      "description": "Update existing rows in a Smartsheet",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "sheetId": {
+            "type": "string",
+            "description": "ID of the sheet containing rows to update"
+          },
+          "rowUpdates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "cells": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "columnId": {"type": "string"},
+                      "value": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Array of row update objects"
+          }
+        },
+        "required": ["sheetId", "rowUpdates"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "rows_updated": {
+            "type": "number",
+            "description": "Number of rows successfully updated"
+          },
+          "updated_row_ids": {
+            "type": "array",
+            "description": "IDs of the updated rows"
+          }
+        }
+      }
+    },
+    {
+      "name": "smartsheet_scaffold_from_altitude",
+      "description": "Create Smartsheet project structure from CTB/Altitude specifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "projectName": {
+            "type": "string",
+            "description": "Name for the project workspace",
+            "default": "CTB-Altitude Project"
+          },
+          "folderLocation": {
+            "type": "string",
+            "description": "Folder to create project structure in"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "description": "Created workspace identifier"
+          },
+          "master_sheet_id": {
+            "type": "string",
+            "description": "Master project sheet ID"
+          },
+          "altitude_sheet_ids": {
+            "type": "array",
+            "description": "IDs of altitude-level sheets"
+          },
+          "ctb_integration": {
+            "type": "object",
+            "description": "CTB/Altitude integration details"
+          }
+        }
+      }
     }
   ],
   "manifest": {
@@ -647,7 +879,7 @@
       "hubspot", "salesforce", "discord", "linear", "jira",
       "google_calendar", "google_drive", "dropbox", "asana",
       "trello", "monday", "clickup", "zendesk", "intercom",
-      "lovable", "builder_io", "figma"
+      "lovable", "builder_io", "figma", "smartsheet"
     ],
     "authentication_methods": [
       "oauth2", "api_key", "bearer_token", "basic_auth"

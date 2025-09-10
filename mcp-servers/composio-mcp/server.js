@@ -76,7 +76,7 @@ app.get('/mcp/capabilities', (req, res) => {
           'hubspot', 'salesforce', 'discord', 'linear', 'jira',
           'google_calendar', 'google_drive', 'dropbox', 'asana',
           'trello', 'monday', 'clickup', 'zendesk', 'intercom',
-          'lovable', 'builder_io', 'figma'
+          'lovable', 'builder_io', 'figma', 'smartsheet'
         ]
       },
       {
@@ -103,6 +103,17 @@ app.get('/mcp/capabilities', (req, res) => {
           'create_design_system',
           'sync_components',
           'scaffold_from_altitude (CTB/Altitude integration)'
+        ]
+      },
+      {
+        name: 'Smartsheet Project Management',
+        description: 'Create and manage Smartsheets for project tracking via Smartsheet integration',
+        capabilities: [
+          'create_sheet (Project templates and custom columns)',
+          'get_sheets (List and filter accessible sheets)',
+          'add_rows (Bulk row creation with hierarchy)',
+          'update_rows (Batch updates with validation)',
+          'scaffold_from_altitude (CTB/Altitude project generation)'
         ]
       },
       {

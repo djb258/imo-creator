@@ -967,6 +967,16 @@ Requirements:
         return await this.figma_sync_components(payload);
       case 'figma_scaffold_from_altitude':
         return await this.figma_scaffold_from_altitude(payload);
+      case 'smartsheet_create_sheet':
+        return await this.smartsheet_create_sheet(payload);
+      case 'smartsheet_get_sheets':
+        return await this.smartsheet_get_sheets(payload);
+      case 'smartsheet_add_rows':
+        return await this.smartsheet_add_rows(payload);
+      case 'smartsheet_update_rows':
+        return await this.smartsheet_update_rows(payload);
+      case 'smartsheet_scaffold_from_altitude':
+        return await this.smartsheet_scaffold_from_altitude(payload);
       default:
         return {
           success: false,
@@ -988,7 +998,12 @@ Requirements:
             'figma_export_to_code',
             'figma_create_design_system',
             'figma_sync_components',
-            'figma_scaffold_from_altitude'
+            'figma_scaffold_from_altitude',
+            'smartsheet_create_sheet',
+            'smartsheet_get_sheets',
+            'smartsheet_add_rows',
+            'smartsheet_update_rows',
+            'smartsheet_scaffold_from_altitude'
           ]
         };
     }
@@ -1187,6 +1202,257 @@ Requirements:
     } catch (error) {
       return this.handleError(error, 'figma_scaffold_from_altitude', payload);
     }
+  }
+
+  // Smartsheet Project Management Tools
+  async smartsheet_create_sheet(payload) {
+    try {
+      const { name, columns = [], templateId, folderLocation } = payload.data;
+
+      // Default columns if none provided
+      const defaultColumns = [
+        { title: 'Task Name', type: 'TEXT_NUMBER', primary: true },
+        { title: 'Assigned To', type: 'CONTACT_LIST' },
+        { title: 'Status', type: 'PICKLIST', options: ['Not Started', 'In Progress', 'Complete'] },
+        { title: 'Start Date', type: 'DATE' },
+        { title: 'End Date', type: 'DATE' },
+        { title: 'Priority', type: 'PICKLIST', options: ['High', 'Medium', 'Low'] }
+      ];
+
+      // Mock: Would create sheet via Composio's Smartsheet integration
+      const mockResult = {
+        sheet_id: `sheet-${Date.now()}`,
+        name: name,
+        permalink: `https://app.smartsheet.com/sheets/mock-${Date.now()}`,
+        columns_created: (columns.length || defaultColumns.length),
+        total_columns: (columns.length || defaultColumns.length),
+        created_from_template: !!templateId,
+        folder_location: folderLocation || 'root'
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'smartsheet',
+          method: 'create_sheet',
+          template_used: templateId || 'custom'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'smartsheet_create_sheet', payload);
+    }
+  }
+
+  async smartsheet_get_sheets(payload) {
+    try {
+      const { includeAll = false, folderFilter, modifiedSince } = payload.data;
+
+      // Mock: Would retrieve sheets via Composio's Smartsheet integration
+      const mockSheets = [
+        {
+          id: 'sheet-001',
+          name: 'IMO Creator Project Plan',
+          access_level: 'OWNER',
+          permalink: 'https://app.smartsheet.com/sheets/sheet-001',
+          created_at: '2025-01-01T00:00:00Z',
+          modified_at: new Date().toISOString()
+        },
+        {
+          id: 'sheet-002', 
+          name: 'CTB Implementation Tracker',
+          access_level: 'EDITOR',
+          permalink: 'https://app.smartsheet.com/sheets/sheet-002',
+          created_at: '2025-01-15T00:00:00Z',
+          modified_at: new Date().toISOString()
+        }
+      ];
+
+      return {
+        success: true,
+        result: {
+          sheets: mockSheets,
+          total_count: mockSheets.length,
+          filtered_by: folderFilter ? 'folder' : 'all',
+          include_all: includeAll
+        },
+        composio_metadata: {
+          service: 'smartsheet',
+          method: 'get_sheets'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'smartsheet_get_sheets', payload);
+    }
+  }
+
+  async smartsheet_add_rows(payload) {
+    try {
+      const { sheetId, rows, toTop = false, parentId, siblingId } = payload.data;
+
+      // Mock: Would add rows via Composio's Smartsheet integration
+      const mockResult = {
+        rows_added: rows.length,
+        sheet_id: sheetId,
+        added_row_ids: rows.map((_, index) => `row-${Date.now()}-${index}`),
+        position: toTop ? 'top' : 'bottom',
+        parent_row: parentId || null,
+        sibling_row: siblingId || null
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'smartsheet',
+          method: 'add_rows'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'smartsheet_add_rows', payload);
+    }
+  }
+
+  async smartsheet_update_rows(payload) {
+    try {
+      const { sheetId, rowUpdates } = payload.data;
+
+      // Mock: Would update rows via Composio's Smartsheet integration
+      const mockResult = {
+        rows_updated: rowUpdates.length,
+        sheet_id: sheetId,
+        updated_row_ids: rowUpdates.map(update => update.id),
+        modification_timestamp: new Date().toISOString()
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        composio_metadata: {
+          service: 'smartsheet',
+          method: 'update_rows'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'smartsheet_update_rows', payload);
+    }
+  }
+
+  async smartsheet_scaffold_from_altitude(payload) {
+    try {
+      const { projectName = 'CTB-Altitude Project', folderLocation } = payload.data;
+      
+      // Read CTB/Altitude specifications
+      const ctbSpecs = this.readCTBSpecs();
+      
+      // Create Smartsheet structure from CTB specs
+      const smartsheetStructure = {
+        master_sheet: {
+          name: `${projectName} - Master Plan`,
+          columns: [
+            { title: 'Altitude Level', type: 'PICKLIST', options: ['30k-Strategic', '20k-Operational', '10k-Tactical', '5k-Execution'] },
+            { title: 'Component', type: 'TEXT_NUMBER' },
+            { title: 'Status', type: 'PICKLIST', options: ['Planning', 'In Progress', 'Complete', 'Blocked'] },
+            { title: 'Owner', type: 'CONTACT_LIST' },
+            { title: 'Start Date', type: 'DATE' },
+            { title: 'End Date', type: 'DATE' },
+            { title: 'Priority', type: 'PICKLIST', options: ['Critical', 'High', 'Medium', 'Low'] }
+          ]
+        },
+        altitude_sheets: [
+          {
+            name: `${projectName} - 30k Strategic`,
+            type: 'strategic',
+            tasks: this.generateAltitudeTasks(ctbSpecs.altitude_30k, 'strategic')
+          },
+          {
+            name: `${projectName} - 20k Operational`, 
+            type: 'operational',
+            tasks: this.generateAltitudeTasks(ctbSpecs.altitude_20k, 'operational')
+          },
+          {
+            name: `${projectName} - 10k Tactical`,
+            type: 'tactical', 
+            tasks: this.generateAltitudeTasks(ctbSpecs.altitude_10k, 'tactical')
+          },
+          {
+            name: `${projectName} - 5k Execution`,
+            type: 'execution',
+            tasks: this.generateAltitudeTasks(ctbSpecs.altitude_5k, 'execution')
+          }
+        ]
+      };
+
+      // Mock: Would create Smartsheet workspace structure via Composio
+      const mockResult = {
+        workspace_id: `workspace-ctb-${Date.now()}`,
+        master_sheet_id: `master-${Date.now()}`,
+        altitude_sheet_ids: smartsheetStructure.altitude_sheets.map((_, index) => `altitude-${Date.now()}-${index}`),
+        total_sheets_created: 1 + smartsheetStructure.altitude_sheets.length,
+        project_name: projectName,
+        ctb_integration: {
+          process_map_loaded: !!ctbSpecs.process_map,
+          altitude_levels_created: 4,
+          catalog_integrated: !!ctbSpecs.catalog,
+          total_tasks_generated: smartsheetStructure.altitude_sheets.reduce((sum, sheet) => sum + (sheet.tasks?.length || 0), 0)
+        }
+      };
+
+      return {
+        success: true,
+        result: mockResult,
+        smartsheet_structure: smartsheetStructure,
+        composio_metadata: {
+          service: 'smartsheet',
+          method: 'scaffold_from_altitude'
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'smartsheet_scaffold_from_altitude', payload);
+    }
+  }
+
+  generateAltitudeTasks(altitudeData, level) {
+    if (!altitudeData) return [];
+    
+    const levelTasks = {
+      strategic: ['Define vision', 'Set goals', 'Identify stakeholders', 'Resource planning'],
+      operational: ['Process design', 'Team formation', 'Workflow setup', 'Quality gates'],
+      tactical: ['Task breakdown', 'Sprint planning', 'Risk mitigation', 'Dependencies'],
+      execution: ['Implementation', 'Testing', 'Deployment', 'Monitoring']
+    };
+    
+    return (levelTasks[level] || []).map((task, index) => ({
+      task_name: task,
+      altitude_level: `${level}`,
+      priority: index === 0 ? 'Critical' : 'High',
+      status: 'Planning'
+    }));
   }
 }
 

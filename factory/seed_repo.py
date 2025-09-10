@@ -239,13 +239,45 @@ def seed_repo(target_repo_path: Path):
     except Exception as e:
         print(f"⚠ Warning: Could not generate initial docs: {e}")
     
+    # Install Composio .env configuration
+    print("\n📋 Installing Composio .env configuration...")
+    master_env_path = Path(__file__).parent.parent / 'config' / 'master.env'
+    if master_env_path.exists():
+        # Copy to root .env
+        env_dest = target_repo_path / '.env'
+        shutil.copy2(master_env_path, env_dest)
+        print(f"✓ Installed .env to repository root")
+        
+        # Copy to mcp-servers/composio-mcp if it exists
+        mcp_dir = target_repo_path / 'mcp-servers' / 'composio-mcp'
+        if mcp_dir.exists():
+            mcp_env_dest = mcp_dir / '.env'
+            shutil.copy2(master_env_path, mcp_env_dest)
+            print(f"✓ Installed .env to Composio MCP server")
+        
+        # Update .gitignore to exclude .env files
+        gitignore_path = target_repo_path / '.gitignore'
+        if gitignore_path.exists():
+            gitignore_content = gitignore_path.read_text()
+            if '.env' not in gitignore_content:
+                with open(gitignore_path, 'a') as f:
+                    f.write('\n# Environment files\n.env\n.env.local\n.env.*.local\n')
+                print(f"✓ Updated .gitignore to exclude .env files")
+        else:
+            # Create .gitignore with .env exclusion
+            gitignore_path.write_text('# Environment files\n.env\n.env.local\n.env.*.local\n')
+            print(f"✓ Created .gitignore with .env exclusion")
+    else:
+        print(f"⚠ Master .env not found - skipping Composio configuration")
+    
     print(f"\n🎉 Successfully seeded {target_repo_path}")
     print("\nNext steps:")
     print("1. Edit spec/process_map.yaml to match your project")
     print("2. Run: python tools/generate_ctb.py spec/process_map.yaml")
     print("3. Review generated docs in docs/ and docs/altitude/")
-    print("4. Commit all files to git")
+    print("4. Commit all files to git (except .env)")
     print("\nThe CI workflow will auto-regenerate docs on future spec changes.")
+    print("Composio credentials are pre-configured in .env file.")
 
 def main():
     if len(sys.argv) != 2:
