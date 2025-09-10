@@ -270,14 +270,46 @@ def seed_repo(target_repo_path: Path):
     else:
         print(f"⚠ Master .env not found - skipping Composio configuration")
     
+    # Install Claude MCP Auto-Discovery System
+    print("\n📚 Installing Claude MCP auto-discovery system...")
+    
+    # Copy auto-discovery script
+    scripts_dir = target_repo_path / 'scripts'
+    scripts_dir.mkdir(exist_ok=True)
+    
+    source_discovery = Path(__file__).parent.parent / 'scripts' / 'mcp-auto-discovery.js'
+    if source_discovery.exists():
+        target_discovery = scripts_dir / 'mcp-auto-discovery.js'
+        shutil.copy2(source_discovery, target_discovery)
+        print(f"✓ Installed MCP auto-discovery script")
+    else:
+        print(f"⚠ mcp-auto-discovery.js not found - skipping auto-discovery")
+    
+    # Copy .claude discovery configuration
+    source_claude_dir = Path(__file__).parent.parent / '.claude'
+    source_discovery_json = source_claude_dir / 'mcp_discovery.json'
+    if source_discovery_json.exists():
+        claude_dir = target_repo_path / '.claude'
+        claude_dir.mkdir(exist_ok=True)
+        target_discovery_json = claude_dir / 'mcp_discovery.json'
+        shutil.copy2(source_discovery_json, target_discovery_json)
+        print(f"✓ Installed Claude MCP discovery configuration")
+    else:
+        print(f"⚠ .claude/mcp_discovery.json not found - skipping discovery config")
+    
     print(f"\n🎉 Successfully seeded {target_repo_path}")
     print("\nNext steps:")
     print("1. Edit spec/process_map.yaml to match your project")
     print("2. Run: python tools/generate_ctb.py spec/process_map.yaml")
-    print("3. Review generated docs in docs/ and docs/altitude/")
-    print("4. Commit all files to git (except .env)")
-    print("\nThe CI workflow will auto-regenerate docs on future spec changes.")
-    print("Composio credentials are pre-configured in .env file.")
+    print("3. Discover MCP servers: node scripts/mcp-auto-discovery.js")
+    print("4. Review generated docs in docs/ and docs/altitude/")
+    print("5. Commit all files to git (except .env)")
+    print("\nInstalled systems:")
+    print("• CTB generator with CI workflow")
+    print("• Composio credentials (.env pre-configured)")
+    print("• MCP auto-discovery system (scripts/mcp-auto-discovery.js)")
+    print("• Claude discovery configuration (.claude/mcp_discovery.json)")
+    print("\nClaude will auto-discover and connect to available MCP servers.")
 
 def main():
     if len(sys.argv) != 2:

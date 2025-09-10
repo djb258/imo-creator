@@ -62,6 +62,117 @@ app.get('/mcp/kill-switch', (req, res) => {
   });
 });
 
+// Claude-friendly documentation endpoint
+app.get('/mcp/docs', async (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    // Load tool manifest for real-time tool info
+    const manifestPath = path.join(__dirname, 'manifests', 'tool_manifest.json');
+    const manifest = fs.existsSync(manifestPath) ? 
+      JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
+    
+    const docs = {
+      server: 'composio-mcp',
+      description: 'Universal AI agent integration platform with 100+ services',
+      connection: {
+        base_url: `http://localhost:${process.env.PORT || 3000}`,
+        endpoint: '/tool',
+        method: 'POST',
+        required_headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      payload_format: {
+        tool: 'string (tool name)',
+        data: 'object (tool parameters)',
+        unique_id: 'string (HEIR format: HEIR-YYYY-MM-SYSTEM-MODE-VN)',
+        process_id: 'string (PRC-SYSTCODE-EPOCHTIMESTAMP)',
+        orbt_layer: 'number (1-5)',
+        blueprint_version: 'string (e.g. "1.0")'
+      },
+      available_tools: manifest ? manifest.tools.map(tool => ({
+        name: tool.name,
+        description: tool.description,
+        parameters: tool.inputSchema?.properties || {},
+        example_payload: {
+          tool: tool.name,
+          data: tool.inputSchema?.required ? 
+            Object.fromEntries(tool.inputSchema.required.map(field => [field, `<${field}>`])) : 
+            {},
+          unique_id: "HEIR-2025-09-COMPOSIO-PROD-01",
+          process_id: "PRC-COMP-" + Date.now(),
+          orbt_layer: 2,
+          blueprint_version: "1.0"
+        }
+      })) : [],
+      usage_examples: {
+        neon_query: {
+          description: "Execute SQL query on Neon database",
+          payload: {
+            tool: "neon_query_database",
+            data: { query: "SELECT * FROM users LIMIT 5" },
+            unique_id: "HEIR-2025-09-NEON-QUERY-01",
+            process_id: "PRC-NEON-" + Date.now(),
+            orbt_layer: 2,
+            blueprint_version: "1.0"
+          }
+        },
+        lovable_create: {
+          description: "Create new UI project with Lovable.dev",
+          payload: {
+            tool: "lovable_create_project",
+            data: { 
+              prompt: "Create a dashboard with charts and tables",
+              projectType: "react"
+            },
+            unique_id: "HEIR-2025-09-LOVABLE-CREATE-01", 
+            process_id: "PRC-LOVBL-" + Date.now(),
+            orbt_layer: 3,
+            blueprint_version: "1.0"
+          }
+        },
+        smartsheet_create: {
+          description: "Create Smartsheet for project tracking",
+          payload: {
+            tool: "smartsheet_create_sheet",
+            data: {
+              name: "Project Tasks",
+              columns: [
+                { title: "Task", type: "TEXT_NUMBER", primary: true },
+                { title: "Status", type: "PICKLIST", options: ["Todo", "In Progress", "Done"] },
+                { title: "Owner", type: "CONTACT_LIST" }
+              ]
+            },
+            unique_id: "HEIR-2025-09-SMART-CREATE-01",
+            process_id: "PRC-SMART-" + Date.now(),
+            orbt_layer: 2,
+            blueprint_version: "1.0"
+          }
+        }
+      },
+      tool_status: {
+        real_integrations: [
+          "neon_query_database", "neon_get_schema", "neon_create_table", 
+          "neon_insert_data", "neon_update_data"
+        ],
+        mock_implementations: [
+          "smartsheet_create_sheet", "smartsheet_get_sheets", "smartsheet_add_rows",
+          "lovable_create_project", "lovable_scaffold_altitude_ui",
+          "builder_io_create_space", "figma_export_to_code"
+        ]
+      },
+      health_check: `${process.env.PORT || 3000}/mcp/health`,
+      last_updated: new Date().toISOString()
+    };
+    
+    res.json(docs);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to generate documentation', details: error.message });
+  }
+});
+
 // Composio capabilities and supported toolkits
 app.get('/mcp/capabilities', (req, res) => {
   res.json({
@@ -76,7 +187,7 @@ app.get('/mcp/capabilities', (req, res) => {
           'hubspot', 'salesforce', 'discord', 'linear', 'jira',
           'google_calendar', 'google_drive', 'dropbox', 'asana',
           'trello', 'monday', 'clickup', 'zendesk', 'intercom',
-          'lovable', 'builder_io', 'figma', 'smartsheet'
+          'lovable', 'builder_io', 'figma', 'smartsheet', 'neon'
         ]
       },
       {
@@ -114,6 +225,17 @@ app.get('/mcp/capabilities', (req, res) => {
           'add_rows (Bulk row creation with hierarchy)',
           'update_rows (Batch updates with validation)',
           'scaffold_from_altitude (CTB/Altitude project generation)'
+        ]
+      },
+      {
+        name: 'Neon Database Operations',
+        description: 'Execute database operations on Neon PostgreSQL via Composio integration',
+        capabilities: [
+          'query_database (Execute SQL queries with parameters)',
+          'create_table (Create tables with columns and indexes)',
+          'insert_data (Bulk insert with conflict resolution)',
+          'update_data (Update records with WHERE conditions)',
+          'get_schema (Retrieve table and column information)'
         ]
       },
       {

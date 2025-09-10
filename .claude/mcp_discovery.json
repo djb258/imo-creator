@@ -1,0 +1,25 @@
+{
+  "mcp_discovery": {
+    "auto_discovery": true,
+    "servers": [
+      {
+        "name": "composio-mcp",
+        "description": "Universal AI agent integration platform with 100+ services",
+        "docs_endpoint": "http://localhost:3000/mcp/docs",
+        "health_endpoint": "http://localhost:3000/mcp/health",
+        "priority": 1
+      }
+    ],
+    "discovery_pattern": {
+      "scan_ports": [3000, 3001, 3002, 3003, 3004, 3005],
+      "endpoints_to_check": ["/mcp/docs", "/mcp/health", "/mcp/capabilities"],
+      "auto_refresh_interval": "5m"
+    },
+    "claude_instructions": {
+      "startup_behavior": "Query all available MCP servers for documentation on startup",
+      "tool_usage": "Always check server documentation before using tools",
+      "error_handling": "If tool fails, check server health and re-read documentation",
+      "preferred_format": "Use example payloads from /mcp/docs endpoint"
+    }
+  }
+}
