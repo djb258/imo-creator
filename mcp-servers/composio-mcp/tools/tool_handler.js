@@ -977,6 +977,16 @@ Requirements:
         return await this.smartsheet_update_rows(payload);
       case 'smartsheet_scaffold_from_altitude':
         return await this.smartsheet_scaffold_from_altitude(payload);
+      case 'neon_query_database':
+        return await this.neon_query_database(payload);
+      case 'neon_create_table':
+        return await this.neon_create_table(payload);
+      case 'neon_insert_data':
+        return await this.neon_insert_data(payload);
+      case 'neon_update_data':
+        return await this.neon_update_data(payload);
+      case 'neon_get_schema':
+        return await this.neon_get_schema(payload);
       default:
         return {
           success: false,
@@ -1453,6 +1463,222 @@ Requirements:
       priority: index === 0 ? 'Critical' : 'High',
       status: 'Planning'
     }));
+  }
+
+  // Neon Database Tools (via Composio)
+  async neon_query_database(payload) {
+    try {
+      const { query, parameters = [] } = payload.data;
+      
+      console.log(`🗄️ Executing Neon query via Composio: ${query}`);
+      
+      // Execute through Composio's Neon integration
+      const result = await this.composio.tools.execute('NEON_EXECUTE_QUERY', {
+        parameters: {
+          sql: query,
+          params: parameters
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          query: query,
+          rows: result.rows || [],
+          row_count: result.rowCount || 0,
+          fields: result.fields || [],
+          execution_time: result.executionTime || null
+        },
+        composio_metadata: {
+          service: 'neon',
+          method: 'execute_query',
+          via_composio: true
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'neon_query_database', payload);
+    }
+  }
+
+  async neon_create_table(payload) {
+    try {
+      const { tableName, columns, primaryKey, indexes = [] } = payload.data;
+      
+      // Build CREATE TABLE statement
+      const columnDefs = columns.map(col => {
+        let def = `${col.name} ${col.type}`;
+        if (col.nullable === false) def += ' NOT NULL';
+        if (col.default) def += ` DEFAULT ${col.default}`;
+        return def;
+      }).join(', ');
+      
+      let createSQL = `CREATE TABLE ${tableName} (${columnDefs}`;
+      if (primaryKey) {
+        createSQL += `, PRIMARY KEY (${Array.isArray(primaryKey) ? primaryKey.join(', ') : primaryKey})`;
+      }
+      createSQL += ')';
+      
+      console.log(`🗄️ Creating Neon table via Composio: ${tableName}`);
+      
+      // Execute through Composio
+      const result = await this.composio.tools.execute('NEON_EXECUTE_QUERY', {
+        parameters: {
+          sql: createSQL,
+          params: []
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          table_name: tableName,
+          table_created: result.success || true,
+          columns_count: columns.length,
+          create_statement: createSQL
+        },
+        composio_metadata: {
+          service: 'neon',
+          method: 'create_table',
+          via_composio: true
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'neon_create_table', payload);
+    }
+  }
+
+  async neon_insert_data(payload) {
+    try {
+      const { tableName, data, onConflict = 'error' } = payload.data;
+      
+      // Handle single record or array of records
+      const records = Array.isArray(data) ? data : [data];
+      
+      if (records.length === 0) {
+        throw new Error('No data provided for insertion');
+      }
+      
+      console.log(`🗄️ Inserting data to Neon via Composio: ${tableName} (${records.length} records)`);
+      
+      // Execute through Composio
+      const result = await this.composio.tools.execute('NEON_INSERT_DATA', {
+        parameters: {
+          table: tableName,
+          data: records,
+          conflict_resolution: onConflict
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          table_name: tableName,
+          records_inserted: result.rowCount || records.length,
+          total_records: records.length,
+          conflict_resolution: onConflict
+        },
+        composio_metadata: {
+          service: 'neon',
+          method: 'insert_data',
+          via_composio: true
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'neon_insert_data', payload);
+    }
+  }
+
+  async neon_update_data(payload) {
+    try {
+      const { tableName, updates, where } = payload.data;
+      
+      console.log(`🗄️ Updating Neon data via Composio: ${tableName}`);
+      
+      // Execute through Composio
+      const result = await this.composio.tools.execute('NEON_UPDATE_DATA', {
+        parameters: {
+          table: tableName,
+          updates: updates,
+          where: where
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          table_name: tableName,
+          records_updated: result.rowCount || 0
+        },
+        composio_metadata: {
+          service: 'neon',
+          method: 'update_data',
+          via_composio: true
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'neon_update_data', payload);
+    }
+  }
+
+  async neon_get_schema(payload) {
+    try {
+      const { tableName } = payload.data;
+      
+      console.log(`🗄️ Getting Neon schema via Composio: ${tableName || 'all tables'}`);
+      
+      // Execute through Composio
+      const result = await this.composio.tools.execute('NEON_GET_SCHEMA', {
+        parameters: {
+          table: tableName || null
+        },
+        entityId: payload.process_id
+      });
+
+      return {
+        success: true,
+        result: {
+          table_name: tableName || 'all',
+          schema_info: result.schema || result.tables || [],
+          total_items: result.count || 0
+        },
+        composio_metadata: {
+          service: 'neon',
+          method: 'get_schema',
+          via_composio: true
+        },
+        heir_tracking: {
+          unique_id: payload.unique_id,
+          process_lineage: [payload.process_id],
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      return this.handleError(error, 'neon_get_schema', payload);
+    }
   }
 }
 

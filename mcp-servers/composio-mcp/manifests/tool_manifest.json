@@ -839,6 +839,149 @@
           }
         }
       }
+    },
+    {
+      "name": "neon_query_database",
+      "description": "Execute SQL queries on Neon database via Composio integration",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "SQL query to execute"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Query parameters for prepared statements"
+          }
+        },
+        "required": ["query"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "type": "array",
+            "description": "Query result rows"
+          },
+          "row_count": {
+            "type": "number",
+            "description": "Number of rows returned"
+          },
+          "fields": {
+            "type": "array",
+            "description": "Column information"
+          }
+        }
+      }
+    },
+    {
+      "name": "neon_create_table",
+      "description": "Create a new table in Neon database via Composio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string",
+            "description": "Name of the table to create"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+                "nullable": {"type": "boolean"},
+                "default": {"type": "string"}
+              }
+            },
+            "description": "Column definitions"
+          },
+          "primaryKey": {
+            "type": "string",
+            "description": "Primary key column(s)"
+          },
+          "indexes": {
+            "type": "array",
+            "description": "Index definitions"
+          }
+        },
+        "required": ["tableName", "columns"]
+      }
+    },
+    {
+      "name": "neon_insert_data",
+      "description": "Insert data into Neon database table via Composio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string",
+            "description": "Target table name"
+          },
+          "data": {
+            "type": "array",
+            "description": "Data records to insert"
+          },
+          "onConflict": {
+            "type": "string",
+            "enum": ["error", "ignore", "update"],
+            "description": "Conflict resolution strategy",
+            "default": "error"
+          }
+        },
+        "required": ["tableName", "data"]
+      }
+    },
+    {
+      "name": "neon_update_data",
+      "description": "Update data in Neon database table via Composio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string",
+            "description": "Target table name"
+          },
+          "updates": {
+            "type": "object",
+            "description": "Fields to update with new values"
+          },
+          "where": {
+            "type": "object",
+            "description": "WHERE clause conditions"
+          }
+        },
+        "required": ["tableName", "updates"]
+      }
+    },
+    {
+      "name": "neon_get_schema",
+      "description": "Get database schema information from Neon via Composio",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string",
+            "description": "Specific table name (optional - if not provided, returns all tables)"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "schema_info": {
+            "type": "array",
+            "description": "Schema information"
+          },
+          "total_items": {
+            "type": "number",
+            "description": "Total number of items"
+          }
+        }
+      }
     }
   ],
   "manifest": {
@@ -879,7 +1022,7 @@
       "hubspot", "salesforce", "discord", "linear", "jira",
       "google_calendar", "google_drive", "dropbox", "asana",
       "trello", "monday", "clickup", "zendesk", "intercom",
-      "lovable", "builder_io", "figma", "smartsheet"
+      "lovable", "builder_io", "figma", "smartsheet", "neon"
     ],
     "authentication_methods": [
       "oauth2", "api_key", "bearer_token", "basic_auth"
