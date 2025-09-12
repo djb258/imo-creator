@@ -14,3 +14,25 @@ jobs:
       - run: ruff check .
       - run: black --check .
       - run: pytest -q
+      
+  instantly-smoke-tests:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      COMPOSIO_API_KEY: ${{ secrets.COMPOSIO_API_KEY }}
+      HIVE_USER_UUID: 6b9518ed-5771-4153-95bd-c72ce46e84ef
+      INSTANTLY_BASIC_B64: ${{ secrets.INSTANTLY_BASIC_B64 }}
+      INSTANTLY_BASE_URL: https://api.instantly.ai
+      MCP_DISABLE_INSTANTLY: false
+      NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Run Instantly ESLint checks
+        run: npx eslint --no-eslintrc --config .eslintrc-instantly.js "src/**/*.ts" "src/**/*.js" --format compact
+      - name: Run Instantly smoke tests (dry-run)
+        run: npm run smoke:instantly

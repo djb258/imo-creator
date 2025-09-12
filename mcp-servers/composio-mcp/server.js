@@ -4,6 +4,19 @@ const cors = require('cors');
 const toolHandler = require('./tools/tool_handler');
 const { cacheMiddleware, connectionPoolMiddleware, setupAll } = require('../shared/performance-boost');
 
+// Bootstrap Composio custom tools on startup
+async function initializeComposioTools() {
+  try {
+    // Dynamic import for TypeScript modules
+    const { bootstrapComposioTools } = await import('../../src/composio/bootstrap.js');
+    await bootstrapComposioTools();
+    console.log('[MCP-SERVER] Composio custom tools initialized successfully');
+  } catch (error) {
+    console.error('[MCP-SERVER] Failed to initialize Composio custom tools:', error);
+    // Don't crash the server, just log the error
+  }
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -423,7 +436,7 @@ app.post('/tool', validatePayload, killSwitch, logToMantis, async (req, res) => 
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 composio-mcp server running on port ${PORT}`);
   console.log(`🌐 Universal AI agent integration platform ready`);
   console.log(`🔗 100+ services available via Composio SDK`);
@@ -441,5 +454,8 @@ app.listen(PORT, () => {
   } else {
     console.log(`✅ Composio API authentication configured`);
     console.log(`🎯 Ready to replace multiple individual MCP servers`);
+    
+    // Initialize custom tools after server startup
+    await initializeComposioTools();
   }
 });

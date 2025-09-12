@@ -1,0 +1,31 @@
+{
+  "composio": {
+    "description": "Composio MCP Server - Universal tool integration via SSE",
+    "type": "sse",
+    "url": "https://mcp.composio.dev/sse",
+    "headers": {
+      "x-api-key": "${COMPOSIO_API_KEY}",
+      "x-entity-id": "6b9518ed-5771-4153-95bd-c72ce46e84ef"
+    },
+    "capabilities": {
+      "tools": true,
+      "resources": false,
+      "prompts": false
+    },
+    "config": {
+      "timeout_ms": 15000,
+      "max_retries": 2,
+      "retry_delay_ms": 1000
+    },
+    "metadata": {
+      "version": "1.0.0",
+      "provider": "Composio",
+      "contact": "support@composio.dev",
+      "documentation": "https://docs.composio.dev/mcp"
+    },
+    "guardrails": {
+      "mcp_disable_write": "${MCP_DISABLE_WRITE}",
+      "allowed_tools": "${ALLOWED_TOOLS}"
+    }
+  }
+}

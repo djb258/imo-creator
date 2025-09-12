@@ -35,6 +35,7 @@
     "garage:start": "tsx scripts/garage/garage-entrypoint.ts",
     "garage:scan": "tsx scripts/garage/garage-scan.ts",
     "garage:viz": "cd garage/viz && pnpm install && pnpm dev",
+    "smoke:instantly": "tsx scripts/smoke-instantly.ts",
     "garage:viz:build": "cd garage/viz && pnpm build",
     "garage:viz:start": "cd garage/viz && pnpm start",
     "spec:validate": "tsx scripts/factory/validate-spec.ts",
@@ -67,7 +68,10 @@
     "predeploy": "npm run doctrine:validate",
     "outreach:start": "node server/server.js",
     "outreach:dev": "NODE_ENV=development node server/server.js",
-    "outreach:install": "npm install express cors pg dotenv ajv ajv-formats"
+    "outreach:install": "npm install express cors pg dotenv ajv ajv-formats",
+    "abacus:register": "tsx scripts/register-abacus-mcp.ts",
+    "smoke": "tsx scripts/smoke.ts",
+    "abacus:lint": "eslint --no-eslintrc --config .eslintrc-abacus.js \"src/**/*.ts\" --format compact"
   },
   "dependencies": {
     "@builder.io/cli": "^1.2.10",

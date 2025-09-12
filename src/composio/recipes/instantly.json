@@ -1,0 +1,7 @@
+{
+  "rateLimitPerMin": 60,
+  "timeoutMs": 15000,
+  "retries": 3,
+  "backoffMs": 800,
+  "idempotency": true
+}
