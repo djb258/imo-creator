@@ -106,7 +106,10 @@
       "Bash(npx composio apps:*)",
       "Bash(composio:*)",
       "Bash(npx composio:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(BMAD_ALLOW_MULTI=1 git commit -m \"feat: complete Abacus.AI × Composio MCP integration with guardrails and smoke tests\n\nBMAD_TRACE_ID=BMAD-ABACUS-INTEGRATION-COMPLETE\n\n🚀 Production-Ready Abacus Integration:\n\n✨ Core Infrastructure:\n- src/composio/runTool.ts with timeout, retries, and audit logging\n- src/composio/recipes/global.json with default policies (15s timeout, 2 retries)\n- sql/shq_composio_call_log.sql for PostgreSQL audit trail\n- config/abacus.mcp.ready.json - copy-paste ready for Abacus UI\n\n🛡️ Guardrails & Security:\n- .eslintrc-abacus.js prevents direct HTTP calls outside src/composio/*\n- MCP_DISABLE_WRITE=true support blocks write operations\n- ALLOWED_TOOLS whitelist support for tool restriction\n- Request ID tracking with SHA256 payload hashing\n\n🧪 Testing & Validation:\n- scripts/smoke.ts with idempotent read-only tests\n- scripts/register-abacus-mcp.ts for automatic registration\n- Write operation blocking verification\n- Audit log validation\n\n📋 Configuration & Documentation:\n- README-ABACUS.md with step-by-step setup guide\n- config/master.env updated with Abacus API credentials\n- .github/workflows/abacus-mcp.yml CI pipeline\n- Package.json scripts: abacus:register, smoke, abacus:lint\n\n🎯 Ready for Production:\n- Entity ID: 6b9518ed-5771-4153-95bd-c72ce46e84ef\n- SSE connection to https://mcp.composio.dev/sse\n- Up to 50 tools supported by Abacus\n- Emergency kill switches implemented\n\nUsage: Import config/abacus.mcp.ready.json in Abacus → Deep Agent → MCP Servers\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(BMAD_TRACE_ID=BMAD-ABACUS-INTEGRATION-COMPLETE ./bmad/measure.sh echo \"Complete Abacus.AI × Composio MCP integration deployment ready\")",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": [],

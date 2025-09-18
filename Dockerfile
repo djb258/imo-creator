@@ -1,13 +1,14 @@
 # Multi-stage Docker build for MCP servers
-FROM node:18-alpine AS base
+FROM node:18-slim AS base
 
 # Install system dependencies
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     python3 \
-    py3-pip \
+    python3-pip \
     bash \
     curl \
-    git
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -37,8 +38,8 @@ RUN npm run build
 RUN npm ci --only=production && npm cache clean --force
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S mcp -u 1001
+RUN groupadd -r nodejs -g 1001 && \
+    useradd -r -u 1001 -g nodejs mcp
 
 # Change ownership
 RUN chown -R mcp:nodejs /app

@@ -1,0 +1,99 @@
+{
+  "mcpServers": {
+    "smartsheet": {
+      "command": "node",
+      "args": ["./mcp-servers/smartsheet-server.js"],
+      "env": {
+        "SMARTSHEET_API_TOKEN": "JpxP0xueCoWibhuPfuB4n6YETZ8gIe6OJJoMi",
+        "SMARTSHEET_BASE_URL": "https://api.smartsheet.com/2.0"
+      },
+      "description": "Smartsheet integration for managing sheets, rows, and columns",
+      "features": [
+        "Sheet management",
+        "Row operations",
+        "Column operations",
+        "Workspace management",
+        "Search functionality"
+      ]
+    },
+    "composio": {
+      "command": "node",
+      "args": ["./mcp-servers/composio-server.js"],
+      "env": {
+        "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
+        "COMPOSIO_BASE_URL": "https://backend.composio.dev"
+      },
+      "description": "Composio integration for AI tool orchestration",
+      "features": [
+        "Tool execution",
+        "Connected accounts",
+        "Toolkit management"
+      ]
+    },
+    "instantly": {
+      "command": "node",
+      "args": ["./mcp-servers/instantly-server.js"],
+      "env": {
+        "INSTANTLY_API_KEY": "eaf2c37e-ade9-4cd1-9f91-edec66dfc83b:gpeymGNltHfI",
+        "INSTANTLY_BASE_URL": "https://api.instantly.ai"
+      },
+      "description": "Instantly.ai integration for email outreach campaigns",
+      "features": [
+        "Email campaigns",
+        "Lead management",
+        "Analytics"
+      ]
+    },
+    "heyreach": {
+      "command": "node",
+      "args": ["./mcp-servers/heyreach-server.js"],
+      "env": {
+        "HEYREACH_API_KEY": "30l4vmMccKZvGnjsCgMdUb6W4m1qpgt6oSBjwrASV+c="
+      },
+      "description": "HeyReach integration for LinkedIn outreach automation",
+      "features": [
+        "LinkedIn automation",
+        "Connection requests",
+        "Message sequences"
+      ]
+    }
+  },
+  "serverConfig": {
+    "timeout": 30000,
+    "retries": 3,
+    "logLevel": "info",
+    "healthCheck": {
+      "enabled": true,
+      "interval": "30s"
+    }
+  },
+  "integrations": {
+    "smartsheet": {
+      "toolkits": ["smartsheet"],
+      "allowedOperations": [
+        "list_sheets",
+        "get_sheet",
+        "create_sheet",
+        "update_sheet",
+        "add_rows",
+        "update_rows",
+        "delete_rows",
+        "add_columns",
+        "update_columns",
+        "search_sheets",
+        "list_workspaces"
+      ],
+      "rateLimit": {
+        "requests": 300,
+        "period": "60s"
+      }
+    },
+    "composio": {
+      "toolkits": ["all"],
+      "mcp": {
+        "enabled": true,
+        "providers": ["anthropic", "openai"]
+      }
+    }
+  }
+}
