@@ -1,5 +1,24 @@
 {
   "mcpServers": {
+    "github": {
+      "command": "node",
+      "args": ["./mcp-servers/github-composio-server.js"],
+      "env": {
+        "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
+        "COMPOSIO_BASE_URL": "https://backend.composio.dev"
+      },
+      "description": "GitHub integration through Composio for repository management and automation",
+      "features": [
+        "Repository management",
+        "Issue tracking",
+        "Pull request automation",
+        "GitHub Actions workflows",
+        "Code search",
+        "Branch management",
+        "File operations",
+        "User management"
+      ]
+    },
     "smartsheet": {
       "command": "node",
       "args": ["./mcp-servers/smartsheet-server.js"],
@@ -68,6 +87,49 @@
     }
   },
   "integrations": {
+    "github": {
+      "toolkits": ["github"],
+      "allowedOperations": [
+        "GITHUB_GET_AUTHENTICATED_USER",
+        "GITHUB_LIST_REPOS_FOR_AUTHENTICATED_USER",
+        "GITHUB_CREATE_REPO",
+        "GITHUB_GET_REPO",
+        "GITHUB_DELETE_REPO",
+        "GITHUB_LIST_ISSUES_FOR_REPO",
+        "GITHUB_CREATE_ISSUE",
+        "GITHUB_UPDATE_ISSUE",
+        "GITHUB_LIST_PULL_REQUESTS",
+        "GITHUB_CREATE_PULL_REQUEST",
+        "GITHUB_MERGE_PULL_REQUEST",
+        "GITHUB_CREATE_BRANCH",
+        "GITHUB_DELETE_BRANCH",
+        "GITHUB_CREATE_FILE",
+        "GITHUB_UPDATE_FILE",
+        "GITHUB_DELETE_FILE",
+        "GITHUB_SEARCH_CODE",
+        "GITHUB_SEARCH_REPOS",
+        "GITHUB_SEARCH_ISSUES",
+        "GITHUB_LIST_WORKFLOWS",
+        "GITHUB_TRIGGER_WORKFLOW"
+      ],
+      "authentication": {
+        "method": "oauth",
+        "scopes": [
+          "repo",
+          "workflow",
+          "write:packages",
+          "read:org",
+          "admin:repo_hook",
+          "notifications",
+          "user",
+          "delete_repo"
+        ]
+      },
+      "rateLimit": {
+        "requests": 5000,
+        "period": "60m"
+      }
+    },
     "smartsheet": {
       "toolkits": ["smartsheet"],
       "allowedOperations": [

@@ -1,0 +1,176 @@
+{
+  "composio": {
+    "version": "3.0.0",
+    "defaultProvider": "github",
+    "globalSettings": {
+      "apiKey": "${COMPOSIO_API_KEY}",
+      "baseUrl": "https://backend.composio.dev",
+      "enableTelemetry": false,
+      "logLevel": "info"
+    }
+  },
+  "github": {
+    "integration": {
+      "enabled": true,
+      "useComposio": true,
+      "fallbackToDirect": true,
+      "authentication": {
+        "method": "token",
+        "token": "${GITHUB_API_TOKEN}",
+        "scopes": [
+          "repo",
+          "workflow",
+          "write:packages",
+          "read:org",
+          "admin:repo_hook",
+          "notifications",
+          "user",
+          "delete_repo"
+        ]
+      }
+    },
+    "defaultBehavior": {
+      "autoCommit": {
+        "enabled": true,
+        "includeTraceId": true,
+        "template": "{type}: {description} COMPOSIO_TRACE_ID={traceId}\\n\\n{details}\\n\\n🤖 Generated with [Claude Code](https://claude.ai/code)\\n\\nCo-Authored-By: Claude <noreply@anthropic.com>"
+      },
+      "autoPush": {
+        "enabled": true,
+        "requiresApproval": false,
+        "defaultBranch": "main"
+      },
+      "pullRequestAutomation": {
+        "enabled": true,
+        "autoCreatePR": false,
+        "autoMergePR": false,
+        "requiresReview": true
+      }
+    },
+    "hooks": {
+      "preCommit": {
+        "enabled": true,
+        "validateChanges": true,
+        "runLinting": true,
+        "runTests": false
+      },
+      "postCommit": {
+        "enabled": true,
+        "notifyComposio": true,
+        "updateTrackingSystem": true
+      },
+      "prePush": {
+        "enabled": true,
+        "validateRemote": true,
+        "checkForUpdates": true
+      },
+      "postPush": {
+        "enabled": true,
+        "triggerCI": false,
+        "notifySlack": false
+      }
+    }
+  },
+  "crossRepoSync": {
+    "enabled": true,
+    "centralRepo": "djb258/imo-creator",
+    "configPath": ".composio/global-config.json",
+    "syncFrequency": "on-push",
+    "syncItems": [
+      "composio-config",
+      "mcp-servers",
+      "integration-scripts",
+      "git-hooks"
+    ],
+    "excludeRepos": [
+      "archived-*",
+      "temp-*",
+      "experimental-*"
+    ]
+  },
+  "automation": {
+    "issueManagement": {
+      "enabled": true,
+      "autoAssignLabels": true,
+      "autoCreateFromErrors": true,
+      "templates": {
+        "bug": "## Bug Report\\n\\n**Description**\\n{description}\\n\\n**Environment**\\n- Composio Version: {composio_version}\\n- Repository: {repo}\\n- Timestamp: {timestamp}\\n\\n**Trace ID**\\n{trace_id}",
+        "feature": "## Feature Request\\n\\n**Description**\\n{description}\\n\\n**Proposed Implementation**\\n{implementation}\\n\\n**Repository Context**\\n{repo_context}"
+      }
+    },
+    "codeAnalysis": {
+      "enabled": true,
+      "scanOnPush": true,
+      "aiReview": true,
+      "securityCheck": true,
+      "performanceAnalysis": false
+    },
+    "deployment": {
+      "enabled": false,
+      "strategy": "manual",
+      "environments": ["development", "staging", "production"],
+      "requiresApproval": true
+    }
+  },
+  "integrations": {
+    "smartsheet": {
+      "enabled": true,
+      "syncIssues": true,
+      "trackProgress": true,
+      "sheetId": null
+    },
+    "docker": {
+      "enabled": true,
+      "autoRebuild": false,
+      "platforms": ["linux/amd64", "linux/arm64"]
+    },
+    "mcp": {
+      "enabled": true,
+      "autoStartServers": true,
+      "servers": [
+        "github-composio-server",
+        "github-direct-server",
+        "smartsheet-server"
+      ]
+    }
+  },
+  "security": {
+    "secretsManagement": {
+      "enabled": true,
+      "preventSecretsInCommits": true,
+      "encryptedStorage": true
+    },
+    "accessControl": {
+      "requireCodeReview": true,
+      "allowDirectPush": false,
+      "branchProtection": {
+        "main": {
+          "requiresPR": true,
+          "requiresReview": true,
+          "dismissStaleReviews": true
+        }
+      }
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": {
+      "commitFrequency": true,
+      "buildSuccess": true,
+      "deploymentTime": true,
+      "issueResolution": true
+    },
+    "alerts": {
+      "buildFailures": true,
+      "securityVulnerabilities": true,
+      "performanceRegression": false
+    }
+  },
+  "metadata": {
+    "createdAt": "2025-01-18T16:30:00Z",
+    "lastUpdated": "2025-01-18T16:30:00Z",
+    "version": "1.0.0",
+    "managedBy": "composio-global-config",
+    "repositories": []
+  }
+}

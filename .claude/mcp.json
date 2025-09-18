@@ -1,20 +1,63 @@
 {
   "mcpServers": {
+    "github-composio": {
+      "command": "node",
+      "args": ["./mcp-servers/github-composio-server.js"],
+      "env": {
+        "COMPOSIO_API_KEY": "${COMPOSIO_API_KEY}",
+        "COMPOSIO_BASE_URL": "https://backend.composio.dev"
+      },
+      "description": "GitHub integration through Composio for AI-powered repository management"
+    },
+    "github-direct": {
+      "command": "node",
+      "args": ["./mcp-servers/github-direct-server.js"],
+      "env": {
+        "GITHUB_API_TOKEN": "${GITHUB_API_TOKEN}",
+        "GITHUB_BASE_URL": "https://api.github.com"
+      },
+      "description": "Direct GitHub API integration for repository operations"
+    },
+    "smartsheet": {
+      "command": "node",
+      "args": ["./mcp-servers/smartsheet-server.js"],
+      "env": {
+        "SMARTSHEET_API_TOKEN": "${SMARTSHEET_API_TOKEN}",
+        "SMARTSHEET_BASE_URL": "https://api.smartsheet.com/2.0"
+      },
+      "description": "Smartsheet integration for project management and data tracking"
+    },
     "lovable": {
       "command": "node",
       "args": ["./mcp-servers/lovable-mcp/dist/server.js"],
       "env": {}
     },
     "composio": {
-      "command": "node", 
+      "command": "node",
       "args": ["./mcp-servers/composio-mcp/dist/server.js"],
       "env": {}
     },
     "render": {
       "url": "https://mcp.render.com/mcp",
       "headers": {
-        "Authorization": "Bearer rnd_4y6V4Nqvb9xv0ojheGrtlSiARWZ2"
+        "Authorization": "Bearer ${RENDER_API_TOKEN}"
       }
+    }
+  },
+  "globalSettings": {
+    "defaultGitIntegration": "github-composio",
+    "autoStartServers": ["github-composio", "smartsheet"],
+    "crossRepoSync": {
+      "enabled": true,
+      "centralRepo": "djb258/imo-creator",
+      "syncConfig": true,
+      "syncScripts": true
+    },
+    "gitDefaults": {
+      "useComposioForCommits": true,
+      "useComposioForPush": true,
+      "autoGenerateCommitMessages": true,
+      "includeTraceIds": true
     }
   }
 }
