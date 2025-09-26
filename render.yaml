@@ -6,10 +6,12 @@ services:
     plan: free
     branch: main
     region: oregon
+    rootDir: ./
     buildCommand: |
+      python -m pip install --upgrade pip
       pip install -r requirements.txt
-      pip install composio-sdk
-    startCommand: uvicorn src.server.main:app --host 0.0.0.0 --port $PORT
+      pip install composio-sdk fastapi uvicorn
+    startCommand: cd /opt/render/project/src && python -m uvicorn server.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY
