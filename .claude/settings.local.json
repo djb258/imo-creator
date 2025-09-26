@@ -10,7 +10,8 @@
       "Bash(rm:*)",
       "Bash(cp:*)",
       "Bash(git checkout:*)",
-      "Bash(git clone:*)"
+      "Bash(git clone:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],

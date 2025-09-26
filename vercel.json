@@ -1,42 +1,19 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/composio/(.*)", "destination": "/api/composio/$1" },
-    { "source": "/api/integrate", "destination": "/api/integrate" },
-    { "source": "/api/ssot/(.*)", "destination": "/api/ssot/$1" },
-    { "source": "/api/subagents", "destination": "/api/subagents" },
-    { "source": "/api/llm", "destination": "/api/llm" },
-    { "source": "/", "destination": "/docs/blueprints/ui/overview.html" }
+  "redirects": [
+    { "source": "/", "destination": "/docs/blueprints/ui/overview.html" },
+    { "source": "/ui", "destination": "/docs/blueprints/ui/overview.html" },
+    { "source": "/overview", "destination": "/docs/blueprints/ui/overview.html" }
   ],
   "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type,Authorization" }
-      ]
-    },
     {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Powered-By", "value": "IMO-Creator" }
       ]
     }
-  ],
-  "env": {
-    "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
-    "MCP_API_URL": "https://backend.composio.dev",
-    "LLM_DEFAULT_PROVIDER": "openai",
-    "DOCTRINE_DB": "shq",
-    "DOCTRINE_SUBHIVE": "03",
-    "DOCTRINE_APP": "imo",
-    "DOCTRINE_VER": "1",
-    "GARAGE_MCP_URL": "http://localhost:7001",
-    "GARAGE_MCP_TOKEN": "dev-local",
-    "SUBAGENT_REGISTRY_PATH": "/registry/subagents",
-    "ALLOW_ORIGIN": "*"
-  }
+  ]
 }
