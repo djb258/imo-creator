@@ -63,6 +63,41 @@
       "label": "vercel: dev",
       "type": "shell",
       "command": "vercel dev"
+    },
+    {
+      "label": "mcp: start server",
+      "type": "shell",
+      "command": "python src/mcp_server.py",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "options": {
+        "env": {
+          "BUILDER_IO_API_KEY": "9502e3493ccf42339f36d16b4a482c70",
+          "MCP_SERVER_MODE": "vscode",
+          "PORT": "7001"
+        }
+      },
+      "runOptions": {
+        "runOn": "default"
+      }
+    },
+    {
+      "label": "mcp: test integration",
+      "type": "shell",
+      "command": "python test_builder_integration.py",
+      "group": "test",
+      "dependsOn": "mcp: start server"
+    },
+    {
+      "label": "builder: sync current file",
+      "type": "shell",
+      "command": "curl -X POST http://localhost:7001/vscode/sync-with-builder -H \"Content-Type: application/json\" -d '{\"file_path\": \"${file}\", \"component_name\": \"${fileBasenameNoExtension}\"}'",
+      "group": "build"
     }
   ],
   "inputs": [

@@ -1,3 +1,36 @@
 {
-  "claudeCodeChat.permissions.yoloMode": true
+  "claudeCodeChat.permissions.yoloMode": true,
+  "mcp.servers": {
+    "imo-creator-composio": {
+      "name": "IMO Creator Composio Bridge",
+      "description": "Integrates Builder.io with composio MCP server for enhanced visual development",
+      "command": "python",
+      "args": ["src/mcp_server.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "BUILDER_IO_API_KEY": "9502e3493ccf42339f36d16b4a482c70",
+        "MCP_SERVER_MODE": "vscode",
+        "PORT": "7001"
+      },
+      "tools": [
+        "builder_create_content",
+        "builder_get_models",
+        "builder_sync_designs",
+        "heir_validate"
+      ],
+      "resources": [
+        "builder://models/*",
+        "builder://content/*",
+        "heir://validation/*"
+      ],
+      "prompts": [
+        "generate_component",
+        "sync_figma_design",
+        "validate_heir_compliance"
+      ]
+    }
+  },
+  "mcp.enabledServers": ["imo-creator-composio"],
+  "builder.io.mcpIntegration": true,
+  "builder.io.autoSyncWithMCP": true
 }

@@ -14,7 +14,13 @@
       "Bash(git commit:*)",
       "WebFetch(domain:composio-imo-creator6.vercel.app)",
       "Bash(find:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(git stash:*)",
+      "Bash(git-ingest:*)",
+      "Bash(npm install:*)",
+      "WebSearch",
+      "WebFetch(domain:www.builder.io)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "ask": [],

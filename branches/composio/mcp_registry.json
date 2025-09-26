@@ -64,5 +64,15 @@
     "branch": "pipedream",
     "doctrine_id": "04.04.F4",
     "status": "active"
+  },
+  {
+    "tool": "Builder.io",
+    "type": "MCP",
+    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
+    "branch": "composio",
+    "doctrine_id": "04.04.04",
+    "status": "active",
+    "api_key": "9502e3493ccf42339f36d16b4a482c70",
+    "description": "Builder.io visual development platform integration for UI/UX generation"
   }
 ]
