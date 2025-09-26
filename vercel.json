@@ -38,13 +38,5 @@
     "GARAGE_MCP_TOKEN": "dev-local",
     "SUBAGENT_REGISTRY_PATH": "/registry/subagents",
     "ALLOW_ORIGIN": "*"
-  },
-  "functions": {
-    "api/integrate.js": {
-      "maxDuration": 30
-    },
-    "api/composio/*.js": {
-      "maxDuration": 30
-    }
   }
 }
