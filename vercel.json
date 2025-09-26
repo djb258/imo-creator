@@ -1,19 +1,23 @@
 {
   "version": 2,
-  "redirects": [
-    { "source": "/", "destination": "/docs/blueprints/ui/overview.html" },
-    { "source": "/ui", "destination": "/docs/blueprints/ui/overview.html" },
-    { "source": "/overview", "destination": "/docs/blueprints/ui/overview.html" }
-  ],
-  "headers": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Powered-By", "value": "IMO-Creator" }
-      ]
+      "src": "docs/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "branches/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "config/**/*",
+      "use": "@vercel/static"
     }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/ui", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/overview", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
