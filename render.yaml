@@ -13,8 +13,12 @@ services:
       python3 -m pip install --upgrade pip
       pip3 install -r requirements.txt
       pip3 install composio-sdk fastapi uvicorn gunicorn python-multipart
+      echo "=== Creating startup script ==="
+      echo '#!/bin/bash' > start.sh
+      echo 'gunicorn src.server.main:app --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker' >> start.sh
+      chmod +x start.sh
       echo "=== PYTHON BUILD COMPLETE ==="
-    startCommand: gunicorn src.server.main:app --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker
+    startCommand: ./start.sh
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY
