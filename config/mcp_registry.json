@@ -14,26 +14,40 @@
     ]
   },
   "engine_version": "1.0.0",
-  "last_updated": "2025-09-26T00:00:00Z",
+  "last_updated": "2025-09-26T12:30:00Z",
+  "production_urls": {
+    "frontend": "https://imo-creator.vercel.app",
+    "backend": "https://composio-imo-creator-url.onrender.com",
+    "api_base": "https://composio-imo-creator-url.onrender.com/api"
+  },
   "engine_capabilities": [
+    {
+      "tool": "Composio MCP Server",
+      "type": "MCP",
+      "endpoint": "https://composio-imo-creator-url.onrender.com",
+      "doctrine_id": "04.04.00",
+      "status": "active",
+      "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
+      "description": "Primary Composio MCP integration hub for IMO-Creator ecosystem"
+    },
     {
       "tool": "Neon",
       "type": "MCP",
-      "endpoint": "https://neon.mcp",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
       "doctrine_id": "04.04.01",
       "status": "active"
     },
     {
       "tool": "Firebase",
       "type": "MCP",
-      "endpoint": "https://firebase.mcp",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
       "doctrine_id": "04.04.02",
       "status": "active"
     },
     {
       "tool": "Apify",
       "type": "MCP",
-      "endpoint": "https://apify.mcp",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
       "doctrine_id": "04.04.03",
       "status": "active"
     },

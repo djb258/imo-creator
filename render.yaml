@@ -37,4 +37,6 @@ services:
       - key: DOCTRINE_VER
         value: "1"
       - key: ALLOW_ORIGIN
-        value: "*"
+        value: "https://imo-creator.vercel.app"
+      - key: FRONTEND_URL
+        value: "https://imo-creator.vercel.app"

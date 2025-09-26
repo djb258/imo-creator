@@ -1,8 +1,18 @@
 [
   {
+    "tool": "Composio MCP Server",
+    "type": "MCP",
+    "endpoint": "https://composio-imo-creator-url.onrender.com",
+    "branch": "composio",
+    "doctrine_id": "04.04.00",
+    "status": "active",
+    "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
+    "description": "Primary Composio MCP integration hub"
+  },
+  {
     "tool": "Neon",
     "type": "MCP",
-    "endpoint": "https://neon.mcp",
+    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
     "branch": "composio",
     "doctrine_id": "04.04.01",
     "status": "active"
@@ -10,7 +20,7 @@
   {
     "tool": "Firebase",
     "type": "MCP",
-    "endpoint": "https://firebase.mcp",
+    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
     "branch": "composio",
     "doctrine_id": "04.04.02",
     "status": "active"
@@ -18,7 +28,7 @@
   {
     "tool": "Apify",
     "type": "MCP",
-    "endpoint": "https://apify.mcp",
+    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
     "branch": "composio",
     "doctrine_id": "04.04.03",
     "status": "active"
