@@ -8,11 +8,11 @@ services:
     region: oregon
     buildCommand: |
       echo "=== FORCING PYTHON BUILD ==="
-      mv package.json package.json.backup || echo "No package.json to move"
+      rm -f package.json package-lock.json yarn.lock
+      rm -rf node_modules
       python3 --version
       python3 -m pip install --upgrade pip
       pip3 install -r requirements.txt
-      pip3 install composio-sdk fastapi uvicorn gunicorn python-multipart
       echo "=== Verifying gunicorn installation ==="
       gunicorn --version
       which gunicorn
