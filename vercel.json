@@ -1,14 +1,12 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/api/composio/(.*)", "dest": "/api/composio/$1" },
-    { "src": "/api/integrate", "dest": "/api/integrate" },
-    { "src": "/api/ssot/(.*)", "dest": "/api/ssot/$1" },
-    { "src": "/api/subagents", "dest": "/api/subagents" },
-    { "src": "/api/llm", "dest": "/api/llm" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" },
-    { "src": "/(.*)", "dest": "/docs/$1" }
+  "rewrites": [
+    { "source": "/api/composio/(.*)", "destination": "/api/composio/$1" },
+    { "source": "/api/integrate", "destination": "/api/integrate" },
+    { "source": "/api/ssot/(.*)", "destination": "/api/ssot/$1" },
+    { "source": "/api/subagents", "destination": "/api/subagents" },
+    { "source": "/api/llm", "destination": "/api/llm" },
+    { "source": "/", "destination": "/docs/blueprints/ui/overview.html" }
   ],
   "headers": [
     {
