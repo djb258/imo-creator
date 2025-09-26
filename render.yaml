@@ -6,12 +6,15 @@ services:
     plan: free
     branch: main
     region: oregon
-    rootDir: ./
     buildCommand: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-      pip install composio-sdk fastapi uvicorn
-    startCommand: cd /opt/render/project/src && python -m uvicorn server.main:app --host 0.0.0.0 --port $PORT
+      echo "=== FORCING PYTHON BUILD ==="
+      mv package.json package.json.backup || echo "No package.json to move"
+      python3 --version
+      python3 -m pip install --upgrade pip
+      pip3 install -r requirements.txt
+      pip3 install composio-sdk fastapi uvicorn python-multipart
+      echo "=== PYTHON BUILD COMPLETE ==="
+    startCommand: python3 -m uvicorn src.server.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY
