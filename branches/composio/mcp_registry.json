@@ -1,0 +1,58 @@
+[
+  {
+    "tool": "Neon",
+    "type": "MCP",
+    "endpoint": "https://neon.mcp",
+    "branch": "composio",
+    "doctrine_id": "04.04.01",
+    "status": "active"
+  },
+  {
+    "tool": "Firebase",
+    "type": "MCP",
+    "endpoint": "https://firebase.mcp",
+    "branch": "composio",
+    "doctrine_id": "04.04.02",
+    "status": "active"
+  },
+  {
+    "tool": "Apify",
+    "type": "MCP",
+    "endpoint": "https://apify.mcp",
+    "branch": "composio",
+    "doctrine_id": "04.04.03",
+    "status": "active"
+  },
+  {
+    "tool": "n8n",
+    "type": "Fallback",
+    "endpoint": "https://n8n-instance/webhook",
+    "branch": "n8n",
+    "doctrine_id": "04.04.F1",
+    "status": "active"
+  },
+  {
+    "tool": "Make.com",
+    "type": "Fallback",
+    "endpoint": "https://make-instance/webhook",
+    "branch": "make",
+    "doctrine_id": "04.04.F2",
+    "status": "active"
+  },
+  {
+    "tool": "Zapier",
+    "type": "Fallback",
+    "endpoint": "https://hooks.zapier.com/webhook",
+    "branch": "zapier",
+    "doctrine_id": "04.04.F3",
+    "status": "active"
+  },
+  {
+    "tool": "Pipedream",
+    "type": "Fallback",
+    "endpoint": "https://pipedream-instance/webhook",
+    "branch": "pipedream",
+    "doctrine_id": "04.04.F4",
+    "status": "active"
+  }
+]

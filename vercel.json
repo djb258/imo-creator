@@ -1,15 +1,68 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "docs/**",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
+    { "src": "/api/composio/(.*)", "dest": "/api/composio/$1" },
+    { "src": "/api/integrate", "dest": "/api/integrate" },
+    { "src": "/api/ssot/(.*)", "dest": "/api/ssot/$1" },
+    { "src": "/api/subagents", "dest": "/api/subagents" },
+    { "src": "/api/llm", "dest": "/api/llm" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" }
+    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/(.*)", "dest": "/docs/$1" }
   ],
   "headers": [
     {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type,Authorization" }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ]
+  ],
+  "env": {
+    "COMPOSIO_API_KEY": "@composio_api_key",
+    "MCP_API_URL": "https://backend.composio.dev",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "LLM_DEFAULT_PROVIDER": "openai",
+    "DOCTRINE_DB": "shq",
+    "DOCTRINE_SUBHIVE": "03",
+    "DOCTRINE_APP": "imo",
+    "DOCTRINE_VER": "1",
+    "GARAGE_MCP_URL": "http://localhost:7001",
+    "GARAGE_MCP_TOKEN": "dev-local",
+    "SUBAGENT_REGISTRY_PATH": "/registry/subagents",
+    "ALLOW_ORIGIN": "*"
+  },
+  "functions": {
+    "api/integrate.js": {
+      "maxDuration": 30
+    },
+    "api/composio/*.js": {
+      "maxDuration": 30
+    }
+  }
 }

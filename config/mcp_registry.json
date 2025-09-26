@@ -1,0 +1,60 @@
+{
+  "_docstring": {
+    "description": "IMO-Creator MCP Registry Configuration",
+    "usage": {
+      "engine_capabilities": "Global tool definitions managed centrally in IMO-Creator. These represent the static capabilities available across all repos that use this engine. DO NOT modify in individual repos.",
+      "repo_usage": "Repo-specific usage patterns. This section is populated by Claude when scaffolding new repos. Define only the specific tools and workflows this repo uses from the available engine capabilities.",
+      "versioning": "engine_version and last_updated provide doctrine tracking for compatibility and updates across the IMO-Creator ecosystem."
+    },
+    "rules": [
+      "This file MUST be copied into all new repos when cloning/scaffolding from IMO-Creator",
+      "Engine capabilities are updated globally via IMO-Creator repo only",
+      "Repo-level customization belongs only in 'repo_usage' section",
+      "Version tracking ensures compatibility across distributed repos"
+    ]
+  },
+  "engine_version": "1.0.0",
+  "last_updated": "2025-09-26T00:00:00Z",
+  "engine_capabilities": [
+    {
+      "tool": "Neon",
+      "type": "MCP",
+      "endpoint": "https://neon.mcp",
+      "doctrine_id": "04.04.01",
+      "status": "active"
+    },
+    {
+      "tool": "Firebase",
+      "type": "MCP",
+      "endpoint": "https://firebase.mcp",
+      "doctrine_id": "04.04.02",
+      "status": "active"
+    },
+    {
+      "tool": "Apify",
+      "type": "MCP",
+      "endpoint": "https://apify.mcp",
+      "doctrine_id": "04.04.03",
+      "status": "active"
+    },
+    {
+      "tool": "n8n",
+      "type": "Fallback",
+      "endpoint": "https://n8n-instance/webhook",
+      "doctrine_id": "04.04.F1",
+      "status": "active"
+    },
+    {
+      "tool": "Make",
+      "type": "Fallback",
+      "endpoint": "https://make-instance/webhook",
+      "doctrine_id": "04.04.F2",
+      "status": "active"
+    }
+  ],
+  "repo_usage": {
+    "inputs": [],
+    "middle": [],
+    "outputs": []
+  }
+}
