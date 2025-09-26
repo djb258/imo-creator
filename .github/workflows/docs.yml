@@ -1,0 +1,102 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - '*.md'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install markdown tools
+        run: |
+          npm install -g markdownlint-cli
+          npm install -g markdown-link-check
+
+      - name: Lint markdown files
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | \
+          xargs markdownlint --config .markdownlint.json || echo "⚠️ Markdown linting issues found"
+
+      - name: Check markdown links
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | \
+          xargs markdown-link-check || echo "⚠️ Broken markdown links found"
+
+      - name: Generate docs index
+        run: |
+          echo "# 📚 Documentation Index" > docs/INDEX.md
+          echo "" >> docs/INDEX.md
+          echo "Auto-generated documentation index for IMO-Creator repository." >> docs/INDEX.md
+          echo "" >> docs/INDEX.md
+          echo "## Available Documentation" >> docs/INDEX.md
+          echo "" >> docs/INDEX.md
+          find docs/ -name "*.md" -not -name "INDEX.md" | sort | while read file; do
+            title=$(head -1 "$file" | sed 's/^# //' || basename "$file" .md)
+            echo "- [$title]($file)" >> docs/INDEX.md
+          done
+
+      - name: Validate doctrine documentation
+        run: |
+          if [ ! -f "docs/imo_architecture.md" ]; then
+            echo "⚠️ Missing IMO architecture documentation"
+          else
+            echo "✅ IMO architecture documentation found"
+          fi
+
+          if [ ! -f "docs/composio_connection.md" ]; then
+            echo "⚠️ Missing Composio connection documentation"
+          else
+            echo "✅ Composio connection documentation found"
+          fi
+
+      - name: Check for required sections
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+
+          required_files = [
+              ("README.md", ["Installation", "Usage", "Contributing"]),
+              ("docs/imo_architecture.md", ["Input Layer", "Middle Layer", "Output Layer"]),
+          ]
+
+          for filename, sections in required_files:
+              if os.path.exists(filename):
+                  with open(filename, 'r') as f:
+                      content = f.read()
+                      for section in sections:
+                          if section.lower() in content.lower():
+                              print(f"✅ {filename}: Found '{section}' section")
+                          else:
+                              print(f"⚠️ {filename}: Missing '{section}' section")
+              else:
+                  print(f"❌ {filename}: File not found")
+          EOF
+
+      - name: Generate documentation summary
+        run: |
+          echo "## 📖 Documentation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files processed:**" >> $GITHUB_STEP_SUMMARY
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | wc -l | \
+          xargs echo "- Markdown files:" >> $GITHUB_STEP_SUMMARY
+          echo "- Documentation validation completed" >> $GITHUB_STEP_SUMMARY
