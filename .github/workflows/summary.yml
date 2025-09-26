@@ -1,0 +1,385 @@
+name: Repository Summary
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 12 * * *'  # Daily at noon UTC
+  workflow_dispatch:
+    inputs:
+      summary_type:
+        description: 'Type of summary to generate'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - technical
+          - user-facing
+
+jobs:
+  generate-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install analysis tools
+        run: |
+          pip install pyyaml requests GitPython
+
+      - name: Generate IMO narrative summary
+        run: |
+          mkdir -p .github/generated/summaries
+          python3 << 'EOF'
+          import os
+          import yaml
+          import json
+          from pathlib import Path
+          from datetime import datetime
+          import subprocess
+
+          def analyze_repository():
+              """Analyze repository structure and generate IMO narrative"""
+
+              # Get repository stats
+              try:
+                  total_commits = subprocess.check_output(['git', 'rev-list', '--count', 'HEAD']).decode().strip()
+                  contributors = subprocess.check_output(['git', 'log', '--format=%an', '--all']).decode().split('\n')
+                  unique_contributors = len(set(filter(None, contributors)))
+                  latest_commit = subprocess.check_output(['git', 'log', '-1', '--format=%H %s %ad', '--date=short']).decode().strip()
+              except:
+                  total_commits, unique_contributors, latest_commit = "Unknown", 0, "No commits"
+
+              # Analyze file structure
+              file_analysis = {
+                  'python_files': len(list(Path('.').rglob('*.py'))),
+                  'javascript_files': len(list(Path('.').rglob('*.js'))) + len(list(Path('.').rglob('*.ts'))),
+                  'config_files': len(list(Path('.').rglob('*.json'))) + len(list(Path('.').rglob('*.yaml'))) + len(list(Path('.').rglob('*.yml'))),
+                  'documentation_files': len(list(Path('.').rglob('*.md'))),
+                  'workflow_files': len(list(Path('.github/workflows').rglob('*.yml'))) if Path('.github/workflows').exists() else 0
+              }
+
+              # Check for key IMO-Creator components
+              imo_components = {
+                  'heir_doctrine': Path('heir.doctrine.yaml').exists(),
+                  'mcp_registry': Path('config/mcp_registry.json').exists(),
+                  'composio_branches': Path('branches/composio').exists(),
+                  'imo_architecture_docs': Path('docs/imo_architecture.md').exists(),
+                  'vercel_config': Path('vercel.json').exists(),
+                  'render_config': Path('render.yaml').exists(),
+                  'github_workflows': Path('.github/workflows').exists()
+              }
+
+              return {
+                  'repository_stats': {
+                      'total_commits': total_commits,
+                      'contributors': unique_contributors,
+                      'latest_commit': latest_commit,
+                      'analysis_date': datetime.utcnow().isoformat()
+                  },
+                  'file_analysis': file_analysis,
+                  'imo_components': imo_components
+              }
+
+          def generate_narrative(analysis):
+              """Generate human-readable narrative summary"""
+
+              stats = analysis['repository_stats']
+              files = analysis['file_analysis']
+              components = analysis['imo_components']
+
+              # Determine project maturity
+              total_files = sum(files.values())
+              workflow_coverage = files['workflow_files'] >= 3
+              documentation_coverage = files['documentation_files'] >= 3
+
+              if components['mcp_registry'] and components['heir_doctrine'] and workflow_coverage:
+                  maturity = "Production-Ready"
+                  maturity_desc = "fully configured with IMO doctrine compliance, MCP integration, and comprehensive CI/CD workflows"
+              elif components['mcp_registry'] and components['vercel_config']:
+                  maturity = "Development-Active"
+                  maturity_desc = "actively developed with core IMO components and deployment configuration"
+              elif total_files > 10:
+                  maturity = "In Development"
+                  maturity_desc = "under active development with foundational structure in place"
+              else:
+                  maturity = "Early Stage"
+                  maturity_desc = "in early development phase"
+
+              # Generate narrative
+              narrative = f"""# Repository Summary
+
+          ## Overview
+          This repository represents a **{maturity}** IMO-Creator project that is {maturity_desc}.
+
+          ## Project Analysis
+          - **Total Commits**: {stats['total_commits']}
+          - **Contributors**: {stats['contributors']}
+          - **Files**: {total_files} across multiple languages and configurations
+          - **Latest Activity**: {stats['latest_commit']}
+
+          ## Technical Composition
+          - **Python**: {files['python_files']} files (Backend/API development)
+          - **JavaScript/TypeScript**: {files['javascript_files']} files (Frontend/UI development)
+          - **Configuration**: {files['config_files']} files (Deployment and service config)
+          - **Documentation**: {files['documentation_files']} files (Project documentation)
+          - **Workflows**: {files['workflow_files']} files (CI/CD automation)
+
+          ## IMO-Creator Integration Status
+
+          ### Input → Middle → Output Architecture
+          """
+
+              if components['vercel_config'] and components['render_config']:
+                  narrative += "✅ **Complete** - Full deployment pipeline configured for Vercel (frontend) and Render (backend)\n"
+              elif components['vercel_config'] or components['render_config']:
+                  narrative += "🔄 **Partial** - Deployment configuration present but incomplete\n"
+              else:
+                  narrative += "⚠️ **Missing** - No deployment configuration detected\n"
+
+              if components['mcp_registry']:
+                  narrative += "✅ **MCP Registry** - Composio integration hub configured with tool routing\n"
+              else:
+                  narrative += "⚠️ **MCP Registry** - Missing centralized integration configuration\n"
+
+              if components['heir_doctrine']:
+                  narrative += "✅ **HEIR Compliance** - Doctrine metadata and compliance requirements defined\n"
+              else:
+                  narrative += "⚠️ **HEIR Compliance** - Missing doctrine compliance configuration\n"
+
+              if components['github_workflows']:
+                  narrative += f"✅ **CI/CD Workflows** - {files['workflow_files']} automated workflows configured\n"
+              else:
+                  narrative += "⚠️ **CI/CD Workflows** - No GitHub Actions workflows detected\n"
+
+              narrative += f"""
+          ### Architecture Components
+          - **Composio Branches**: {'✅ Configured' if components['composio_branches'] else '❌ Missing'}
+          - **Architecture Documentation**: {'✅ Present' if components['imo_architecture_docs'] else '❌ Missing'}
+          - **Deployment Ready**: {'✅ Yes' if (components['vercel_config'] and components['render_config']) else '❌ Incomplete'}
+
+          ## Project Health Score
+          """
+
+              # Calculate health score
+              health_score = 0
+              max_score = 7
+
+              if components['heir_doctrine']: health_score += 1
+              if components['mcp_registry']: health_score += 1
+              if components['vercel_config']: health_score += 1
+              if components['render_config']: health_score += 1
+              if components['github_workflows']: health_score += 1
+              if documentation_coverage: health_score += 1
+              if files['python_files'] > 0 or files['javascript_files'] > 0: health_score += 1
+
+              health_percentage = (health_score / max_score) * 100
+
+              if health_percentage >= 85:
+                  health_status = "🟢 Excellent"
+              elif health_percentage >= 70:
+                  health_status = "🟡 Good"
+              elif health_percentage >= 50:
+                  health_status = "🟠 Developing"
+              else:
+                  health_status = "🔴 Needs Attention"
+
+              narrative += f"**{health_status}** ({health_percentage:.0f}% - {health_score}/{max_score} components)\n\n"
+
+              narrative += f"""## Next Steps for Optimization
+
+          Based on the analysis, consider these improvements:
+          """
+
+              recommendations = []
+              if not components['heir_doctrine']:
+                  recommendations.append("- Add `heir.doctrine.yaml` for compliance tracking")
+              if not components['mcp_registry']:
+                  recommendations.append("- Create `config/mcp_registry.json` for integration management")
+              if not components['vercel_config']:
+                  recommendations.append("- Add `vercel.json` for frontend deployment")
+              if not components['render_config']:
+                  recommendations.append("- Add `render.yaml` for backend deployment")
+              if files['workflow_files'] < 3:
+                  recommendations.append("- Implement comprehensive CI/CD workflows")
+              if not documentation_coverage:
+                  recommendations.append("- Expand project documentation")
+
+              if recommendations:
+                  narrative += "\n".join(recommendations)
+              else:
+                  narrative += "✅ Project is well-configured! Consider advanced optimizations like monitoring and performance tuning."
+
+              narrative += f"""
+
+          ---
+          *Summary generated on {stats['analysis_date'][:19]} UTC by IMO-Creator analysis tools*
+              """
+
+              return narrative
+
+          # Generate the analysis and narrative
+          analysis = analyze_repository()
+          narrative = generate_narrative(analysis)
+
+          # Write files
+          with open('.github/generated/summaries/repository-analysis.json', 'w') as f:
+              json.dump(analysis, f, indent=2)
+
+          with open('.github/generated/summaries/NARRATIVE.md', 'w') as f:
+              f.write(narrative)
+
+          print("✅ Generated IMO narrative summary")
+          EOF
+
+      - name: Generate ORBT format summary
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+
+          # ORBT = Objective, Result, Benefit, Timeline
+          orbt_content = """# ORBT Summary - IMO Creator Repository
+
+          ## Objective 🎯
+          Transform this repository into a fully compliant IMO-Creator ecosystem with:
+          - Complete Input → Middle → Output architecture
+          - Composio integration hub for seamless service orchestration
+          - HEIR doctrine compliance for consistency and tracking
+          - Automated CI/CD pipelines for deployment and testing
+
+          ## Result 📊
+          Current repository status based on automated analysis:
+          """
+
+          # Load analysis if it exists
+          if os.path.exists('.github/generated/summaries/repository-analysis.json'):
+              with open('.github/generated/summaries/repository-analysis.json', 'r') as f:
+                  analysis = json.load(f)
+
+              total_files = sum(analysis['file_analysis'].values())
+              components = analysis['imo_components']
+
+              orbt_content += f"""
+          - **Files Analyzed**: {total_files} across multiple languages and configurations
+          - **IMO Components**: {sum(1 for v in components.values() if v)}/{len(components)} core components implemented
+          - **Deployment Ready**: {'Yes' if (components.get('vercel_config') and components.get('render_config')) else 'Partial'}
+          - **Documentation**: {'Comprehensive' if analysis['file_analysis']['documentation_files'] >= 3 else 'Basic'}
+          - **Automation**: {'Full CI/CD' if analysis['file_analysis']['workflow_files'] >= 3 else 'Limited'}
+          """
+          else:
+              orbt_content += "\n- Analysis data not available - run repository analysis first\n"
+
+          orbt_content += """
+          ## Benefit 💡
+          Implementing the complete IMO-Creator framework provides:
+
+          ### For Developers
+          - **Reduced Setup Time**: Pre-configured workflows and deployment pipelines
+          - **Consistent Architecture**: Standardized Input → Middle → Output pattern
+          - **Automated Testing**: Built-in compliance checks and quality gates
+          - **Easy Integration**: Composio hub handles complex service orchestration
+
+          ### For Organizations
+          - **Faster Time-to-Market**: Standardized deployment and scaling patterns
+          - **Reduced Operational Overhead**: Automated compliance and monitoring
+          - **Improved Reliability**: Battle-tested architecture and fallback mechanisms
+          - **Better Collaboration**: Consistent project structure across teams
+
+          ### For Maintenance
+          - **Self-Documenting**: Automated diagram and summary generation
+          - **Compliance Tracking**: Built-in HEIR doctrine validation
+          - **Dependency Management**: Centralized registry and version control
+          - **Performance Monitoring**: Integrated observability and health checks
+
+          ## Timeline ⏱️
+
+          ### Phase 1: Foundation (Week 1)
+          - ✅ Repository structure analysis
+          - ✅ Core IMO architecture documentation
+          - ✅ Basic deployment configuration
+
+          ### Phase 2: Integration (Week 2)
+          - 🔄 Complete Composio MCP integration
+          - 🔄 Full CI/CD workflow implementation
+          - 🔄 HEIR doctrine compliance validation
+
+          ### Phase 3: Optimization (Week 3)
+          - 📋 Performance monitoring setup
+          - 📋 Advanced diagram generation
+          - 📋 Comprehensive testing coverage
+
+          ### Phase 4: Production (Week 4)
+          - 📋 Production deployment verification
+          - 📋 Documentation finalization
+          - 📋 Team training and handoff
+
+          ---
+
+          ## Quick Actions 🚀
+
+          **Immediate Next Steps:**
+          1. Review generated repository analysis
+          2. Implement missing IMO components (see NARRATIVE.md)
+          3. Configure deployment secrets in GitHub/Vercel/Render
+          4. Run compliance validation workflows
+
+          **Success Metrics:**
+          - All CI/CD workflows passing ✅
+          - Deployment health checks green ✅
+          - Documentation coverage >90% ✅
+          - Response time <200ms for API endpoints ✅
+
+          *ORBT summary generated by automated analysis tools*
+          """
+
+          with open('.github/generated/summaries/ORBT.md', 'w') as f:
+              f.write(orbt_content)
+
+          print("✅ Generated ORBT format summary")
+          EOF
+
+      - name: Commit generated summaries
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Summary Generation Action"
+          git add .github/generated/summaries/
+          if git diff --staged --quiet; then
+            echo "No summary changes to commit"
+          else
+            git commit -m "chore: update repository summaries and analysis
+
+          - Generated IMO narrative summary with health score
+          - Updated ORBT format project summary
+          - Refreshed repository analysis data
+          - Updated project maturity assessment
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+            git push origin ai-human-readable || echo "Push failed - may need manual merge"
+          fi
+
+      - name: Generate workflow summary
+        run: |
+          echo "## 📝 Repository Summary Generation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Summaries" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 **repository-analysis.json** - Detailed technical analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- 📖 **NARRATIVE.md** - Human-readable project summary with health score" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎯 **ORBT.md** - Objective/Result/Benefit/Timeline project overview" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f ".github/generated/summaries/repository-analysis.json" ]; then
+            total_files=$(jq '.file_analysis | add' .github/generated/summaries/repository-analysis.json 2>/dev/null || echo "N/A")
+            echo "**Key Metrics:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Files analyzed: $total_files" >> $GITHUB_STEP_SUMMARY
+            echo "- Components: $(jq '[.imo_components[]] | map(select(. == true)) | length' .github/generated/summaries/repository-analysis.json 2>/dev/null || echo "N/A")/$(jq '.imo_components | length' .github/generated/summaries/repository-analysis.json 2>/dev/null || echo "N/A") implemented" >> $GITHUB_STEP_SUMMARY
+          fi

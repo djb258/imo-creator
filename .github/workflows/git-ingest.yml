@@ -1,0 +1,255 @@
+name: GitIngest Indexing
+
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM UTC
+  workflow_dispatch:
+    inputs:
+      force_full_scan:
+        description: 'Force full repository scan'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  GITINGEST_VERSION: "latest"
+
+jobs:
+  generate-ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive analysis
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install GitIngest tools
+        run: |
+          pip install requests python-magic gitpython
+
+      - name: Generate repository structure
+        run: |
+          python3 << 'EOF'
+          import os
+          import json
+          from pathlib import Path
+          from datetime import datetime
+          import subprocess
+
+          def get_git_info():
+              """Get git repository information"""
+              try:
+                  repo_url = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode().strip()
+                  branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode().strip()
+                  commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+                  return {
+                      'repository': repo_url,
+                      'branch': branch,
+                      'commit': commit,
+                      'scan_time': datetime.utcnow().isoformat()
+                  }
+              except:
+                  return {}
+
+          def scan_directory(path, max_size=1024*1024):  # 1MB max file size
+              """Recursively scan directory for code files"""
+              code_extensions = {'.py', '.js', '.ts', '.jsx', '.tsx', '.html', '.css', '.json',
+                               '.yaml', '.yml', '.md', '.sql', '.sh', '.dockerfile'}
+              ignore_dirs = {'node_modules', '.git', '__pycache__', 'dist', 'build', '.venv'}
+
+              files = []
+              for root, dirs, filenames in os.walk(path):
+                  # Remove ignored directories
+                  dirs[:] = [d for d in dirs if d not in ignore_dirs]
+
+                  for filename in filenames:
+                      if any(filename.endswith(ext) for ext in code_extensions):
+                          filepath = Path(root) / filename
+                          try:
+                              if filepath.stat().st_size <= max_size:
+                                  with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                                      content = f.read()
+                                      files.append({
+                                          'path': str(filepath.relative_to(Path('.'))),
+                                          'size': len(content),
+                                          'lines': len(content.splitlines()),
+                                          'content': content[:2000] + ('...' if len(content) > 2000 else '')  # Truncate for index
+                                      })
+                          except (PermissionError, UnicodeDecodeError):
+                              continue
+              return files
+
+          # Generate the ingest data
+          git_info = get_git_info()
+          files = scan_directory('.')
+
+          ingest_data = {
+              'metadata': git_info,
+              'summary': {
+                  'total_files': len(files),
+                  'total_lines': sum(f['lines'] for f in files),
+                  'total_size': sum(f['size'] for f in files)
+              },
+              'files': files
+          }
+
+          # Write ingest file
+          os.makedirs('.github/generated', exist_ok=True)
+          with open('.github/generated/git-ingest.json', 'w') as f:
+              json.dump(ingest_data, f, indent=2)
+
+          print(f"✅ Generated GitIngest index with {len(files)} files")
+          EOF
+
+      - name: Generate semantic search index
+        run: |
+          python3 << 'EOF'
+          import json
+          import re
+          from collections import defaultdict
+
+          # Load the git-ingest data
+          with open('.github/generated/git-ingest.json', 'r') as f:
+              ingest_data = json.load(f)
+
+          # Generate semantic search terms
+          search_index = defaultdict(list)
+
+          for file_info in ingest_data['files']:
+              path = file_info['path']
+              content = file_info['content'].lower()
+
+              # Index by file type
+              ext = path.split('.')[-1] if '.' in path else 'none'
+              search_index[f'filetype:{ext}'].append(path)
+
+              # Index by directory
+              if '/' in path:
+                  directory = '/'.join(path.split('/')[:-1])
+                  search_index[f'directory:{directory}'].append(path)
+
+              # Index by keywords (simple approach)
+              keywords = re.findall(r'\b[a-zA-Z]{3,}\b', content)
+              for keyword in set(keywords[:50]):  # Limit to top 50 keywords per file
+                  search_index[f'keyword:{keyword}'].append(path)
+
+              # Index by common patterns
+              if 'class ' in content:
+                  search_index['contains:class'].append(path)
+              if 'function ' in content or 'def ' in content:
+                  search_index['contains:function'].append(path)
+              if 'import ' in content:
+                  search_index['contains:imports'].append(path)
+              if 'TODO' in content.upper():
+                  search_index['contains:todo'].append(path)
+
+          # Convert to regular dict and write
+          search_data = {
+              'generated_at': ingest_data['metadata'].get('scan_time'),
+              'index': dict(search_index)
+          }
+
+          with open('.github/generated/search-index.json', 'w') as f:
+              json.dump(search_data, f, indent=2)
+
+          print(f"✅ Generated search index with {len(search_index)} terms")
+          EOF
+
+      - name: Generate repository summary
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+
+          # Load ingest data
+          with open('.github/generated/git-ingest.json', 'r') as f:
+              ingest_data = json.load(f)
+
+          # Generate summary
+          files = ingest_data['files']
+          file_types = {}
+          directories = set()
+
+          for file_info in files:
+              path = file_info['path']
+              ext = path.split('.')[-1] if '.' in path else 'none'
+              file_types[ext] = file_types.get(ext, 0) + 1
+
+              if '/' in path:
+                  directories.add('/'.join(path.split('/')[:-1]))
+
+          # Check for key files
+          key_files = {
+              'README.md': 'README.md' in [f['path'] for f in files],
+              'package.json': 'package.json' in [f['path'] for f in files],
+              'requirements.txt': 'requirements.txt' in [f['path'] for f in files],
+              'Dockerfile': any('dockerfile' in f['path'].lower() for f in files),
+              'config/mcp_registry.json': 'config/mcp_registry.json' in [f['path'] for f in files],
+              'heir.doctrine.yaml': 'heir.doctrine.yaml' in [f['path'] for f in files]
+          }
+
+          summary = {
+              'repository_analysis': {
+                  'total_files': len(files),
+                  'total_lines': sum(f['lines'] for f in files),
+                  'file_types': file_types,
+                  'directories': sorted(list(directories)),
+                  'key_files_present': key_files
+              },
+              'project_type_detection': {
+                  'python_project': 'py' in file_types and key_files['requirements.txt'],
+                  'node_project': 'js' in file_types and key_files['package.json'],
+                  'imo_creator': key_files['config/mcp_registry.json'] and key_files['heir.doctrine.yaml'],
+                  'has_docker': key_files['Dockerfile'],
+                  'has_docs': 'md' in file_types
+              }
+          }
+
+          with open('.github/generated/repo-summary.json', 'w') as f:
+              json.dump(summary, f, indent=2)
+
+          print("✅ Generated repository summary")
+          EOF
+
+      - name: Commit generated files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitIngest Action"
+          git add .github/generated/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update GitIngest index and search data
+
+          - Updated git-ingest.json with latest repository structure
+          - Regenerated search index for semantic search
+          - Updated repository analysis summary
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+            git push origin ai-human-readable || echo "Push failed - may need manual merge"
+          fi
+
+      - name: Generate workflow summary
+        run: |
+          echo "## 🔍 GitIngest Analysis Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files processed:** $(jq '.summary.total_files' .github/generated/git-ingest.json)" >> $GITHUB_STEP_SUMMARY
+          echo "**Total lines:** $(jq '.summary.total_lines' .github/generated/git-ingest.json)" >> $GITHUB_STEP_SUMMARY
+          echo "**Search terms indexed:** $(jq '.index | keys | length' .github/generated/search-index.json)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Files" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 `.github/generated/git-ingest.json` - Full repository index" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 `.github/generated/search-index.json` - Semantic search index" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 `.github/generated/repo-summary.json` - Repository analysis" >> $GITHUB_STEP_SUMMARY

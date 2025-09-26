@@ -1,196 +1,143 @@
-# Blueprint App Shell
+# AI/Human Readable Branch
 
-A 4-page planning app with SSOT manifest, flex ladder stages, and visual progress tracking.
+This branch provides repository readability for both AI systems and human developers through automated analysis, diagram generation, and narrative summaries.
 
-## Features
-- **4-Page UI**: Overview with progress visual, Input/Middle/Output pages
-- **SSOT Manifest**: YAML-based configuration with flexible stages per bucket
-- **Scoring**: Automatic progress calculation (done/wip/todo)
-- **Visuals**: Mermaid diagrams for overview and per-bucket ladders
-- **API**: Optional FastAPI for manifest GET/PUT operations
+## 🤖 Purpose
 
-## Quickstart
+Every repository explains itself to humans & AI by default through:
 
-```bash
-# Setup
-python -m venv .venv && . .venv/bin/activate  # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
+- **GitIngest indexing** for semantic search and AI comprehension
+- **Diagram generation** using Mermaid, PlantUML, and SVG formats
+- **Narrative summaries** in IMO + ORBT format for project understanding
 
-# Generate progress and visuals
-python tools/blueprint_score.py example
-python tools/blueprint_visual.py example
+## 🔄 Available Workflows
 
-# Open UI
-# Open docs/blueprints/ui/overview.html in your browser
+### `git-ingest.yml`
+- **Purpose**: Generate comprehensive repository index for AI systems
+- **Features**:
+  - Full repository structure scanning with smart file filtering
+  - Semantic search index generation for keyword and pattern matching
+  - Repository analysis and project type detection
+  - Weekly automated updates with manual trigger option
 
-# (Optional) Run API
-uvicorn src.server.main:app --port 7002 --reload
-```
+### `diagram.yml`
+- **Purpose**: Automated diagram generation for visual documentation
+- **Features**:
+  - IMO Architecture diagrams showing Input → Middle → Output flow
+  - MCP Registry flow diagrams from configuration files
+  - Dependency graphs for Python and Node.js projects
+  - Multiple output formats: Mermaid, SVG, PlantUML
 
-## LLM Endpoint & Env
+### `summary.yml`
+- **Purpose**: Human-readable project summaries and health scoring
+- **Features**:
+  - IMO narrative summaries with project maturity assessment
+  - ORBT format summaries (Objective/Result/Benefit/Timeline)
+  - Repository health scoring and optimization recommendations
+  - Daily automated updates with comprehensive analysis
 
-The UI supports LLM-assisted prompt generation with **concurrent Anthropic and OpenAI support**:
+## 📊 Generated Outputs
 
-**Local Development:**
-```bash
-# Copy environment template
-cp .env.example .env
+### GitIngest Files
+- **`.github/generated/git-ingest.json`** - Complete repository index
+- **`.github/generated/search-index.json`** - Semantic search database
+- **`.github/generated/repo-summary.json`** - Technical analysis summary
 
-# (Optional) Add API keys for full functionality:
-# ANTHROPIC_API_KEY=sk-ant-xxx
-# OPENAI_API_KEY=sk-xxx
-# LLM_DEFAULT_PROVIDER=openai
+### Diagram Files
+- **`.github/generated/diagrams/*.mmd`** - Mermaid diagram sources
+- **`.github/generated/diagrams/*.svg`** - Rendered SVG diagrams
+- **`.github/generated/diagrams/*.puml`** - PlantUML sequence diagrams
 
-# Run server (works without API keys, shows helpful messages)
-uvicorn src.server.main:app --port 7002 --reload
+### Summary Files
+- **`.github/generated/summaries/NARRATIVE.md`** - Human-readable project overview
+- **`.github/generated/summaries/ORBT.md`** - Structured project summary
+- **`.github/generated/summaries/repository-analysis.json`** - Detailed analysis data
 
-# Use LLM endpoint
-# Open docs/blueprints/ui/input.html?llm=http://localhost:7002/llm
-```
+## 🎯 AI Integration Benefits
 
-**Production (Vercel):**
-- **Deploy immediately** - no API keys required, app works with copy-to-clipboard fallback
-- **Add API keys later** in Vercel Dashboard → Project Settings → Environment Variables:
-  - `ANTHROPIC_API_KEY` = `sk-ant-your-key` (optional)
-  - `OPENAI_API_KEY` = `sk-your-key` (optional) 
-  - `LLM_DEFAULT_PROVIDER` = `openai` or `anthropic` (optional)
-  - `ALLOW_ORIGIN` = `https://your-domain.vercel.app` (optional, for CORS)
-- LLM Settings panel shows real-time key status
+### For AI Systems
+- **Structured Data**: JSON indexes enable semantic understanding
+- **Visual Context**: Diagrams provide architectural comprehension
+- **Narrative Context**: Summaries explain project purpose and status
+- **Search Capability**: Semantic indexes enable targeted file discovery
 
-**Request Format:**
+### For Human Developers
+- **Project Health**: Automated health scoring with improvement suggestions
+- **Visual Documentation**: Auto-generated architecture and flow diagrams
+- **Onboarding**: Comprehensive summaries for new team members
+- **Maintenance**: Regular analysis identifies technical debt and gaps
+
+## 🚀 Integration with IMO-Creator
+
+These workflows automatically integrate with:
+
 ```json
 {
-  "provider": "anthropic" | "openai",     // optional: auto-select if omitted
-  "model": "claude-3-5-sonnet-20240620",  // optional: provider-specific model
-  "system": "You are a helpful assistant", // optional
-  "prompt": "Generate a JSON schema",     // required
-  "json": true,                          // optional: expect JSON response
-  "max_tokens": 1024                     // optional
+  "doctrine_branches": {
+    "ai-human-readable": {
+      "git_ingest": ".github/workflows/git-ingest.yml",
+      "diagram": ".github/workflows/diagram.yml",
+      "summary": ".github/workflows/summary.yml"
+    }
+  }
 }
 ```
 
-**Provider Selection Algorithm:**
-1. If `provider` specified → use it (error if API key missing)
-2. Else if `model` starts with "claude" → anthropic, "gpt"/"o" → openai  
-3. Else use `LLM_DEFAULT_PROVIDER` (error if key missing)
-4. Else use whichever single API key is available
-5. Else error: no provider/key available
+## 📋 Workflow Triggers
 
-**Fallback:** If LLM endpoint unavailable, buttons fall back to copy-to-clipboard prompts.
+### Automatic Triggers
+- **Push to main**: Updates diagrams and summaries
+- **Schedule**: Daily summaries, weekly GitIngest updates
+- **File Changes**: Diagram updates on architecture file changes
 
-## HEIR/MCP Integration
+### Manual Triggers
+- **workflow_dispatch**: All workflows support manual execution
+- **Custom Parameters**: Choose specific diagram types or summary formats
+- **Force Options**: Full repository scans and complete regeneration
 
-This app includes HEIR (Hierarchical Error-handling, ID management, and Reporting) and MCP (Model Context Protocol) integration:
+## 🔧 Customization
 
-### Quick Start
-```bash
-# Run HEIR validation checks
-make check
-# or
-python -m packages.heir.checks
+### File Filtering
+- **GitIngest**: Configurable file size limits and extension filtering
+- **Diagrams**: Adjustable complexity and tool selection
+- **Analysis**: Customizable health scoring criteria
 
-# Start MCP server (port 7001)
-make run-mcp
+### Output Formats
+- **Multiple Formats**: JSON, Markdown, SVG, Mermaid, PlantUML
+- **Configurable Templates**: Customize narrative and ORBT formats
+- **Integration Ready**: Outputs designed for documentation systems
 
-# Start Sidecar event logger (port 8000)
-make run-sidecar
+## 📈 Usage Examples
 
-# Test endpoints
-curl http://localhost:7001/heir/check -X POST -H "Content-Type: application/json" -d '{"ssot": {"meta": {"app_name": "test"}, "doctrine": {}}}'
-curl http://localhost:8000/events -X POST -H "Content-Type: application/json" -d '{"type": "test.event", "payload": {"message": "hello"}, "tags": {"source": "curl"}}'
+### Including Diagrams in Documentation
+```markdown
+<!-- Auto-generated IMO Architecture -->
+![IMO Architecture](.github/generated/diagrams/imo-architecture.svg)
+
+<!-- Mermaid diagram in markdown -->
+```mermaid
+graph TB
+    <!-- Content from .github/generated/diagrams/imo-architecture.mmd -->
 ```
 
-### Service Architecture
-- **MCP Server** (`:7001`): HEIR validation endpoint `/heir/check`
-- **Sidecar Server** (`:8000`): Event logging to `./logs/sidecar.ndjson`  
-- **Main API** (`:7002`): Blueprint management and LLM endpoints
+### Accessing Analysis Data
+```javascript
+// Load repository analysis
+const analysis = await fetch('/.github/generated/summaries/repository-analysis.json')
+    .then(r => r.json());
 
-### API Examples
-```bash
-# Check HEIR compliance
-curl -X POST http://localhost:7001/heir/check \
-  -H "Content-Type: application/json" \
-  -d '{"ssot": {"meta": {"app_name": "imo-creator"}, "doctrine": {"schema_version": "HEIR/1.0"}}}'
-
-# Log telemetry event  
-curl -X POST http://localhost:8000/events \
-  -H "Content-Type: application/json" \
-  -d '{"type": "app.start", "payload": {"version": "1.0.0"}, "tags": {"env": "dev"}}'
-
-# View recent events
-curl http://localhost:8000/events/recent?limit=5
-
-# Test SSOT ID generation
-curl -X POST http://localhost:7002/api/ssot/save \
-  -H "Content-Type: application/json" \
-  -d '{"ssot":{"meta":{"app_name":"IMO Creator","stage":"overview"}}}'
-
-# Test subagent registry
-curl http://localhost:7002/api/subagents
+// Use semantic search
+const searchIndex = await fetch('/.github/generated/search-index.json')
+    .then(r => r.json());
 ```
 
-## Smoke Tests (After Vercel Deploy)
+## 🏷️ Branch Purpose
 
-### 1. ID Stamping Test
-```bash
-# Test that IDs get stamped automatically
-curl -s -X POST https://imo-creator.vercel.app/api/ssot/save \
-  -H 'content-type: application/json' \
-  -d '{"ssot":{"meta":{"app_name":"IMO Creator","stage":"overview"}}}' | jq
+This is a **doctrine branch** that provides foundational AI/human readability capabilities. Every IMO-Creator repository automatically inherits these analysis and documentation workflows, ensuring consistent project comprehension across the ecosystem.
 
-# Expected: .ssot.doctrine.unique_id, .ssot.doctrine.process_id, .ssot.doctrine.blueprint_version_hash
-```
+## 🔄 Update Frequency
 
-### 2. Subagent Registry Test  
-```bash
-# Test subagent enumeration (from garage-mcp or fallback)
-curl -s https://imo-creator.vercel.app/api/subagents | jq
-
-# Expected: { "items": [ { "id": "...", "bay": "...", "desc": "..." }, ... ] }
-```
-
-## Vercel Environment Variables
-
-Add these in Vercel → Project → Settings → Environment Variables:
-
-```bash
-# Required for ID generation
-DOCTRINE_DB=shq
-DOCTRINE_SUBHIVE=03
-DOCTRINE_APP=imo
-DOCTRINE_VER=1
-
-# Optional garage-mcp integration
-GARAGE_MCP_URL=https://your-mcp.example.com
-GARAGE_MCP_TOKEN=your-token-here
-SUBAGENT_REGISTRY_PATH=/registry/subagents
-
-# Existing LLM keys
-IMOCREATOR_OPENAI_API_KEY=sk-your-key
-IMOCREATOR_ANTHROPIC_API_KEY=sk-ant-your-key
-
-# Optional UI feature flag
-NEXT_PUBLIC_SHOW_SUBAGENTS=true
-```
-
-**HEIR/MCP Features:**
-- **Doctrine file**: `heir.doctrine.yaml` defines app metadata and compliance requirements
-- **ID Generation**: Automatic stamping of `unique_id`, `process_id`, and `blueprint_version_hash`
-- **Subagent Registry**: `/api/subagents` endpoint with garage-mcp integration and fallback
-- **SSOT Processing**: `/api/ssot/save` endpoint for doctrine-safe ID stamping
-- **MCP Server**: Validates SSOT configurations via `/heir/check` endpoint
-- **Sidecar Logger**: Captures telemetry events in structured NDJSON format
-- **Typed Models**: Pydantic models for request/response validation
-- **CI Integration**: Automated HEIR compliance validation in GitHub Actions
-- **Event Streaming**: Real-time event logging to `./logs/sidecar.ndjson`
-
-## Structure
-- `docs/blueprints/example/` - Example manifest and generated files
-- `docs/blueprints/ui/` - Static HTML UI pages
-- `tools/` - Scorer and visual generator
-- `src/server/` - Optional FastAPI backend
-- `packages/heir/` - HEIR compliance validation
-- `packages/sidecar/` - Event emission for telemetry
-- `heir.doctrine.yaml` - HEIR metadata and compliance configuration
-- `src/server/blueprints/` - ID generation and versioning utilities
-- `src/server/infra/` - Subagent registry client with garage-mcp integration
+- **GitIngest**: Weekly automated, triggered by significant changes
+- **Diagrams**: On architecture file changes, manual on demand
+- **Summaries**: Daily automated, comprehensive project analysis
+- **All**: Available for manual trigger via GitHub Actions interface

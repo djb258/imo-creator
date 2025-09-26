@@ -1,0 +1,307 @@
+name: Diagram Generation
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'config/**'
+      - 'heir.doctrine.yaml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'config/**'
+  workflow_dispatch:
+    inputs:
+      diagram_type:
+        description: 'Type of diagrams to generate'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - architecture
+          - flow
+          - dependencies
+
+jobs:
+  generate-diagrams:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install diagram tools
+        run: |
+          pip install pyyaml requests graphviz
+          npm install -g @mermaid-js/mermaid-cli
+          sudo apt-get update && sudo apt-get install -y graphviz
+
+      - name: Generate IMO Architecture Diagram
+        run: |
+          mkdir -p .github/generated/diagrams
+          python3 << 'EOF'
+          import yaml
+          import json
+          import os
+
+          # Generate IMO Architecture Mermaid Diagram
+          mermaid_content = '''
+          graph TB
+              subgraph "INPUT LAYER"
+                  V[Vercel Frontend]
+                  R[Render Backend]
+                  API[API Edge Functions]
+              end
+
+              subgraph "MIDDLE LAYER - COMPOSIO HUB"
+                  CH[Composio Hub<br/>Primary Integration Router]
+                  CH --> MCP1[Neon MCP]
+                  CH --> MCP2[Firebase MCP]
+                  CH --> MCP3[Apify MCP]
+                  CH --> FB1[n8n Fallback]
+                  CH --> FB2[Make.com Fallback]
+                  CH --> FB3[Zapier Fallback]
+                  CH --> FB4[Pipedream Fallback]
+              end
+
+              subgraph "OUTPUT LAYER"
+                  DB1[(Neon PostgreSQL)]
+                  DB2[(Firebase)]
+                  SV1[Apify Services]
+                  EXT[External APIs]
+              end
+
+              V --> CH
+              R --> CH
+              API --> CH
+
+              MCP1 --> DB1
+              MCP2 --> DB2
+              MCP3 --> SV1
+              FB1 --> EXT
+              FB2 --> EXT
+              FB3 --> EXT
+              FB4 --> EXT
+
+              style CH fill:#e1f5fe
+              style V fill:#f3e5f5
+              style R fill:#f3e5f5
+              style DB1 fill:#e8f5e8
+              style DB2 fill:#e8f5e8
+          '''
+
+          with open('.github/generated/diagrams/imo-architecture.mmd', 'w') as f:
+              f.write(mermaid_content.strip())
+
+          print("✅ Generated IMO architecture diagram")
+          EOF
+
+      - name: Generate MCP Registry Flow Diagram
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+
+          # Check if MCP registry exists
+          registry_path = 'config/mcp_registry.json'
+          if os.path.exists(registry_path):
+              with open(registry_path, 'r') as f:
+                  registry = json.load(f)
+
+              mermaid_content = '''
+              graph LR
+                  REQ[Request] --> ROUTER[Router Service]
+                  ROUTER --> |"Check Registry"| REG[MCP Registry]
+
+                  subgraph "MCP Tools"
+              '''
+
+              # Add MCP tools from registry
+              if 'engine_capabilities' in registry:
+                  mcp_tools = [tool for tool in registry['engine_capabilities'] if tool.get('type') == 'MCP']
+                  for i, tool in enumerate(mcp_tools):
+                      mermaid_content += f'\n                      MCP{i+1}[{tool["tool"]}]'
+
+                  mermaid_content += '\n                  end\n'
+                  mermaid_content += '\n                  subgraph "Fallback Tools"'
+
+                  # Add fallback tools
+                  fallback_tools = [tool for tool in registry['engine_capabilities'] if tool.get('type') == 'Fallback']
+                  for i, tool in enumerate(fallback_tools):
+                      mermaid_content += f'\n                      FB{i+1}[{tool["tool"]}]'
+
+                  mermaid_content += '\n                  end\n'
+
+                  # Add connections
+                  for i, tool in enumerate(mcp_tools):
+                      mermaid_content += f'\n                  ROUTER --> |"Primary"| MCP{i+1}'
+
+                  for i, tool in enumerate(fallback_tools):
+                      mermaid_content += f'\n                  ROUTER --> |"Fallback"| FB{i+1}'
+
+              with open('.github/generated/diagrams/mcp-registry-flow.mmd', 'w') as f:
+                  f.write(mermaid_content)
+
+              print("✅ Generated MCP registry flow diagram")
+          else:
+              print("⚠️ No MCP registry found, skipping registry diagram")
+          EOF
+
+      - name: Generate Dependency Graph
+        run: |
+          python3 << 'EOF'
+          import os
+          import json
+
+          dependencies = {'python': [], 'node': []}
+
+          # Parse Python dependencies
+          if os.path.exists('requirements.txt'):
+              with open('requirements.txt', 'r') as f:
+                  for line in f:
+                      if line.strip() and not line.startswith('#'):
+                          pkg = line.strip().split('==')[0].split('>=')[0].split('<=')[0]
+                          dependencies['python'].append(pkg)
+
+          # Parse Node dependencies
+          if os.path.exists('package.json'):
+              with open('package.json', 'r') as f:
+                  pkg_data = json.load(f)
+                  if 'dependencies' in pkg_data:
+                      dependencies['node'] = list(pkg_data['dependencies'].keys())
+
+          # Generate dependency diagram
+          mermaid_content = '''
+          graph TD
+              APP[IMO-Creator Application]
+
+              subgraph "Python Dependencies"
+          '''
+
+          for dep in dependencies['python'][:8]:  # Limit to first 8
+              clean_dep = dep.replace('-', '_').replace('.', '_')
+              mermaid_content += f'\n              PY_{clean_dep}[{dep}]'
+              mermaid_content += f'\n              APP --> PY_{clean_dep}'
+
+          mermaid_content += '\n          end\n'
+
+          if dependencies['node']:
+              mermaid_content += '\n          subgraph "Node Dependencies"'
+              for dep in dependencies['node'][:8]:  # Limit to first 8
+                  clean_dep = dep.replace('-', '_').replace('.', '_').replace('/', '_')
+                  mermaid_content += f'\n              JS_{clean_dep}[{dep}]'
+                  mermaid_content += f'\n              APP --> JS_{clean_dep}'
+              mermaid_content += '\n          end'
+
+          with open('.github/generated/diagrams/dependencies.mmd', 'w') as f:
+              f.write(mermaid_content)
+
+          print(f"✅ Generated dependency diagram (Python: {len(dependencies['python'])}, Node: {len(dependencies['node'])})")
+          EOF
+
+      - name: Convert Mermaid to SVG
+        run: |
+          cd .github/generated/diagrams
+          for file in *.mmd; do
+              if [ -f "$file" ]; then
+                  echo "Converting $file to SVG..."
+                  mmdc -i "$file" -o "${file%.mmd}.svg" -t neutral -b white || echo "Failed to convert $file"
+              fi
+          done
+
+      - name: Generate PlantUML diagrams
+        run: |
+          python3 << 'EOF'
+          import os
+
+          # Generate PlantUML sequence diagram for request flow
+          plantuml_content = '''
+          @startuml request-flow
+          !theme plain
+          title IMO-Creator Request Flow
+
+          actor User
+          participant "Vercel Frontend" as VF
+          participant "Router Service" as RS
+          participant "Composio Hub" as CH
+          participant "MCP Service" as MCP
+          participant "Fallback Service" as FS
+          database "Output Service" as OS
+
+          User -> VF: Submit Request
+          VF -> RS: Route Integration
+          RS -> CH: Check Registry
+          CH -> RS: Return Config
+
+          alt MCP Available
+              RS -> MCP: Execute via MCP
+              MCP -> OS: Store/Retrieve Data
+              OS -> MCP: Response
+              MCP -> RS: Success Response
+          else MCP Unavailable
+              RS -> FS: Execute via Fallback
+              FS -> OS: Store/Retrieve Data
+              OS -> FS: Response
+              FS -> RS: Fallback Response
+          end
+
+          RS -> VF: Final Response
+          VF -> User: Display Result
+
+          @enduml
+          '''
+
+          with open('.github/generated/diagrams/request-flow.puml', 'w') as f:
+              f.write(plantuml_content.strip())
+
+          print("✅ Generated PlantUML sequence diagram")
+          EOF
+
+      - name: Commit generated diagrams
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Diagram Generation Action"
+          git add .github/generated/diagrams/
+          if git diff --staged --quiet; then
+            echo "No diagram changes to commit"
+          else
+            git commit -m "chore: update generated diagrams
+
+          - Updated IMO architecture diagram
+          - Regenerated MCP registry flow diagram
+          - Updated dependency visualization
+          - Generated PlantUML sequence diagrams
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+            git push origin ai-human-readable || echo "Push failed - may need manual merge"
+          fi
+
+      - name: Generate summary
+        run: |
+          echo "## 📊 Diagram Generation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Diagrams" >> $GITHUB_STEP_SUMMARY
+          ls -la .github/generated/diagrams/ | grep -E '\.(mmd|svg|puml)$' | while read -r line; do
+              filename=$(echo "$line" | awk '{print $NF}')
+              echo "- 📈 \`$filename\`" >> $GITHUB_STEP_SUMMARY
+          done || echo "- No diagram files found" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Usage" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mermaid files** (\`.mmd\`): Include in markdown with \`\`\`mermaid\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **SVG files**: Direct image embedding in documentation" >> $GITHUB_STEP_SUMMARY
+          echo "- **PlantUML files** (\`.puml\`): Use with PlantUML renderers" >> $GITHUB_STEP_SUMMARY
