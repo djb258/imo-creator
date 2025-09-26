@@ -1,0 +1,60 @@
+{
+  "_docstring": "IMO-Creator doctrine branch configuration - defines auto-included branches for all new repos",
+  "doctrine_branches": {
+    "actions-workflows": {
+      "description": "CI/CD workflows for compliance, testing, documentation, and deployment",
+      "files": {
+        "compliance": ".github/workflows/compliance.yml",
+        "tests": ".github/workflows/tests.yml",
+        "docs": ".github/workflows/docs.yml",
+        "deploy": ".github/workflows/deploy.yml"
+      },
+      "auto_include": true,
+      "required": true
+    },
+    "ai-human-readable": {
+      "description": "Repository readability for AI systems and human developers",
+      "files": {
+        "git_ingest": ".github/workflows/git-ingest.yml",
+        "diagram": ".github/workflows/diagram.yml",
+        "summary": ".github/workflows/summary.yml"
+      },
+      "auto_include": true,
+      "required": false
+    }
+  },
+  "scaffold_rules": {
+    "always_copy": [
+      "config/mcp_registry.json",
+      "heir.doctrine.yaml",
+      "vercel.json",
+      "render.yaml",
+      ".python-version"
+    ],
+    "template_files": [
+      "QUICKSTART.md",
+      "docs/imo_architecture.md",
+      "docs/composio_connection.md"
+    ],
+    "create_directories": [
+      ".github/workflows",
+      ".github/generated/diagrams",
+      ".github/generated/summaries",
+      "config",
+      "docs",
+      "services",
+      "branches/composio",
+      "branches/n8n",
+      "branches/make",
+      "branches/zapier",
+      "branches/pipedream"
+    ]
+  },
+  "version": "1.0.0",
+  "last_updated": "2025-09-26T07:00:00Z",
+  "compatibility": {
+    "min_python": "3.11",
+    "min_node": "18.0.0",
+    "github_actions": "v4+"
+  }
+}
