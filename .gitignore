@@ -23,3 +23,5 @@ public/
 # OS
 .DS_Store
 Thumbs.db
+render-cli-source/
+render.exe
