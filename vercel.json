@@ -27,10 +27,8 @@
     }
   ],
   "env": {
-    "COMPOSIO_API_KEY": "@composio_api_key",
+    "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
     "MCP_API_URL": "https://backend.composio.dev",
-    "ANTHROPIC_API_KEY": "@anthropic_api_key",
-    "OPENAI_API_KEY": "@openai_api_key",
     "LLM_DEFAULT_PROVIDER": "openai",
     "DOCTRINE_DB": "shq",
     "DOCTRINE_SUBHIVE": "03",
