@@ -466,13 +466,66 @@ async def get_subagents():
         # Gracefully fall back to static list
         return JSONResponse({"items": FALLBACK})
 
+@app.get("/health")
+async def health():
+    return {"status": "ok", "service": "imo-creator-backend"}
+
+@app.get("/api/composio/_21risk")
+async def composio_21risk():
+    """21RISK toolkit endpoint - Risk Management & Compliance"""
+    return {
+        "toolkit": "_21RISK",
+        "category": "Risk Management & Compliance",
+        "tools": 9,
+        "status": "active",
+        "description": "Risk management and compliance operations"
+    }
+
+@app.get("/api/composio/_2chat")
+async def composio_2chat():
+    """2CHAT toolkit endpoint - Chat & Communication"""
+    return {
+        "toolkit": "_2CHAT",
+        "category": "Chat & Communication",
+        "tools": 5,
+        "status": "active",
+        "description": "WhatsApp and communication management"
+    }
+
+@app.get("/api/composio/ably")
+async def composio_ably():
+    """ABLY toolkit endpoint - Real-time Messaging & Presence"""
+    return {
+        "toolkit": "ABLY",
+        "category": "Real-time Messaging & Presence",
+        "tools": 6,
+        "status": "active",
+        "description": "Real-time messaging and presence tracking"
+    }
+
+@app.get("/api/composio/builder")
+async def composio_builder():
+    """Builder.io toolkit endpoint - Visual Development & UI/UX"""
+    return {
+        "toolkit": "Builder.io",
+        "category": "Visual Development & UI/UX",
+        "tools": 0,
+        "status": "active",
+        "description": "Visual development and UI generation"
+    }
+
 @app.get("/")
 async def root():
-    return {"message": "Blueprint API", "endpoints": [
+    return {"message": "IMO-Creator Backend API", "endpoints": [
+        "/health",
         "/blueprints/{slug}/manifest",
         "/blueprints/{slug}/score",
         "/blueprints/{slug}/visuals",
         "/llm",
         "/api/ssot/save",
-        "/api/subagents"
+        "/api/subagents",
+        "/api/composio/_21risk",
+        "/api/composio/_2chat",
+        "/api/composio/ably",
+        "/api/composio/builder"
     ]}
