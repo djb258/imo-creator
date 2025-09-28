@@ -1,0 +1,620 @@
+{
+  "timestamp": "2025-09-28T16:33:53.146Z",
+  "repository": "imo-creator",
+  "mcpEndpoint": "http://localhost:3001/tool",
+  "testResults": {
+    "mcp_connection": {
+      "status": "SUCCESS",
+      "timestamp": "2025-09-28T16:33:53.189Z",
+      "response": {
+        "success": true,
+        "result": {
+          "composio_integration": {
+            "sdk_version": "3.0",
+            "api_configured": true,
+            "base_url": "https://backend.composio.dev",
+            "telemetry_enabled": true
+          },
+          "cache_stats": {
+            "tools_cache_size": 0,
+            "accounts_cache_size": 0,
+            "cache_ttl_minutes": 5
+          },
+          "supported_features": {
+            "total_toolkits": 100,
+            "authentication_methods": [
+              "oauth2",
+              "api_key",
+              "bearer_token",
+              "basic_auth"
+            ],
+            "heir_orbt_compliant": true,
+            "performance_caching": true,
+            "lovable_integration": true,
+            "builder_io_integration": true
+          }
+        },
+        "heir_tracking": {
+          "unique_id": "HEIR-2025-09-TEST-1759077233149",
+          "process_lineage": [
+            "PRC-TEST-001"
+          ],
+          "operation": "get_composio_stats",
+          "include_usage": false,
+          "timestamp": "2025-09-28T16:33:53.185Z"
+        }
+      },
+      "details": "MCP server responding correctly"
+    },
+    "gmail_get_profile": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.150Z",
+      "tool": "GMAIL_GET_PROFILE",
+      "error": "Unknown tool: execute_tool",
+      "description": "Gmail Profile Access"
+    },
+    "googledrive_list_files": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.188Z",
+      "tool": "GOOGLEDRIVE_LIST_FILES",
+      "error": "Unknown tool: execute_tool",
+      "description": "Google Drive File Listing"
+    },
+    "googlecalendar_list_calendars": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.228Z",
+      "tool": "GOOGLECALENDAR_LIST_CALENDARS",
+      "error": "Unknown tool: execute_tool",
+      "description": "Google Calendar Listing"
+    },
+    "googlesheets_list_spreadsheets": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.267Z",
+      "tool": "GOOGLESHEETS_LIST_SPREADSHEETS",
+      "error": "Unknown tool: execute_tool",
+      "description": "Google Sheets Listing"
+    },
+    "notion_list_pages": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.306Z",
+      "tool": "NOTION_LIST_PAGES",
+      "error": "Unknown tool: execute_tool",
+      "description": "Notion Pages Listing"
+    },
+    "github_get_user": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.389Z",
+      "tool": "GITHUB_GET_USER",
+      "error": "Unknown tool: execute_tool",
+      "description": "GitHub User Info"
+    },
+    "slack_list_channels": {
+      "status": "FAILED",
+      "timestamp": "2025-09-28T16:33:55.429Z",
+      "tool": "SLACK_LIST_CHANNELS",
+      "error": "Unknown tool: execute_tool",
+      "description": "Slack Channels Listing"
+    }
+  },
+  "serviceOverview": {
+    "gmail": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:53.547Z"
+    },
+    "googledrive": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:53.726Z"
+    },
+    "googlecalendar": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:53.941Z"
+    },
+    "googlesheets": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:54.130Z"
+    },
+    "notion": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:54.328Z"
+    },
+    "render": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:54.522Z"
+    },
+    "vercel": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:54.707Z"
+    },
+    "github": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:54.913Z"
+    },
+    "slack": {
+      "status": "CONNECTED",
+      "accountCount": 10,
+      "accounts": [
+        {
+          "id": "ca_6XD0QaOwLDR8",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:47.520Z"
+        },
+        {
+          "id": "ca_ovFzduXza8Ax",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:27.095Z"
+        },
+        {
+          "id": "ca_CWoInx__nXq-",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:22:03.321Z"
+        },
+        {
+          "id": "ca_yGbhTw96db32",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:19:54.698Z"
+        },
+        {
+          "id": "ca_nJ2cJ6Ltzq4l",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:18:32.648Z"
+        },
+        {
+          "id": "ca_BSkcAvhBMH92",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:16:35.698Z"
+        },
+        {
+          "id": "ca_Dh-5OnHENWcG",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:15:56.171Z"
+        },
+        {
+          "id": "ca_TcSBw5YRBVbN",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-28T14:12:55.519Z"
+        },
+        {
+          "id": "ca_ue3QriHvR2gn",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:36:33.064Z"
+        },
+        {
+          "id": "ca_ONgC5eIQM0VR",
+          "status": "ACTIVE",
+          "connectionTime": "2025-09-11T20:05:45.144Z"
+        }
+      ],
+      "lastChecked": "2025-09-28T16:33:55.111Z"
+    }
+  },
+  "summary": {
+    "totalServices": 9,
+    "connectedServices": 9,
+    "workingServices": 0,
+    "failedServices": 7
+  }
+}
