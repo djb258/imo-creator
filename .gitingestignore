@@ -1,0 +1,48 @@
+# GitIngest ignore patterns for draw.io integration
+
+# Exclude large binary files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.pdf
+
+# Exclude temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# Exclude build artifacts
+node_modules/
+dist/
+build/
+.venv/
+__pycache__/
+*.pyc
+
+# Exclude logs
+*.log
+logs/
+
+# Exclude sensitive files
+.env
+.env.local
+.env.production
+*.key
+*.pem
+
+# Exclude very large text files (over 1MB)
+git-ingest-*.md
+
+# Include draw.io files and diagrams
+!*.drawio
+!diagrams/
+!diagrams/**
+
+# Include documentation
+!README.md
+!*.md
+!docs/

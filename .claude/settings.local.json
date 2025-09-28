@@ -20,7 +20,8 @@
       "Bash(npm install:*)",
       "WebSearch",
       "WebFetch(domain:www.builder.io)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": [],
