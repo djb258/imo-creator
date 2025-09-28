@@ -89,6 +89,23 @@
       "endpoint": "https://make-instance/webhook",
       "doctrine_id": "04.04.F2",
       "status": "active"
+    },
+    {
+      "tool": "Firebase MCP Server",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001",
+      "doctrine_id": "04.04.05",
+      "status": "active",
+      "barton_doctrine_role": "staging_memory",
+      "toolkit_tools": [
+        "FIREBASE_WRITE", "FIREBASE_READ", "FIREBASE_UPDATE",
+        "FIREBASE_DELETE", "FIREBASE_STUDIO_LIST", "FIREBASE_STUDIO_DEPLOY"
+      ],
+      "required_env_vars": [
+        "FIREBASE_PROJECT_ID", "FIREBASE_CLIENT_EMAIL", "FIREBASE_PRIVATE_KEY",
+        "FIREBASE_DATABASE_URL", "FIREBASE_STORAGE_BUCKET"
+      ],
+      "description": "Firebase staging memory with Barton Doctrine validation - all writes require unique_id, process_id, timestamp_last_touched, validated"
     }
   ],
   "repo_usage": {

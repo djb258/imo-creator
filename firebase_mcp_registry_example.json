@@ -1,0 +1,116 @@
+{
+  "tool": "Firebase MCP Server",
+  "type": "MCP",
+  "endpoint": "http://localhost:3001",
+  "doctrine_id": "04.04.05",
+  "status": "active",
+  "barton_doctrine_role": "staging_memory",
+  "category": "Database & Storage (Staging)",
+  "tool_count": 6,
+  "tools": [
+    {
+      "name": "Firebase Write",
+      "slug": "FIREBASE_WRITE",
+      "method": "POST",
+      "endpoint": "/mcp/firebase_write",
+      "description": "Write document to Firebase with Barton Doctrine validation",
+      "required_fields": ["collection", "payload"],
+      "doctrine_validation": ["unique_id", "process_id", "timestamp_last_touched", "validated"],
+      "tags": ["writeHint", "doctrineRequired", "auditLogged"]
+    },
+    {
+      "name": "Firebase Read",
+      "slug": "FIREBASE_READ",
+      "method": "POST",
+      "endpoint": "/mcp/firebase_read",
+      "description": "Read documents from Firebase with query support",
+      "required_fields": ["collection"],
+      "optional_fields": ["query"],
+      "query_support": ["where", "orderBy", "limit"],
+      "tags": ["readOnlyHint", "querySupport", "auditLogged"]
+    },
+    {
+      "name": "Firebase Update",
+      "slug": "FIREBASE_UPDATE",
+      "method": "POST",
+      "endpoint": "/mcp/firebase_update",
+      "description": "Update document in Firebase with Barton Doctrine validation",
+      "required_fields": ["collection", "docId", "fields"],
+      "doctrine_validation": ["unique_id", "process_id", "timestamp_last_touched", "validated"],
+      "tags": ["writeHint", "doctrineRequired", "auditLogged"]
+    },
+    {
+      "name": "Firebase Delete",
+      "slug": "FIREBASE_DELETE",
+      "method": "POST",
+      "endpoint": "/mcp/firebase_delete",
+      "description": "Soft delete document in Firebase (marks as deleted, preserves data)",
+      "required_fields": ["collection", "docId"],
+      "operation_type": "soft_delete",
+      "tags": ["destructiveHint", "softDelete", "auditLogged"]
+    },
+    {
+      "name": "Firebase Studio List",
+      "slug": "FIREBASE_STUDIO_LIST",
+      "method": "GET",
+      "endpoint": "/mcp/firebase_studio_list",
+      "description": "List deployed Firebase Studio apps with metadata",
+      "returns": ["app_id", "name", "status", "deployment_url", "github_repo"],
+      "tags": ["readOnlyHint", "studioIntegration", "auditLogged"]
+    },
+    {
+      "name": "Firebase Studio Deploy",
+      "slug": "FIREBASE_STUDIO_DEPLOY",
+      "method": "POST",
+      "endpoint": "/mcp/firebase_studio_deploy",
+      "description": "Trigger deployment of Firebase Studio app from GitHub",
+      "required_fields": ["appId", "githubRepo"],
+      "optional_fields": ["branch"],
+      "integration": "github_actions",
+      "tags": ["deploymentHint", "githubIntegration", "auditLogged"]
+    }
+  ],
+  "environment_variables": {
+    "FIREBASE_PROJECT_ID": {
+      "required": true,
+      "description": "Firebase project identifier"
+    },
+    "FIREBASE_CLIENT_EMAIL": {
+      "required": true,
+      "description": "Service account client email"
+    },
+    "FIREBASE_PRIVATE_KEY": {
+      "required": true,
+      "description": "Service account private key (escaped newlines)"
+    },
+    "FIREBASE_DATABASE_URL": {
+      "required": false,
+      "description": "Realtime Database URL (if using RTDB)"
+    },
+    "FIREBASE_STORAGE_BUCKET": {
+      "required": false,
+      "description": "Cloud Storage bucket name (if using Storage)"
+    }
+  },
+  "barton_doctrine": {
+    "role": "staging_memory",
+    "description": "Firebase serves as temporary staging for data validation before promotion to Neon (vault)",
+    "required_schema": {
+      "unique_id": "string - globally unique document identifier",
+      "process_id": "string - process tracking identifier",
+      "timestamp_last_touched": "number - Unix timestamp of last modification",
+      "validated": "boolean - indicates if data passed validation"
+    },
+    "data_flow": [
+      "Studio apps → Firebase (staging)",
+      "Composio validators → Firebase validation",
+      "Validated data → Neon (vault)",
+      "Analytics data → BigQuery (silo)"
+    ]
+  },
+  "audit_logging": {
+    "collection": "firebase_audit_log",
+    "tracks": ["operation", "collection", "doc_id", "result_status", "error_message"],
+    "retention": "All operations logged for compliance and debugging"
+  }
+}
