@@ -1,13 +1,10 @@
 services:
-  # Main IMO-Creator Backend Service (FastAPI)
   - type: web
     name: imo-creator-backend
     plan: free
     branch: master
     region: oregon
     autoDeploy: true
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python3 -m uvicorn src.server.main:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY

@@ -23,7 +23,13 @@
       "Bash(cd:*)",
       "Bash(git fetch:*)",
       "Bash(curl:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(where render)",
+      "Bash(./render.exe --help)",
+      "WebFetch(domain:composio-imo-creator-url.onrender.com)",
+      "Bash(render:*)",
+      "Bash(where render.exe)",
+      "Bash(./render.exe --version)"
     ],
     "deny": [],
     "ask": [],
