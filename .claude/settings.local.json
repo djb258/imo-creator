@@ -22,7 +22,8 @@
       "WebFetch(domain:www.builder.io)",
       "Bash(cd:*)",
       "Bash(git fetch:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": [],

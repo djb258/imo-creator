@@ -6,6 +6,7 @@ services:
     plan: free
     branch: master
     region: oregon
+    autoDeploy: true
     buildCommand: |
       echo "=== FORCING PYTHON BUILD ==="
       rm -f package.json package-lock.json yarn.lock
@@ -19,7 +20,7 @@ services:
       echo "=== Testing FastAPI app import ==="
       python3 -c "from src.server.main import app; print('FastAPI app imported successfully')"
       echo "=== PYTHON BUILD COMPLETE ==="
-    startCommand: uvicorn src.server.main:app --host 0.0.0.0 --port $PORT --workers 1
+    startCommand: chmod +x start.sh && ./start.sh
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY
