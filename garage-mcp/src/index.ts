@@ -1,3 +1,12 @@
+/**
+ * Doctrine Spec:
+ * - Barton ID: 04.01.01.07.10000.008
+ * - Altitude: 10000 (Execution Layer)
+ * - Purpose: MCP server for garage management operations
+ * - Input: MCP tool requests
+ * - Output: tool execution results
+ * - MCP: Model Control Protocol (MCP)
+ */
 #!/usr/bin/env node
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';

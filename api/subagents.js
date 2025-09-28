@@ -1,3 +1,12 @@
+/**
+ * Doctrine Spec:
+ * - Barton ID: 01.03.01.07.10000.004
+ * - Altitude: 10000 (Execution Layer)
+ * - Purpose: Subagent registry with garage-mcp integration
+ * - Input: HTTP GET request
+ * - Output: subagent list JSON
+ * - MCP: Garage-MCP (registry integration)
+ */
 // Vercel API Route for subagent registry with garage-mcp integration
 export default async function handler(req, res) {
     if (req.method !== 'GET') {

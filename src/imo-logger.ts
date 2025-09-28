@@ -1,3 +1,12 @@
+/**
+ * Doctrine Spec:
+ * - Barton ID: 03.02.01.07.10000.007
+ * - Altitude: 10000 (Execution Layer)
+ * - Purpose: IMO logging utility
+ * - Input: log messages and metadata
+ * - Output: formatted log entries
+ * - MCP: N/A
+ */
 import { fetch } from 'undici';
 
 interface ErrorContext {

@@ -1,3 +1,12 @@
+/**
+ * Doctrine Spec:
+ * - Barton ID: 02.01.01.07.10000.003
+ * - Altitude: 10000 (Execution Layer)
+ * - Purpose: SSOT processing with Barton ID compliance
+ * - Input: SSOT data object
+ * - Output: processed SSOT with IDs
+ * - MCP: N/A
+ */
 // Vercel API Route for SSOT processing with doctrine-safe IDs
 import { NextApiRequest, NextApiResponse } from 'next'
 

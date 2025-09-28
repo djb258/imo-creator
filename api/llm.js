@@ -1,3 +1,12 @@
+/**
+ * Doctrine Spec:
+ * - Barton ID: 01.02.01.07.10000.002
+ * - Altitude: 10000 (Execution Layer)
+ * - Purpose: LLM API proxy with provider selection
+ * - Input: prompt, model, system message
+ * - Output: AI response text or JSON
+ * - MCP: N/A
+ */
 export default async function handler(req, res) {
   // CORS headers
   const corsHeaders = {
