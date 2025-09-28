@@ -2,25 +2,11 @@ services:
   # Main IMO-Creator Backend Service (FastAPI)
   - type: web
     name: imo-creator-backend
-    runtime: python
     plan: free
     branch: master
     region: oregon
     autoDeploy: true
-    buildCommand: |
-      echo "=== FORCING PYTHON BUILD ==="
-      rm -f package.json package-lock.json yarn.lock
-      rm -rf node_modules
-      python3 --version
-      python3 -m pip install --upgrade pip
-      pip3 install -r requirements.txt
-      echo "=== Verifying uvicorn installation ==="
-      uvicorn --version
-      which uvicorn
-      echo "=== Testing FastAPI app import ==="
-      python3 -c "from src.server.main import app; print('FastAPI app imported successfully')"
-      echo "=== PYTHON BUILD COMPLETE ==="
-    startCommand: python3 -m uvicorn src.server.main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     envVars:
       - key: COMPOSIO_API_KEY
