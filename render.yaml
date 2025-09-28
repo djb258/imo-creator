@@ -6,7 +6,7 @@ services:
     branch: master
     region: oregon
     autoDeploy: true
-    dockerfilePath: ./Dockerfile
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "python3 -m uvicorn src.server.main:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     envVars:
