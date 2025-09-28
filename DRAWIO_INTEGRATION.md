@@ -4,11 +4,13 @@ This branch combines the power of GitIngest repository analysis with automated d
 
 ## Features
 
-### 🎨 Automated Diagram Generation
-- **Repository Architecture**: High-level Input→Middle→Output flow visualization
-- **MCP Tool Routing**: Visual map of Composio hub and tool connections
-- **CI/CD Workflows**: Doctrine branch auto-scaffolding process
-- **Custom Diagrams**: Extensible template system for new diagram types
+### 🎨 Altitude-Based Christmas Tree Architecture Diagrams
+- **40,000 ft Strategic Overview**: Christmas tree backbone with trunk and domain branches
+- **30,000 ft Orchestrator Tree**: Central trunk (Overall Orchestrator) with domain orchestrators and subagents
+- **20,000 ft Input Domain**: Input branch with Mapper and Validator subagents
+- **10,000 ft Middle Domain**: Middle branch with Database and Enforcer subagents
+- **5,000 ft Output Domain**: Output branch with Notifier and Reporter subagents
+- **Ground Level Infrastructure**: MCP tool routing via Composio hub
 
 ### 📊 GitIngest Integration
 - Repository analysis with smart filtering
@@ -79,10 +81,18 @@ node_modules/
 ## Generated Files
 
 ### `/diagrams/generated/`
-- `repository-architecture.drawio` - Repository structure visualization
-- `mcp-routing.drawio` - Tool routing and connections
-- `cicd-workflow.drawio` - Workflow and branch relationships
-- `diagram-metadata.json` - Generation metadata and statistics
+- `altitude-overview.drawio` - 40k ft strategic Christmas tree backbone
+- `orchestrator-tree.drawio` - 30k ft trunk with domain orchestrators and subagents
+- `mcp-routing.drawio` - Ground level tool routing and Composio hub
+- `diagram-metadata.json` - Generation metadata and altitude specifications
+
+### Altitude Hierarchy:
+- **40,000 ft**: Strategic oversight and business alignment
+- **30,000 ft**: Overall orchestration and routing (Christmas tree trunk)
+- **20,000 ft**: Input domain processing (tree branch)
+- **10,000 ft**: Middle domain processing (tree branch)
+- **5,000 ft**: Output domain processing (tree branch)
+- **Ground Level**: Infrastructure and MCP tool routing
 
 ### Integration with IMO-Creator
 - **Composio Endpoints**: Diagrams include live production URLs

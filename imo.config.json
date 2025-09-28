@@ -29,6 +29,26 @@
       "auto_include": true,
       "required": false,
       "when_copy": "repo_creation"
+    },
+    "drawio-ingest": {
+      "description": "Visual documentation with draw.io diagrams generated from GitIngest analysis",
+      "source_branch": "drawio-ingest",
+      "source_repo": "https://github.com/djb258/imo-creator.git",
+      "copy_strategy": "merge_files",
+      "files": {
+        "drawio_workflow": ".github/workflows/drawio-ingest.yml",
+        "gitingest_ignore": ".gitingestignore",
+        "diagram_config": "diagrams/config.json",
+        "integration_docs": "DRAWIO_INTEGRATION.md"
+      },
+      "auto_include": true,
+      "required": true,
+      "when_copy": "repo_creation",
+      "auto_triggers": [
+        "on_repo_update",
+        "on_gitingest_change",
+        "on_workflow_change"
+      ]
     }
   },
   "scaffold_rules": {

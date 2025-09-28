@@ -3,14 +3,25 @@ name: Draw.io + GitIngest Integration
 on:
   push:
     branches: [ main, master ]
+    paths-ignore:
+      - 'diagrams/generated/**'
+      - 'repo-analysis.txt'
   pull_request:
     branches: [ main, master ]
+  schedule:
+    # Auto-update GitIngest and diagrams daily at 6 AM UTC
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       include_diagrams:
         description: 'Include diagram generation'
         required: false
         default: 'true'
+        type: boolean
+      force_update:
+        description: 'Force update even if no changes detected'
+        required: false
+        default: 'false'
         type: boolean
 
 jobs:
@@ -36,8 +47,30 @@ jobs:
 
     - name: Generate GitIngest analysis
       run: |
-        gitingest . -o repo-analysis.txt --include-pattern "*.py" --include-pattern "*.js" --include-pattern "*.md" --include-pattern "*.yml" --include-pattern "*.yaml" --include-pattern "*.json"
-        echo "Repository analysis complete"
+        echo "🔍 Generating GitIngest analysis for repository..."
+
+        # Always generate fresh analysis - this ensures diagrams stay current
+        gitingest . -o repo-analysis.txt \
+          --include-pattern "*.py" \
+          --include-pattern "*.js" \
+          --include-pattern "*.ts" \
+          --include-pattern "*.md" \
+          --include-pattern "*.yml" \
+          --include-pattern "*.yaml" \
+          --include-pattern "*.json" \
+          --include-pattern "*.drawio" \
+          --exclude-pattern "node_modules/*" \
+          --exclude-pattern "*.log" \
+          --exclude-pattern ".git/*"
+
+        echo "📊 Repository analysis complete"
+        echo "📈 Analysis size: $(wc -l < repo-analysis.txt) lines"
+
+        # Create timestamp for tracking updates
+        echo "last_updated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > diagrams/analysis-metadata.yml
+        echo "commit_sha: ${{ github.sha }}" >> diagrams/analysis-metadata.yml
+        echo "repository: ${{ github.repository }}" >> diagrams/analysis-metadata.yml
+        echo "trigger: ${{ github.event_name }}" >> diagrams/analysis-metadata.yml
 
     - name: Create draw.io diagram templates
       run: |
@@ -164,12 +197,213 @@ print('Draw.io template created successfully')
         cat > generate_diagrams.py << 'EOF'
 #!/usr/bin/env python3
 \"\"\"
-Generate draw.io diagrams based on GitIngest analysis
+Generate altitude-based draw.io diagrams following Christmas tree backbone architecture
 \"\"\"
 import json
 import os
 import hashlib
 from datetime import datetime
+
+def create_altitude_overview_diagram():
+    \"\"\"Create 40,000 ft strategic overview - Christmas tree backbone\"\"\"
+    template = '''<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="{timestamp}" agent="IMO-Creator-Altitude-Generator" version="22.1.16">
+  <diagram name="40k Ft - Strategic Overview" id="altitude-overview">
+    <mxGraphModel dx="1422" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Strategic Layer - 40,000 ft -->
+        <mxCell id="strategic" value="🎯 Strategic Layer\\n40,000 ft\\n\\nBusiness Alignment\\nArchitectural Oversight\\nIMO-Creator Doctrine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="300" y="50" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Christmas Tree Trunk - Overall Orchestrator -->
+        <mxCell id="trunk" value="🎄 TRUNK\\nOverall Orchestrator\\n30,000 ft\\n\\nCentral Routing\\nDomain Coordination\\nRequest Distribution" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="350" y="200" width="100" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Input Branch - 20,000 ft -->
+        <mxCell id="input-branch" value="🌿 INPUT BRANCH\\n20,000 ft\\n\\nData Ingestion\\nValidation\\nMapping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="150" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Middle Branch - 10,000 ft -->
+        <mxCell id="middle-branch" value="🌿 MIDDLE BRANCH\\n10,000 ft\\n\\nDatabase Ops\\nEnforcement\\nProcessing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="340" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Output Branch - 5,000 ft -->
+        <mxCell id="output-branch" value="🌿 OUTPUT BRANCH\\n5,000 ft\\n\\nNotifications\\nReporting\\nArtifacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="530" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Infrastructure Layer - Ground Level -->
+        <mxCell id="infrastructure" value="🏗️ INFRASTRUCTURE\\nGround Level\\n\\nComposio MCP Hub: {composio_url}\\nNeon • Firebase • Apify • Builder.io\\nFallbacks: n8n • Make • Zapier • Pipedream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="200" y="520" width="400" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Altitude Labels -->
+        <mxCell id="alt-40k" value="40k ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt-30k" value="30k ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="270" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt-20k" value="20k ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="430" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt-ground" value="0 ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="560" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Flow connections -->
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#9673a6;" edge="1" parent="1" source="strategic" target="trunk" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="trunk" target="input-branch" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="trunk" target="middle-branch" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1" source="trunk" target="output-branch" />
+
+        <!-- Infrastructure connections -->
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="input-branch" target="infrastructure" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="middle-branch" target="infrastructure" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="output-branch" target="infrastructure" />
+
+        <!-- Legend -->
+        <mxCell id="legend" value="🎄 Christmas Tree Backbone\\n━━━ Strategic Flow\\n━━━ Domain Branches\\n┉┉┉ Infrastructure" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="680" y="50" width="120" height="80" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>'''
+
+    timestamp = datetime.now().isoformat()
+    composio_url = "https://composio-imo-creator-url.onrender.com"
+
+    diagram_content = template.format(
+        timestamp=timestamp,
+        composio_url=composio_url
+    )
+
+    with open('diagrams/generated/altitude-overview.drawio', 'w') as f:
+        f.write(diagram_content)
+
+    print("40k ft strategic overview diagram created")
+
+def create_orchestrator_tree_diagram():
+    \"\"\"Create 30,000 ft orchestrator tree - Christmas tree trunk with branches\"\"\"
+    template = '''<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="{timestamp}" agent="IMO-Creator-Tree-Generator" version="22.1.16">
+  <diagram name="30k Ft - Orchestrator Tree" id="orchestrator-tree">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Central Trunk - Overall Orchestrator -->
+        <mxCell id="overall-orchestrator" value="🎄 Overall Orchestrator\\n30,000 ft\\n\\nrole_id: overall-orchestrator\\nCapabilities:\\n• Routing\\n• Delegation\\n• Coordination\\n\\nRoutes to domain orchestrators" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="350" y="150" width="160" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Input Branch Orchestrator -->
+        <mxCell id="input-orchestrator" value="🌿 Input Orchestrator\\n20,000 ft\\n\\nrole_id: input-orchestrator\\nDomain: input\\nCoordinates:\\n• Mapper → Validator" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="120" y="350" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Input Subagents -->
+        <mxCell id="input-mapper" value="Mapper\\n20k ft\\ndata_mapping\\ntransformation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-validator" value="Validator\\n20k ft\\nvalidation\\nschema_checking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="150" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Middle Branch Orchestrator -->
+        <mxCell id="middle-orchestrator" value="🌿 Middle Orchestrator\\n10,000 ft\\n\\nrole_id: middle-orchestrator\\nDomain: middle\\nCoordinates:\\n• DB → Enforcer → Apply" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="350" y="350" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Middle Subagents -->
+        <mxCell id="middle-db" value="Database\\n10k ft\\ndatabase_ops\\ndry_run, apply" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="middle-enforcer" value="Enforcer\\n10k ft\\nrule_enforcement\\npromotion_decision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="380" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Output Branch Orchestrator -->
+        <mxCell id="output-orchestrator" value="🌿 Output Orchestrator\\n5,000 ft\\n\\nrole_id: output-orchestrator\\nDomain: output\\nCoordinates:\\n• Notifier → Reporter" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="350" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Output Subagents -->
+        <mxCell id="output-notifier" value="Notifier\\n5k ft\\nemail, slack\\nwebhook, alerts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="510" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output-reporter" value="Reporter\\n5k ft\\nreport_generation\\nartifact_creation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="610" y="500" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Tree connections from trunk to branches -->
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#82b366;" edge="1" parent="1" source="overall-orchestrator" target="input-orchestrator" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d6b656;" edge="1" parent="1" source="overall-orchestrator" target="middle-orchestrator" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#6c8ebf;" edge="1" parent="1" source="overall-orchestrator" target="output-orchestrator" />
+
+        <!-- Branch to subagent connections -->
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="input-orchestrator" target="input-mapper" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="input-orchestrator" target="input-validator" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="middle-orchestrator" target="middle-db" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="middle-orchestrator" target="middle-enforcer" />
+
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="output-orchestrator" target="output-notifier" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="output-orchestrator" target="output-reporter" />
+
+        <!-- Subagent flow connections -->
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="input-mapper" target="input-validator" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="middle-db" target="middle-enforcer" />
+        <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="output-notifier" target="output-reporter" />
+
+        <!-- Altitude indicators -->
+        <mxCell id="altitude-30k" value="30k ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=3;" vertex="1" parent="1">
+          <mxGeometry x="50" y="200" width="50" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="altitude-branches" value="20k ft\\n10k ft\\n5k ft" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=3;" vertex="1" parent="1">
+          <mxGeometry x="50" y="380" width="50" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="🎄 Christmas Tree Orchestrator Architecture\\nTrunk: Overall Orchestrator (30k ft)\\nBranches: Domain Orchestrators + Subagents" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#333333;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="50" width="260" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>'''
+
+    timestamp = datetime.now().isoformat()
+
+    diagram_content = template.format(timestamp=timestamp)
+
+    with open('diagrams/generated/orchestrator-tree.drawio', 'w') as f:
+        f.write(diagram_content)
+
+    print("30k ft orchestrator tree diagram created")
 
 def create_mcp_routing_diagram():
     \"\"\"Create MCP tool routing diagram\"\"\"
@@ -328,9 +562,18 @@ def create_workflow_diagram():
 
 if __name__ == "__main__":
     os.makedirs('diagrams/generated', exist_ok=True)
-    create_mcp_routing_diagram()
-    create_workflow_diagram()
-    print("All diagrams generated successfully!")
+
+    # Generate altitude-based Christmas tree architecture diagrams
+    create_altitude_overview_diagram()           # 40k ft strategic
+    create_orchestrator_tree_diagram()           # 30k ft trunk + branches
+    create_mcp_routing_diagram()                 # Ground level infrastructure
+
+    print("🎄 All altitude-based Christmas tree diagrams generated successfully!")
+    print("📊 Diagrams created:")
+    print("   • 40k ft: Strategic Overview (Christmas tree backbone)")
+    print("   • 30k ft: Orchestrator Tree (trunk + domain branches)")
+    print("   • Ground: MCP Infrastructure (Composio hub + tools)")
+    print("🎯 Architecture follows altitude hierarchy with Christmas tree structure")
 EOF
         chmod +x generate_diagrams.py
         python generate_diagrams.py
