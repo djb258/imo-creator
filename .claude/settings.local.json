@@ -29,7 +29,9 @@
       "WebFetch(domain:composio-imo-creator-url.onrender.com)",
       "Bash(render:*)",
       "Bash(where render.exe)",
-      "Bash(./render.exe --version)"
+      "Bash(./render.exe --version)",
+      "Bash(gunicorn:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": [],
