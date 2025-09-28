@@ -21,7 +21,8 @@
       "WebSearch",
       "WebFetch(domain:www.builder.io)",
       "Bash(cd:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": [],

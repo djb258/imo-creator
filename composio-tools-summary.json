@@ -1,0 +1,21 @@
+{
+  "total_tools": 20,
+  "total_toolkits": 3,
+  "toolkits": {
+    "_21risk": {
+      "name": "_21risk",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/_21risk-logo.png",
+      "tool_count": 9
+    },
+    "_2chat": {
+      "name": "_2chat",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/icons/_2chat_fixed_20250722.png",
+      "tool_count": 5
+    },
+    "ably": {
+      "name": "ably",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/ably.svg",
+      "tool_count": 6
+    }
+  }
+}

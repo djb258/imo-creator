@@ -97,7 +97,37 @@
         "actions-workflows",
         "ai-human-readable",
         "drawio-ingest"
-      ]
+      ],
+      "composio_toolkits": {
+        "_21risk": {
+          "name": "_21RISK Toolkit",
+          "category": "Risk Management & Compliance",
+          "tools": 9,
+          "altitude_placement": "middle_domain",
+          "description": "Risk management and compliance operations"
+        },
+        "_2chat": {
+          "name": "_2CHAT Toolkit",
+          "category": "Chat & Communication",
+          "tools": 5,
+          "altitude_placement": "output_domain",
+          "description": "WhatsApp and communication management"
+        },
+        "ably": {
+          "name": "ABLY Toolkit",
+          "category": "Real-time Messaging & Presence",
+          "tools": 6,
+          "altitude_placement": "middle_domain",
+          "description": "Real-time messaging and presence tracking"
+        },
+        "builder": {
+          "name": "Builder.io",
+          "category": "Visual Development & UI/UX",
+          "tools": 0,
+          "altitude_placement": "input_domain",
+          "description": "Visual development and UI generation"
+        }
+      }
     },
     "vs_code_integration": {
       "extension": "hediet.vscode-drawio",

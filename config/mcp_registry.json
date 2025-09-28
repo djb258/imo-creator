@@ -28,28 +28,53 @@
       "doctrine_id": "04.04.00",
       "status": "active",
       "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
-      "description": "Primary Composio MCP integration hub for IMO-Creator ecosystem"
+      "description": "Primary Composio MCP integration hub - 20 tools across 3 toolkits"
     },
     {
-      "tool": "Neon",
+      "tool": "_21RISK Toolkit",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/_21risk",
       "doctrine_id": "04.04.01",
-      "status": "active"
+      "status": "active",
+      "toolkit_tools": [
+        "GET_COMPLIANCE", "GET_ITEMS", "GET_ITEMS_PER_MONTH",
+        "GET_ORGANIZATIONS", "GET_PROPERTIES", "GET_REPORTS",
+        "GET_RISKMODEL_CATEGORIES", "GET_RISK_MODELS", "GET_SITES"
+      ],
+      "description": "Risk management and compliance toolkit - 9 tools for audit, compliance, and organizational structure"
     },
     {
-      "tool": "Firebase",
+      "tool": "_2CHAT Toolkit",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/_2chat",
       "doctrine_id": "04.04.02",
-      "status": "active"
+      "status": "active",
+      "toolkit_tools": [
+        "CREATE_CONTACT", "GET_API_USAGE_INFO", "LIST_CONTACTS",
+        "LIST_WEBHOOKS", "TEST_API_KEY"
+      ],
+      "description": "Chat and contact management toolkit - 5 tools for WhatsApp/chat communication"
     },
     {
-      "tool": "Apify",
+      "tool": "ABLY Toolkit",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/ably",
       "doctrine_id": "04.04.03",
-      "status": "active"
+      "status": "active",
+      "toolkit_tools": [
+        "BATCH_PRESENCE", "BATCH_PRESENCE_HISTORY", "CREATE_CHANNEL",
+        "DELETE_CHANNEL_SUBSCRIPTION", "GET_CHANNEL_DETAILS", "GET_CHANNEL_HISTORY"
+      ],
+      "description": "Real-time messaging and presence toolkit - 6 tools for channels and messaging"
+    },
+    {
+      "tool": "Builder.io",
+      "type": "MCP",
+      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
+      "doctrine_id": "04.04.04",
+      "status": "active",
+      "api_key": "9502e3493ccf42339f36d16b4a482c70",
+      "description": "Builder.io visual development platform integration for UI/UX generation"
     },
     {
       "tool": "n8n",
@@ -64,15 +89,6 @@
       "endpoint": "https://make-instance/webhook",
       "doctrine_id": "04.04.F2",
       "status": "active"
-    },
-    {
-      "tool": "Builder.io",
-      "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
-      "doctrine_id": "04.04.04",
-      "status": "active",
-      "api_key": "9502e3493ccf42339f36d16b4a482c70",
-      "description": "Builder.io visual development platform integration for UI/UX generation"
     }
   ],
   "repo_usage": {
