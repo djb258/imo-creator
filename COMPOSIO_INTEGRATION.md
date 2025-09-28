@@ -1,26 +1,91 @@
-# Composio MCP Integration Guide - IMO Creator
+# 🔥 CRITICAL: Composio Integration Guide - IMO Creator
 
-## Overview
+## ⚠️ MANDATORY READING - ALWAYS REFERENCE THIS FIRST
 
-This IMO Creator project leverages Composio as a Model Context Protocol (MCP) server to integrate with external services. This guide documents how Composio is configured and used within the IMO Creator ecosystem, complementing the main Barton Outreach Core implementation.
+**This is the AUTHORITATIVE guide for Composio integration. NEVER attempt to build custom Google/API integrations - everything goes through Composio MCP server!**
 
-## 🔧 Architecture
+## ✅ VERIFIED SYSTEM STATUS (2025-09-28)
+
+**🚀 Composio MCP Server**: ACTIVE on port 3001
+**📧 Gmail**: 3 accounts connected and verified
+**📁 Google Drive**: 3 accounts connected and verified
+**📅 Google Calendar**: 1 account connected and verified
+**📊 Google Sheets**: 1 account connected and verified
+**🔥 Firebase**: MCP server available with Barton Doctrine compliance
+**🌐 100+ Services**: Available through single MCP endpoint
+
+## 🎯 QUICK START - ESSENTIAL COMMANDS
+
+### Start Composio MCP Server (REQUIRED)
+```bash
+cd "C:\Users\CUSTOM PC\Desktop\Cursor Builds\scraping-tool\imo-creator\mcp-servers\composio-mcp"
+node server.js
+```
+
+### Test Server Connection
+```bash
+curl -X POST http://localhost:3001/tool \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "get_composio_stats", "data": {}, "unique_id": "HEIR-2025-09-TEST-01", "process_id": "PRC-TEST-001", "orbt_layer": 2, "blueprint_version": "1.0"}'
+```
+
+### List Connected Google Accounts
+```bash
+curl -X POST http://localhost:3001/tool \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "manage_connected_account", "data": {"action": "list", "app": "GMAIL"}, "unique_id": "HEIR-2025-09-LIST-01", "process_id": "PRC-LIST-001", "orbt_layer": 2, "blueprint_version": "1.0"}'
+```
+
+## 🔧 Verified Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   IMO Creator   │    │   MCP Bridge    │    │   Composio MCP  │
-│   Frontend      │───▶│   (Node.js)     │───▶│   Server        │
+│   IMO Creator   │───▶│  Composio MCP   │───▶│ Google Services │
+│   Application   │    │ Server (3001)   │    │  & 100+ APIs    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                       │
-                                                       ▼
-                                              ┌─────────────────┐
-                                              │  External APIs  │
-                                              │  • GitHub       │
-                                              │  • Vercel       │
-                                              │  • OpenAI       │
-                                              │  • Anthropic    │
-                                              └─────────────────┘
+                              │
+                              ▼
+                       ┌─────────────────┐
+                       │ HEIR/ORBT       │
+                       │ Compliance      │
+                       │ & Caching       │
+                       └─────────────────┘
 ```
+
+## 🚨 CRITICAL PAYLOAD FORMAT
+
+**ALWAYS use this exact HEIR/ORBT format for ALL Composio calls:**
+
+```json
+{
+  "tool": "tool_name_here",
+  "data": {
+    // Tool-specific parameters
+  },
+  "unique_id": "HEIR-YYYY-MM-SYSTEM-MODE-VN",
+  "process_id": "PRC-SYSTEM-EPOCHTIMESTAMP",
+  "orbt_layer": 2,
+  "blueprint_version": "1.0"
+}
+```
+
+## ✅ VERIFIED CONNECTED ACCOUNTS
+
+### Gmail Accounts (3 Active)
+- service@svg.agency (ca_BSkcAvhBMH92)
+- djb258@gmail.com (ca_Dh-5OnHENWcG)
+- dbarton@svg.agency (ca_TcSBw5YRBVbN)
+
+### Google Drive Accounts (3 Active)
+- service@svg.agency (ca_CWoInx__nXq-)
+- djb258@gmail.com (ca_ovFzduXza8Ax)
+- dbarton@svg.agency (ca_6XD0QaOwLDR8)
+
+### Google Calendar Account (1 Active)
+- service@svg.agency (ca_nJ2cJ6Ltzq4l)
+
+### Google Sheets Account (1 Active)
+- service@svg.agency (ca_yGbhTw96db32)
 
 ## 🌐 Connected Services for IMO Creator
 
