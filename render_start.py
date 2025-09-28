@@ -24,7 +24,8 @@ def main():
     else:
         print("=== RENDER START PHASE ===")
         port = os.environ.get("PORT", "10000")
-        cmd = f"gunicorn src.server.main:app --bind 0.0.0.0:{port} --worker-class uvicorn.workers.UvicornWorker"
+        # Use uvicorn directly for better FastAPI compatibility
+        cmd = f"uvicorn src.server.main:app --host 0.0.0.0 --port {port}"
         run_command(cmd)
 
 if __name__ == "__main__":
