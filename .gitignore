@@ -25,3 +25,4 @@ public/
 Thumbs.db
 render-cli-source/
 render.exe
+.bootstrap-report.json
