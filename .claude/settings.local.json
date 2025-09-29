@@ -34,7 +34,8 @@
       "Bash(pip install:*)",
       "Bash(node:*)",
       "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node test-google-services.js)",
-      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node composio-list-all-tools.js)"
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node composio-list-all-tools.js)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": [],
