@@ -34,6 +34,22 @@ curl -X POST http://localhost:3001/tool \
 curl -X POST http://localhost:3001/tool \
   -H "Content-Type: application/json" \
   -d '{"tool": "manage_connected_account", "data": {"action": "list", "app": "GMAIL"}, "unique_id": "HEIR-2025-09-LIST-01", "process_id": "PRC-LIST-001", "orbt_layer": 2, "blueprint_version": "1.0"}'
+
+### Test Million Verifier Integration
+```bash
+# Get Million Verifier service info
+curl -X GET http://localhost:8000/api/composio/million_verifier
+
+# Verify a single email
+curl -X POST http://localhost:8000/api/composio/million_verifier/tool \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "VERIFY_EMAIL", "data": {"email": "test@example.com"}, "unique_id": "HEIR-2025-09-VERIFY-01", "process_id": "PRC-VERIFY-001", "orbt_layer": 2, "blueprint_version": "1.0"}'
+
+# Check available credits
+curl -X POST http://localhost:8000/api/composio/million_verifier/tool \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "GET_CREDITS", "data": {}, "unique_id": "HEIR-2025-09-CREDITS-01", "process_id": "PRC-CREDITS-001", "orbt_layer": 2, "blueprint_version": "1.0"}'
+```
 ```
 
 ## 🔧 Verified Architecture
@@ -89,7 +105,21 @@ curl -X POST http://localhost:3001/tool \
 
 ## 🌐 Connected Services for IMO Creator
 
-### **1. GitHub (Version Control)**
+### **1. Million Verifier (Email Validation)**
+- **Purpose**: Email verification and validation services
+- **Connection Status**: ✅ Active - Custom API integration
+- **API Key**: 7hLlWoR3DCDoDwDllpafUh4U9
+- **Available Tools**: VERIFY_EMAIL, BATCH_VERIFY, GET_CREDITS, GET_RESULTS
+- **Endpoints**:
+  - Info: `/api/composio/million_verifier`
+  - Tool Execution: `/api/composio/million_verifier/tool`
+- **Use Cases**:
+  - Single email verification
+  - Bulk email list validation
+  - Credit monitoring
+  - Batch result retrieval
+
+### **2. GitHub (Version Control)**
 - **Purpose**: Repository management, code deployment, issue tracking
 - **Connection Status**: ✅ Available through Composio
 - **Use Cases**:

@@ -44,7 +44,12 @@
       "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-composio-apps.cjs)",
       "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-instantly-app.cjs)",
       "WebFetch(domain:developer.instantly.ai)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "WebFetch(domain:docs.composio.dev)",
+      "WebFetch(domain:docs.millionverifier.com)",
+      "WebFetch(domain:www.millionverifier.com)",
+      "WebFetch(domain:developer.millionverifier.com)",
+      "WebFetch(domain:millionverifier.com)"
     ],
     "deny": [],
     "ask": [],

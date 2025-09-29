@@ -12,6 +12,16 @@ import hashlib
 import time
 import base64
 from typing import Optional, Dict, Any
+import sys
+
+# Add tools directory to path for imports
+sys.path.append(str(Path(__file__).parent.parent.parent / "tools"))
+
+try:
+    from million_verifier import handle_million_verifier_tool
+except ImportError as e:
+    print(f"Warning: Could not import Million Verifier tool: {e}")
+    handle_million_verifier_tool = None
 
 app = FastAPI(title="Blueprint API")
 
@@ -514,6 +524,73 @@ async def composio_builder():
         "description": "Visual development and UI generation"
     }
 
+@app.get("/api/composio/million_verifier")
+async def composio_million_verifier():
+    """Million Verifier toolkit endpoint - Email Validation"""
+    return {
+        "toolkit": "Million Verifier",
+        "category": "Email Validation & Verification",
+        "tools": 4,
+        "status": "active",
+        "description": "Email verification and validation services",
+        "available_tools": [
+            "VERIFY_EMAIL",
+            "BATCH_VERIFY",
+            "GET_CREDITS",
+            "GET_RESULTS"
+        ]
+    }
+
+@app.post("/api/composio/million_verifier/tool")
+async def million_verifier_tool_endpoint(request: Request):
+    """Million Verifier tool execution endpoint with HEIR/ORBT compliance"""
+    try:
+        if not handle_million_verifier_tool:
+            return JSONResponse({
+                "successful": False,
+                "error": "Million Verifier tool not available"
+            }, status_code=500)
+
+        body = await request.json()
+
+        # Extract HEIR/ORBT parameters
+        tool_name = body.get("tool")
+        data = body.get("data", {})
+        unique_id = body.get("unique_id")
+        process_id = body.get("process_id")
+        orbt_layer = body.get("orbt_layer", 2)
+        blueprint_version = body.get("blueprint_version", "1.0")
+
+        if not tool_name:
+            return JSONResponse({
+                "successful": False,
+                "error": "tool parameter is required"
+            }, status_code=400)
+
+        if not unique_id or not process_id:
+            return JSONResponse({
+                "successful": False,
+                "error": "unique_id and process_id are required for HEIR/ORBT compliance"
+            }, status_code=400)
+
+        # Execute the tool
+        result = handle_million_verifier_tool(
+            tool_name=tool_name,
+            data=data,
+            unique_id=unique_id,
+            process_id=process_id,
+            orbt_layer=orbt_layer,
+            blueprint_version=blueprint_version
+        )
+
+        return JSONResponse(result)
+
+    except Exception as e:
+        return JSONResponse({
+            "successful": False,
+            "error": f"Tool execution failed: {str(e)}"
+        }, status_code=500)
+
 @app.get("/")
 async def root():
     return {"message": "IMO-Creator Backend API", "endpoints": [
@@ -527,5 +604,7 @@ async def root():
         "/api/composio/_21risk",
         "/api/composio/_2chat",
         "/api/composio/ably",
-        "/api/composio/builder"
+        "/api/composio/builder",
+        "/api/composio/million_verifier",
+        "/api/composio/million_verifier/tool"
     ]}

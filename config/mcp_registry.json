@@ -106,6 +106,29 @@
         "FIREBASE_DATABASE_URL", "FIREBASE_STORAGE_BUCKET"
       ],
       "description": "Firebase staging memory with Barton Doctrine validation - all writes require unique_id, process_id, timestamp_last_touched, validated"
+    },
+    {
+      "tool": "Million Verifier",
+      "type": "Custom API",
+      "endpoint": "https://api.millionverifier.com",
+      "doctrine_id": "04.04.06",
+      "status": "active",
+      "api_key": "7hLlWoR3DCDoDwDllpafUh4U9",
+      "toolkit_tools": [
+        "VERIFY_EMAIL", "BATCH_VERIFY", "GET_CREDITS", "GET_RESULTS"
+      ],
+      "api_endpoints": {
+        "verify_single": "/v3/verify",
+        "batch_upload": "/v3/bulkapi/verifyfile",
+        "get_credits": "/v3/credits",
+        "get_results": "/v3/bulkapi/download"
+      },
+      "authentication": {
+        "type": "api_key",
+        "key_param": "api",
+        "key_location": "query"
+      },
+      "description": "Million Verifier email validation service for single and batch email verification"
     }
   ],
   "repo_usage": {
