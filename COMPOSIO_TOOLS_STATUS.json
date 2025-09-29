@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-28T16:35:00.000Z",
+  "lastUpdated": "2025-09-29T13:15:00.000Z",
   "mcpServer": {
     "endpoint": "http://localhost:3001/tool",
     "status": "SUCCESS"
@@ -60,7 +60,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:53.547Z"
+      "lastChecked": "2025-09-29T12:53:55.008Z"
     },
     "googledrive": {
       "status": "CONNECTED",
@@ -117,7 +117,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:53.726Z"
+      "lastChecked": "2025-09-29T12:53:55.199Z"
     },
     "googlecalendar": {
       "status": "CONNECTED",
@@ -174,7 +174,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:53.941Z"
+      "lastChecked": "2025-09-29T12:53:55.445Z"
     },
     "googlesheets": {
       "status": "CONNECTED",
@@ -231,7 +231,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:54.130Z"
+      "lastChecked": "2025-09-29T12:53:55.640Z"
     },
     "notion": {
       "status": "CONNECTED",
@@ -288,7 +288,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:54.328Z"
+      "lastChecked": "2025-09-29T12:53:55.833Z"
     },
     "render": {
       "status": "CONNECTED",
@@ -345,7 +345,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:54.522Z"
+      "lastChecked": "2025-09-29T12:53:56.040Z"
     },
     "vercel": {
       "status": "CONNECTED",
@@ -402,7 +402,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:54.707Z"
+      "lastChecked": "2025-09-29T12:53:56.241Z"
     },
     "github": {
       "status": "CONNECTED",
@@ -459,7 +459,7 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:54.913Z"
+      "lastChecked": "2025-09-29T12:53:56.428Z"
     },
     "slack": {
       "status": "CONNECTED",
@@ -516,136 +516,38 @@
           "connectionTime": "2025-09-11T20:05:45.144Z"
         }
       ],
-      "lastChecked": "2025-09-28T16:33:55.111Z"
+      "lastChecked": "2025-09-29T12:53:56.640Z"
+    },
+    "instantly": {
+      "status": "INTEGRATED",
+      "integrationMethod": "CUSTOM_MCP",
+      "apiKey": "eaf2c37e-ade9-4cd1-9f91-edec66dfc83b:gALQdZVogjpy",
+      "baseUrl": "https://api.instantly.ai/api/v2",
+      "tools": [
+        "instantly_list_campaigns",
+        "instantly_create_campaign",
+        "instantly_get_campaign",
+        "instantly_list_leads",
+        "instantly_create_lead",
+        "instantly_delete_lead",
+        "instantly_list_subsequences",
+        "instantly_create_subsequence"
+      ],
+      "integrationTime": "2025-09-29T13:15:00.000Z",
+      "lastTested": "2025-09-29T13:15:00.000Z",
+      "notes": "Integrated into Composio MCP server. API returns 404 for some endpoints - may require verification of API permissions or endpoint structure."
     }
-  },
-  "additionalServicesViaDirectAPI": {
-    "anthropic_administrator": {
-      "status": "CONNECTED",
-      "id": "ca49330d-d131-483c-a268-c9ceb6106083",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "openai": {
-      "status": "CONNECTED",
-      "id": "d404a758-cbb1-4cc7-86cb-ca4589c520d1",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "neon": {
-      "status": "CONNECTED",
-      "id": "8117665a-66bc-4466-919e-144f693a4a32",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "firecrawl": {
-      "status": "CONNECTED",
-      "id": "b61e92f0-9881-4ceb-9ea3-75b64c3baf65",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "apify": {
-      "status": "CONNECTED",
-      "id": "f81a8a4a-c602-4adf-be02-fadec17cc378",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "perplexityai": {
-      "status": "CONNECTED",
-      "id": "a49492cd-0d5d-4c77-8c9c-08e14074e39d",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "active_campaign": {
-      "status": "CONNECTED",
-      "id": "e33ac6d5-38c1-42a8-a5e9-78ea21946d1a",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "heyreach": {
-      "status": "CONNECTED",
-      "id": "4ceda374-96c6-400f-83c8-f3cdaebaaab5",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    },
-    "jotform": {
-      "status": "CONNECTED",
-      "id": "81ab26b6-981e-47c6-998a-f261442f7b3e",
-      "lastChecked": "2025-09-28T16:34:28.673Z"
-    }
-  },
-  "mcpAvailableTools": [
-    "execute_composio_tool",
-    "get_available_tools",
-    "manage_connected_account",
-    "get_composio_stats",
-    "lovable_create_project",
-    "lovable_get_project_status",
-    "lovable_get_project_details",
-    "lovable_scaffold_altitude_ui",
-    "builder_io_create_space",
-    "builder_io_create_model",
-    "builder_io_create_content",
-    "builder_io_scaffold_altitude_cms",
-    "builder_io_get_content",
-    "figma_export_to_code",
-    "figma_create_design_system",
-    "figma_sync_components",
-    "figma_scaffold_from_altitude",
-    "smartsheet_create_sheet",
-    "smartsheet_get_sheets",
-    "smartsheet_add_rows",
-    "smartsheet_update_rows",
-    "smartsheet_scaffold_from_altitude"
-  ],
-  "firebaseMCP": {
-    "status": "AVAILABLE",
-    "hasBartonDoctrine": true,
-    "tools": [
-      "FIREBASE_WRITE",
-      "FIREBASE_READ",
-      "FIREBASE_UPDATE",
-      "FIREBASE_DELETE",
-      "FIREBASE_STUDIO_LIST",
-      "FIREBASE_STUDIO_DEPLOY"
-    ],
-    "location": "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\imo-creator\\firebase_mcp.js"
   },
   "testingSummary": {
-    "totalServices": 20,
-    "connectedServices": 20,
-    "mcpServices": 9,
-    "directAPIServices": 11,
-    "mcpToolsAvailable": 22,
-    "firebaseTools": 6,
-    "lastComprehensiveTest": "2025-09-28T16:35:00.000Z"
+    "totalServices": 10,
+    "connectedServices": 9,
+    "integratedServices": 1,
+    "workingServices": 0,
+    "failedServices": 7
   },
-  "verifiedIntegrations": {
-    "googleWorkspace": {
-      "gmail": "✅ VERIFIED",
-      "googledrive": "✅ VERIFIED",
-      "googlecalendar": "✅ VERIFIED",
-      "googlesheets": "✅ VERIFIED"
-    },
-    "developmentPlatforms": {
-      "github": "✅ VERIFIED",
-      "vercel": "✅ VERIFIED",
-      "render": "✅ VERIFIED",
-      "neon": "✅ VERIFIED"
-    },
-    "aiPlatforms": {
-      "openai": "✅ VERIFIED",
-      "anthropic": "✅ VERIFIED",
-      "perplexityai": "✅ VERIFIED"
-    },
-    "productivityTools": {
-      "notion": "✅ VERIFIED",
-      "slack": "✅ VERIFIED",
-      "jotform": "✅ VERIFIED",
-      "active_campaign": "✅ VERIFIED"
-    },
-    "automation": {
-      "apify": "✅ VERIFIED",
-      "firecrawl": "✅ VERIFIED",
-      "heyreach": "✅ VERIFIED"
-    },
-    "designBuild": {
-      "figma": "✅ TOOLS AVAILABLE",
-      "lovable": "✅ TOOLS AVAILABLE",
-      "builder_io": "✅ TOOLS AVAILABLE",
-      "smartsheet": "✅ TOOLS AVAILABLE"
+  "verifiedTools": [
+    {
+      "lastTested": "2025-09-29T12:53:54.743Z"
     }
-  }
+  ]
 }

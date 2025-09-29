@@ -29,11 +29,19 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.0",
+    "composio-core": "^0.5.39",
     "firebase-admin": "^12.0.0",
     "undici": "^6.19.8"
   },
-  "devDependencies": {},
-  "keywords": ["compliance", "orchestration", "garage-mcp", "heir", "imo-creator", "factory", "mechanic"],
+  "keywords": [
+    "compliance",
+    "orchestration",
+    "garage-mcp",
+    "heir",
+    "imo-creator",
+    "factory",
+    "mechanic"
+  ],
   "author": "",
   "license": "MIT",
   "engines": {

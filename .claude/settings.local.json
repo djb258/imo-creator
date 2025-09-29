@@ -34,7 +34,17 @@
       "Bash(pip install:*)",
       "Bash(node:*)",
       "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node test-google-services.js)",
-      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node composio-list-all-tools.js)"
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node composio-list-all-tools.js)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-relevance-app.js)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-relevance-app.cjs)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node \"C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\imo-creator\\check-relevance-app.cjs\")",
+      "WebFetch(domain:docs.relevance.ai)",
+      "WebFetch(domain:docs.relevanceai.com)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node test-all-composio-tools.cjs)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-composio-apps.cjs)",
+      "Bash(COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node check-instantly-app.cjs)",
+      "WebFetch(domain:developer.instantly.ai)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": [],
