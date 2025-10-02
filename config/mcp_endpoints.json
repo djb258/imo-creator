@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "version": "1.1",
+    "last_updated": "2025-10-02T15:30:00Z",
+    "base_url": "https://mcpo-jte8.onrender.com",
+    "description": "MCPO REST API Proxy Layer - Extends the existing MCP registry by providing OpenAPI REST access to all MCP tools. This complements config/mcp_registry.json by adding HTTP REST interfaces for LLM integration.",
+    "proxy_type": "mcpo",
+    "deployment_platform": "Render",
+    "global_config": true,
+    "extends": "config/mcp_registry.json",
+    "config_url": "https://raw.githubusercontent.com/djb258/imo-creator/main/config/mcp_endpoints.json"
+  },
+  "mcp_servers": [
+    {
+      "name": "neon-db",
+      "description": "Handles Neon database operations such as querying, schema validation, and doctrine-enforced inserts.",
+      "url": "https://mcpo-jte8.onrender.com/neon",
+      "openapi_spec": "/neon/openapi.json",
+      "docs_url": "https://mcpo-jte8.onrender.com/neon/docs",
+      "health_check": "https://mcpo-jte8.onrender.com/neon/health",
+      "auth": {
+        "type": "bearer",
+        "env_var": "NEON_API_KEY",
+        "header_name": "Authorization",
+        "format": "Bearer {token}"
+      },
+      "capabilities": [
+        "database_queries",
+        "schema_validation",
+        "data_insertion",
+        "migration_management"
+      ]
+    },
+    {
+      "name": "apify-scraper",
+      "description": "Scraping service connected to Apify actors for outreach data enrichment.",
+      "url": "https://mcpo-jte8.onrender.com/apify",
+      "openapi_spec": "/apify/openapi.json",
+      "docs_url": "https://mcpo-jte8.onrender.com/apify/docs",
+      "health_check": "https://mcpo-jte8.onrender.com/apify/health",
+      "auth": {
+        "type": "bearer",
+        "env_var": "APIFY_API_TOKEN",
+        "header_name": "Authorization",
+        "format": "Bearer {token}"
+      },
+      "capabilities": [
+        "web_scraping",
+        "data_enrichment",
+        "actor_execution",
+        "result_processing"
+      ]
+    },
+    {
+      "name": "email-verifier",
+      "description": "Email validation and hygiene checks via MillionVerify.",
+      "url": "https://mcpo-jte8.onrender.com/millionverify",
+      "openapi_spec": "/millionverify/openapi.json",
+      "docs_url": "https://mcpo-jte8.onrender.com/millionverify/docs",
+      "health_check": "https://mcpo-jte8.onrender.com/millionverify/health",
+      "auth": {
+        "type": "bearer",
+        "env_var": "MILLIONVERIFY_API_KEY",
+        "header_name": "Authorization",
+        "format": "Bearer {token}"
+      },
+      "capabilities": [
+        "email_validation",
+        "domain_verification",
+        "bulk_verification",
+        "hygiene_scoring"
+      ]
+    },
+    {
+      "name": "github-agent",
+      "description": "MCP server for GitHub repo diagnostics, commits, and issue management.",
+      "url": "https://mcpo-jte8.onrender.com/github",
+      "openapi_spec": "/github/openapi.json",
+      "docs_url": "https://mcpo-jte8.onrender.com/github/docs",
+      "health_check": "https://mcpo-jte8.onrender.com/github/health",
+      "auth": {
+        "type": "bearer",
+        "env_var": "GITHUB_TOKEN",
+        "header_name": "Authorization",
+        "format": "Bearer {token}"
+      },
+      "capabilities": [
+        "repository_analysis",
+        "commit_management",
+        "issue_tracking",
+        "pull_request_operations"
+      ]
+    }
+  ],
+  "usage_instructions": {
+    "overview": "This global configuration enables cross-repository access to MCP servers via REST APIs",
+    "integration_pattern": {
+      "fetch_config": "curl -s https://raw.githubusercontent.com/your-username/imo-creator/main/config/mcp_endpoints.json",
+      "parse_servers": "Extract mcp_servers array for available services",
+      "authenticate": "Use environment variables specified in auth.env_var",
+      "make_requests": "POST to {url}/tools/{tool_name} with proper headers"
+    },
+    "authentication_example": {
+      "headers": {
+        "Authorization": "Bearer ${NEON_API_KEY}",
+        "Content-Type": "application/json"
+      }
+    },
+    "environment_variables": {
+      "required": [
+        "NEON_API_KEY",
+        "APIFY_API_TOKEN",
+        "MILLIONVERIFY_API_KEY",
+        "GITHUB_TOKEN"
+      ],
+      "optional": [
+        "MCPO_API_KEY"
+      ]
+    }
+  },
+  "cross_repo_config": {
+    "enabled": true,
+    "update_frequency": "daily",
+    "fallback_servers": [
+      "https://mcpo-jte8.onrender.com"
+    ],
+    "cache_duration": "1h"
+  }
+}
