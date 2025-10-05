@@ -49,7 +49,11 @@
       "WebFetch(domain:docs.millionverifier.com)",
       "WebFetch(domain:www.millionverifier.com)",
       "WebFetch(domain:developer.millionverifier.com)",
-      "WebFetch(domain:millionverifier.com)"
+      "WebFetch(domain:millionverifier.com)",
+      "Bash(git reset:*)",
+      "Bash(nslookup:*)",
+      "Bash(set COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn)",
+      "Bash(cmd /c \"set COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn && node check-composio-apps.cjs\")"
     ],
     "deny": [],
     "ask": [],

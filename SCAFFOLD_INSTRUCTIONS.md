@@ -29,7 +29,7 @@ When this repository is used as a template or scaffolding source, the following 
 
 ### Latest MCP Configuration Auto-Deployment:
 1. **MCP Endpoints** (`config/mcp_endpoints.json`)
-   - Native Composio API endpoints (api.composio.dev)
+   - Native Composio API endpoints (backend.composio.dev)
    - Latest authentication tokens embedded
    - 100+ service integrations ready to use
    - Auto-updates with daily sync
@@ -51,6 +51,13 @@ When this repository is used as a template or scaffolding source, the following 
    - Post-deployment endpoint testing
    - Token validation and health monitoring
    - Comprehensive error reporting
+
+5. **Integration Documentation** (`docs/COMPOSIO_MCP_INTEGRATION.md`)
+   - Complete guide for Composio MCP interactions
+   - Authentication patterns and examples
+   - Python, JavaScript, and cURL usage examples
+   - Troubleshooting and best practices
+   - Auto-discovery and health monitoring patterns
 
 ### Auto-Triggers Configured:
 - ✅ **On Code Push**: GitIngest + diagrams update automatically

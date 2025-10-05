@@ -24,7 +24,7 @@ class MCPConfigValidator:
 
     def validate_all(self) -> bool:
         """Validate all MCP configuration files."""
-        print("🔍 Validating MCP Configuration...")
+        print("[INFO] Validating MCP Configuration...")
 
         # Validate main config files
         self.validate_mcp_endpoints()
@@ -33,17 +33,17 @@ class MCPConfigValidator:
 
         # Report results
         if self.errors:
-            print("\n❌ Validation FAILED:")
+            print("\n[ERROR] Validation FAILED:")
             for error in self.errors:
-                print(f"  ✗ {error}")
+                print(f"  - {error}")
 
         if self.warnings:
-            print("\n⚠️ Warnings:")
+            print("\n[WARNING] Warnings:")
             for warning in self.warnings:
-                print(f"  ⚠ {warning}")
+                print(f"  - {warning}")
 
         if not self.errors:
-            print("\n✅ All MCP configurations are valid!")
+            print("\n[SUCCESS] All MCP configurations are valid!")
             return True
 
         return False
@@ -203,7 +203,7 @@ class MCPConfigValidator:
         except:
             return
 
-        print("\n🔗 Testing endpoint connectivity...")
+        print("\n[INFO] Testing endpoint connectivity...")
 
         for server in config.get("mcp_servers", []):
             name = server.get("name", "unknown")
@@ -215,12 +215,12 @@ class MCPConfigValidator:
             try:
                 response = requests.get(health_url, timeout=5)
                 if response.status_code == 200:
-                    print(f"  ✅ {name}: OK")
+                    print(f"  [OK] {name}: Connected")
                 else:
-                    print(f"  ❌ {name}: HTTP {response.status_code}")
+                    print(f"  [ERROR] {name}: HTTP {response.status_code}")
                     self.warnings.append(f"Endpoint {name} returned HTTP {response.status_code}")
             except requests.RequestException as e:
-                print(f"  ❌ {name}: Connection failed")
+                print(f"  [ERROR] {name}: Connection failed")
                 self.warnings.append(f"Cannot connect to {name}: {e}")
 
 

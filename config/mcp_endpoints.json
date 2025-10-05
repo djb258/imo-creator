@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "version": "2.0",
-    "last_updated": "2025-10-02T16:00:00Z",
-    "base_url": "https://api.composio.dev",
+    "version": "2.1",
+    "last_updated": "2025-10-05T13:17:00Z",
+    "base_url": "https://backend.composio.dev",
     "description": "Direct Composio API Integration - Native access to Composio's MCP tools and integrations. This configuration connects directly to Composio's production API endpoints for maximum reliability and performance.",
     "proxy_type": "composio-native",
     "deployment_platform": "Composio Cloud",
@@ -14,10 +14,10 @@
     {
       "name": "composio-universal",
       "description": "Universal Composio integration hub providing 100+ tools and services through a single API",
-      "url": "https://api.composio.dev/api/v1",
-      "openapi_spec": "https://api.composio.dev/openapi.json",
+      "url": "https://backend.composio.dev/api/v1",
+      "openapi_spec": "https://backend.composio.dev/openapi.json",
       "docs_url": "https://docs.composio.dev",
-      "health_check": "https://api.composio.dev/health",
+      "health_check": "https://backend.composio.dev/health",
       "auth": {
         "type": "bearer",
         "token": "oak_d4qEQhMSdWBgvAI3XELr",
