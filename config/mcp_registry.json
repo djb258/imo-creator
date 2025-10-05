@@ -24,11 +24,11 @@
     {
       "tool": "Composio MCP Server",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com",
+      "endpoint": "https://api.composio.dev",
       "doctrine_id": "04.04.00",
       "status": "active",
-      "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
-      "description": "Primary Composio MCP integration hub - 20 tools across 3 toolkits"
+      "api_key": "oak_d4qEQhMSdWBgvAI3XELr",
+      "description": "Primary Composio MCP integration hub - 100+ tools and services"
     },
     {
       "tool": "_21RISK Toolkit",

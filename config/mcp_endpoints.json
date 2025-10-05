@@ -1,28 +1,58 @@
 {
   "metadata": {
-    "version": "1.1",
-    "last_updated": "2025-10-02T15:30:00Z",
-    "base_url": "https://mcpo-jte8.onrender.com",
-    "description": "MCPO REST API Proxy Layer - Extends the existing MCP registry by providing OpenAPI REST access to all MCP tools. This complements config/mcp_registry.json by adding HTTP REST interfaces for LLM integration.",
-    "proxy_type": "mcpo",
-    "deployment_platform": "Render",
+    "version": "2.0",
+    "last_updated": "2025-10-02T16:00:00Z",
+    "base_url": "https://api.composio.dev",
+    "description": "Direct Composio API Integration - Native access to Composio's MCP tools and integrations. This configuration connects directly to Composio's production API endpoints for maximum reliability and performance.",
+    "proxy_type": "composio-native",
+    "deployment_platform": "Composio Cloud",
     "global_config": true,
     "extends": "config/mcp_registry.json",
     "config_url": "https://raw.githubusercontent.com/djb258/imo-creator/main/config/mcp_endpoints.json"
   },
   "mcp_servers": [
     {
-      "name": "neon-db",
-      "description": "Handles Neon database operations such as querying, schema validation, and doctrine-enforced inserts.",
-      "url": "https://mcpo-jte8.onrender.com/neon",
-      "openapi_spec": "/neon/openapi.json",
-      "docs_url": "https://mcpo-jte8.onrender.com/neon/docs",
-      "health_check": "https://mcpo-jte8.onrender.com/neon/health",
+      "name": "composio-universal",
+      "description": "Universal Composio integration hub providing 100+ tools and services through a single API",
+      "url": "https://api.composio.dev/api/v1",
+      "openapi_spec": "https://api.composio.dev/openapi.json",
+      "docs_url": "https://docs.composio.dev",
+      "health_check": "https://api.composio.dev/health",
       "auth": {
         "type": "bearer",
-        "env_var": "NEON_API_KEY",
-        "header_name": "Authorization",
-        "format": "Bearer {token}"
+        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "header_name": "X-API-Key",
+        "format": "{token}"
+      },
+      "endpoints": {
+        "tools": "https://api.composio.dev/api/v1/tools",
+        "actions": "https://api.composio.dev/api/v1/actions",
+        "execute": "https://api.composio.dev/api/v1/actions/execute",
+        "apps": "https://api.composio.dev/api/v1/apps",
+        "connections": "https://api.composio.dev/api/v1/connections"
+      },
+      "capabilities": [
+        "github_integration",
+        "gmail_integration",
+        "slack_integration",
+        "linear_integration",
+        "notion_integration",
+        "calendar_integration",
+        "database_operations",
+        "web_scraping",
+        "email_validation",
+        "100+ other integrations"
+      ]
+    },
+    {
+      "name": "composio-neon",
+      "description": "Neon database operations via Composio",
+      "url": "https://api.composio.dev/api/v1/tools/neon",
+      "auth": {
+        "type": "bearer",
+        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "header_name": "X-API-Key",
+        "format": "{token}"
       },
       "capabilities": [
         "database_queries",
@@ -32,57 +62,14 @@
       ]
     },
     {
-      "name": "apify-scraper",
-      "description": "Scraping service connected to Apify actors for outreach data enrichment.",
-      "url": "https://mcpo-jte8.onrender.com/apify",
-      "openapi_spec": "/apify/openapi.json",
-      "docs_url": "https://mcpo-jte8.onrender.com/apify/docs",
-      "health_check": "https://mcpo-jte8.onrender.com/apify/health",
+      "name": "composio-github",
+      "description": "GitHub operations via Composio",
+      "url": "https://api.composio.dev/api/v1/tools/github",
       "auth": {
         "type": "bearer",
-        "env_var": "APIFY_API_TOKEN",
-        "header_name": "Authorization",
-        "format": "Bearer {token}"
-      },
-      "capabilities": [
-        "web_scraping",
-        "data_enrichment",
-        "actor_execution",
-        "result_processing"
-      ]
-    },
-    {
-      "name": "email-verifier",
-      "description": "Email validation and hygiene checks via MillionVerify.",
-      "url": "https://mcpo-jte8.onrender.com/millionverify",
-      "openapi_spec": "/millionverify/openapi.json",
-      "docs_url": "https://mcpo-jte8.onrender.com/millionverify/docs",
-      "health_check": "https://mcpo-jte8.onrender.com/millionverify/health",
-      "auth": {
-        "type": "bearer",
-        "env_var": "MILLIONVERIFY_API_KEY",
-        "header_name": "Authorization",
-        "format": "Bearer {token}"
-      },
-      "capabilities": [
-        "email_validation",
-        "domain_verification",
-        "bulk_verification",
-        "hygiene_scoring"
-      ]
-    },
-    {
-      "name": "github-agent",
-      "description": "MCP server for GitHub repo diagnostics, commits, and issue management.",
-      "url": "https://mcpo-jte8.onrender.com/github",
-      "openapi_spec": "/github/openapi.json",
-      "docs_url": "https://mcpo-jte8.onrender.com/github/docs",
-      "health_check": "https://mcpo-jte8.onrender.com/github/health",
-      "auth": {
-        "type": "bearer",
-        "env_var": "GITHUB_TOKEN",
-        "header_name": "Authorization",
-        "format": "Bearer {token}"
+        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "header_name": "X-API-Key",
+        "format": "{token}"
       },
       "capabilities": [
         "repository_analysis",
@@ -90,40 +77,93 @@
         "issue_tracking",
         "pull_request_operations"
       ]
+    },
+    {
+      "name": "composio-gmail",
+      "description": "Gmail operations via Composio",
+      "url": "https://api.composio.dev/api/v1/tools/gmail",
+      "auth": {
+        "type": "bearer",
+        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "header_name": "X-API-Key",
+        "format": "{token}"
+      },
+      "capabilities": [
+        "send_email",
+        "read_inbox",
+        "manage_labels",
+        "attachment_handling"
+      ]
+    },
+    {
+      "name": "composio-slack",
+      "description": "Slack operations via Composio",
+      "url": "https://api.composio.dev/api/v1/tools/slack",
+      "auth": {
+        "type": "bearer",
+        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "header_name": "X-API-Key",
+        "format": "{token}"
+      },
+      "capabilities": [
+        "send_messages",
+        "channel_management",
+        "user_interactions",
+        "file_sharing"
+      ]
     }
   ],
   "usage_instructions": {
-    "overview": "This global configuration enables cross-repository access to MCP servers via REST APIs",
+    "overview": "This configuration provides direct access to Composio's native API for 100+ integrations",
     "integration_pattern": {
-      "fetch_config": "curl -s https://raw.githubusercontent.com/your-username/imo-creator/main/config/mcp_endpoints.json",
+      "fetch_config": "curl -s https://raw.githubusercontent.com/djb258/imo-creator/main/config/mcp_endpoints.json",
       "parse_servers": "Extract mcp_servers array for available services",
-      "authenticate": "Use environment variables specified in auth.env_var",
-      "make_requests": "POST to {url}/tools/{tool_name} with proper headers"
+      "authenticate": "Use X-API-Key header with Composio token",
+      "make_requests": "POST to Composio API endpoints with proper headers"
     },
     "authentication_example": {
       "headers": {
-        "Authorization": "Bearer ${NEON_API_KEY}",
+        "X-API-Key": "oak_d4qEQhMSdWBgvAI3XELr",
         "Content-Type": "application/json"
+      }
+    },
+    "example_requests": {
+      "list_tools": {
+        "method": "GET",
+        "url": "https://api.composio.dev/api/v1/tools",
+        "headers": {
+          "X-API-Key": "oak_d4qEQhMSdWBgvAI3XELr"
+        }
+      },
+      "execute_action": {
+        "method": "POST",
+        "url": "https://api.composio.dev/api/v1/actions/execute",
+        "headers": {
+          "X-API-Key": "oak_d4qEQhMSdWBgvAI3XELr",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "actionId": "github_create_issue",
+          "params": {
+            "owner": "username",
+            "repo": "repository",
+            "title": "Issue title",
+            "body": "Issue description"
+          }
+        }
       }
     },
     "environment_variables": {
       "required": [
-        "NEON_API_KEY",
-        "APIFY_API_TOKEN",
-        "MILLIONVERIFY_API_KEY",
-        "GITHUB_TOKEN"
+        "COMPOSIO_API_KEY"
       ],
-      "optional": [
-        "MCPO_API_KEY"
-      ]
+      "value": "oak_d4qEQhMSdWBgvAI3XELr"
     }
   },
   "cross_repo_config": {
     "enabled": true,
     "update_frequency": "daily",
-    "fallback_servers": [
-      "https://mcpo-jte8.onrender.com"
-    ],
+    "primary_endpoint": "https://api.composio.dev",
     "cache_duration": "1h"
   }
 }
