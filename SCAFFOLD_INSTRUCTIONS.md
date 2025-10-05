@@ -25,11 +25,45 @@ When this repository is used as a template or scaffolding source, the following 
    - VS Code integration guide
    - Troubleshooting and customization
 
+## 🔗 Automatic Composio MCP Integration
+
+### Latest MCP Configuration Auto-Deployment:
+1. **MCP Endpoints** (`config/mcp_endpoints.json`)
+   - Native Composio API endpoints (api.composio.dev)
+   - Latest authentication tokens embedded
+   - 100+ service integrations ready to use
+   - Auto-updates with daily sync
+
+2. **MCP Registry** (`config/mcp_registry.json`)
+   - Comprehensive tool registry with all capabilities
+   - Production-ready Composio integration
+   - Barton Doctrine compliance built-in
+   - Validates token freshness automatically
+
+3. **Config Loader Utility** (`utils/mcp_config_loader.py`)
+   - Python utility for loading global MCP config
+   - Caching and fallback mechanisms
+   - Cross-repository compatibility
+   - Automatic endpoint health checking
+
+4. **Validation Scripts** (`scripts/`)
+   - Pre-deployment configuration validation
+   - Post-deployment endpoint testing
+   - Token validation and health monitoring
+   - Comprehensive error reporting
+
 ### Auto-Triggers Configured:
 - ✅ **On Code Push**: GitIngest + diagrams update automatically
 - ✅ **Daily Schedule**: Ensures diagrams stay current even with external changes
 - ✅ **Manual Dispatch**: Force updates when needed
 - ✅ **PR Creation**: Preview diagrams for code reviews
+
+### MCP Configuration Auto-Triggers:
+- ✅ **On Repo Creation**: Latest Composio MCP config copied immediately
+- ✅ **On Deployment**: Config validation runs before every deployment
+- ✅ **Daily Sync**: Pulls latest MCP endpoints and tokens from IMO-Creator
+- ✅ **Token Validation**: Automatic checks for expired or invalid Composio tokens
+- ✅ **Health Monitoring**: Post-deployment endpoint testing and validation
 
 ## 🔄 Repository Update Behavior
 
@@ -93,6 +127,11 @@ When you create a new repository from IMO-Creator:
 - **Visual MCP Tool Mapping**
 - **CI/CD Workflow Documentation**
 - **Production Composio Integration**
+- **Latest MCP Configuration (100+ Tools)**
+- **Native Composio API Access**
+- **Automatic Token Management**
+- **Endpoint Health Monitoring**
+- **Cross-Repository MCP Compatibility**
 
 ### GitHub Actions Workflows:
 - `drawio-ingest.yml` - Main integration workflow

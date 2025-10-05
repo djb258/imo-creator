@@ -49,11 +49,44 @@
         "on_gitingest_change",
         "on_workflow_change"
       ]
+    },
+    "composio-mcp-config": {
+      "description": "Latest Composio MCP configuration with native API endpoints and authentication",
+      "source_branch": "master",
+      "source_repo": "https://github.com/djb258/imo-creator.git",
+      "copy_strategy": "overwrite_always",
+      "files": {
+        "mcp_endpoints": "config/mcp_endpoints.json",
+        "mcp_registry": "config/mcp_registry.json",
+        "mcp_loader": "utils/mcp_config_loader.py",
+        "config_readme": "config/README.md"
+      },
+      "auto_include": true,
+      "required": true,
+      "when_copy": ["repo_creation", "deployment", "update"],
+      "auto_triggers": [
+        "on_repo_update",
+        "on_deployment",
+        "on_mcp_config_change",
+        "daily_sync"
+      ],
+      "validation": {
+        "required_keys": ["metadata.base_url", "mcp_servers", "usage_instructions"],
+        "required_tokens": ["oak_d4qEQhMSdWBgvAI3XELr"],
+        "endpoint_health_check": true
+      },
+      "deployment_hooks": {
+        "pre_deploy": "scripts/validate_mcp_config.py",
+        "post_deploy": "scripts/test_mcp_endpoints.py"
+      }
     }
   },
   "scaffold_rules": {
     "always_copy": [
       "config/mcp_registry.json",
+      "config/mcp_endpoints.json",
+      "config/README.md",
+      "utils/mcp_config_loader.py",
       "branches/composio/mcp_registry.json",
       "heir.doctrine.yaml",
       "vercel.json",
