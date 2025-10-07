@@ -1,0 +1,8 @@
+{
+  "schema_url": "https://backend.composio.dev/openapi.yaml",
+  "auth": {
+    "type": "api_key_header",
+    "header": "X-API-Key",
+    "env_var": "COMPOSIO_API_KEY"
+  }
+}
