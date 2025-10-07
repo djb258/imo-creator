@@ -1,10 +1,10 @@
 {
-  "last_updated": "2025-10-05T13:45:00Z",
+  "last_updated": "2025-10-07T12:00:00Z",
   "summary": {
     "total_tools_in_composio": 13216,
     "total_pages_in_composio": 661,
     "connected_tools_in_account": 40,
-    "connected_services": 10,
+    "connected_services": 11,
     "custom_integrations": 1
   },
   "connected_services": {
@@ -53,6 +53,13 @@
       "account_count": 10,
       "type": "standard_composio"
     },
+    "figma": {
+      "status": "CONNECTED",
+      "account_count": 1,
+      "type": "standard_composio",
+      "connection_id": "704dfd40-fc4e-4aca-98d4-fcb4d74334b8",
+      "connected_user": "dbarton@svg.agency"
+    },
     "instantly": {
       "status": "INTEGRATED",
       "integration_method": "CUSTOM_MCP",
@@ -92,9 +99,10 @@
   },
   "analysis_notes": {
     "massive_scale": "Composio has grown from 20 to 13,216 total tools across 661 pages",
-    "our_connected_tools": "We have 40 tools from 10 connected services (9 standard + 1 custom)",
+    "our_connected_tools": "We have 40 tools from 11 connected services (10 standard + 1 custom)",
     "custom_integration": "Instantly.ai integrated as custom MCP with 8 specific tools",
     "page_analyzed": "Analysis based on page 1 of 661 total pages in Composio",
-    "growth_factor": "13,196 new tools since last summary"
+    "growth_factor": "13,196 new tools since last summary",
+    "latest_connection": "Figma connected on 2025-10-07 as connection ID 704dfd40-fc4e-4aca-98d4-fcb4d74334b8"
   }
 }
