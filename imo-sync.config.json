@@ -1,0 +1,187 @@
+{
+  "name": "IMO-Creator Sync Configuration",
+  "version": "1.0.0",
+  "description": "Configuration for syncing IMO-Creator updates to doctrine-aligned repositories",
+  "sync": {
+    "source_repo": "djb258/imo-creator",
+    "composio_endpoint": "https://composio-imo-creator-url.onrender.com/imo-creator/sync",
+    "target_repositories": [
+      {
+        "name": "sales-hive",
+        "owner": "djb258",
+        "branch": "main",
+        "enabled": true,
+        "sync_types": ["workflows-only", "configs-only", "full-sync"]
+      },
+      {
+        "name": "client-hive",
+        "owner": "djb258",
+        "branch": "main",
+        "enabled": true,
+        "sync_types": ["workflows-only", "configs-only", "full-sync"]
+      },
+      {
+        "name": "outreach-hive",
+        "owner": "djb258",
+        "branch": "main",
+        "enabled": true,
+        "sync_types": ["workflows-only", "configs-only", "full-sync"]
+      }
+    ],
+    "sync_presets": {
+      "workflows-only": {
+        "description": "Sync only GitHub Actions workflow files",
+        "files": [
+          ".github/workflows/composio-orchestration.yml",
+          ".github/workflows/doctrine-validate.yml",
+          ".github/workflows/firebase-promote.yml",
+          ".github/workflows/sync-updates.yml"
+        ],
+        "directories": [
+          ".github/workflows/"
+        ],
+        "patterns": [
+          "**/.github/workflows/*.yml",
+          "**/.github/workflows/*.yaml"
+        ]
+      },
+      "configs-only": {
+        "description": "Sync only configuration files",
+        "files": [
+          "config/mcp_endpoints.json",
+          "composio-tools-summary.json",
+          "imo-sync.config.json"
+        ],
+        "directories": [
+          "config/",
+          "scripts/"
+        ],
+        "patterns": [
+          "**/config/*.json",
+          "**/*.config.*",
+          "**/package.json",
+          "**/tsconfig.json"
+        ]
+      },
+      "full-sync": {
+        "description": "Sync workflows, configs, and documentation",
+        "files": [
+          ".github/workflows/composio-orchestration.yml",
+          ".github/workflows/doctrine-validate.yml",
+          ".github/workflows/firebase-promote.yml",
+          ".github/workflows/sync-updates.yml",
+          "config/mcp_endpoints.json",
+          "composio-tools-summary.json",
+          "imo-sync.config.json",
+          "docs/COMPOSIO_MCP_INTEGRATION.md"
+        ],
+        "directories": [
+          ".github/",
+          "config/",
+          "docs/",
+          "scripts/"
+        ],
+        "patterns": [
+          "**/.github/**/*.yml",
+          "**/.github/**/*.yaml",
+          "**/config/*.json",
+          "**/docs/*.md",
+          "**/*.config.*"
+        ]
+      }
+    },
+    "triggers": {
+      "auto_sync": {
+        "enabled": true,
+        "events": [
+          "push",
+          "workflow_dispatch"
+        ],
+        "branches": [
+          "main",
+          "master",
+          "doctrine/*"
+        ],
+        "paths": [
+          ".github/workflows/**",
+          "config/**",
+          "docs/**",
+          "*.config.*"
+        ]
+      },
+      "manual_sync": {
+        "enabled": true,
+        "allowed_actors": [
+          "djb258"
+        ],
+        "require_approval": false
+      },
+      "external_trigger": {
+        "enabled": true,
+        "webhook_events": [
+          "repository_dispatch"
+        ],
+        "allowed_event_types": [
+          "sync-imo-creator",
+          "update-doctrine-repos"
+        ]
+      }
+    },
+    "notifications": {
+      "composio_mcp": {
+        "enabled": true,
+        "endpoint": "https://composio-imo-creator-url.onrender.com/notifications",
+        "events": [
+          "sync_started",
+          "sync_completed",
+          "sync_failed"
+        ]
+      },
+      "github_status": {
+        "enabled": true,
+        "create_status_checks": true,
+        "create_pr_comments": false
+      }
+    },
+    "security": {
+      "require_signed_commits": false,
+      "allowed_file_extensions": [
+        ".yml",
+        ".yaml",
+        ".json",
+        ".md",
+        ".js",
+        ".ts",
+        ".py"
+      ],
+      "blocked_paths": [
+        ".env*",
+        "**/.env*",
+        "**/secrets/**",
+        "**/credentials/**",
+        "**/*secret*",
+        "**/*key*"
+      ],
+      "max_file_size": "10MB",
+      "scan_for_secrets": true
+    },
+    "retry": {
+      "max_attempts": 3,
+      "backoff_strategy": "exponential",
+      "initial_delay": 1000,
+      "max_delay": 30000
+    }
+  },
+  "metadata": {
+    "created_by": "Claude Code",
+    "created_at": "2025-10-07T10:15:00Z",
+    "last_updated": "2025-10-07T10:15:00Z",
+    "version_history": [
+      {
+        "version": "1.0.0",
+        "date": "2025-10-07T10:15:00Z",
+        "changes": "Initial configuration for IMO-Creator sync system"
+      }
+    ]
+  }
+}

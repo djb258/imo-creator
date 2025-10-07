@@ -1,0 +1,243 @@
+name: Sync IMO-Creator Updates
+
+on:
+  repository_dispatch:
+    types: [sync-imo-creator]
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: 'Target repository to sync updates to'
+        required: true
+        type: choice
+        options:
+          - sales-hive
+          - client-hive
+          - outreach-hive
+          - all-repos
+      sync_type:
+        description: 'Type of sync operation'
+        required: true
+        type: choice
+        options:
+          - workflows-only
+          - configs-only
+          - full-sync
+        default: 'workflows-only'
+
+jobs:
+  sync-to-target:
+    name: Sync Updates to Target Repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout IMO-Creator
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: imo-creator
+
+      - name: Load sync configuration
+        id: config
+        run: |
+          cd imo-creator
+
+          # Load sync configuration from file
+          if [ -f "imo-sync.config.json" ]; then
+            echo "[INFO] Loading sync configuration from imo-sync.config.json"
+
+            # Extract configuration values
+            COMPOSIO_ENDPOINT=$(jq -r '.sync.composio_endpoint' imo-sync.config.json)
+            TARGET_REPOS=$(jq -r '.sync.target_repositories[].name' imo-sync.config.json | tr '\n' ',' | sed 's/,$//')
+
+            echo "composio_endpoint=$COMPOSIO_ENDPOINT" >> $GITHUB_OUTPUT
+            echo "available_repos=$TARGET_REPOS" >> $GITHUB_OUTPUT
+
+            # Store full config for later use
+            CONFIG_CONTENT=$(cat imo-sync.config.json | jq -c '.')
+            echo "config_content=$CONFIG_CONTENT" >> $GITHUB_OUTPUT
+
+            echo "[SUCCESS] Configuration loaded successfully"
+          else
+            echo "[ERROR] imo-sync.config.json not found!"
+            exit 1
+          fi
+
+      - name: Extract sync metadata
+        id: sync
+        run: |
+          cd imo-creator
+
+          # Extract sync parameters
+          TARGET_REPO="${{ inputs.target_repo || github.event.client_payload.target_repo || 'all-repos' }}"
+          SYNC_TYPE="${{ inputs.sync_type || github.event.client_payload.sync_type || 'workflows-only' }}"
+
+          echo "target_repo=$TARGET_REPO" >> $GITHUB_OUTPUT
+          echo "sync_type=$SYNC_TYPE" >> $GITHUB_OUTPUT
+
+          # Determine repositories to sync from config
+          if [[ "$TARGET_REPO" == "all-repos" ]]; then
+            REPOS="${{ steps.config.outputs.available_repos }}"
+          else
+            # Validate target repo exists in config
+            if echo "${{ steps.config.outputs.available_repos }}" | grep -q "$TARGET_REPO"; then
+              REPOS="$TARGET_REPO"
+            else
+              echo "[ERROR] Repository '$TARGET_REPO' not found in configuration"
+              exit 1
+            fi
+          fi
+          echo "repositories=$REPOS" >> $GITHUB_OUTPUT
+
+          # Get files to sync from configuration
+          FILES=$(jq -c ".sync.sync_presets.$SYNC_TYPE.files" imo-sync.config.json)
+          PATTERNS=$(jq -c ".sync.sync_presets.$SYNC_TYPE.patterns" imo-sync.config.json)
+          DIRECTORIES=$(jq -c ".sync.sync_presets.$SYNC_TYPE.directories" imo-sync.config.json)
+
+          echo "files_to_sync=$FILES" >> $GITHUB_OUTPUT
+          echo "patterns_to_sync=$PATTERNS" >> $GITHUB_OUTPUT
+          echo "directories_to_sync=$DIRECTORIES" >> $GITHUB_OUTPUT
+
+          # Validate sync type exists in config
+          if ! jq -e ".sync.sync_presets.$SYNC_TYPE" imo-sync.config.json >/dev/null; then
+            echo "[ERROR] Sync type '$SYNC_TYPE' not found in configuration"
+            exit 1
+          fi
+
+      - name: Send sync request to Composio MCP
+        id: sync_request
+        run: |
+          # Construct sync payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "repo": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "event": "imo_creator_sync",
+            "source": "imo-creator",
+            "target_repos": "${{ steps.sync.outputs.repositories }}",
+            "sync_type": "${{ steps.sync.outputs.sync_type }}",
+            "sha": "${{ github.sha }}",
+            "actor": "${{ github.actor }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "sync_data": {
+              "files_to_sync": ${{ steps.sync.outputs.files_to_sync }},
+              "source_branch": "${{ github.ref_name }}",
+              "sync_manifest": {
+                "workflow_files": [
+                  ".github/workflows/composio-orchestration.yml",
+                  ".github/workflows/doctrine-validate.yml",
+                  ".github/workflows/firebase-promote.yml"
+                ],
+                "config_files": [
+                  "config/mcp_endpoints.json",
+                  "composio-tools-summary.json",
+                  "docs/COMPOSIO_MCP_INTEGRATION.md"
+                ]
+              }
+            },
+            "metadata": {
+              "run_id": "${{ github.run_id }}",
+              "run_number": "${{ github.run_number }}",
+              "workflow": "${{ github.workflow }}",
+              "manual_trigger": "${{ github.event_name == 'workflow_dispatch' }}"
+            }
+          }
+          EOF
+          )
+
+          echo "[INFO] IMO-Creator Sync Payload:"
+          echo "$PAYLOAD" | jq '.'
+
+          # Send sync request to Composio
+          RESPONSE=$(curl -X POST \
+            "${{ steps.config.outputs.composio_endpoint }}" \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: imo_creator_sync" \
+            -H "X-GitHub-Repository: ${{ github.repository }}" \
+            -H "X-Target-Repos: ${{ steps.sync.outputs.repositories }}" \
+            -H "X-GitHub-SHA: ${{ github.sha }}" \
+            -d "$PAYLOAD" \
+            -w "\n%{http_code}" \
+            -s --max-time 60)
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+
+          echo "Response Code: $HTTP_CODE"
+          echo "Response Body:"
+          echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+
+          # Parse sync result
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "[SUCCESS] IMO-Creator sync initiated successfully"
+            echo "sync_successful=true" >> $GITHUB_OUTPUT
+
+            # Extract sync details if available
+            if echo "$BODY" | jq -e '.sync_id' >/dev/null 2>&1; then
+              SYNC_ID=$(echo "$BODY" | jq -r '.sync_id')
+              echo "sync_id=$SYNC_ID" >> $GITHUB_OUTPUT
+            fi
+
+            if echo "$BODY" | jq -e '.target_repos_updated' >/dev/null 2>&1; then
+              UPDATED_REPOS=$(echo "$BODY" | jq -r '.target_repos_updated')
+              echo "updated_repos=$UPDATED_REPOS" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "[ERROR] IMO-Creator sync failed"
+            echo "sync_successful=false" >> $GITHUB_OUTPUT
+
+            # Extract error details if available
+            if echo "$BODY" | jq -e '.errors' >/dev/null 2>&1; then
+              echo "Sync Errors:"
+              echo "$BODY" | jq '.errors'
+            fi
+
+            exit 1
+          fi
+
+      - name: Create sync report
+        if: always()
+        run: |
+          cat > sync-report.md <<EOF
+          # IMO-Creator Sync Report
+
+          ## Summary
+          - **Source Repository**: ${{ github.repository }}
+          - **Target Repositories**: ${{ steps.sync.outputs.repositories }}
+          - **Sync Type**: ${{ steps.sync.outputs.sync_type }}
+          - **Commit**: ${{ github.sha }}
+          - **Actor**: ${{ github.actor }}
+          - **Sync Status**: ${{ steps.sync_request.outputs.sync_successful == 'true' && '[SUCCESS] Completed' || '[ERROR] Failed' }}
+
+          ## Sync Details
+          - **Files Synced**: ${{ steps.sync.outputs.files_to_sync }}
+          - **Sync ID**: ${{ steps.sync_request.outputs.sync_id || 'N/A' }}
+          - **Updated Repositories**: ${{ steps.sync_request.outputs.updated_repos || 'N/A' }}
+
+          ## Operation Details
+          - **Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          - **Workflow Run**: ${{ github.run_id }}
+          - **Manual Trigger**: ${{ github.event_name == 'workflow_dispatch' && 'Yes' || 'No' }}
+
+          ---
+          *Synchronized via Composio MCP Orchestration System*
+          EOF
+
+          echo "[INFO] IMO-Creator Sync Report Generated:"
+          cat sync-report.md
+
+      - name: Upload sync artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: imo-creator-sync-${{ github.sha }}
+          path: |
+            sync-report.md
+            imo-creator/.github/workflows/*.yml
+            imo-creator/config/*.json
+          retention-days: 30
+
+      - name: Notify completion
+        if: steps.sync_request.outputs.sync_successful == 'true'
+        run: |
+          echo "[SUCCESS] IMO-Creator updates successfully synced to: ${{ steps.sync.outputs.repositories }}"
+          echo "Sync ID: ${{ steps.sync_request.outputs.sync_id }}"

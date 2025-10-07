@@ -1,0 +1,41 @@
+FIGMA PLUGINS - COPY AND PASTE THESE URLS INTO YOUR BROWSER
+================================================================
+
+1. Convertify (Format conversion)
+   https://www.figma.com/community/plugin/791989050714641598/Convertify
+
+2. Pitchdeck Presentation Studio (Presentation tools)
+   https://www.figma.com/community/plugin/748533339900865323/Pitchdeck-Presentation-Studio
+
+3. PDF Exporter (Export to PDF)
+   https://www.figma.com/community/plugin/742664219575395510/PDF-Exporter
+
+4. Chart (Data visualization)
+   https://www.figma.com/community/plugin/739208226250893725/Chart
+
+5. Google Sheets Sync (Spreadsheet integration)
+   https://www.figma.com/community/plugin/747985633931346548/Google-Sheets-Sync
+
+6. Design Lint (Design quality checks)
+   https://www.figma.com/community/plugin/801195587259091012/Design-Lint
+
+7. Accessibility Contrast Checker (Accessibility tools)
+   https://www.figma.com/community/plugin/742992099192946233/Accessibility-Contrast-Checker
+
+8. Annotation Kit (Design annotations)
+   https://www.figma.com/community/plugin/823434922318019462/Annotation-Kit
+
+9. Content Reel (Content management)
+   https://www.figma.com/community/plugin/826246267167433514/Content-Reel
+
+10. 3D Mockups (3D presentation tools)
+    https://www.figma.com/community/plugin/842267112908563912/3D-Mockups
+
+11. Flowchart Kit (Flowchart creation)
+    https://www.figma.com/community/plugin/835195113074019300/Flowchart-Kit
+
+INSTRUCTIONS:
+1. Copy each URL above
+2. Paste into your browser
+3. Click "Install" on each Figma plugin page
+4. The plugins will be added to your Figma account

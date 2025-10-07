@@ -53,7 +53,12 @@
       "Bash(git reset:*)",
       "Bash(nslookup:*)",
       "Bash(set COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn)",
-      "Bash(cmd /c \"set COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn && node check-composio-apps.cjs\")"
+      "Bash(cmd /c \"set COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn && node check-composio-apps.cjs\")",
+      "Bash(icacls:*)",
+      "Bash(bash:*)",
+      "Bash(install-figma-plugins.bat)",
+      "Bash(cmd:*)",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": [],
