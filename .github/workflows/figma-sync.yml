@@ -1,0 +1,273 @@
+name: Figma Design Sync
+
+on:
+  repository_dispatch:
+    types: [figma-sync]
+  workflow_dispatch:
+    inputs:
+      sync_type:
+        description: 'Type of Figma sync to perform'
+        required: true
+        type: choice
+        options:
+          - design-tokens
+          - components
+          - assets
+          - prototypes
+          - full-sync
+        default: 'design-tokens'
+      target_repos:
+        description: 'Target repositories for sync'
+        required: false
+        type: string
+        default: 'all-repos'
+
+jobs:
+  figma-sync:
+    name: Sync Figma Design Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Load Claude orchestration config
+        id: config
+        run: |
+          if [ -f "config/claude_orchestration.config.json" ]; then
+            echo "[INFO] Loading Claude orchestration configuration"
+
+            # Extract Composio endpoints
+            COMPOSIO_BASE=$(jq -r '.communication_protocol.composio_endpoints.figma_sync' config/claude_orchestration.config.json)
+            FIGMA_ENDPOINT=$(jq -r '.communication_protocol.composio_endpoints.figma_sync' config/claude_orchestration.config.json)
+
+            echo "composio_base=$COMPOSIO_BASE" >> $GITHUB_OUTPUT
+            echo "figma_endpoint=$FIGMA_ENDPOINT" >> $GITHUB_OUTPUT
+
+            echo "[SUCCESS] Configuration loaded successfully"
+          else
+            echo "[ERROR] Claude orchestration config not found!"
+            exit 1
+          fi
+
+      - name: Extract sync parameters
+        id: sync
+        run: |
+          # Extract sync parameters from input or dispatch
+          SYNC_TYPE="${{ inputs.sync_type || github.event.client_payload.sync_type || 'design-tokens' }}"
+          TARGET_REPOS="${{ inputs.target_repos || github.event.client_payload.target_repos || 'all-repos' }}"
+
+          echo "sync_type=$SYNC_TYPE" >> $GITHUB_OUTPUT
+          echo "target_repos=$TARGET_REPOS" >> $GITHUB_OUTPUT
+
+          echo "[INFO] Figma sync parameters:"
+          echo "- Sync Type: $SYNC_TYPE"
+          echo "- Target Repos: $TARGET_REPOS"
+
+      - name: Send Figma sync request to Composio MCP
+        id: figma_sync
+        run: |
+          # Construct Figma sync payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "repo": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "event": "figma_sync",
+            "source": "imo-creator",
+            "sync_type": "${{ steps.sync.outputs.sync_type }}",
+            "target_repos": "${{ steps.sync.outputs.target_repos }}",
+            "sha": "${{ github.sha }}",
+            "actor": "${{ github.actor }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "figma_data": {
+              "sync_manifest": {
+                "design_tokens": {
+                  "colors": true,
+                  "typography": true,
+                  "spacing": true,
+                  "effects": true
+                },
+                "components": {
+                  "export_svg": true,
+                  "export_png": true,
+                  "component_metadata": true
+                },
+                "assets": {
+                  "icons": true,
+                  "images": true,
+                  "illustrations": true
+                },
+                "prototypes": {
+                  "flows": true,
+                  "interactions": true,
+                  "animations": false
+                }
+              },
+              "export_settings": {
+                "format": "json",
+                "destination": "design-system/",
+                "file_naming": "kebab-case",
+                "include_metadata": true
+              }
+            },
+            "metadata": {
+              "run_id": "${{ github.run_id }}",
+              "run_number": "${{ github.run_number }}",
+              "workflow": "${{ github.workflow }}",
+              "manual_trigger": "${{ github.event_name == 'workflow_dispatch' }}"
+            }
+          }
+          EOF
+          )
+
+          echo "[INFO] Figma Sync Payload:"
+          echo "$PAYLOAD" | jq '.'
+
+          # Send Figma sync request to Composio
+          RESPONSE=$(curl -X POST \
+            "${{ steps.config.outputs.figma_endpoint }}" \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: figma_sync" \
+            -H "X-GitHub-Repository: ${{ github.repository }}" \
+            -H "X-Figma-Sync-Type: ${{ steps.sync.outputs.sync_type }}" \
+            -H "X-GitHub-SHA: ${{ github.sha }}" \
+            -d "$PAYLOAD" \
+            -w "\n%{http_code}" \
+            -s --max-time 120)
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+
+          echo "Response Code: $HTTP_CODE"
+          echo "Response Body:"
+          echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+
+          # Parse Figma sync result
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "[SUCCESS] Figma sync initiated successfully"
+            echo "sync_successful=true" >> $GITHUB_OUTPUT
+
+            # Extract sync details if available
+            if echo "$BODY" | jq -e '.sync_id' >/dev/null 2>&1; then
+              SYNC_ID=$(echo "$BODY" | jq -r '.sync_id')
+              echo "sync_id=$SYNC_ID" >> $GITHUB_OUTPUT
+            fi
+
+            if echo "$BODY" | jq -e '.assets_synced' >/dev/null 2>&1; then
+              ASSETS_SYNCED=$(echo "$BODY" | jq -r '.assets_synced')
+              echo "assets_synced=$ASSETS_SYNCED" >> $GITHUB_OUTPUT
+            fi
+
+            if echo "$BODY" | jq -e '.target_repos_updated' >/dev/null 2>&1; then
+              UPDATED_REPOS=$(echo "$BODY" | jq -r '.target_repos_updated')
+              echo "updated_repos=$UPDATED_REPOS" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "[ERROR] Figma sync failed"
+            echo "sync_successful=false" >> $GITHUB_OUTPUT
+
+            # Extract error details if available
+            if echo "$BODY" | jq -e '.errors' >/dev/null 2>&1; then
+              echo "Figma Sync Errors:"
+              echo "$BODY" | jq '.errors'
+            fi
+
+            # Check for human intervention required
+            if echo "$BODY" | jq -e '.human_intervention_required' >/dev/null 2>&1; then
+              echo "[WARNING] Human intervention required - escalating to firebreak queue"
+            fi
+
+            exit 1
+          fi
+
+      - name: Validate design token sync
+        if: steps.figma_sync.outputs.sync_successful == 'true' && contains(steps.sync.outputs.sync_type, 'design-tokens')
+        run: |
+          echo "[INFO] Validating design token sync"
+
+          # Check if design tokens were created/updated
+          if [ -d "design-system/tokens" ]; then
+            echo "[SUCCESS] Design tokens directory found"
+            echo "Token files:"
+            find design-system/tokens -name "*.json" -type f | head -10
+          else
+            echo "[WARNING] Design tokens directory not found"
+          fi
+
+      - name: Validate component sync
+        if: steps.figma_sync.outputs.sync_successful == 'true' && contains(steps.sync.outputs.sync_type, 'components')
+        run: |
+          echo "[INFO] Validating component sync"
+
+          # Check if components were exported
+          if [ -d "design-system/components" ]; then
+            echo "[SUCCESS] Components directory found"
+            echo "Component files:"
+            find design-system/components -type f | head -10
+          else
+            echo "[WARNING] Components directory not found"
+          fi
+
+      - name: Create Figma sync report
+        if: always()
+        run: |
+          cat > figma-sync-report.md <<EOF
+          # Figma Design Sync Report
+
+          ## Summary
+          - **Source Repository**: ${{ github.repository }}
+          - **Sync Type**: ${{ steps.sync.outputs.sync_type }}
+          - **Target Repositories**: ${{ steps.sync.outputs.target_repos }}
+          - **Commit**: ${{ github.sha }}
+          - **Actor**: ${{ github.actor }}
+          - **Sync Status**: ${{ steps.figma_sync.outputs.sync_successful == 'true' && '[SUCCESS] Completed' || '[ERROR] Failed' }}
+
+          ## Sync Details
+          - **Sync ID**: ${{ steps.figma_sync.outputs.sync_id || 'N/A' }}
+          - **Assets Synced**: ${{ steps.figma_sync.outputs.assets_synced || 'N/A' }}
+          - **Updated Repositories**: ${{ steps.figma_sync.outputs.updated_repos || 'N/A' }}
+
+          ## Figma Integration
+          - **Design Tokens**: ${{ contains(steps.sync.outputs.sync_type, 'design-tokens') && 'Included' || 'Excluded' }}
+          - **Components**: ${{ contains(steps.sync.outputs.sync_type, 'components') && 'Included' || 'Excluded' }}
+          - **Assets**: ${{ contains(steps.sync.outputs.sync_type, 'assets') && 'Included' || 'Excluded' }}
+          - **Prototypes**: ${{ contains(steps.sync.outputs.sync_type, 'prototypes') && 'Included' || 'Excluded' }}
+
+          ## Operation Details
+          - **Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          - **Workflow Run**: ${{ github.run_id }}
+          - **Manual Trigger**: ${{ github.event_name == 'workflow_dispatch' && 'Yes' || 'No' }}
+
+          ---
+          *Synchronized via Composio MCP Figma Integration*
+          EOF
+
+          echo "[INFO] Figma Sync Report Generated:"
+          cat figma-sync-report.md
+
+      - name: Upload Figma sync artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: figma-sync-${{ github.sha }}
+          path: |
+            figma-sync-report.md
+            design-system/
+          retention-days: 30
+
+      - name: Notify completion
+        if: steps.figma_sync.outputs.sync_successful == 'true'
+        run: |
+          echo "[SUCCESS] Figma design assets successfully synced"
+          echo "Sync Type: ${{ steps.sync.outputs.sync_type }}"
+          echo "Sync ID: ${{ steps.figma_sync.outputs.sync_id }}"
+          echo "Assets Synced: ${{ steps.figma_sync.outputs.assets_synced }}"
+
+      - name: Handle sync failure
+        if: steps.figma_sync.outputs.sync_successful == 'false'
+        run: |
+          echo "[ERROR] Figma sync failed - check logs and Composio MCP status"
+          echo "Consider manual intervention or retry with different sync type"
+          exit 1
