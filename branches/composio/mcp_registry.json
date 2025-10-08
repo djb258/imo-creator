@@ -2,7 +2,7 @@
   {
     "tool": "Composio MCP Server",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com",
+    "endpoint": "http://localhost:3001",
     "branch": "composio",
     "doctrine_id": "04.04.00",
     "status": "active",
@@ -14,7 +14,7 @@
   {
     "tool": "_21RISK Toolkit",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/_21risk",
+    "endpoint": "http://localhost:3001/api/composio/_21risk",
     "branch": "composio",
     "doctrine_id": "04.04.01",
     "status": "active",
@@ -80,7 +80,7 @@
   {
     "tool": "_2CHAT Toolkit",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/_2chat",
+    "endpoint": "http://localhost:3001/api/composio/_2chat",
     "branch": "composio",
     "doctrine_id": "04.04.02",
     "status": "active",
@@ -121,7 +121,7 @@
   {
     "tool": "ABLY Toolkit",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/ably",
+    "endpoint": "http://localhost:3001/api/composio/ably",
     "branch": "composio",
     "doctrine_id": "04.04.03",
     "status": "active",
@@ -201,7 +201,7 @@
   {
     "tool": "Builder.io",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
+    "endpoint": "http://localhost:3001/api/composio/builder",
     "branch": "composio",
     "doctrine_id": "04.04.04",
     "status": "active",

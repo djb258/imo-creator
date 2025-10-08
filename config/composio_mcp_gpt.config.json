@@ -6,7 +6,7 @@
     "gpt_name": "Composio MCP GPT",
     "gpt_id": "composio-mcp-v1",
     "purpose": "Doctrine validation, build automation, and deployment orchestration",
-    "composio_endpoint": "https://composio-imo-creator-url.onrender.com/composio-mcp",
+    "composio_endpoint": "http://localhost:3001/tool",
     "capabilities": [
       "doctrine_validation",
       "build_automation",
@@ -60,10 +60,10 @@
       }
     },
     "validation_endpoints": {
-      "doctrine_validate": "https://composio-imo-creator-url.onrender.com/doctrine/validate",
-      "build_check": "https://composio-imo-creator-url.onrender.com/build/check",
-      "security_scan": "https://composio-imo-creator-url.onrender.com/security/scan",
-      "compliance_audit": "https://composio-imo-creator-url.onrender.com/compliance/audit"
+      "doctrine_validate": "http://localhost:3001/tool",
+      "build_check": "http://localhost:3001/tool",
+      "security_scan": "http://localhost:3001/tool",
+      "compliance_audit": "http://localhost:3001/tool"
     }
   },
   "automation_workflows": {
@@ -101,7 +101,7 @@
   },
   "integration": {
     "composio_mcp": {
-      "relay_endpoint": "https://composio-imo-creator-url.onrender.com/composio-mcp",
+      "relay_endpoint": "http://localhost:3001/tool",
       "webhook_events": [
         "doctrine_validation_complete",
         "build_started",
@@ -128,9 +128,9 @@
     "health_checks": {
       "interval": 300,
       "endpoints": [
-        "https://composio-imo-creator-url.onrender.com/health",
-        "https://composio-imo-creator-url.onrender.com/doctrine/status",
-        "https://composio-imo-creator-url.onrender.com/build/status"
+        "http://localhost:3001/tool",
+        "http://localhost:3001/tool",
+        "http://localhost:3001/tool"
       ]
     },
     "activity_logs": {
@@ -140,7 +140,7 @@
   },
   "human_firebreak": {
     "enabled": true,
-    "queue_endpoint": "https://composio-imo-creator-url.onrender.com/human-firebreak",
+    "queue_endpoint": "http://localhost:3001/tool",
     "escalation_rules": {
       "validation_failure": "immediate",
       "deployment_failure": "immediate",

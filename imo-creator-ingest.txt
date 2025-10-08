@@ -1051,16 +1051,16 @@ When cloning this repository, these are the production endpoints your applicatio
   - Output: https://imo-creator.vercel.app/docs/blueprints/ui/output.html
 
 ## Backend (Render)
-- **API Base**: https://composio-imo-creator-url.onrender.com
-- **Health Check**: https://composio-imo-creator-url.onrender.com/health
-- **Composio MCP Server**: https://composio-imo-creator-url.onrender.com/api
+- **API Base**: http://localhost:3001
+- **Health Check**: http://localhost:3001/health
+- **Composio MCP Server**: http://localhost:3001/api
 
 ## Key API Endpoints
 
 ### SSOT Management
 ```bash
 # Save SSOT with ID generation
-curl -X POST https://composio-imo-creator-url.onrender.com/api/ssot/save \
+curl -X POST http://localhost:3001/api/ssot/save \
   -H "Content-Type: application/json" \
   -d '{"ssot":{"meta":{"app_name":"Your App","stage":"overview"}}}'
 ```
@@ -1068,7 +1068,7 @@ curl -X POST https://composio-imo-creator-url.onrender.com/api/ssot/save \
 ### Subagent Registry
 ```bash
 # List available subagents
-curl https://composio-imo-creator-url.onrender.com/api/subagents
+curl http://localhost:3001/api/subagents
 ```
 
 ### MCP Registry
@@ -1082,7 +1082,7 @@ curl https://imo-creator.vercel.app/branches/composio/mcp_registry.json
 
 ## Composio Integration
 - **API Key**: `ak_t-F0AbvfZHUZSUrqAGNn` (embedded in configs)
-- **MCP Endpoint**: https://composio-imo-creator-url.onrender.com
+- **MCP Endpoint**: http://localhost:3001
 - **Tool Access**: All Composio tools accessible via `/api/composio/{tool}` routes
 
 ## Environment Variables for New Repos
@@ -1091,15 +1091,15 @@ When creating new repositories based on IMO-Creator, use these URLs:
 
 ```bash
 # Backend API
-BACKEND_URL=https://composio-imo-creator-url.onrender.com
-API_BASE_URL=https://composio-imo-creator-url.onrender.com/api
+BACKEND_URL=http://localhost:3001
+API_BASE_URL=http://localhost:3001/api
 
 # Frontend
 FRONTEND_URL=https://imo-creator.vercel.app
 
 # Composio Integration
 COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
-MCP_SERVER_URL=https://composio-imo-creator-url.onrender.com
+MCP_SERVER_URL=http://localhost:3001
 
 # CORS Configuration
 ALLOW_ORIGIN=https://imo-creator.vercel.app
@@ -1933,10 +1933,10 @@ organized with proper syntax highlighting and metadata for optimal LLM processin
 # PRIMARY REQUIREMENT - Composio Integration (PRODUCTION READY)
 # =============================================================================
 COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
-MCP_API_URL=https://composio-imo-creator-url.onrender.com
-BACKEND_URL=https://composio-imo-creator-url.onrender.com
+MCP_API_URL=http://localhost:3001
+BACKEND_URL=http://localhost:3001
 FRONTEND_URL=https://imo-creator.vercel.app
-API_BASE_URL=https://composio-imo-creator-url.onrender.com/api
+API_BASE_URL=http://localhost:3001/api
 
 # =============================================================================
 # OPTIONAL CONFIGURATIONS (App works without these)
@@ -1948,8 +1948,8 @@ OPENAI_API_KEY=
 LLM_DEFAULT_PROVIDER=openai
 
 # HEIR/MCP Integration (Production URLs)
-IMOCREATOR_MCP_URL=https://composio-imo-creator-url.onrender.com
-IMOCREATOR_SIDECAR_URL=https://composio-imo-creator-url.onrender.com
+IMOCREATOR_MCP_URL=http://localhost:3001
+IMOCREATOR_SIDECAR_URL=http://localhost:3001
 IMOCREATOR_BEARER_TOKEN=ak_t-F0AbvfZHUZSUrqAGNn
 
 # Doctrine ID Generation (Production configured)
@@ -1959,7 +1959,7 @@ DOCTRINE_APP=imo
 DOCTRINE_VER=1
 
 # Garage-MCP Integration (Production)
-GARAGE_MCP_URL=https://composio-imo-creator-url.onrender.com
+GARAGE_MCP_URL=http://localhost:3001
 GARAGE_MCP_TOKEN=ak_t-F0AbvfZHUZSUrqAGNn
 SUBAGENT_REGISTRY_PATH=/api/subagents
 
@@ -3340,7 +3340,7 @@ try {
   {
     "tool": "Composio MCP Server",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com",
+    "endpoint": "http://localhost:3001",
     "branch": "composio",
     "doctrine_id": "04.04.00",
     "status": "active",
@@ -3350,7 +3350,7 @@ try {
   {
     "tool": "Neon",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
+    "endpoint": "http://localhost:3001/api/composio/neon",
     "branch": "composio",
     "doctrine_id": "04.04.01",
     "status": "active"
@@ -3358,7 +3358,7 @@ try {
   {
     "tool": "Firebase",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
+    "endpoint": "http://localhost:3001/api/composio/firebase",
     "branch": "composio",
     "doctrine_id": "04.04.02",
     "status": "active"
@@ -3366,7 +3366,7 @@ try {
   {
     "tool": "Apify",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
+    "endpoint": "http://localhost:3001/api/composio/apify",
     "branch": "composio",
     "doctrine_id": "04.04.03",
     "status": "active"
@@ -5868,14 +5868,14 @@ async function logIMOOperation(operation) {
   "last_updated": "2025-09-26T12:30:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
-    "backend": "https://composio-imo-creator-url.onrender.com",
-    "api_base": "https://composio-imo-creator-url.onrender.com/api"
+    "backend": "http://localhost:3001",
+    "api_base": "http://localhost:3001/api"
   },
   "engine_capabilities": [
     {
       "tool": "Composio MCP Server",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com",
+      "endpoint": "http://localhost:3001",
       "doctrine_id": "04.04.00",
       "status": "active",
       "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
@@ -5884,21 +5884,21 @@ async function logIMOOperation(operation) {
     {
       "tool": "Neon",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
+      "endpoint": "http://localhost:3001/api/composio/neon",
       "doctrine_id": "04.04.01",
       "status": "active"
     },
     {
       "tool": "Firebase",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
+      "endpoint": "http://localhost:3001/api/composio/firebase",
       "doctrine_id": "04.04.02",
       "status": "active"
     },
     {
       "tool": "Apify",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
+      "endpoint": "http://localhost:3001/api/composio/apify",
       "doctrine_id": "04.04.03",
       "status": "active"
     },
@@ -6050,16 +6050,16 @@ When cloning this repository, these are the production endpoints your applicatio
   - Output: https://imo-creator.vercel.app/docs/blueprints/ui/output.html
 
 ## Backend (Render)
-- **API Base**: https://composio-imo-creator-url.onrender.com
-- **Health Check**: https://composio-imo-creator-url.onrender.com/health
-- **Composio MCP Server**: https://composio-imo-creator-url.onrender.com/api
+- **API Base**: http://localhost:3001
+- **Health Check**: http://localhost:3001/health
+- **Composio MCP Server**: http://localhost:3001/api
 
 ## Key API Endpoints
 
 ### SSOT Management
 ```bash
 # Save SSOT with ID generation
-curl -X POST https://composio-imo-creator-url.onrender.com/api/ssot/save \
+curl -X POST http://localhost:3001/api/ssot/save \
   -H "Content-Type: application/json" \
   -d '{"ssot":{"meta":{"app_name":"Your App","stage":"overview"}}}'
 ```
@@ -6067,7 +6067,7 @@ curl -X POST https://composio-imo-creator-url.onrender.com/api/ssot/save \
 ### Subagent Registry
 ```bash
 # List available subagents
-curl https://composio-imo-creator-url.onrender.com/api/subagents
+curl http://localhost:3001/api/subagents
 ```
 
 ### MCP Registry
@@ -6081,7 +6081,7 @@ curl https://imo-creator.vercel.app/branches/composio/mcp_registry.json
 
 ## Composio Integration
 - **API Key**: `ak_t-F0AbvfZHUZSUrqAGNn` (embedded in configs)
-- **MCP Endpoint**: https://composio-imo-creator-url.onrender.com
+- **MCP Endpoint**: http://localhost:3001
 - **Tool Access**: All Composio tools accessible via `/api/composio/{tool}` routes
 
 ## Environment Variables for New Repos
@@ -6090,15 +6090,15 @@ When creating new repositories based on IMO-Creator, use these URLs:
 
 ```bash
 # Backend API
-BACKEND_URL=https://composio-imo-creator-url.onrender.com
-API_BASE_URL=https://composio-imo-creator-url.onrender.com/api
+BACKEND_URL=http://localhost:3001
+API_BASE_URL=http://localhost:3001/api
 
 # Frontend
 FRONTEND_URL=https://imo-creator.vercel.app
 
 # Composio Integration
 COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
-MCP_SERVER_URL=https://composio-imo-creator-url.onrender.com
+MCP_SERVER_URL=http://localhost:3001
 
 # CORS Configuration
 ALLOW_ORIGIN=https://imo-creator.vercel.app
@@ -12255,18 +12255,18 @@ is_valid = bool(re.match(pattern, unique_id))
 {
   "_comment": "IMO-Creator MCP Configuration - Production URLs embedded",
   "production_urls": {
-    "backend": "https://composio-imo-creator-url.onrender.com",
+    "backend": "http://localhost:3001",
     "frontend": "https://imo-creator.vercel.app",
-    "api_base": "https://composio-imo-creator-url.onrender.com/api",
+    "api_base": "http://localhost:3001/api",
     "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
   },
   "servers": {
     "imo-creator-mcp": {
       "command": "curl",
-      "args": ["-X", "GET", "https://composio-imo-creator-url.onrender.com/api/subagents"],
+      "args": ["-X", "GET", "http://localhost:3001/api/subagents"],
       "env": {
         "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
-        "MCP_SERVER_URL": "https://composio-imo-creator-url.onrender.com"
+        "MCP_SERVER_URL": "http://localhost:3001"
       }
     },
     "garage-mcp-local": {
@@ -12274,7 +12274,7 @@ is_valid = bool(re.match(pattern, unique_id))
       "args": ["services.mcp.main:app", "--port", "7001"],
       "env": {
         "BAY": "frontend",
-        "BACKEND_URL": "https://composio-imo-creator-url.onrender.com"
+        "BACKEND_URL": "http://localhost:3001"
       }
     }
   }
@@ -27078,9 +27078,9 @@ echo "  4. Set environment variables in deployment platform"
   "main": "index.js",
   "config": {
     "production_urls": {
-      "backend": "https://composio-imo-creator-url.onrender.com",
+      "backend": "http://localhost:3001",
       "frontend": "https://imo-creator.vercel.app",
-      "api_base": "https://composio-imo-creator-url.onrender.com/api",
+      "api_base": "http://localhost:3001/api",
       "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
     }
   },
@@ -27096,7 +27096,7 @@ echo "  4. Set environment variables in deployment platform"
     "orchestrate": "python tools/repo_mcp_orchestrator.py",
     "vercel:dev": "vercel dev",
     "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/",
-    "test:urls": "curl https://composio-imo-creator-url.onrender.com/health && curl https://imo-creator.vercel.app"
+    "test:urls": "curl http://localhost:3001/health && curl https://imo-creator.vercel.app"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.0",
@@ -35238,9 +35238,9 @@ FILE: package.json
   "main": "index.js",
   "config": {
     "production_urls": {
-      "backend": "https://composio-imo-creator-url.onrender.com",
+      "backend": "http://localhost:3001",
       "frontend": "https://imo-creator.vercel.app",
-      "api_base": "https://composio-imo-creator-url.onrender.com/api",
+      "api_base": "http://localhost:3001/api",
       "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
     }
   },
@@ -35256,7 +35256,7 @@ FILE: package.json
     "orchestrate": "python tools/repo_mcp_orchestrator.py",
     "vercel:dev": "vercel dev",
     "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/",
-    "test:urls": "curl https://composio-imo-creator-url.onrender.com/health && curl https://imo-creator.vercel.app"
+    "test:urls": "curl http://localhost:3001/health && curl https://imo-creator.vercel.app"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.0",
@@ -36107,10 +36107,10 @@ FILE: .env.example
 # PRIMARY REQUIREMENT - Composio Integration (PRODUCTION READY)
 # =============================================================================
 COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
-MCP_API_URL=https://composio-imo-creator-url.onrender.com
-BACKEND_URL=https://composio-imo-creator-url.onrender.com
+MCP_API_URL=http://localhost:3001
+BACKEND_URL=http://localhost:3001
 FRONTEND_URL=https://imo-creator.vercel.app
-API_BASE_URL=https://composio-imo-creator-url.onrender.com/api
+API_BASE_URL=http://localhost:3001/api
 
 # =============================================================================
 # OPTIONAL CONFIGURATIONS (App works without these)
@@ -36122,8 +36122,8 @@ OPENAI_API_KEY=
 LLM_DEFAULT_PROVIDER=openai
 
 # HEIR/MCP Integration (Production URLs)
-IMOCREATOR_MCP_URL=https://composio-imo-creator-url.onrender.com
-IMOCREATOR_SIDECAR_URL=https://composio-imo-creator-url.onrender.com
+IMOCREATOR_MCP_URL=http://localhost:3001
+IMOCREATOR_SIDECAR_URL=http://localhost:3001
 IMOCREATOR_BEARER_TOKEN=ak_t-F0AbvfZHUZSUrqAGNn
 
 # Doctrine ID Generation (Production configured)
@@ -36133,7 +36133,7 @@ DOCTRINE_APP=imo
 DOCTRINE_VER=1
 
 # Garage-MCP Integration (Production)
-GARAGE_MCP_URL=https://composio-imo-creator-url.onrender.com
+GARAGE_MCP_URL=http://localhost:3001
 GARAGE_MCP_TOKEN=ak_t-F0AbvfZHUZSUrqAGNn
 SUBAGENT_REGISTRY_PATH=/api/subagents
 
@@ -37189,7 +37189,7 @@ FILE: branches/composio/mcp_registry.json
   {
     "tool": "Composio MCP Server",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com",
+    "endpoint": "http://localhost:3001",
     "branch": "composio",
     "doctrine_id": "04.04.00",
     "status": "active",
@@ -37199,7 +37199,7 @@ FILE: branches/composio/mcp_registry.json
   {
     "tool": "Neon",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
+    "endpoint": "http://localhost:3001/api/composio/neon",
     "branch": "composio",
     "doctrine_id": "04.04.01",
     "status": "active"
@@ -37207,7 +37207,7 @@ FILE: branches/composio/mcp_registry.json
   {
     "tool": "Firebase",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
+    "endpoint": "http://localhost:3001/api/composio/firebase",
     "branch": "composio",
     "doctrine_id": "04.04.02",
     "status": "active"
@@ -37215,7 +37215,7 @@ FILE: branches/composio/mcp_registry.json
   {
     "tool": "Apify",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
+    "endpoint": "http://localhost:3001/api/composio/apify",
     "branch": "composio",
     "doctrine_id": "04.04.03",
     "status": "active"
@@ -37255,7 +37255,7 @@ FILE: branches/composio/mcp_registry.json
   {
     "tool": "Builder.io",
     "type": "MCP",
-    "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
+    "endpoint": "http://localhost:3001/api/composio/builder",
     "branch": "composio",
     "doctrine_id": "04.04.04",
     "status": "active",
@@ -39308,14 +39308,14 @@ FILE: config/mcp_registry.json
   "last_updated": "2025-09-26T12:30:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
-    "backend": "https://composio-imo-creator-url.onrender.com",
-    "api_base": "https://composio-imo-creator-url.onrender.com/api"
+    "backend": "http://localhost:3001",
+    "api_base": "http://localhost:3001/api"
   },
   "engine_capabilities": [
     {
       "tool": "Composio MCP Server",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com",
+      "endpoint": "http://localhost:3001",
       "doctrine_id": "04.04.00",
       "status": "active",
       "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
@@ -39324,21 +39324,21 @@ FILE: config/mcp_registry.json
     {
       "tool": "Neon",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/neon",
+      "endpoint": "http://localhost:3001/api/composio/neon",
       "doctrine_id": "04.04.01",
       "status": "active"
     },
     {
       "tool": "Firebase",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/firebase",
+      "endpoint": "http://localhost:3001/api/composio/firebase",
       "doctrine_id": "04.04.02",
       "status": "active"
     },
     {
       "tool": "Apify",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/apify",
+      "endpoint": "http://localhost:3001/api/composio/apify",
       "doctrine_id": "04.04.03",
       "status": "active"
     },
@@ -39359,7 +39359,7 @@ FILE: config/mcp_registry.json
     {
       "tool": "Builder.io",
       "type": "MCP",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/api/composio/builder",
+      "endpoint": "http://localhost:3001/api/composio/builder",
       "doctrine_id": "04.04.04",
       "status": "active",
       "api_key": "9502e3493ccf42339f36d16b4a482c70",
@@ -43976,18 +43976,18 @@ FILE: garage-mcp/docs/mcp.config.sample.json
 {
   "_comment": "IMO-Creator MCP Configuration - Production URLs embedded",
   "production_urls": {
-    "backend": "https://composio-imo-creator-url.onrender.com",
+    "backend": "http://localhost:3001",
     "frontend": "https://imo-creator.vercel.app",
-    "api_base": "https://composio-imo-creator-url.onrender.com/api",
+    "api_base": "http://localhost:3001/api",
     "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
   },
   "servers": {
     "imo-creator-mcp": {
       "command": "curl",
-      "args": ["-X", "GET", "https://composio-imo-creator-url.onrender.com/api/subagents"],
+      "args": ["-X", "GET", "http://localhost:3001/api/subagents"],
       "env": {
         "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
-        "MCP_SERVER_URL": "https://composio-imo-creator-url.onrender.com"
+        "MCP_SERVER_URL": "http://localhost:3001"
       }
     },
     "garage-mcp-local": {
@@ -43995,7 +43995,7 @@ FILE: garage-mcp/docs/mcp.config.sample.json
       "args": ["services.mcp.main:app", "--port", "7001"],
       "env": {
         "BAY": "frontend",
-        "BACKEND_URL": "https://composio-imo-creator-url.onrender.com"
+        "BACKEND_URL": "http://localhost:3001"
       }
     }
   }

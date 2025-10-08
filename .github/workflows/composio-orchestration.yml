@@ -52,7 +52,7 @@ jobs:
 
           # Send to Composio MCP endpoint
           RESPONSE=$(curl -X POST \
-            https://composio-imo-creator-url.onrender.com/github/event \
+            http://localhost:3001/tool
             -H "Content-Type: application/json" \
             -H "X-GitHub-Event: ${{ github.event_name }}" \
             -H "X-GitHub-Repository: ${{ github.repository }}" \

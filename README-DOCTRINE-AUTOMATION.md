@@ -10,7 +10,7 @@ The IMO-Creator Doctrine Automation System provides fully automated deployment, 
 - **Personal Assistant GPT:** Personal productivity (Gmail, Calendar, Drive, Notion)
 - **Composio MCP GPT:** Doctrine validation and build automation
 
-Both connect to: `https://composio-imo-creator-url.onrender.com`
+Both connect to: `http://localhost:3001`
 
 ### 2️⃣ Claude Coordination
 Claude Code reads `/config/claude_orchestration.config.json` to know:
@@ -28,7 +28,7 @@ Workflows live in `.github/workflows/`:
 - `figma-sync.yml` - Design token and asset synchronization
 - `sync-updates.yml` - Cross-repository synchronization
 
-Each uses Composio safe curl calls to `https://composio-imo-creator-url.onrender.com/`
+Each uses Composio safe curl calls to `http://localhost:3001/`
 
 ### 4️⃣ Kill Switch & Audit
 - Deploy blocked unless doctrine returns `validated:true`
@@ -46,7 +46,7 @@ config/
 ```
 
 ### Key Configuration Values
-- **Composio Base URL:** `https://composio-imo-creator-url.onrender.com`
+- **Composio Base URL:** `http://localhost:3001`
 - **GitHub Event Endpoint:** `/github/event`
 - **Doctrine Validation:** `/doctrine/validate`
 - **Firebase Promotion:** `/firebase/promote`
@@ -167,7 +167,7 @@ config/
 ## 📊 Monitoring & Troubleshooting
 
 ### Health Checks
-- **Composio Endpoint:** `https://composio-imo-creator-url.onrender.com/health`
+- **Composio Endpoint:** `http://localhost:3001/health`
 - **Check Interval:** 5 minutes
 - **Timeout:** 30 seconds
 
@@ -208,7 +208,7 @@ gh run list --workflow=doctrine-validate.yml
 gh run view [RUN_ID] --log
 
 # Test Composio endpoint
-curl -X GET https://composio-imo-creator-url.onrender.com/health
+curl -X GET http://localhost:3001/health
 
 # Trigger manual sync
 gh workflow run sync-updates.yml -f target_repo=sales-hive -f sync_type=workflows-only
@@ -253,7 +253,7 @@ gh workflow run sync-updates.yml \
 4. Investigate root cause via Composio MCP logs
 
 ### Human Firebreak Queue
-- **Access:** `https://composio-imo-creator-url.onrender.com/human-firebreak`
+- **Access:** `http://localhost:3001/human-firebreak`
 - **Purpose:** Manual intervention for failed automations
 - **SLA:** Immediate response for critical failures
 

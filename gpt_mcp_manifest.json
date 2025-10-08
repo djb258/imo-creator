@@ -1,0 +1,152 @@
+{
+  "mcp_server": "https://backend.composio.dev",
+  "gpt_name": "IMO-Creator Doctrine Orchestrator",
+  "description": "Unified orchestration GPT for doctrine validation, outreach automation, sales pipeline design, and cross-repository synchronization via Composio MCP",
+  "connectors_enabled": [
+    "github",
+    "figma",
+    "firebase",
+    "gmail",
+    "googlecalendar",
+    "googledrive",
+    "googlesheets",
+    "notion",
+    "render",
+    "vercel",
+    "slack",
+    "instantly"
+  ],
+  "permissions_scope": [
+    "read",
+    "write",
+    "execute",
+    "validate",
+    "deploy",
+    "sync"
+  ],
+  "communication_protocol": {
+    "Claude_to_GPT": "POST /agent/invoke",
+    "GPT_to_Claude": "POST /claude/execute",
+    "GPT_to_Composio": "POST /composio-mcp",
+    "Composio_to_GPT": "POST /gpt/callback",
+    "webhook_endpoint": "POST /webhook/gpt",
+    "event_stream": "SSE /events/stream"
+  },
+  "auth_mode": "oauth_via_composio",
+  "api_endpoints": {
+    "base_url": "https://backend.composio.dev",
+    "execute_action": "/api/v2/actions/execute",
+    "get_connections": "/api/v1/connectedAccounts",
+    "list_tools": "/api/v2/actions",
+    "trigger_webhook": "/api/v1/triggers/handle",
+    "get_entities": "/api/v1/entities",
+    "oauth_callback": "/api/v1/auth/oauth/callback",
+    "health_check": "/api/health"
+  },
+  "safety": {
+    "no_tokens_in_code": true,
+    "validate_before_write": true,
+    "require_doctrine_validation": true,
+    "human_firebreak_enabled": true,
+    "kill_switch_enabled": true,
+    "audit_all_operations": true,
+    "block_on_validation_failure": true,
+    "escalate_security_violations": true
+  },
+  "validation_rules": {
+    "code_quality": {
+      "linting": true,
+      "type_checking": true,
+      "test_coverage": true,
+      "security_scan": true
+    },
+    "deployment_readiness": {
+      "build_success": true,
+      "dependency_check": true,
+      "environment_validation": true,
+      "configuration_validation": true
+    }
+  },
+  "orchestration_features": {
+    "doctrine_branches": {
+      "auto_deploy": true,
+      "validation_required": true,
+      "rollback_on_failure": true
+    },
+    "cross_repo_sync": {
+      "enabled": true,
+      "target_repos": ["sales-hive", "client-hive", "outreach-hive"],
+      "sync_types": ["workflows-only", "configs-only", "full-sync"]
+    },
+    "figma_integration": {
+      "design_tokens": true,
+      "components": true,
+      "assets": true,
+      "prototypes": true
+    }
+  },
+  "logging": {
+    "activity_log": "firebase.firestore:repo_activity",
+    "error_log": "firebase.firestore:human_firebreak_queue",
+    "deployment_log": "firebase.firestore:deployment_logs",
+    "validation_log": "firebase.firestore:validation_results",
+    "sync_log": "firebase.firestore:sync_operations",
+    "retention_days": 365,
+    "log_levels": ["info", "warning", "error", "critical"]
+  },
+  "monitoring": {
+    "health_check_interval": 300,
+    "timeout_seconds": 30,
+    "alerting_thresholds": {
+      "success_rate_below": 95,
+      "deployment_time_above": 600,
+      "rollback_frequency_above": 10
+    },
+    "notification_channels": {
+      "primary": "slack",
+      "secondary": "email",
+      "emergency": "human_firebreak_queue"
+    }
+  },
+  "gpt_capabilities": {
+    "personal_productivity": [
+      "email_management",
+      "calendar_scheduling",
+      "document_management",
+      "task_tracking",
+      "notification_routing"
+    ],
+    "development_automation": [
+      "doctrine_validation",
+      "build_automation",
+      "deployment_orchestration",
+      "repository_management",
+      "workflow_coordination"
+    ],
+    "design_integration": [
+      "figma_sync",
+      "design_token_management",
+      "component_library_updates",
+      "asset_distribution"
+    ],
+    "sales_outreach": [
+      "campaign_management",
+      "lead_tracking",
+      "email_sequences",
+      "performance_analytics"
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created_by": "Claude Code",
+    "created_at": "2025-10-07T14:00:00Z",
+    "last_updated": "2025-10-07T14:00:00Z",
+    "repository": "https://github.com/djb258/imo-creator",
+    "documentation": {
+      "main": "/README-DOCTRINE-AUTOMATION.md",
+      "composio_integration": "/docs/COMPOSIO_MCP_INTEGRATION.md",
+      "sync_system": "/docs/SYNC_SYSTEM.md",
+      "config_files": "/config/"
+    }
+  }
+}

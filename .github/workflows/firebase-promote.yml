@@ -129,7 +129,7 @@ jobs:
 
           # Send promotion request to Composio
           RESPONSE=$(curl -X POST \
-            https://composio-imo-creator-url.onrender.com/firebase/promote \
+            http://localhost:3001/tool
             -H "Content-Type: application/json" \
             -H "X-GitHub-Event: firebase_promotion" \
             -H "X-GitHub-Repository: ${{ github.repository }}" \

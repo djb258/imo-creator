@@ -7,9 +7,9 @@
   "main": "index.js",
   "config": {
     "production_urls": {
-      "backend": "https://composio-imo-creator-url.onrender.com",
+      "composio_mcp": "http://localhost:3001",
+      "composio_api": "https://backend.composio.dev",
       "frontend": "https://imo-creator.vercel.app",
-      "api_base": "https://composio-imo-creator-url.onrender.com/api",
       "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
     }
   },
@@ -25,7 +25,7 @@
     "orchestrate": "python tools/repo_mcp_orchestrator.py",
     "vercel:dev": "vercel dev",
     "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/",
-    "test:urls": "curl https://composio-imo-creator-url.onrender.com/health && curl https://imo-creator.vercel.app"
+    "test:urls": "curl http://localhost:3001/mcp/health && curl https://imo-creator.vercel.app"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.0",

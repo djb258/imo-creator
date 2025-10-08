@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "composio": {
-      "url": "https://composio-imo-creator-url.onrender.com",
+      "url": "http://localhost:3001",
       "auth": {
         "bearer": "ak_t-F0AbvfZHUZSUrqAGNn"
       },

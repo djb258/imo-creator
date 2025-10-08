@@ -2,7 +2,7 @@
   "figma_integration": {
     "enabled": true,
     "version": "1.0.0",
-    "composio_endpoint": "https://composio-imo-creator-url.onrender.com/figma/sync",
+    "composio_endpoint": "http://localhost:3001/tool",
     "mcp_server": "http://localhost:3001"
   },
   "sync_settings": {

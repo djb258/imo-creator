@@ -19,22 +19,22 @@ This system enables:
 
 ### neon-db
 - **Description**: Neon database operations (queries, schema, inserts)
-- **Endpoint**: `https://mcpo-jte8.onrender.com/neon`
+- **Endpoint**: `http://localhost:3001/tool`
 - **Auth**: `NEON_API_KEY` environment variable
 
 ### apify-scraper
 - **Description**: Web scraping via Apify actors for data enrichment
-- **Endpoint**: `https://mcpo-jte8.onrender.com/apify`
+- **Endpoint**: `http://localhost:3001/tool`
 - **Auth**: `APIFY_API_TOKEN` environment variable
 
 ### email-verifier
 - **Description**: Email validation via MillionVerify
-- **Endpoint**: `https://mcpo-jte8.onrender.com/millionverify`
+- **Endpoint**: `http://localhost:3001/tool`
 - **Auth**: `MILLIONVERIFY_API_KEY` environment variable
 
 ### github-agent
 - **Description**: GitHub operations (repos, commits, issues)
-- **Endpoint**: `https://mcpo-jte8.onrender.com/github`
+- **Endpoint**: `http://localhost:3001/tool`
 - **Auth**: `GITHUB_TOKEN` environment variable
 
 ## Usage Examples
@@ -64,14 +64,14 @@ result = call_mcp_tool('neon-db', 'execute_query', {
 ```bash
 # List available tools for a server
 curl -H "Authorization: Bearer $NEON_API_KEY" \
-     https://mcpo-jte8.onrender.com/neon/tools
+     http://localhost:3001/mcp/tools
 
 # Execute a specific tool
 curl -X POST \
      -H "Authorization: Bearer $NEON_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{"query": "SELECT * FROM users"}' \
-     https://mcpo-jte8.onrender.com/neon/tools/execute_query
+     http://localhost:3001/tool
 ```
 
 ### LLM Auto-Configuration

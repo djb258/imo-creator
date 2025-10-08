@@ -89,7 +89,7 @@ jobs:
 
           # Send validation request to Composio
           RESPONSE=$(curl -X POST \
-            https://composio-imo-creator-url.onrender.com/doctrine/validate \
+            http://localhost:3001/tool
             -H "Content-Type: application/json" \
             -H "X-GitHub-Event: doctrine_validation" \
             -H "X-GitHub-Repository: ${{ github.repository }}" \

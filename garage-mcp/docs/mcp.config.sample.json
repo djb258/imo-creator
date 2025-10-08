@@ -1,18 +1,18 @@
 {
   "_comment": "IMO-Creator MCP Configuration - Production URLs embedded",
   "production_urls": {
-    "backend": "https://composio-imo-creator-url.onrender.com",
+    "backend": "http://localhost:3001",
     "frontend": "https://imo-creator.vercel.app",
-    "api_base": "https://composio-imo-creator-url.onrender.com/api",
+    "api_base": "http://localhost:3001/api",
     "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
   },
   "servers": {
     "imo-creator-mcp": {
       "command": "curl",
-      "args": ["-X", "GET", "https://composio-imo-creator-url.onrender.com/api/subagents"],
+      "args": ["-X", "GET", "http://localhost:3001/api/subagents"],
       "env": {
         "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
-        "MCP_SERVER_URL": "https://composio-imo-creator-url.onrender.com"
+        "MCP_SERVER_URL": "http://localhost:3001"
       }
     },
     "garage-mcp-local": {
@@ -20,7 +20,7 @@
       "args": ["services.mcp.main:app", "--port", "7001"],
       "env": {
         "BAY": "frontend",
-        "BACKEND_URL": "https://composio-imo-creator-url.onrender.com"
+        "BACKEND_URL": "http://localhost:3001"
       }
     }
   }

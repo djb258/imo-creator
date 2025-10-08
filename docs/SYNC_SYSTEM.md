@@ -88,7 +88,7 @@ Syncs workflows, configs, and documentation:
 1. **Trigger**: Sync can be triggered manually, via API, or automatically on push
 2. **Configuration Loading**: System loads `imo-sync.config.json` for settings
 3. **File Collection**: Collects files based on sync type presets
-4. **Composio MCP**: Sends sync request to `https://composio-imo-creator-url.onrender.com/imo-creator/sync`
+4. **Composio MCP**: Sends sync request to `http://localhost:3001/imo-creator/sync`
 5. **Target Update**: Composio MCP handles updating target repositories
 6. **Reporting**: Generates sync reports and artifacts
 

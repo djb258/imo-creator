@@ -90,7 +90,7 @@
       "output_format": "structured"
     },
     "diagram_metadata": {
-      "composio_endpoint": "https://composio-imo-creator-url.onrender.com",
+      "composio_endpoint": "http://localhost:3001",
       "frontend_url": "https://imo-creator.vercel.app",
       "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
       "doctrine_branches": [

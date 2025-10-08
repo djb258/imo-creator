@@ -4,7 +4,7 @@
   "description": "Configuration for syncing IMO-Creator updates to doctrine-aligned repositories",
   "sync": {
     "source_repo": "djb258/imo-creator",
-    "composio_endpoint": "https://composio-imo-creator-url.onrender.com/imo-creator/sync",
+    "composio_endpoint": "http://localhost:3001/imo-creator/sync",
     "target_repositories": [
       {
         "name": "sales-hive",
@@ -130,7 +130,7 @@
     "notifications": {
       "composio_mcp": {
         "enabled": true,
-        "endpoint": "https://composio-imo-creator-url.onrender.com/notifications",
+        "endpoint": "http://localhost:3001/notifications",
         "events": [
           "sync_started",
           "sync_completed",

@@ -178,7 +178,7 @@ import datetime
 
 timestamp = datetime.datetime.now().isoformat()
 etag = hashlib.md5(timestamp.encode()).hexdigest()[:8]
-composio_url = 'https://composio-imo-creator-url.onrender.com'
+composio_url = 'http://localhost:3001/tool
 
 template = drawio_template.format(
     timestamp=timestamp,
@@ -286,7 +286,7 @@ def create_altitude_overview_diagram():
 </mxfile>'''
 
     timestamp = datetime.now().isoformat()
-    composio_url = "https://composio-imo-creator-url.onrender.com"
+    composio_url = "http://localhost:3001/tool"
 
     diagram_content = template.format(
         timestamp=timestamp,
@@ -477,7 +477,7 @@ def create_mcp_routing_diagram():
 </mxfile>'''
 
     timestamp = datetime.now().isoformat()
-    composio_endpoint = "https://composio-imo-creator-url.onrender.com"
+    composio_endpoint = "http://localhost:3001/tool"
 
     diagram_content = template.format(
         timestamp=timestamp,

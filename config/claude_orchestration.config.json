@@ -6,15 +6,15 @@
     "name": "Claude Code",
     "role": "Orchestration Coordinator",
     "purpose": "Coordinate between GPTs, repositories, and Composio MCP for automated doctrine workflows",
-    "composio_relay": "https://composio-imo-creator-url.onrender.com",
-    "communication_method": "composio_relay_only",
+    "composio_mcp": "http://localhost:3001",
+    "communication_method": "composio_mcp_only",
     "no_direct_tokens": true
   },
   "gpt_ecosystem": {
     "personal_assistant": {
       "gpt_id": "personal-assistant-v1",
       "config_file": "/config/personal_assistant.config.json",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/personal-assistant",
+      "endpoint": "http://localhost:3001/tool",
       "responsibilities": [
         "Email management",
         "Calendar scheduling",
@@ -26,14 +26,14 @@
     "composio_mcp": {
       "gpt_id": "composio-mcp-v1",
       "config_file": "/config/composio_mcp_gpt.config.json",
-      "endpoint": "https://composio-imo-creator-url.onrender.com/composio-mcp",
+      "endpoint": "http://localhost:3001/tool",
       "responsibilities": [
         "Doctrine validation",
         "Build automation",
         "Deployment orchestration",
         "Cross-repo synchronization"
       ],
-      "connected_services": ["github", "render", "vercel", "figma"]
+      "connected_services": ["github", "vercel", "figma", "composio"]
     }
   },
   "repository_coordination": {
@@ -70,24 +70,24 @@
   "workflow_triggers": {
     "doctrine_validation": {
       "trigger_on": ["push:doctrine/*", "pull_request:doctrine/*"],
-      "endpoint": "https://composio-imo-creator-url.onrender.com/doctrine/validate",
+      "endpoint": "http://localhost:3001/tool",
       "required_for_deployment": true,
       "failure_action": "block_deployment"
     },
     "firebase_promotion": {
       "trigger_on": ["workflow_completion:doctrine-validate", "manual:firebase-promote"],
-      "endpoint": "https://composio-imo-creator-url.onrender.com/firebase/promote",
+      "endpoint": "http://localhost:3001/tool",
       "requires_approval": true,
       "staging_first": true
     },
     "cross_repo_sync": {
       "trigger_on": ["push:main", "workflow_completion", "manual:sync"],
-      "endpoint": "https://composio-imo-creator-url.onrender.com/imo-creator/sync",
+      "endpoint": "http://localhost:3001/tool",
       "target_determination": "config_driven"
     },
     "figma_sync": {
       "trigger_on": ["figma_webhook", "manual:figma-sync"],
-      "endpoint": "https://composio-imo-creator-url.onrender.com/figma/sync",
+      "endpoint": "http://localhost:3001/tool",
       "asset_types": ["design_tokens", "components", "prototypes"]
     }
   },
@@ -96,12 +96,12 @@
     "no_direct_api_calls": true,
     "no_stored_tokens": true,
     "composio_endpoints": {
-      "github_event": "https://composio-imo-creator-url.onrender.com/github/event",
-      "doctrine_validate": "https://composio-imo-creator-url.onrender.com/doctrine/validate",
-      "firebase_promote": "https://composio-imo-creator-url.onrender.com/firebase/promote",
-      "imo_creator_sync": "https://composio-imo-creator-url.onrender.com/imo-creator/sync",
-      "figma_sync": "https://composio-imo-creator-url.onrender.com/figma/sync",
-      "human_firebreak": "https://composio-imo-creator-url.onrender.com/human-firebreak"
+      "github_event": "http://localhost:3001/tool",
+      "doctrine_validate": "http://localhost:3001/tool",
+      "firebase_promote": "http://localhost:3001/tool",
+      "imo_creator_sync": "http://localhost:3001/tool",
+      "figma_sync": "http://localhost:3001/tool",
+      "human_firebreak": "http://localhost:3001/tool"
     }
   },
   "security_controls": {
@@ -117,7 +117,7 @@
     },
     "human_firebreak": {
       "enabled": true,
-      "queue_endpoint": "https://composio-imo-creator-url.onrender.com/human-firebreak",
+      "queue_endpoint": "http://localhost:3001/tool",
       "escalation_matrix": {
         "validation_failure": "immediate",
         "deployment_failure": "immediate",
@@ -134,7 +134,7 @@
   },
   "monitoring_and_alerting": {
     "health_checks": {
-      "composio_endpoint": "https://composio-imo-creator-url.onrender.com/health",
+      "composio_endpoint": "http://localhost:3001/mcp/health",
       "interval_seconds": 300,
       "timeout_seconds": 30
     },
