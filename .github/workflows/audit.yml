@@ -1,0 +1,159 @@
+name: HEIR Compliance Audit
+
+on:
+  push:
+    branches:
+      - main
+      - 'sys/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  heir-compliance:
+    runs-on: ubuntu-latest
+    name: HEIR Doctrine Compliance Validation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt 2>/dev/null || pip install pyyaml pydantic
+
+      - name: Verify heir.doctrine.yaml
+        run: |
+          if [ ! -f "heir.doctrine.yaml" ]; then
+            echo "❌ heir.doctrine.yaml not found"
+            exit 1
+          fi
+
+          echo "✅ heir.doctrine.yaml found"
+          cat heir.doctrine.yaml
+
+      - name: Run HEIR Checks
+        run: |
+          if [ -f "packages/heir/checks.py" ]; then
+            python -m packages.heir.checks
+          elif [ -f "tools/heir_validator.py" ]; then
+            python tools/heir_validator.py
+          else
+            echo "⚠️  No HEIR validation script found - skipping"
+          fi
+
+      - name: Validate CTB Branch Map
+        run: |
+          python3 << 'EOF'
+          import yaml
+          import sys
+
+          try:
+              with open('global-config/ctb.branchmap.yaml', 'r') as f:
+                  config = yaml.safe_load(f)
+
+              required_keys = ['meta', 'altitudes', 'merge_flow', 'automation_hooks', 'branch_protection']
+
+              for key in required_keys:
+                  if key not in config:
+                      print(f"❌ Missing required key: {key}")
+                      sys.exit(1)
+
+              print("✅ CTB branch map is valid")
+              print(f"Version: {config['meta']['version']}")
+              print(f"Last updated: {config['meta']['last_updated']}")
+
+          except Exception as e:
+              print(f"❌ CTB branch map validation failed: {e}")
+              sys.exit(1)
+          EOF
+
+      - name: Check Doctrine ID Generation
+        run: |
+          python3 << 'EOF'
+          import os
+          import sys
+
+          required_env_vars = ['DOCTRINE_DB', 'DOCTRINE_SUBHIVE', 'DOCTRINE_APP', 'DOCTRINE_VER']
+
+          print("Checking Doctrine environment variables...")
+
+          # Check if environment variables are documented
+          if os.path.exists('.env.example'):
+              with open('.env.example', 'r') as f:
+                  env_example = f.read()
+
+              missing_vars = []
+              for var in required_env_vars:
+                  if var not in env_example:
+                      missing_vars.append(var)
+
+              if missing_vars:
+                  print(f"⚠️  Missing env vars in .env.example: {', '.join(missing_vars)}")
+              else:
+                  print("✅ All Doctrine env vars documented in .env.example")
+          else:
+              print("⚠️  .env.example not found")
+
+          # Check if ID generation code exists
+          if os.path.exists('src/server/main.py'):
+              with open('src/server/main.py', 'r') as f:
+                  content = f.read()
+
+              if 'generate_unique_id' in content and 'generate_process_id' in content:
+                  print("✅ Doctrine ID generation functions found")
+              else:
+                  print("⚠️  Doctrine ID generation functions not found in main.py")
+
+          EOF
+
+      - name: Validate Composio Integration
+        run: |
+          if [ -f "COMPOSIO_INTEGRATION.md" ]; then
+            echo "✅ Composio integration documentation found"
+
+            # Check for required Composio configuration
+            if grep -q "COMPOSIO_API_KEY" COMPOSIO_INTEGRATION.md; then
+              echo "✅ Composio API key documented"
+            else
+              echo "⚠️  Composio API key not documented"
+            fi
+
+            if grep -q "HEIR/ORBT" COMPOSIO_INTEGRATION.md; then
+              echo "✅ HEIR/ORBT compliance documented"
+            else
+              echo "⚠️  HEIR/ORBT compliance not documented"
+            fi
+          else
+            echo "⚠️  COMPOSIO_INTEGRATION.md not found"
+          fi
+
+      - name: Generate Compliance Report
+        if: always()
+        run: |
+          echo "=== HEIR Compliance Report ===" > compliance_report.txt
+          echo "Generated: $(date)" >> compliance_report.txt
+          echo "Repository: ${{ github.repository }}" >> compliance_report.txt
+          echo "Branch: ${{ github.ref_name }}" >> compliance_report.txt
+          echo "" >> compliance_report.txt
+
+          echo "Files Checked:" >> compliance_report.txt
+          echo "- heir.doctrine.yaml" >> compliance_report.txt
+          echo "- global-config/ctb.branchmap.yaml" >> compliance_report.txt
+          echo "- COMPOSIO_INTEGRATION.md" >> compliance_report.txt
+          echo "- src/server/main.py" >> compliance_report.txt
+
+          cat compliance_report.txt
+
+      - name: Upload Compliance Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: heir-compliance-report
+          path: compliance_report.txt

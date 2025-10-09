@@ -1,0 +1,161 @@
+name: CTB Health Check
+
+on:
+  schedule:
+    # Weekly health check on Sundays at midnight
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    name: Verify CTB Branch Structure Health
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+
+      - name: Verify CTB Branch Map Exists
+        id: verify-map
+        run: |
+          if [ -f "global-config/ctb.branchmap.yaml" ]; then
+            echo "✅ CTB branch map found"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ CTB branch map missing"
+            echo "exists=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Verify All Required Branches Exist
+        run: |
+          echo "=== CTB Branch Health Check ==="
+
+          REQUIRED_BRANCHES=(
+            "main"
+            "doctrine/get-ingest"
+            "sys/composio-mcp"
+            "sys/neon-vault"
+            "sys/firebase-workbench"
+            "sys/bigquery-warehouse"
+            "sys/github-factory"
+            "sys/builder-bridge"
+            "sys/security-audit"
+            "imo/input"
+            "imo/middle"
+            "imo/output"
+            "ui/figma-bolt"
+            "ui/builder-templates"
+            "ops/automation-scripts"
+            "ops/report-builder"
+          )
+
+          MISSING_BRANCHES=()
+
+          for branch in "${REQUIRED_BRANCHES[@]}"; do
+            if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+              echo "✅ $branch"
+            else
+              echo "❌ $branch (MISSING)"
+              MISSING_BRANCHES+=("$branch")
+            fi
+          done
+
+          if [ ${#MISSING_BRANCHES[@]} -gt 0 ]; then
+            echo ""
+            echo "⚠️  Missing branches detected:"
+            printf '%s\n' "${MISSING_BRANCHES[@]}"
+            echo ""
+            echo "Run the CTB initialization script to create missing branches"
+            exit 1
+          else
+            echo ""
+            echo "✅ All CTB branches present and healthy"
+          fi
+
+      - name: Verify HEIR Compliance Files
+        run: |
+          echo "=== HEIR Compliance Check ==="
+
+          REQUIRED_FILES=(
+            "heir.doctrine.yaml"
+            "global-config/ctb.branchmap.yaml"
+            "CLAUDE.md"
+            "COMPOSIO_INTEGRATION.md"
+          )
+
+          MISSING_FILES=()
+
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✅ $file"
+            else
+              echo "❌ $file (MISSING)"
+              MISSING_FILES+=("$file")
+            fi
+          done
+
+          if [ ${#MISSING_FILES[@]} -gt 0 ]; then
+            echo ""
+            echo "⚠️  Missing required HEIR/Doctrine files"
+            exit 1
+          fi
+
+      - name: Check Branch Divergence
+        run: |
+          echo "=== Branch Divergence Check ==="
+
+          git fetch origin main
+
+          CTB_BRANCHES=(
+            "doctrine/get-ingest"
+            "sys/composio-mcp"
+            "imo/input"
+            "imo/middle"
+            "imo/output"
+            "ui/figma-bolt"
+            "ops/automation-scripts"
+          )
+
+          for branch in "${CTB_BRANCHES[@]}"; do
+            if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+              BEHIND=$(git rev-list --count origin/$branch..origin/main 2>/dev/null || echo "0")
+              AHEAD=$(git rev-list --count origin/main..origin/$branch 2>/dev/null || echo "0")
+              echo "$branch: $AHEAD ahead, $BEHIND behind main"
+            fi
+          done
+
+      - name: Generate Health Report
+        if: always()
+        run: |
+          echo "=== CTB Health Report ===" > ctb_health_report.txt
+          echo "Generated: $(date)" >> ctb_health_report.txt
+          echo "" >> ctb_health_report.txt
+          echo "Branch Count:" >> ctb_health_report.txt
+          git branch -r | grep -E '(doctrine|sys|imo|ui|ops)/' | wc -l >> ctb_health_report.txt
+          echo "" >> ctb_health_report.txt
+          echo "All Branches:" >> ctb_health_report.txt
+          git branch -r | grep -E '(doctrine|sys|imo|ui|ops)/' >> ctb_health_report.txt
+
+          cat ctb_health_report.txt
+
+      - name: Upload Health Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ctb-health-report
+          path: ctb_health_report.txt

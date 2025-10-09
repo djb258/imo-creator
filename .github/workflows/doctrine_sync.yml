@@ -1,0 +1,145 @@
+name: CTB Doctrine Sync
+
+on:
+  schedule:
+    # Nightly sync at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+  push:
+    branches:
+      - 'doctrine/**'
+      - 'sys/**'
+    paths:
+      - 'heir.doctrine.yaml'
+      - 'global-config/**'
+      - 'CLAUDE.md'
+      - 'COMPOSIO_INTEGRATION.md'
+
+jobs:
+  sync-doctrine:
+    runs-on: ubuntu-latest
+    name: Sync CTB Doctrine Across Branches
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "CTB Doctrine Bot"
+          git config user.email "doctrine-bot@barton-enterprises.com"
+
+      - name: Load CTB Branch Map
+        id: load-map
+        run: |
+          if [ -f "global-config/ctb.branchmap.yaml" ]; then
+            echo "CTB branch map found"
+            echo "branchmap_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "CTB branch map not found - skipping sync"
+            echo "branchmap_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Verify All CTB Branches Exist
+        if: steps.load-map.outputs.branchmap_exists == 'true'
+        run: |
+          echo "Verifying CTB branch structure..."
+
+          # Define all CTB branches
+          CTB_BRANCHES=(
+            "doctrine/get-ingest"
+            "sys/composio-mcp"
+            "sys/neon-vault"
+            "sys/firebase-workbench"
+            "sys/bigquery-warehouse"
+            "sys/github-factory"
+            "sys/builder-bridge"
+            "sys/security-audit"
+            "imo/input"
+            "imo/middle"
+            "imo/output"
+            "ui/figma-bolt"
+            "ui/builder-templates"
+            "ops/automation-scripts"
+            "ops/report-builder"
+          )
+
+          for branch in "${CTB_BRANCHES[@]}"; do
+            if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+              echo "✅ Branch exists: $branch"
+            else
+              echo "⚠️  Branch missing: $branch - creating from main"
+              git checkout -b "$branch" origin/main
+              git push -u origin "$branch"
+              git checkout main
+            fi
+          done
+
+      - name: Sync Doctrine Files to All Branches
+        if: steps.load-map.outputs.branchmap_exists == 'true'
+        run: |
+          echo "Syncing doctrine files across CTB branches..."
+
+          # Doctrine files that should exist on all branches
+          DOCTRINE_FILES=(
+            "heir.doctrine.yaml"
+            "global-config/ctb.branchmap.yaml"
+            ".github/workflows/doctrine_sync.yml"
+            ".github/workflows/ctb_health.yml"
+            ".github/workflows/audit.yml"
+          )
+
+          # Target branches for sync
+          SYNC_BRANCHES=(
+            "doctrine/get-ingest"
+            "sys/composio-mcp"
+            "sys/neon-vault"
+            "sys/firebase-workbench"
+            "sys/bigquery-warehouse"
+            "sys/github-factory"
+            "sys/builder-bridge"
+            "sys/security-audit"
+            "imo/input"
+            "imo/middle"
+            "imo/output"
+            "ui/figma-bolt"
+            "ui/builder-templates"
+            "ops/automation-scripts"
+            "ops/report-builder"
+          )
+
+          for branch in "${SYNC_BRANCHES[@]}"; do
+            echo "Processing branch: $branch"
+            git checkout "$branch" 2>/dev/null || git checkout -b "$branch" origin/main
+
+            # Copy doctrine files from main
+            git checkout main -- "${DOCTRINE_FILES[@]}" 2>/dev/null || true
+
+            # Commit if changes exist
+            if git diff --staged --quiet; then
+              echo "No changes for $branch"
+            else
+              git add .
+              git commit -m "🌲 CTB Doctrine Sync - $(date +%Y-%m-%d)" || true
+              git push origin "$branch" || true
+            fi
+          done
+
+          git checkout main
+
+      - name: Report Sync Status
+        if: always()
+        run: |
+          echo "=== CTB Doctrine Sync Complete ==="
+          echo "Timestamp: $(date)"
+          git branch -r | grep -E '(doctrine|sys|imo|ui|ops)/' || echo "No CTB branches found"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ CTB Doctrine Sync failed"
+          echo "Check workflow logs for details"
