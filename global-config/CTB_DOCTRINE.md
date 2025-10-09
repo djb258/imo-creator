@@ -1,5 +1,19 @@
 # 🌲 CTB (Christmas Tree Backbone) Doctrine
 
+## 🚀 Quick Start - One Simple Command
+
+To update any repository with the latest CTB structure, just say to Claude Code:
+
+```
+"update from imo-creator"
+```
+
+That's it! The system automatically syncs all configuration, creates branches, and verifies compliance.
+
+**📖 For more details, see**: `QUICK_REFERENCE.md` and `CLAUDE_COMMANDS.md`
+
+---
+
 ## Overview
 
 The **Christmas Tree Backbone (CTB) Doctrine** is Barton Enterprises' organizational framework for managing code repositories through a hierarchical branch structure that mirrors altitude-based development philosophy.
