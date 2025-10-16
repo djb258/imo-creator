@@ -746,7 +746,9 @@ async def million_verifier_tool_endpoint(request: Request):
         }, status_code=500)
 
 @app.get("/")
+@app.post("/")
 async def root():
+    """Root endpoint - accepts both GET and POST for MCP client compatibility"""
     return {
         "message": "IMO-Creator Backend API",
         "version": "1.0.0",
@@ -771,3 +773,48 @@ async def root():
             "/api/composio/million_verifier/tool"
         ]
     }
+
+@app.post("/register")
+async def mcp_register(request: Request):
+    """MCP client registration endpoint"""
+    try:
+        body = await request.json()
+        client_id = body.get("client_id", "unknown")
+        print(f"[MCP REGISTER] Client: {client_id}")
+
+        return JSONResponse({
+            "registered": True,
+            "client_id": client_id,
+            "server": "imo-creator",
+            "version": "1.0.0",
+            "capabilities": ["tools", "schema", "invoke"],
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        })
+    except Exception as e:
+        print(f"[MCP REGISTER ERROR] {str(e)}")
+        return JSONResponse(
+            {"error": str(e)},
+            status_code=500
+        )
+
+@app.get("/.well-known/oauth-authorization-server")
+async def oauth_authorization_server():
+    """OAuth discovery endpoint - returns no-auth configuration"""
+    return JSONResponse({
+        "issuer": os.getenv("BASE_URL", "https://composio-imo-creator-url.onrender.com"),
+        "authorization_endpoint": None,
+        "token_endpoint": None,
+        "grant_types_supported": [],
+        "response_types_supported": [],
+        "service_documentation": f"{os.getenv('BASE_URL', 'https://composio-imo-creator-url.onrender.com')}/docs"
+    })
+
+@app.get("/.well-known/oauth-protected-resource")
+async def oauth_protected_resource():
+    """OAuth resource discovery - indicates no authentication required"""
+    return JSONResponse({
+        "resource": os.getenv("BASE_URL", "https://composio-imo-creator-url.onrender.com"),
+        "authorization_servers": [],
+        "bearer_methods_supported": [],
+        "resource_documentation": f"{os.getenv('BASE_URL', 'https://composio-imo-creator-url.onrender.com')}/docs"
+    })
