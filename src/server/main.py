@@ -480,6 +480,160 @@ async def get_subagents():
 async def health():
     return {"status": "ok", "service": "imo-creator-backend"}
 
+@app.get("/status")
+async def status():
+    """MCP status endpoint for service monitoring"""
+    return {
+        "status": "ok",
+        "service": "imo-creator-backend",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "composio_configured": bool(os.getenv("COMPOSIO_API_KEY")),
+        "kill_switch": os.getenv("KILL_SWITCH", "false").lower() == "true"
+    }
+
+@app.get("/schema")
+async def schema():
+    """MCP schema endpoint - Lists all available tools for ChatGPT discovery"""
+    return {
+        "tools": [
+            {
+                "name": "firebase_write",
+                "description": "Write a record to Firebase via Composio API",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {"type": "string", "description": "Firebase collection name"},
+                        "payload": {"type": "object", "description": "Data to write"}
+                    },
+                    "required": ["collection", "payload"]
+                }
+            },
+            {
+                "name": "firebase_read",
+                "description": "Read data from Firebase via Composio API",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {"type": "string", "description": "Firebase collection name"},
+                        "document_id": {"type": "string", "description": "Document ID to read"}
+                    },
+                    "required": ["collection"]
+                }
+            },
+            {
+                "name": "million_verifier_verify",
+                "description": "Verify email address via Million Verifier",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "email": {"type": "string", "description": "Email address to verify"}
+                    },
+                    "required": ["email"]
+                }
+            }
+        ]
+    }
+
+@app.post("/invoke")
+async def invoke(request: Request):
+    """MCP invoke endpoint - Executes tools via Composio API with error handling"""
+    # Barton Doctrine: Kill switch check
+    if os.getenv("KILL_SWITCH", "false").lower() == "true":
+        return JSONResponse(
+            {"error": "Service disabled via kill switch", "status": "kill_switch_active"},
+            status_code=503
+        )
+
+    try:
+        payload = await request.json()
+        tool = payload.get("tool")
+        data = payload.get("data", {})
+
+        # Barton Doctrine: Logging for traceability
+        print(f"[INVOKE] Tool: {tool} | Data: {json.dumps(data)[:100]}")
+
+        if not tool:
+            return JSONResponse(
+                {"error": "tool parameter is required"},
+                status_code=400
+            )
+
+        # Get Composio API configuration
+        composio_api_key = os.getenv("COMPOSIO_API_KEY")
+        composio_api_url = os.getenv("COMPOSIO_API_URL", "https://api.composio.dev/api/v1")
+
+        if not composio_api_key:
+            return JSONResponse(
+                {"error": "COMPOSIO_API_KEY not configured"},
+                status_code=500
+            )
+
+        # Execute tool via Composio API
+        headers = {
+            "Authorization": f"Bearer {composio_api_key}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(
+            f"{composio_api_url}/actions/{tool}/execute",
+            headers=headers,
+            json=data,
+            timeout=30
+        )
+
+        # Barton Doctrine: Comprehensive error handling
+        if not response.ok:
+            error_detail = response.text[:200]  # Truncate for safety
+            print(f"[INVOKE ERROR] Status: {response.status_code} | Detail: {error_detail}")
+            return JSONResponse(
+                {
+                    "error": f"Composio API error: {response.status_code}",
+                    "detail": error_detail
+                },
+                status_code=500
+            )
+
+        result = response.json()
+        print(f"[INVOKE SUCCESS] Tool: {tool}")
+
+        return JSONResponse({
+            "success": True,
+            "tool": tool,
+            "result": result,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        })
+
+    except Exception as e:
+        # Barton Doctrine: Never crash - always return structured error
+        error_msg = str(e)
+        print(f"[INVOKE EXCEPTION] {error_msg}")
+        return JSONResponse(
+            {"error": error_msg},
+            status_code=500
+        )
+
+@app.get("/.well-known/ai-plugin.json")
+async def ai_plugin_manifest():
+    """ChatGPT MCP discovery manifest"""
+    base_url = os.getenv("BASE_URL", "https://composio-imo-creator-url.onrender.com")
+
+    return JSONResponse({
+        "schema_version": "v1",
+        "name_for_human": "IMO Creator Gateway",
+        "name_for_model": "imo_creator",
+        "description_for_human": "Unified MCP server for IMO Creator, Composio, Firebase, and Million Verifier tools",
+        "description_for_model": "Provides blueprint management, Firebase operations, and email verification through the MCP protocol",
+        "auth": {"type": "none"},
+        "api": {
+            "type": "openapi",
+            "url": f"{base_url}/openapi.json",
+            "is_user_authenticated": False
+        },
+        "logo_url": f"{base_url}/static/logo.png",
+        "contact_email": "support@imo-creator.dev",
+        "legal_info_url": "https://imo-creator.dev/legal"
+    })
+
 @app.get("/api/composio/_21risk")
 async def composio_21risk():
     """21RISK toolkit endpoint - Risk Management & Compliance"""
@@ -593,18 +747,27 @@ async def million_verifier_tool_endpoint(request: Request):
 
 @app.get("/")
 async def root():
-    return {"message": "IMO-Creator Backend API", "endpoints": [
-        "/health",
-        "/blueprints/{slug}/manifest",
-        "/blueprints/{slug}/score",
-        "/blueprints/{slug}/visuals",
-        "/llm",
-        "/api/ssot/save",
-        "/api/subagents",
-        "/api/composio/_21risk",
-        "/api/composio/_2chat",
-        "/api/composio/ably",
-        "/api/composio/builder",
-        "/api/composio/million_verifier",
-        "/api/composio/million_verifier/tool"
-    ]}
+    return {
+        "message": "IMO-Creator Backend API",
+        "version": "1.0.0",
+        "mcp_enabled": True,
+        "endpoints": [
+            "/health",
+            "/status",
+            "/schema",
+            "/invoke (POST)",
+            "/.well-known/ai-plugin.json",
+            "/blueprints/{slug}/manifest",
+            "/blueprints/{slug}/score",
+            "/blueprints/{slug}/visuals",
+            "/llm",
+            "/api/ssot/save",
+            "/api/subagents",
+            "/api/composio/_21risk",
+            "/api/composio/_2chat",
+            "/api/composio/ably",
+            "/api/composio/builder",
+            "/api/composio/million_verifier",
+            "/api/composio/million_verifier/tool"
+        ]
+    }
