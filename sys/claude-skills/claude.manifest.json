@@ -1,0 +1,247 @@
+{
+  "manifest_version": "1.0",
+  "tool_name": "Anthropic_Claude_Skills",
+  "doctrine_id": "04.04.10",
+  "description": "AI/SHQ Reasoning Layer - Anthropic Claude Skills integration via Composio MCP",
+  "version": "1.0.0",
+  "created": "2025-10-18T00:00:00Z",
+  "last_updated": "2025-10-18T00:00:00Z",
+  "status": "active",
+
+  "endpoint": {
+    "type": "composio",
+    "protocol": "composio://anthropic",
+    "scope": "global",
+    "requires_auth": true,
+    "auth_type": "mcp_vault"
+  },
+
+  "ctb_integration": {
+    "branch": "sys/claude-skills",
+    "altitude": "40k",
+    "layer_type": "AI/SHQ",
+    "doctrine_compliance": true,
+    "heir_protocol": true,
+    "orbt_tracking": true
+  },
+
+  "capabilities": {
+    "extended_context": {
+      "enabled": true,
+      "max_tokens": 200000,
+      "model": "claude-sonnet-4.5-20250929"
+    },
+    "skills_api": {
+      "enabled": true,
+      "multi_turn": true,
+      "tool_use": true,
+      "structured_output": true
+    },
+    "reasoning": {
+      "enabled": true,
+      "chain_of_thought": true,
+      "multi_step": true,
+      "autonomous_planning": true
+    }
+  },
+
+  "toolkit_tools": [
+    {
+      "name": "CLAUDE_ANALYZE",
+      "description": "Deep analysis of code, documentation, or data",
+      "input_schema": {
+        "content": "string (required)",
+        "analysis_type": "string (required) - code_review|security_audit|performance|architecture",
+        "depth": "string (optional) - quick|standard|comprehensive",
+        "output_format": "string (optional) - markdown|json|structured"
+      },
+      "output_schema": {
+        "analysis": "object",
+        "findings": "array",
+        "recommendations": "array",
+        "confidence": "number"
+      }
+    },
+    {
+      "name": "CLAUDE_REASON",
+      "description": "Multi-step reasoning and complex problem solving",
+      "input_schema": {
+        "task": "string (required)",
+        "context": "string|object (optional)",
+        "steps": "array (optional)",
+        "constraints": "array (optional)",
+        "output_format": "string (optional)"
+      },
+      "output_schema": {
+        "reasoning_chain": "array",
+        "conclusion": "object",
+        "confidence": "number",
+        "alternatives": "array"
+      }
+    },
+    {
+      "name": "CLAUDE_GENERATE",
+      "description": "Content and code generation with context awareness",
+      "input_schema": {
+        "task": "string (required)",
+        "template": "string (optional)",
+        "context": "object (optional)",
+        "constraints": "object (optional)",
+        "style": "string (optional)"
+      },
+      "output_schema": {
+        "generated_content": "string",
+        "metadata": "object",
+        "alternatives": "array"
+      }
+    },
+    {
+      "name": "CLAUDE_REVIEW",
+      "description": "Code and document review with best practices",
+      "input_schema": {
+        "content": "string (required)",
+        "review_type": "string (required) - code|documentation|architecture|security",
+        "standards": "array (optional)",
+        "severity_threshold": "string (optional)"
+      },
+      "output_schema": {
+        "summary": "object",
+        "issues": "array",
+        "suggestions": "array",
+        "score": "number"
+      }
+    },
+    {
+      "name": "CLAUDE_PLAN",
+      "description": "Task planning and decomposition",
+      "input_schema": {
+        "goal": "string (required)",
+        "context": "object (optional)",
+        "constraints": "object (optional)",
+        "preferences": "object (optional)"
+      },
+      "output_schema": {
+        "plan": "object",
+        "tasks": "array",
+        "dependencies": "array",
+        "estimated_effort": "object"
+      }
+    },
+    {
+      "name": "CLAUDE_EXECUTE",
+      "description": "Workflow execution with Claude orchestration",
+      "input_schema": {
+        "workflow_definition": "object|string (required)",
+        "input_data": "object (optional)",
+        "orchestration_mode": "string (optional) - guided|autonomous",
+        "checkpoints": "boolean (optional)"
+      },
+      "output_schema": {
+        "execution_log": "array",
+        "results": "object",
+        "status": "string",
+        "duration_ms": "number"
+      }
+    }
+  ],
+
+  "configuration": {
+    "required_env_vars": [
+      "ANTHROPIC_API_KEY",
+      "ANTHROPIC_MODEL"
+    ],
+    "optional_env_vars": [
+      "ANTHROPIC_MAX_TOKENS",
+      "COMPOSIO_ANTHROPIC_ENABLED",
+      "COMPOSIO_ANTHROPIC_ENDPOINT"
+    ],
+    "defaults": {
+      "model": "claude-sonnet-4.5-20250929",
+      "max_tokens": 200000,
+      "temperature": 1.0,
+      "timeout_ms": 60000
+    }
+  },
+
+  "rate_limiting": {
+    "requests_per_minute": 50,
+    "tokens_per_minute": 100000,
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff_multiplier": 2,
+      "initial_delay_ms": 1000
+    }
+  },
+
+  "logging": {
+    "audit_log": "logs/claude_skills_audit.log",
+    "firebase_collection": "claude_skills_audit_log",
+    "log_level": "info",
+    "include_request_body": false,
+    "include_response_body": false
+  },
+
+  "security": {
+    "api_key_source": "mcp_vault",
+    "vault_key_name": "ANTHROPIC_API_KEY",
+    "encryption": true,
+    "pii_detection": true,
+    "audit_required": true
+  },
+
+  "testing": {
+    "integration_tests": "sys/claude-skills/tests/integration.test.ts",
+    "unit_tests": "sys/claude-skills/tests/skills.test.ts",
+    "test_coverage_required": 80
+  },
+
+  "dependencies": {
+    "composio": ">=1.0.0",
+    "anthropic": ">=0.20.0",
+    "mcp_vault_resolver": ">=1.0.0"
+  },
+
+  "maintenance": {
+    "maintained_by": "CTB Doctrine Enforcement System",
+    "support_contact": "ctb-support@barton.enterprises",
+    "update_frequency": "quarterly",
+    "deprecation_policy": "12_month_notice"
+  },
+
+  "compliance": {
+    "heir_protocol": {
+      "enforced": true,
+      "unique_id_format": "HEIR-YYYY-MM-MODULE-DESC-NN",
+      "process_id_format": "PRC-MODULE-NNN"
+    },
+    "orbt_tracking": {
+      "enforced": true,
+      "layer_values": [1, 2, 3, 4],
+      "layer_mapping": {
+        "1": "40k - Doctrine/Strategic",
+        "2": "20k - IMO/Business Logic",
+        "3": "10k - UI/Interface",
+        "4": "5k - Operations"
+      }
+    },
+    "security_requirements": {
+      "zero_tolerance_secrets": true,
+      "mcp_vault_required": true,
+      "audit_logging": true,
+      "encryption_at_rest": true
+    }
+  },
+
+  "examples": {
+    "basic_analysis": "sys/claude-skills/examples/analysis_example.ts",
+    "multi_step_reasoning": "sys/claude-skills/examples/reasoning_example.ts",
+    "workflow_execution": "sys/claude-skills/examples/workflow_example.ts"
+  },
+
+  "documentation": {
+    "main_doc": "sys/claude-skills/claude.skills.md",
+    "api_reference": "https://docs.anthropic.com",
+    "composio_guide": "https://docs.composio.dev",
+    "ctb_doctrine": "global-config/CTB_DOCTRINE.md"
+  }
+}
