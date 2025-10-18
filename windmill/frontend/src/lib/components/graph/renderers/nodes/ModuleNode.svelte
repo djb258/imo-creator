@@ -1,0 +1,129 @@
+<script lang="ts">
+	import { preventDefault, stopPropagation } from 'svelte/legacy'
+
+	import MapItem from '$lib/components/flows/map/MapItem.svelte'
+	import { GitBranchPlus, Maximize2 } from 'lucide-svelte'
+	import NodeWrapper from './NodeWrapper.svelte'
+	import { getStateColor, getStateHoverColor } from '../../util'
+	import type { ModuleN } from '../../graphBuilder.svelte'
+	import { jobToGraphModuleState } from '$lib/components/modulesTest.svelte'
+
+	interface Props {
+		data: ModuleN['data']
+	}
+
+	let { data }: Props = $props()
+
+	let state = $derived.by(() => {
+		return data.testModuleState
+			? (jobToGraphModuleState(data.testModuleState) ?? data.flowModuleState)
+			: data.flowModuleState
+	})
+
+	let flowJobs = $derived(
+		state?.flow_jobs
+			? {
+					flowJobs: state?.flow_jobs,
+					selected: state?.selectedForloopIndex ?? 0,
+					selectedManually: state?.selectedForLoopSetManually,
+					flowJobsSuccess: state?.flow_jobs_success
+				}
+			: (undefined as any)
+	)
+
+	let type = $derived.by(() => {
+		let typ = state?.type
+		if (!typ && flowJobs) {
+			return 'InProgress'
+		}
+		return typ
+	})
+</script>
+
+<NodeWrapper offset={data.offset}>
+	{#snippet children({ darkMode })}
+		{#if data.module.value.type == 'flow'}
+			<button
+				title="Expand subflow"
+				class="z-50 absolute -top-[10px] right-[25px] rounded-full h-[20px] w-[20px] center-center text-primary bg-surface duration-0 hover:bg-surface-hover"
+				onclick={stopPropagation(
+					preventDefault(() => {
+						if (data.module.value.type == 'flow') {
+							data.eventHandlers.expandSubflow(data.id, data.module.value.path)
+						}
+					})
+				)}
+			>
+				<Maximize2 size={12} />
+			</button>
+		{/if}
+		<MapItem
+			moduleId={data.id}
+			mod={data.module}
+			insertable={data.insertable}
+			editMode={data.editMode}
+			annotation={flowJobs &&
+			(data.module.value.type === 'forloopflow' || data.module.value.type === 'whileloopflow')
+				? 'Iteration: ' +
+					((state?.selectedForloopIndex ?? 0) >= 0
+						? (state?.selectedForloopIndex ?? 0) + 1
+						: state?.flow_jobs?.length) +
+					'/' +
+					(state?.iteration_total ?? '?')
+				: ''}
+			bgColor={getStateColor(data.editMode ? undefined : type, darkMode, true, state?.skipped)}
+			bgHoverColor={getStateHoverColor(
+				data.editMode ? undefined : type,
+				darkMode,
+				true,
+				state?.skipped
+			)}
+			moving={data.moving}
+			duration_ms={state?.duration_ms}
+			retries={state?.retries}
+			{flowJobs}
+			on:delete={(e) => {
+				data.eventHandlers.delete(e.detail, '')
+			}}
+			on:changeId={(e) => {
+				data.eventHandlers.changeId(e.detail)
+			}}
+			on:move={(e) => {
+				data.eventHandlers.move({ id: data.id })
+			}}
+			on:newBranch={(e) => {
+				data.eventHandlers.newBranch(data.id)
+			}}
+			onSelect={(e) => {
+				setTimeout(() => e && data.eventHandlers.select(e))
+			}}
+			onSelectedIteration={(e) => {
+				data.eventHandlers.selectedIteration(e)
+			}}
+			onTestUpTo={data.eventHandlers.testUpTo}
+			onUpdateMock={(detail) => {
+				data.eventHandlers.updateMock(detail)
+			}}
+			onEditInput={data.eventHandlers.editInput}
+			flowJob={data.flowJob}
+			isOwner={data.isOwner}
+			{type}
+			{darkMode}
+			skipped={state?.skipped}
+		/>
+
+		<div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2 z-10">
+			{#if (data.module.value.type === 'branchall' || data.module.value.type === 'branchone') && data.insertable}
+				<button
+					title="Add branch"
+					class="rounded text-secondary border hover:bg-surface-hover bg-surface p-1"
+					onclick={() => {
+						data?.eventHandlers?.newBranch(data.id)
+					}}
+				>
+					<GitBranchPlus size={16} />
+				</button>
+			{/if}
+		</div>
+	{/snippet}
+</NodeWrapper>

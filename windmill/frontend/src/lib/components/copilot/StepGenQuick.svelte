@@ -1,0 +1,89 @@
+<script lang="ts">
+	import { workspaceStore } from '$lib/stores'
+	import { ScriptService, type Script } from '$lib/gen'
+
+	import { Wand2, Loader2 } from 'lucide-svelte'
+	import SearchItems from '../SearchItems.svelte'
+	import { emptyString } from '$lib/utils'
+	import { createEventDispatcher, onMount, untrack } from 'svelte'
+
+	let scripts: Script[] | undefined = $state(undefined)
+	interface Props {
+		funcDesc: string
+		trigger?: boolean
+		loading?: boolean
+		preFilter: string
+		disableAi?: boolean
+		filteredItems?: (Script & { marked?: string })[] | (Item & { marked?: string })[]
+	}
+
+	let {
+		funcDesc = $bindable(),
+		trigger = false,
+		loading = false,
+		preFilter,
+		disableAi = false,
+		filteredItems = $bindable([])
+	}: Props = $props()
+	let prefilteredItems = $derived(scripts ?? [])
+
+	const dispatch = createEventDispatcher()
+
+	async function loadScripts(): Promise<void> {
+		const loadedScripts = await ScriptService.listScripts({
+			workspace: $workspaceStore!,
+			perPage: 300,
+			kinds: trigger ? 'trigger' : 'script'
+		})
+
+		scripts = loadedScripts
+	}
+
+	$effect(() => {
+		scripts == undefined && funcDesc?.length > 1 && untrack(() => loadScripts())
+	})
+
+	let input: HTMLInputElement | undefined = $state()
+
+	$effect(() => {
+		preFilter &&
+			setTimeout(() => {
+				input?.focus()
+			}, 50)
+	})
+
+	onMount(() => {
+		input?.focus()
+	})
+</script>
+
+<SearchItems
+	filter={funcDesc}
+	items={prefilteredItems}
+	bind:filteredItems
+	f={(x) => (emptyString(x.summary) ? x.path : x.summary + ' (' + x.path + ')')}
+/>
+
+<div class="relative text-primary items-center transition-all flex-grow">
+	<div class="grow items-cente">
+		<input
+			bind:this={input}
+			type="text"
+			onkeydown={(e) => {
+				if (e.key === 'Escape') {
+					dispatch('escape')
+				}
+			}}
+			bind:value={funcDesc}
+			placeholder="Search {trigger ? 'triggers' : 'scripts'} {disableAi ? '' : 'or AI gen'}"
+		/>
+	</div>
+	<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+		{#if loading}
+			<Loader2 size={16} class="animate-spin text-gray-400" />
+		{/if}
+		{#if funcDesc?.length === 0 && !loading && !disableAi}
+			<Wand2 size={14} class="fill-current opacity-70 text-violet-800 dark:text-violet-400" />
+		{/if}
+	</div>
+</div>

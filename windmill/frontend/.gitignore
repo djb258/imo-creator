@@ -1,0 +1,15 @@
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+/src/lib/gen
+.vite.temp.*.js
+CaddyfileRemoteRuben
+tests-out/
+storageState.json
+.env.production
+dist/
+static/tsdocs/
+static/ui_builder/
+ui_builder.tar.gz

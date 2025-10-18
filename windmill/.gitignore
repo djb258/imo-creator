@@ -1,0 +1,15 @@
+target/
+.DS_Store
+nohup.out
+local/
+frontend/src/routes/test.svelte
+CaddyfileRemoteMalo
+*.swp
+**/.idea/
+.direnv
+/.vscode
+.dev-docker-wrapper*
+backend/.minio-data
+.aider*
+!.aiderignore
+rust-client/Cargo.toml
