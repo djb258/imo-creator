@@ -13,7 +13,7 @@
       "Version tracking ensures compatibility across distributed repos"
     ]
   },
-  "engine_version": "1.2.0",
+  "engine_version": "1.3.0",
   "last_updated": "2025-10-18T00:00:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
@@ -197,6 +197,34 @@
         "python", "typescript", "bash", "go", "sql"
       ],
       "description": "Windmill developer platform - execute scripts, deploy apps, and orchestrate workflows with multi-language support"
+    },
+    {
+      "tool": "Anthropic_Claude_Skills",
+      "type": "MCP",
+      "endpoint": "composio://anthropic",
+      "doctrine_id": "04.04.10",
+      "status": "active",
+      "scope": "global",
+      "ctb_branch": "sys/claude-skills",
+      "toolkit_tools": [
+        "CLAUDE_ANALYZE", "CLAUDE_REASON", "CLAUDE_GENERATE",
+        "CLAUDE_REVIEW", "CLAUDE_PLAN", "CLAUDE_EXECUTE"
+      ],
+      "capabilities": [
+        "extended_context_processing",
+        "multi_step_reasoning",
+        "content_generation",
+        "code_review",
+        "task_planning",
+        "workflow_orchestration"
+      ],
+      "model": "claude-sonnet-4.5-20250929",
+      "max_tokens": 200000,
+      "required_env_vars": [
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_MODEL"
+      ],
+      "description": "Anthropic Claude Skills AI/SHQ reasoning layer - extended context, multi-step reasoning, and autonomous workflow execution"
     }
   ],
   "repo_usage": {

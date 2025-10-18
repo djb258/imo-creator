@@ -2,7 +2,7 @@
 
 ###############################################################################
 # CTB Doctrine Enforcement Script
-# Version: 1.0
+# Version: 1.3
 # Purpose: Enforce presence and health of required external repo branches
 # Usage: bash global-config/scripts/ctb_enforce.sh [--strict]
 ###############################################################################
@@ -80,6 +80,7 @@ REQUIRED_BRANCHES=(
   "sys/chartdb"
   "sys/activepieces"
   "sys/windmill"
+  "sys/claude-skills"
 )
 
 # Required MCP tools
@@ -87,8 +88,9 @@ declare -A REQUIRED_TOOLS
 REQUIRED_TOOLS["ChartDB"]="04.04.07"
 REQUIRED_TOOLS["Activepieces"]="04.04.08"
 REQUIRED_TOOLS["Windmill"]="04.04.09"
+REQUIRED_TOOLS["Anthropic_Claude_Skills"]="04.04.10"
 
-# Required ports
+# Required ports (Claude Skills uses global Composio endpoint)
 declare -A REQUIRED_PORTS
 REQUIRED_PORTS["ChartDB"]="5173"
 REQUIRED_PORTS["Activepieces"]="80"

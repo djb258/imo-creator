@@ -418,29 +418,33 @@ Repositories that **inherit** CTB structure.
 | `sys/chartdb` | github.com/djb258/chartdb | 04.04.07 | **REQUIRED** |
 | `sys/activepieces` | github.com/djb258/activepieces | 04.04.08 | **REQUIRED** |
 | `sys/windmill` | github.com/djb258/windmill | 04.04.09 | **REQUIRED** |
+| `sys/claude-skills` | Anthropic via Composio MCP | 04.04.10 | **REQUIRED** |
 
 ### Enforcement Actions
 
 The CTB enforcement system performs the following checks on every repo creation, update, or sync:
 
 1. **Branch Presence Check**
-   - Verifies all 3 required branches exist
+   - Verifies all 4 required branches exist
    - Validates branches contain actual code (not empty)
-   - Minimum 10 files per branch required
+   - Minimum 2 files per sys/claude-skills branch (claude.skills.md, claude.manifest.json)
 
 2. **MCP Registration Check**
    - Confirms all tools are registered in `config/mcp_registry.json`
-   - Validates correct doctrine IDs are assigned
+   - Validates correct doctrine IDs are assigned (04.04.07–10)
    - Ensures endpoints are configured
+   - Verifies Anthropic_Claude_Skills uses `composio://anthropic` endpoint
 
 3. **Port Health Check** (optional in standard mode)
    - ChartDB → localhost:5173
    - Activepieces → localhost:80
    - Windmill → localhost:8000
+   - Anthropic_Claude_Skills → Global Composio endpoint (no local port)
 
 4. **Configuration Validation**
    - Verifies `global-config/ctb.branchmap.yaml` includes all branches
    - Checks CTB_DOCTRINE.md is present and current
+   - Validates Anthropic is registered in Composio: `composio tools list | grep Anthropic`
 
 ### Running Enforcement Checks
 
@@ -801,6 +805,7 @@ git add . && git commit
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3 | 2025-10-18 | Added mandatory AI/SHQ reasoning layer — Anthropic Claude Skills (doctrine_id 04.04.10) |
 | 1.2 | 2025-10-18 | Added CTB Doctrine Enforcement System with automated checks, logging, and GitHub Actions |
 | 1.1 | 2025-10-18 | Added 3 new sys branches: chartdb, activepieces, windmill (18 total branches) |
 | 1.0 | 2025-10-09 | Initial CTB Doctrine implementation |
