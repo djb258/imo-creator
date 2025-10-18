@@ -1,0 +1,246 @@
+name: Security Lockdown Enforcement
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Security & Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive scanning
+
+      - name: Set up security scanning tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq git
+
+      - name: Make security script executable
+        run: chmod +x global-config/scripts/security_lockdown.sh
+
+      - name: Run Security Lockdown Scan
+        id: security_scan
+        run: |
+          bash global-config/scripts/security_lockdown.sh || echo "scan_failed=true" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Upload security audit log
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-audit-log
+          path: logs/security_audit.log
+          retention-days: 90  # Keep security logs for 90 days
+
+      - name: Scan for secrets with TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+
+      - name: Comment PR with security status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let logContent = 'Security audit log not found';
+            let status = '❌ FAILED';
+            let emoji = '🔒';
+
+            try {
+              logContent = fs.readFileSync('logs/security_audit.log', 'utf8');
+              const logData = JSON.parse(logContent);
+
+              status = logData.status === 'PASSED' ? '✅ PASSED' : '❌ FAILED';
+              emoji = logData.status === 'PASSED' ? '✅' : '🔒';
+
+              const comment = `## ${emoji} Security Lockdown Enforcement
+
+**Status:** ${status}
+**Repository:** ${logData.repo_id}
+**Timestamp:** ${logData.timestamp}
+**Policy:** ${logData.policy.toUpperCase()}
+
+### Scan Results:
+
+**Total Violations:** ${logData.violations.total}
+- Forbidden .env files: ${logData.violations.env_files}
+- Hardcoded secrets: ${logData.violations.hardcoded_secrets}
+
+**MCP Compliance:**
+- Config valid: ${logData.mcp_compliance.config_valid ? '✅' : '❌'}
+- Usage correct: ${logData.mcp_compliance.usage_correct ? '✅' : '❌'}
+
+${logData.status === 'FAILED' ? `
+### 🔒 SECURITY VIOLATIONS DETECTED
+
+**This PR is BLOCKED until security issues are resolved.**
+
+#### Required Actions:
+
+1. **Remove all .env files** - Use MCP vault instead
+2. **Remove hardcoded secrets** - Move to MCP environment registry
+3. **Update environment variable references:**
+   - ❌ \`process.env.DATABASE_URL\`
+   - ✅ \`\${MCP:DATABASE_URL}\`
+
+4. **Convert to MCP variable calls:**
+   - ❌ \`const apiKey = "sk_live_abc123"\`
+   - ✅ \`const apiKey = mcp.getVariable('API_KEY')\`
+
+#### Remediation:
+\`\`\`bash
+# Run security scan locally
+bash global-config/scripts/security_lockdown.sh
+
+# Fix violations, then re-commit
+git add -A
+git commit -m "🔒 Security: Remove local secrets, use MCP vault"
+\`\`\`
+
+**Zero Tolerance Policy:** No builds or deploys proceed with local secrets present.
+` : `
+### ✅ Security Scan Passed
+
+All security checks passed. No local secrets or forbidden files detected.
+This PR is clear for review and merge.
+
+**Best Practices Followed:**
+- ✅ No .env files in repository
+- ✅ No hardcoded secrets
+- ✅ Using MCP vault for credentials
+- ✅ Environment variables properly managed
+`}
+
+---
+*Security Lockdown Enforcement - Automated Scan*
+*Policy: Zero Tolerance for Local Secrets*
+`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not read or parse security log:', error);
+
+              // Post generic failure comment
+              const failureComment = `## 🔒 Security Lockdown Enforcement
+
+**Status:** ❌ SCAN FAILED
+
+Security scan could not complete. Please check the workflow logs for details.
+
+**Required:** All PRs must pass security scanning before merge.
+`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: failureComment
+              });
+            }
+
+      - name: Fail workflow if security violations detected
+        if: steps.security_scan.outputs.scan_failed == 'true'
+        run: |
+          echo "🔒 SECURITY_LOCKDOWN_TRIGGERED"
+          echo "Security violations detected. Build/deploy BLOCKED."
+          echo "Review security audit log for details."
+          exit 1
+
+      - name: Success notification
+        if: steps.security_scan.outputs.scan_failed != 'true'
+        run: |
+          echo "✅ Security scan passed"
+          echo "No local secrets or forbidden files detected."
+          echo "Repository is secure and ready for build/deploy."
+
+  check-git-secrets:
+    name: Check for Leaked Secrets in Git History
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install git-secrets
+        run: |
+          git clone https://github.com/awslabs/git-secrets.git
+          cd git-secrets
+          sudo make install
+
+      - name: Configure git-secrets patterns
+        run: |
+          git secrets --register-aws
+          git secrets --add 'api[_-]?key'
+          git secrets --add 'secret[_-]?key'
+          git secrets --add 'password\s*='
+          git secrets --add 'token\s*='
+          git secrets --add 'private[_-]?key'
+          git secrets --add 'access[_-]?token'
+          git secrets --add '-----BEGIN RSA PRIVATE KEY-----'
+          git secrets --add '-----BEGIN PRIVATE KEY-----'
+
+      - name: Scan git history for secrets
+        run: |
+          git secrets --scan-history || (echo "⚠️ Secrets detected in git history!" && exit 1)
+
+  mcp-vault-validation:
+    name: Validate MCP Vault Configuration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check MCP configuration files
+        run: |
+          echo "Validating MCP vault configuration..."
+
+          if [ ! -f "config/mcp_registry.json" ]; then
+            echo "❌ MCP registry not found"
+            exit 1
+          fi
+
+          if [ ! -f "config/mcp_endpoints.json" ]; then
+            echo "⚠️ MCP endpoints configuration not found"
+          fi
+
+          # Validate JSON structure
+          jq empty config/mcp_registry.json || (echo "❌ Invalid MCP registry JSON" && exit 1)
+
+          echo "✅ MCP configuration valid"
+
+      - name: Verify no hardcoded credentials in MCP config
+        run: |
+          echo "Checking MCP config for hardcoded secrets..."
+
+          # Check for actual secret values (not references)
+          if grep -iE '(sk_live_|sk_test_|-----BEGIN|postgres://[^$])' config/*.json; then
+            echo "❌ Hardcoded secrets found in MCP config files!"
+            echo "Use MCP variable references instead: \${MCP:VARIABLE_NAME}"
+            exit 1
+          fi
+
+          echo "✅ No hardcoded secrets in MCP configuration"
