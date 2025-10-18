@@ -53,7 +53,7 @@ The MCP server is automatically configured in `.vscode/settings.json`:
       "command": "python",
       "args": ["src/mcp_server.py"],
       "env": {
-        "BUILDER_IO_API_KEY": "9502e3493ccf42339f36d16b4a482c70"
+        "BUILDER_IO_API_KEY": "<your-builder-io-api-key>"
       }
     }
   }
@@ -134,7 +134,7 @@ python src/mcp_server.py
 Add to your `.env` file:
 ```bash
 # Builder.io Integration
-BUILDER_IO_API_KEY=9502e3493ccf42339f36d16b4a482c70
+BUILDER_IO_API_KEY=<your-builder-io-api-key>
 BUILDER_IO_SPACE_ID=your-space-id
 BUILDER_IO_MODEL_ID=your-model-id
 

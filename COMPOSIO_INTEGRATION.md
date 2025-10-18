@@ -151,8 +151,8 @@ curl -X POST http://localhost:8000/api/composio/million_verifier/tool \
 ### **Environment Variables (.env)**
 ```bash
 # LLM Provider Configuration
-ANTHROPIC_API_KEY=sk-ant-your-key-here
-OPENAI_API_KEY=sk-your-key-here
+ANTHROPIC_API_KEY=<your-api-key>
+OPENAI_API_KEY=<your-api-key>
 LLM_DEFAULT_PROVIDER=openai
 
 # HEIR/MCP Integration
@@ -176,7 +176,7 @@ ALLOW_ORIGIN=https://your-vercel-project.vercel.app
 PORT=7002
 
 # Composio Integration
-COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
+COMPOSIO_API_KEY=<your-composio-api-key>
 MCP_API_URL=https://backend.composio.dev
 ```
 
@@ -357,7 +357,7 @@ curl -X POST http://localhost:7001/mcp/test \
 
 # Test Composio integration
 curl -X GET https://backend.composio.dev/api/v3/connected_accounts \
-  -H "x-api-key: ak_t-F0AbvfZHUZSUrqAGNn"
+  -H "x-api-key: <your-composio-api-key>"
 ```
 
 ### **Test Component Generation**

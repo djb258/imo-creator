@@ -16,7 +16,7 @@ cd imo-creator
 1. Go to [vercel.com](https://vercel.com) and create new project
 2. Connect to your GitHub repo
 3. Set **only one environment variable**:
-   - `COMPOSIO_API_KEY` = `ak_t-F0AbvfZHUZSUrqAGNn`
+   - `COMPOSIO_API_KEY` = `<your-composio-api-key>`
 4. Deploy from `main` branch ✅
 
 ### 3. Deploy to Render
@@ -97,7 +97,7 @@ Edit `/branches/composio/mcp_registry.json` to:
 
 1. Check `/docs/composio_connection.md` for detailed setup
 2. Review `/docs/imo_architecture.md` for system overview
-3. Verify Composio API key is working: `curl -H "x-api-key: ak_t-F0AbvfZHUZSUrqAGNn" https://backend.composio.dev/api/v3/health`
+3. Verify Composio API key is working: `curl -H "x-api-key: <your-composio-api-key>" https://backend.composio.dev/api/v3/health`
 
 ## 🏆 Success Indicators
 

@@ -102,7 +102,7 @@ curl -X POST http://localhost:3001/tool \\
 
 ### 2. Direct Composio API
 ```javascript
-const client = new Composio('ak_t-F0AbvfZHUZSUrqAGNn');
+const client = new Composio('<your-composio-api-key>');
 const accounts = await client.connectedAccounts.list({});
 ```
 
@@ -143,7 +143,7 @@ node test-all-composio-tools.cjs
 
 # Test Google services specifically
 cd "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\scraping-tool\\imo-creator"
-COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn node test-google-services.js
+COMPOSIO_API_KEY=<your-composio-api-key> node test-google-services.js
 ```
 
 ### Start Services

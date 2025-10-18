@@ -41,7 +41,7 @@ curl https://imo-creator.vercel.app/branches/composio/mcp_registry.json
 ```
 
 ## Composio Integration
-- **API Key**: `ak_t-F0AbvfZHUZSUrqAGNn` (embedded in configs)
+- **API Key**: `<your-composio-api-key>` (embedded in configs)
 - **MCP Endpoint**: http://localhost:3001
 - **Tool Access**: All Composio tools accessible via `/api/composio/{tool}` routes
 
@@ -58,7 +58,7 @@ API_BASE_URL=http://localhost:3001/api
 FRONTEND_URL=https://imo-creator.vercel.app
 
 # Composio Integration
-COMPOSIO_API_KEY=ak_t-F0AbvfZHUZSUrqAGNn
+COMPOSIO_API_KEY=<your-composio-api-key>
 MCP_SERVER_URL=http://localhost:3001
 
 # CORS Configuration

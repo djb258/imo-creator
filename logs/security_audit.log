@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-10-18T14:00:13Z",
+  "repo_id": "imo-creator",
+  "scan_type": "security_lockdown",
+  "policy": "zero_tolerance",
+  "violations": {
+    "total": 0,
+    "env_files": 0,
+    "hardcoded_secrets": 0,
+    "violations_list": []
+  },
+  "mcp_compliance": {
+    "config_valid": true,
+    "usage_correct": false
+  },
+  "status": "PASSED"
+}

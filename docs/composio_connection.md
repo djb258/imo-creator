@@ -7,7 +7,7 @@ Composio serves as the primary integration hub for the IMO-Creator system, follo
 
 **🎯 ONLY ONE KEY REQUIRED:**
 
-- `COMPOSIO_API_KEY` - Your Composio API key for authentication (`ak_t-F0AbvfZHUZSUrqAGNn`)
+- `COMPOSIO_API_KEY` - Your Composio API key for authentication (`<your-composio-api-key>`)
 
 **All other configuration is pre-embedded in the repository:**
 

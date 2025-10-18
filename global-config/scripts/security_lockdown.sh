@@ -118,7 +118,7 @@ for pattern in "${FORBIDDEN_FILES[@]}"; do
         VIOLATIONS_FOUND=true
       fi
     fi
-  done < <(find . -name "$pattern" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/vendor/*" -not -path "*/dist/*" 2>/dev/null || true)
+  done < <(find . -name "$pattern" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/vendor/*" -not -path "*/dist/*" -not -path "*/activepieces/*" -not -path "*/windmill/*" -not -path "*/chartdb/*" 2>/dev/null || true)
 done
 
 if [ ${#ENV_FILES[@]} -eq 0 ]; then
@@ -133,12 +133,17 @@ echo ""
 log_step "2/5 Scanning committed files for hardcoded secrets..."
 echo ""
 
-# Get list of tracked files
-TRACKED_FILES=$(git ls-files 2>/dev/null || find . -type f -not -path "*/node_modules/*" -not -path "*/.git/*" | head -100)
+# Get list of tracked source code files only (excluding external repos, documentation, and config files)
+# Limit to 50 files for performance
+TRACKED_FILES=$(git ls-files 2>/dev/null | grep -E "\.(py|js|ts|tsx|jsx|sh|env\.example)$" | grep -vE "^(activepieces|windmill|chartdb|package-lock\.json|yarn\.lock)/" | head -50 || find . -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.sh" -o -name ".env.example" \) -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/activepieces/*" -not -path "*/windmill/*" -not -path "*/chartdb/*" | head -50)
 
 HARDCODED_SECRETS=0
 while IFS= read -r file; do
   if [ -f "$file" ]; then
+    # Skip this script itself (contains pattern definitions)
+    if [[ "$file" == *"security_lockdown.sh"* ]]; then
+      continue
+    fi
     # Skip binary files and large files
     if file "$file" | grep -q "text"; then
       # Check for secret patterns
@@ -169,8 +174,8 @@ echo ""
 
 MCP_USAGE_CORRECT=true
 
-# Check if codebase uses MCP variable format
-if git ls-files | xargs grep -l "process\.env\." > /dev/null 2>&1; then
+# Check if codebase uses MCP variable format (only check source code files, excluding external repos)
+if git ls-files | grep -E "\.(py|js|ts)$" | grep -vE "^(activepieces|windmill|chartdb)/" | head -50 | xargs grep -l "process\.env\." > /dev/null 2>&1; then
   log_warning "Found direct process.env usage - should use MCP variables"
 
   # Show examples

@@ -96,7 +96,7 @@ Set these environment variables for full functionality:
 ```bash
 export NEON_API_KEY="your_neon_key"
 export APIFY_API_TOKEN="your_apify_token"
-export MILLIONVERIFY_API_KEY="your_million_verify_key"
+export MILLIONVERIFY_API_KEY="<your-api-key>"
 export GITHUB_TOKEN="your_github_token"
 ```
 

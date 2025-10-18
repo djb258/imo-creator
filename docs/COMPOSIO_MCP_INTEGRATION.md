@@ -69,7 +69,7 @@ Located at: `config/mcp_endpoints.json`
       "health_check": "https://backend.composio.dev/health",
       "auth": {
         "type": "bearer",
-        "token": "oak_d4qEQhMSdWBgvAI3XELr",
+        "token": "<your-composio-api-key>",
         "header_name": "X-API-Key",
         "format": "{token}"
       },
@@ -100,7 +100,7 @@ Located at: `config/mcp_endpoints.json`
 ### Environment Variables
 ```bash
 # Required for all Composio operations
-COMPOSIO_API_KEY=oak_d4qEQhMSdWBgvAI3XELr
+COMPOSIO_API_KEY=<your-composio-api-key>
 
 # Optional: Override default endpoints
 COMPOSIO_BASE_URL=https://backend.composio.dev
@@ -111,12 +111,12 @@ COMPOSIO_API_VERSION=v1
 
 ### Bearer Token Format
 ```http
-X-API-Key: oak_d4qEQhMSdWBgvAI3XELr
+X-API-Key: <your-composio-api-key>
 Content-Type: application/json
 ```
 
 ### Token Validation
-The API key `oak_d4qEQhMSdWBgvAI3XELr` provides access to:
+The API key `<your-composio-api-key>` provides access to:
 - All Composio tools and integrations
 - Tool execution capabilities
 - Connection management
@@ -147,7 +147,7 @@ GET https://backend.composio.dev/health
 ```http
 GET https://backend.composio.dev/api/v1/tools
 Headers:
-  X-API-Key: oak_d4qEQhMSdWBgvAI3XELr
+  X-API-Key: <your-composio-api-key>
 ```
 **Response**: Array of all available Composio tools
 
@@ -155,7 +155,7 @@ Headers:
 ```http
 GET https://backend.composio.dev/api/v1/apps
 Headers:
-  X-API-Key: oak_d4qEQhMSdWBgvAI3XELr
+  X-API-Key: <your-composio-api-key>
 ```
 **Response**: Array of supported applications and services
 
@@ -163,7 +163,7 @@ Headers:
 ```http
 POST https://backend.composio.dev/api/v1/actions/execute
 Headers:
-  X-API-Key: oak_d4qEQhMSdWBgvAI3XELr
+  X-API-Key: <your-composio-api-key>
   Content-Type: application/json
 
 Body:
@@ -182,7 +182,7 @@ Body:
 ```http
 GET https://backend.composio.dev/api/v1/connections
 Headers:
-  X-API-Key: oak_d4qEQhMSdWBgvAI3XELr
+  X-API-Key: <your-composio-api-key>
 ```
 
 ## Usage Examples
@@ -193,7 +193,7 @@ import requests
 import json
 
 class ComposioMCPClient:
-    def __init__(self, api_key="oak_d4qEQhMSdWBgvAI3XELr"):
+    def __init__(self, api_key="<your-composio-api-key>"):
         self.base_url = "https://backend.composio.dev/api/v1"
         self.headers = {
             "X-API-Key": api_key,
@@ -244,7 +244,7 @@ result = client.execute_action("github_create_issue", {
 const axios = require('axios');
 
 class ComposioMCPClient {
-    constructor(apiKey = 'oak_d4qEQhMSdWBgvAI3XELr') {
+    constructor(apiKey = '<your-composio-api-key>') {
         this.baseURL = 'https://backend.composio.dev/api/v1';
         this.headers = {
             'X-API-Key': apiKey,
@@ -303,11 +303,11 @@ async function example() {
 ```bash
 # List available tools
 curl -X GET "https://backend.composio.dev/api/v1/tools" \
-  -H "X-API-Key: oak_d4qEQhMSdWBgvAI3XELr"
+  -H "X-API-Key: <your-composio-api-key>"
 
 # Execute GitHub action
 curl -X POST "https://backend.composio.dev/api/v1/actions/execute" \
-  -H "X-API-Key: oak_d4qEQhMSdWBgvAI3XELr" \
+  -H "X-API-Key: <your-composio-api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "actionId": "github_create_issue",
@@ -321,7 +321,7 @@ curl -X POST "https://backend.composio.dev/api/v1/actions/execute" \
 
 # List supported apps
 curl -X GET "https://backend.composio.dev/api/v1/apps" \
-  -H "X-API-Key: oak_d4qEQhMSdWBgvAI3XELr"
+  -H "X-API-Key: <your-composio-api-key>"
 ```
 
 ## Integration Patterns
@@ -385,7 +385,7 @@ def execute_with_retry(action_id, params, max_retries=3):
 #### 1. Authentication Failures
 **Error**: `401 Unauthorized` or `403 Forbidden`
 **Solution**:
-- Verify API key is correct: `oak_d4qEQhMSdWBgvAI3XELr`
+- Verify API key is correct: `<your-composio-api-key>`
 - Check header format: `X-API-Key: {token}`
 - Ensure no extra spaces or characters in token
 
@@ -419,7 +419,7 @@ python scripts/test_mcp_endpoints.py
 ```
 
 ### Debugging Checklist
-1. ✅ API key format: `oak_d4qEQhMSdWBgvAI3XELr`
+1. ✅ API key format: `<your-composio-api-key>`
 2. ✅ Base URL: `https://backend.composio.dev`
 3. ✅ Header format: `X-API-Key: {token}`
 4. ✅ Content-Type: `application/json`
@@ -532,7 +532,7 @@ This documentation provides everything needed for consistent Composio MCP integr
 
 **Key Points**:
 - Use `backend.composio.dev` for all endpoints
-- Always include `X-API-Key: oak_d4qEQhMSdWBgvAI3XELr` header
+- Always include `X-API-Key: <your-composio-api-key>` header
 - Implement proper error handling and retries
 - Validate configuration before deployment
 - Test endpoints after deployment
