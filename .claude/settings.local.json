@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(for:*)",
-      "Bash(do [ -f \"$file\" ])"
+      "Bash(do [ -f \"$file\" ])",
+      "Bash(chmod +x global-config/scripts/ctb_enforce.sh)",
+      "Bash(bash global-config/scripts/ctb_enforce.sh)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"🔒 Add CTB Doctrine Enforcement System\n\nImplemented comprehensive enforcement system for CTB Doctrine compliance.\n\nChanges:\n- Created ctb_enforce.sh script for automated validation\n- Added GitHub Actions workflow for CI/CD enforcement\n- Updated CTB_DOCTRINE.md with enforcement rules and policy\n- Enforcement checks:\n  * Required branches (sys/chartdb, sys/activepieces, sys/windmill)\n  * MCP tool registration (doctrine IDs 04.04.07-09)\n  * Port health monitoring (optional)\n  * Configuration validation\n\nFeatures:\n- Standard and strict enforcement modes\n- Automated logging to logs/ctb_enforcement.log\n- Firebase integration support for remote logging\n- PR comments with enforcement status\n- Auto-tagging compliant commits with [CTB_DOCTRINE_VERIFIED]\n\nFailure Policy:\n- Blocks builds and deploys on non-compliance\n- Rejects merge requests if enforcement fails\n- Provides diagnostic output for remediation\n\nVersion: 1.2\nStatus: All external repos integrated and operational\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": [],

@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-10-18T13:23:43Z",
+  "repo_id": "imo-creator",
+  "enforcement_mode": "STANDARD",
+  "status": "FAILED",
+  "checks": {
+    "branches": {
+      "required": 3,
+      "missing": 0,
+      "empty": 0,
+      "missing_list": ,
+      "empty_list": 
+    },
+    "mcp_tools": {
+      "required": 3,
+      "missing": 3,
+      "missing_list": 
+    },
+    "ports": {
+      "checked": 3,
+      "unhealthy": 0,
+      "unhealthy_list": 
+    }
+  }
+}

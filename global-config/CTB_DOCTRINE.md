@@ -407,6 +407,122 @@ Repositories that **inherit** CTB structure.
 
 ---
 
+## CTB Doctrine Enforcement
+
+### Mandatory External Repository Integration
+
+**CRITICAL**: All repositories following the Barton CTB Doctrine MUST include the following external repository integrations:
+
+| Branch | Repository | Doctrine ID | Status |
+|--------|-----------|-------------|--------|
+| `sys/chartdb` | github.com/djb258/chartdb | 04.04.07 | **REQUIRED** |
+| `sys/activepieces` | github.com/djb258/activepieces | 04.04.08 | **REQUIRED** |
+| `sys/windmill` | github.com/djb258/windmill | 04.04.09 | **REQUIRED** |
+
+### Enforcement Actions
+
+The CTB enforcement system performs the following checks on every repo creation, update, or sync:
+
+1. **Branch Presence Check**
+   - Verifies all 3 required branches exist
+   - Validates branches contain actual code (not empty)
+   - Minimum 10 files per branch required
+
+2. **MCP Registration Check**
+   - Confirms all tools are registered in `config/mcp_registry.json`
+   - Validates correct doctrine IDs are assigned
+   - Ensures endpoints are configured
+
+3. **Port Health Check** (optional in standard mode)
+   - ChartDB → localhost:5173
+   - Activepieces → localhost:80
+   - Windmill → localhost:8000
+
+4. **Configuration Validation**
+   - Verifies `global-config/ctb.branchmap.yaml` includes all branches
+   - Checks CTB_DOCTRINE.md is present and current
+
+### Running Enforcement Checks
+
+**Manual Enforcement:**
+```bash
+# Standard mode (recommended)
+bash global-config/scripts/ctb_enforce.sh
+
+# Strict mode (requires all ports healthy)
+bash global-config/scripts/ctb_enforce.sh --strict
+```
+
+**Automated Enforcement:**
+- Runs automatically on every push via GitHub Actions
+- Blocks merges if enforcement fails
+- Tags compliant commits with `[CTB_DOCTRINE_VERIFIED]`
+
+### Enforcement Logging
+
+All enforcement checks are logged to:
+- **Local**: `logs/ctb_enforcement.log`
+- **Firebase**: `ctb_enforcement_log` collection (if configured)
+
+Log format:
+```json
+{
+  "timestamp": "2025-10-18T00:00:00Z",
+  "repo_id": "repository-name",
+  "enforcement_mode": "STANDARD",
+  "status": "PASSED",
+  "checks": {
+    "branches": {
+      "required": 3,
+      "missing": 0,
+      "empty": 0
+    },
+    "mcp_tools": {
+      "required": 3,
+      "missing": 0
+    },
+    "ports": {
+      "checked": 3,
+      "unhealthy": 0
+    }
+  }
+}
+```
+
+### Failure Policy
+
+**If enforcement fails:**
+1. ❌ Build and deploy pipelines are **BLOCKED**
+2. ❌ Merge requests are **REJECTED**
+3. ❌ Status returns `CTB_ENFORCEMENT_FAILURE`
+4. 📊 Diagnostic output shows missing components
+
+**Remediation:**
+```bash
+# Option 1: Run initialization
+bash global-config/scripts/ctb_init.sh
+
+# Option 2: Update from IMO-Creator
+# (if in a different repo)
+bash global-config/scripts/update_from_imo_creator.sh
+
+# Option 3: Manually integrate missing repos
+git checkout sys/chartdb
+git clone https://github.com/djb258/chartdb.git
+# ... (repeat for other repos)
+
+# Verify fix
+bash global-config/scripts/ctb_enforce.sh
+```
+
+### Enforcement Exemptions
+
+**None.** All CTB repositories MUST comply. No exemptions are granted.
+
+If a repository cannot support these integrations due to technical constraints, it should not use the CTB Doctrine scaffold.
+
+---
+
 ## Troubleshooting
 
 ### Missing Branches
@@ -448,6 +564,8 @@ git add . && git commit
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2025-10-18 | Added CTB Doctrine Enforcement System with automated checks, logging, and GitHub Actions |
+| 1.1 | 2025-10-18 | Added 3 new sys branches: chartdb, activepieces, windmill (18 total branches) |
 | 1.0 | 2025-10-09 | Initial CTB Doctrine implementation |
 
 ---
