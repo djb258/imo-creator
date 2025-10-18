@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(for:*)",
-      "Bash(do [ -f \"$file\" ])"
+      "Bash(do [ -f \"$file\" ])",
+      "Bash(git clone https://github.com/djb258/activepieces.git temp-activepieces)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"📦 Import Activepieces external repository\n\nIntegrated Activepieces workflow automation platform into CTB branch.\n\nRepository: https://github.com/djb258/activepieces.git\nCTB Branch: sys/activepieces\nDoctrine ID: 04.04.08\nLocation: activepieces/\n\nThis branch now contains the full Activepieces codebase for no-code workflow\nautomation with 100+ integrations. The tool is accessible via Composio MCP\nserver at http://localhost:3001/tool\n\nCapabilities:\n- Workflow automation and orchestration\n- No-code automation builder\n- API integrations (100+ services)\n- Scheduled tasks and cron jobs\n- Webhook triggers\n- Flow execution and monitoring\n\nUpdated configuration files to reflect CTB expansion from 15 to 18 branches.\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": [],
