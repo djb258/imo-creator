@@ -8,7 +8,7 @@
       "args": ["src/mcp_server.py"],
       "cwd": "${workspaceFolder}",
       "env": {
-        "BUILDER_IO_API_KEY": "9502e3493ccf42339f36d16b4a482c70",
+        "BUILDER_IO_API_KEY": "${MCP:BUILDER_IO_API_KEY}",
         "MCP_SERVER_MODE": "vscode",
         "PORT": "7001"
       },
@@ -32,5 +32,57 @@
   },
   "mcp.enabledServers": ["imo-creator-composio"],
   "builder.io.mcpIntegration": true,
-  "builder.io.autoSyncWithMCP": true
+  "builder.io.autoSyncWithMCP": true,
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.pyc": true,
+    "**/node_modules": true,
+    "**/.git": false
+  },
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": false,
+  "python.defaultInterpreterPath": "python",
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/logs": true,
+    "**/.pytest_cache": true,
+    "**/htmlcov": true
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": false
+  }
 }

@@ -805,6 +805,7 @@ git add . && git commit
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.2 | 2025-10-18 | Phase 2 Enhancements: Added dev container configuration, VS Code settings/extensions, comprehensive troubleshooting guide, architecture documentation |
 | 1.3.1 | 2025-10-18 | Phase 1 Enhancements: Added testing infrastructure (pytest, GitHub Actions), integration READMEs for all sys/* branches, GitHub issue/PR templates, dev_setup.sh script |
 | 1.3 | 2025-10-18 | Added mandatory AI/SHQ reasoning layer — Anthropic Claude Skills (doctrine_id 04.04.10) |
 | 1.2 | 2025-10-18 | Added CTB Doctrine Enforcement System with automated checks, logging, and GitHub Actions |

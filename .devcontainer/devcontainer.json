@@ -1,0 +1,57 @@
+{
+  "name": "CTB Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "postCreateCommand": "bash global-config/scripts/dev_setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests"],
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "forwardPorts": [
+    3001,
+    5173,
+    8000,
+    8080
+  ],
+  "portsAttributes": {
+    "3001": {
+      "label": "Composio MCP Server",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "ChartDB",
+      "onAutoForward": "silent"
+    },
+    "8000": {
+      "label": "Windmill",
+      "onAutoForward": "silent"
+    },
+    "8080": {
+      "label": "Activepieces",
+      "onAutoForward": "silent"
+    }
+  },
+  "remoteUser": "vscode"
+}
