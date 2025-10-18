@@ -5,7 +5,10 @@
       "Bash(do [ -f \"$file\" ])",
       "Bash(git clone https://github.com/djb258/windmill.git temp-windmill)",
       "Bash(git add -A)",
-      "Bash(git commit -m \"📦 Import Windmill external repository\n\nIntegrated Windmill developer platform into CTB branch.\n\nRepository: https://github.com/djb258/windmill.git\nCTB Branch: sys/windmill\nDoctrine ID: 04.04.09\nLocation: windmill/\n\nThis branch now contains the full Windmill codebase for script execution,\napp deployment, and workflow orchestration. The tool is accessible via\nComposio MCP server at http://localhost:3001/tool\n\nCapabilities:\n- Script execution (Python, TypeScript, Bash, Go, SQL)\n- Workflow orchestration and automation\n- App deployment platform\n- Developer platform for internal tools\n- Job scheduling and resource management\n- Multi-language support\n\nUpdated configuration files to reflect CTB expansion from 15 to 18 branches.\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
+      "Bash(git commit -m \"📦 Import Windmill external repository\n\nIntegrated Windmill developer platform into CTB branch.\n\nRepository: https://github.com/djb258/windmill.git\nCTB Branch: sys/windmill\nDoctrine ID: 04.04.09\nLocation: windmill/\n\nThis branch now contains the full Windmill codebase for script execution,\napp deployment, and workflow orchestration. The tool is accessible via\nComposio MCP server at http://localhost:3001/tool\n\nCapabilities:\n- Script execution (Python, TypeScript, Bash, Go, SQL)\n- Workflow orchestration and automation\n- App deployment platform\n- Developer platform for internal tools\n- Job scheduling and resource management\n- Multi-language support\n\nUpdated configuration files to reflect CTB expansion from 15 to 18 branches.\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git checkout master)",
+      "Bash(git add .claude/settings.local.json)",
+      "Bash(git commit -m \"chore: update local settings\")"
     ],
     "deny": [],
     "ask": [],
