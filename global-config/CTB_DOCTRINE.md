@@ -61,7 +61,7 @@ Operations (5k) → UI (10k) → Business (20k) → Systems (40k) → Main (Trun
 
 ## Branch Structure
 
-### 40k Altitude: Doctrine Core (8 branches)
+### 40k Altitude: Doctrine Core (12 branches)
 
 Immutable infrastructure and global standards.
 
@@ -76,6 +76,9 @@ Immutable infrastructure and global standards.
 | `sys/github-factory` | CI/CD templates, automation | Moderate (1 review) |
 | `sys/builder-bridge` | Builder.io, Figma connectors | Moderate (1 review) |
 | `sys/security-audit` | Compliance, key rotation | Moderate (1 review) |
+| `sys/chartdb` | Database schema visualization | Moderate (1 review) |
+| `sys/activepieces` | Workflow automation platform | Moderate (1 review) |
+| `sys/windmill` | Developer platform for scripts/workflows | Moderate (1 review) |
 
 ### 20k Altitude: Business Logic (3 branches)
 
@@ -187,6 +190,39 @@ Automation and operational tooling.
 - `.env.example`
 - `VERCEL_ENVS.md`
 - Security policies
+
+</details>
+
+<details>
+<summary><strong>sys/chartdb</strong> - Database Schema Visualization</summary>
+
+- `chartdb/**`
+- `database/schema/**`
+- `db/visualization/**`
+- `*chartdb*.json`, `*chartdb*.yaml`
+- Database design tools
+
+</details>
+
+<details>
+<summary><strong>sys/activepieces</strong> - Workflow Automation</summary>
+
+- `activepieces/**`
+- `workflows/**`
+- `automation/flows/**`
+- `*activepieces*.json`, `*activepieces*.yaml`
+- Automation flow definitions
+
+</details>
+
+<details>
+<summary><strong>sys/windmill</strong> - Developer Platform</summary>
+
+- `windmill/**`
+- `scripts/windmill/**`
+- `apps/windmill/**`
+- `*windmill*.ts`, `*windmill*.json`
+- Script and workflow runners
 
 </details>
 
@@ -354,7 +390,7 @@ Three workflows maintain CTB compliance:
 
 ### All Repositories Must Have
 
-- ✅ All 15 CTB branches created
+- ✅ All 18 CTB branches created
 - ✅ `global-config/ctb.branchmap.yaml` present
 - ✅ `heir.doctrine.yaml` customized for repo
 - ✅ `.github/workflows/doctrine_sync.yml`
@@ -448,6 +484,7 @@ git add . && git commit
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2025-10-18 | Added 3 new sys branches: chartdb, activepieces, windmill (18 total branches) |
 | 1.0 | 2025-10-09 | Initial CTB Doctrine implementation |
 
 ---

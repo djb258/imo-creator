@@ -52,6 +52,9 @@ EXPECTED_BRANCHES=(
   "sys/github-factory"
   "sys/builder-bridge"
   "sys/security-audit"
+  "sys/chartdb"
+  "sys/activepieces"
+  "sys/windmill"
   "imo/input"
   "imo/middle"
   "imo/output"
@@ -125,7 +128,7 @@ log_info ""
 log_info "=== Summary ==="
 log_info ""
 
-log_info "Present branches: ${#PRESENT_BRANCHES[@]}/15"
+log_info "Present branches: ${#PRESENT_BRANCHES[@]}/18"
 log_info "Missing branches: ${#MISSING_BRANCHES[@]}"
 log_info "Missing files: ${#MISSING_FILES[@]}"
 

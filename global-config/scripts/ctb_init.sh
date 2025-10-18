@@ -80,7 +80,7 @@ fi
 
 # Define all CTB branches by altitude
 declare -A BRANCHES
-BRANCHES[40k]="doctrine/get-ingest sys/composio-mcp sys/neon-vault sys/firebase-workbench sys/bigquery-warehouse sys/github-factory sys/builder-bridge sys/security-audit"
+BRANCHES[40k]="doctrine/get-ingest sys/composio-mcp sys/neon-vault sys/firebase-workbench sys/bigquery-warehouse sys/github-factory sys/builder-bridge sys/security-audit sys/chartdb sys/activepieces sys/windmill"
 BRANCHES[20k]="imo/input imo/middle imo/output"
 BRANCHES[10k]="ui/figma-bolt ui/builder-templates"
 BRANCHES[5k]="ops/automation-scripts ops/report-builder"
@@ -139,6 +139,65 @@ EOF
   fi
 }
 
+# Function to populate branch with external repo content
+populate_external_repo() {
+  local branch_name=$1
+  local repo_url=$2
+  local target_dir=$3
+
+  if [ "$DRY_RUN" = true ]; then
+    log_info "Would populate $branch_name with content from $repo_url"
+    return 0
+  fi
+
+  log_info "Populating $branch_name with content from external repo..."
+
+  # Switch to the branch
+  git checkout "$branch_name" 2>/dev/null || return 1
+
+  # Create target directory if needed
+  mkdir -p "$target_dir"
+
+  # Clone the external repo into a temp directory
+  TEMP_DIR=$(mktemp -d)
+  if git clone "$repo_url" "$TEMP_DIR" 2>/dev/null; then
+    # Remove .git to avoid nested repos
+    rm -rf "$TEMP_DIR/.git"
+
+    # Copy content to target directory
+    cp -r "$TEMP_DIR/"* "$target_dir/" 2>/dev/null || true
+    cp -r "$TEMP_DIR/."* "$target_dir/" 2>/dev/null || true
+
+    # Clean up temp
+    rm -rf "$TEMP_DIR"
+
+    # Commit the external repo content
+    git add "$target_dir"
+    git commit -m "📦 Import external repo content from $repo_url
+
+External repository integrated into CTB branch: $branch_name
+Content location: $target_dir/
+
+This branch now contains the working codebase from the external repository
+and will be kept in sync with updates.
+" || log_warning "No changes to commit for $branch_name"
+
+    log_success "Populated $branch_name with external repo content"
+  else
+    log_error "Failed to clone $repo_url"
+    return 1
+  fi
+
+  # Return to previous branch
+  git checkout "$CURRENT_BRANCH" 2>/dev/null || git checkout main
+}
+
+# Define external repo mappings
+declare -A EXTERNAL_REPOS
+EXTERNAL_REPOS["sys/chartdb"]="https://github.com/djb258/chartdb.git:chartdb"
+EXTERNAL_REPOS["sys/activepieces"]="https://github.com/djb258/activepieces.git:activepieces"
+EXTERNAL_REPOS["sys/windmill"]="https://github.com/djb258/windmill.git:windmill"
+
 # Create branches by altitude
 log_info ""
 log_info "=== Creating CTB Branch Structure ==="
@@ -151,6 +210,21 @@ for altitude in "40k" "20k" "10k" "5k"; do
     create_branch "$branch" "$altitude"
   done
 
+  log_info ""
+done
+
+# Populate external repos
+log_info ""
+log_info "=== Populating External Repository Branches ==="
+log_info ""
+
+for branch_key in "${!EXTERNAL_REPOS[@]}"; do
+  mapping="${EXTERNAL_REPOS[$branch_key]}"
+  repo_url="${mapping%%:*}"
+  target_dir="${mapping##*:}"
+
+  log_info "📦 Processing: $branch_key"
+  populate_external_repo "$branch_key" "$repo_url" "$target_dir"
   log_info ""
 done
 

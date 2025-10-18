@@ -176,9 +176,10 @@ else
 
 Synchronized CTB (Christmas Tree Backbone) configuration:
 - Updated ctb.branchmap.yaml with latest branch definitions
-- Synced all 15 CTB branch structure
+- Synced all 18 CTB branch structure (including external repos)
 - Updated GitHub Actions workflows (doctrine_sync, ctb_health, audit)
 - Refreshed CTB initialization and verification scripts
+- Integrated external repositories: chartdb, activepieces, windmill
 
 Source: IMO-Creator (djb258/imo-creator)
 Synced: $TIMESTAMP
@@ -206,7 +207,7 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 echo -e "${CYAN}Repository:${NC}     $CURRENT_REPO_NAME"
 echo -e "${CYAN}Status:${NC}         ✅ Updated from IMO-Creator SOURCE"
-echo -e "${CYAN}CTB Branches:${NC}   $BRANCH_COUNT/15"
+echo -e "${CYAN}CTB Branches:${NC}   $BRANCH_COUNT/18"
 echo -e "${CYAN}Compliance:${NC}     ✅ Verified"
 echo -e "${CYAN}Timestamp:${NC}      $(date)"
 echo ""
