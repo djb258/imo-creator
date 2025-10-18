@@ -129,6 +129,7 @@ mkdir -p config
 # Copy CTB configuration files
 [ -f "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" ] && cp "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" "global-config/" && log_info "  ✓ ctb.branchmap.yaml"
 [ -f "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" ] && cp "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" "global-config/" && log_info "  ✓ CTB_DOCTRINE.md"
+[ -f "$IMO_CREATOR_PATH/global-config/ctb_version.json" ] && cp "$IMO_CREATOR_PATH/global-config/ctb_version.json" "global-config/" && log_info "  ✓ ctb_version.json (version tracking)"
 [ -f "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" ] && cp "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" "global-config/" && log_info "  ✓ branch_protection_config.json"
 
 # Copy MCP registry
@@ -330,12 +331,13 @@ echo -e "${CYAN}Updated:${NC}           $(date)"
 echo ""
 echo -e "${YELLOW}What was synced:${NC}"
 echo -e "  ${GREEN}✓${NC} CTB Doctrine configuration (v1.3.2)"
+echo -e "  ${GREEN}✓${NC} Version tracking system (ctb_version.json + auto-update script)"
 echo -e "  ${GREEN}✓${NC} All 19 CTB branches created/verified"
 echo -e "  ${GREEN}✓${NC} All 4 mandatory integration branches (04.04.07-10)"
 echo -e "  ${GREEN}✓${NC} Mandatory branch content (chartdb, activepieces, windmill, claude-skills)"
 echo -e "  ${GREEN}✓${NC} Testing infrastructure (pytest, coverage)"
 echo -e "  ${GREEN}✓${NC} Integration documentation (READMEs)"
-echo -e "  ${GREEN}✓${NC} GitHub templates (issues, PRs, workflows)"
+echo -e "  ${GREEN}✓${NC} GitHub templates (issues, PRs, workflows + auto-update)"
 echo -e "  ${GREEN}✓${NC} Dev container configuration"
 echo -e "  ${GREEN}✓${NC} VS Code settings and extensions"
 echo -e "  ${GREEN}✓${NC} Troubleshooting and architecture guides"
