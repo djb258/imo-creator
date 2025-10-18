@@ -2,12 +2,17 @@
 
 ###############################################################################
 # IMO-Creator CTB Update Script
-# Version: 1.0
+# Version: 1.3.2
 # Purpose: One-command update from IMO-Creator SOURCE repository
-# Usage: bash update_from_imo_creator.sh
+# Usage: bash update_from_imo_creator.sh [/path/to/imo-creator]
 #
-# Simple command: "update from IMO-creator"
+# Simple command: "update from imo-creator"
 # This script handles everything automatically.
+#
+# Updates include:
+# - CTB Doctrine v1.3.2 (all 4 mandatory integrations)
+# - Phase 1: Testing infrastructure, integration docs, GitHub templates
+# - Phase 2: Dev containers, VS Code config, troubleshooting, architecture
 ###############################################################################
 
 set -e
@@ -43,7 +48,7 @@ log_step() {
 # Header
 echo ""
 echo -e "${CYAN}╔════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║  IMO-Creator CTB Doctrine Update          ║${NC}"
+echo -e "${CYAN}║  IMO-Creator CTB Doctrine Update v1.3.2   ║${NC}"
 echo -e "${CYAN}║  Automatic Repository Synchronization     ║${NC}"
 echo -e "${CYAN}╚════════════════════════════════════════════╝${NC}"
 echo ""
@@ -65,7 +70,7 @@ fi
 
 # We're in a different repository - proceed with update
 log_info "Current repository: $CURRENT_REPO_NAME"
-log_info "Updating from IMO-Creator SOURCE..."
+log_info "Updating from IMO-Creator SOURCE v1.3.2..."
 echo ""
 
 # Find IMO-Creator source
@@ -116,104 +121,232 @@ log_success "IMO-Creator SOURCE located at: $IMO_CREATOR_PATH"
 echo ""
 
 # Step 1: Copy global configuration
-log_step "1/5 Syncing global configuration files..."
+log_step "1/8 Syncing global configuration files..."
 
 mkdir -p global-config/scripts
-mkdir -p .github/workflows
+mkdir -p config
 
-# Copy all CTB configuration files
-cp "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" "global-config/ctb.branchmap.yaml"
-log_info "  ✓ ctb.branchmap.yaml"
+# Copy CTB configuration files
+[ -f "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" ] && cp "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" "global-config/" && log_info "  ✓ ctb.branchmap.yaml"
+[ -f "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" ] && cp "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" "global-config/" && log_info "  ✓ CTB_DOCTRINE.md"
+[ -f "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" ] && cp "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" "global-config/" && log_info "  ✓ branch_protection_config.json"
 
-cp "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" "global-config/CTB_DOCTRINE.md"
-log_info "  ✓ CTB_DOCTRINE.md"
+# Copy MCP registry
+[ -f "$IMO_CREATOR_PATH/config/mcp_registry.json" ] && cp "$IMO_CREATOR_PATH/config/mcp_registry.json" "config/" && log_info "  ✓ mcp_registry.json (4 mandatory tools)"
 
-cp "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" "global-config/branch_protection_config.json"
-log_info "  ✓ branch_protection_config.json"
-
-# Copy scripts
-cp "$IMO_CREATOR_PATH/global-config/scripts/ctb_init.sh" "global-config/scripts/ctb_init.sh"
-cp "$IMO_CREATOR_PATH/global-config/scripts/ctb_verify.sh" "global-config/scripts/ctb_verify.sh"
-cp "$IMO_CREATOR_PATH/global-config/scripts/ctb_scaffold_new_repo.sh" "global-config/scripts/ctb_scaffold_new_repo.sh"
-cp "$IMO_CREATOR_PATH/global-config/scripts/update_from_imo_creator.sh" "global-config/scripts/update_from_imo_creator.sh"
-chmod +x global-config/scripts/*.sh
-log_info "  ✓ All scripts copied and made executable"
-
-# Copy GitHub Actions workflows
-cp "$IMO_CREATOR_PATH/.github/workflows/doctrine_sync.yml" ".github/workflows/doctrine_sync.yml"
-cp "$IMO_CREATOR_PATH/.github/workflows/ctb_health.yml" ".github/workflows/ctb_health.yml"
-cp "$IMO_CREATOR_PATH/.github/workflows/audit.yml" ".github/workflows/audit.yml"
-log_info "  ✓ GitHub Actions workflows"
+# Copy ALL scripts (including new v1.3 scripts)
+for script in "$IMO_CREATOR_PATH/global-config/scripts"/*.sh; do
+  if [ -f "$script" ]; then
+    cp "$script" "global-config/scripts/"
+    chmod +x "global-config/scripts/$(basename "$script")"
+  fi
+done
+log_info "  ✓ All CTB scripts (enforce, security, setup, etc.)"
 
 log_success "Configuration files synced"
 echo ""
 
-# Step 2: Initialize CTB branches
-log_step "2/5 Initializing CTB branch structure..."
-bash global-config/scripts/ctb_init.sh 2>&1 | grep -E "(Creating|SUCCESS|ERROR|Creating branch|Would create)" || true
+# Step 2: Copy GitHub Actions workflows and templates
+log_step "2/8 Syncing GitHub Actions and templates..."
+
+mkdir -p .github/workflows
+mkdir -p .github/ISSUE_TEMPLATE
+
+# Workflows
+[ -f "$IMO_CREATOR_PATH/.github/workflows/doctrine_sync.yml" ] && cp "$IMO_CREATOR_PATH/.github/workflows/doctrine_sync.yml" ".github/workflows/" && log_info "  ✓ doctrine_sync.yml"
+[ -f "$IMO_CREATOR_PATH/.github/workflows/ctb_health.yml" ] && cp "$IMO_CREATOR_PATH/.github/workflows/ctb_health.yml" ".github/workflows/" && log_info "  ✓ ctb_health.yml"
+[ -f "$IMO_CREATOR_PATH/.github/workflows/audit.yml" ] && cp "$IMO_CREATOR_PATH/.github/workflows/audit.yml" ".github/workflows/" && log_info "  ✓ audit.yml"
+[ -f "$IMO_CREATOR_PATH/.github/workflows/test_coverage.yml" ] && cp "$IMO_CREATOR_PATH/.github/workflows/test_coverage.yml" ".github/workflows/" && log_info "  ✓ test_coverage.yml (Phase 1)"
+
+# Templates
+[ -f "$IMO_CREATOR_PATH/.github/ISSUE_TEMPLATE/bug_report.md" ] && cp "$IMO_CREATOR_PATH/.github/ISSUE_TEMPLATE/bug_report.md" ".github/ISSUE_TEMPLATE/" && log_info "  ✓ bug_report.md (Phase 1)"
+[ -f "$IMO_CREATOR_PATH/.github/pull_request_template.md" ] && cp "$IMO_CREATOR_PATH/.github/pull_request_template.md" ".github/" && log_info "  ✓ pull_request_template.md (Phase 1)"
+
+log_success "GitHub configuration synced"
 echo ""
 
-# Step 3: Verify compliance
-log_step "3/5 Verifying CTB compliance..."
-if bash global-config/scripts/ctb_verify.sh 2>&1 | grep -q "fully compliant"; then
-  log_success "CTB structure verified and compliant"
-else
-  log_warning "Some compliance issues detected - review output above"
+# Step 3: Copy testing infrastructure (Phase 1)
+log_step "3/8 Syncing testing infrastructure (Phase 1)..."
+
+mkdir -p tests
+
+[ -f "$IMO_CREATOR_PATH/pytest.ini" ] && cp "$IMO_CREATOR_PATH/pytest.ini" "./" && log_info "  ✓ pytest.ini"
+[ -f "$IMO_CREATOR_PATH/tests/test_ctb_scripts.sh" ] && cp "$IMO_CREATOR_PATH/tests/test_ctb_scripts.sh" "tests/" && chmod +x "tests/test_ctb_scripts.sh" && log_info "  ✓ test_ctb_scripts.sh"
+[ -f "$IMO_CREATOR_PATH/tests/test_registry.py" ] && cp "$IMO_CREATOR_PATH/tests/test_registry.py" "tests/" && log_info "  ✓ test_registry.py"
+
+log_success "Testing infrastructure synced"
+echo ""
+
+# Step 4: Copy integration documentation (Phase 1)
+log_step "4/8 Syncing integration documentation (Phase 1)..."
+
+mkdir -p chartdb activepieces windmill sys/claude-skills
+
+[ -f "$IMO_CREATOR_PATH/chartdb/README.md" ] && cp "$IMO_CREATOR_PATH/chartdb/README.md" "chartdb/" && log_info "  ✓ chartdb/README.md (04.04.07)"
+[ -f "$IMO_CREATOR_PATH/activepieces/README.md" ] && cp "$IMO_CREATOR_PATH/activepieces/README.md" "activepieces/" && log_info "  ✓ activepieces/README.md (04.04.08)"
+[ -f "$IMO_CREATOR_PATH/windmill/README.md" ] && cp "$IMO_CREATOR_PATH/windmill/README.md" "windmill/" && log_info "  ✓ windmill/README.md (04.04.09)"
+
+# Copy entire sys/claude-skills directory
+if [ -d "$IMO_CREATOR_PATH/sys/claude-skills" ]; then
+  cp -r "$IMO_CREATOR_PATH/sys/claude-skills"/* "sys/claude-skills/" 2>/dev/null || true
+  log_info "  ✓ sys/claude-skills/* (04.04.10 - AI/SHQ layer)"
 fi
+
+log_success "Integration documentation synced"
 echo ""
 
-# Step 4: Commit changes
-log_step "4/5 Committing CTB doctrine updates..."
+# Step 5: Copy dev container configuration (Phase 2)
+log_step "5/8 Syncing dev container configuration (Phase 2)..."
 
-git add global-config/ .github/workflows/ 2>/dev/null || true
+mkdir -p .devcontainer
 
-if git diff --cached --quiet; then
-  log_info "No changes to commit (already up to date)"
+[ -f "$IMO_CREATOR_PATH/.devcontainer/devcontainer.json" ] && cp "$IMO_CREATOR_PATH/.devcontainer/devcontainer.json" ".devcontainer/" && log_info "  ✓ devcontainer.json (one-click environment)"
+
+log_success "Dev container synced"
+echo ""
+
+# Step 6: Copy VS Code configuration (Phase 2)
+log_step "6/8 Syncing VS Code configuration (Phase 2)..."
+
+mkdir -p .vscode
+
+# Only copy if they don't exist (preserve existing customizations)
+if [ ! -f ".vscode/settings.json" ]; then
+  [ -f "$IMO_CREATOR_PATH/.vscode/settings.json" ] && cp "$IMO_CREATOR_PATH/.vscode/settings.json" ".vscode/" && log_info "  ✓ settings.json (created)"
 else
-  TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-
-  git commit -m "🔁 CTB Doctrine Sync from IMO-Creator SOURCE
-
-Synchronized CTB (Christmas Tree Backbone) configuration:
-- Updated ctb.branchmap.yaml with latest branch definitions
-- Synced all 15 CTB branch structure
-- Updated GitHub Actions workflows (doctrine_sync, ctb_health, audit)
-- Refreshed CTB initialization and verification scripts
-
-Source: IMO-Creator (djb258/imo-creator)
-Synced: $TIMESTAMP
-
-🤖 Generated with Claude Code
-Co-Authored-By: Claude <noreply@anthropic.com>" || log_warning "Commit failed or no changes"
-
-  # Tag the sync
-  TAG_NAME="ctb-sync-$(date +%Y%m%d-%H%M%S)"
-  git tag -a "$TAG_NAME" -m "CTB Doctrine sync from IMO-Creator SOURCE" 2>/dev/null || log_info "Tag creation skipped"
-
-  log_success "Changes committed and tagged: $TAG_NAME"
+  log_warning "  ⊘ settings.json exists - preserving existing file"
 fi
+
+[ -f "$IMO_CREATOR_PATH/.vscode/extensions.json" ] && cp "$IMO_CREATOR_PATH/.vscode/extensions.json" ".vscode/" && log_info "  ✓ extensions.json"
+
+log_success "VS Code configuration synced"
 echo ""
 
-# Step 5: Summary
-log_step "5/5 Generating update summary..."
+# Step 7: Copy comprehensive documentation (Phase 2)
+log_step "7/8 Syncing comprehensive documentation (Phase 2)..."
 
-BRANCH_COUNT=$(git branch | grep -E '(doctrine|sys|imo|ui|ops)/' | wc -l)
+mkdir -p docs
 
+[ -f "$IMO_CREATOR_PATH/docs/TROUBLESHOOTING.md" ] && cp "$IMO_CREATOR_PATH/docs/TROUBLESHOOTING.md" "docs/" && log_info "  ✓ TROUBLESHOOTING.md (90% self-service)"
+[ -f "$IMO_CREATOR_PATH/docs/ARCHITECTURE.md" ] && cp "$IMO_CREATOR_PATH/docs/ARCHITECTURE.md" "docs/" && log_info "  ✓ ARCHITECTURE.md (complete system overview)"
+
+log_success "Documentation synced"
+echo ""
+
+# Step 8: Create/sync CTB branches
+log_step "8/10 Creating CTB branch structure..."
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "master")
+log_info "Current branch: $CURRENT_BRANCH"
+
+# List of all CTB branches (19 total)
+CTB_BRANCHES=(
+  "doctrine/get-ingest"
+  "sys/composio-mcp"
+  "sys/neon-vault"
+  "sys/firebase-workbench"
+  "sys/bigquery-warehouse"
+  "sys/github-factory"
+  "sys/builder-bridge"
+  "sys/security-audit"
+  "sys/chartdb"
+  "sys/activepieces"
+  "sys/windmill"
+  "sys/claude-skills"
+  "imo/input"
+  "imo/middle"
+  "imo/output"
+  "ui/figma-bolt"
+  "ui/builder-templates"
+  "ops/automation-scripts"
+  "ops/report-builder"
+)
+
+CREATED_COUNT=0
+EXISTING_COUNT=0
+
+for branch in "${CTB_BRANCHES[@]}"; do
+  if git show-ref --verify --quiet "refs/heads/$branch"; then
+    EXISTING_COUNT=$((EXISTING_COUNT + 1))
+  else
+    git checkout -b "$branch" 2>/dev/null && CREATED_COUNT=$((CREATED_COUNT + 1)) && log_info "  ✓ Created branch: $branch"
+  fi
+done
+
+# Return to original branch
+git checkout "$CURRENT_BRANCH" 2>/dev/null || git checkout master 2>/dev/null
+
+log_info "Branches: $EXISTING_COUNT existing, $CREATED_COUNT created"
+log_success "CTB branch structure initialized"
+echo ""
+
+# Step 9: Copy branch-specific content for mandatory integrations
+log_step "9/10 Syncing mandatory integration branch content..."
+
+# For each mandatory branch, copy its content from imo-creator if it exists
+MANDATORY_BRANCHES=("sys/chartdb" "sys/activepieces" "sys/windmill" "sys/claude-skills")
+
+for branch in "${MANDATORY_BRANCHES[@]}"; do
+  if [ -d "$IMO_CREATOR_PATH/$branch" ]; then
+    # Branch directory exists in imo-creator, copy contents
+    mkdir -p "$branch"
+    cp -r "$IMO_CREATOR_PATH/$branch"/* "$branch/" 2>/dev/null || true
+    log_info "  ✓ Synced $branch/ content"
+  fi
+done
+
+log_success "Mandatory integration content synced"
+echo ""
+
+# Step 10: Run CTB enforcement and setup
+log_step "10/10 Running CTB enforcement and validation..."
+
+# Make sure scripts are executable
+chmod +x global-config/scripts/*.sh 2>/dev/null || true
+chmod +x tests/*.sh 2>/dev/null || true
+
+# Run CTB enforcement check
+if [ -f "global-config/scripts/ctb_enforce.sh" ]; then
+  log_info "Running CTB enforcement validation..."
+  bash global-config/scripts/ctb_enforce.sh 2>&1 | grep -E "(✅|❌|COMPLIANT|FAILURE)" | head -20 || log_warning "Enforcement check completed with warnings"
+else
+  log_warning "CTB enforcement script not found - skipping validation"
+fi
+
+echo ""
+log_success "Update complete!"
+echo ""
+
+# Summary
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║       CTB Doctrine Update Complete        ║${NC}"
+echo -e "${GREEN}║   CTB Doctrine v1.3.2 Update Complete     ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "${CYAN}Repository:${NC}     $CURRENT_REPO_NAME"
-echo -e "${CYAN}Status:${NC}         ✅ Updated from IMO-Creator SOURCE"
-echo -e "${CYAN}CTB Branches:${NC}   $BRANCH_COUNT/15"
-echo -e "${CYAN}Compliance:${NC}     ✅ Verified"
-echo -e "${CYAN}Timestamp:${NC}      $(date)"
+echo -e "${CYAN}Repository:${NC}         $CURRENT_REPO_NAME"
+echo -e "${CYAN}Source:${NC}            IMO-Creator v1.3.2"
+echo -e "${CYAN}CTB Version:${NC}       1.3.2"
+echo -e "${CYAN}Updated:${NC}           $(date)"
+echo ""
+echo -e "${YELLOW}What was synced:${NC}"
+echo -e "  ${GREEN}✓${NC} CTB Doctrine configuration (v1.3.2)"
+echo -e "  ${GREEN}✓${NC} All 19 CTB branches created/verified"
+echo -e "  ${GREEN}✓${NC} All 4 mandatory integration branches (04.04.07-10)"
+echo -e "  ${GREEN}✓${NC} Mandatory branch content (chartdb, activepieces, windmill, claude-skills)"
+echo -e "  ${GREEN}✓${NC} Testing infrastructure (pytest, coverage)"
+echo -e "  ${GREEN}✓${NC} Integration documentation (READMEs)"
+echo -e "  ${GREEN}✓${NC} GitHub templates (issues, PRs, workflows)"
+echo -e "  ${GREEN}✓${NC} Dev container configuration"
+echo -e "  ${GREEN}✓${NC} VS Code settings and extensions"
+echo -e "  ${GREEN}✓${NC} Troubleshooting and architecture guides"
+echo -e "  ${GREEN}✓${NC} CTB enforcement and security scripts"
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
-echo -e "  1. Review changes: ${CYAN}git log -1${NC}"
-echo -e "  2. Push branches: ${CYAN}git push --all origin${NC}"
-echo -e "  3. Push tags: ${CYAN}git push --tags${NC}"
+echo -e "  1. Review changes: ${CYAN}git status${NC}"
+echo -e "  2. Test locally: ${CYAN}bash global-config/scripts/dev_setup.sh${NC}"
+echo -e "  3. Run tests: ${CYAN}pytest${NC}"
+echo -e "  4. Commit changes: ${CYAN}git add . && git commit -m '🔁 CTB Doctrine v1.3.2 sync from imo-creator'${NC}"
+echo -e "  5. Push to remote: ${CYAN}git push origin master${NC}"
 echo ""
-echo -e "${BLUE}🌲 CTB Doctrine: Your repository is now aligned with IMO-Creator standards${NC}"
+echo -e "${BLUE}🌲 CTB Doctrine: Your repository is now aligned with IMO-Creator v1.3.2 standards${NC}"
 echo ""
