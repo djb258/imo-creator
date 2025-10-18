@@ -13,8 +13,8 @@
       "Version tracking ensures compatibility across distributed repos"
     ]
   },
-  "engine_version": "1.0.0",
-  "last_updated": "2025-09-26T12:30:00Z",
+  "engine_version": "1.2.0",
+  "last_updated": "2025-10-18T00:00:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
     "backend": "http://localhost:3001/tool",
@@ -129,6 +129,74 @@
         "key_location": "query"
       },
       "description": "Million Verifier email validation service for single and batch email verification"
+    },
+    {
+      "tool": "ChartDB",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.07",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/chartdb.git",
+      "ctb_branch": "sys/chartdb",
+      "toolkit_tools": [
+        "GENERATE_SCHEMA_DIAGRAM", "EXPORT_DDL", "IMPORT_DATABASE",
+        "VISUALIZE_RELATIONSHIPS", "COMPARE_SCHEMAS", "GENERATE_DOCS"
+      ],
+      "capabilities": [
+        "database_schema_visualization",
+        "entity_relationship_diagrams",
+        "ddl_generation",
+        "schema_comparison",
+        "database_documentation"
+      ],
+      "description": "ChartDB database schema visualization tool - create, visualize, and export database schemas with ER diagrams"
+    },
+    {
+      "tool": "Activepieces",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.08",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/activepieces.git",
+      "ctb_branch": "sys/activepieces",
+      "toolkit_tools": [
+        "CREATE_FLOW", "EXECUTE_FLOW", "LIST_FLOWS", "UPDATE_FLOW",
+        "DELETE_FLOW", "GET_FLOW_RUNS", "TRIGGER_WEBHOOK", "SCHEDULE_FLOW"
+      ],
+      "capabilities": [
+        "workflow_automation",
+        "no_code_automation",
+        "api_integrations",
+        "scheduled_tasks",
+        "webhook_triggers",
+        "flow_orchestration"
+      ],
+      "description": "Activepieces workflow automation platform - build and execute no-code automation flows with 100+ integrations"
+    },
+    {
+      "tool": "Windmill",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.09",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/windmill.git",
+      "ctb_branch": "sys/windmill",
+      "toolkit_tools": [
+        "RUN_SCRIPT", "DEPLOY_APP", "CREATE_FLOW", "SCHEDULE_TASK",
+        "LIST_SCRIPTS", "GET_LOGS", "MANAGE_VARIABLES", "EXECUTE_WORKFLOW"
+      ],
+      "capabilities": [
+        "script_execution",
+        "workflow_orchestration",
+        "app_deployment",
+        "developer_platform",
+        "job_scheduling",
+        "resource_management"
+      ],
+      "integration_languages": [
+        "python", "typescript", "bash", "go", "sql"
+      ],
+      "description": "Windmill developer platform - execute scripts, deploy apps, and orchestrate workflows with multi-language support"
     }
   ],
   "repo_usage": {
