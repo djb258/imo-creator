@@ -28,11 +28,51 @@
         "sync_figma_design",
         "validate_heir_compliance"
       ]
+    },
+    "deepseek-agent": {
+      "name": "DeepSeek AI Agent",
+      "description": "DeepSeek AI agent for intelligent code assistance and analysis",
+      "command": "node",
+      "args": ["${workspaceFolder}/extensions/deepseek-agent/src/mcpServer.js"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DEEPSEEK_API_KEY": "${MCP:DEEPSEEK_API_KEY}",
+        "MCP_SERVER_MODE": "vscode",
+        "PORT": "7002"
+      },
+      "tools": [
+        "deepseek_chat",
+        "deepseek_code_completion",
+        "deepseek_code_analysis",
+        "deepseek_refactor",
+        "deepseek_generate_tests"
+      ],
+      "resources": [
+        "deepseek://chat/*",
+        "deepseek://completions/*",
+        "deepseek://analysis/*"
+      ],
+      "prompts": [
+        "explain_code",
+        "refactor_code",
+        "generate_tests",
+        "fix_bugs",
+        "optimize_code"
+      ]
     }
   },
-  "mcp.enabledServers": ["imo-creator-composio"],
+  "mcp.enabledServers": ["imo-creator-composio", "deepseek-agent"],
   "builder.io.mcpIntegration": true,
   "builder.io.autoSyncWithMCP": true,
+  "deepseek.apiKey": "",
+  "deepseek.apiEndpoint": "https://api.deepseek.com/v1",
+  "deepseek.model": "deepseek-chat",
+  "deepseek.temperature": 0.7,
+  "deepseek.maxTokens": 4096,
+  "deepseek.enableMCP": true,
+  "deepseek.mcpPort": 7002,
+  "deepseek.autoSuggest": false,
+  "deepseek.contextWindow": 10,
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
@@ -83,6 +123,10 @@
   },
   "[markdown]": {
     "editor.wordWrap": "on",
-    "editor.quickSuggestions": false
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
   }
 }
