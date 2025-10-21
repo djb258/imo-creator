@@ -46,6 +46,7 @@ bash global-config/scripts/update_from_imo_creator.sh /path/to/imo-creator
 - Copies latest `global-config/CTB_DOCTRINE.md`
 - Copies all scripts (ctb_init.sh, ctb_verify.sh, etc.)
 - Copies GitHub Actions workflows
+- **Syncs `libs/imo_tools/**` (modular toolbox with all new tools)**
 
 **3. Branch Creation Phase**
 - Creates any missing CTB branches:

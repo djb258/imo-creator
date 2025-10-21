@@ -207,6 +207,7 @@ Automation and operational tooling.
 - `src/models.py`
 - `main.py`
 - `tools/blueprint_*.py`
+- `libs/imo_tools/**` (shared modular toolbox)
 
 </details>
 
@@ -215,7 +216,32 @@ Automation and operational tooling.
 
 - `docs/blueprints/**`
 - `index.html`
+- `libs/imo_tools/**` (shared modular toolbox)
 - Export generators
+
+</details>
+
+<details>
+<summary><strong>libs/imo_tools</strong> - Shared Modular Toolbox</summary>
+
+**Auto-propagated to all child repositories**
+
+Lightweight, AI-ready tools for common IMO Factory operations:
+- `base_tool.py` - Base class with logging and version tracking
+- `parser_tool.py` - AI-heavy parsing for unstructured data (PDFs, text)
+- `api_mapper_tool.py` - API documentation analysis and schema mapping
+- `csv_mapper_tool.py` - CSV/Excel normalization and schema alignment
+- `composio_client_tool.py` - (Future) Shared MCP connection wrapper
+
+**Usage:**
+```python
+from libs.imo_tools import ParserTool, APIMapperTool, CSVMapperTool
+
+parser = ParserTool(tool_name="MyParser", version="0.1.0")
+result = parser.run(raw_input="unstructured data...")
+```
+
+**Update Behavior:** When you run `update from imo-creator`, all new tools are automatically synced to child repositories.
 
 </details>
 

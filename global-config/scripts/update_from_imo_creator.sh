@@ -234,6 +234,30 @@ mkdir -p docs
 log_success "Documentation synced"
 echo ""
 
+# Step 7.5: Copy imo_tools library (modular toolbox)
+log_step "7.5/10 Syncing imo_tools library (modular toolbox)..."
+
+mkdir -p libs/imo_tools
+
+# Copy the entire imo_tools library
+if [ -d "$IMO_CREATOR_PATH/libs/imo_tools" ]; then
+  # Copy all Python files from imo_tools
+  for tool_file in "$IMO_CREATOR_PATH/libs/imo_tools"/*.py; do
+    if [ -f "$tool_file" ]; then
+      cp "$tool_file" "libs/imo_tools/"
+      log_info "  ✓ $(basename "$tool_file") (modular tool)"
+    fi
+  done
+
+  # Ensure libs __init__.py exists
+  [ -f "$IMO_CREATOR_PATH/libs/__init__.py" ] && cp "$IMO_CREATOR_PATH/libs/__init__.py" "libs/" && log_info "  ✓ libs/__init__.py"
+
+  log_success "imo_tools library synced (AI-ready toolbox)"
+else
+  log_warning "  ⊘ imo_tools not found in SOURCE - skipping"
+fi
+echo ""
+
 # Step 8: Create/sync CTB branches
 log_step "8/10 Creating CTB branch structure..."
 

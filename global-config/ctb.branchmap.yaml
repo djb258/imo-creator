@@ -207,16 +207,19 @@ file_organization:
     - "simple_garage_bay.py"
     - "test_*.py"
     - "scraping-tool/**"
+    - "libs/imo_tools/**"
 
   imo/middle:
     - "src/server/main.py"
     - "src/models.py"
     - "main.py"
     - "tools/blueprint_*.py"
+    - "libs/imo_tools/**"
 
   imo/output:
     - "docs/blueprints/**"
     - "index.html"
+    - "libs/imo_tools/**"
 
   ui/figma-bolt:
     - "docs/blueprints/ui/**"
