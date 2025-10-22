@@ -103,6 +103,110 @@ deep_wiki:
     emergency_contact: "admin@bartonenterprises.com"
 
 # ============================================================
+# CHARTDB AUTOMATION CONFIGURATION
+# ============================================================
+chartdb:
+  enabled: true
+  run_on_update: true
+  index_path: /chartdb_schemas/schema_index.json
+
+  # Repository Configuration
+  target_repos:
+    - name: outreach-core
+      enabled: true
+      priority: high
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: main_db
+        - type: mysql
+          name: analytics_db
+    - name: client-intake
+      enabled: true
+      priority: high
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: client_db
+    - name: blueprint-engine
+      enabled: true
+      priority: medium
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: blueprint_db
+    - name: imo-creator
+      enabled: true
+      priority: critical
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: imo_db
+
+  # Trigger Configuration
+  triggers:
+    on_push: true
+    on_pull_request: false
+    on_merge: true
+    on_schema_change: true
+    on_schedule: true
+    schedule_cron: "0 3 * * *"  # Daily at 3 AM (1 hour after DeepWiki)
+
+  # Schema Detection
+  schema_detection:
+    auto_detect: true
+    scan_patterns:
+      - "*.sql"
+      - "migrations/**"
+      - "prisma/schema.prisma"
+      - "sequelize/models/**"
+      - "typeorm/entities/**"
+      - "database/schema/**"
+    exclude_patterns:
+      - "node_modules/**"
+      - "*.bak"
+      - "*.tmp"
+
+  # Output Configuration
+  output:
+    base_path: /chartdb_schemas
+    format: ["json", "sql", "png", "svg"]
+    create_index: true
+    commit_message_template: "📊 ChartDB: Auto-update database schemas [skip ci]"
+    branch_naming: "docs/chartdb-update-{timestamp}"
+
+  # Diagram Generation
+  diagram:
+    auto_generate: true
+    include_relationships: true
+    include_indexes: true
+    include_constraints: true
+    theme: "light"
+    export_formats: ["png", "svg"]
+
+  # Logging & Observability
+  logging:
+    enabled: true
+    audit_log: /logs/chartdb_audit.log
+    error_log: /logs/chartdb_error.log
+    level: INFO
+    retention_days: 90
+
+  # Error Handling
+  error_handling:
+    retry_count: 3
+    retry_delay_seconds: 30
+    halt_on_error: true
+    notify_on_failure: true
+
+  # Kill Switch Configuration
+  kill_switch:
+    enabled: false
+    reason: ""
+    disabled_by: ""
+    disabled_at: ""
+
+# ============================================================
 # CTB DOCTRINE ENFORCEMENT
 # ============================================================
 ctb_doctrine:
