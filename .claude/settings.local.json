@@ -12,7 +12,10 @@
       "Bash(git commit -m \"📦 Import ChartDB external repository\n\nIntegrated ChartDB database schema visualization tool into CTB branch.\n\nRepository: https://github.com/djb258/chartdb.git\nCTB Branch: sys/chartdb\nDoctrine ID: 04.04.07\nLocation: chartdb/\n\nThis branch now contains the full ChartDB codebase for database schema\nvisualization, ER diagrams, and DDL generation. The tool is accessible\nvia Composio MCP server at http://localhost:3001/tool\n\nCapabilities:\n- Database schema visualization\n- Entity relationship diagrams\n- DDL generation and export\n- Schema comparison\n- Database documentation\n\nUpdated configuration files to reflect CTB expansion from 15 to 18 branches.\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
       "Bash(git checkout sys/activepieces)",
       "Bash(git add .claude/settings.local.json)",
-      "Bash(git commit -m \"chore: update local settings\")"
+      "Bash(git commit -m \"chore: update local settings\")",
+      "Bash(git checkout:*)",
+      "Bash(git stash pop:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],
