@@ -1,0 +1,334 @@
+name: DeepWiki Automation
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'deep_wiki/**'
+      - 'logs/**'
+      - '*.log'
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+      - main
+  schedule:
+    # Daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force_full_refresh:
+        description: 'Force full repository refresh (not just diff)'
+        required: false
+        type: boolean
+        default: false
+      target_branch:
+        description: 'Specific branch to document (leave empty for current)'
+        required: false
+        type: string
+
+env:
+  DEEPWIKI_ENABLED: true
+  NODE_VERSION: '18.x'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  check-config:
+    name: Check DeepWiki Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.config.outputs.enabled }}
+      kill_switch: ${{ steps.config.outputs.kill_switch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check global configuration
+        id: config
+        run: |
+          if [ -f "global-config/global_manifest.yaml" ]; then
+            # Check if DeepWiki is enabled
+            ENABLED=$(grep -A 1 "deep_wiki:" global-config/global_manifest.yaml | grep "enabled:" | awk '{print $2}')
+            echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
+
+            # Check kill switch
+            KILL_SWITCH=$(grep -A 5 "kill_switch:" global-config/global_manifest.yaml | grep "enabled:" | awk '{print $2}')
+            echo "kill_switch=$KILL_SWITCH" >> $GITHUB_OUTPUT
+
+            echo "DeepWiki Enabled: $ENABLED"
+            echo "Kill Switch: $KILL_SWITCH"
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "kill_switch=true" >> $GITHUB_OUTPUT
+          fi
+
+  deepwiki-update:
+    name: Run DeepWiki Documentation Update
+    runs-on: ubuntu-latest
+    needs: check-config
+    if: needs.check-config.outputs.enabled == 'true' && needs.check-config.outputs.kill_switch == 'false'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for diff analysis
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: deepwiki/package-lock.json
+
+      - name: Install DeepWiki dependencies
+        run: |
+          cd deepwiki
+          pip install -r api/requirements.txt
+          npm install
+
+      - name: Create logs directory
+        run: |
+          mkdir -p logs
+          touch logs/deepwiki_audit.log
+          touch logs/deepwiki_error.log
+
+      - name: Get commit information
+        id: commit-info
+        run: |
+          REPO_NAME="${{ github.repository }}"
+          BRANCH_NAME="${{ github.ref_name }}"
+          COMMIT_HASH="${{ github.sha }}"
+          COMMIT_SHORT="${COMMIT_HASH:0:7}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          echo "repo=$REPO_NAME" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "commit=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          echo "commit_short=$COMMIT_SHORT" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+
+          # Get changed files for diff analysis
+          if [ "${{ github.event_name }}" == "push" ]; then
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD | wc -l)
+            echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          else
+            echo "changed_files=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Log audit entry (start)
+        run: |
+          echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] START - Repo: ${{ steps.commit-info.outputs.repo }}, Branch: ${{ steps.commit-info.outputs.branch }}, Commit: ${{ steps.commit-info.outputs.commit_short }}, Changed Files: ${{ steps.commit-info.outputs.changed_files }}" >> logs/deepwiki_audit.log
+
+      - name: Determine analysis mode
+        id: analysis-mode
+        run: |
+          if [ "${{ github.event.inputs.force_full_refresh }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
+            echo "mode=full" >> $GITHUB_OUTPUT
+            echo "Analysis mode: FULL REFRESH"
+          elif [ "${{ steps.commit-info.outputs.changed_files }}" -gt "0" ]; then
+            echo "mode=diff" >> $GITHUB_OUTPUT
+            echo "Analysis mode: DIFF ONLY"
+          else
+            echo "mode=skip" >> $GITHUB_OUTPUT
+            echo "Analysis mode: SKIP (no changes)"
+          fi
+
+      - name: Start DeepWiki API server
+        if: steps.analysis-mode.outputs.mode != 'skip'
+        run: |
+          cd deepwiki
+          # Create .env file with API keys from secrets
+          cat > .env << EOF
+          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          DEEPWIKI_EMBEDDER_TYPE=google
+          PORT=8001
+          LOG_LEVEL=INFO
+          SERVER_BASE_URL=http://localhost:8001
+          EOF
+
+          # Start server in background
+          python -m api.main &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+
+          # Wait for server to be ready
+          echo "Waiting for DeepWiki API to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8001/health > /dev/null; then
+              echo "DeepWiki API is ready!"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Run DeepWiki analysis
+        if: steps.analysis-mode.outputs.mode != 'skip'
+        id: deepwiki-run
+        run: |
+          cd deepwiki
+
+          # Determine repository URL
+          REPO_URL="${{ github.server_url }}/${{ github.repository }}"
+
+          # Call DeepWiki API
+          RESPONSE=$(curl -s -X POST http://localhost:8001/api/generate \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repository_url": "'"$REPO_URL"'",
+              "ai_provider": "google",
+              "embedder_type": "google",
+              "generate_diagrams": true,
+              "branch": "${{ steps.commit-info.outputs.branch }}"
+            }')
+
+          # Check if successful
+          if echo "$RESPONSE" | jq -e '.status == "success"' > /dev/null 2>&1; then
+            echo "success=true" >> $GITHUB_OUTPUT
+            echo "DeepWiki analysis completed successfully"
+
+            # Extract repository ID for future queries
+            REPO_ID=$(echo "$RESPONSE" | jq -r '.repository_id')
+            echo "repo_id=$REPO_ID" >> $GITHUB_OUTPUT
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error // "Unknown error"')
+            echo "error=$ERROR_MSG" >> $GITHUB_OUTPUT
+            echo "DeepWiki analysis failed: $ERROR_MSG"
+
+            # Log error
+            echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] ERROR - Repo: ${{ steps.commit-info.outputs.repo }}, Branch: ${{ steps.commit-info.outputs.branch }}, Error: $ERROR_MSG" >> ../logs/deepwiki_error.log
+
+            exit 1
+          fi
+
+      - name: Update DeepWiki index
+        if: steps.deepwiki-run.outputs.success == 'true'
+        run: |
+          mkdir -p deep_wiki
+
+          # Create or update index
+          if [ -f "deep_wiki/deepwiki_index.json" ]; then
+            # Update existing index
+            jq --arg repo "${{ steps.commit-info.outputs.repo }}" \
+               --arg branch "${{ steps.commit-info.outputs.branch }}" \
+               --arg commit "${{ steps.commit-info.outputs.commit }}" \
+               --arg timestamp "${{ steps.commit-info.outputs.timestamp }}" \
+               --arg repo_id "${{ steps.deepwiki-run.outputs.repo_id }}" \
+               '.repositories[$repo] = {
+                 "branch": $branch,
+                 "last_commit": $commit,
+                 "last_updated": $timestamp,
+                 "repository_id": $repo_id,
+                 "status": "success"
+               }' deep_wiki/deepwiki_index.json > deep_wiki/deepwiki_index.json.tmp
+            mv deep_wiki/deepwiki_index.json.tmp deep_wiki/deepwiki_index.json
+          else
+            # Create new index
+            cat > deep_wiki/deepwiki_index.json << EOF
+          {
+            "version": "1.0",
+            "last_updated": "${{ steps.commit-info.outputs.timestamp }}",
+            "repositories": {
+              "${{ steps.commit-info.outputs.repo }}": {
+                "branch": "${{ steps.commit-info.outputs.branch }}",
+                "last_commit": "${{ steps.commit-info.outputs.commit }}",
+                "last_updated": "${{ steps.commit-info.outputs.timestamp }}",
+                "repository_id": "${{ steps.deepwiki-run.outputs.repo_id }}",
+                "status": "success"
+              }
+            }
+          }
+          EOF
+          fi
+
+      - name: Stop DeepWiki server
+        if: always() && env.SERVER_PID != ''
+        run: |
+          if [ -n "$SERVER_PID" ]; then
+            kill $SERVER_PID || true
+          fi
+
+      - name: Log audit entry (complete)
+        if: always()
+        run: |
+          STATUS="${{ steps.deepwiki-run.outputs.success == 'true' && 'SUCCESS' || 'FAILED' }}"
+          echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] END - Repo: ${{ steps.commit-info.outputs.repo }}, Branch: ${{ steps.commit-info.outputs.branch }}, Commit: ${{ steps.commit-info.outputs.commit_short }}, Status: $STATUS" >> logs/deepwiki_audit.log
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if [ -n "$(git status --porcelain deep_wiki/ logs/)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.has_changes == 'true' && steps.deepwiki-run.outputs.success == 'true'
+        run: |
+          git config user.name "DeepWiki Bot"
+          git config user.email "deepwiki-bot@bartonenterprises.com"
+
+          git add deep_wiki/ logs/
+          git commit -m "📚 DeepWiki: Auto-update documentation [skip ci]
+
+          Repository: ${{ steps.commit-info.outputs.repo }}
+          Branch: ${{ steps.commit-info.outputs.branch }}
+          Commit: ${{ steps.commit-info.outputs.commit_short }}
+          Timestamp: ${{ steps.commit-info.outputs.timestamp }}
+          Mode: ${{ steps.analysis-mode.outputs.mode }}
+
+          🤖 Generated with Claude Code
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+
+          git push
+
+      - name: Send success notification
+        if: steps.deepwiki-run.outputs.success == 'true' && always()
+        run: |
+          echo "✅ DeepWiki updated for ${{ steps.commit-info.outputs.repo }} - ${{ steps.commit-info.outputs.branch }} (${{ steps.commit-info.outputs.commit_short }})"
+
+      - name: Send failure notification
+        if: failure()
+        run: |
+          ERROR_MSG="${{ steps.deepwiki-run.outputs.error }}"
+          echo "❌ DeepWiki failed for ${{ steps.commit-info.outputs.repo }} - ${{ steps.commit-info.outputs.branch }}: $ERROR_MSG"
+
+  cleanup:
+    name: Cleanup and Maintenance
+    runs-on: ubuntu-latest
+    needs: deepwiki-update
+    if: always() && github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Rotate logs
+        run: |
+          if [ -f "logs/deepwiki_audit.log" ]; then
+            # Archive logs older than 90 days
+            ARCHIVE_DATE=$(date -d "90 days ago" +%Y%m%d)
+            if [ -s logs/deepwiki_audit.log ]; then
+              gzip -c logs/deepwiki_audit.log > logs/deepwiki_audit_${ARCHIVE_DATE}.log.gz
+              echo "Log rotated and archived"
+            fi
+          fi
+
+      - name: Clear cache
+        run: |
+          # Clear DeepWiki cache if exists
+          if [ -d "$HOME/.adalflow" ]; then
+            find "$HOME/.adalflow" -type f -mtime +7 -delete
+            echo "Cache cleaned"
+          fi

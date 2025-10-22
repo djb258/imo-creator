@@ -1,0 +1,332 @@
+# IMO Creator - Global Configuration Manifest
+# Version: 1.3.3
+# Last Updated: 2025-10-22
+
+meta:
+  version: 1.3.3
+  last_updated: 2025-10-22T00:00:00Z
+  description: |
+    Global configuration manifest for IMO Creator ecosystem.
+    This file defines system-wide settings, automation rules, and integration patterns
+    that apply across all repositories using the CTB Doctrine.
+
+# ============================================================
+# DEEP WIKI AUTOMATION CONFIGURATION
+# ============================================================
+deep_wiki:
+  enabled: true
+  run_on_update: true
+  index_path: /deep_wiki/deepwiki_index.json
+
+  # Repository Configuration
+  target_repos:
+    - name: outreach-core
+      enabled: true
+      priority: high
+      auto_commit: true
+    - name: client-intake
+      enabled: true
+      priority: high
+      auto_commit: true
+    - name: blueprint-engine
+      enabled: true
+      priority: medium
+      auto_commit: true
+    - name: imo-creator
+      enabled: true
+      priority: critical
+      auto_commit: true
+
+  # Trigger Configuration
+  triggers:
+    on_push: true
+    on_pull_request: false
+    on_merge: true
+    on_schedule: true
+    schedule_cron: "0 2 * * *"  # Daily at 2 AM
+
+  # AI Provider Settings
+  ai_provider:
+    default: google
+    fallback: openai
+    embedder_type: google
+    models:
+      google: gemini-pro
+      openai: gpt-4-turbo
+
+  # Processing Options
+  processing:
+    generate_diagrams: true
+    analyze_diffs_only: true
+    max_file_size_mb: 50
+    exclude_patterns:
+      - "node_modules/**"
+      - "*.log"
+      - ".git/**"
+      - "**/__pycache__/**"
+      - "*.pyc"
+      - "build/**"
+      - "dist/**"
+
+  # Output Configuration
+  output:
+    base_path: /deep_wiki
+    create_index: true
+    commit_message_template: "📚 DeepWiki: Auto-update documentation [skip ci]"
+    branch_naming: "docs/deepwiki-update-{timestamp}"
+
+  # Logging & Observability
+  logging:
+    enabled: true
+    audit_log: /logs/deepwiki_audit.log
+    error_log: /logs/deepwiki_error.log
+    level: INFO
+    retention_days: 90
+    include_metrics: true
+
+  # Error Handling
+  error_handling:
+    retry_count: 3
+    retry_delay_seconds: 60
+    halt_on_error: true
+    notify_on_failure: true
+    notification_channels:
+      - slack
+      - email
+
+  # Kill Switch Configuration
+  kill_switch:
+    enabled: false
+    reason: ""
+    disabled_by: ""
+    disabled_at: ""
+    emergency_contact: "admin@bartonenterprises.com"
+
+# ============================================================
+# CTB DOCTRINE ENFORCEMENT
+# ============================================================
+ctb_doctrine:
+  enforcement_mode: standard
+  version: 1.3.3
+
+  required_branches:
+    - sys/chartdb
+    - sys/activepieces
+    - sys/windmill
+    - sys/claude-skills
+    - sys/deepwiki
+
+  required_tools:
+    - doctrine_id: "04.04.07"
+      name: ChartDB
+      enabled: true
+    - doctrine_id: "04.04.08"
+      name: Activepieces
+      enabled: true
+    - doctrine_id: "04.04.09"
+      name: Windmill
+      enabled: true
+    - doctrine_id: "04.04.10"
+      name: Anthropic_Claude_Skills
+      enabled: true
+    - doctrine_id: "04.04.11"
+      name: DeepWiki
+      enabled: true
+
+# ============================================================
+# MCP INTEGRATION SETTINGS
+# ============================================================
+mcp_integration:
+  enabled: true
+  server_port: 3001
+  health_check_interval: 60
+
+  composio:
+    enabled: true
+    endpoint: "http://localhost:3001/tool"
+    api_base: "https://api.composio.dev"
+    connected_services: 24
+    total_tools: 1059
+
+  firebase:
+    enabled: true
+    project_id: "${FIREBASE_PROJECT_ID}"
+    staging_memory: true
+    barton_doctrine: true
+
+  builder_io:
+    enabled: true
+    api_key: "${BUILDER_IO_API_KEY}"
+    visual_dev: true
+
+# ============================================================
+# SECURITY & COMPLIANCE
+# ============================================================
+security:
+  zero_tolerance: true
+  forbidden_files:
+    - ".env"
+    - "*.pem"
+    - "*.key"
+    - "*credentials*.json"
+    - "*secret*.txt"
+
+  secret_scanning:
+    enabled: true
+    tools:
+      - truffleHog
+      - git-secrets
+    halt_on_violation: true
+
+  mcp_vault:
+    enabled: true
+    required: true
+    sources:
+      - mcp
+      - doppler
+      - firebase
+
+# ============================================================
+# AUTOMATION WORKFLOWS
+# ============================================================
+automation:
+  github_actions:
+    enabled: true
+    workflows:
+      - deepwiki_automation
+      - ctb_enforcement
+      - security_lockdown
+      - doctrine_sync
+
+  hooks:
+    pre_commit:
+      - security_scan
+      - format_check
+    post_commit:
+      - deepwiki_update
+      - audit_log
+    pre_push:
+      - test_suite
+      - compliance_check
+
+# ============================================================
+# DEPLOYMENT CONFIGURATION
+# ============================================================
+deployment:
+  platforms:
+    render:
+      enabled: true
+      auto_deploy: true
+      environment: production
+    vercel:
+      enabled: true
+      auto_deploy: true
+      environment: production
+
+  health_checks:
+    enabled: true
+    endpoints:
+      - url: "http://localhost:8001/health"
+        service: deepwiki-api
+      - url: "http://localhost:3001/mcp/health"
+        service: composio-mcp
+      - url: "http://localhost:3000"
+        service: deepwiki-frontend
+
+# ============================================================
+# NOTIFICATION SETTINGS
+# ============================================================
+notifications:
+  enabled: true
+  channels:
+    slack:
+      enabled: true
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+      notify_on:
+        - errors
+        - deployments
+        - security_violations
+    email:
+      enabled: true
+      recipients:
+        - admin@bartonenterprises.com
+      notify_on:
+        - critical_errors
+        - security_violations
+
+  templates:
+    deepwiki_success: "✅ DeepWiki updated for {repo} - {branch} ({commit_hash})"
+    deepwiki_failure: "❌ DeepWiki failed for {repo} - {branch}: {error_message}"
+    security_violation: "🚨 SECURITY VIOLATION in {repo}: {violation_type}"
+
+# ============================================================
+# REPOSITORY TEMPLATES
+# ============================================================
+repo_templates:
+  source_repos:
+    - imo-creator
+    - barton-doctrine
+
+  scaffold_config:
+    auto_apply: true
+    inherit_from: imo-creator
+    include_files:
+      - global-config/ctb.branchmap.yaml
+      - global-config/global_manifest.yaml
+      - .github/workflows/deepwiki_automation.yml
+      - scripts/hooks/post_update_deepwiki.sh
+
+# ============================================================
+# METRICS & ANALYTICS
+# ============================================================
+metrics:
+  enabled: true
+  collect:
+    - deepwiki_runs
+    - documentation_updates
+    - error_rates
+    - processing_time
+    - repo_coverage
+
+  export_to:
+    - bigquery
+    - firebase_analytics
+
+  dashboards:
+    enabled: true
+    url: "${METRICS_DASHBOARD_URL}"
+
+# ============================================================
+# MAINTENANCE WINDOWS
+# ============================================================
+maintenance:
+  scheduled_windows:
+    - day: Sunday
+      time: "02:00-04:00 UTC"
+      tasks:
+        - deepwiki_full_refresh
+        - log_rotation
+        - cache_cleanup
+
+  auto_updates:
+    enabled: true
+    check_interval: weekly
+    source_repo: imo-creator
+
+# ============================================================
+# FEATURE FLAGS
+# ============================================================
+feature_flags:
+  experimental:
+    deepwiki_ml_insights: false
+    auto_pr_generation: false
+    cross_repo_analysis: true
+
+  beta:
+    real_time_sync: false
+    collaborative_editing: false
+
+  stable:
+    auto_documentation: true
+    diff_analysis: true
+    diagram_generation: true

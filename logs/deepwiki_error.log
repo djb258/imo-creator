@@ -1,0 +1,5 @@
+# DeepWiki Error Log
+# Format: [TIMESTAMP] ERROR - Repo: repo_name, Branch: branch, Error: error_message
+# This file tracks all failed DeepWiki runs
+
+[2025-10-22T00:00:00Z] INIT - DeepWiki error logging initialized
