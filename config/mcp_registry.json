@@ -13,8 +13,8 @@
       "Version tracking ensures compatibility across distributed repos"
     ]
   },
-  "engine_version": "1.3.0",
-  "last_updated": "2025-10-18T00:00:00Z",
+  "engine_version": "1.3.3",
+  "last_updated": "2025-10-22T00:00:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
     "backend": "http://localhost:3001/tool",
@@ -225,6 +225,55 @@
         "ANTHROPIC_MODEL"
       ],
       "description": "Anthropic Claude Skills AI/SHQ reasoning layer - extended context, multi-step reasoning, and autonomous workflow execution"
+    },
+    {
+      "tool": "DeepWiki",
+      "type": "MCP",
+      "endpoint": "http://localhost:8001",
+      "doctrine_id": "04.04.11",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/deepwiki-open.git",
+      "ctb_branch": "sys/deepwiki",
+      "ports": {
+        "frontend": 3000,
+        "api": 8001
+      },
+      "toolkit_tools": [
+        "DEEPWIKI_GENERATE", "DEEPWIKI_ASK", "DEEPWIKI_RESEARCH"
+      ],
+      "capabilities": [
+        "automatic_wiki_generation",
+        "code_analysis",
+        "rag_powered_chat",
+        "diagram_generation",
+        "multi_turn_research",
+        "repository_documentation"
+      ],
+      "ai_providers": [
+        "google_gemini", "openai", "openrouter", "azure_openai", "ollama"
+      ],
+      "embeddings": [
+        "openai", "google", "ollama"
+      ],
+      "supported_platforms": [
+        "github", "gitlab", "bitbucket"
+      ],
+      "technology": {
+        "frontend": "Next.js 15.3 + React 19",
+        "backend": "Python FastAPI",
+        "ui": "Tailwind CSS 4",
+        "diagrams": "Mermaid.js"
+      },
+      "required_env_vars": [
+        "GOOGLE_API_KEY or OPENAI_API_KEY or OLLAMA"
+      ],
+      "optional_env_vars": [
+        "DEEPWIKI_EMBEDDER_TYPE", "OPENROUTER_API_KEY", "OLLAMA_HOST",
+        "AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_VERSION",
+        "PORT", "LOG_LEVEL", "LOG_FILE_PATH"
+      ],
+      "health_check": "http://localhost:8001/health",
+      "description": "DeepWiki-Open AI-powered automatic wiki generator - analyzes repositories, generates documentation, creates diagrams, and provides RAG-powered Q&A"
     }
   ],
   "repo_usage": {

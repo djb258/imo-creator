@@ -1,6 +1,6 @@
 meta:
-  version: 1.3
-  last_updated: 2025-10-18
+  version: 1.3.3
+  last_updated: 2025-10-22
   description: |
     Canonical CTB (Christmas Tree Backbone) branch structure and merge rules for all Barton repos.
     Enforced automatically by Claude-Code and GitHub Actions.
@@ -30,6 +30,7 @@ altitudes:
       - sys/activepieces
       - sys/windmill
       - sys/claude-skills
+      - sys/deepwiki
     merge_to: none
     protection: strict
     auto_create: true
@@ -201,6 +202,15 @@ file_organization:
     - "claude.manifest.json"
     - "*claude-skills*.ts"
     - "*claude-skills*.json"
+
+  sys/deepwiki:
+    - "sys/deepwiki/**"
+    - "deepwiki/**"
+    - "deepwiki.md"
+    - "deepwiki.manifest.json"
+    - "*deepwiki*.ts"
+    - "*deepwiki*.json"
+    - "*deepwiki*.py"
 
   imo/input:
     - "garage_bay.py"
