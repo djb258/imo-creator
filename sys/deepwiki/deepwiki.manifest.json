@@ -1,0 +1,249 @@
+{
+  "id": "deepwiki",
+  "doctrine_id": "04.04.11",
+  "name": "DeepWiki-Open",
+  "version": "0.1.0",
+  "description": "AI-powered automatic wiki generator for code repositories with RAG-powered chat and diagram generation",
+  "type": "external_repo",
+  "repository": "https://github.com/djb258/deepwiki-open.git",
+  "altitude": "40k",
+  "category": "documentation",
+  "metadata": {
+    "author": "AsyncFuncAI (adapted by Barton Enterprises)",
+    "license": "See repository LICENSE",
+    "homepage": "https://github.com/djb258/deepwiki-open",
+    "tags": [
+      "documentation",
+      "wiki",
+      "ai",
+      "rag",
+      "code-analysis",
+      "diagrams",
+      "knowledge-management"
+    ]
+  },
+  "technology": {
+    "frontend": {
+      "framework": "Next.js",
+      "version": "15.3.1",
+      "language": "TypeScript",
+      "ui": "Tailwind CSS 4"
+    },
+    "backend": {
+      "framework": "FastAPI",
+      "language": "Python",
+      "features": ["RAG", "AI Chat", "Repository Analysis"]
+    },
+    "dependencies": {
+      "react": "^19.0.0",
+      "mermaid": "^11.4.1",
+      "next-intl": "^4.1.0",
+      "react-markdown": "^10.1.0"
+    }
+  },
+  "ports": {
+    "frontend": 3000,
+    "api": 8001
+  },
+  "health_check": {
+    "url": "http://localhost:8001/health",
+    "interval": 60,
+    "timeout": 10,
+    "retries": 3
+  },
+  "environment": {
+    "required": [
+      "GOOGLE_API_KEY or OPENAI_API_KEY or OLLAMA"
+    ],
+    "optional": [
+      "DEEPWIKI_EMBEDDER_TYPE",
+      "OPENROUTER_API_KEY",
+      "OLLAMA_HOST",
+      "AZURE_OPENAI_API_KEY",
+      "AZURE_OPENAI_ENDPOINT",
+      "AZURE_OPENAI_VERSION",
+      "PORT",
+      "LOG_LEVEL",
+      "LOG_FILE_PATH"
+    ]
+  },
+  "features": {
+    "core": [
+      "Automatic wiki generation from Git repositories",
+      "Support for GitHub, GitLab, BitBucket",
+      "Private repository support with access tokens",
+      "AI-powered code structure analysis",
+      "Automatic Mermaid diagram generation",
+      "RAG-powered chat interface",
+      "Multi-turn DeepResearch mode"
+    ],
+    "ai_providers": [
+      "Google Gemini",
+      "OpenAI (GPT-3.5, GPT-4)",
+      "OpenRouter",
+      "Azure OpenAI",
+      "Ollama (local models)"
+    ],
+    "embeddings": [
+      "OpenAI embeddings",
+      "Google AI embeddings",
+      "Ollama embeddings"
+    ],
+    "languages": [
+      "English",
+      "简体中文",
+      "繁體中文",
+      "日本語",
+      "Español",
+      "한국어",
+      "Tiếng Việt",
+      "Português Brasileiro",
+      "Français",
+      "Русский"
+    ]
+  },
+  "deployment": {
+    "docker": {
+      "compose_file": "docker-compose.yml",
+      "image": "deepwiki-open",
+      "memory_limit": "6g",
+      "memory_reservation": "2g"
+    },
+    "manual": {
+      "backend": "python -m api.main",
+      "frontend": "npm run dev",
+      "build": "npm run build && npm start"
+    }
+  },
+  "data_persistence": {
+    "repository_data": "~/.adalflow",
+    "logs": "api/logs/application.log"
+  },
+  "integration": {
+    "mcp_compatible": true,
+    "heir_orbt_support": true,
+    "composio_ready": false,
+    "standalone": true
+  },
+  "use_cases": [
+    "Automated documentation for IMO Creator modules",
+    "Codebase understanding and exploration",
+    "Developer onboarding acceleration",
+    "API documentation generation",
+    "Architecture visualization",
+    "Knowledge base creation",
+    "Code review assistance",
+    "Technical writing automation"
+  ],
+  "api_endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "description": "Health check endpoint"
+    },
+    {
+      "method": "POST",
+      "path": "/api/generate",
+      "description": "Generate wiki for a repository",
+      "parameters": {
+        "repository_url": "string (required)",
+        "access_token": "string (optional)",
+        "ai_provider": "string (optional)",
+        "embedder_type": "string (optional)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/ask",
+      "description": "Ask questions about repository using RAG",
+      "parameters": {
+        "question": "string (required)",
+        "repository_id": "string (required)"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "name": "DEEPWIKI_GENERATE",
+      "description": "Generate comprehensive wiki documentation for any Git repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repository_url": {
+            "type": "string",
+            "description": "GitHub, GitLab, or BitBucket repository URL"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "Personal access token for private repositories"
+          },
+          "ai_provider": {
+            "type": "string",
+            "enum": ["google", "openai", "openrouter", "azure", "ollama"],
+            "description": "AI provider to use for analysis"
+          },
+          "embedder_type": {
+            "type": "string",
+            "enum": ["openai", "google", "ollama"],
+            "description": "Embedding provider for RAG"
+          },
+          "generate_diagrams": {
+            "type": "boolean",
+            "description": "Generate Mermaid architecture diagrams"
+          }
+        },
+        "required": ["repository_url"]
+      }
+    },
+    {
+      "name": "DEEPWIKI_ASK",
+      "description": "Ask questions about a repository using RAG-powered AI",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repository_id": {
+            "type": "string",
+            "description": "ID of the analyzed repository"
+          },
+          "question": {
+            "type": "string",
+            "description": "Question about the codebase"
+          },
+          "deep_research": {
+            "type": "boolean",
+            "description": "Enable multi-turn deep research mode"
+          }
+        },
+        "required": ["repository_id", "question"]
+      }
+    },
+    {
+      "name": "DEEPWIKI_RESEARCH",
+      "description": "Perform deep multi-turn research on a topic within the repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repository_id": {
+            "type": "string",
+            "description": "ID of the analyzed repository"
+          },
+          "topic": {
+            "type": "string",
+            "description": "Research topic or question"
+          },
+          "max_turns": {
+            "type": "integer",
+            "description": "Maximum number of research iterations",
+            "default": 5
+          }
+        },
+        "required": ["repository_id", "topic"]
+      }
+    }
+  ],
+  "enabled": true,
+  "required": false,
+  "status": "active",
+  "integration_date": "2025-10-22",
+  "last_updated": "2025-10-22"
+}
