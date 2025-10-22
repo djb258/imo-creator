@@ -90,6 +90,10 @@ COMPOSIO_API_URL=https://backend.composio.dev
 COMPOSIO_BASE_URL=https://backend.composio.dev
 COMPOSIO_ENTITY_ID=default
 
+# ⚠️ REQUIRED AS OF NOVEMBER 1ST, 2025
+COMPOSIO_USER_ID=usr_your_generated_id
+COMPOSIO_MCP_URL=http://localhost:3001/tool?user_id=usr_your_generated_id
+
 # Google Gemini (Direct API)
 GOOGLE_API_KEY=AIzaSyDp-XJ_6HFZc57f2RaAFXBPXQMOjliF2WY
 GEMINI_API_KEY=AIzaSyDp-XJ_6HFZc57f2RaAFXBPXQMOjliF2WY

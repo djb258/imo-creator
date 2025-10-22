@@ -4,6 +4,108 @@
 
 **This is the AUTHORITATIVE guide for Composio integration. NEVER attempt to build custom Google/API integrations - everything goes through Composio MCP server!**
 
+---
+
+## 🚨 BREAKING CHANGE: November 1st, 2025 - user_id Required
+
+**CRITICAL**: Starting **November 1st, 2025**, all Composio MCP Server URLs **MUST** include a `user_id` query parameter for enhanced security.
+
+### What's Changing
+
+**Before November 1st, 2025**:
+```
+http://localhost:3001/tool
+```
+
+**After November 1st, 2025** (REQUIRED):
+```
+http://localhost:3001/tool?user_id=YOUR_USER_ID
+```
+
+### Why This Matters
+
+- **Security**: Enhanced authentication and connection tracking
+- **Multi-User Support**: Composio allows connections for multiple users
+- **Connection Differentiation**: `user_id` helps distinguish between user-specific connections
+- **No Migration = Service Interruption**: Without `user_id`, MCP Server requests will fail after Nov 1st
+
+### How to Get Your user_id
+
+#### Option 1: Composio Platform UI
+1. Go to [Composio Platform](https://app.composio.dev)
+2. Navigate to **Settings** → **MCP Servers**
+3. Generate MCP Server URL with embedded `user_id`
+
+#### Option 2: Composio API
+```bash
+# Generate MCP Server URL for a specific user
+curl -X POST https://backend.composio.dev/api/v2/cli/generate-mcp-url \
+  -H "X-API-Key: YOUR_COMPOSIO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "your_user_identifier"
+  }'
+```
+
+**Response**:
+```json
+{
+  "mcp_server_url": "http://localhost:3001/tool?user_id=usr_abc123xyz",
+  "user_id": "usr_abc123xyz",
+  "expires_at": null
+}
+```
+
+### Migration Steps
+
+1. **Before November 1st, 2025**:
+   - [ ] Generate `user_id` via Composio Platform or API
+   - [ ] Update all MCP Server endpoint URLs to include `?user_id=YOUR_USER_ID`
+   - [ ] Update environment variables if using URL in `.env`
+   - [ ] Test all integrations with new URL format
+   - [ ] Update documentation and code comments
+
+2. **Update Code Examples**:
+```javascript
+// OLD (deprecated after Nov 1st, 2025)
+const response = await fetch('http://localhost:3001/tool', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+});
+
+// NEW (required after Nov 1st, 2025)
+const USER_ID = process.env.COMPOSIO_USER_ID || 'usr_default';
+const response = await fetch(`http://localhost:3001/tool?user_id=${USER_ID}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+});
+```
+
+3. **Environment Variables**:
+```bash
+# Add to .env file
+COMPOSIO_USER_ID=usr_your_generated_id
+COMPOSIO_MCP_URL=http://localhost:3001/tool?user_id=usr_your_generated_id
+```
+
+### Resources
+
+- 📖 [User Management Documentation](https://docs.composio.dev/patterns/user-management)
+- 🔧 [MCP URL Generation API](https://docs.composio.dev/api-reference/mcp/generate-url)
+- 📧 [Support](mailto:support@composio.dev)
+
+### Action Items
+
+- [ ] **URGENT**: Generate `user_id` before November 1st, 2025
+- [ ] Update all code references to MCP Server URL
+- [ ] Add `COMPOSIO_USER_ID` to `.env` file
+- [ ] Test integrations with new URL format
+- [ ] Document `user_id` in team wiki/onboarding docs
+
+---
+
 ## ✅ VERIFIED SYSTEM STATUS (2025-09-28)
 
 **🚀 Composio MCP Server**: ACTIVE on port 3001
