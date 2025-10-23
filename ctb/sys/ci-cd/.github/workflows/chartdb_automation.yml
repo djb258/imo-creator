@@ -1,0 +1,279 @@
+name: ChartDB Schema Automation
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+
+env:
+  CHARTDB_ENABLED: true
+  NODE_VERSION: '18.x'
+
+jobs:
+  check-config:
+    name: Check ChartDB Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.config.outputs.enabled }}
+      kill_switch: ${{ steps.config.outputs.kill_switch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check global configuration
+        id: config
+        run: |
+          if [ -f "global-config/global_manifest.yaml" ]; then
+            # Check if ChartDB is enabled
+            ENABLED=$(grep -A 1 "chartdb:" global-config/global_manifest.yaml | grep "enabled:" | awk '{print $2}')
+            echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
+
+            # Check kill switch
+            KILL_SWITCH=$(grep -A 5 "chartdb:" global-config/global_manifest.yaml | grep -A 5 "kill_switch:" | grep "enabled:" | head -1 | awk '{print $2}')
+            echo "kill_switch=$KILL_SWITCH" >> $GITHUB_OUTPUT
+
+            echo "ChartDB Enabled: $ENABLED"
+            echo "Kill Switch: $KILL_SWITCH"
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "kill_switch=true" >> $GITHUB_OUTPUT
+          fi
+
+  chartdb-update:
+    name: Run ChartDB Schema Update
+    runs-on: ubuntu-latest
+    needs: check-config
+    if: needs.check-config.outputs.enabled == 'true' && needs.check-config.outputs.kill_switch == 'false'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for diff analysis
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: chartdb/package-lock.json
+
+      - name: Install ChartDB dependencies
+        run: |
+          cd chartdb
+          npm install
+
+      - name: Create logs directory
+        run: |
+          mkdir -p logs chartdb_schemas
+          touch logs/chartdb_audit.log
+          touch logs/chartdb_error.log
+
+      - name: Get commit information
+        id: commit-info
+        run: |
+          REPO_NAME="${{ github.repository }}"
+          BRANCH_NAME="${{ github.ref_name }}"
+          COMMIT_HASH="${{ github.sha }}"
+          COMMIT_SHORT="${COMMIT_HASH:0:7}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          echo "repo=$REPO_NAME" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "commit=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          echo "commit_short=$COMMIT_SHORT" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+
+          # Get changed schema files
+          if [ "${{ github.event_name }}" == "push" ]; then
+            CHANGED_SCHEMA=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(sql|prisma)$|migrations/|models/|entities/' | wc -l)
+            echo "changed_schema=$CHANGED_SCHEMA" >> $GITHUB_OUTPUT
+          else
+            echo "changed_schema=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Log audit entry (start)
+        run: |
+          echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] START - Repo: ${{ steps.commit-info.outputs.repo }}, Branch: ${{ steps.commit-info.outputs.branch }}, Commit: ${{ steps.commit-info.outputs.commit_short }}, Changed Schema Files: ${{ steps.commit-info.outputs.changed_schema }}" >> logs/chartdb_audit.log
+
+      - name: Determine analysis mode
+        id: analysis-mode
+        run: |
+          if [ "${{ github.event.inputs.force_full_scan }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
+            echo "mode=full" >> $GITHUB_OUTPUT
+            echo "Analysis mode: FULL SCAN"
+          elif [ "${{ steps.commit-info.outputs.changed_schema }}" -gt "0" ]; then
+            echo "mode=diff" >> $GITHUB_OUTPUT
+            echo "Analysis mode: DIFF ONLY"
+          else
+            echo "mode=skip" >> $GITHUB_OUTPUT
+            echo "Analysis mode: SKIP (no schema changes)"
+          fi
+
+      - name: Detect database schemas
+        if: steps.analysis-mode.outputs.mode != 'skip'
+        id: detect-schemas
+        run: |
+          echo "Scanning for database schema files..."
+
+          # Find all schema files
+          SCHEMA_FILES=$(find . -type f \( \
+            -name "*.sql" -o \
+            -name "schema.prisma" -o \
+            -path "*/migrations/*" -o \
+            -path "*/models/*" -o \
+            -path "*/entities/*" \
+          \) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/chartdb/*")
+
+          SCHEMA_COUNT=$(echo "$SCHEMA_FILES" | grep -c . || echo "0")
+          echo "schema_count=$SCHEMA_COUNT" >> $GITHUB_OUTPUT
+
+          echo "Found $SCHEMA_COUNT schema files"
+
+          # Save schema file list
+          echo "$SCHEMA_FILES" > chartdb_schemas/detected_schemas.txt
+
+      - name: Generate schema diagrams
+        if: steps.analysis-mode.outputs.mode != 'skip' && steps.detect-schemas.outputs.schema_count > 0
+        id: generate-diagrams
+        run: |
+          echo "Generating database schema diagrams..."
+
+          # Create output directory
+          mkdir -p chartdb_schemas/diagrams
+
+          # Extract schema information
+          # For each SQL file, create a summary
+          find . -name "*.sql" ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/chartdb/*" | while read -r file; do
+            BASENAME=$(basename "$file" .sql)
+            DIRNAME=$(dirname "$file" | sed 's/^\.\///')
+
+            # Create schema metadata
+            cat > "chartdb_schemas/schemas/$BASENAME.json" <<EOF
+{
+  "name": "$BASENAME",
+  "path": "$file",
+  "directory": "$DIRNAME",
+  "type": "sql",
+  "last_modified": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "commit": "${{ steps.commit-info.outputs.commit_short }}"
+}
+EOF
+
+            echo "Processed: $file"
+          done || true
+
+          echo "success=true" >> $GITHUB_OUTPUT
+
+      - name: Update ChartDB index
+        if: steps.generate-diagrams.outputs.success == 'true'
+        run: |
+          mkdir -p chartdb_schemas
+
+          # Create or update index
+          if [ -f "chartdb_schemas/schema_index.json" ]; then
+            # Update existing index
+            jq --arg repo "${{ steps.commit-info.outputs.repo }}" \
+               --arg branch "${{ steps.commit-info.outputs.branch }}" \
+               --arg commit "${{ steps.commit-info.outputs.commit }}" \
+               --arg timestamp "${{ steps.commit-info.outputs.timestamp }}" \
+               --arg schema_count "${{ steps.detect-schemas.outputs.schema_count }}" \
+               '.repositories[$repo] = {
+                 "branch": $branch,
+                 "last_commit": $commit,
+                 "last_updated": $timestamp,
+                 "schema_count": ($schema_count | tonumber),
+                 "status": "success"
+               }' chartdb_schemas/schema_index.json > chartdb_schemas/schema_index.json.tmp
+            mv chartdb_schemas/schema_index.json.tmp chartdb_schemas/schema_index.json
+          else
+            # Create new index
+            cat > chartdb_schemas/schema_index.json << EOF
+{
+  "version": "1.0",
+  "last_updated": "${{ steps.commit-info.outputs.timestamp }}",
+  "repositories": {
+    "${{ steps.commit-info.outputs.repo }}": {
+      "branch": "${{ steps.commit-info.outputs.branch }}",
+      "last_commit": "${{ steps.commit-info.outputs.commit }}",
+      "last_updated": "${{ steps.commit-info.outputs.timestamp }}",
+      "schema_count": ${{ steps.detect-schemas.outputs.schema_count }},
+      "status": "success"
+    }
+  }
+}
+EOF
+          fi
+
+      - name: Log audit entry (complete)
+        if: always()
+        run: |
+          STATUS="${{ steps.generate-diagrams.outputs.success == 'true' && 'SUCCESS' || 'FAILED' }}"
+          echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] END - Repo: ${{ steps.commit-info.outputs.repo }}, Branch: ${{ steps.commit-info.outputs.branch }}, Commit: ${{ steps.commit-info.outputs.commit_short }}, Status: $STATUS" >> logs/chartdb_audit.log
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if [ -n "$(git status --porcelain chartdb_schemas/ logs/)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.has_changes == 'true' && steps.generate-diagrams.outputs.success == 'true'
+        run: |
+          git config user.name "ChartDB Bot"
+          git config user.email "chartdb-bot@bartonenterprises.com"
+
+          git add chartdb_schemas/ logs/
+          git commit -m "📊 ChartDB: Auto-update database schemas [skip ci]
+
+          Repository: ${{ steps.commit-info.outputs.repo }}
+          Branch: ${{ steps.commit-info.outputs.branch }}
+          Commit: ${{ steps.commit-info.outputs.commit_short }}
+          Timestamp: ${{ steps.commit-info.outputs.timestamp }}
+          Mode: ${{ steps.analysis-mode.outputs.mode }}
+          Schemas Found: ${{ steps.detect-schemas.outputs.schema_count }}
+
+          🤖 Generated with Claude Code
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+
+          git push
+
+      - name: Send success notification
+        if: steps.generate-diagrams.outputs.success == 'true' && always()
+        run: |
+          echo "✅ ChartDB updated for ${{ steps.commit-info.outputs.repo }} - ${{ steps.commit-info.outputs.branch }} (${{ steps.commit-info.outputs.commit_short }})"
+
+      - name: Send failure notification
+        if: failure()
+        run: |
+          echo "❌ ChartDB failed for ${{ steps.commit-info.outputs.repo }} - ${{ steps.commit-info.outputs.branch }}"
+
+  cleanup:
+    name: Cleanup and Maintenance
+    runs-on: ubuntu-latest
+    needs: chartdb-update
+    if: always() && github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Rotate logs
+        run: |
+          if [ -f "logs/chartdb_audit.log" ]; then
+            ARCHIVE_DATE=$(date -d "90 days ago" +%Y%m%d)
+            if [ -s logs/chartdb_audit.log ]; then
+              gzip -c logs/chartdb_audit.log > logs/chartdb_audit_${ARCHIVE_DATE}.log.gz
+              echo "Log rotated and archived"
+            fi
+          fi

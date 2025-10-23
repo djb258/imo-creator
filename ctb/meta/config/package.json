@@ -1,0 +1,56 @@
+{
+  "name": "imo-creator",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Unified repository compliance and orchestration system with Factory/Mechanic architecture",
+  "main": "index.js",
+  "config": {
+    "production_urls": {
+      "composio_mcp": "http://localhost:3001",
+      "composio_api": "https://backend.composio.dev",
+      "frontend": "https://imo-creator.vercel.app",
+      "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
+    }
+  },
+  "scripts": {
+    "dev": "node factory/ui/dev.js",
+    "build": "node factory/ui/build.js",
+    "init": "bash factory/ui/init.sh",
+    "recall": "bash mechanic/recall/recall.sh",
+    "env:check": "node scripts/env-check.mjs",
+    "compliance:check": "python tools/repo_compliance_check.py",
+    "compliance:fix": "python tools/repo_compliance_fixer.py",
+    "audit": "python simple_garage_bay.py",
+    "orchestrate": "python tools/repo_mcp_orchestrator.py",
+    "vercel:dev": "vercel dev",
+    "vercel:build": "mkdir -p public && cp index.html public/ && cp -r docs public/",
+    "test:urls": "curl http://localhost:3001/mcp/health && curl https://imo-creator.vercel.app",
+    "gemini:test": "node tools/gemini-cli/gemini.js test",
+    "gemini:generate": "node tools/gemini-cli/gemini.js generate",
+    "gemini:chat": "node tools/gemini-cli/gemini.js chat",
+    "gemini:models": "node tools/gemini-cli/gemini.js models",
+    "gemini:analyze": "node tools/gemini-cli/gemini.js analyze"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@neondatabase/serverless": "^0.10.0",
+    "composio-core": "^0.5.39",
+    "firebase-admin": "^12.0.0",
+    "undici": "^6.19.8"
+  },
+  "keywords": [
+    "compliance",
+    "orchestration",
+    "garage-mcp",
+    "heir",
+    "imo-creator",
+    "factory",
+    "mechanic"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

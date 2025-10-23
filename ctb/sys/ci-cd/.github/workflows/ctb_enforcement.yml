@@ -1,0 +1,223 @@
+name: CTB Doctrine Enforcement
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+
+jobs:
+  enforce-ctb-doctrine:
+    name: Enforce CTB Doctrine Requirements
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all branches for verification
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "CTB Enforcement Bot"
+          git config --global user.email "ctb-bot@bartonenterprises.com"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl
+
+      - name: Make enforcement script executable
+        run: chmod +x global-config/scripts/ctb_enforce.sh
+
+      - name: Run CTB Doctrine Enforcement
+        id: enforcement
+        run: |
+          bash global-config/scripts/ctb_enforce.sh || echo "enforcement_failed=true" >> $GITHUB_OUTPUT
+
+      - name: Upload enforcement log
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ctb-enforcement-log
+          path: logs/ctb_enforcement.log
+          retention-days: 30
+
+      - name: Comment PR with enforcement status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let logContent = 'CTB Enforcement Log not found';
+            try {
+              logContent = fs.readFileSync('logs/ctb_enforcement.log', 'utf8');
+              const logData = JSON.parse(logContent);
+
+              const status = logData.status === 'PASSED' ? '✅ PASSED' : '❌ FAILED';
+              const emoji = logData.status === 'PASSED' ? '✅' : '❌';
+
+              const comment = `## ${emoji} CTB Doctrine Enforcement Check
+
+**Status:** ${status}
+**Repository:** ${logData.repo_id}
+**Timestamp:** ${logData.timestamp}
+**Mode:** ${logData.enforcement_mode}
+
+### Check Results:
+
+**Branches:**
+- Required: ${logData.checks.branches.required}
+- Missing: ${logData.checks.branches.missing}
+- Empty: ${logData.checks.branches.empty}
+
+**MCP Tools:**
+- Required: ${logData.checks.mcp_tools.required}
+- Missing: ${logData.checks.mcp_tools.missing}
+
+**Ports:**
+- Checked: ${logData.checks.ports.checked}
+- Unhealthy: ${logData.checks.ports.unhealthy}
+
+${logData.status === 'FAILED' ? `
+### ⚠️ Action Required
+
+This PR does not meet CTB Doctrine requirements. Please ensure all required branches and MCP tools are properly configured.
+
+**Remediation Steps:**
+1. Run: \`bash global-config/scripts/ctb_init.sh\`
+2. Or: Update from IMO-Creator SOURCE
+3. Verify: \`bash global-config/scripts/ctb_enforce.sh\`
+` : `
+### ✅ All Requirements Met
+
+This repository is fully compliant with CTB Doctrine requirements.
+`}
+
+---
+*CTB Doctrine Enforcement - Automated Check*
+`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not read or parse enforcement log:', error);
+            }
+
+      - name: Fail workflow if enforcement failed
+        if: steps.enforcement.outputs.enforcement_failed == 'true'
+        run: |
+          echo "❌ CTB Doctrine Enforcement Failed"
+          echo "This repository does not meet CTB requirements."
+          echo "See enforcement log for details."
+          exit 1
+
+      - name: Success notification
+        if: steps.enforcement.outputs.enforcement_failed != 'true'
+        run: |
+          echo "✅ CTB Doctrine Enforcement Passed"
+          echo "Repository is fully compliant with CTB requirements."
+
+  check-external-repos:
+    name: Verify External Repository Integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check ChartDB branch
+        run: |
+          if git show-ref --verify --quiet refs/heads/sys/chartdb; then
+            echo "✅ sys/chartdb branch exists"
+            FILE_COUNT=$(git ls-tree -r sys/chartdb --name-only | wc -l)
+            echo "Files in sys/chartdb: $FILE_COUNT"
+            if [ "$FILE_COUNT" -lt 10 ]; then
+              echo "⚠️ WARNING: sys/chartdb appears empty"
+              exit 1
+            fi
+          else
+            echo "❌ ERROR: sys/chartdb branch missing"
+            exit 1
+          fi
+
+      - name: Check Activepieces branch
+        run: |
+          if git show-ref --verify --quiet refs/heads/sys/activepieces; then
+            echo "✅ sys/activepieces branch exists"
+            FILE_COUNT=$(git ls-tree -r sys/activepieces --name-only | wc -l)
+            echo "Files in sys/activepieces: $FILE_COUNT"
+            if [ "$FILE_COUNT" -lt 10 ]; then
+              echo "⚠️ WARNING: sys/activepieces appears empty"
+              exit 1
+            fi
+          else
+            echo "❌ ERROR: sys/activepieces branch missing"
+            exit 1
+          fi
+
+      - name: Check Windmill branch
+        run: |
+          if git show-ref --verify --quiet refs/heads/sys/windmill; then
+            echo "✅ sys/windmill branch exists"
+            FILE_COUNT=$(git ls-tree -r sys/windmill --name-only | wc -l)
+            echo "Files in sys/windmill: $FILE_COUNT"
+            if [ "$FILE_COUNT" -lt 10 ]; then
+              echo "⚠️ WARNING: sys/windmill appears empty"
+              exit 1
+            fi
+          else
+            echo "❌ ERROR: sys/windmill branch missing"
+            exit 1
+          fi
+
+      - name: Verify MCP Registry
+        run: |
+          if [ -f "config/mcp_registry.json" ]; then
+            echo "✅ MCP registry found"
+
+            # Check for required doctrine IDs
+            if grep -q '"doctrine_id": "04.04.07"' config/mcp_registry.json; then
+              echo "✅ ChartDB registered (04.04.07)"
+            else
+              echo "❌ ChartDB not registered"
+              exit 1
+            fi
+
+            if grep -q '"doctrine_id": "04.04.08"' config/mcp_registry.json; then
+              echo "✅ Activepieces registered (04.04.08)"
+            else
+              echo "❌ Activepieces not registered"
+              exit 1
+            fi
+
+            if grep -q '"doctrine_id": "04.04.09"' config/mcp_registry.json; then
+              echo "✅ Windmill registered (04.04.09)"
+            else
+              echo "❌ Windmill not registered"
+              exit 1
+            fi
+          else
+            echo "❌ ERROR: MCP registry not found"
+            exit 1
+          fi
+
+      - name: External repos integration verified
+        run: |
+          echo "✅ All external repository integrations verified successfully"
+          echo "📊 Integration Status:"
+          echo "  - ChartDB: ✅ Integrated"
+          echo "  - Activepieces: ✅ Integrated"
+          echo "  - Windmill: ✅ Integrated"
