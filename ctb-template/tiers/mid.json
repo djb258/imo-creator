@@ -1,0 +1,22 @@
+{
+  "tier": "mid",
+  "description": "CTB layout for mid-size repos (Validator, Gatekeeper)",
+  "include": [
+    "sys",
+    "data",
+    "apps",
+    "docs",
+    "tests"
+  ],
+  "exclude": [
+    "ai/training",
+    "docs/ort"
+  ],
+  "use_cases": [
+    "Standard web applications with API backends",
+    "Multi-component services without heavy AI",
+    "Internal tools and dashboards"
+  ],
+  "minimum_team_size": 2,
+  "complexity": "medium"
+}

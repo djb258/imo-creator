@@ -1,0 +1,134 @@
+# CTB Architecture Map Placeholder
+
+This file is a placeholder for the visual CTB architecture diagram.
+
+## To Generate CTB_MAP.png:
+
+Use a diagramming tool (Mermaid, Draw.io, Figma, etc.) to create a visual representation of the CTB structure:
+
+### Recommended Structure:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   CTB ARCHITECTURE                      │
+│              Christmas Tree Backbone v1.0.0             │
+└─────────────────────────────────────────────────────────┘
+
+                            ┌─────────┐
+                            │  MAIN   │
+                            │ Branch  │
+                            └────┬────┘
+                                 │
+                            ┌────▼────┐
+                            │ DEVELOP │
+                            │ Branch  │
+                            └────┬────┘
+                                 │
+                 ┌───────────────┼───────────────┐
+                 │               │               │
+            ┌────▼────┐    ┌────▼────┐    ┌────▼────┐
+            │   SYS   │    │ FEATURE │    │  TOOLS  │
+            │ 40k ft  │    │  10k ft │    │  20k ft │
+            └────┬────┘    └─────────┘    └─────────┘
+                 │
+     ┌───────────┼───────────┬───────────┬───────────┐
+     │           │           │           │           │
+┌────▼────┐ ┌───▼────┐ ┌────▼────┐ ┌───▼────┐ ┌───▼────┐
+│Composio │ │ Gate   │ │  Vali   │ │   CI   │ │  ENV   │
+│  MCP    │ │ keeper │ │ dator   │ │        │ │        │
+└─────────┘ └────────┘ └─────────┘ └────────┘ └────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│                      DATA LAYER (5k)                    │
+├─────────────┬─────────────┬─────────────┬──────────────┤
+│    NEON     │  FIREBASE   │  BIGQUERY   │     ZOD      │
+│ PostgreSQL  │ Realtime DB │  Analytics  │ Validation   │
+└─────────────┴─────────────┴─────────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│                     APPS LAYER (20k)                    │
+├─────────────┬─────────────┬─────────────┬──────────────┤
+│     UI      │     API     │   AGENTS    │    TOOLS     │
+│  Frontend   │   Backend   │  AI Agents  │  CLI Utils   │
+└─────────────┴─────────────┴─────────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│                      AI LAYER (20k)                     │
+├─────────────┬─────────────┬─────────────┬──────────────┤
+│ BLUEPRINTS  │   PROMPTS   │   MODELS    │   TRAINING   │
+│ Workflows   │ Engineering │   Configs   │  Resources   │
+└─────────────┴─────────────┴─────────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│                    DOCS + TESTS                         │
+├─────────────┬─────────────┬─────────────┬──────────────┤
+│  CTB Docs   │  Doctrine   │    ORT      │    TESTS     │
+│             │  Policies   │ Readiness   │ Unit/Int/Aud │
+└─────────────┴─────────────┴─────────────┴──────────────┘
+```
+
+### Visual Elements to Include:
+
+1. **Tree Structure**: Show hierarchical organization
+2. **Altitude Labels**: 40k, 20k, 10k, 5k markers
+3. **Branch Flow**: main → develop → sys/* → feature/*
+4. **Color Coding**:
+   - System (sys): Red/Orange
+   - Data: Blue
+   - Apps: Green
+   - AI: Purple
+   - Docs/Tests: Gray
+5. **Connections**: Show data flow between layers
+6. **Barton Doctrine Symbols**: Gatekeeper, Validator, MCP
+
+### Tools to Use:
+
+- **Mermaid**: Text-based diagram generation
+- **Draw.io**: Free diagramming tool
+- **Figma**: Professional design tool
+- **Lucidchart**: Online diagramming
+- **PlantUML**: Code-based UML diagrams
+
+### Example Mermaid Code:
+
+```mermaid
+graph TD
+    MAIN[Main Branch] --> DEVELOP[Develop Branch]
+    DEVELOP --> SYS[sys/* - 40k ft]
+    DEVELOP --> FEATURE[feature/* - 10k ft]
+    DEVELOP --> TOOLS[tools - 20k ft]
+
+    SYS --> COMPOSIO[Composio MCP]
+    SYS --> GATEKEEPER[Gatekeeper]
+    SYS --> VALIDATOR[Validator]
+    SYS --> CI[CI/CD]
+    SYS --> ENV[Environment]
+
+    DATA[Data Layer - 5k ft] --> NEON[Neon]
+    DATA --> FIREBASE[Firebase]
+    DATA --> BIGQUERY[BigQuery]
+    DATA --> ZOD[Zod]
+
+    APPS[Apps Layer - 20k ft] --> UI[UI]
+    APPS --> API[API]
+    APPS --> AGENTS[Agents]
+    APPS --> CLITOOLS[Tools]
+
+    AI[AI Layer - 20k ft] --> BLUEPRINTS[Blueprints]
+    AI --> PROMPTS[Prompts]
+    AI --> MODELS[Models]
+    AI --> TRAINING[Training]
+
+    style MAIN fill:#ff6b6b
+    style DEVELOP fill:#ffa07a
+    style SYS fill:#ff4500
+    style DATA fill:#4169e1
+    style APPS fill:#32cd32
+    style AI fill:#9370db
+```
+
+---
+
+**Action Required**: Replace this placeholder with actual CTB_MAP.png visual diagram.
+
+**Last Updated**: 2025-10-23

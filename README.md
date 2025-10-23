@@ -1,4 +1,130 @@
-# Blueprint App Shell
+# IMO-Creator — CTB Master Template Factory
+
+## Purpose
+This repository is the **canonical source of truth** for the **Christmas Tree Backbone (CTB)** architecture under Barton Doctrine.
+
+## Usage
+All new Barton-compliant repositories **must scaffold** from `/ctb-template/` via the `ctb_scaffold.ts` generator.
+
+## Hierarchy
+CTB defines the structural doctrine:
+- **System** (`/sys`) → Core infrastructure (Composio MCP, Gatekeeper, Validator, CI, Environment)
+- **Data** (`/data`) → Schema enforcement (Neon, Firebase, BigQuery, Zod)
+- **Apps** (`/apps`) → Application layer (UI, API, Agents, Tools)
+- **AI** (`/ai`) → AI integration (Blueprints, Prompts, Models, Training)
+- **Docs** (`/docs`) → Documentation (CTB, Doctrine, ORT, SOPs)
+- **Tests** (`/tests`) → Validation (Unit, Integration, Audit)
+
+## Versioning
+The current CTB schema version is defined in `/ctb-template/version.json`.
+
+**Current Version**: `1.0.0`
+**Last Updated**: `2025-10-23`
+
+## Quick Start
+
+### Scaffold a New Repository
+
+```bash
+# Full tier (enterprise-scale)
+ts-node scripts/ctb_scaffold.ts --repo my-enterprise-app --tier full
+
+# Mid tier (standard applications)
+ts-node scripts/ctb_scaffold.ts --repo my-web-app --tier mid
+
+# Micro tier (single-purpose tools)
+ts-node scripts/ctb_scaffold.ts --repo my-cli-tool --tier micro
+```
+
+### Available Tiers
+
+- **full**: Complete CTB structure for enterprise-scale repos (System + Data + Apps + AI + Docs + Tests)
+- **mid**: CTB layout for mid-size repos (excludes AI training, ORT docs)
+- **micro**: CTB layout for single-tool repos (minimal structure: sys, apps/tools, data/zod)
+
+See `/ctb-template/tiers/` for complete tier specifications.
+
+## CTB Template Structure
+
+```
+ctb-template/
+├── sys/              # System infrastructure (40k altitude)
+│   ├── composio-mcp/ # Composio MCP integration
+│   ├── gatekeeper/   # Access control & policy enforcement
+│   ├── validator/    # Schema enforcement
+│   ├── ci/           # CI/CD pipelines
+│   └── env/          # Environment configuration
+├── data/             # Data layer (5k altitude)
+│   ├── neon/         # PostgreSQL schemas
+│   ├── firebase/     # Firebase Realtime DB
+│   ├── bigquery/     # Analytics warehouse
+│   └── zod/          # TypeScript validation
+├── apps/             # Application layer (20k altitude)
+│   ├── ui/           # Frontend components
+│   ├── api/          # Backend endpoints
+│   ├── agents/       # AI agents
+│   └── tools/        # CLI utilities
+├── ai/               # AI integration (20k altitude)
+│   ├── blueprints/   # Workflow templates
+│   ├── prompts/      # Prompt engineering
+│   ├── models/       # Model configurations
+│   └── training/     # Training resources
+├── docs/             # Documentation
+│   ├── ctb/          # CTB architecture docs
+│   ├── doctrine/     # Barton Doctrine policies
+│   ├── ort/          # Operational readiness
+│   └── sops/         # Standard procedures
+└── tests/            # Test suites
+    ├── unit/         # Unit tests
+    ├── integration/  # Integration tests
+    └── audit/        # Compliance audits
+```
+
+## Barton Doctrine Enforcement
+
+All scaffolded repositories enforce:
+
+✅ **Composio MCP Required** - All external integrations must go through Composio MCP
+✅ **Gatekeeper Enforced** - Access control and validation policies enforced at system layer
+✅ **No Direct Neon Access** - Data access must go through validator layer
+
+See `/ctb-template/.barton_policy.json` for complete policy specification.
+
+## CTB Branch Structure
+
+All repositories follow the branch map defined in `/ctb-template/CTB_BRANCHMAP.yaml`:
+
+- `main` - Production (doctrine locked, maximum protection)
+- `develop` - Integration and staging
+- `sys/composio` - Doctrine & MCP synchronization (40k altitude)
+- `sys/validator` - Schema enforcement (40k altitude)
+- `sys/gatekeeper` - Access control (40k altitude)
+- `feature/*` - Active feature development (10k altitude)
+- `tools` - Permanent tool branch (20k altitude)
+
+## Drift Enforcement
+
+A GitHub Action (`.github/workflows/ctb_drift_check.yml`) automatically validates:
+- CTB version consistency across repositories
+- Barton policy compliance
+- Required file presence
+
+See **CI/CD Integration** section below for details.
+
+## Documentation
+
+- [CTB Architecture Guide](./docs/ctb/CTB_MAP.png)
+- [CTB Version History](./docs/ctb/CTB_VERSION_HISTORY.md)
+- [CTB Tier Selection Guide](./docs/ctb/CTB_TIER_GUIDE.md)
+- [Barton Doctrine Policies](./docs/doctrine/)
+
+---
+
+## Legacy: Blueprint App Shell
+
+Below is the legacy documentation for the original Blueprint App Shell functionality (still available in this repository).
+
+### Blueprint App Features
 
 A 4-page planning app with SSOT manifest, flex ladder stages, and visual progress tracking.
 

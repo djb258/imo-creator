@@ -1,0 +1,202 @@
+{
+  "version": "1.0.0",
+  "description": "Kodex Doctrine Enforcement Rules for CTB Template Authority",
+  "enforcement_level": "strict",
+  "rules": [
+    {
+      "id": "CTB_STRUCTURE_REQUIRED",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template",
+      "must_exist": true,
+      "description": "CTB template directory must exist at repository root"
+    },
+    {
+      "id": "CTB_VERSION_FILE",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/version.json",
+      "must_exist": true,
+      "description": "CTB version file must be present"
+    },
+    {
+      "id": "CTB_VERSION_VALID",
+      "type": "content",
+      "severity": "error",
+      "path": "ctb-template/version.json",
+      "pattern": "\"ctb_version\"\\s*:\\s*\"\\d+\\.\\d+\\.\\d+\"",
+      "description": "CTB version must follow semantic versioning"
+    },
+    {
+      "id": "POLICY_FILE",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/.barton_policy.json",
+      "must_exist": true,
+      "description": "Barton policy file must be present"
+    },
+    {
+      "id": "COMPOSIO_GATE_ENFORCEMENT",
+      "type": "content",
+      "severity": "error",
+      "path": "ctb-template/.barton_policy.json",
+      "search": "\"allow_direct_neon\": false",
+      "must_exist": true,
+      "description": "Barton policy must disallow direct Neon access"
+    },
+    {
+      "id": "COMPOSIO_REQUIRED",
+      "type": "content",
+      "severity": "error",
+      "path": "ctb-template/.barton_policy.json",
+      "search": "\"requires_composio\": true",
+      "must_exist": true,
+      "description": "Barton policy must require Composio MCP"
+    },
+    {
+      "id": "GATEKEEPER_ENFORCED",
+      "type": "content",
+      "severity": "error",
+      "path": "ctb-template/.barton_policy.json",
+      "search": "\"gatekeeper_enforced\": true",
+      "must_exist": true,
+      "description": "Barton policy must enforce gatekeeper"
+    },
+    {
+      "id": "CTB_BRANCHMAP",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/CTB_BRANCHMAP.yaml",
+      "must_exist": true,
+      "description": "CTB branch map must be present"
+    },
+    {
+      "id": "TIER_FULL_EXISTS",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/tiers/full.json",
+      "must_exist": true,
+      "description": "Full tier configuration must exist"
+    },
+    {
+      "id": "TIER_MID_EXISTS",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/tiers/mid.json",
+      "must_exist": true,
+      "description": "Mid tier configuration must exist"
+    },
+    {
+      "id": "TIER_MICRO_EXISTS",
+      "type": "file",
+      "severity": "error",
+      "path": "ctb-template/tiers/micro.json",
+      "must_exist": true,
+      "description": "Micro tier configuration must exist"
+    },
+    {
+      "id": "SCAFFOLD_SCRIPT_EXISTS",
+      "type": "file",
+      "severity": "error",
+      "path": "scripts/ctb_scaffold.ts",
+      "must_exist": true,
+      "description": "CTB scaffolding script must exist"
+    },
+    {
+      "id": "SYS_COMPOSIO_MCP",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/sys/composio-mcp",
+      "must_exist": true,
+      "description": "Composio MCP system directory must exist"
+    },
+    {
+      "id": "SYS_GATEKEEPER",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/sys/gatekeeper",
+      "must_exist": true,
+      "description": "Gatekeeper system directory must exist"
+    },
+    {
+      "id": "SYS_VALIDATOR",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/sys/validator",
+      "must_exist": true,
+      "description": "Validator system directory must exist"
+    },
+    {
+      "id": "DATA_NEON",
+      "type": "filesystem",
+      "severity": "warning",
+      "path": "ctb-template/data/neon",
+      "must_exist": true,
+      "description": "Neon data directory should exist"
+    },
+    {
+      "id": "DATA_FIREBASE",
+      "type": "filesystem",
+      "severity": "warning",
+      "path": "ctb-template/data/firebase",
+      "must_exist": true,
+      "description": "Firebase data directory should exist"
+    },
+    {
+      "id": "APPS_TOOLS",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/apps/tools",
+      "must_exist": true,
+      "description": "Apps/tools directory must exist"
+    },
+    {
+      "id": "DOCS_CTB",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/docs/ctb",
+      "must_exist": true,
+      "description": "CTB documentation directory must exist"
+    },
+    {
+      "id": "DOCS_DOCTRINE",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/docs/doctrine",
+      "must_exist": true,
+      "description": "Doctrine documentation directory must exist"
+    },
+    {
+      "id": "TESTS_AUDIT",
+      "type": "filesystem",
+      "severity": "error",
+      "path": "ctb-template/tests/audit",
+      "must_exist": true,
+      "description": "Audit tests directory must exist"
+    },
+    {
+      "id": "README_CTB_SECTION",
+      "type": "content",
+      "severity": "error",
+      "path": "README.md",
+      "search": "CTB Master Template Factory",
+      "must_exist": true,
+      "description": "README must contain CTB Master Template Factory section"
+    },
+    {
+      "id": "DRIFT_CHECK_WORKFLOW",
+      "type": "file",
+      "severity": "error",
+      "path": ".github/workflows/ctb_drift_check.yml",
+      "must_exist": true,
+      "description": "CTB drift check GitHub Action must exist"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-10-23",
+    "updated_at": "2025-10-23",
+    "maintainer": "Barton Doctrine Authority",
+    "repository": "imo-creator",
+    "purpose": "Enforce CTB template authority compliance"
+  }
+}

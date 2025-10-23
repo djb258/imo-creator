@@ -1,0 +1,5 @@
+{
+  "requires_composio": true,
+  "allow_direct_neon": false,
+  "gatekeeper_enforced": true
+}

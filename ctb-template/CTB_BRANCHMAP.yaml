@@ -1,0 +1,74 @@
+# CTB Branch Mapping - Barton Doctrine Standard
+# All Barton-compliant repositories must follow this branch organization
+
+branches:
+  main:
+    description: "Production (doctrine locked)"
+    protection: "maximum"
+    merge_requires: ["develop", "all tests passing", "doctrine compliance"]
+    deployment: "production"
+
+  develop:
+    description: "Integration and staging"
+    protection: "high"
+    merge_requires: ["feature branches", "integration tests passing"]
+    deployment: "staging"
+
+  sys/composio:
+    description: "Doctrine & MCP synchronization"
+    altitude: "40k"
+    purpose: "Composio MCP integration and tool orchestration"
+    merge_target: "develop"
+
+  sys/validator:
+    description: "Schema enforcement"
+    altitude: "40k"
+    purpose: "Data validation and schema compliance"
+    merge_target: "develop"
+
+  sys/gatekeeper:
+    description: "Access control and policy enforcement"
+    altitude: "40k"
+    purpose: "Security and authorization layer"
+    merge_target: "develop"
+
+  feature/*:
+    description: "Active feature development"
+    altitude: "10k"
+    purpose: "New features and enhancements"
+    merge_target: "develop"
+    naming_convention: "feature/descriptive-name"
+
+  tools:
+    description: "Permanent tool branch for /apps/tools modules"
+    altitude: "20k"
+    purpose: "CLI utilities and helper tools"
+    merge_target: "develop"
+    status: "permanent"
+
+# CTB Altitude System
+altitudes:
+  40k:
+    description: "System infrastructure and core services"
+    branches: ["sys/*"]
+  20k:
+    description: "Domain logic and business rules"
+    branches: ["tools", "apps/*"]
+  10k:
+    description: "Feature implementation"
+    branches: ["feature/*", "ui/*"]
+  5k:
+    description: "Data and content"
+    branches: ["data/*", "content/*"]
+
+# Merge Flow
+merge_flow:
+  - from: "feature/*"
+    to: "develop"
+    requires: ["tests", "code review", "doctrine compliance"]
+  - from: "sys/*"
+    to: "develop"
+    requires: ["tests", "security review", "doctrine validation"]
+  - from: "develop"
+    to: "main"
+    requires: ["all tests passing", "staging validation", "production approval"]
