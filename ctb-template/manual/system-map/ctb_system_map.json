@@ -1,0 +1,104 @@
+{
+  "version": "1.3.0",
+  "last_updated": "2025-10-23",
+  "description": "CTB Role-Based System Map for visualization and operational monitoring",
+  "roles": ["ai_engine", "workbench_db", "vault_db", "integration_bridge"],
+  "nodes": [
+    {
+      "id": "ai_engine",
+      "label": "AI Engine",
+      "altitude": "20k",
+      "color": "yellow",
+      "driver": "gemini",
+      "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#ai_engine",
+      "ort_manual": "/manual/ort-manuals/ai_engine.ort.md",
+      "capabilities": ["reasoning", "orchestration", "llm_execution"]
+    },
+    {
+      "id": "workbench_db",
+      "label": "Workbench DB",
+      "altitude": "5k",
+      "color": "blue",
+      "driver": "firebase",
+      "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#workbench_db",
+      "ort_manual": "/manual/ort-manuals/workbench_db.ort.md",
+      "capabilities": ["staging", "validation_queue", "realtime_updates"]
+    },
+    {
+      "id": "vault_db",
+      "label": "Vault DB",
+      "altitude": "5k",
+      "color": "teal",
+      "driver": "neon",
+      "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#vault_db",
+      "ort_manual": "/manual/ort-manuals/vault_db.ort.md",
+      "capabilities": ["schema_enforcement", "audit_logging", "immutable_storage"]
+    },
+    {
+      "id": "integration_bridge",
+      "label": "Integration Bridge",
+      "altitude": "20k",
+      "color": "orange",
+      "driver": "composio-mcp",
+      "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#integration_bridge",
+      "ort_manual": "/manual/ort-manuals/integration_bridge.ort.md",
+      "capabilities": ["api_gateway", "tool_orchestration", "mcp_protocol"]
+    }
+  ],
+  "links": [
+    {
+      "from": "ai_engine",
+      "to": "workbench_db",
+      "type": "orchestration",
+      "description": "AI engine writes temporary results to workbench for validation"
+    },
+    {
+      "from": "workbench_db",
+      "to": "vault_db",
+      "type": "promotion",
+      "description": "Validated data promoted from workbench to vault via gatekeeper"
+    },
+    {
+      "from": "integration_bridge",
+      "to": "vault_db",
+      "type": "data_bridge",
+      "description": "External tools write validated data directly to vault"
+    },
+    {
+      "from": "integration_bridge",
+      "to": "ai_engine",
+      "type": "tool_driver",
+      "description": "Integration bridge provides external tool capabilities to AI engine"
+    },
+    {
+      "from": "ai_engine",
+      "to": "integration_bridge",
+      "type": "tool_request",
+      "description": "AI engine requests external tool execution via MCP"
+    },
+    {
+      "from": "workbench_db",
+      "to": "ai_engine",
+      "type": "feedback_loop",
+      "description": "Workbench provides validation results back to AI engine"
+    }
+  ],
+  "data_flow": {
+    "input": "integration_bridge",
+    "processing": ["ai_engine", "workbench_db"],
+    "storage": "vault_db",
+    "output": "integration_bridge"
+  },
+  "viewer": {
+    "json_endpoint": "/manual/system-map/ctb_system_map.json",
+    "diagram_endpoint": "/manual/system-map/ctb_system_map.mmd",
+    "live_status": "/manual/troubleshooting/system_diagnostics.json",
+    "api_schema": "/viewer-api/schemas/system_manual.schema.json"
+  },
+  "barton_doctrine": {
+    "composio_required": true,
+    "gatekeeper_enforced": true,
+    "direct_vault_access": "forbidden",
+    "heir_orbt_tracking": "mandatory"
+  }
+}

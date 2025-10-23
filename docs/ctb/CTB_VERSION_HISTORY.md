@@ -71,6 +71,256 @@ None - All Gemini functionality remains intact, only classification changed.
 
 ---
 
+## Version 1.3.0 (2025-10-23)
+
+**Status**: Role-Based System Manual ✨
+
+### Overview
+
+Major release introducing a comprehensive **Role-Based System Manual + Troubleshooting Layer** to the CTB template. This release prepares the architecture for external visualization apps (CTB Viewer) while maintaining vendor-agnostic operational documentation.
+
+### Key Features
+
+#### 1. Role-Based Abstraction (NEW)
+
+Introduced **4 functional roles** independent of vendor implementations:
+
+- **AI_ENGINE** (20k altitude) - Reasoning, orchestration, LLM execution
+- **WORKBENCH_DB** (5k altitude) - Staging database, validation queues
+- **VAULT_DB** (5k altitude) - Production vault with schema enforcement
+- **INTEGRATION_BRIDGE** (20k altitude) - External tools, API gateway via MCP
+
+**Why Role-Based?**
+- Prevents vendor lock-in (switch Gemini↔Claude, Firebase↔MongoDB without breaking architecture)
+- Enables driver abstraction with interface contracts
+- Prepares for future CTB Viewer App visualization
+- Stable documentation regardless of vendor changes
+
+#### 2. Driver Manifests (NEW)
+
+Created vendor-agnostic driver manifests for all roles:
+
+**Files Added:**
+- ✅ `ctb-template/drivers/ai_engine/driver_manifest.json`
+- ✅ `ctb-template/drivers/workbench_db/driver_manifest.json`
+- ✅ `ctb-template/drivers/vault_db/driver_manifest.json`
+- ✅ `ctb-template/drivers/integration_bridge/driver_manifest.json`
+
+**Structure:**
+```json
+{
+  "role": "AI_ENGINE",
+  "current_driver": "gemini",
+  "supported_drivers": ["gemini", "claude", "gpt"],
+  "interface_contract": {
+    "input": "structured_prompt",
+    "output": "json_result"
+  },
+  "ort_manual": "/manual/ort-manuals/ai_engine.ort.md",
+  "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#ai_engine"
+}
+```
+
+#### 3. ORBT Manuals (NEW)
+
+Implemented **Operate/Repair/Build/Train** operational runbooks for each role:
+
+**Files Added:**
+- ✅ `ctb-template/manual/ort-manuals/ai_engine.ort.md` (~250 lines)
+- ✅ `ctb-template/manual/ort-manuals/workbench_db.ort.md`
+- ✅ `ctb-template/manual/ort-manuals/vault_db.ort.md`
+- ✅ `ctb-template/manual/ort-manuals/integration_bridge.ort.md`
+
+**ORBT Format:**
+- **Operate**: Normal operations, health checks, daily procedures
+- **Repair**: Failure modes (symptoms, diagnosis, repair steps, resolution time)
+- **Build**: Initial setup, configuration, driver switching
+- **Train**: Key concepts, practice scenarios, operator training
+
+**Example Failure Modes Documented:**
+- AI_ENGINE: API connection failure, high latency, model deprecation
+- WORKBENCH_DB: Connection timeout, validation queue backlog
+- VAULT_DB: Connection failure, schema violation, audit log overflow
+- INTEGRATION_BRIDGE: MCP server down, API rate limits, tool registration failure
+
+#### 4. System Topology Maps (NEW)
+
+Created system visualization ready for CTB Viewer App:
+
+**Files Added:**
+- ✅ `ctb-template/manual/system-map/ctb_system_map.json` - System topology (JSON)
+- ✅ `ctb-template/manual/system-map/ctb_system_map.mmd` - System diagram (Mermaid)
+
+**Features:**
+- Node definitions with altitude classification (20k/5k)
+- Link definitions showing data flow between roles
+- Color-coded visualization (yellow/blue/teal/orange)
+- Viewer integration metadata
+
+#### 5. Troubleshooting Layer (NEW)
+
+Implemented live system diagnostics and health monitoring:
+
+**Files Added:**
+- ✅ `ctb-template/manual/troubleshooting/system_diagnostics.json` - Live health status
+- ✅ `ctb-template/manual/scripts/status_check.ts` - Health check script (~300 lines)
+
+**Health Monitoring Features:**
+- Real-time status for all 4 roles (healthy/degraded/disconnected)
+- Latency tracking per role
+- System-wide health aggregation
+- Alert generation and issue tracking
+- Viewer-ready JSON output
+
+**Status Check Script:**
+```bash
+# Run health check
+ts-node ctb-template/manual/scripts/status_check.ts
+
+# Output: System health summary with role diagnostics
+```
+
+#### 6. Viewer API (NEW)
+
+Created external API layer for CTB Viewer apps:
+
+**Files Added:**
+- ✅ `ctb-template/viewer-api/schemas/system_health_response.schema.json` - Health API schema
+- ✅ `ctb-template/viewer-api/schemas/role_details_response.schema.json` - Role API schema
+- ✅ `ctb-template/viewer-api/mocks/sample_system_health.json` - Mock health data
+- ✅ `ctb-template/viewer-api/mocks/sample_role_details.json` - Mock role data
+- ✅ `ctb-template/viewer-api/README.md` - Integration guide
+
+**JSON Schema Features:**
+- Draft-07 compliant schemas for validation
+- TypeScript-compatible type definitions
+- Mock data for frontend development
+- Complete integration examples (React, Next.js)
+
+**Viewer Integration:**
+```typescript
+// Poll system health (recommended: 30s interval)
+const health = await fetch('/manual/troubleshooting/system_diagnostics.json');
+
+// Load role details
+const role = await fetch('/drivers/ai_engine/driver_manifest.json');
+```
+
+#### 7. Documentation (NEW)
+
+Comprehensive system manual and guides:
+
+**Files Added:**
+- ✅ `docs/ctb/CTB_SYSTEM_MANUAL_GUIDE.md` - Complete operational guide (~500 lines)
+
+**Guide Includes:**
+- System architecture overview
+- Role-based abstraction explanation
+- ORBT manual usage
+- Troubleshooting workflows
+- Driver management procedures
+- Quick reference commands
+- Incident response playbooks
+
+### Directory Structure Changes
+
+**New Directories:**
+```
+ctb-template/
+├── manual/                     # NEW: System documentation
+│   ├── system-map/
+│   ├── ort-manuals/
+│   ├── troubleshooting/
+│   └── scripts/
+├── drivers/                    # NEW: Vendor implementations
+│   ├── ai_engine/
+│   ├── workbench_db/
+│   ├── vault_db/
+│   └── integration_bridge/
+└── viewer-api/                 # NEW: External API layer
+    ├── schemas/
+    └── mocks/
+```
+
+### Statistics
+
+**Files Added**: 21
+- 4 driver manifests
+- 4 ORBT manuals
+- 2 system maps (JSON + Mermaid)
+- 2 troubleshooting files (diagnostics + script)
+- 4 viewer API schemas/mocks
+- 2 READMEs
+- 1 system manual guide
+- 2 directory structure additions
+
+**Total Lines**: ~2,500
+- ORBT manuals: ~800 lines
+- Status check script: ~300 lines
+- System manual guide: ~500 lines
+- Viewer API schemas: ~400 lines
+- Documentation/READMEs: ~500 lines
+
+### Barton Doctrine Compliance
+
+All role-based structures follow Barton Doctrine:
+
+- ✅ **Vendor-agnostic**: Roles are functional (AI_ENGINE), not vendor-specific (Gemini)
+- ✅ **Driver abstraction**: Current driver is separate from interface contract
+- ✅ **HEIR/ORBT tracking**: All roles include tracking metadata
+- ✅ **Composio MCP integration**: Integration Bridge uses MCP protocol
+- ✅ **Gatekeeper enforcement**: Vault DB access requires validation
+- ✅ **No direct access**: Vault DB forbids direct writes (validator layer required)
+
+### Breaking Changes
+
+**None** - All additions are backward-compatible. Existing CTB scaffolds continue to work.
+
+### Deprecations
+
+None
+
+### Migration Guide
+
+#### For Existing CTB v1.0.0 Repositories
+
+1. **Copy New Structures** (optional, recommended for operational excellence):
+   ```bash
+   # Add role-based documentation
+   cp -r ctb-template/manual your-repo/
+   cp -r ctb-template/drivers your-repo/
+   cp -r ctb-template/viewer-api your-repo/
+   ```
+
+2. **Configure Driver Manifests**:
+   - Edit `drivers/*/driver_manifest.json` with your current vendors
+   - Update `current_driver` fields (gemini, firebase, neon, composio-mcp)
+
+3. **Run Health Check**:
+   ```bash
+   ts-node manual/scripts/status_check.ts
+   ```
+
+4. **Optional - Add to Scaffolding**:
+   - Update `ctb_scaffold.ts` to include new structures (Step 9)
+   - Add Kodex rules for role-based validation (Step 10)
+
+### Known Issues
+
+None
+
+### Future Enhancements (Planned)
+
+- **v1.4.0**: CTB Viewer App (React/Next.js) with live system visualization
+- **v1.5.0**: WebSocket support for real-time health updates
+- **v1.6.0**: Historical metrics and trend analysis
+
+### Acknowledgments
+
+This release prepares CTB for external visualization while maintaining operational excellence through vendor-agnostic role-based documentation.
+
+---
+
 ## Version 1.0.0 (2025-10-23)
 
 **Status**: Initial Release ✨

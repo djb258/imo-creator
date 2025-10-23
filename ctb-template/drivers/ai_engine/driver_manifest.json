@@ -1,0 +1,48 @@
+{
+  "role": "AI_ENGINE",
+  "current_driver": "gemini",
+  "description": "Handles reasoning, orchestration, and LLM execution with multi-model support",
+  "altitude": "20k",
+  "interface_contract": {
+    "input": "structured_prompt (string | object)",
+    "output": "json_result (object with text, metadata, usage)"
+  },
+  "capabilities": [
+    "text_generation",
+    "code_analysis",
+    "multi_step_reasoning",
+    "context_preservation"
+  ],
+  "status_endpoint": "/manual/troubleshooting/system_diagnostics.json#ai_engine",
+  "ort_manual": "/manual/ort-manuals/ai_engine.ort.md",
+  "supported_drivers": [
+    {
+      "name": "gemini",
+      "version": "2.5-flash",
+      "provider": "Google AI",
+      "api_endpoint": "https://generativelanguage.googleapis.com/v1beta"
+    },
+    {
+      "name": "claude",
+      "version": "sonnet-4.5",
+      "provider": "Anthropic",
+      "api_endpoint": "composio://anthropic"
+    },
+    {
+      "name": "gpt",
+      "version": "4-turbo",
+      "provider": "OpenAI",
+      "api_endpoint": "https://api.openai.com/v1"
+    }
+  ],
+  "barton_doctrine_compliance": {
+    "requires_composio": true,
+    "heir_orbt_tracking": true,
+    "gatekeeper_validation": false
+  },
+  "health_check": {
+    "method": "POST",
+    "endpoint": "/tool",
+    "expected_latency_ms": 300
+  }
+}
