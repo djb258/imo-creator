@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.939399
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: guides
+# Compliance: 100%
+# HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
+-->
+
 # Composio + Gemini AI Integration
 
 Complete integration guide for using Google Gemini AI through the Composio MCP server in the IMO Creator ecosystem.

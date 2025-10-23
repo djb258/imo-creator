@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.585373
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: composio
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-COMPOS-01
+
+-->
+
 # Composio Integration Verification Report
 
 **Date:** September 28, 2025

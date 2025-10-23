@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.247859
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: utils
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-UTILS-01
+
 """
 MCP Configuration Loader
 ========================

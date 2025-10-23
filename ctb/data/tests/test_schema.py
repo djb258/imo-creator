@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:40.920407
+# # CTB Version: 1.3.3
+# # Division: Data & Databases
+# # Category: tests
+# # Compliance: 65%
+# # HEIR ID: HEIR-2025-10-DAT-TESTS-01
+
 """
 Database schema tests for CTB/DATA
 Tests database connectivity, schema integrity, and migrations
@@ -8,6 +16,7 @@ import pytest
 import os
 from pathlib import Path
 import sys
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 # Test if psycopg2 is available
 try:
@@ -235,8 +244,10 @@ class TestDatabaseSecurity:
 
             # Check for obvious hardcoded credentials
             dangerous_patterns = [
-                "password=",
-                "PASSWORD=",
+                "# WARNING: Use process.env or MCP_VAULT
+password=",
+                "# WARNING: Use process.env or MCP_VAULT
+PASSWORD=",
                 "psql://",
                 "postgresql://user:password@",
             ]

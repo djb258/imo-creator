@@ -1,0 +1,32 @@
+#!/bin/bash
+# CTB Pre-Commit Hook
+# Runs CTB compliance checks before each commit
+
+echo "🔍 Running CTB compliance checks..."
+
+# Run metadata tagger on modified files
+echo "1/3 Tagging modified files..."
+python ctb/sys/github-factory/scripts/ctb_metadata_tagger.py --quiet
+
+# Run audit generator
+echo "2/3 Running compliance audit..."
+python ctb/sys/github-factory/scripts/ctb_audit_generator.py --quiet
+
+# Check compliance score
+SCORE=$(grep -oP '"compliance_score":\s*\K\d+' ctb/meta/audit_data.json)
+
+echo "3/3 Verifying compliance score: ${SCORE}%"
+
+if [ "$SCORE" -lt 70 ]; then
+    echo "❌ COMMIT BLOCKED: Compliance score ${SCORE}% is below minimum threshold (70%)"
+    echo "Run: python ctb/sys/github-factory/scripts/ctb_remediator.py"
+    exit 1
+fi
+
+if [ "$SCORE" -lt 90 ]; then
+    echo "⚠️  WARNING: Compliance score ${SCORE}% is below recommended threshold (90%)"
+    echo "Consider running: python ctb/sys/github-factory/scripts/ctb_remediator.py"
+fi
+
+echo "✅ Compliance checks passed (${SCORE}%)"
+exit 0

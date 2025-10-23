@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:36.271235
+// # CTB Version: 1.3.3
+// # Division: System Infrastructure
+// # Category: tools
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-SYS-TOOLS-01
+
 /**
  * Gemini CLI Tool
  * Google Generative AI Command-Line Interface

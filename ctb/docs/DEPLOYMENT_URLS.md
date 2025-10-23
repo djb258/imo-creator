@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.074243
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: DEPLOYMENT_URLS.md
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-DEPLOY-01
+
+-->
+
 # IMO-Creator Production URLs
 
 When cloning this repository, these are the production endpoints your applications will use:

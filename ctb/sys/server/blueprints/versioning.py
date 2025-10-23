@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.341221
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: server
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-SERVER-01
+
 import json, hashlib
 
 OMIT = {"timestamp_last_touched", "_created_at_ms", "blueprint_version_hash"}

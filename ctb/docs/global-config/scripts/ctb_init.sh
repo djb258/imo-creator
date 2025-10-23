@@ -1,4 +1,12 @@
 #!/bin/bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:40.808183
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
 # ============================================================================
 # CTB (Christmas Tree Backbone) Initialization Script
 # Version: 1.3.3

@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:37.171884
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: infrastructure
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-INFRAS-01
+
 {
   "_comment": "IMO-Creator MCP Configuration - Production URLs embedded",
   "production_urls": {

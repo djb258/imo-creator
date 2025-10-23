@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:35.146767
+// # CTB Version: 1.3.3
+// # Division: System Infrastructure
+// # Category: imo-logger.ts
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-SYS-IMO-LO-01
+
 /**
  * Doctrine Spec:
  * - Barton ID: 03.02.01.07.10000.007

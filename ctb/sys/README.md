@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.169824
+# CTB Version: 1.3.3
+# Division: System Infrastructure
+# Category: README.md
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-SYS-README-01
+
+-->
+
 # CTB/SYS - System Infrastructure
 
 **Division**: System Infrastructure (40k Altitude)

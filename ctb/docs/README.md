@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.111003
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: README.md
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-README-01
+
+-->
+
 # CTB/DOCS - Documentation & Guides
 
 **Division**: Documentation & Guides (20k Altitude)

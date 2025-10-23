@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.472584
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: tests
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-MET-TESTS-01
+
 """Smoke tests for overview page with example slug"""
 import subprocess
 import json

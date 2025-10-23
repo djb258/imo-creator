@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.515241
+# CTB Version: 1.3.3
+# Division: System Infrastructure
+# Category: claude-skills
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-SYS-CLAUDE-01
+
+-->
+
 # Anthropic Claude Skills Integration
 
 **Doctrine ID**: 04.04.10

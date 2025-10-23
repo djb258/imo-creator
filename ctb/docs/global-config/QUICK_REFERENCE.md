@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.655589
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: global-config
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+-->
+
 # 🚀 IMO-Creator CTB Doctrine - Quick Reference
 
 ## One-Command Usage

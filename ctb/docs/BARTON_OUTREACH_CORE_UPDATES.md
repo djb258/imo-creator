@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:34.998951
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: BARTON_OUTREACH_CORE_UPDATES.md
+# Compliance: 100%
+# HEIR ID: HEIR-2025-10-DOC-BARTON-01
+
+-->
+
 # 🚀 Barton Outreach Core Integration Updates for IMO-Creator
 
 **Date**: 2025-10-23

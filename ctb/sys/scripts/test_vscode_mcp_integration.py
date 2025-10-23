@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.827046
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: scripts
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-SCRIPT-01
+
 """
 Test script for VS Code MCP integration with Builder.io
 """
 import os
 import json
 from dotenv import load_dotenv
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 # Load environment variables
 load_dotenv()

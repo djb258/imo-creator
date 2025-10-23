@@ -1,4 +1,12 @@
 #!/bin/bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:40.836587
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 70%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
 
 ###############################################################################
 # Security & Secret Handling Lockdown Script

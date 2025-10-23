@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.016991
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: CLAUDE.md
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-CLAUDE-01
+
+-->
+
 # 🚀 Claude Bootstrap Guide - IMO Creator Repository
 
 ## 📋 INSTANT REPO OVERVIEW

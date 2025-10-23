@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.212374
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: tools
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-SYS-TOOLS-01
+
 # Wiki Generator - Creates deep wiki structure for any repository
 set -euo pipefail
 

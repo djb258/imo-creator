@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:40.944015
+# CTB Version: 1.3.3
+# Division: Data & Databases
+# Category: warehouses
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DAT-WAREHO-01
+
+-->
+
 # ChartDB Integration
 
 **Doctrine ID**: 04.04.07

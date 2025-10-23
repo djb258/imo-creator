@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.715008
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: scripts
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-SCRIPT-01
+
 """
 Analyze Composio Tools Data
 ===========================
@@ -13,6 +21,7 @@ This helps identify:
 
 import json
 from collections import defaultdict
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 def analyze_composio_tools():
     """Analyze the latest Composio tools data from latest-composio-tools.json"""

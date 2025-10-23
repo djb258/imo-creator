@@ -1,0 +1,2984 @@
+{
+  "timestamp": "2025-10-23T14:32:41.116181",
+  "total_tagged": 425,
+  "total_skipped": 3,
+  "total_errors": 0,
+  "tagged_files": [
+    {
+      "path": "ctb\\ai\\README.md",
+      "division": "ai",
+      "category": "README.md",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-README-01"
+    },
+    {
+      "path": "ctb\\data\\README.md",
+      "division": "data",
+      "category": "README.md",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-DAT-README-01"
+    },
+    {
+      "path": "ctb\\data\\SCHEMA_REFERENCE.md",
+      "division": "data",
+      "category": "SCHEMA_REFERENCE.md",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\docs\\BARTON_OUTREACH_CORE_UPDATES.md",
+      "division": "docs",
+      "category": "BARTON_OUTREACH_CORE_UPDATES.md",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-BARTON-01"
+    },
+    {
+      "path": "ctb\\docs\\BUILDER_COMPOSIO_MCP.md",
+      "division": "docs",
+      "category": "BUILDER_COMPOSIO_MCP.md",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-BUILDE-01"
+    },
+    {
+      "path": "ctb\\docs\\CLAUDE.md",
+      "division": "docs",
+      "category": "CLAUDE.md",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-CLAUDE-01"
+    },
+    {
+      "path": "ctb\\docs\\CLAUDE_COMMANDS.md",
+      "division": "docs",
+      "category": "CLAUDE_COMMANDS.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-CLAUDE-01"
+    },
+    {
+      "path": "ctb\\docs\\CTB_IMPLEMENTATION_REPORT.md",
+      "division": "docs",
+      "category": "CTB_IMPLEMENTATION_REPORT.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-CTB_IM-01"
+    },
+    {
+      "path": "ctb\\docs\\CTB_ORBT_IMPLEMENTATION.md",
+      "division": "docs",
+      "category": "CTB_ORBT_IMPLEMENTATION.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-CTB_OR-01"
+    },
+    {
+      "path": "ctb\\docs\\DEEPWIKI_AUTOMATION.md",
+      "division": "docs",
+      "category": "DEEPWIKI_AUTOMATION.md",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-DEEPWI-01"
+    },
+    {
+      "path": "ctb\\docs\\DEPLOYMENT_URLS.md",
+      "division": "docs",
+      "category": "DEPLOYMENT_URLS.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-DEPLOY-01"
+    },
+    {
+      "path": "ctb\\docs\\LLM_ONBOARDING.md",
+      "division": "docs",
+      "category": "LLM_ONBOARDING.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-LLM_ON-01"
+    },
+    {
+      "path": "ctb\\docs\\QUICKSTART.md",
+      "division": "docs",
+      "category": "QUICKSTART.md",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-DOC-QUICKS-01"
+    },
+    {
+      "path": "ctb\\docs\\README-DOCTRINE-AUTOMATION.md",
+      "division": "docs",
+      "category": "README-DOCTRINE-AUTOMATION.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-README-01"
+    },
+    {
+      "path": "ctb\\docs\\README.md",
+      "division": "docs",
+      "category": "README.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-README-01"
+    },
+    {
+      "path": "ctb\\docs\\UPDATE_SUMMARY_2025-10-23.md",
+      "division": "docs",
+      "category": "UPDATE_SUMMARY_2025-10-23.md",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-UPDATE-01"
+    },
+    {
+      "path": "ctb\\meta\\DEPENDENCIES.md",
+      "division": "meta",
+      "category": "DEPENDENCIES.md",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-DEPEND-01"
+    },
+    {
+      "path": "ctb\\sys\\imo-logger.ts",
+      "division": "sys",
+      "category": "imo-logger.ts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-IMO-LO-01"
+    },
+    {
+      "path": "ctb\\sys\\mcp_server.py",
+      "division": "sys",
+      "category": "mcp_server.py",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-MCP_SE-01"
+    },
+    {
+      "path": "ctb\\sys\\mcp_vault_resolver.ts",
+      "division": "sys",
+      "category": "mcp_vault_resolver.ts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-MCP_VA-01"
+    },
+    {
+      "path": "ctb\\sys\\models.py",
+      "division": "sys",
+      "category": "models.py",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-MODELS-01"
+    },
+    {
+      "path": "ctb\\sys\\README.md",
+      "division": "sys",
+      "category": "README.md",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-README-01"
+    },
+    {
+      "path": "ctb\\sys\\sidecar_server.py",
+      "division": "sys",
+      "category": "sidecar_server.py",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SIDECA-01"
+    },
+    {
+      "path": "ctb\\ui\\packages\\__init__.py",
+      "division": "ui",
+      "category": "packages",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-PACKAG-01"
+    },
+    {
+      "path": "ctb\\ui\\templates\\imo-compliance-check.py",
+      "division": "ui",
+      "category": "templates",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-TEMPLA-01"
+    },
+    {
+      "path": "ctb\\ui\\packages\\heir\\checks.py",
+      "division": "ui",
+      "category": "packages",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-PACKAG-01"
+    },
+    {
+      "path": "ctb\\ui\\packages\\heir\\__init__.py",
+      "division": "ui",
+      "category": "packages",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-PACKAG-01"
+    },
+    {
+      "path": "ctb\\ui\\packages\\sidecar\\event_emitter.py",
+      "division": "ui",
+      "category": "packages",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-PACKAG-01"
+    },
+    {
+      "path": "ctb\\ui\\packages\\sidecar\\__init__.py",
+      "division": "ui",
+      "category": "packages",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-PACKAG-01"
+    },
+    {
+      "path": "ctb\\ui\\factory\\ui\\build.js",
+      "division": "ui",
+      "category": "factory",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-FACTOR-01"
+    },
+    {
+      "path": "ctb\\ui\\factory\\ui\\dev.js",
+      "division": "ui",
+      "category": "factory",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-FACTOR-01"
+    },
+    {
+      "path": "ctb\\ui\\factory\\ui\\init.sh",
+      "division": "ui",
+      "category": "factory",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-FACTOR-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\README.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\branches\\example.yml",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\branches\\schema.json",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\branches\\_tree.yml",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\toolbox\\profiles.yml",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\wiki\\00-overview\\api.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\wiki\\00-overview\\architecture.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\wiki\\00-overview\\index.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\wiki\\10-input\\index.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\ui\\apps\\my-app\\docs\\wiki\\20-middle\\index.md",
+      "division": "ui",
+      "category": "apps",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-UI-APPS-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\API_CATALOG.md",
+      "division": "sys",
+      "category": "api",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\hello.js",
+      "division": "sys",
+      "category": "api",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\llm.js",
+      "division": "sys",
+      "category": "api",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\subagents.js",
+      "division": "sys",
+      "category": "api",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\test.js",
+      "division": "sys",
+      "category": "api",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\sys\\claude-skills\\README.md",
+      "division": "sys",
+      "category": "claude-skills",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-CLAUDE-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb.branchmap.yaml",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb_check_version.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\CTB_DOCTRINE.md",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 65,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb_enforce.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb_init.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb_scaffold_new_repo.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\ctb_verify.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\dev_setup.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\global_manifest.yaml",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\repo_organization_standard.yaml",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 80,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\repo_taxonomy.yaml",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\security_lockdown.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 70,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\update_from_imo_creator.sh",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\__init__.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\add-doctrine-headers.js",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\analyze_composio_tools.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\ctb_scaffold.ts",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\firebase_mcp.js",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\garage_bay.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\generate_branch_docs.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\generate_branch_wikis.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\main.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\simple_garage_bay.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\test-composio-tools.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\test_builder_integration.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\test_mcp_endpoints.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\test_pdf_mapper.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\test_vscode_mcp_integration.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\trigger-sync.sh",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\validate_mcp_config.py",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\main.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\tests\\conftest.py",
+      "division": "sys",
+      "category": "tests",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-TESTS-01"
+    },
+    {
+      "path": "ctb\\sys\\tests\\test_api_smoke.py",
+      "division": "sys",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TESTS-01"
+    },
+    {
+      "path": "ctb\\sys\\tests\\__init__.py",
+      "division": "sys",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TESTS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\blueprint_score.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\blueprint_visual.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\compliance_heartbeat.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\compliance_standards.json",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\deep_wiki_generator.sh",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\demo_client.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\demo_workflow.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\garage_bay_demo.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\ids.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\million_verifier.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 80,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\repo_audit.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\repo_compliance_check.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\repo_compliance_fixer.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\repo_mcp_orchestrator.py",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\wiki_generator.sh",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\utils\\mcp_config_loader.py",
+      "division": "sys",
+      "category": "utils",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-UTILS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\config\\.env.schema.json",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\gemini-cli\\gemini.js",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\gemini-cli\\package.json",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\tools\\gemini-cli\\README.md",
+      "division": "sys",
+      "category": "tools",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-TOOLS-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\blueprints\\ids.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\blueprints\\versioning.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\blueprints\\__init__.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\infra\\subagents.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\server\\infra\\__init__.py",
+      "division": "sys",
+      "category": "server",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-SERVER-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\hooks\\post_update_chartdb.sh",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\hooks\\post_update_deepwiki.sh",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\scripts\\maintenance\\rotate_logs.sh",
+      "division": "sys",
+      "category": "scripts",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-SCRIPT-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\api_mapper_tool.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\base_tool.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\csv_mapper_tool.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\parser_tool.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\pdf_mapper_tool.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\imo_tools\\__init__.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\orbt-utils\\heir-generator.js",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\orbt-utils\\heir_generator.py",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\libs\\orbt-utils\\README.md",
+      "division": "sys",
+      "category": "libs",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-LIBS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\activepieces\\README.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\package.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\README.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\requirements-dev.txt",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\requirements.txt",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\test_registry.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tsconfig.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\windmill\\README.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\windmill\\backend\\windmill-api\\openapi-deref.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\windmill\\backend\\windmill-api\\openapi-deref.yaml",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\settings.local.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\artifacts\\hdo.seed.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\blueprints\\altitude.plan.schema.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\agent.bindings.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\CLAUDE_SETUP.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\hdo.schema.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\ids.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\mcp.config.sample.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\subagents.registry.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\subagents.registry.schema.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\extras\\heir.txt",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\packages\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\scripts\\id_tools.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\scripts\\list_global_agents.sh",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\scripts\\validate_plan.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\src\\index.ts",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\fakes\\fake_backend_driver.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\fakes\\fake_db_driver.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\fakes\\fake_frontend_driver.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\fakes\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_adapters_backend.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_adapters_db.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_adapters_frontend.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_core_fs.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_core_git.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_domains_db.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_heir_module.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\test_intake_ingest.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\tests\\modules\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\main.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\sidecar\\main.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\sidecar\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\backend_adapter.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\data_adapter.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\db_adapter.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\frontend_adapter.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\sidecar_client.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\adapters\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\base_driver.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\auto_documenter.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\error_sink.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\fix_pipeline.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\orchestra.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\orchestra_runner.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\subagent_delegator.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\exec.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\fs.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\git.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\heir.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\registry.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\sidecar.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\core\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\domains\\backend.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\domains\\data.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\domains\\db.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\domains\\frontend.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\domains\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\intake\\ingest.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\intake\\mapping.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\modules\\intake\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\backend\\flyio.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\backend\\render.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\backend\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\bigquery.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\firebase.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\neon.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\postgres_local.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\supabase.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\db\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\frontend\\netlify.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\frontend\\vercel.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\services\\mcp\\drivers\\frontend\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\packages\\heir\\checks.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\packages\\heir\\__init__.py",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\packages\\sql\\2025-08-19_create_shq_master_error_log.sql",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\packages\\sql\\2025-08-19_ids.sql",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_container_build.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_cron_schedule.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_deploy.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_lint.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_scaffold.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_backend_test.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_backup.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_migrate.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_restore.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_seed.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_snapshot.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_db_upgrade.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_frontend_build.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_frontend_deploy.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_frontend_preview.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_frontend_routes_sync.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\domains_frontend_scaffold.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\drivers.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\exec_run.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\fs_read.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\fs_write.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\git_commit.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\git_diff.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\heir_check.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_ingest_extract.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_ingest_parse.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_ingest_snapshot.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_ingest_upload.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_mapping_align_to_master.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_mapping_diff.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_mapping_normalize.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\intake_mapping_validate.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\sidecar_event.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\docs\\tools\\sidecar_health.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\blueprints\\clients_intake\\altitude.plan.json",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\00_overall_orchestrator.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\input\\10_input_orchestrator.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\input\\11_input_subagent_mapper.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\input\\12_input_subagent_validator.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\middle\\20_middle_orchestrator.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\middle\\21_middle_subagent_db_neon.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\middle\\22_middle_subagent_enforcer.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\output\\30_output_orchestrator.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\output\\31_output_subagent_notifier.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\infrastructure\\garage-mcp\\.claude\\agents\\output\\32_output_subagent_reporter.md",
+      "division": "sys",
+      "category": "infrastructure",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-INFRAS-01"
+    },
+    {
+      "path": "ctb\\sys\\global-factory\\doctrine\\PROMPT_6_CHECKLIST.md",
+      "division": "sys",
+      "category": "global-factory",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-SYS-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\sys\\github-factory\\scripts\\ctb_audit_generator.py",
+      "division": "sys",
+      "category": "github-factory",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-GITHUB-01"
+    },
+    {
+      "path": "ctb\\sys\\github-factory\\scripts\\ctb_remediator.py",
+      "division": "sys",
+      "category": "github-factory",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-GITHUB-01"
+    },
+    {
+      "path": "ctb\\sys\\app\\lib\\useSubagents.ts",
+      "division": "sys",
+      "category": "app",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-APP-01"
+    },
+    {
+      "path": "ctb\\sys\\api\\ssot\\save.js",
+      "division": "sys",
+      "category": "api",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-SYS-API-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\claude_orchestration.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio-mcp-openapi.yaml",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio-tools-analysis.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio-tools-full.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio-tools-organized.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio-tools-summary.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio.actions.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\composio_mcp_gpt.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\COMPOSIO_TOOLS_STATUS.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\custom-gpt-openapi.yaml",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\figma_sync.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\firebase_mcp_package.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\firebase_mcp_registry_example.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\gpt_mcp_manifest.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\heir.doctrine.yaml",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\imo-sync.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\imo.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\kodex.rules.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\latest-composio-tools.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\mcp.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\mcp_endpoints.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\mcp_registry.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\package.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\personal_assistant.config.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\README.md",
+      "division": "meta",
+      "category": "config",
+      "compliance": 70,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\config\\vercel.json",
+      "division": "meta",
+      "category": "config",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-CONFIG-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_api_smoke.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_blueprint_shell.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_ctb_scripts.sh",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_doctrine_features.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_llm_endpoint.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_registry.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\test_toolbox_imports.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\blueprints\\test_input_page.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\blueprints\\test_middle_page.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\blueprints\\test_output_page.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\tests\\blueprints\\test_overview_example.py",
+      "division": "meta",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-TESTS-01"
+    },
+    {
+      "path": "ctb\\meta\\ide\\.vscode\\extensions.json",
+      "division": "meta",
+      "category": "ide",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-IDE-01"
+    },
+    {
+      "path": "ctb\\meta\\ide\\.vscode\\settings.json",
+      "division": "meta",
+      "category": "ide",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-IDE-01"
+    },
+    {
+      "path": "ctb\\meta\\ide\\.vscode\\tasks.json",
+      "division": "meta",
+      "category": "ide",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-MET-IDE-01"
+    },
+    {
+      "path": "ctb\\meta\\branches\\composio\\mcp_registry.json",
+      "division": "meta",
+      "category": "branches",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-MET-BRANCH-01"
+    },
+    {
+      "path": "ctb\\meta\\audit_results\\hivemind-command-center\\summary.json",
+      "division": "meta",
+      "category": "audit_results",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-MET-AUDIT_-01"
+    },
+    {
+      "path": "ctb\\docs\\composio\\COMPOSIO_GEMINI_CONNECTION.md",
+      "division": "docs",
+      "category": "composio",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-COMPOS-01"
+    },
+    {
+      "path": "ctb\\docs\\composio\\COMPOSIO_INTEGRATION.md",
+      "division": "docs",
+      "category": "composio",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-COMPOS-01"
+    },
+    {
+      "path": "ctb\\docs\\composio\\COMPOSIO_INTEGRATION_SUMMARY.md",
+      "division": "docs",
+      "category": "composio",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-COMPOS-01"
+    },
+    {
+      "path": "ctb\\docs\\composio\\COMPOSIO_QUICK_START.md",
+      "division": "docs",
+      "category": "composio",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-COMPOS-01"
+    },
+    {
+      "path": "ctb\\docs\\composio\\COMPOSIO_VERIFICATION_REPORT.md",
+      "division": "docs",
+      "category": "composio",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-COMPOS-01"
+    },
+    {
+      "path": "ctb\\docs\\diagrams\\config.json",
+      "division": "docs",
+      "category": "diagrams",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-DIAGRA-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\branch_protection_config.json",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\ctb.branchmap.yaml",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\CTB_DOCTRINE.md",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 65,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\ctb_version.json",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\global_manifest.yaml",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\QUICK_REFERENCE.md",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\repo_organization_standard.yaml",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 80,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\repo_taxonomy.yaml",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\integration\\DEEPSEEK_INTEGRATION.md",
+      "division": "docs",
+      "category": "integration",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-INTEGR-01"
+    },
+    {
+      "path": "ctb\\docs\\integration\\DRAWIO_INTEGRATION.md",
+      "division": "docs",
+      "category": "integration",
+      "compliance": 85,
+      "heir_id": "HEIR-2025-10-DOC-INTEGR-01"
+    },
+    {
+      "path": "ctb\\docs\\integration\\INTEGRATION_SUMMARY_2025-10-21.md",
+      "division": "docs",
+      "category": "integration",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-INTEGR-01"
+    },
+    {
+      "path": "ctb\\docs\\integration\\VSCODE_BUILDER_INTEGRATION.md",
+      "division": "docs",
+      "category": "integration",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-INTEGR-01"
+    },
+    {
+      "path": "ctb\\docs\\references\\firebase_workflow_example.md",
+      "division": "docs",
+      "category": "references",
+      "compliance": 70,
+      "heir_id": "HEIR-2025-10-DOC-REFERE-01"
+    },
+    {
+      "path": "ctb\\docs\\references\\git-ingest-1758912879.md",
+      "division": "docs",
+      "category": "references",
+      "compliance": 80,
+      "heir_id": "HEIR-2025-10-DOC-REFERE-01"
+    },
+    {
+      "path": "ctb\\docs\\references\\deep_wiki\\deepwiki_index.json",
+      "division": "docs",
+      "category": "references",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-REFERE-01"
+    },
+    {
+      "path": "ctb\\docs\\references\\deep_wiki\\README.md",
+      "division": "docs",
+      "category": "references",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-REFERE-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ARCHITECTURE.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\composio_connection.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 65,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\COMPOSIO_GEMINI_INTEGRATION.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\COMPOSIO_MCP_INTEGRATION.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 65,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\imo_architecture.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\QUICKSTART.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ssot.sample.yaml",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\SYNC_SYSTEM.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\TODO.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\TROUBLESHOOTING.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 70,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\INDEX.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ctb\\CTB_CICD_STANDARDIZATION.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ctb\\CTB_SYSTEM_MANUAL_GUIDE.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ctb\\CTB_TIER_GUIDE.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\ctb\\CTB_VERSION_HISTORY.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\actions-workflows\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\actions-workflows\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ai-human-readable\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ai-human-readable\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\doctrine_get-ingest\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\doctrine_get-ingest\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\drawio-ingest\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\drawio-ingest\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\feature_mcp-endpoints\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\feature_mcp-endpoints\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_input\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_input\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_middle\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_middle\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_output\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\imo_output\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\master\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\master\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ops_automation-scripts\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ops_automation-scripts\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ops_report-builder\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ops_report-builder\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_activepieces\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_activepieces\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_bigquery-warehouse\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_bigquery-warehouse\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_builder-bridge\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_builder-bridge\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_chartdb\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_chartdb\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_claude-skills\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_claude-skills\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_composio-mcp\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_composio-mcp\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_deepwiki\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_deepwiki\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_firebase-workbench\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_firebase-workbench\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_github-factory\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_github-factory\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_neon-vault\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_neon-vault\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_security-audit\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_security-audit\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_windmill\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\sys_windmill\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ui_builder-templates\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ui_builder-templates\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ui_figma-bolt\\branch_info.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\branch-documentation\\ui_figma-bolt\\documentation.md",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\blueprints\\example\\manifest.yaml",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\blueprints\\example\\progress.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\blueprints\\imo\\manifest.yaml",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\blueprints\\imo\\progress.json",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\guides\\docs\\blueprints\\ui\\app.js",
+      "division": "docs",
+      "category": "guides",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DOC-GUIDES-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\ctb_check_version.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\ctb_enforce.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\ctb_init.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\ctb_scaffold_new_repo.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\ctb_verify.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\dev_setup.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\security_lockdown.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 70,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\global-config\\scripts\\update_from_imo_creator.sh",
+      "division": "docs",
+      "category": "global-config",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-GLOBAL-01"
+    },
+    {
+      "path": "ctb\\docs\\doctrine\\doctrine\\CTB_UI_DOCTRINE.md",
+      "division": "docs",
+      "category": "doctrine",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DOC-DOCTRI-01"
+    },
+    {
+      "path": "ctb\\docs\\doctrine\\doctrine\\GLOBAL_PROPAGATION_SYSTEM.md",
+      "division": "docs",
+      "category": "doctrine",
+      "compliance": 75,
+      "heir_id": "HEIR-2025-10-DOC-DOCTRI-01"
+    },
+    {
+      "path": "ctb\\data\\tests\\conftest.py",
+      "division": "data",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-TESTS-01"
+    },
+    {
+      "path": "ctb\\data\\tests\\test_schema.py",
+      "division": "data",
+      "category": "tests",
+      "compliance": 65,
+      "heir_id": "HEIR-2025-10-DAT-TESTS-01"
+    },
+    {
+      "path": "ctb\\data\\tests\\__init__.py",
+      "division": "data",
+      "category": "tests",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-TESTS-01"
+    },
+    {
+      "path": "ctb\\data\\warehouses\\chartdb\\README.md",
+      "division": "data",
+      "category": "warehouses",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DAT-WAREHO-01"
+    },
+    {
+      "path": "ctb\\data\\schemas\\chartdb_schemas\\detected_schemas.txt",
+      "division": "data",
+      "category": "schemas",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\data\\schemas\\chartdb_schemas\\README.md",
+      "division": "data",
+      "category": "schemas",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\data\\schemas\\chartdb_schemas\\schema_index.json",
+      "division": "data",
+      "category": "schemas",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\data\\schemas\\chartdb_schemas\\schemas\\2025-08-19_create_shq_master_error_log.json",
+      "division": "data",
+      "category": "schemas",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\data\\schemas\\chartdb_schemas\\schemas\\2025-08-19_ids.json",
+      "division": "data",
+      "category": "schemas",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-DAT-SCHEMA-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\install.sh",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\manifest.json",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\orbt-utils\\heir-generator.js",
+      "division": "ai",
+      "category": "orbt-utils",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-AI-ORBT-U-01"
+    },
+    {
+      "path": "ctb\\ai\\orbt-utils\\heir_generator.py",
+      "division": "ai",
+      "category": "orbt-utils",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-AI-ORBT-U-01"
+    },
+    {
+      "path": "ctb\\ai\\orbt-utils\\README.md",
+      "division": "ai",
+      "category": "orbt-utils",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-ORBT-U-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\agents\\database-specialist.md",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\agents\\devops-engineer.md",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\agents\\frontend-architect.md",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\agents\\security-auditor.md",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 90,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\mcp\\registry_endpoint.py",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\mcp\\requirements.txt",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    },
+    {
+      "path": "ctb\\ai\\agents\\mcp\\scripts\\install_agents.sh",
+      "division": "ai",
+      "category": "agents",
+      "compliance": 100,
+      "heir_id": "HEIR-2025-10-AI-AGENTS-01"
+    }
+  ],
+  "errors": []
+}

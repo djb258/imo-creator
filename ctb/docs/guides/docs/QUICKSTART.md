@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.966239
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: guides
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
+-->
+
 # IMO Creator HEIR/MCP Quickstart
 
 This guide helps you get started with the HEIR (Hierarchical Error-handling, ID management, and Reporting) and MCP (Model Context Protocol) integration.

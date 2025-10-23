@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.191435
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: tools
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-TOOLS-01
+
 """
 Repository Compliance Auto-Fixer
 Automatically applies common fixes for compliance issues.

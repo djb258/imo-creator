@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.025631
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: CLAUDE_COMMANDS.md
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-CLAUDE-01
+
+-->
+
 # 🤖 Claude Code Commands for IMO-Creator CTB Doctrine
 
 ## Simple Commands You Can Use

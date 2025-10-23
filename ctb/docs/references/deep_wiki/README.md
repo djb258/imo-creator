@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.904553
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: references
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-REFERE-01
+
+-->
+
 # DeepWiki Documentation Directory
 
 This directory contains automatically generated documentation from the DeepWiki automation system.

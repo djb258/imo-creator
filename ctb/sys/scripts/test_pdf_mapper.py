@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.805512
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: scripts
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-SCRIPT-01
+
 """Quick validation script for PDFMapperTool."""
 
 from libs.imo_tools import PDFMapperTool

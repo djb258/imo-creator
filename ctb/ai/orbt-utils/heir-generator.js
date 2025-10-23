@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:40.990978
+// # CTB Version: 1.3.3
+// # Division: AI Agents & MCP
+// # Category: orbt-utils
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-AI-ORBT-U-01
+
 /**
  * HEIR/ORBT ID Generator
  * Version: 1.0.0

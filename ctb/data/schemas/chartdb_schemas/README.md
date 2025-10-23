@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:40.954300
+# CTB Version: 1.3.3
+# Division: Data & Databases
+# Category: schemas
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DAT-SCHEMA-01
+
+-->
+
 # ChartDB Schema Directory
 
 This directory contains automatically generated database schema documentation from the ChartDB automation system.

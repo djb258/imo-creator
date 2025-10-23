@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.052533
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: tests
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-TESTS-01
+
 """
 Pytest configuration for CTB/SYS tests
 """
@@ -5,6 +13,7 @@ Pytest configuration for CTB/SYS tests
 import pytest
 import sys
 from pathlib import Path
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 # Add CTB root to Python path
 CTB_ROOT = Path(__file__).parent.parent.parent.parent

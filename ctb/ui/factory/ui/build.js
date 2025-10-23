@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:35.350606
+// # CTB Version: 1.3.3
+// # Division: User Interface
+// # Category: factory
+// # Compliance: 90%
+// # HEIR ID: HEIR-2025-10-UI-FACTOR-01
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

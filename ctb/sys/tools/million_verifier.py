@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:36.168741
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: tools
+# # Compliance: 80%
+# # HEIR ID: HEIR-2025-10-SYS-TOOLS-01
+
 """
 Million Verifier Email Validation Tool
 Custom integration for IMO-Creator with Composio MCP compliance
@@ -328,7 +336,8 @@ def handle_million_verifier_tool(tool_name: str, data: Dict[str, Any], unique_id
     """
     try:
         # Initialize Million Verifier with API key from config
-        api_key = "7hLlWoR3DCDoDwDllpafUh4U9"
+        # WARNING: Use process.env or MCP_VAULT
+api_key = "7hLlWoR3DCDoDwDllpafUh4U9"
         mv_tool = MillionVerifierTool(api_key)
 
         # Route to appropriate tool function
@@ -384,7 +393,8 @@ def handle_million_verifier_tool(tool_name: str, data: Dict[str, Any], unique_id
 
 if __name__ == "__main__":
     # Test the tool
-    api_key = "7hLlWoR3DCDoDwDllpafUh4U9"
+    # WARNING: Use process.env or MCP_VAULT
+api_key = "7hLlWoR3DCDoDwDllpafUh4U9"
     mv = MillionVerifierTool(api_key)
 
     # Test getting credits

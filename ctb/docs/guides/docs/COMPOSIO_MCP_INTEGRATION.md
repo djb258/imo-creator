@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.948136
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: guides
+# Compliance: 65%
+# HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
+-->
+
 # Composio MCP Integration Guide
 
 Complete guide for interacting with Composio endpoints through the MCP (Model Context Protocol) server. This documentation ensures consistent integration across all repositories and deployments.

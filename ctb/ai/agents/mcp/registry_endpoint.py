@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:41.069437
+# # CTB Version: 1.3.3
+# # Division: AI Agents & MCP
+# # Category: agents
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-AI-AGENTS-01
+
 """
 FastAPI Registry Endpoint for Claude Code Agents Library
 Provides REST API access to agent metadata and content

@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.336426
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: tests
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-MET-TESTS-01
+
 """
 CTB Doctrine v1.3 - MCP Registry Validation Tests
 Purpose: Validate config/mcp_registry.json integrity and compliance
@@ -6,6 +14,7 @@ Purpose: Validate config/mcp_registry.json integrity and compliance
 import json
 import pytest
 from pathlib import Path
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 
 @pytest.fixture

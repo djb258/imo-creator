@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:38.959916
+// # CTB Version: 1.3.3
+// # Division: System Infrastructure
+// # Category: app
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-SYS-APP-01
+
 /**
  * Doctrine Spec:
  * - Barton ID: 03.01.01.07.10000.006

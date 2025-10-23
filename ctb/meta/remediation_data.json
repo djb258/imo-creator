@@ -1,0 +1,203 @@
+{
+  "timestamp": "2025-10-23T14:35:58.170809",
+  "total_fixes": 13,
+  "fixes_applied": [
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\scripts\\analyze_composio_tools.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\scripts\\test-composio-tools.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\scripts\\test_mcp_endpoints.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\scripts\\test_vscode_mcp_integration.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\scripts\\validate_mcp_config.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\tests\\conftest.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\libs\\imo_tools\\api_mapper_tool.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\libs\\imo_tools\\parser_tool.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\sys\\github-factory\\scripts\\ctb_metadata_tagger.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\meta\\tests\\test_registry.py"
+    },
+    {
+      "type": "heir_orbt",
+      "action": "added_heir_import",
+      "path": "ctb\\data\\tests\\test_schema.py"
+    },
+    {
+      "type": "security",
+      "action": "added_security_warning",
+      "path": "ctb\\sys\\tools\\million_verifier.py"
+    },
+    {
+      "type": "security",
+      "action": "added_security_warning",
+      "path": "ctb\\data\\tests\\test_schema.py"
+    }
+  ],
+  "fixes_failed": [],
+  "registry": {
+    "version": "1.3.3",
+    "generated": "2025-10-23T14:35:57.604745",
+    "repository": "imo-creator",
+    "divisions": {
+      "ai": {
+        "path": "ctb\\ai",
+        "file_count": 13,
+        "subdirectories": [
+          "agents",
+          "blueprints",
+          "mcp",
+          "orbt-utils",
+          "prompts"
+        ],
+        "status": "active"
+      },
+      "data": {
+        "path": "ctb\\data",
+        "file_count": 12,
+        "subdirectories": [
+          "migrations",
+          "schemas",
+          "seeds",
+          "tests",
+          "warehouses"
+        ],
+        "status": "active"
+      },
+      "docs": {
+        "path": "ctb\\docs",
+        "file_count": 130,
+        "subdirectories": [
+          "architecture",
+          "composio",
+          "diagrams",
+          "doctrine",
+          "global-config",
+          "guides",
+          "integration",
+          "references"
+        ],
+        "status": "active"
+      },
+      "meta": {
+        "path": "ctb\\meta",
+        "file_count": 49,
+        "subdirectories": [
+          "audit_results",
+          "branches",
+          "build",
+          "config",
+          "ide",
+          "tests"
+        ],
+        "status": "active"
+      },
+      "sys": {
+        "path": "ctb\\sys",
+        "file_count": 270,
+        "subdirectories": [
+          "api",
+          "app",
+          "ci-cd",
+          "claude-skills",
+          "github-factory",
+          "global-factory",
+          "infrastructure",
+          "libs",
+          "scripts",
+          "server",
+          "services",
+          "tests",
+          "tools",
+          "utils",
+          "__pycache__"
+        ],
+        "status": "active"
+      },
+      "ui": {
+        "path": "ctb\\ui",
+        "file_count": 21,
+        "subdirectories": [
+          "apps",
+          "components",
+          "factory",
+          "packages",
+          "templates"
+        ],
+        "status": "active"
+      }
+    },
+    "enforcement": {
+      "scripts": [
+        {
+          "name": "ctb_audit_generator",
+          "path": "ctb\\sys\\github-factory\\scripts\\ctb_audit_generator.py",
+          "version": "1.0"
+        },
+        {
+          "name": "ctb_metadata_tagger",
+          "path": "ctb\\sys\\github-factory\\scripts\\ctb_metadata_tagger.py",
+          "version": "1.0"
+        },
+        {
+          "name": "ctb_remediator",
+          "path": "ctb\\sys\\github-factory\\scripts\\ctb_remediator.py",
+          "version": "1.0"
+        }
+      ],
+      "workflows": [
+        {
+          "name": "ctb_drift_check",
+          "path": ".github\\workflows\\ctb_drift_check.yml"
+        },
+        {
+          "name": "ctb_enforcement",
+          "path": ".github\\workflows\\ctb_enforcement.yml"
+        },
+        {
+          "name": "ctb_health",
+          "path": ".github\\workflows\\ctb_health.yml"
+        },
+        {
+          "name": "ctb_version_check",
+          "path": ".github\\workflows\\ctb_version_check.yml"
+        }
+      ],
+      "status": "active"
+    }
+  }
+}

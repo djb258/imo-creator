@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:41.027823
+# CTB Version: 1.3.3
+# Division: AI Agents & MCP
+# Category: agents
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-AI-AGENTS-01
+
+-->
+
 ---
 name: Database Specialist
 version: 1.0.0

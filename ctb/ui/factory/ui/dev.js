@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:35.359452
+// # CTB Version: 1.3.3
+// # Division: User Interface
+// # Category: factory
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-UI-FACTOR-01
+
 console.log("[Factory] Development UI Cockpit");
 console.log("=============================");
 console.log("");

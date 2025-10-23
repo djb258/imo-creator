@@ -1,4 +1,12 @@
 #!/bin/bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:40.976909
+# # CTB Version: 1.3.3
+# # Division: AI Agents & MCP
+# # Category: agents
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-AI-AGENTS-01
+
 # Claude Code Agents Library Installation Script
 # This script installs portable Claude Code agents for use across projects
 

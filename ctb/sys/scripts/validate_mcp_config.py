@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.984499
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: scripts
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-SCRIPT-01
+
 """
 MCP Configuration Validation Script
 ==================================
@@ -12,6 +20,7 @@ import sys
 import requests
 from pathlib import Path
 from typing import Dict, List, Optional
+from ctb.ai.orbt_utils.heir_generator import HeirGenerator
 
 
 class MCPConfigValidator:

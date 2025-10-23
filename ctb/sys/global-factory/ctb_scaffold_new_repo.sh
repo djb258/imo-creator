@@ -1,4 +1,12 @@
 #!/bin/bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.566075
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: global-factory
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-SYS-GLOBAL-01
+
 
 ###############################################################################
 # CTB Scaffold New Repository Script

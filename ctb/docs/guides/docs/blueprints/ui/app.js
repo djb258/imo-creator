@@ -1,3 +1,11 @@
+// # CTB Metadata
+// # Generated: 2025-10-23T14:32:40.778013
+// # CTB Version: 1.3.3
+// # Division: Documentation
+// # Category: guides
+// # Compliance: 100%
+// # HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
 let manifest = null;
 let progress = null;
 const SLUG = new URL(location.href).searchParams.get('slug') || 'example';

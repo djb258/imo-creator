@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:38.913686
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: github-factory
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-GITHUB-01
+
 """
 CTB Remediator
 Automatically fixes CTB compliance issues
@@ -14,6 +22,12 @@ import re
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
+
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 class CTBRemediator:
     def __init__(self, root_dir: str = "ctb"):

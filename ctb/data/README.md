@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:34.965642
+# CTB Version: 1.3.3
+# Division: Data & Databases
+# Category: README.md
+# Compliance: 85%
+# HEIR ID: HEIR-2025-10-DAT-README-01
+
+-->
+
 # CTB/DATA - Data & Databases
 
 **Division**: Data & Databases

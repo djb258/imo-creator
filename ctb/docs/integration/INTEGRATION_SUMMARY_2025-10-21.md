@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.711135
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: integration
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-INTEGR-01
+
+-->
+
 # IMO Creator - Major Updates Integration Summary
 **Date**: 2025-10-21
 **Version**: 1.3.3

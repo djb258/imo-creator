@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.086897
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: LLM_ONBOARDING.md
+# Compliance: 75%
+# HEIR ID: HEIR-2025-10-DOC-LLM_ON-01
+
+-->
+
 # 🤖 LLM Onboarding Guide - imo-creator Repository
 
 **Last Updated**: 2025-10-19

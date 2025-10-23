@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:35.165756
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: models.py
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-MODELS-01
+
 """Pydantic models for IMO Creator HEIR/MCP integration"""
 from typing import Dict, List, Any, Optional
 from pydantic import BaseModel, Field

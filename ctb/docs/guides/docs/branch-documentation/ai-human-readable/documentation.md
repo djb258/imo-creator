@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:40.099163
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: guides
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
+-->
+
 # Branch Documentation: ai-human-readable
 
 **Generated**: 2025-10-22T07:56:53.458530

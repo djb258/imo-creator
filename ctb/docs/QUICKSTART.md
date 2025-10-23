@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.094733
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: QUICKSTART.md
+# Compliance: 85%
+# HEIR ID: HEIR-2025-10-DOC-QUICKS-01
+
+-->
+
 # 🚀 IMO-Creator Quickstart
 
 ## Zero-Config Deployment with One API Key

@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.007302
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: BUILDER_COMPOSIO_MCP.md
+# Compliance: 100%
+# HEIR ID: HEIR-2025-10-DOC-BUILDE-01
+
+-->
+
 # 🎨 Builder.io via Composio MCP - IMO Calculator
 
 ## 🚨 CRITICAL ARCHITECTURE RULE

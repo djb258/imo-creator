@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:35.483148
+# CTB Version: 1.3.3
+# Division: System Infrastructure
+# Category: api
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-SYS-API-01
+
+-->
+
 # API Catalog - Complete Endpoint Reference
 
 **Service**: IMO Creator Backend API

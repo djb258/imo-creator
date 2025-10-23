@@ -1,4 +1,12 @@
 #!/bin/bash
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:41.109749
+# # CTB Version: 1.3.3
+# # Division: AI Agents & MCP
+# # Category: agents
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-AI-AGENTS-01
+
 # MCP Integration Script for Claude Code Agents Library
 # This script integrates agents with Model Context Protocol systems
 

@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:40.950606
+# # CTB Version: 1.3.3
+# # Division: Data & Databases
+# # Category: schemas
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-DAT-SCHEMA-01
+
 ./deepwiki/src/app/api/models/config/route.ts
 ./garage-mcp/packages/sql/2025-08-19_create_shq_master_error_log.sql
 ./garage-mcp/packages/sql/2025-08-19_ids.sql

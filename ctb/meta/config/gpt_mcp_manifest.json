@@ -1,3 +1,11 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.131429
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
 {
   "mcp_server": "https://backend.composio.dev",
   "gpt_name": "IMO-Creator Doctrine Orchestrator",

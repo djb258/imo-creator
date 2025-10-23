@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.922894
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: guides
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DOC-GUIDES-01
+
+-->
+
 # CTB Architecture Guide
 
 Comprehensive overview of the Christmas Tree Backbone (CTB) Doctrine system architecture, component relationships, and data flow.

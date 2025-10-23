@@ -41,7 +41,12 @@
       "Bash(cp:*)",
       "Bash(cat:*)",
       "Bash(tree:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(git add:*)",
+      "Bash(test:*)",
+      "Bash(python:*)",
+      "Bash(set:*)",
+      "Bash(tee:*)"
     ],
     "deny": [],
     "ask": [],

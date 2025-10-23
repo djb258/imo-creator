@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:39.688256
+# CTB Version: 1.3.3
+# Division: Documentation
+# Category: integration
+# Compliance: 100%
+# HEIR ID: HEIR-2025-10-DOC-INTEGR-01
+
+-->
+
 # DeepSeek Agent Integration for VS Code
 
 This document provides an overview of the DeepSeek AI Agent integration into VS Code for the IMO Creator project.

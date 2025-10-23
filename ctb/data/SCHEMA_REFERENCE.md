@@ -1,3 +1,15 @@
+<!--
+
+# CTB Metadata
+# Generated: 2025-10-23T14:32:34.983284
+# CTB Version: 1.3.3
+# Division: Data & Databases
+# Category: SCHEMA_REFERENCE.md
+# Compliance: 90%
+# HEIR ID: HEIR-2025-10-DAT-SCHEMA-01
+
+-->
+
 # Schema Reference - Complete Database Catalog
 
 **Database**: IMO Creator
