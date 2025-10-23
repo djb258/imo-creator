@@ -326,6 +326,55 @@ mcp_integration:
     connected_services: 24
     total_tools: 1059
 
+    # ⚠️ CRITICAL: Database Operations Pattern (Updated 2025-10-23)
+    # Source: barton-outreach-core (100% Barton Doctrine compliant)
+    database_operations:
+      # Database operations MUST use direct connections
+      # Composio does NOT provide database tools (neon_execute_sql does NOT exist)
+      method: "direct_pg_client"
+      connection_source: "DATABASE_URL"  # Use environment variable
+      pattern: |
+        const { Client } = require('pg');
+        const client = new Client({ connectionString: process.env.DATABASE_URL });
+        await client.connect();
+        const result = await client.query(sql);
+        await client.end();
+
+      # What to use Composio for:
+      composio_for:
+        - apify_run_actor
+        - gmail_send
+        - drive_upload
+        - sheets_append
+        - calendar_create_event
+        - github_create_issue
+        - "40+ external API integrations"
+
+      # What NOT to use Composio for:
+      not_composio:
+        - neon_execute_sql  # Does NOT exist
+        - neon_query        # Does NOT exist
+        - database_operations  # Use direct pg client
+
+    # HEIR/ORBT Payload Requirements
+    payload_format:
+      required_fields:
+        - tool
+        - data
+        - unique_id  # Format: HEIR-YYYY-MM-SYSTEM-MODE-VN
+        - process_id  # Format: PRC-SYSTEM-EPOCHTIMESTAMP
+        - orbt_layer  # Execution layer (1-4)
+        - blueprint_version  # Version tracking
+      example: |
+        {
+          "tool": "apify_run_actor",
+          "data": { "actorId": "..." },
+          "unique_id": "HEIR-2025-10-IMO-ACTION-01",
+          "process_id": "PRC-ACTION-1729651200",
+          "orbt_layer": 2,
+          "blueprint_version": "1.0"
+        }
+
   firebase:
     enabled: true
     project_id: "${FIREBASE_PROJECT_ID}"
