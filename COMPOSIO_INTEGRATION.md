@@ -565,3 +565,160 @@ async function logIMOOperation(operation) {
 **Version**: v1.0.0
 **Maintainer**: IMO Creator Team
 **Related Projects**: barton-outreach-core
+---
+
+## 🚨 CRITICAL: Database Operations - NOT via Composio
+
+**⚠️ IMPORTANT CLARIFICATION (Updated 2025-10-23)**
+
+After extensive testing with barton-outreach-core (100% Barton Doctrine compliant), we have confirmed:
+
+### ❌ What Does NOT Exist in Composio
+
+- `neon_execute_sql` - **This tool does NOT exist**
+- `neon_query` - **This tool does NOT exist**
+- `neon_insert` - **This tool does NOT exist**
+- Any custom database tools - **Do NOT use Composio for database operations**
+
+###  ✅ CORRECT Pattern: Direct Database Connection
+
+**For ALL database operations (migrations, queries, inserts, updates):**
+
+```javascript
+// ✅ CORRECT: Use direct pg client
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL || process.env.NEON_DATABASE_URL
+});
+
+async function runDatabaseOperation(sql) {
+  try {
+    await client.connect();
+    const result = await client.query(sql);
+    return result.rows;
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  } finally {
+    await client.end();
+  }
+}
+```
+
+**Example: Running Migrations**
+
+```javascript
+// migrations/run_migrations.cjs
+const { Client } = require('pg');
+const fs = require('fs');
+const path = require('path');
+
+const migrations = [
+  './2025-10-23_create_table.sql',
+  './2025-10-23_add_indexes.sql'
+];
+
+async function runMigrations() {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL
+  });
+
+  try {
+    await client.connect();
+    console.log('✅ Connected to database\n');
+
+    for (const file of migrations) {
+      const filePath = path.join(__dirname, file);
+      const fileName = path.basename(file);
+      
+      console.log(`📄 Executing: ${fileName}`);
+      const sql = fs.readFileSync(filePath, 'utf8');
+      
+      try {
+        await client.query(sql);
+        console.log(`✅ Success\n`);
+      } catch (error) {
+        console.error(`❌ Error: ${error.message}\n`);
+      }
+    }
+  } finally {
+    await client.end();
+  }
+}
+
+runMigrations();
+```
+
+### ✅ What IS Available in Composio
+
+**External API Integrations** (use Composio for these):
+- ✅ `apify_run_actor` - Apify actor execution
+- ✅ `apify_run_actor_sync_get_dataset_items` - Apify with dataset retrieval
+- ✅ `gmail_send` - Send emails via Gmail
+- ✅ `gmail_create_draft` - Create Gmail drafts
+- ✅ `drive_upload` - Upload files to Google Drive
+- ✅ `drive_create_folder` - Create Drive folders
+- ✅ `sheets_append` - Append rows to Google Sheets
+- ✅ `sheets_create` - Create new spreadsheets
+- ✅ `calendar_create_event` - Create Calendar events
+- ✅ `github_create_issue` - Create GitHub issues
+- ✅ `github_create_pr` - Create pull requests
+- ✅ And 40+ other verified Composio tools
+
+**Example: Using Apify via Composio (CORRECT)**
+
+```javascript
+// ✅ Use Composio for external API calls
+const USER_ID = process.env.COMPOSIO_USER_ID || 'usr_default';
+
+const response = await fetch(`http://localhost:3001/tool?user_id=${USER_ID}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    tool: 'apify_run_actor_sync_get_dataset_items',  // ✅ This exists!
+    data: {
+      actorId: 'apify~linkedin-profile-scraper',
+      runInput: {
+        linkedinUrls: ['https://linkedin.com/in/example'],
+        maxProfiles: 100
+      },
+      timeout: 300
+    },
+    unique_id: `HEIR-2025-10-APIFY-${Date.now()}`,
+    process_id: `PRC-APIFY-${Date.now()}`,
+    orbt_layer: 2,
+    blueprint_version: '1.0'
+  })
+});
+
+const data = await response.json();
+console.log('Apify dataset:', data);
+```
+
+### 🎯 Summary: When to Use What
+
+| Operation Type | Use | Example |
+|---------------|-----|---------|
+| **Database queries** | ✅ Direct `pg` client | `client.query('SELECT * FROM users')` |
+| **Migrations** | ✅ Direct `pg` client | `client.query(migrationSQL)` |
+| **External APIs** | ✅ Composio MCP | `fetch('localhost:3001/tool', {tool: 'apify_run_actor'})` |
+| **Google Services** | ✅ Composio MCP | `fetch('localhost:3001/tool', {tool: 'gmail_send'})` |
+| **Custom database tools** | ❌ NEVER | These don't exist in Composio |
+
+### 📚 Reference
+
+**Verified Pattern Source**: barton-outreach-core repository
+- File: `scripts/run_migrations.cjs` (working example)
+- File: `analysis/discover_neon_schema.js` (database connection pattern)
+- Status: ✅ 100% Barton Doctrine Compliant
+- Verification: All operations tested and working
+
+**Key Learnings**:
+1. Composio MCP is for external API integrations only
+2. Database operations require direct connections
+3. Never assume a tool exists - verify first
+4. Pattern verified in production environment
+
+---
+
