@@ -3,12 +3,16 @@ name: Security Lockdown Enforcement
 on:
   push:
     branches:
-      - '**'
+      - main
+      - develop
   pull_request:
     branches:
-      - master
       - main
-  workflow_dispatch:
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   security-scan:

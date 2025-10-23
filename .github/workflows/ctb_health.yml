@@ -1,13 +1,18 @@
 name: CTB Health Check
 
 on:
-  schedule:
-    # Weekly health check on Sundays at midnight
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
   pull_request:
     branches:
       - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   health-check:

@@ -1,20 +1,18 @@
 name: CTB Doctrine Sync
 
 on:
-  schedule:
-    # Nightly sync at 2 AM UTC
-    - cron: '0 2 * * *'
-  workflow_dispatch:
-    # Allow manual triggering
   push:
     branches:
-      - 'doctrine/**'
-      - 'sys/**'
-    paths:
-      - 'heir.doctrine.yaml'
-      - 'global-config/**'
-      - 'CLAUDE.md'
-      - 'COMPOSIO_INTEGRATION.md'
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   sync-doctrine:
@@ -119,13 +117,16 @@ jobs:
             # Copy doctrine files from main
             git checkout main -- "${DOCTRINE_FILES[@]}" 2>/dev/null || true
 
-            # Commit if changes exist
+            # AUTO-COMMIT DISABLED - Prevents infinite commit loops
+            # Use manual workflow_dispatch for intentional syncs only
             if git diff --staged --quiet; then
               echo "No changes for $branch"
             else
-              git add .
-              git commit -m "🌲 CTB Doctrine Sync - $(date +%Y-%m-%d)" || true
-              git push origin "$branch" || true
+              echo "⚠️ Changes detected but auto-commit is disabled"
+              echo "Run manual sync if intentional doctrine updates needed"
+              # git add .
+              # git commit -m "🌲 CTB Doctrine Sync - $(date +%Y-%m-%d)" || true
+              # git push origin "$branch" || true
             fi
           done
 

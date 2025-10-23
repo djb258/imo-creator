@@ -1,26 +1,18 @@
 name: Figma Design Sync
 
 on:
-  repository_dispatch:
-    types: [figma-sync]
-  workflow_dispatch:
-    inputs:
-      sync_type:
-        description: 'Type of Figma sync to perform'
-        required: true
-        type: choice
-        options:
-          - design-tokens
-          - components
-          - assets
-          - prototypes
-          - full-sync
-        default: 'design-tokens'
-      target_repos:
-        description: 'Target repositories for sync'
-        required: false
-        type: string
-        default: 'all-repos'
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   figma-sync:

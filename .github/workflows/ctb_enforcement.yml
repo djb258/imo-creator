@@ -3,17 +3,16 @@ name: CTB Doctrine Enforcement
 on:
   push:
     branches:
-      - master
       - main
-      - 'sys/**'
-      - 'imo/**'
-      - 'ui/**'
-      - 'ops/**'
+      - develop
   pull_request:
     branches:
-      - master
       - main
-  workflow_dispatch:
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   enforce-ctb-doctrine:

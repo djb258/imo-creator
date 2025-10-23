@@ -1,28 +1,18 @@
 name: Sync IMO-Creator Updates
 
 on:
-  repository_dispatch:
-    types: [sync-imo-creator]
-  workflow_dispatch:
-    inputs:
-      target_repo:
-        description: 'Target repository to sync updates to'
-        required: true
-        type: choice
-        options:
-          - sales-hive
-          - client-hive
-          - outreach-hive
-          - all-repos
-      sync_type:
-        description: 'Type of sync operation'
-        required: true
-        type: choice
-        options:
-          - workflows-only
-          - configs-only
-          - full-sync
-        default: 'workflows-only'
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   sync-to-target:

@@ -2,21 +2,17 @@ name: Deploy to Vercel and Render
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [ "main" ]
-    types: [closed]
-  workflow_dispatch:
-    inputs:
-      deploy_target:
-        description: 'Deployment target'
-        required: false
-        default: 'both'
-        type: choice
-        options:
-          - both
-          - vercel
-          - render
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 env:
   NODE_VERSION: '18'

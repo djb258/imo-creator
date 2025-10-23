@@ -2,15 +2,17 @@ name: Composio Orchestration
 
 on:
   push:
-    branches: [main, doctrine/*]
+    branches:
+      - main
+      - develop
   pull_request:
-    types: [opened, reopened, synchronize]
-  workflow_dispatch:
-    inputs:
-      custom_message:
-        description: 'Custom message to send with the notification'
-        required: false
-        type: string
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   notify-composio:

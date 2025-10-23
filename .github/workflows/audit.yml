@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - main
-      - 'sys/**'
+      - develop
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   heir-compliance:

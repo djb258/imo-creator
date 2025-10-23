@@ -2,10 +2,17 @@ name: Test Coverage
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [master, main]
-  workflow_dispatch:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   test-python:

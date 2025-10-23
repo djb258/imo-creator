@@ -3,30 +3,16 @@ name: DeepWiki Automation
 on:
   push:
     branches:
-      - '**'
-    paths-ignore:
-      - 'deep_wiki/**'
-      - 'logs/**'
-      - '*.log'
-  pull_request:
-    types: [closed]
-    branches:
-      - master
       - main
-  schedule:
-    # Daily at 2 AM UTC
-    - cron: '0 2 * * *'
-  workflow_dispatch:
-    inputs:
-      force_full_refresh:
-        description: 'Force full repository refresh (not just diff)'
-        required: false
-        type: boolean
-        default: false
-      target_branch:
-        description: 'Specific branch to document (leave empty for current)'
-        required: false
-        type: string
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 env:
   DEEPWIKI_ENABLED: true

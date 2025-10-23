@@ -3,20 +3,16 @@ name: Firebase Environment Promotion
 on:
   push:
     branches:
-      - 'deploy/*'
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to promote (staging/prod)'
-        required: true
-        type: choice
-        options:
-          - staging
-          - prod
-      doctrine_name:
-        description: 'Doctrine name for this deployment'
-        required: false
-        type: string
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   promote-firebase:

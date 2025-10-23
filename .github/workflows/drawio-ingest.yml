@@ -2,27 +2,17 @@ name: Draw.io + GitIngest Integration
 
 on:
   push:
-    branches: [ main, master ]
-    paths-ignore:
-      - 'diagrams/generated/**'
-      - 'repo-analysis.txt'
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [ main, master ]
-  schedule:
-    # Auto-update GitIngest and diagrams daily at 6 AM UTC
-    - cron: '0 6 * * *'
-  workflow_dispatch:
-    inputs:
-      include_diagrams:
-        description: 'Include diagram generation'
-        required: false
-        default: 'true'
-        type: boolean
-      force_update:
-        description: 'Force update even if no changes detected'
-        required: false
-        default: 'false'
-        type: boolean
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   drawio-ingest-analysis:

@@ -3,15 +3,16 @@ name: Doctrine Blueprint Validation
 on:
   push:
     branches:
-      - 'doctrine/**'
-      - 'doctrine/*'
-  workflow_dispatch:
-    inputs:
-      force_validation:
-        description: 'Force validation even if not a doctrine branch'
-        required: false
-        type: boolean
-        default: false
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
 
 jobs:
   validate-blueprint:
