@@ -2,6 +2,75 @@
 
 This document tracks the version history of the Christmas Tree Backbone (CTB) template architecture.
 
+## Patch 1.3.3a (2025-10-23)
+
+**Status**: Doctrine Cleanup ✅
+
+### Overview
+Corrected a doctrinal misclassification where Google Gemini AI Integration was incorrectly registered as a CTB doctrine element (doctrine_id 04.04.12) instead of a Composio MCP tool.
+
+### Changes
+
+#### Reclassification
+- **Gemini Moved**: From CTB doctrine registry → Composio MCP tools
+- **New Location**: `ctb-template/sys/composio-mcp/tools/gemini/`
+- **Doctrine ID Removed**: 04.04.12 no longer assigned to Gemini
+- **Tool Governance**: Now governed by Composio MCP, not CTB structural doctrine
+
+#### Files Added
+- ✅ `ctb-template/sys/composio-mcp/tools/gemini/tool_manifest.json`
+- ✅ `ctb-template/sys/composio-mcp/tools/gemini/README.md`
+
+#### Files Modified
+- ✅ `config/mcp_registry.json` - Removed doctrine_id, changed type to "Composio MCP Tool"
+- ✅ `tools/gemini-cli/README.md` - Updated compliance section
+- ✅ `kodex.rules.json` - Added DOCTRINE_SCOPE_EXCLUSION rule (24th rule)
+
+#### Kodex Enforcement
+- **New Rule**: DOCTRINE_SCOPE_EXCLUSION
+  - **Purpose**: Prevents MCP tools from being classified as doctrine components
+  - **Enforcement**: Tools must be under `ctb-template/sys/composio-mcp/tools/`
+  - **Rationale**: CTB doctrine governs repository architecture (sys, data, apps, ai, docs, tests), not individual tool integrations
+
+### Doctrine Clarification
+
+**What IS CTB Doctrine:**
+- Repository structure (sys/, data/, apps/, ai/, docs/, tests/)
+- Branch organization (main, develop, sys/*, feature/*)
+- Barton policy enforcement (Composio required, gatekeeper enforced, no direct Neon)
+- Tier system (full, mid, micro)
+
+**What IS NOT CTB Doctrine:**
+- Individual tools (Gemini, Claude, GPT, etc.)
+- MCP tool integrations (governed by Composio MCP)
+- External service APIs (governed by their respective policies)
+
+### Tool vs. Doctrine Decision Tree
+
+```
+Is this a structural component of the repo?
+├─ YES → CTB Doctrine (assign altitude, enforce structure)
+└─ NO  → Is it an integration/tool?
+          └─ YES → Composio MCP Tool (register in tools/, no doctrine_id)
+```
+
+### Breaking Changes
+None - All Gemini functionality remains intact, only classification changed.
+
+### Deprecations
+- `doctrine_id: 04.04.12` for Gemini (removed, now `previous_doctrine_id`)
+
+### Migration Impact
+- **Existing code**: No changes required
+- **MCP registry**: Uses new `tool_manifest` reference
+- **Documentation**: Updated to clarify tool vs. doctrine
+
+### Future Prevention
+- Kodex rule DOCTRINE_SCOPE_EXCLUSION automatically blocks future misclassifications
+- All AI models (Claude Skills, GPT, Perplexity, etc.) must follow this pattern
+
+---
+
 ## Version 1.0.0 (2025-10-23)
 
 **Status**: Initial Release ✨

@@ -155,14 +155,19 @@ If you hit rate limits, the CLI will display the error. Consider:
 - Waiting before retrying
 - Upgrading your Google AI quota
 
-## CTB Doctrine Compliance
+## CTB & Barton Doctrine Compliance
 
-This tool follows the CTB Doctrine patterns:
+This tool is classified as a **Composio MCP Tool**, not a CTB doctrine component:
 
-- **Doctrine ID**: 04.04.12 (pending MCP registry update)
-- **Altitude**: 40k ft (System Infrastructure)
-- **HEIR Integration**: Supports HEIR-formatted requests
-- **ORBT Layer**: Compatible with multi-layer processing
+- **Tool Type**: Composio MCP Tool (AI Model)
+- **Governance**: Composio MCP (not CTB structural doctrine)
+- **Previous Doctrine ID**: 04.04.12 (reclassified in Patch 1.3.3a)
+- **Tool Manifest**: ctb-template/sys/composio-mcp/tools/gemini/tool_manifest.json
+- **HEIR Integration**: ✅ Supports HEIR-formatted requests
+- **ORBT Layer**: ✅ Compatible with multi-layer processing
+- **Composio Required**: ✅ All AI model integrations must use Composio MCP
+
+**Note**: Gemini and all similar AI models (Claude, GPT, etc.) are **tools**, not doctrine components. CTB doctrine governs repository architecture (sys, data, apps, ai, docs, tests), not individual tool integrations.
 
 ## Contributing
 

@@ -190,6 +190,24 @@
       "path": ".github/workflows/ctb_drift_check.yml",
       "must_exist": true,
       "description": "CTB drift check GitHub Action must exist"
+    },
+    {
+      "id": "DOCTRINE_SCOPE_EXCLUSION",
+      "type": "policy",
+      "severity": "error",
+      "description": "Prevents MCP tools from being classified as CTB doctrine components",
+      "policy": "MCP tools must be registered under ctb-template/sys/composio-mcp/tools/, not as doctrine elements",
+      "exclusion_paths": [
+        "ctb-template/sys/composio-mcp/tools/*"
+      ],
+      "enforcement": {
+        "doctrine_id_forbidden_for": "tools",
+        "allowed_doctrine_scope": ["sys", "data", "apps", "ai", "docs", "tests"],
+        "tools_must_have": ["tool_manifest.json", "governance: Composio MCP"]
+      },
+      "rationale": "CTB doctrine governs repository architecture (structural components), not individual tool integrations. AI models (Gemini, Claude, GPT, etc.) are tools governed by Composio MCP.",
+      "added_in_patch": "1.3.3a",
+      "triggered_by": "Gemini reclassification from doctrine_id 04.04.12 to Composio MCP tool"
     }
   ],
   "metadata": {
