@@ -1,0 +1,148 @@
+# Global CTB Configuration
+# Christmas Tree Backbone (CTB) Doctrine Implementation
+# Version: 1.3.3
+# Last Updated: 2025-10-23
+
+version: 1.3.3
+last_updated: 2025-10-23
+
+ctb:
+  structure:
+    root: ctb/
+    branches:
+      - sys    # System infrastructure, APIs, CI/CD
+      - ai     # AI agents & MCP scripts
+      - data   # Databases, schemas, migrations
+      - docs   # Documentation, guides, doctrine
+      - ui     # Frontend apps & components
+      - meta   # Configuration, IDE, tests
+
+  altitude_levels:
+    40k: sys     # System infrastructure
+    20k: imo     # Business logic (IMO Factory)
+    10k: ui      # User interface layer
+    5k: ops      # Operations & automation
+
+doctrine_enforcement:
+  # Global factory for CTB scripts and workflows
+  ctb_factory: ctb/sys/global-factory/
+
+  # Automatic synchronization with imo-creator master
+  auto_sync: true
+
+  # Minimum CTB compliance score required (0-100)
+  min_score: 90
+
+  # Composio scenario for automated compliance checks
+  composio_scenario: CTB_Compliance_Cycle
+
+  # Enforcement scripts
+  scripts:
+    verify: ctb/sys/scripts/ctb_verify.sh
+    enforce: ctb/sys/scripts/ctb_enforce.sh
+    init: ctb/sys/scripts/ctb_init.sh
+    check_version: ctb/sys/scripts/ctb_check_version.sh
+
+  # GitHub Actions workflows
+  workflows:
+    - ctb_enforcement.yml
+    - ctb_drift_check.yml
+    - ctb_health.yml
+    - ctb_version_check.yml
+    - doctrine-validate.yml
+    - security_lockdown.yml
+
+  # Validation rules
+  validation:
+    required_branches:
+      - doctrine/get-ingest
+      - sys/composio-mcp
+      - sys/neon-vault
+      - sys/firebase-workbench
+      - sys/bigquery-warehouse
+      - sys/github-factory
+      - sys/builder-bridge
+      - sys/security-audit
+      - sys/chartdb
+      - sys/activepieces
+      - sys/windmill
+      - sys/claude-skills
+      - sys/deepwiki
+      - imo/input
+      - imo/middle
+      - imo/output
+      - ui/figma-bolt
+      - ui/builder-templates
+      - ops/automation-scripts
+      - ops/report-builder
+
+    required_files:
+      - ctb/docs/global-config/ctb.branchmap.yaml
+      - ctb/docs/global-config/global_manifest.yaml
+      - ctb/docs/global-config/CTB_DOCTRINE.md
+      - ctb/ai/orbt-utils/heir-generator.js
+      - ctb/ai/orbt-utils/heir_generator.py
+      - CTB_INDEX.md
+      - README.md
+      - CONTRIBUTING.md
+
+barton_doctrine:
+  version: 1.3.3
+  heir_orbt:
+    enabled: true
+    format: "HEIR-YYYY-MM-SYSTEM-MODE-VN"
+    process_id_format: "PRC-SYSTEM-EPOCHTIMESTAMP"
+    orbt_layers: 4
+
+  branch_structure:
+    total_branches: 20
+    merge_flow: "ops → ui → imo → sys → main"
+
+mcp:
+  composio:
+    port: 3001
+    url: http://localhost:3001
+    heir_tracking: required
+    payload_format:
+      - tool
+      - data
+      - unique_id
+      - process_id
+      - orbt_layer
+      - blueprint_version
+
+  integrations:
+    - name: google-workspace
+      tools: [gmail, drive, calendar, sheets]
+    - name: github
+      tools: [issues, pr, actions]
+    - name: apify
+      tools: [actor_run, dataset]
+    - name: builder-io
+      tools: [space, model, content]
+
+security:
+  zero_tolerance: true
+  forbidden_files:
+    - .env
+    - credentials.json
+    - *.key
+    - *.pem
+    - *secret*
+
+  vault:
+    mcp_vault: required
+    local_secrets: forbidden
+
+repository:
+  type: master_template
+  propagates_to: all_barton_repos
+  update_frequency: on_commit
+
+bootstrap:
+  script: setup_ctb.sh
+  requirements:
+    - bash
+    - git
+    - node (optional)
+    - python (optional)

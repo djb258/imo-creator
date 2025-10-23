@@ -40,7 +40,8 @@
       "Bash(mv:*)",
       "Bash(cp:*)",
       "Bash(cat:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": [],
