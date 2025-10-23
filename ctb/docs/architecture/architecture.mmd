@@ -1,0 +1,165 @@
+%% IMO Creator System Architecture
+%% Christmas Tree Backbone (CTB) v1.3.3
+%% Generated: 2025-10-23
+
+graph TB
+    %% External Services Layer
+    subgraph External["🌐 External Services"]
+        Gmail[Gmail API<br/>3 accounts]
+        Drive[Google Drive<br/>3 accounts]
+        Calendar[Google Calendar<br/>1 account]
+        Sheets[Google Sheets<br/>1 account]
+        GitHub[GitHub API]
+        Slack[Slack API]
+        Others[100+ Services<br/>via Composio]
+    end
+
+    %% Integration Hub
+    subgraph MCP["🔌 Integration Hub (Port 3001)"]
+        ComposioMCP[Composio MCP Server<br/>Model Context Protocol<br/>HEIR/ORBT Tracking]
+    end
+
+    %% CTB Foundation Layer (40k Altitude)
+    subgraph Foundation["🏗️ CTB/SYS - Foundation (40k)"]
+        FastAPI[FastAPI Server<br/>Port 8000<br/>main.py]
+        API[REST API Layer<br/>composio_tools.py]
+        Services[Background Services<br/>Job Processing]
+        Scripts[Automation Scripts<br/>CTB Enforcement]
+        GlobalFactory[Global Factory<br/>CTB Doctrine<br/>Compliance Scripts]
+    end
+
+    %% CTB Core Logic Layer (20k Altitude)
+    subgraph CoreLogic["🧠 Core Logic (20k Altitude)"]
+        direction TB
+
+        subgraph AI["🤖 CTB/AI"]
+            Agents[AI Agents<br/>Gmail, Drive, etc.]
+            ORBT[HEIR/ORBT Utils<br/>Process Tracking]
+            SHQ[Strategic HQ<br/>Reasoning Layer]
+        end
+
+        subgraph Data["🗄️ CTB/DATA"]
+            Schemas[Database Schemas<br/>ChartDB Visualizations]
+            Migrations[Migrations & Seeds<br/>Version Control]
+            Warehouses[Data Warehouses<br/>BigQuery Analytics]
+        end
+
+        subgraph Docs["📖 CTB/DOCS"]
+            Guides[Developer Guides<br/>Tutorials & Blueprints]
+            APIDocs[API Documentation<br/>OpenAPI Specs]
+            Diagrams[Architecture Diagrams<br/>This file!]
+        end
+    end
+
+    %% CTB Application Layer (10k Altitude)
+    subgraph Application["🎨 Application Layer (10k)"]
+        direction TB
+
+        subgraph UI["🎨 CTB/UI"]
+            Components[React Components<br/>UI Elements]
+            Pages[Page Components<br/>Views & Layouts]
+            Assets[Static Assets<br/>Images & Styles]
+        end
+
+        subgraph Meta["⚙️ CTB/META"]
+            Config[Configuration<br/>composio_ctb_tasks.json]
+            Registry[CTB Registry<br/>Auto-generated]
+            IDESettings[IDE Settings<br/>VS Code & Cursor]
+        end
+    end
+
+    %% Database Layer
+    subgraph Databases["💾 Databases"]
+        Neon[(Neon PostgreSQL<br/>Primary Database)]
+        Firebase[(Firebase Firestore<br/>Document Store)]
+        BigQuery[(BigQuery<br/>Analytics Warehouse)]
+    end
+
+    %% Deployment Layer (5k Altitude)
+    subgraph Deployment["🚀 Deployment (5k)"]
+        Render[Render<br/>FastAPI Backend]
+        Vercel[Vercel<br/>Frontend Optional]
+        CICD[GitHub Actions<br/>CTB Enforcement<br/>Compliance Checks]
+    end
+
+    %% Users
+    User([👤 End User])
+
+    %% External Services → MCP
+    Gmail -.->|OAuth| ComposioMCP
+    Drive -.->|OAuth| ComposioMCP
+    Calendar -.->|OAuth| ComposioMCP
+    Sheets -.->|OAuth| ComposioMCP
+    GitHub -.->|API| ComposioMCP
+    Slack -.->|API| ComposioMCP
+    Others -.->|APIs| ComposioMCP
+
+    %% MCP → Foundation
+    ComposioMCP <-->|HTTP POST<br/>HEIR/ORBT Payload| API
+
+    %% Foundation Internal
+    API --> FastAPI
+    FastAPI --> Services
+    FastAPI --> Scripts
+    Scripts --> GlobalFactory
+
+    %% Foundation → Core Logic
+    API -->|Tool Calls| Agents
+    API -->|Queries| Schemas
+    FastAPI <-->|Read/Write| Migrations
+
+    %% AI Division Internal
+    Agents --> ORBT
+    Agents --> SHQ
+    ORBT -.->|Generate IDs| Agents
+
+    %% Core Logic → Application
+    Agents -->|Status & Results| Components
+    Schemas -->|Data Models| Components
+    Guides -.->|Documentation| Components
+
+    %% Application → Foundation
+    Components -->|HTTP Requests| API
+    Pages -->|API Calls| FastAPI
+    Config -.->|Configuration| FastAPI
+
+    %% Database Connections
+    FastAPI <-->|Direct pg Client<br/>NOT Composio!| Neon
+    FastAPI <-->|Firebase SDK| Firebase
+    Warehouses <-->|Google Cloud SDK| BigQuery
+    Migrations -->|Schema Updates| Neon
+
+    %% Meta/Registry
+    Scripts -->|Generate| Registry
+    GlobalFactory -->|Audit & Remediate| Registry
+
+    %% Deployment
+    FastAPI -->|Deploy| Render
+    Components -->|Deploy| Vercel
+    GlobalFactory -->|Enforce| CICD
+
+    %% User Interaction
+    User -->|Interacts| Pages
+    Pages -->|Display| User
+
+    %% Styling
+    classDef external fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    classDef mcp fill:#fff3e0,stroke:#f57c00,stroke-width:3px
+    classDef foundation fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef core fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    classDef app fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    classDef db fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef deploy fill:#e0f2f1,stroke:#00796b,stroke-width:2px
+
+    class Gmail,Drive,Calendar,Sheets,GitHub,Slack,Others external
+    class ComposioMCP mcp
+    class FastAPI,API,Services,Scripts,GlobalFactory foundation
+    class Agents,ORBT,SHQ,Schemas,Migrations,Warehouses,Guides,APIDocs,Diagrams core
+    class Components,Pages,Assets,Config,Registry,IDESettings app
+    class Neon,Firebase,BigQuery db
+    class Render,Vercel,CICD deploy
+
+    %% Notes
+    note1[Note: Database access uses DIRECT connections<br/>NEVER use Composio for database operations]
+    note2[Note: All Composio calls require HEIR/ORBT payload:<br/>unique_id, process_id, orbt_layer, blueprint_version]
+    note3[Note: CTB Altitude System:<br/>40k Foundation → 20k Core → 10k App → 5k Deploy]
