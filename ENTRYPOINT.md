@@ -100,6 +100,52 @@ imo-creator/
 
 ---
 
+## 🛡️ CTB Enforcement Summary
+
+**Automated Compliance**: Every commit is automatically checked and tagged for CTB compliance.
+
+### Compliance Threshold
+
+| Score  | Grade | Status  | Policy |
+|--------|-------|---------|--------|
+| 90–100 | 🌟 EXCELLENT | PASS | Merge allowed |
+| 70–89  | ✅ GOOD/FAIR | PASS | Merge allowed |
+| 60–69  | ⚠️ NEEDS WORK | BLOCKED | Fix before commit |
+| 0–59   | ❌ FAIL | BLOCKED | Fix before commit |
+
+**Current Threshold**: 70/100
+
+### Auto-Enforcement
+
+1. **Pre-Commit Hook** → Tags & scores files locally
+2. **GitHub Actions** → Verifies compliance on PRs
+3. **Weekly Composio Run** → Monitors compliance trends
+4. **CTB Remediator** → Auto-fixes drifted files
+
+### Quick Compliance Check
+
+```bash
+# Check current compliance score
+python ctb/sys/github-factory/scripts/ctb_audit_generator.py
+
+# Auto-fix compliance issues
+python ctb/sys/github-factory/scripts/ctb_remediator.py
+
+# View detailed enforcement guide
+cat CTB_ENFORCEMENT.md
+```
+
+### Benefits
+
+✅ **Zero manual Barton ID management**
+✅ **No non-compliant code merged**
+✅ **Every commit automatically tagged**
+✅ **Guaranteed CTB compliance**
+
+📖 **Full Details**: See `CTB_ENFORCEMENT.md` for complete setup instructions, troubleshooting, and FAQ.
+
+---
+
 ## 🎯 Common Tasks
 
 ### For New Developers
