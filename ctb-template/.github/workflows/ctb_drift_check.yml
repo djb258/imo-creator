@@ -1,0 +1,59 @@
+name: CTB Drift Check
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    name: Verify CTB Template Structure
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify CTB Template Structure
+        run: |
+          echo "🔍 Verifying CTB template structure..."
+
+          if [ ! -f "ctb-template/version.json" ]; then
+            echo "::warning::CTB version.json not found - not a CTB-scaffolded repo"
+            exit 0
+          fi
+
+          echo "✅ CTB template detected"
+
+          CTB_VERSION=$(cat ctb-template/version.json | grep -o '"ctb_version"[[:space:]]*:[[:space:]]*"[^"]*"' | cut -d'"' -f4)
+          echo "📦 CTB Version: $CTB_VERSION"
+
+      - name: Verify Barton Policy
+        run: |
+          if [ -f "ctb-template/.barton_policy.json" ]; then
+            echo "🔍 Validating Barton policy..."
+
+            if ! grep -q '"requires_composio": true' ctb-template/.barton_policy.json; then
+              echo "::error::Barton policy must require Composio"
+              exit 1
+            fi
+
+            echo "✅ Barton policy validation passed"
+          else
+            echo "::warning::Barton policy not found - skipping validation"
+          fi
+
+      - name: Drift Check Summary
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ CTB Drift Check Complete"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

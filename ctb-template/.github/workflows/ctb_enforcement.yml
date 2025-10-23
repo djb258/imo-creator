@@ -1,0 +1,22 @@
+name: CTB Doctrine Enforcement
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Silence email notifications
+notifications:
+  email: false
+
+jobs:
+  enforce:
+    name: CTB Doctrine Enforcement
+    uses: djb258/imo-creator/.github/workflows/reusable-ctb-enforcement.yml@v1.3.1
+    with:
+      enforcement_mode: standard
