@@ -7,9 +7,6 @@ on:
   workflow_dispatch:
     # Allow manual trigger
 
-# Silence email notifications
-notifications:
-  email: false
 
 jobs:
   auto-sync:

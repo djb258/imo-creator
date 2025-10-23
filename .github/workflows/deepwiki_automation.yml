@@ -10,9 +10,6 @@ on:
       - main
       - develop
 
-# Silence email notifications
-notifications:
-  email: false
 
 env:
   DEEPWIKI_ENABLED: true
