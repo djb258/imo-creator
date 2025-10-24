@@ -1,0 +1,130 @@
+# Global CTB Configuration
+version: "1.0.0"
+repository: imo-creator
+description: AI-powered IMO (Indexed Marketing Operation) creation and management system
+
+# CTB Structure Configuration
+ctb:
+  enabled: true
+  version: "1.0.0"
+  branches:
+    - sys      # System integrations and infrastructure
+    - ai       # AI models, prompts, and training
+    - data     # Database schemas and migrations
+    - docs     # Documentation and guides
+    - ui       # User interfaces and components
+    - meta     # CTB metadata and registry
+
+# Doctrine Enforcement
+doctrine_enforcement:
+  ctb_factory: ctb/sys/global-factory/
+  auto_sync: true
+  min_score: 70
+  composio_scenario: CTB_Compliance_Cycle
+  auto_remediate: true
+  audit_frequency: monthly
+
+# Logging Configuration
+logging:
+  directory: logs/
+  audit_enabled: true
+  retention_days: 90
+  levels:
+    - audit
+    - error
+    - info
+    - debug
+
+# Integration Settings
+integrations:
+  composio:
+    enabled: true
+    mcp_url: http://localhost:3001/tool
+    api_key_env: COMPOSIO_API_KEY
+    user_id_env: COMPOSIO_USER_ID
+  firebase:
+    enabled: true
+    config_path: ctb/sys/firebase/firebase.json
+  neon:
+    enabled: true
+    database_url_env: DATABASE_URL
+  github:
+    enabled: true
+    factory_path: ctb/sys/github-factory/
+
+# HEIR/ORBT Configuration
+heir_orbt:
+  enabled: true
+  heir_format: HEIR-YYYY-MM-SYSTEM-MODE-VN
+  process_id_format: PRC-SYSTEM-EPOCHTIMESTAMP
+  orbt_layers:
+    1: Infrastructure
+    2: Integration
+    3: Application
+    4: Presentation
+  blueprint_version: "1.0"
+
+# Database Configuration
+database:
+  providers:
+    - firebase
+    - neon
+  migrations:
+    directory: ctb/data/migrations/
+    auto_run: false
+  schema_validation: true
+
+# AI Configuration
+ai:
+  providers:
+    - gemini
+    - openai
+  prompts_directory: ctb/ai/prompts/
+  models_directory: ctb/ai/models/
+  default_provider: gemini
+
+# UI Configuration
+ui:
+  framework: react
+  components_directory: ctb/ui/components/
+  pages_directory: ctb/ui/pages/
+  styling: tailwind
+
+# Documentation
+documentation:
+  auto_generate: true
+  formats:
+    - markdown
+    - json
+  output_directory: ctb/docs/
+
+# Maintenance
+maintenance:
+  auto_tag_new_files: true
+  monthly_audit: true
+  compliance_alerts: true
+  alert_threshold: 85
+
+# Security
+security:
+  env_vars_required:
+    - DATABASE_URL
+    - COMPOSIO_API_KEY
+  secrets_detection: true
+  vulnerability_scanning: true
+
+# Performance
+performance:
+  cache_enabled: true
+  cache_ttl: 3600
+  compression: true
+
+# Metadata
+metadata:
+  last_updated: "2025-10-23"
+  maintainers:
+    - CTB Standards Team
+  version_history:
+    - version: "1.0.0"
+      date: "2025-10-23"
+      changes: Initial CTB implementation

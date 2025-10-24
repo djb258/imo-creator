@@ -15,3 +15,4 @@ openpyxl>=3.1.2
 PyPDF2>=3.0.0
 tqdm>=4.66.0
 rich>=13.7.0
+asyncpg>=0.29.0

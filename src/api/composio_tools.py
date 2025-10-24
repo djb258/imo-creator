@@ -11,6 +11,7 @@ import json
 import os
 import asyncio
 from pathlib import Path
+from ..utils.database import get_db_client
 
 router = APIRouter(prefix="/api/composio", tags=["composio"])
 
@@ -277,29 +278,92 @@ async def builder_create_content(
     return result
 
 # Neon Database Tools
+# ✅ CORRECT: Using direct database connection (not fake Composio tools)
 @router.post("/neon/query")
 async def neon_query_database(
     request: ToolExecutionRequest,
     api_key: str = Depends(get_api_key)
 ):
-    """Query Neon database"""
-    result = await execute_mcp_tool("neon_query_database", request.dict())
-    return result
+    """
+    Query Neon database using direct PostgreSQL connection
+    Following Barton Doctrine compliance standards
+    """
+    try:
+        db = get_db_client()
+
+        if "sql" not in request.arguments:
+            raise HTTPException(status_code=400, detail="sql parameter is required")
+
+        sql = request.arguments["sql"]
+        params = request.arguments.get("params", [])
+
+        result = await db.execute_query(sql, params if params else None)
+
+        return {
+            "success": True,
+            "result": result,
+            "row_count": len(result),
+            "executed_at": asyncio.get_event_loop().time()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database query failed: {str(e)}")
 
 @router.post("/neon/tables/create")
 async def neon_create_table(
     request: ToolExecutionRequest,
     api_key: str = Depends(get_api_key)
 ):
-    """Create Neon database table"""
-    result = await execute_mcp_tool("neon_create_table", request.dict())
-    return result
+    """
+    Create Neon database table using direct PostgreSQL connection
+    Following Barton Doctrine compliance standards
+    """
+    try:
+        db = get_db_client()
+
+        if "table_name" not in request.arguments or "columns" not in request.arguments:
+            raise HTTPException(status_code=400, detail="table_name and columns parameters are required")
+
+        table_name = request.arguments["table_name"]
+        columns = request.arguments["columns"]
+
+        result = await db.create_table(table_name, columns)
+
+        return {
+            "success": True,
+            "message": f"Table {table_name} created successfully",
+            "result": result,
+            "executed_at": asyncio.get_event_loop().time()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Table creation failed: {str(e)}")
 
 @router.get("/neon/schema")
 async def neon_get_schema(api_key: str = Depends(get_api_key)):
-    """Get Neon database schema"""
-    result = await execute_mcp_tool("neon_get_schema", {})
-    return result
+    """
+    Get Neon database schema using direct PostgreSQL connection
+    Following Barton Doctrine compliance standards
+    """
+    try:
+        db = get_db_client()
+        schema = await db.get_schema()
+
+        return {
+            "success": True,
+            "schema": schema,
+            "retrieved_at": asyncio.get_event_loop().time()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Schema retrieval failed: {str(e)}")
+
+@router.get("/neon/test")
+async def neon_test_connection(api_key: str = Depends(get_api_key)):
+    """Test Neon database connection"""
+    try:
+        db = get_db_client()
+        result = await db.test_connection()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Connection test failed: {str(e)}")
 
 # Figma Tools
 @router.post("/figma/export")

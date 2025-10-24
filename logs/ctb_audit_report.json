@@ -1,0 +1,80 @@
+{
+  "audit_timestamp": "2025-10-23T22:22:08.274634",
+  "repository": "imo-creator",
+  "ctb_version": "1.0.0",
+  "compliance_score": 90,
+  "issues": [],
+  "recommendations": [
+    {
+      "priority": "MEDIUM",
+      "category": "organization",
+      "message": "Found 569 files outside CTB structure",
+      "action": "Run ctb_reorganizer.py to move files into CTB branches"
+    }
+  ],
+  "structure_check": {
+    "ctb": {
+      "exists": true,
+      "required": true,
+      "description": "CTB root directory",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb"
+    },
+    "ctb/sys": {
+      "exists": true,
+      "required": true,
+      "description": "System integrations and infrastructure",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\sys"
+    },
+    "ctb/ai": {
+      "exists": true,
+      "required": true,
+      "description": "AI models, prompts, and training",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\ai"
+    },
+    "ctb/data": {
+      "exists": true,
+      "required": true,
+      "description": "Database schemas and migrations",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\data"
+    },
+    "ctb/docs": {
+      "exists": true,
+      "required": true,
+      "description": "Documentation and guides",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\docs"
+    },
+    "ctb/ui": {
+      "exists": true,
+      "required": false,
+      "description": "UI components and templates",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\ui"
+    },
+    "ctb/meta": {
+      "exists": true,
+      "required": true,
+      "description": "CTB metadata and registry",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb\\meta"
+    },
+    "logs": {
+      "exists": true,
+      "required": true,
+      "description": "Application and audit logs",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\logs"
+    },
+    "global-config.yaml": {
+      "exists": true,
+      "required": true,
+      "description": "Global configuration file",
+      "path": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\global-config.yaml"
+    }
+  },
+  "file_distribution": {
+    "sys": 27,
+    "ai": 1,
+    "data": 9,
+    "docs": 2,
+    "ui": 0,
+    "meta": 4,
+    "non_ctb": 569
+  }
+}

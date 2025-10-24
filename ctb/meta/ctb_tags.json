@@ -1,0 +1,415 @@
+{
+  "scanned_at": "2025-10-23T22:22:07.774724",
+  "root_directory": "C:\\Users\\CUSTOMER PC\\Cursor Repo\\imo-creator\\ctb",
+  "files": [
+    {
+      "file_path": "ai\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 12040,
+      "last_modified": "2025-10-23T16:45:39.579272",
+      "tagged_at": "2025-10-23T22:22:07.804077",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "data\\.env.example",
+      "ctb_branch": "sys",
+      "file_type": ".example",
+      "size_bytes": 7141,
+      "last_modified": "2025-10-23T16:58:44.662076",
+      "tagged_at": "2025-10-23T22:22:07.814241",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/.env.example"
+    },
+    {
+      "file_path": "data\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 13627,
+      "last_modified": "2025-10-23T16:47:55.423738",
+      "tagged_at": "2025-10-23T22:22:07.826648",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "data\\SCHEMA_REFERENCE.md",
+      "ctb_branch": "data",
+      "file_type": ".md",
+      "size_bytes": 25865,
+      "last_modified": "2025-10-23T17:16:51.570268",
+      "tagged_at": "2025-10-23T22:22:07.839112",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/docs/data/SCHEMA_REFERENCE.md"
+    },
+    {
+      "file_path": "data\\tests\\conftest.py",
+      "ctb_branch": "data",
+      "file_type": ".py",
+      "size_bytes": 2240,
+      "last_modified": "2025-10-23T17:01:21.837465",
+      "tagged_at": "2025-10-23T22:22:07.850680",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/data/tests/conftest.py"
+    },
+    {
+      "file_path": "data\\tests\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 7411,
+      "last_modified": "2025-10-23T17:03:20.880910",
+      "tagged_at": "2025-10-23T22:22:07.861140",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/tests/README.md"
+    },
+    {
+      "file_path": "data\\tests\\test_migrations.py",
+      "ctb_branch": "data",
+      "file_type": ".py",
+      "size_bytes": 3708,
+      "last_modified": "2025-10-23T17:02:08.192221",
+      "tagged_at": "2025-10-23T22:22:07.872009",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/data/tests/test_migrations.py"
+    },
+    {
+      "file_path": "data\\tests\\test_schemas.py",
+      "ctb_branch": "data",
+      "file_type": ".py",
+      "size_bytes": 3132,
+      "last_modified": "2025-10-23T17:01:43.295482",
+      "tagged_at": "2025-10-23T22:22:07.880902",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/data/tests/test_schemas.py"
+    },
+    {
+      "file_path": "data\\tests\\test_validation.py",
+      "ctb_branch": "ai",
+      "file_type": ".py",
+      "size_bytes": 5438,
+      "last_modified": "2025-10-23T17:02:38.939825",
+      "tagged_at": "2025-10-23T22:22:07.892334",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/ai/tests/test_validation.py"
+    },
+    {
+      "file_path": "data\\tests\\__init__.py",
+      "ctb_branch": "data",
+      "file_type": ".py",
+      "size_bytes": 126,
+      "last_modified": "2025-10-23T17:01:02.755624",
+      "tagged_at": "2025-10-23T22:22:07.900312",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/data/tests/__init__.py"
+    },
+    {
+      "file_path": "docs\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 11992,
+      "last_modified": "2025-10-23T16:48:04.044034",
+      "tagged_at": "2025-10-23T22:22:07.913385",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "docs\\architecture\\architecture.mmd",
+      "ctb_branch": "docs",
+      "file_type": ".mmd",
+      "size_bytes": 4573,
+      "last_modified": "2025-10-23T16:56:38.935551",
+      "tagged_at": "2025-10-23T22:22:07.923948",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/architecture.mmd"
+    },
+    {
+      "file_path": "meta\\ctb_registry.json",
+      "ctb_branch": "sys",
+      "file_type": ".json",
+      "size_bytes": 4839,
+      "last_modified": "2025-10-23T14:56:49.131627",
+      "tagged_at": "2025-10-23T22:22:07.933488",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/ctb_registry.json"
+    },
+    {
+      "file_path": "meta\\ctb_tags.json",
+      "ctb_branch": "data",
+      "file_type": ".json",
+      "size_bytes": 15055,
+      "last_modified": "2025-10-23T18:20:45.338092",
+      "tagged_at": "2025-10-23T22:22:07.944370",
+      "heir_id": "HEIR-2025-10-CTB-DATA-01",
+      "suggested_location": "ctb/data/ctb_tags.json"
+    },
+    {
+      "file_path": "meta\\DEPENDENCIES.md",
+      "ctb_branch": "sys",
+      "file_type": ".md",
+      "size_bytes": 16149,
+      "last_modified": "2025-10-23T16:55:52.728237",
+      "tagged_at": "2025-10-23T22:22:07.952201",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/docs/sys/DEPENDENCIES.md"
+    },
+    {
+      "file_path": "meta\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 17005,
+      "last_modified": "2025-10-23T16:52:24.009434",
+      "tagged_at": "2025-10-23T22:22:07.964461",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "sys\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 9357,
+      "last_modified": "2025-10-23T16:45:34.752003",
+      "tagged_at": "2025-10-23T22:22:07.975550",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "sys\\api\\.env.example",
+      "ctb_branch": "sys",
+      "file_type": ".example",
+      "size_bytes": 5836,
+      "last_modified": "2025-10-23T16:58:07.283258",
+      "tagged_at": "2025-10-23T22:22:07.989733",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/.env.example"
+    },
+    {
+      "file_path": "sys\\api\\API_CATALOG.md",
+      "ctb_branch": "sys",
+      "file_type": ".md",
+      "size_bytes": 26506,
+      "last_modified": "2025-10-23T17:14:40.423367",
+      "tagged_at": "2025-10-23T22:22:07.999675",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/docs/sys/API_CATALOG.md"
+    },
+    {
+      "file_path": "sys\\github-factory\\COMPOSIO_CTB_INTEGRATION.md",
+      "ctb_branch": "sys",
+      "file_type": ".md",
+      "size_bytes": 10955,
+      "last_modified": "2025-10-23T16:40:10.496573",
+      "tagged_at": "2025-10-23T22:22:08.012875",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/docs/sys/COMPOSIO_CTB_INTEGRATION.md"
+    },
+    {
+      "file_path": "sys\\github-factory\\scripts\\ctb_audit_generator.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 13414,
+      "last_modified": "2025-10-23T18:21:38.928916",
+      "tagged_at": "2025-10-23T22:22:08.028662",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/ctb_audit_generator.py"
+    },
+    {
+      "file_path": "sys\\github-factory\\scripts\\ctb_metadata_tagger.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 8451,
+      "last_modified": "2025-10-23T16:33:58.835447",
+      "tagged_at": "2025-10-23T22:22:08.038780",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/ctb_metadata_tagger.py"
+    },
+    {
+      "file_path": "sys\\github-factory\\scripts\\ctb_remediator.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 10093,
+      "last_modified": "2025-10-23T16:33:59.045996",
+      "tagged_at": "2025-10-23T22:22:08.049560",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/ctb_remediator.py"
+    },
+    {
+      "file_path": "sys\\github-factory\\scripts\\run_compliance_simple.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 8379,
+      "last_modified": "2025-10-23T16:37:55.527358",
+      "tagged_at": "2025-10-23T22:22:08.060918",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/run_compliance_simple.py"
+    },
+    {
+      "file_path": "sys\\github-factory\\scripts\\run_ctb_compliance.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 14550,
+      "last_modified": "2025-10-23T16:36:28.349846",
+      "tagged_at": "2025-10-23T22:22:08.069088",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/run_ctb_compliance.py"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_1_REORGANIZER.md",
+      "ctb_branch": "ai",
+      "file_type": ".md",
+      "size_bytes": 5655,
+      "last_modified": "2025-10-23T14:54:53.585026",
+      "tagged_at": "2025-10-23T22:22:08.090647",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/docs/ai/PROMPT_1_REORGANIZER.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_2_TAGGER_AUDITOR_REMEDIATOR.md",
+      "ctb_branch": "ai",
+      "file_type": ".md",
+      "size_bytes": 6536,
+      "last_modified": "2025-10-23T14:54:59.160024",
+      "tagged_at": "2025-10-23T22:22:08.099904",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/docs/ai/PROMPT_2_TAGGER_AUDITOR_REMEDIATOR.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_3_GITHUB_FACTORY_CI.md",
+      "ctb_branch": "sys",
+      "file_type": ".md",
+      "size_bytes": 9182,
+      "last_modified": "2025-10-23T18:03:18.924523",
+      "tagged_at": "2025-10-23T22:22:08.110799",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/docs/sys/PROMPT_3_GITHUB_FACTORY_CI.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_4_DOCUMENTATION_NAVIGATION.md",
+      "ctb_branch": "ai",
+      "file_type": ".md",
+      "size_bytes": 25461,
+      "last_modified": "2025-10-23T18:08:58.976729",
+      "tagged_at": "2025-10-23T22:22:08.121353",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/docs/ai/PROMPT_4_DOCUMENTATION_NAVIGATION.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_5_ENFORCEMENT_VERIFICATION.md",
+      "ctb_branch": "ai",
+      "file_type": ".md",
+      "size_bytes": 30353,
+      "last_modified": "2025-10-23T18:12:25.128857",
+      "tagged_at": "2025-10-23T22:22:08.132879",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/docs/ai/PROMPT_5_ENFORCEMENT_VERIFICATION.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\PROMPT_6_CHECKLIST.md",
+      "ctb_branch": "ai",
+      "file_type": ".md",
+      "size_bytes": 30679,
+      "last_modified": "2025-10-23T18:17:55.599288",
+      "tagged_at": "2025-10-23T22:22:08.147518",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/docs/ai/PROMPT_6_CHECKLIST.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\doctrine\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 8103,
+      "last_modified": "2025-10-23T14:55:48.380927",
+      "tagged_at": "2025-10-23T22:22:08.159344",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/docs/README.md"
+    },
+    {
+      "file_path": "sys\\global-factory\\scripts\\ctb_audit_generator.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 11431,
+      "last_modified": "2025-10-23T14:53:41.561379",
+      "tagged_at": "2025-10-23T22:22:08.171024",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/ctb_audit_generator.py"
+    },
+    {
+      "file_path": "sys\\global-factory\\scripts\\ctb_metadata_tagger.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 8451,
+      "last_modified": "2025-10-23T14:52:21.525215",
+      "tagged_at": "2025-10-23T22:22:08.181691",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/scripts/ctb_metadata_tagger.py"
+    },
+    {
+      "file_path": "sys\\global-factory\\scripts\\ctb_remediator.py",
+      "ctb_branch": "ai",
+      "file_type": ".py",
+      "size_bytes": 10093,
+      "last_modified": "2025-10-23T14:53:43.709758",
+      "tagged_at": "2025-10-23T22:22:08.193322",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/ai/scripts/ctb_remediator.py"
+    },
+    {
+      "file_path": "sys\\tests\\conftest.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 1598,
+      "last_modified": "2025-10-23T16:59:46.043536",
+      "tagged_at": "2025-10-23T22:22:08.206108",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/tests/conftest.py"
+    },
+    {
+      "file_path": "sys\\tests\\README.md",
+      "ctb_branch": "docs",
+      "file_type": ".md",
+      "size_bytes": 5325,
+      "last_modified": "2025-10-23T17:00:50.008290",
+      "tagged_at": "2025-10-23T22:22:08.216245",
+      "heir_id": "HEIR-2025-10-CTB-DOCS-01",
+      "suggested_location": "ctb/docs/tests/README.md"
+    },
+    {
+      "file_path": "sys\\tests\\test_database.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 1884,
+      "last_modified": "2025-10-23T16:59:59.140245",
+      "tagged_at": "2025-10-23T22:22:08.228227",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/tests/test_database.py"
+    },
+    {
+      "file_path": "sys\\tests\\test_heir_orbt.py",
+      "ctb_branch": "ai",
+      "file_type": ".py",
+      "size_bytes": 3461,
+      "last_modified": "2025-10-23T17:00:19.215964",
+      "tagged_at": "2025-10-23T22:22:08.241371",
+      "heir_id": "HEIR-2025-10-CTB-AI-01",
+      "suggested_location": "ctb/ai/tests/test_heir_orbt.py"
+    },
+    {
+      "file_path": "sys\\tests\\__init__.py",
+      "ctb_branch": "sys",
+      "file_type": ".py",
+      "size_bytes": 128,
+      "last_modified": "2025-10-23T16:59:24.969991",
+      "tagged_at": "2025-10-23T22:22:08.252057",
+      "heir_id": "HEIR-2025-10-CTB-SYS-01",
+      "suggested_location": "ctb/sys/tests/__init__.py"
+    }
+  ],
+  "summary": {
+    "total_files": 40,
+    "by_branch": {
+      "docs": 9,
+      "sys": 17,
+      "data": 6,
+      "ai": 8
+    }
+  }
+}
