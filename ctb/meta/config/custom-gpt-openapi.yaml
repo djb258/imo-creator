@@ -1,0 +1,458 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.107278
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
+openapi: 3.1.0
+info:
+  title: IMO Creator API
+  description: AI-powered interface creation tool with Google Workspace integration via Composio MCP
+  version: 1.0.0
+  contact:
+    name: IMO Creator Support
+    email: service@svg.agency
+
+servers:
+  - url: http://localhost:3001
+    description: Production Render deployment
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Check API health status
+      description: Returns the current health status of the FastAPI server
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /composio/execute:
+    post:
+      operationId: executeComposioTool
+      summary: Execute a Composio tool
+      description: Execute any Composio tool with HEIR/ORBT formatted payload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tool
+                - data
+                - unique_id
+                - process_id
+                - orbt_layer
+                - blueprint_version
+              properties:
+                tool:
+                  type: string
+                  description: The Composio tool to execute
+                  example: gmail_send_email
+                data:
+                  type: object
+                  description: Tool-specific parameters
+                  example:
+                    to: "recipient@example.com"
+                    subject: "Test Email"
+                    body: "Hello from IMO Creator"
+                unique_id:
+                  type: string
+                  description: HEIR-formatted unique identifier
+                  example: HEIR-2025-09-TASK-001
+                process_id:
+                  type: string
+                  description: Process tracking identifier
+                  example: PRC-EMAIL-001
+                orbt_layer:
+                  type: integer
+                  description: ORBT layer level (1-5)
+                  example: 2
+                blueprint_version:
+                  type: string
+                  description: Blueprint version
+                  example: "1.0"
+      responses:
+        '200':
+          description: Tool executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                  execution_id:
+                    type: string
+        '400':
+          description: Invalid request payload
+        '500':
+          description: Execution error
+
+  /gmail/send:
+    post:
+      operationId: sendGmailEmail
+      summary: Send an email via Gmail
+      description: Send an email using connected Gmail account through Composio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - to
+                - subject
+                - body
+              properties:
+                to:
+                  type: string
+                  format: email
+                  description: Recipient email address
+                  example: recipient@example.com
+                subject:
+                  type: string
+                  description: Email subject line
+                  example: Meeting Follow-up
+                body:
+                  type: string
+                  description: Email body content
+                  example: Thanks for the meeting today!
+                from_account:
+                  type: string
+                  description: Gmail account to send from
+                  enum:
+                    - service@svg.agency
+                    - djb258@gmail.com
+                    - dbarton@svg.agency
+                  default: service@svg.agency
+                cc:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: CC recipients
+                bcc:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: BCC recipients
+      responses:
+        '200':
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message_id:
+                    type: string
+                  thread_id:
+                    type: string
+
+  /gmail/read:
+    get:
+      operationId: readGmailEmails
+      summary: Read emails from Gmail
+      description: Retrieve emails from connected Gmail account
+      parameters:
+        - name: account
+          in: query
+          schema:
+            type: string
+            enum:
+              - service@svg.agency
+              - djb258@gmail.com
+              - dbarton@svg.agency
+          description: Gmail account to read from
+        - name: max_results
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Maximum number of emails to retrieve
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: Gmail search query
+          example: "is:unread from:client@example.com"
+      responses:
+        '200':
+          description: Emails retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        from:
+                          type: string
+                        subject:
+                          type: string
+                        body:
+                          type: string
+                        date:
+                          type: string
+                          format: date-time
+
+  /drive/upload:
+    post:
+      operationId: uploadToDrive
+      summary: Upload file to Google Drive
+      description: Upload a file to Google Drive using connected account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - file_name
+                - file_content
+              properties:
+                file_name:
+                  type: string
+                  description: Name of the file to upload
+                  example: document.pdf
+                file_content:
+                  type: string
+                  description: Base64 encoded file content
+                folder_id:
+                  type: string
+                  description: Target folder ID in Drive
+                account:
+                  type: string
+                  enum:
+                    - service@svg.agency
+                    - djb258@gmail.com
+                    - dbarton@svg.agency
+                  default: service@svg.agency
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_id:
+                    type: string
+                  web_view_link:
+                    type: string
+                  web_content_link:
+                    type: string
+
+  /calendar/create-event:
+    post:
+      operationId: createCalendarEvent
+      summary: Create Google Calendar event
+      description: Create a new event in Google Calendar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - summary
+                - start_time
+                - end_time
+              properties:
+                summary:
+                  type: string
+                  description: Event title
+                  example: Team Meeting
+                description:
+                  type: string
+                  description: Event description
+                start_time:
+                  type: string
+                  format: date-time
+                  description: Event start time (ISO 8601)
+                end_time:
+                  type: string
+                  format: date-time
+                  description: Event end time (ISO 8601)
+                attendees:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: Event attendees
+                location:
+                  type: string
+                  description: Event location
+      responses:
+        '200':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_id:
+                    type: string
+                  html_link:
+                    type: string
+                  hangout_link:
+                    type: string
+
+  /sheets/read:
+    get:
+      operationId: readGoogleSheet
+      summary: Read data from Google Sheet
+      description: Read data from a Google Sheets spreadsheet
+      parameters:
+        - name: spreadsheet_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The Google Sheets spreadsheet ID
+        - name: range
+          in: query
+          required: true
+          schema:
+            type: string
+          description: A1 notation range
+          example: "Sheet1!A1:D10"
+      responses:
+        '200':
+          description: Data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+
+  /sheets/write:
+    post:
+      operationId: writeGoogleSheet
+      summary: Write data to Google Sheet
+      description: Write data to a Google Sheets spreadsheet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - spreadsheet_id
+                - range
+                - values
+              properties:
+                spreadsheet_id:
+                  type: string
+                  description: The Google Sheets spreadsheet ID
+                range:
+                  type: string
+                  description: A1 notation range
+                  example: "Sheet1!A1:D10"
+                values:
+                  type: array
+                  items:
+                    type: array
+                    items:
+                      type: string
+                  description: 2D array of values to write
+      responses:
+        '200':
+          description: Data written successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated_range:
+                    type: string
+                  updated_rows:
+                    type: integer
+                  updated_columns:
+                    type: integer
+
+  /accounts/list:
+    get:
+      operationId: listConnectedAccounts
+      summary: List all connected accounts
+      description: Retrieve all Google Workspace accounts connected via Composio
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        email:
+                          type: string
+                        service:
+                          type: string
+                        status:
+                          type: string
+                        connected_at:
+                          type: string
+                          format: date-time
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication
+
+security:
+  - ApiKeyAuth: []

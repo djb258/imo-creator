@@ -1,0 +1,220 @@
+name: Firebase Environment Promotion
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+
+jobs:
+  promote-firebase:
+    name: Promote Firebase Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for deployment analysis
+
+      - name: Extract deployment metadata
+        id: deploy
+        run: |
+          # Extract deployment branch info
+          BRANCH_NAME="${{ github.ref_name }}"
+          DEPLOY_ENV="${BRANCH_NAME#deploy/}"
+
+          # Set deployment environment
+          if [[ "$DEPLOY_ENV" == "prod" || "$DEPLOY_ENV" == "production" ]]; then
+            ENVIRONMENT="prod"
+          elif [[ "$DEPLOY_ENV" == "staging" || "$DEPLOY_ENV" == "stage" ]]; then
+            ENVIRONMENT="staging"
+          else
+            ENVIRONMENT="$DEPLOY_ENV"
+          fi
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+          echo "deploy_target=$DEPLOY_ENV" >> $GITHUB_OUTPUT
+
+          # Check for Firebase config
+          if [ -f "firebase.json" ]; then
+            echo "has_firebase_config=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_firebase_config=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Extract doctrine info if available
+          DOCTRINE_NAME="${{ inputs.doctrine_name }}"
+          if [[ -z "$DOCTRINE_NAME" && "$BRANCH_NAME" == *"doctrine"* ]]; then
+            DOCTRINE_NAME=$(echo "$BRANCH_NAME" | sed 's/.*doctrine[\/\-]\(.*\)/\1/')
+          fi
+          echo "doctrine_name=$DOCTRINE_NAME" >> $GITHUB_OUTPUT
+
+      - name: Validate deployment readiness
+        id: validate
+        run: |
+          echo "[INFO] Validating deployment readiness..."
+
+          # Check for required files
+          VALIDATION_ERRORS=()
+
+          if [ ! -f "firebase.json" ]; then
+            VALIDATION_ERRORS+=("Missing firebase.json configuration")
+          fi
+
+          if [ ! -d "public" ] && [ ! -d "dist" ] && [ ! -d "build" ]; then
+            VALIDATION_ERRORS+=("No build output directory found (public/dist/build)")
+          fi
+
+          # Report validation results
+          if [ ${#VALIDATION_ERRORS[@]} -eq 0 ]; then
+            echo "validation_passed=true" >> $GITHUB_OUTPUT
+            echo "[SUCCESS] Deployment validation passed"
+          else
+            echo "validation_passed=false" >> $GITHUB_OUTPUT
+            echo "[ERROR] Deployment validation failed:"
+            printf '%s\n' "${VALIDATION_ERRORS[@]}"
+            exit 1
+          fi
+
+      - name: Send promotion request to Composio MCP
+        id: promote
+        run: |
+          # Construct promotion payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "repo": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "event": "firebase_promotion",
+            "source": "imo-creator",
+            "branch": "${{ steps.deploy.outputs.branch_name }}",
+            "environment": "${{ steps.deploy.outputs.environment }}",
+            "deploy_target": "${{ steps.deploy.outputs.deploy_target }}",
+            "doctrine_name": "${{ steps.deploy.outputs.doctrine_name }}",
+            "sha": "${{ github.sha }}",
+            "actor": "${{ github.actor }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "deployment": {
+              "has_firebase_config": ${{ steps.deploy.outputs.has_firebase_config }},
+              "validation_passed": ${{ steps.validate.outputs.validation_passed }},
+              "files_changed": $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]'),
+              "commit_message": "${{ github.event.head_commit.message }}",
+              "commit_author": "${{ github.event.head_commit.author.name }}"
+            },
+            "metadata": {
+              "run_id": "${{ github.run_id }}",
+              "run_number": "${{ github.run_number }}",
+              "workflow": "${{ github.workflow }}",
+              "manual_trigger": "${{ github.event_name == 'workflow_dispatch' }}"
+            }
+          }
+          EOF
+          )
+
+          echo "[INFO] Firebase Promotion Payload:"
+          echo "$PAYLOAD" | jq '.'
+
+          # Send promotion request to Composio
+          RESPONSE=$(curl -X POST \
+            http://localhost:3001/tool
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: firebase_promotion" \
+            -H "X-GitHub-Repository: ${{ github.repository }}" \
+            -H "X-Firebase-Environment: ${{ steps.deploy.outputs.environment }}" \
+            -H "X-GitHub-SHA: ${{ github.sha }}" \
+            -d "$PAYLOAD" \
+            -w "\n%{http_code}" \
+            -s --max-time 45)
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+
+          echo "Response Code: $HTTP_CODE"
+          echo "Response Body:"
+          echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+
+          # Parse promotion result
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "[SUCCESS] Firebase promotion initiated successfully"
+            echo "promotion_successful=true" >> $GITHUB_OUTPUT
+
+            # Extract promotion details if available
+            if echo "$BODY" | jq -e '.deployment_id' >/dev/null 2>&1; then
+              DEPLOYMENT_ID=$(echo "$BODY" | jq -r '.deployment_id')
+              echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+            fi
+
+            if echo "$BODY" | jq -e '.firebase_url' >/dev/null 2>&1; then
+              FIREBASE_URL=$(echo "$BODY" | jq -r '.firebase_url')
+              echo "firebase_url=$FIREBASE_URL" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "[ERROR] Firebase promotion failed"
+            echo "promotion_successful=false" >> $GITHUB_OUTPUT
+
+            # Extract error details if available
+            if echo "$BODY" | jq -e '.errors' >/dev/null 2>&1; then
+              echo "Promotion Errors:"
+              echo "$BODY" | jq '.errors'
+            fi
+
+            exit 1
+          fi
+
+      - name: Create deployment report
+        if: always()
+        run: |
+          cat > firebase-deployment-report.md <<EOF
+          # Firebase Deployment Report
+
+          ## Summary
+          - **Repository**: ${{ github.repository }}
+          - **Branch**: ${{ steps.deploy.outputs.branch_name }}
+          - **Environment**: ${{ steps.deploy.outputs.environment }}
+          - **Deploy Target**: ${{ steps.deploy.outputs.deploy_target }}
+          - **Doctrine**: ${{ steps.deploy.outputs.doctrine_name || 'N/A' }}
+          - **Commit**: ${{ github.sha }}
+          - **Author**: ${{ github.actor }}
+          - **Promotion Status**: ${{ steps.promote.outputs.promotion_successful == 'true' && '[SUCCESS] Completed' || '[ERROR] Failed' }}
+
+          ## Deployment Details
+          - **Firebase Config**: ${{ steps.deploy.outputs.has_firebase_config == 'true' && '[SUCCESS] Present' || '[ERROR] Missing' }}
+          - **Validation**: ${{ steps.validate.outputs.validation_passed == 'true' && '[SUCCESS] Passed' || '[ERROR] Failed' }}
+          - **Deployment ID**: ${{ steps.promote.outputs.deployment_id || 'N/A' }}
+          - **Firebase URL**: ${{ steps.promote.outputs.firebase_url || 'N/A' }}
+
+          ## Deployment Metadata
+          - **Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          - **Workflow Run**: ${{ github.run_id }}
+          - **Manual Trigger**: ${{ github.event_name == 'workflow_dispatch' && 'Yes' || 'No' }}
+
+          ---
+          *Deployed via Composio MCP Orchestration System*
+          EOF
+
+          echo "[INFO] Firebase Deployment Report Generated:"
+          cat firebase-deployment-report.md
+
+      - name: Upload deployment artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: firebase-deployment-${{ github.sha }}
+          path: |
+            firebase-deployment-report.md
+            firebase.json
+            .firebaserc
+          retention-days: 90
+
+      - name: Update deployment status
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "[INFO] Manual deployment triggered - status updated via Composio MCP"
+          echo "Environment: ${{ steps.deploy.outputs.environment }}"
+          echo "Status: ${{ steps.promote.outputs.promotion_successful == 'true' && 'SUCCESS' || 'FAILED' }}"

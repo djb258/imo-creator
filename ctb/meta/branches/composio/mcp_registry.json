@@ -1,0 +1,222 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.524119
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: branches
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-MET-BRANCH-01
+
+[
+  {
+    "tool": "Composio MCP Server",
+    "type": "MCP",
+    "endpoint": "http://localhost:3001",
+    "branch": "composio",
+    "doctrine_id": "04.04.00",
+    "status": "active",
+    "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
+    "description": "Primary Composio MCP integration hub - 20 tools across 3 toolkits",
+    "total_tools": 20,
+    "total_toolkits": 3
+  },
+  {
+    "tool": "_21RISK Toolkit",
+    "type": "MCP",
+    "endpoint": "http://localhost:3001/api/composio/_21risk",
+    "branch": "composio",
+    "doctrine_id": "04.04.01",
+    "status": "active",
+    "category": "Risk Management & Compliance",
+    "tool_count": 9,
+    "tools": [
+      {
+        "name": "Get Compliance",
+        "slug": "_21RISK_GET_COMPLIANCE",
+        "description": "Retrieve compliance data for sites, categories, or questions",
+        "tags": ["readOnlyHint", "Permissions and Compliance"]
+      },
+      {
+        "name": "Get Items (BETA)",
+        "slug": "_21RISK_GET_ITEMS",
+        "description": "Retrieve items from 21risk OData API with filtering",
+        "tags": ["readOnlyHint", "important", "Items and Labels"]
+      },
+      {
+        "name": "Get Items Per Month",
+        "slug": "_21RISK_GET_ITEMS_PER_MONTH",
+        "description": "Fact table data for items per month, one row per question per site per month",
+        "tags": ["readOnlyHint", "Items and Labels"]
+      },
+      {
+        "name": "Get Organizations",
+        "slug": "_21RISK_GET_ORGANIZATIONS",
+        "description": "Retrieve organizations with OData filtering and pagination",
+        "tags": ["readOnlyHint", "important", "Organizational Structure"]
+      },
+      {
+        "name": "Get Properties",
+        "slug": "_21RISK_GET_PROPERTIES",
+        "description": "Fetch properties related to sites including COPE information",
+        "tags": ["readOnlyHint", "Organizational Structure"]
+      },
+      {
+        "name": "Get Reports",
+        "slug": "_21RISK_GET_REPORTS",
+        "description": "Retrieve audit reports including draft, published, and scheduled reports",
+        "tags": ["readOnlyHint", "important", "Reports"]
+      },
+      {
+        "name": "Get RiskModel Categories",
+        "slug": "_21RISK_GET_RISKMODEL_CATEGORIES",
+        "description": "Retrieve risk model categories for grouping questions and compliance checks",
+        "tags": ["readOnlyHint", "important", "Risk Management"]
+      },
+      {
+        "name": "Get Risk Models",
+        "slug": "_21RISK_GET_RISK_MODELS",
+        "description": "Retrieve risk models used for audits and compliance",
+        "tags": ["readOnlyHint", "important", "Risk Management"]
+      },
+      {
+        "name": "Get Sites",
+        "slug": "_21RISK_GET_SITES",
+        "description": "Retrieve sites (locations) from 21risk OData API",
+        "tags": ["readOnlyHint", "important", "Organizational Structure"]
+      }
+    ]
+  },
+  {
+    "tool": "_2CHAT Toolkit",
+    "type": "MCP",
+    "endpoint": "http://localhost:3001/api/composio/_2chat",
+    "branch": "composio",
+    "doctrine_id": "04.04.02",
+    "status": "active",
+    "category": "Chat & Communication",
+    "tool_count": 5,
+    "tools": [
+      {
+        "name": "Create Contact",
+        "slug": "_2CHAT_CREATE_CONTACT",
+        "description": "Create a new contact in 2chat account after gathering and verifying data"
+      },
+      {
+        "name": "Get API Usage Info",
+        "slug": "_2CHAT_GET_API_USAGE_INFO",
+        "description": "Retrieve current API usage and account information",
+        "tags": ["account", "billing", "usage"]
+      },
+      {
+        "name": "List Contacts",
+        "slug": "_2CHAT_LIST_CONTACTS",
+        "description": "List all contacts in 2chat account",
+        "tags": ["contacts"]
+      },
+      {
+        "name": "List Webhook Subscriptions",
+        "slug": "_2CHAT_LIST_WEBHOOKS",
+        "description": "List all configured webhook subscriptions for audit/management",
+        "tags": ["webhooks", "whatsapp"]
+      },
+      {
+        "name": "Test API Key",
+        "slug": "_2CHAT_TEST_API_KEY",
+        "description": "Validate API key and retrieve account info for authentication confirmation",
+        "tags": ["account", "authentication"]
+      }
+    ]
+  },
+  {
+    "tool": "ABLY Toolkit",
+    "type": "MCP",
+    "endpoint": "http://localhost:3001/api/composio/ably",
+    "branch": "composio",
+    "doctrine_id": "04.04.03",
+    "status": "active",
+    "category": "Real-time Messaging & Presence",
+    "tool_count": 6,
+    "tools": [
+      {
+        "name": "Query Batch Presence",
+        "slug": "ABLY_BATCH_PRESENCE",
+        "description": "Query presence states of multiple channels in a single API call",
+        "tags": ["important", "openWorldHint", "readOnlyHint"]
+      },
+      {
+        "name": "Query Batch Presence History",
+        "slug": "ABLY_BATCH_PRESENCE_HISTORY",
+        "description": "Query presence history for multiple channels in single API call",
+        "tags": ["important", "openWorldHint", "readOnlyHint"]
+      },
+      {
+        "name": "Create Ably Channel",
+        "slug": "ABLY_CREATE_CHANNEL",
+        "description": "Create new channel or retrieve existing channel in Ably",
+        "tags": ["important", "openWorldHint"]
+      },
+      {
+        "name": "Delete Channel Subscription",
+        "slug": "ABLY_DELETE_CHANNEL_SUBSCRIPTION",
+        "description": "Unsubscribe devices/clients from push notifications for specific channel",
+        "tags": ["destructiveHint", "important", "openWorldHint"]
+      },
+      {
+        "name": "Get Channel Details",
+        "slug": "ABLY_GET_CHANNEL_DETAILS",
+        "description": "Retrieve metadata and details for specific Ably channel",
+        "tags": ["important", "openWorldHint", "readOnlyHint"]
+      },
+      {
+        "name": "Get Channel History",
+        "slug": "ABLY_GET_CHANNEL_HISTORY",
+        "description": "Retrieve message history for specified Ably channel",
+        "tags": ["important", "openWorldHint", "readOnlyHint"]
+      }
+    ]
+  },
+  {
+    "tool": "n8n",
+    "type": "Fallback",
+    "endpoint": "https://n8n-instance/webhook",
+    "branch": "n8n",
+    "doctrine_id": "04.04.F1",
+    "status": "active"
+  },
+  {
+    "tool": "Make.com",
+    "type": "Fallback",
+    "endpoint": "https://make-instance/webhook",
+    "branch": "make",
+    "doctrine_id": "04.04.F2",
+    "status": "active"
+  },
+  {
+    "tool": "Zapier",
+    "type": "Fallback",
+    "endpoint": "https://hooks.zapier.com/webhook",
+    "branch": "zapier",
+    "doctrine_id": "04.04.F3",
+    "status": "active"
+  },
+  {
+    "tool": "Pipedream",
+    "type": "Fallback",
+    "endpoint": "https://pipedream-instance/webhook",
+    "branch": "pipedream",
+    "doctrine_id": "04.04.F4",
+    "status": "active"
+  },
+  {
+    "tool": "Builder.io",
+    "type": "MCP",
+    "endpoint": "http://localhost:3001/api/composio/builder",
+    "branch": "composio",
+    "doctrine_id": "04.04.04",
+    "status": "active",
+    "api_key": "9502e3493ccf42339f36d16b4a482c70",
+    "category": "Visual Development & UI/UX",
+    "tool_count": 0,
+    "description": "Builder.io visual development platform integration for UI/UX generation",
+    "tools": []
+  }
+]

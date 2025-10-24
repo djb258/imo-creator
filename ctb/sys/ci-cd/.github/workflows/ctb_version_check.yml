@@ -1,0 +1,80 @@
+name: CTB Version Check & Auto-Update
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install jq (if needed)
+        run: |
+          if ! command -v jq &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y jq
+          fi
+
+      - name: Check CTB version
+        id: version_check
+        run: |
+          # Make script executable
+          chmod +x global-config/scripts/ctb_check_version.sh
+
+          # Check if auto-update is enabled
+          AUTO_UPDATE="${{ github.event.inputs.auto_update }}"
+          if [ "$AUTO_UPDATE" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "Running with auto-update enabled..."
+            bash global-config/scripts/ctb_check_version.sh --auto-update || echo "UPDATE_FAILED=true" >> $GITHUB_ENV
+          else
+            echo "Running version check only (no auto-update)..."
+            bash global-config/scripts/ctb_check_version.sh || echo "UPDATE_AVAILABLE=true" >> $GITHUB_ENV
+          fi
+
+      - name: Create pull request (if update available)
+        if: env.UPDATE_AVAILABLE == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "🔄 CTB Doctrine version update available"
+          title: "Update to latest CTB Doctrine version"
+          body: |
+            ## CTB Doctrine Update Available
+
+            A new version of the CTB Doctrine is available from imo-creator.
+
+            **Action Required:**
+            Run the update manually or enable auto-update:
+            ```bash
+            bash global-config/scripts/ctb_check_version.sh --auto-update
+            ```
+
+            Or via Claude:
+            ```
+            "update from imo-creator"
+            ```
+          branch: ctb-version-update
+          delete-branch: true
+
+      - name: Notify on failure
+        if: failure() || env.UPDATE_FAILED == 'true'
+        run: |
+          echo "::warning::CTB version check or update failed. Manual intervention may be required."

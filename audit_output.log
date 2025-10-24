@@ -1,0 +1,39 @@
+🔍 CTB Audit Generator
+==================================================
+
+📁 Auditing CTB structure...
+  ✅ sys: 270 files (2,900,211 bytes)
+  ✅ ai: 13 files (96,962 bytes)
+  ✅ data: 12 files (54,734 bytes)
+  ✅ docs: 130 files (2,475,188 bytes)
+  ✅ ui: 21 files (50,126 bytes)
+  ✅ meta: 48 files (877,614 bytes)
+
+🏷️  Auditing metadata compliance...
+  Total files: 466
+  Tagged: 425
+  Untagged: 41
+  Avg Compliance: 92.2%
+
+🎯 Auditing HEIR/ORBT compliance...
+  HEIR IDs found: 134
+  Process IDs found: 1
+  Composio calls: 16
+  Compliant calls: 4
+
+🔒 Auditing security compliance...
+  Hardcoded secrets: 3
+  .env files: 0
+  MCP vault usage: ✅
+
+==================================================
+📊 Overall Compliance Score: 75%
+❌ Issues: 2
+💡 Recommendations: 1
+
+📄 Report saved: CTB_AUDIT_REPORT.md
+💾 Data saved: ctb\meta\audit_data.json
+
+✅ CTB Audit Complete!
+
+⚠️  WARNING: Compliance score 75% is below minimum 90%

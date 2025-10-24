@@ -1,5 +1,0 @@
-./deepwiki/src/app/api/models/config/route.ts
-./garage-mcp/packages/sql/2025-08-19_create_shq_master_error_log.sql
-./garage-mcp/packages/sql/2025-08-19_ids.sql
-./imo-creator/garage-mcp/packages/sql/2025-08-19_create_shq_master_error_log.sql
-./imo-creator/garage-mcp/packages/sql/2025-08-19_ids.sql

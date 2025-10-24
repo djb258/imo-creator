@@ -1,0 +1,116 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.081938
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
+{
+  "last_updated": "2025-10-07T12:00:00Z",
+  "summary": {
+    "total_tools_in_composio": 13216,
+    "total_pages_in_composio": 661,
+    "connected_tools_in_account": 40,
+    "connected_services": 11,
+    "custom_integrations": 1
+  },
+  "connected_services": {
+    "gmail": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "googledrive": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "googlecalendar": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "googlesheets": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "notion": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "render": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "vercel": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "github": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "slack": {
+      "status": "CONNECTED",
+      "account_count": 10,
+      "type": "standard_composio"
+    },
+    "figma": {
+      "status": "CONNECTED",
+      "account_count": 1,
+      "type": "standard_composio",
+      "connection_id": "704dfd40-fc4e-4aca-98d4-fcb4d74334b8",
+      "connected_user": "dbarton@svg.agency"
+    },
+    "instantly": {
+      "status": "INTEGRATED",
+      "integration_method": "CUSTOM_MCP",
+      "type": "custom_integration",
+      "tools": [
+        "instantly_list_campaigns",
+        "instantly_create_campaign",
+        "instantly_get_campaign",
+        "instantly_list_leads",
+        "instantly_create_lead",
+        "instantly_delete_lead",
+        "instantly_list_subsequences",
+        "instantly_create_subsequence"
+      ],
+      "tool_count": 8
+    }
+  },
+  "sample_available_toolkits": {
+    "_21risk": {
+      "name": "_21risk",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/_21risk-logo.png",
+      "tool_count": 9,
+      "type": "available_in_composio"
+    },
+    "_2chat": {
+      "name": "_2chat",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/icons/_2chat_fixed_20250722.png",
+      "tool_count": 5,
+      "type": "available_in_composio"
+    },
+    "ably": {
+      "name": "ably",
+      "logo": "https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/ably.svg",
+      "tool_count": 6,
+      "type": "available_in_composio"
+    }
+  },
+  "analysis_notes": {
+    "massive_scale": "Composio has grown from 20 to 13,216 total tools across 661 pages",
+    "our_connected_tools": "We have 40 tools from 11 connected services (10 standard + 1 custom)",
+    "custom_integration": "Instantly.ai integrated as custom MCP with 8 specific tools",
+    "page_analyzed": "Analysis based on page 1 of 661 total pages in Composio",
+    "growth_factor": "13,196 new tools since last summary",
+    "latest_connection": "Figma connected on 2025-10-07 as connection ID 704dfd40-fc4e-4aca-98d4-fcb4d74334b8"
+  }
+}

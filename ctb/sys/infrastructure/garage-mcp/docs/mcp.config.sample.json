@@ -1,0 +1,35 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:37.171884
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: infrastructure
+# # Compliance: 85%
+# # HEIR ID: HEIR-2025-10-SYS-INFRAS-01
+
+{
+  "_comment": "IMO-Creator MCP Configuration - Production URLs embedded",
+  "production_urls": {
+    "backend": "http://localhost:3001",
+    "frontend": "https://imo-creator.vercel.app",
+    "api_base": "http://localhost:3001/api",
+    "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
+  },
+  "servers": {
+    "imo-creator-mcp": {
+      "command": "curl",
+      "args": ["-X", "GET", "http://localhost:3001/api/subagents"],
+      "env": {
+        "COMPOSIO_API_KEY": "ak_t-F0AbvfZHUZSUrqAGNn",
+        "MCP_SERVER_URL": "http://localhost:3001"
+      }
+    },
+    "garage-mcp-local": {
+      "command": "uvicorn",
+      "args": ["services.mcp.main:app", "--port", "7001"],
+      "env": {
+        "BAY": "frontend",
+        "BACKEND_URL": "http://localhost:3001"
+      }
+    }
+  }
+}

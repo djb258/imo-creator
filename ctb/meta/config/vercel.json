@@ -1,0 +1,31 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.220170
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "docs/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "branches/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "config/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/ui", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/overview", "dest": "/docs/blueprints/ui/overview.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}

@@ -1,0 +1,42 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:37.089530
+# # CTB Version: 1.3.3
+# # Division: System Infrastructure
+# # Category: infrastructure
+# # Compliance: 100%
+# # HEIR ID: HEIR-2025-10-SYS-INFRAS-01
+
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(git init:*)",
+      "Bash(rm:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(make:*)",
+      "Bash(ls:*)",
+      "Bash(echo:*)",
+      "Bash(BAY=frontend uvicorn services.mcp.main:app --port 7001 --reload)",
+      "Bash(pip install:*)",
+      "Bash(uvicorn:*)",
+      "Bash(curl:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(python:*)",
+      "Bash(pytest:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(make:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

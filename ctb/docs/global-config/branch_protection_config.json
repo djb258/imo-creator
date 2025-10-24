@@ -1,0 +1,146 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.611437
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+{
+  "description": "GitHub Branch Protection Rules for CTB Doctrine",
+  "instructions": "Apply these rules via GitHub UI: Settings → Branches → Add rule",
+  "note": "This file is documentation only - GitHub API or manual configuration required",
+
+  "rules": [
+    {
+      "branch": "main",
+      "protection": {
+        "required_reviews": 2,
+        "dismiss_stale_reviews": true,
+        "require_code_owner_reviews": true,
+        "required_approving_review_count": 2,
+        "restrictions": null,
+        "required_status_checks": {
+          "strict": true,
+          "contexts": [
+            "doctrine_sync",
+            "compliance_audit",
+            "heir_validation"
+          ]
+        },
+        "enforce_admins": true,
+        "required_linear_history": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    },
+    {
+      "branch": "doctrine/*",
+      "protection": {
+        "required_reviews": 1,
+        "dismiss_stale_reviews": false,
+        "require_code_owner_reviews": false,
+        "required_approving_review_count": 1,
+        "required_status_checks": {
+          "strict": false,
+          "contexts": ["doctrine_sync"]
+        },
+        "enforce_admins": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    },
+    {
+      "branch": "sys/*",
+      "protection": {
+        "required_reviews": 1,
+        "dismiss_stale_reviews": false,
+        "require_code_owner_reviews": false,
+        "required_approving_review_count": 1,
+        "required_status_checks": {
+          "strict": false,
+          "contexts": ["compliance_audit"]
+        },
+        "enforce_admins": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    },
+    {
+      "branch": "imo/*",
+      "protection": {
+        "required_reviews": 0,
+        "required_status_checks": {
+          "strict": false,
+          "contexts": []
+        },
+        "enforce_admins": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    },
+    {
+      "branch": "ui/*",
+      "protection": {
+        "required_reviews": 0,
+        "required_status_checks": {
+          "strict": false,
+          "contexts": []
+        },
+        "enforce_admins": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    },
+    {
+      "branch": "ops/*",
+      "protection": {
+        "required_reviews": 0,
+        "required_status_checks": {
+          "strict": false,
+          "contexts": []
+        },
+        "enforce_admins": false,
+        "allow_force_pushes": false,
+        "allow_deletions": false
+      }
+    }
+  ],
+
+  "manual_setup_instructions": {
+    "github_ui_steps": [
+      "1. Navigate to repository Settings",
+      "2. Click 'Branches' in left sidebar",
+      "3. Click 'Add rule' button",
+      "4. Enter branch name pattern (e.g., 'main', 'sys/*')",
+      "5. Configure protection settings as specified above",
+      "6. Click 'Create' to save rule",
+      "7. Repeat for all branch patterns"
+    ],
+
+    "github_cli_example": "gh api repos/:owner/:repo/branches/main/protection -X PUT --input protection-config.json",
+
+    "github_api_endpoint": "PUT /repos/{owner}/{repo}/branches/{branch}/protection"
+  },
+
+  "enforcement_levels": {
+    "strict": {
+      "branches": ["main"],
+      "reviews": 2,
+      "status_checks": ["doctrine_sync", "compliance_audit", "heir_validation"],
+      "admin_override": true
+    },
+    "moderate": {
+      "branches": ["doctrine/*", "sys/*"],
+      "reviews": 1,
+      "status_checks": ["relevant checks"],
+      "admin_override": false
+    },
+    "light": {
+      "branches": ["imo/*", "ui/*", "ops/*"],
+      "reviews": 0,
+      "status_checks": [],
+      "admin_override": false
+    }
+  }
+}

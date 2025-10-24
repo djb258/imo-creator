@@ -1,0 +1,102 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.210628
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
+{
+  "name": "Personal Assistant GPT Configuration",
+  "version": "1.0.0",
+  "description": "Configuration for personal productivity GPT using Composio MCP integration",
+  "gpt_config": {
+    "gpt_name": "Personal Assistant",
+    "gpt_id": "personal-assistant-v1",
+    "purpose": "Personal productivity and task management",
+    "composio_endpoint": "http://localhost:3001/tool",
+    "capabilities": [
+      "email_management",
+      "calendar_scheduling",
+      "document_management",
+      "task_tracking",
+      "notification_routing"
+    ]
+  },
+  "connected_services": {
+    "gmail": {
+      "enabled": true,
+      "permissions": ["read", "compose", "send"],
+      "filters": ["priority", "labels", "threads"]
+    },
+    "googlecalendar": {
+      "enabled": true,
+      "permissions": ["read", "create", "update"],
+      "features": ["scheduling", "reminders", "availability"]
+    },
+    "googledrive": {
+      "enabled": true,
+      "permissions": ["read", "write", "share"],
+      "folders": ["Projects", "Documentation", "Templates"]
+    },
+    "notion": {
+      "enabled": true,
+      "permissions": ["read", "write", "database"],
+      "databases": ["Tasks", "Projects", "Notes", "Archive"]
+    }
+  },
+  "automation_rules": {
+    "email_processing": {
+      "auto_label": true,
+      "priority_detection": true,
+      "calendar_integration": true
+    },
+    "task_management": {
+      "notion_sync": true,
+      "deadline_tracking": true,
+      "progress_updates": true
+    },
+    "document_workflow": {
+      "auto_organization": true,
+      "version_tracking": true,
+      "sharing_permissions": true
+    }
+  },
+  "security": {
+    "authentication": "oauth2",
+    "token_management": "composio_handled",
+    "data_encryption": true,
+    "audit_logging": true,
+    "access_controls": {
+      "time_based": true,
+      "ip_restrictions": false,
+      "rate_limiting": true
+    }
+  },
+  "integration": {
+    "composio_mcp": {
+      "relay_endpoint": "http://localhost:3001/tool",
+      "webhook_events": [
+        "email_received",
+        "calendar_event_created",
+        "document_shared",
+        "task_completed"
+      ],
+      "response_format": "json",
+      "timeout": 30000,
+      "retry_policy": {
+        "max_attempts": 3,
+        "backoff_strategy": "exponential"
+      }
+    }
+  },
+  "monitoring": {
+    "usage_tracking": true,
+    "performance_metrics": true,
+    "error_reporting": true,
+    "activity_logs": {
+      "retention_days": 30,
+      "storage_location": "firebase.firestore:personal_assistant_logs"
+    }
+  }
+}

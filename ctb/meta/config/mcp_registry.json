@@ -1,0 +1,361 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.199382
+# # CTB Version: 1.3.3
+# # Division: Configuration & Tests
+# # Category: config
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-MET-CONFIG-01
+
+{
+  "_docstring": {
+    "description": "IMO-Creator MCP Registry Configuration",
+    "usage": {
+      "engine_capabilities": "Global tool definitions managed centrally in IMO-Creator. These represent the static capabilities available across all repos that use this engine. DO NOT modify in individual repos.",
+      "repo_usage": "Repo-specific usage patterns. This section is populated by Claude when scaffolding new repos. Define only the specific tools and workflows this repo uses from the available engine capabilities.",
+      "versioning": "engine_version and last_updated provide doctrine tracking for compatibility and updates across the IMO-Creator ecosystem."
+    },
+    "rules": [
+      "This file MUST be copied into all new repos when cloning/scaffolding from IMO-Creator",
+      "Engine capabilities are updated globally via IMO-Creator repo only",
+      "Repo-level customization belongs only in 'repo_usage' section",
+      "Version tracking ensures compatibility across distributed repos"
+    ]
+  },
+  "engine_version": "1.3.3",
+  "last_updated": "2025-10-22T00:00:00Z",
+  "production_urls": {
+    "frontend": "https://imo-creator.vercel.app",
+    "composio_api": "https://backend.composio.dev",
+    "composio_base_url": "https://backend.composio.dev",
+    "composio_api_key": "ak_t-F0AbvfZHUZSUrqAGNn"
+  },
+  "engine_capabilities": [
+    {
+      "tool": "Composio Hosted Service",
+      "type": "Hosted API",
+      "endpoint": "https://backend.composio.dev",
+      "base_url": "https://backend.composio.dev",
+      "api_url": "https://api.composio.dev",
+      "doctrine_id": "04.04.00",
+      "status": "active",
+      "api_key": "ak_t-F0AbvfZHUZSUrqAGNn",
+      "description": "Primary Composio hosted service - 100+ tools and services via Composio's infrastructure"
+    },
+    {
+      "tool": "_21RISK Toolkit",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.01",
+      "status": "active",
+      "toolkit_tools": [
+        "GET_COMPLIANCE", "GET_ITEMS", "GET_ITEMS_PER_MONTH",
+        "GET_ORGANIZATIONS", "GET_PROPERTIES", "GET_REPORTS",
+        "GET_RISKMODEL_CATEGORIES", "GET_RISK_MODELS", "GET_SITES"
+      ],
+      "description": "Risk management and compliance toolkit - 9 tools for audit, compliance, and organizational structure"
+    },
+    {
+      "tool": "_2CHAT Toolkit",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.02",
+      "status": "active",
+      "toolkit_tools": [
+        "CREATE_CONTACT", "GET_API_USAGE_INFO", "LIST_CONTACTS",
+        "LIST_WEBHOOKS", "TEST_API_KEY"
+      ],
+      "description": "Chat and contact management toolkit - 5 tools for WhatsApp/chat communication"
+    },
+    {
+      "tool": "ABLY Toolkit",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.03",
+      "status": "active",
+      "toolkit_tools": [
+        "BATCH_PRESENCE", "BATCH_PRESENCE_HISTORY", "CREATE_CHANNEL",
+        "DELETE_CHANNEL_SUBSCRIPTION", "GET_CHANNEL_DETAILS", "GET_CHANNEL_HISTORY"
+      ],
+      "description": "Real-time messaging and presence toolkit - 6 tools for channels and messaging"
+    },
+    {
+      "tool": "Builder.io",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.04",
+      "status": "active",
+      "api_key": "9502e3493ccf42339f36d16b4a482c70",
+      "description": "Builder.io visual development platform integration for UI/UX generation"
+    },
+    {
+      "tool": "n8n",
+      "type": "Fallback",
+      "endpoint": "https://n8n-instance/webhook",
+      "doctrine_id": "04.04.F1",
+      "status": "active"
+    },
+    {
+      "tool": "Make",
+      "type": "Fallback",
+      "endpoint": "https://make-instance/webhook",
+      "doctrine_id": "04.04.F2",
+      "status": "active"
+    },
+    {
+      "tool": "Firebase MCP Server",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001",
+      "doctrine_id": "04.04.05",
+      "status": "active",
+      "barton_doctrine_role": "staging_memory",
+      "toolkit_tools": [
+        "FIREBASE_WRITE", "FIREBASE_READ", "FIREBASE_UPDATE",
+        "FIREBASE_DELETE", "FIREBASE_STUDIO_LIST", "FIREBASE_STUDIO_DEPLOY"
+      ],
+      "required_env_vars": [
+        "FIREBASE_PROJECT_ID", "FIREBASE_CLIENT_EMAIL", "FIREBASE_PRIVATE_KEY",
+        "FIREBASE_DATABASE_URL", "FIREBASE_STORAGE_BUCKET"
+      ],
+      "description": "Firebase staging memory with Barton Doctrine validation - all writes require unique_id, process_id, timestamp_last_touched, validated"
+    },
+    {
+      "tool": "Million Verifier",
+      "type": "Custom API",
+      "endpoint": "https://api.millionverifier.com",
+      "doctrine_id": "04.04.06",
+      "status": "active",
+      "api_key": "7hLlWoR3DCDoDwDllpafUh4U9",
+      "toolkit_tools": [
+        "VERIFY_EMAIL", "BATCH_VERIFY", "GET_CREDITS", "GET_RESULTS"
+      ],
+      "api_endpoints": {
+        "verify_single": "/v3/verify",
+        "batch_upload": "/v3/bulkapi/verifyfile",
+        "get_credits": "/v3/credits",
+        "get_results": "/v3/bulkapi/download"
+      },
+      "authentication": {
+        "type": "api_key",
+        "key_param": "api",
+        "key_location": "query"
+      },
+      "description": "Million Verifier email validation service for single and batch email verification"
+    },
+    {
+      "tool": "ChartDB",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.07",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/chartdb.git",
+      "ctb_branch": "sys/chartdb",
+      "toolkit_tools": [
+        "GENERATE_SCHEMA_DIAGRAM", "EXPORT_DDL", "IMPORT_DATABASE",
+        "VISUALIZE_RELATIONSHIPS", "COMPARE_SCHEMAS", "GENERATE_DOCS"
+      ],
+      "capabilities": [
+        "database_schema_visualization",
+        "entity_relationship_diagrams",
+        "ddl_generation",
+        "schema_comparison",
+        "database_documentation"
+      ],
+      "description": "ChartDB database schema visualization tool - create, visualize, and export database schemas with ER diagrams"
+    },
+    {
+      "tool": "Activepieces",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.08",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/activepieces.git",
+      "ctb_branch": "sys/activepieces",
+      "toolkit_tools": [
+        "CREATE_FLOW", "EXECUTE_FLOW", "LIST_FLOWS", "UPDATE_FLOW",
+        "DELETE_FLOW", "GET_FLOW_RUNS", "TRIGGER_WEBHOOK", "SCHEDULE_FLOW"
+      ],
+      "capabilities": [
+        "workflow_automation",
+        "no_code_automation",
+        "api_integrations",
+        "scheduled_tasks",
+        "webhook_triggers",
+        "flow_orchestration"
+      ],
+      "description": "Activepieces workflow automation platform - build and execute no-code automation flows with 100+ integrations"
+    },
+    {
+      "tool": "Windmill",
+      "type": "MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "doctrine_id": "04.04.09",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/windmill.git",
+      "ctb_branch": "sys/windmill",
+      "toolkit_tools": [
+        "RUN_SCRIPT", "DEPLOY_APP", "CREATE_FLOW", "SCHEDULE_TASK",
+        "LIST_SCRIPTS", "GET_LOGS", "MANAGE_VARIABLES", "EXECUTE_WORKFLOW"
+      ],
+      "capabilities": [
+        "script_execution",
+        "workflow_orchestration",
+        "app_deployment",
+        "developer_platform",
+        "job_scheduling",
+        "resource_management"
+      ],
+      "integration_languages": [
+        "python", "typescript", "bash", "go", "sql"
+      ],
+      "description": "Windmill developer platform - execute scripts, deploy apps, and orchestrate workflows with multi-language support"
+    },
+    {
+      "tool": "Anthropic_Claude_Skills",
+      "type": "MCP",
+      "endpoint": "composio://anthropic",
+      "doctrine_id": "04.04.10",
+      "status": "active",
+      "scope": "global",
+      "ctb_branch": "sys/claude-skills",
+      "toolkit_tools": [
+        "CLAUDE_ANALYZE", "CLAUDE_REASON", "CLAUDE_GENERATE",
+        "CLAUDE_REVIEW", "CLAUDE_PLAN", "CLAUDE_EXECUTE"
+      ],
+      "capabilities": [
+        "extended_context_processing",
+        "multi_step_reasoning",
+        "content_generation",
+        "code_review",
+        "task_planning",
+        "workflow_orchestration"
+      ],
+      "model": "claude-sonnet-4.5-20250929",
+      "max_tokens": 200000,
+      "required_env_vars": [
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_MODEL"
+      ],
+      "description": "Anthropic Claude Skills AI/SHQ reasoning layer - extended context, multi-step reasoning, and autonomous workflow execution"
+    },
+    {
+      "tool": "DeepWiki",
+      "type": "MCP",
+      "endpoint": "http://localhost:8001",
+      "doctrine_id": "04.04.11",
+      "status": "active",
+      "repo_url": "https://github.com/djb258/deepwiki-open.git",
+      "ctb_branch": "sys/deepwiki",
+      "ports": {
+        "frontend": 3000,
+        "api": 8001
+      },
+      "toolkit_tools": [
+        "DEEPWIKI_GENERATE", "DEEPWIKI_ASK", "DEEPWIKI_RESEARCH"
+      ],
+      "capabilities": [
+        "automatic_wiki_generation",
+        "code_analysis",
+        "rag_powered_chat",
+        "diagram_generation",
+        "multi_turn_research",
+        "repository_documentation"
+      ],
+      "ai_providers": [
+        "google_gemini", "openai", "openrouter", "azure_openai", "ollama"
+      ],
+      "embeddings": [
+        "openai", "google", "ollama"
+      ],
+      "supported_platforms": [
+        "github", "gitlab", "bitbucket"
+      ],
+      "technology": {
+        "frontend": "Next.js 15.3 + React 19",
+        "backend": "Python FastAPI",
+        "ui": "Tailwind CSS 4",
+        "diagrams": "Mermaid.js"
+      },
+      "required_env_vars": [
+        "GOOGLE_API_KEY or OPENAI_API_KEY or OLLAMA"
+      ],
+      "optional_env_vars": [
+        "DEEPWIKI_EMBEDDER_TYPE", "OPENROUTER_API_KEY", "OLLAMA_HOST",
+        "AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_VERSION",
+        "PORT", "LOG_LEVEL", "LOG_FILE_PATH"
+      ],
+      "health_check": "http://localhost:8001/health",
+      "description": "DeepWiki-Open AI-powered automatic wiki generator - analyzes repositories, generates documentation, creates diagrams, and provides RAG-powered Q&A"
+    },
+    {
+      "tool": "Google_Gemini_AI",
+      "type": "Composio MCP Tool",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta",
+      "composio_endpoint": "https://backend.composio.dev",
+      "status": "active",
+      "scope": "tool",
+      "governance": "Composio MCP",
+      "tool_manifest": "ctb-template/sys/composio-mcp/tools/gemini/tool_manifest.json",
+      "previous_doctrine_id": "04.04.12",
+      "reclassified_date": "2025-10-23",
+      "reclassification_note": "Moved from CTB doctrine to Composio MCP tool governance (Patch 1.3.3a)",
+      "ctb_branch": "tools/gemini-cli",
+      "toolkit_tools": [
+        "gemini_generate", "gemini_chat", "gemini_analyze",
+        "gemini_status", "gemini_clear_cache"
+      ],
+      "capabilities": [
+        "text_generation",
+        "interactive_chat",
+        "code_analysis",
+        "content_analysis",
+        "multi_model_support",
+        "response_caching"
+      ],
+      "available_models": [
+        "gemini-2.5-flash", "gemini-2.5-flash-preview-05-20", "gemini-2.5-pro-preview-03-25", "gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-lite-preview-06-17"
+      ],
+      "default_model": "gemini-2.5-flash",
+      "max_tokens": 2048,
+      "cache_duration_minutes": 10,
+      "required_env_vars": [
+        "GOOGLE_API_KEY or GEMINI_API_KEY"
+      ],
+      "optional_env_vars": [
+        "GEMINI_MODEL"
+      ],
+      "integration_points": {
+        "composio_mcp": "http://localhost:3001/tool",
+        "standalone_cli": "tools/gemini-cli/gemini.js",
+        "deepwiki": "Automatic integration when GOOGLE_API_KEY set",
+        "chartdb": "Future enhancement for schema descriptions"
+      },
+      "performance": {
+        "caching": true,
+        "cache_expiry_minutes": 10,
+        "tokens_per_second": "~300 (model dependent)"
+      },
+      "technology": {
+        "sdk": "@google/generative-ai v0.24.1",
+        "runtime": "Node.js >= 18.0.0",
+        "integration": "Composio MCP Server"
+      },
+      "heir_orbt_support": true,
+      "heir_tracking": {
+        "unique_id": "required",
+        "process_lineage": "tracked",
+        "external_service_integration": true,
+        "ai_provider": "google",
+        "orbt_layer_support": true
+      },
+      "documentation": "docs/COMPOSIO_GEMINI_INTEGRATION.md",
+      "cli_documentation": "tools/gemini-cli/README.md",
+      "health_check": "http://localhost:3001/tool (POST gemini_status)",
+      "description": "Google Gemini AI integration through Composio MCP - text generation, chat, code analysis with HEIR/ORBT tracking"
+    }
+  ],
+  "repo_usage": {
+    "inputs": [],
+    "middle": [],
+    "outputs": []
+  }
+}
