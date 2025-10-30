@@ -1,0 +1,115 @@
+─────────────────────────────────────────────
+
+#  BARTON ENTERPRISES — DOCTRINE CONTEXT PROMPT
+# ─────────────────────────────────────────────
+# PURPOSE:
+# This prompt teaches Cursor how to interpret CTB altitude,
+# IMO phase, and Doctrine System Manifest references.
+# When you specify an altitude or section (e.g., "40k UI"),
+# Cursor automatically resolves the correct tool and behavior.
+# ─────────────────────────────────────────────
+
+## 📘 CONTEXT SOURCES
+- Primary Manifest: ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml
+- CTB Altitude Map: ctb/docs/doctrine/doctrine/doctrine_ctb_map.yaml
+- Resolver Script: scripts/load_doctrine_context.cjs
+- HEIR/ORBT Supervisory Doctrines: referenced within system manifest acronyms.
+
+---
+
+## ⚙️  DOCTRINE RESOLUTION RULES
+
+**CTB / ALTITUDE TO TOOL MAPPING**
+
+| Altitude | Doctrine Section | Default Tool / Platform |
+|-----------|-----------------|--------------------------|
+| 60k | HEIR Supervisory Framework | Oversees all — reference doctrine only, no code changes |
+| 40k | UI / Governance Layer | Lovable.DAVE |
+| 30k | Engineering Hangar | Cursor 2.0 + CODEX |
+| 20k | Gateway Layer | n8n + Composio |
+| 10k | Vault Layer | Neon (STAMPED) / Firebase (SPVPET) / BigQuery (STACKED) |
+| 5k  | Process / Communicator Agents | n8n-triggered execution layer |
+
+**IMO Phase Context**
+
+| Phase | Description | Common Task Type |
+|--------|--------------|------------------|
+| INPUT | Data intake, validation, enrichment | CSVs, forms, webhooks |
+| MIDDLE | Transformation, validation, or mapping | schema enforcement, enrichment |
+| OUTPUT | Final delivery or visualization | UI, reports, Neon writes |
+
+---
+
+## 💡  OPERATIONAL BEHAVIOR
+
+When a user prompt contains:
+- An altitude reference (e.g., “40k”, “30k”),  
+- An IMO phase (e.g., “Input”, “Output”),  
+- Or a Doctrine section (UI, Gateway, Vault, Engineering, etc.),  
+
+Cursor should automatically:
+1. Load the system manifest from `ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml`.
+2. Resolve the section’s `current_tool` field using `scripts/load_doctrine_context.cjs`.
+3. Use that tool context (e.g., Lovable.DAVE, n8n, Neon) when generating code, configs, or UI elements.
+4. Maintain doctrine consistency — always reflect HEIR (Hierarchy, Enforcement, Integration, Reporting) and ORBT (Operate, Repair, Build, Train) principles.
+5. Respect altitude boundaries:
+   - 40k = design/UI discussion  
+   - 30k = build/code  
+   - 20k = automation  
+   - 10k = database logic  
+   - 5k  = operational scripts or communications  
+
+---
+
+## 🧩  EXAMPLES
+
+Example 1
+> “Build the 40k UI layer for the new client intake process.”
+→ Load `UI` from manifest → resolve `Lovable.DAVE` → configure output for that environment.
+
+Example 2
+> “Validate the 10k Vault layer against doctrine.”
+→ Reference STAMPED/SPVPET/STACKED schemas → use Neon/Firebase/BigQuery context.
+
+Example 3
+> “Automate the 20k Gateway step for enrichment.”
+→ Reference Gateway section → load n8n + Composio integration configuration.
+
+---
+
+## 🧱  ADDITIONAL DOCTRINE GUARDRAILS
+- Always cite which altitude and IMO phase you’re working in.  
+- Never mix altitudes in a single prompt.  
+- Use manifest as canonical source for tool selection.  
+- Include doctrine hashes and CTB tags in all generated files.
+
+---
+
+## 🔁  SHORT COMMANDS (for quick reference)
+
+| Command | Effect |
+|----------|--------|
+| `/doctrine 40k UI` | Use Lovable.DAVE context |
+| `/doctrine 30k Engineering` | Use Cursor 2.0 + CODEX |
+| `/doctrine 20k Gateway` | Use n8n + Composio |
+| `/doctrine 10k Vault` | Use Neon + Firebase + BigQuery |
+| `/doctrine 5k Process` | Use Communicator Agent logic |
+
+---
+
+Summary:
+Cursor, you are operating within the Barton Doctrine.  
+Always anchor your behavior to the CTB altitude, the IMO phase,  
+and the System Manifest — never improvise tools or platforms.  
+When in doubt, reference `doctrine_system_manifest.yaml`  
+and resolve the `current_tool` for the specified section.
+
+─────────────────────────────────────────────
+# END OF DOCTRINE CONTEXT PROMPT
+─────────────────────────────────────────────
+
+How to Use It
+- Place this file at `.cursor/prompts/doctrine_context.prompt`
+- In Cursor, run `/doctrine 40k UI` or prefix your normal task with the altitude/section.
+
+

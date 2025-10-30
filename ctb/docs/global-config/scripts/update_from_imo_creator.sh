@@ -136,9 +136,21 @@ mkdir -p config
 
 # Copy CTB configuration files
 [ -f "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" ] && cp "$IMO_CREATOR_PATH/global-config/ctb.branchmap.yaml" "global-config/" && log_info "  ✓ ctb.branchmap.yaml"
-[ -f "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" ] && cp "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" "global-config/" && log_info "  ✓ CTB_DOCTRINE.md"
+# Prefer standardized filename; fallback to legacy
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/global-config/doctrine_ctb.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/global-config/doctrine_ctb.md" "global-config/" && log_info "  ✓ doctrine_ctb.md"
+elif [ -f "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" ]; then
+  cp "$IMO_CREATOR_PATH/global-config/CTB_DOCTRINE.md" "global-config/" && log_info "  ✓ CTB_DOCTRINE.md (legacy)"
+fi
 [ -f "$IMO_CREATOR_PATH/global-config/ctb_version.json" ] && cp "$IMO_CREATOR_PATH/global-config/ctb_version.json" "global-config/" && log_info "  ✓ ctb_version.json (version tracking)"
 [ -f "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" ] && cp "$IMO_CREATOR_PATH/global-config/branch_protection_config.json" "global-config/" && log_info "  ✓ branch_protection_config.json"
+
+# Copy global manifest (supports legacy and CTB paths)
+if [ -f "$IMO_CREATOR_PATH/global-config/global_manifest.yaml" ]; then
+  cp "$IMO_CREATOR_PATH/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml"
+elif [ -f "$IMO_CREATOR_PATH/ctb/docs/global-config/global_manifest.yaml" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml (from CTB path)"
+fi
 
 # Copy MCP registry
 [ -f "$IMO_CREATOR_PATH/config/mcp_registry.json" ] && cp "$IMO_CREATOR_PATH/config/mcp_registry.json" "config/" && log_info "  ✓ mcp_registry.json (4 mandatory tools)"
@@ -241,6 +253,67 @@ mkdir -p docs
 
 log_success "Documentation synced"
 echo ""
+
+# Step 7.3: Sync agent definitions/templates
+log_step "7.3/10 Syncing agent definitions and templates..."
+
+# Global agents (doctrine)
+mkdir -p docs/doctrine/agents
+if [ -d "$IMO_CREATOR_PATH/ctb/docs/doctrine/agents" ]; then
+  cp -r "$IMO_CREATOR_PATH/ctb/docs/doctrine/agents"/* "docs/doctrine/agents/" 2>/dev/null || true
+  log_info "  ✓ docs/doctrine/agents/* (global fleet)"
+fi
+
+# Doctrine system manifest (front-and-center)
+mkdir -p docs/doctrine/doctrine
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml" "docs/doctrine/doctrine/" && log_info "  ✓ docs/doctrine/doctrine/doctrine_system_manifest.yaml"
+fi
+
+# Doctrine error flow (correlation)
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_error_flow.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_error_flow.md" "docs/doctrine/doctrine/" && log_info "  ✓ docs/doctrine/doctrine/doctrine_error_flow.md"
+fi
+
+# Local agent templates
+mkdir -p templates/agents
+if [ -d "$IMO_CREATOR_PATH/templates/agents" ]; then
+  cp -r "$IMO_CREATOR_PATH/templates/agents"/* "templates/agents/" 2>/dev/null || true
+  log_info "  ✓ templates/agents/* (local agent templates)"
+fi
+
+# Step 7.25: Sync doctrine acronyms/glossary (standardized name preferred)
+log_step "7.25/10 Syncing doctrine acronyms/glossary..."
+
+mkdir -p docs/doctrine
+
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_acronyms.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/doctrine_acronyms.md" "docs/doctrine/doctrine_acronyms.md" && log_info "  ✓ docs/doctrine/doctrine_acronyms.md (standard)"
+elif [ -f "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/ACRONYMS.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/doctrine/doctrine/ACRONYMS.md" "docs/doctrine/ACRONYMS.md" && log_info "  ✓ docs/doctrine/ACRONYMS.md (legacy)"
+elif [ -f "$IMO_CREATOR_PATH/doctrine/ACRONYMS.md" ]; then
+  cp "$IMO_CREATOR_PATH/doctrine/ACRONYMS.md" "docs/doctrine/ACRONYMS.md" && log_info "  ✓ docs/doctrine/ACRONYMS.md (legacy)"
+fi
+
+# Step 7.8: Sync tooling scripts (validator, doctor, visuals, enforcer)
+log_step "7.8/10 Syncing doctrine tooling scripts..."
+mkdir -p scripts
+copy_script() {
+  local src_file="$1"
+  local name
+  name=$(basename "$src_file")
+  if [ -f "$src_file" ]; then
+    cp "$src_file" "scripts/$name"
+    chmod +x "scripts/$name" 2>/dev/null || true
+    log_info "  ✓ scripts/$name"
+  fi
+}
+
+copy_script "$IMO_CREATOR_PATH/scripts/validate_configs.cjs"
+copy_script "$IMO_CREATOR_PATH/scripts/doctor.sh"
+copy_script "$IMO_CREATOR_PATH/scripts/gen_visuals.cjs"
+copy_script "$IMO_CREATOR_PATH/scripts/doctrine_enforcer.sh"
+copy_script "$IMO_CREATOR_PATH/scripts/check_file_names.sh"
 
 # Step 7.5: Copy imo_tools library (modular toolbox)
 log_step "7.5/10 Syncing imo_tools library (modular toolbox)..."

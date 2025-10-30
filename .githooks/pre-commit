@@ -4,6 +4,18 @@
 
 echo "🔍 Running CTB compliance checks..."
 
+# 0/4 File naming policy (fail fast)
+if [ -f scripts/check_file_names.sh ]; then
+  echo "0/3 Checking file naming policy..."
+  bash scripts/check_file_names.sh || exit 1
+fi
+
+# Run doctor (schema validation, security checks)
+if [ -f scripts/doctor.sh ]; then
+  echo "0.5/3 Running doctor..."
+  bash scripts/doctor.sh || exit 1
+fi
+
 # Run metadata tagger on modified files
 echo "1/3 Tagging modified files..."
 python ctb/sys/github-factory/scripts/ctb_metadata_tagger.py --quiet

@@ -1,0 +1,125 @@
+meta:
+  doctrine_source: "Barton Doctrine / Global Agents"
+  last_updated: 2025-10-30
+  author: Nix
+  description: |
+    Barton Global Fleet of persistent cloud agents (40k ft).
+    Registered in Cursor Cloud and mirrored in SHQ (GitHub Pro) agent registry.
+    Exposes webhooks/endpoints for n8n/Composio. Monitored via Grafana.
+
+registration:
+  provider: "Cursor Cloud"
+  registry_ref: "shq.agent_registry"
+  orchestration: "HEIR → Global Orchestrator"
+
+endpoints:
+  # Fill with actual URLs when provisioned
+  n8n_webhook_base: "${N8N_WEBHOOK_BASE}"
+  cursor_cloud_api: "${CURSOR_CLOUD_API}"
+  grafana_base: "${GRAFANA_BASE_URL}"
+
+global_fleet:
+  - id: global_engineer
+    label: "Global Engineer Agent"
+    scope: "system-wide"
+    role: "Runs doctrine audits, schema checks, CI/CD from Cursor Cloud"
+    triggers:
+      - cron: "0 2 * * *"   # nightly doctrine audit
+      - event: "repo.push"
+    actions:
+      - run: "ctb_doctrine_audit"
+      - run: "schema_check_all"
+      - run: "ci_pipeline_trigger"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_engineer"
+    heir:
+      supervisor: "global_orchestrator"
+      orbt_layer: 3
+
+  - id: global_gateway
+    label: "Global Gateway Agent"
+    scope: "system-wide"
+    role: "Coordinates n8n + Composio integrations; holds connector credentials"
+    triggers:
+      - webhook: "${N8N_WEBHOOK_BASE}/gateway"
+      - event: "integration.request"
+    actions:
+      - run: "route_integration"
+      - run: "manage_credentials"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_gateway"
+    heir:
+      supervisor: "global_orchestrator"
+      orbt_layer: 2
+
+  - id: global_validator
+    label: "Global Validator Agent"
+    scope: "system-wide"
+    role: "Verifies STAMPED/SPVPET/STACKED schemas in Neon/Firebase/BigQuery"
+    triggers:
+      - cron: "0 3 * * *"   # nightly post-audit
+      - event: "schema.changed"
+    actions:
+      - run: "validate_neon"
+      - run: "validate_firebase"
+      - run: "validate_bigquery"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_validator"
+    heir:
+      supervisor: "global_orchestrator"
+      orbt_layer: 2
+
+  - id: global_monitor
+    label: "Global Monitor Agent"
+    scope: "system-wide"
+    role: "Streams metrics to Grafana; maintains dashboards"
+    triggers:
+      - event: "metric.emit"
+      - cron: "*/5 * * * *"
+    actions:
+      - run: "collect_metrics"
+      - run: "update_dashboards"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_monitor"
+    heir:
+      supervisor: "global_orchestrator"
+      orbt_layer: 1
+
+  - id: global_communicator
+    label: "Global Communicator Agent"
+    scope: "system-wide"
+    role: "Handles alerts (Slack, email) from any subhive or repo"
+    triggers:
+      - event: "alert.raise"
+      - webhook: "${N8N_WEBHOOK_BASE}/notify"
+    actions:
+      - run: "send_slack"
+      - run: "send_email"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_communicator"
+    heir:
+      supervisor: "global_orchestrator"
+      orbt_layer: 1
+
+  - id: global_orchestrator
+    label: "Global Orchestrator (optional)"
+    scope: "overseer"
+    role: "Governs scheduling and HEIR/ORBT compliance for all global agents"
+    triggers:
+      - event: "agent.schedule"
+      - cron: "*/10 * * * *"
+    actions:
+      - run: "dispatch_jobs"
+      - run: "enforce_heir_orbt"
+    observability:
+      grafana_dashboard: "${GRAFANA_BASE_URL}/d/global_orchestrator"
+    heir:
+      supervisor: "HEIR"
+      orbt_layer: 4
+
+notes:
+  - "All endpoints are placeholders; set via MCP/Doppler and environment."
+  - "Fleet is persistent; callable from any subhive/local repo."
+  - "Mirror records to SHQ GitHub Pro (Agent HQ) for visibility."
+
+

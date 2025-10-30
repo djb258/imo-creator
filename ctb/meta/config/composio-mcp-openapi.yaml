@@ -29,10 +29,10 @@ info:
     email: service@svg.agency
 
 servers:
-  - url: http://localhost:3001
-    description: Local Composio MCP Server (Development)
-  - url: http://localhost:3000
-    description: Alternative local port
+  -url: https://backend.composio.dev
+    description: Production Composio MCP API
+  - url: https://app.composio.dev
+    description: Web app interface
 
 paths:
   /mcp/health:

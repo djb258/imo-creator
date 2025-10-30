@@ -1,0 +1,33 @@
+name: Nightly Drift Check
+
+on:
+  schedule:
+    - cron: "0 3 * * *"  # 3 AM UTC nightly
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate doctrine and compute hash
+        run: |
+          bash scripts/doctor.sh
+          echo "Computed hash:" && cat .doctrine_hash || true
+
+      - name: Open issue on drift (optional stub)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `Drift detected in doctrine validation (${new Date().toISOString()})`;
+            const body = `Doctor validation failed. Please review CI logs and regenerate visuals if needed.`;
+            await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body });
+
+

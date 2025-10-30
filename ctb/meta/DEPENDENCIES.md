@@ -1,3 +1,12 @@
+## Required CLIs and SDKs
+
+- gh (GitHub CLI)
+- vercel (Vercel CLI)
+- firebase-tools (Firebase CLI)
+- gcloud SDK + bq
+- n8n (optional local CLI)
+- @mermaid-js/mermaid-cli (dev dependency)
+
 # CTB Dependencies Map
 
 **Purpose**: Document all dependencies (inter-branch, external services, packages) and their relationships

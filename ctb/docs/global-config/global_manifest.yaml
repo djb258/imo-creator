@@ -19,6 +19,54 @@ meta:
     that apply across all repositories using the CTB Doctrine.
 
 # ============================================================
+# DOCTRINE ACRONYMS (Machine-readable)
+# ============================================================
+acronyms:
+  - acronym: IMO
+    stands_for: "Input–Middle–Output"
+    definition: "Framework used to design every process with clear intake, transformation, and delivery phases."
+  - acronym: CTB
+    stands_for: "Christmas Tree Backbone"
+    definition: "Hierarchical architecture mapping all systems from 60k‑ft overview down to 5k‑ft detailed processes."
+  - acronym: HEIR
+    stands_for: "Hierarchy, Enforcement, Integration, Reporting"
+    definition: "Supervisory governance system that oversees all doctrinal layers and ensures compliance across agents and databases."
+  - acronym: ORBT
+    stands_for: "Operate, Repair, Build, Train"
+    definition: "Core doctrine enforcing self‑documenting, self‑repairing, and teachable systems."
+  - acronym: STAMPED
+    stands_for: "Structured Table Architecture for Managed Persistent Enterprise Data"
+    definition: "Doctrine schema for Neon vault—validated, version‑locked data."
+  - acronym: SPVPET
+    stands_for: "Structured Processing Vault for Persistent Event Tracking"
+    definition: "Firebase schema for realtime working memory."
+  - acronym: STACKED
+    stands_for: "Structured Table Architecture for Calculated Knowledge & Event Data"
+    definition: "BigQuery schema for analytical and historical data."
+  - acronym: ALTITUDE
+    stands_for: "System visibility levels (60k–5k)"
+    definition: "Defines perspective and scope of doctrine—from strategic overview to operational detail."
+    levels:
+      - level: 60k
+        name: Strategic Constellation
+        scope: Company‑wide doctrine, cross‑LLC alignment, long‑range objectives
+      - level: 40k
+        name: Program Constellation
+        scope: Multi‑system initiatives, capability roadmaps, dependency alignment
+      - level: 30k
+        name: Engineering Hangar
+        scope: Architecture, repo‑of‑repos, standards, CI/CD, enforcement (HEIR/ORBT)
+      - level: 20k
+        name: System Blueprint
+        scope: Service boundaries, contracts, schemas, interfaces, SLAs
+      - level: 10k
+        name: Workflow/Module
+        scope: Pipelines, jobs, subagents, tool wiring (n8n/Composio, MCP)
+      - level: 5k
+        name: Operational Runbook
+        scope: Concrete tasks, endpoints, migrations, health checks, dashboards
+
+# ============================================================
 # DEEP WIKI AUTOMATION CONFIGURATION
 # ============================================================
 deep_wiki:
@@ -493,6 +541,42 @@ notifications:
     deepwiki_success: "✅ DeepWiki updated for {repo} - {branch} ({commit_hash})"
     deepwiki_failure: "❌ DeepWiki failed for {repo} - {branch}: {error_message}"
     security_violation: "🚨 SECURITY VIOLATION in {repo}: {violation_type}"
+
+# ============================================================
+# ERROR LOGGING & CORRELATION (Master Error Log)
+# ============================================================
+error_logging:
+  master_log:
+    name: "shq.master_error_log"
+    ids:
+      - unique_id
+      - process_id
+      - blueprint_version_hash
+    required_fields:
+      - error_id
+      - occurred_at
+      - agent_id
+      - stage
+      - severity
+      - message
+      - error_type
+  correlation:
+    lookup:
+      by_ids: [unique_id, process_id]
+      blueprint_fetch: "by blueprint_version_hash (preferred) or by IDs"
+    remediation_sequence:
+      - locate_failing_stage
+      - fetch_ssot_snapshot
+      - reproduce_and_patch
+      - validate_locally
+      - promote_via_gateway
+      - verify_with_global_validator
+  slo_targets:
+    time_to_correlate: "<=10min"
+    time_to_remediate: "<=60min"
+  alert_routes:
+    - "Grafana Alerts → Global Communicator Agent"
+    - "Email: operations@barton.enterprises"
 
 # ============================================================
 # REPOSITORY TEMPLATES

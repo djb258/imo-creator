@@ -3,8 +3,54 @@
 ## Purpose
 This repository is the **canonical source of truth** for the **Christmas Tree Backbone (CTB)** architecture under Barton Doctrine.
 
+### Front and Center: What this repo does
+- **HEIR/ORBT governance**: Enforces doctrine across repos and agents.
+- **SSOT ID generation**: Stamps `unique_id`, `process_id`, and `blueprint_version_hash` for every SSOT.
+- **Global Fleet (40k)**: Persistent cloud agents (Engineer, Gateway, Validator, Monitor, Communicator, Orchestrator).
+- **Propagation**: Downstream repos run “update from imo-creator” to sync doctrine, agents, and manifests.
+
+Key files:
+- `ctb/sys/server/blueprints/ids.py` and `versioning.py` (ID + hash logic; exposed via `/api/ssot/save`)
+- `ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml` (sections + tools)
+- `ctb/docs/doctrine/agents/doctrine_global_agents.yaml` (Global Fleet)
+- `ctb/docs/global-config/global_manifest.yaml` (automation, enforcement, acronyms)
+
 ## Usage
 All new Barton-compliant repositories **must scaffold** from `/ctb-template/` via the `ctb_scaffold.ts` generator.
+
+### Visuals
+
+The following diagrams illustrate CTB doctrine and integrations:
+
+```mermaid
+%% ctb_altitude.mmd
+graph TD
+  A[60k - HEIR Overview] --> B[40k - CTB Layer (Lovable UI)]
+  B --> C[30k - Engineering Hangar (Cursor + CODEX)]
+  C --> D[20k - Gateway Layer (n8n + Composio)]
+  D --> E[10k - Vault Layer (Neon/Firebase/BigQuery)]
+  E --> F[5k - Process Operations / Communicator Agents]
+```
+
+```mermaid
+%% vault_flow.mmd
+graph LR
+  A[SPVPET - Firebase] --> B[STAMPED - Neon]
+  B --> C[STACKED - BigQuery]
+  C --> D[Grafana Pro Dashboards]
+```
+
+```mermaid
+%% tool_integration.mmd
+graph TD
+  GitHubPro[GitHub Pro (Agent HQ)] --> Cursor[Cursor 2.0 + CODEX]
+  Cursor --> n8n[n8n + Composio (Gateway)]
+  n8n --> Firebase[Firebase]
+  n8n --> Neon[Neon]
+  Neon --> BigQuery[BigQuery]
+  BigQuery --> Grafana[Grafana Pro]
+  Grafana --> Lovable[Lovable.DAVE UI]
+```
 
 ## Hierarchy
 CTB defines the structural doctrine:
@@ -178,7 +224,7 @@ uvicorn src.server.main:app --port 7002 --reload
 - **Deploy immediately** - no API keys required, app works with copy-to-clipboard fallback
 - **Add API keys later** in Vercel Dashboard → Project Settings → Environment Variables:
   - `ANTHROPIC_API_KEY` = `sk-ant-your-key` (optional)
-  - `OPENAI_API_KEY` = `sk-your-key` (optional) 
+  - `OPENAI_API_KEY` = `sk-your-key` (optional)
   - `LLM_DEFAULT_PROVIDER` = `openai` or `anthropic` (optional)
   - `ALLOW_ORIGIN` = `https://your-domain.vercel.app` (optional, for CORS)
 - LLM Settings panel shows real-time key status
@@ -197,7 +243,7 @@ uvicorn src.server.main:app --port 7002 --reload
 
 **Provider Selection Algorithm:**
 1. If `provider` specified → use it (error if API key missing)
-2. Else if `model` starts with "claude" → anthropic, "gpt"/"o" → openai  
+2. Else if `model` starts with "claude" → anthropic, "gpt"/"o" → openai
 3. Else use `LLM_DEFAULT_PROVIDER` (error if key missing)
 4. Else use whichever single API key is available
 5. Else error: no provider/key available
@@ -228,7 +274,7 @@ curl http://localhost:8000/events -X POST -H "Content-Type: application/json" -d
 
 ### Service Architecture
 - **MCP Server** (`:7001`): HEIR validation endpoint `/heir/check`
-- **Sidecar Server** (`:8000`): Event logging to `./logs/sidecar.ndjson`  
+- **Sidecar Server** (`:8000`): Event logging to `./logs/sidecar.ndjson`
 - **Main API** (`:7002`): Blueprint management and LLM endpoints
 
 ### API Examples
@@ -238,7 +284,7 @@ curl -X POST http://localhost:7001/heir/check \
   -H "Content-Type: application/json" \
   -d '{"ssot": {"meta": {"app_name": "imo-creator"}, "doctrine": {"schema_version": "HEIR/1.0"}}}'
 
-# Log telemetry event  
+# Log telemetry event
 curl -X POST http://localhost:8000/events \
   -H "Content-Type: application/json" \
   -d '{"type": "app.start", "payload": {"version": "1.0.0"}, "tags": {"env": "dev"}}'
@@ -267,7 +313,7 @@ curl -s -X POST https://imo-creator.vercel.app/api/ssot/save \
 # Expected: .ssot.doctrine.unique_id, .ssot.doctrine.process_id, .ssot.doctrine.blueprint_version_hash
 ```
 
-### 2. Subagent Registry Test  
+### 2. Subagent Registry Test
 ```bash
 # Test subagent enumeration (from garage-mcp or fallback)
 curl -s https://imo-creator.vercel.app/api/subagents | jq

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["meta", "deep_wiki", "chartdb", "ctb_doctrine", "mcp_integration", "security", "automation", "deployment", "notifications", "error_logging"],
+  "properties": {
+    "meta": { "type": "object" },
+    "deep_wiki": { "type": "object" },
+    "chartdb": { "type": "object" },
+    "ctb_doctrine": { "type": "object" },
+    "gemini_ai": { "type": "object" },
+    "mcp_integration": { "type": "object" },
+    "security": { "type": "object" },
+    "automation": { "type": "object" },
+    "deployment": { "type": "object" },
+    "notifications": { "type": "object" },
+    "acronyms": { "type": "array" },
+    "error_logging": { "type": "object" }
+  }
+}
+
+
