@@ -7,7 +7,7 @@ echo "1️⃣  Checking file naming..."
 bash ./scripts/check_file_names.sh || exit 1
 
 echo "2️⃣  Validating configs..."
-node ./scripts/validate_configs.cjs || exit 1
+node ./scripts/validate_configs.mjs || exit 1
 
 echo "3️⃣  Checking branch health..."
 git fetch origin master >/dev/null 2>&1 || true
