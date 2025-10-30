@@ -35,8 +35,10 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@neondatabase/serverless": "^0.10.0",
+    "ajv": "^8.17.1",
     "composio-core": "^0.5.39",
     "firebase-admin": "^12.0.0",
+    "js-yaml": "^4.1.0",
     "undici": "^6.19.8"
   },
   "keywords": [
