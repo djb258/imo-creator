@@ -263,131 +263,6 @@ chartdb:
     disabled_at: ""
 
 # ============================================================
-# REPO DASHBOARD CONFIGURATION
-# ============================================================
-repo_dashboard:
-  enabled: true
-  required: true
-  file_path: repo-dashboard.config.json
-  branch: main  # Must be committed to main branch (repo-dashboard fetches raw URL from main)
-  run_on_update: true
-
-  # Repository Configuration
-  target_repos:
-    - name: outreach-core
-      enabled: true
-      priority: high
-      auto_commit: true
-    - name: client-intake
-      enabled: true
-      priority: high
-      auto_commit: true
-    - name: blueprint-engine
-      enabled: true
-      priority: medium
-      auto_commit: true
-    - name: imo-creator
-      enabled: true
-      priority: critical
-      auto_commit: true
-
-  # Trigger Configuration
-  triggers:
-    on_push: true
-    on_pull_request: false
-    on_merge: true
-    on_schedule: true
-    schedule_cron: "0 4 * * *"  # Daily at 4 AM (after DeepWiki and ChartDB)
-
-  # File Structure Requirements
-  required_fields:
-    - repo
-    - description
-    - maintain_file_on_main
-    - ctb_branches
-    - modules
-    - integrations
-    - last_updated
-
-  # Module Detection
-  module_detection:
-    auto_detect: true
-    scan_patterns:
-      - "*.html"
-      - "*.tsx"
-      - "*.jsx"
-      - "src/pages/**"
-      - "src/components/**"
-      - "api/**"
-      - "ctb/**"
-      - "scripts/**"
-    exclude_patterns:
-      - "node_modules/**"
-      - "*.log"
-      - ".git/**"
-      - "**/__pycache__/**"
-      - "build/**"
-      - "dist/**"
-
-  # Integration Detection
-  integration_detection:
-    auto_detect: true
-    check_files:
-      - package.json
-      - requirements.txt
-      - .env.example
-      - ctb/docs/global-config/global_manifest.yaml
-
-  # Output Configuration
-  output:
-    file_path: repo-dashboard.config.json
-    format: json
-    pretty_print: true
-    validate_schema: true
-    commit_message_template: "📊 Repo Dashboard: Update repo-dashboard.config.json [skip ci]"
-    branch_naming: "docs/repo-dashboard-update-{timestamp}"
-
-  # Schema Validation
-  schema:
-    version: "1.0.0"
-    required_sections:
-      - repo
-      - description
-      - modules
-      - integrations
-    optional_sections:
-      - agents
-      - feature_tags
-      - ctb_branches
-
-  # Logging & Observability
-  logging:
-    enabled: true
-    audit_log: /logs/repo_dashboard_audit.log
-    error_log: /logs/repo_dashboard_error.log
-    level: INFO
-    retention_days: 90
-    include_metrics: true
-
-  # Error Handling
-  error_handling:
-    retry_count: 3
-    retry_delay_seconds: 30
-    halt_on_error: false
-    notify_on_failure: true
-    notification_channels:
-      - slack
-      - email
-
-  # Kill Switch Configuration
-  kill_switch:
-    enabled: false
-    reason: ""
-    disabled_by: ""
-    disabled_at: ""
-    emergency_contact: "admin@bartonenterprises.com"
-
-# ============================================================
 # CTB DOCTRINE ENFORCEMENT
 # ============================================================
 ctb_doctrine:
@@ -419,9 +294,6 @@ ctb_doctrine:
       enabled: true
     - doctrine_id: "04.04.12"
       name: Google_Gemini_AI
-      enabled: true
-    - doctrine_id: "04.04.13"
-      name: Repo_Dashboard
       enabled: true
 
 # ============================================================
@@ -707,40 +579,6 @@ error_logging:
     - "Email: operations@barton.enterprises"
 
 # ============================================================
-# ORBT ERROR LOG CONFIGURATION
-# ============================================================
-error_log:
-  neon_table: shq.orbt_error_log
-  write_access: ["all_agents"]
-  read_access: ["repo-dashboard", "lovable", "deepwiki"]
-  required_fields:
-    - repo_name
-    - process_id
-    - unique_id
-    - error_layer
-    - altitude
-  automation:
-    n8n_hooks: true
-    composio_integration: true
-    auto_tag_by_repo: true
-    auto_tag_by_altitude: true
-    repo_dashboard_visibility: true
-  integration:
-    repos:
-      - imo-creator
-      - client-intake
-      - outreach-core
-      - blueprint-engine
-      - all_ctb_repos
-    agents:
-      - global_engineer
-      - global_validator
-      - global_monitor
-      - local_validator
-      - local_promoter
-      - all_agents
-
-# ============================================================
 # REPOSITORY TEMPLATES
 # ============================================================
 repo_templates:
@@ -756,7 +594,6 @@ repo_templates:
       - global-config/global_manifest.yaml
       - .github/workflows/deepwiki_automation.yml
       - scripts/hooks/post_update_deepwiki.sh
-      - repo-dashboard.config.json
 
 # ============================================================
 # METRICS & ANALYTICS
@@ -765,8 +602,6 @@ metrics:
   enabled: true
   collect:
     - deepwiki_runs
-    - chartdb_runs
-    - repo_dashboard_runs
     - documentation_updates
     - error_rates
     - processing_time
@@ -814,3 +649,53 @@ feature_flags:
     auto_documentation: true
     diff_analysis: true
     diagram_generation: true
+
+# ============================================================
+# ERROR LOG REGISTRY (ORBT Error Logging System)
+# ============================================================
+error_log_registry:
+  destination_table: shq.orbt_error_log
+  repo_origin: imo-creator
+  required_fields:
+    - timestamp
+    - repo_name
+    - altitude_level
+    - orbt_layer
+    - error_message
+    - resolution_status
+    - process_id
+    - unique_id
+  optional_fields:
+    - error_layer
+    - context_metadata
+  altitude_levels:
+    - 60k
+    - 40k
+    - 30k
+    - 20k
+    - 10k
+    - 5k
+  orbt_layers:
+    - System
+    - Operation
+    - Repair
+    - Build
+    - Training
+  automation_hooks:
+    - n8n
+    - Composio
+  access_control:
+    write:
+      - all_agents
+    read:
+      - repo-dashboard
+      - lovable
+      - deepwiki
+  enforcement:
+    required_on_repo_build: true
+    enforce_on_push: true
+    repo_manifest_override_allowed: false
+    validate_fields: true
+    auto_tag_process_id: true
+    auto_tag_altitude: true
+    error_log_view_required: true

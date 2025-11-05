@@ -147,9 +147,18 @@ fi
 
 # Copy global manifest (supports legacy and CTB paths)
 if [ -f "$IMO_CREATOR_PATH/global-config/global_manifest.yaml" ]; then
-  cp "$IMO_CREATOR_PATH/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml"
+  cp "$IMO_CREATOR_PATH/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml (includes error_log_registry)"
 elif [ -f "$IMO_CREATOR_PATH/ctb/docs/global-config/global_manifest.yaml" ]; then
-  cp "$IMO_CREATOR_PATH/ctb/docs/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml (from CTB path)"
+  cp "$IMO_CREATOR_PATH/ctb/docs/global-config/global_manifest.yaml" "global-config/" && log_info "  ✓ global_manifest.yaml (from CTB path, includes error_log_registry)"
+fi
+
+# Verify error_log_registry is present in synced global_manifest.yaml
+if [ -f "global-config/global_manifest.yaml" ]; then
+  if grep -q "error_log_registry:" "global-config/global_manifest.yaml"; then
+    log_info "  ✓ error_log_registry configuration verified"
+  else
+    log_warning "  ⚠ error_log_registry not found in global_manifest.yaml - may need manual update"
+  fi
 fi
 
 # Copy MCP registry
@@ -447,6 +456,7 @@ echo -e "  ${GREEN}✓${NC} Dev container configuration"
 echo -e "  ${GREEN}✓${NC} VS Code settings and extensions"
 echo -e "  ${GREEN}✓${NC} Troubleshooting and architecture guides"
 echo -e "  ${GREEN}✓${NC} CTB enforcement and security scripts"
+echo -e "  ${GREEN}✓${NC} ORBT error log registry (error_log_registry in global_manifest.yaml)"
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
 echo -e "  1. Review changes: ${CYAN}git status${NC}"
