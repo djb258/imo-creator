@@ -1,0 +1,137 @@
+[
+  {
+    "altitude": "60k",
+    "ctb_type": "Vision",
+    "files": [
+      "README.md",
+      "ENTRYPOINT.md",
+      "ctb/docs/LLM_ONBOARDING.md",
+      "ctb/docs/guides/docs/ARCHITECTURE.md",
+      "ctb/docs/architecture/architecture.mmd",
+      "docs/visuals/ctb_altitude.mmd",
+      "ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml",
+      "ctb/docs/doctrine/doctrine/doctrine_acronyms.md",
+      "CTB_INDEX.md",
+      "CTB_IMPLEMENTATION_SUMMARY.md"
+    ],
+    "repo": "imo-creator",
+    "linked_to": ["40k", "30k"],
+    "description": "Strategic vision, doctrine, and architecture overview. Defines CTB structure, HEIR/ORBT principles, and system-wide standards."
+  },
+  {
+    "altitude": "40k",
+    "ctb_type": "System",
+    "files": [
+      "ctb/docs/global-config/global_manifest.yaml",
+      "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "ctb/sys/server/blueprints/ids.py",
+      "ctb/sys/server/blueprints/versioning.py",
+      "ctb/sys/server/main.py",
+      "ctb/sys/mcp_server.py",
+      "ctb/sys/infrastructure/garage-mcp",
+      "ctb/sys/infrastructure/activepieces",
+      "ctb/sys/infrastructure/windmill",
+      "ctb/sys/claude-skills",
+      "ctb/docs/global-config/ctb.branchmap.yaml",
+      "ctb/docs/global-config/CTB_DOCTRINE.md",
+      "ctb/sys/global-factory",
+      "ctb/sys/github-factory",
+      "scripts/doctor.sh",
+      "scripts/doctrine_enforcer.sh",
+      "repo-dashboard.config.json"
+    ],
+    "repo": "imo-creator",
+    "linked_to": ["30k", "20k"],
+    "description": "System infrastructure layer. Global agents, doctrine enforcement, MCP integration, factory systems, and compliance tools."
+  },
+  {
+    "altitude": "30k",
+    "ctb_type": "Data",
+    "files": [
+      "ctb/data/SCHEMA_REFERENCE.md",
+      "ctb/data/schemas/chartdb_schemas/schema_index.json",
+      "ctb/data/schemas/chartdb_schemas/schemas",
+      "ctb/data/warehouses/chartdb",
+      "ctb/data/tests/test_schema.py",
+      "ctb/data/tests/test_migrations.py",
+      "ctb/data/tests/test_validation.py",
+      "example_chartdb_schema.json",
+      "docs/visuals/chartdb_erd.mmd",
+      "docs/visuals/chartdb_erd_readable.md",
+      "docs/visuals/chartdb_erd_text.txt",
+      "ctb/data/README.md",
+      "doctrine/schemas"
+    ],
+    "repo": "imo-creator",
+    "linked_to": ["20k", "10k"],
+    "description": "Data layer: database schemas, migrations, validation, and STAMPED/SPVPET/STACKED compliance. Schema visualization and documentation."
+  },
+  {
+    "altitude": "20k",
+    "ctb_type": "Blueprint",
+    "files": [
+      "ctb/ai/blueprints",
+      "ctb/sys/server/blueprints",
+      "docs/blueprints/example",
+      "docs/blueprints/imo",
+      "ctb/docs/guides/docs/blueprints",
+      "ctb/sys/tools/blueprint_visual.py",
+      "ctb/sys/tools/blueprint_score.py",
+      "tools/blueprint_score.py",
+      "tools/blueprint_visual.py",
+      "ctb/sys/lib/imo_tools",
+      "ctb/sys/scripts/wiki_generator.sh"
+    ],
+    "repo": "imo-creator",
+    "linked_to": ["10k", "5k"],
+    "description": "Workflows and blueprints layer. IMO creation workflows, blueprint templates, scoring, visualization, and workflow orchestration."
+  },
+  {
+    "altitude": "10k",
+    "ctb_type": "Orchestration",
+    "files": [
+      "ctb/ai/agents/agents",
+      "ctb/ai/agents/manifest.json",
+      "ctb/sys/mcp_server.py",
+      "ctb/sys/infrastructure/garage-mcp",
+      "garage-mcp",
+      "ctb/sys/api",
+      "ctb/sys/api/ssot",
+      "ctb/sys/api/subagents.js",
+      "ctb/sys/server/infra",
+      "ctb/sys/tools/wiki_generator.sh",
+      "ctb/docs/integration/COMPOSIO_INTEGRATION.md",
+      "ctb/docs/composio",
+      "main.py",
+      "packages/heir",
+      "packages/sidecar"
+    ],
+    "repo": "imo-creator",
+    "linked_to": ["5k"],
+    "description": "Agents, MCPs, and orchestration layer. AI agents, Model Context Protocol servers, API endpoints, and workflow orchestration tools."
+  },
+  {
+    "altitude": "5k",
+    "ctb_type": "Deliverable",
+    "files": [
+      "index.html",
+      "ctb/ui/apps/my-app",
+      "ctb/ui/factory",
+      "ctb/docs/guides/docs/blueprints/ui/overview.html",
+      "ctb/docs/guides/docs/blueprints/ui/input.html",
+      "ctb/docs/guides/docs/blueprints/ui/middle.html",
+      "ctb/docs/guides/docs/blueprints/ui/output.html",
+      "public/index.html",
+      "public/docs",
+      "ctb/ui/templates",
+      "ctb/ui/packages",
+      "scripts/gen_visuals.cjs",
+      "docs/visuals/vault_flow.mmd",
+      "docs/visuals/tool_integration.mmd"
+    ],
+    "repo": "imo-creator",
+    "linked_to": [],
+    "description": "UI components, pages, and deliverables. Frontend interfaces, HTML pages, visual diagrams, and user-facing applications."
+  }
+]
+

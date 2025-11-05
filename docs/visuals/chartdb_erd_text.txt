@@ -1,0 +1,227 @@
+================================================================================
+CHARTDB ERD - DATABASE SCHEMA VISUALIZATION (TEXT FORMAT)
+================================================================================
+
+Generated from: example_chartdb_schema.json
+Last Updated: 2025-10-30
+Database Type: PostgreSQL (Neon)
+Schema: public
+
+================================================================================
+ENTITY RELATIONSHIP DIAGRAM (TEXT REPRESENTATION)
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           DATABASE SCHEMA                               │
+│                                                                         │
+│  ┌─────────────┐         ┌──────────────┐         ┌─────────────┐      │
+│  │   USERS     │         │   PROJECTS   │         │    TASKS    │      │
+│  │             │         │              │         │             │      │
+│  │ id (PK)     │◄───┐    │ id (PK)       │◄───┐    │ id (PK)     │      │
+│  │ email (UK)  │    │    │ user_id (FK) ├────┘    │ project_id  │      │
+│  │ password    │    │    │ name          │         │   (FK)      │      │
+│  │ name        │    │    │ description   │         │ title       │      │
+│  │ role        │    │    │ status        │         │ description │      │
+│  │             │    │    │              │         │ status      │      │
+│  │ [STAMPED]  │    │    │ [STAMPED]     │         │ priority    │      │
+│  │             │    │    │              │         │             │      │
+│  │ heir_id     │    │    │ heir_id       │         │ heir_id     │      │
+│  │ process_id  │    │    │ process_id    │         │ process_id  │      │
+│  │ created_at  │    │    │ created_at    │         │ created_at  │      │
+│  │ updated_at  │    │    │ updated_at    │         │ updated_at  │      │
+│  │ created_by  │    │    │ created_by    │         │ created_by  │      │
+│  │ orbt_layer  │    │    │ orbt_layer    │         │ orbt_layer  │      │
+│  │ blueprint   │    │    │ blueprint     │         │ blueprint   │      │
+│  └─────────────┘    │    └──────────────┘         └─────────────┘      │
+│                     │                                                    │
+│                     └────────────────────────────────────────────────────┘
+│
+│  Relationships:
+│  • USERS (1) ────< (many) PROJECTS
+│  • PROJECTS (1) ────< (many) TASKS
+│
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+TABLE DETAILS
+================================================================================
+
+1. USERS TABLE
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │ Barton ID: BART-SHQ-USERS-V1                                       │
+   │ Enforcement: STRICT                                                 │
+   │ STAMPED Compliant: Yes                                              │
+   │ Purpose: User accounts and authentication                           │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Columns:                                                            │
+   │   • id (SERIAL, PK) - Primary key                                  │
+   │   • email (VARCHAR(255), UNIQUE, NOT NULL) - User email            │
+   │   • password_hash (VARCHAR(255), NOT NULL) - Hashed password       │
+   │   • name (VARCHAR(255), NULLABLE) - User full name                 │
+   │   • role (VARCHAR(50), DEFAULT 'user') - User role                  │
+   │   • heir_id (VARCHAR(50), UNIQUE, NOT NULL) - HEIR tracking        │
+   │   • process_id (VARCHAR(50), NOT NULL) - Process tracking         │
+   │   • created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • created_by (VARCHAR(100), NOT NULL) - Creator                  │
+   │   • orbt_layer (INTEGER, DEFAULT 3) - ORBT layer (1-4)            │
+   │   • blueprint_version (VARCHAR(20), DEFAULT '1.0') - Version       │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Indexes:                                                            │
+   │   • idx_users_email (UNIQUE) - On email column                     │
+   │   • idx_users_heir_id (UNIQUE) - On heir_id column                 │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Relationships:                                                      │
+   │   • One-to-Many: USERS → PROJECTS (users can have many projects)   │
+   └─────────────────────────────────────────────────────────────────────┘
+
+2. PROJECTS TABLE
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │ Barton ID: BART-SHQ-PROJECTS-V1                                    │
+   │ Enforcement: STANDARD                                               │
+   │ STAMPED Compliant: Yes                                              │
+   │ Purpose: Project management and tracking                           │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Columns:                                                            │
+   │   • id (SERIAL, PK) - Primary key                                  │
+   │   • user_id (INTEGER, FK → users.id, NOT NULL) - Owner            │
+   │   • name (VARCHAR(255), NOT NULL) - Project name                   │
+   │   • description (TEXT, NULLABLE) - Project description            │
+   │   • status (VARCHAR(50), DEFAULT 'active') - Project status      │
+   │   • heir_id (VARCHAR(50), UNIQUE, NOT NULL) - HEIR tracking       │
+   │   • process_id (VARCHAR(50), NOT NULL) - Process tracking         │
+   │   • created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • created_by (VARCHAR(100), NOT NULL) - Creator                 │
+   │   • orbt_layer (INTEGER, DEFAULT 3) - ORBT layer (1-4)            │
+   │   • blueprint_version (VARCHAR(20), DEFAULT '1.0') - Version       │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Indexes:                                                            │
+   │   • idx_projects_user_id - On user_id for foreign key lookups     │
+   │   • idx_projects_heir_id (UNIQUE) - On heir_id column             │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Foreign Keys:                                                       │
+   │   • fk_projects_user_id → users(id) (CASCADE DELETE/UPDATE)        │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Relationships:                                                      │
+   │   • Many-to-One: PROJECTS → USERS (many projects belong to user)  │
+   │   • One-to-Many: PROJECTS → TASKS (projects can have many tasks)  │
+   └─────────────────────────────────────────────────────────────────────┘
+
+3. TASKS TABLE
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │ Barton ID: BART-SHQ-TASKS-V1                                       │
+   │ Enforcement: STANDARD                                               │
+   │ STAMPED Compliant: Yes                                              │
+   │ Purpose: Task management within projects                           │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Columns:                                                            │
+   │   • id (SERIAL, PK) - Primary key                                  │
+   │   • project_id (INTEGER, FK → projects.id, NOT NULL) - Parent     │
+   │   • title (VARCHAR(255), NOT NULL) - Task title                   │
+   │   • description (TEXT, NULLABLE) - Task description               │
+   │   • status (VARCHAR(50), DEFAULT 'todo') - Task status            │
+   │   • priority (INTEGER, DEFAULT 0) - Task priority (0-5)         │
+   │   • heir_id (VARCHAR(50), UNIQUE, NOT NULL) - HEIR tracking       │
+   │   • process_id (VARCHAR(50), NOT NULL) - Process tracking         │
+   │   • created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)              │
+   │   • created_by (VARCHAR(100), NOT NULL) - Creator                │
+   │   • orbt_layer (INTEGER, DEFAULT 3) - ORBT layer (1-4)           │
+   │   • blueprint_version (VARCHAR(20), DEFAULT '1.0') - Version      │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Indexes:                                                            │
+   │   • idx_tasks_project_id - On project_id for foreign key lookups  │
+   │   • idx_tasks_status - On status for filtering                    │
+   │   • idx_tasks_heir_id (UNIQUE) - On heir_id column                 │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Foreign Keys:                                                       │
+   │   • fk_tasks_project_id → projects(id) (CASCADE DELETE/UPDATE)     │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │ Relationships:                                                      │
+   │   • Many-to-One: TASKS → PROJECTS (many tasks belong to project)  │
+   └─────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+RELATIONSHIPS SUMMARY
+================================================================================
+
+1. USERS → PROJECTS (One-to-Many)
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │ Relationship Type: One-to-Many                                      │
+   │ Cardinality: One user can have many projects                        │
+   │ Foreign Key: projects.user_id → users.id                           │
+   │ Cascade: DELETE CASCADE, UPDATE CASCADE                             │
+   │ Description: Users can create and own multiple projects           │
+   └─────────────────────────────────────────────────────────────────────┘
+
+2. PROJECTS → TASKS (One-to-Many)
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │ Relationship Type: One-to-Many                                      │
+   │ Cardinality: One project can have many tasks                       │
+   │ Foreign Key: tasks.project_id → projects.id                        │
+   │ Cascade: DELETE CASCADE, UPDATE CASCADE                            │
+   │ Description: Projects contain multiple tasks                       │
+   └─────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+STAMPED COMPLIANCE
+================================================================================
+
+All tables include the following STAMPED tracking fields:
+
+• heir_id (VARCHAR(50), UNIQUE, NOT NULL)
+  └─ Format: HEIR-YYYY-MM-SYSTEM-MODE-VN
+  └─ Purpose: HEIR tracking ID for compliance
+
+• process_id (VARCHAR(50), NOT NULL)
+  └─ Format: PRC-SYSTEM-EPOCHTIMESTAMP
+  └─ Purpose: Process tracking ID
+
+• created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+  └─ Purpose: Creation timestamp
+
+• updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+  └─ Purpose: Last update timestamp
+
+• created_by (VARCHAR(100), NOT NULL)
+  └─ Purpose: Creator user/system identifier
+
+• orbt_layer (INTEGER, DEFAULT 3)
+  └─ Range: 1-4
+  └─ Purpose: ORBT layer designation
+
+• blueprint_version (VARCHAR(20), DEFAULT '1.0')
+  └─ Purpose: Blueprint version tracking
+
+================================================================================
+LINKED PROCESSES (PRC-* IDs)
+================================================================================
+
+• PRC-AUTH-LOGIN - User authentication
+• PRC-AUTH-REGISTER - User registration
+• PRC-PROJECT-CREATE - Project creation
+• PRC-TASK-CREATE - Task creation
+
+================================================================================
+LINKED API ENDPOINTS
+================================================================================
+
+• POST /api/auth/login - User login
+• POST /api/auth/register - User registration
+• GET /api/projects - List projects
+• POST /api/projects - Create project
+• GET /api/tasks - List tasks
+• POST /api/tasks - Create task
+
+================================================================================
+END OF SCHEMA DOCUMENTATION
+================================================================================
+
+This text format is designed to be:
+✓ Human-readable
+✓ LLM-readable
+✓ Easy to parse programmatically
+✓ Suitable for documentation generation
+
+

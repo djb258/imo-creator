@@ -1,0 +1,245 @@
+{
+  "repo": "imo-creator",
+  "description": "CTB Master Template Factory - Canonical source of truth for Christmas Tree Backbone (CTB) architecture under Barton Doctrine. Enforces HEIR/ORBT governance, SSOT ID generation, and Global Fleet (40k) persistent cloud agents.",
+  "maintain_file_on_main": true,
+  "ctb_branches": [
+    "sys/chartdb",
+    "sys/activepieces",
+    "sys/windmill",
+    "sys/claude-skills",
+    "sys/deepwiki",
+    "sys/composio-mcp",
+    "sys/gatekeeper",
+    "sys/validator"
+  ],
+  "modules": [
+    {
+      "name": "Blueprint Overview Page",
+      "path": "ctb/docs/guides/docs/blueprints/ui/overview.html",
+      "status": "complete",
+      "tags": ["UI", "Blueprint", "Planning"]
+    },
+    {
+      "name": "Blueprint Input Page",
+      "path": "ctb/docs/guides/docs/blueprints/ui/input.html",
+      "status": "complete",
+      "tags": ["UI", "Blueprint", "Input"]
+    },
+    {
+      "name": "Blueprint Middle Page",
+      "path": "ctb/docs/guides/docs/blueprints/ui/middle.html",
+      "status": "complete",
+      "tags": ["UI", "Blueprint", "Processing"]
+    },
+    {
+      "name": "Blueprint Output Page",
+      "path": "ctb/docs/guides/docs/blueprints/ui/output.html",
+      "status": "complete",
+      "tags": ["UI", "Blueprint", "Output"]
+    },
+    {
+      "name": "Main Index Page",
+      "path": "index.html",
+      "status": "complete",
+      "tags": ["UI", "Landing", "Dashboard"]
+    },
+    {
+      "name": "API Server",
+      "path": "ctb/sys/server/main.py",
+      "status": "complete",
+      "tags": ["API", "Backend", "FastAPI"]
+    },
+    {
+      "name": "SSOT Save Endpoint",
+      "path": "api/ssot",
+      "status": "complete",
+      "tags": ["API", "SSOT", "ID Generation"]
+    },
+    {
+      "name": "Composio MCP Server",
+      "path": "ctb/sys/mcp_server.py",
+      "status": "complete",
+      "tags": ["API", "MCP", "Integration"]
+    },
+    {
+      "name": "HEIR Check Endpoint",
+      "path": "ctb/sys/mcp_server.py",
+      "status": "complete",
+      "tags": ["API", "HEIR", "Validation"]
+    },
+    {
+      "name": "ID Generation Logic",
+      "path": "ctb/sys/server/blueprints/ids.py",
+      "status": "complete",
+      "tags": ["Backend", "SSOT", "ID Generation"]
+    },
+    {
+      "name": "Versioning System",
+      "path": "ctb/sys/server/blueprints/versioning.py",
+      "status": "complete",
+      "tags": ["Backend", "Versioning", "Blueprint"]
+    },
+    {
+      "name": "Global Agents Manifest",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "complete",
+      "tags": ["Agents", "Configuration", "CTB"]
+    },
+    {
+      "name": "Doctrine System Manifest",
+      "path": "ctb/docs/doctrine/doctrine/doctrine_system_manifest.yaml",
+      "status": "complete",
+      "tags": ["Doctrine", "Configuration", "CTB"]
+    },
+    {
+      "name": "Global Configuration Manifest",
+      "path": "ctb/docs/global-config/global_manifest.yaml",
+      "status": "complete",
+      "tags": ["Configuration", "Global", "CTB"]
+    },
+    {
+      "name": "Doctor Script",
+      "path": "scripts/doctor.sh",
+      "status": "complete",
+      "tags": ["Scripts", "Validation", "Health Check"]
+    },
+    {
+      "name": "Config Validator",
+      "path": "scripts/validate_configs.mjs",
+      "status": "complete",
+      "tags": ["Scripts", "Validation", "Schema"]
+    },
+    {
+      "name": "Doctrine Enforcer",
+      "path": "scripts/doctrine_enforcer.sh",
+      "status": "complete",
+      "tags": ["Scripts", "Enforcement", "CTB"]
+    },
+    {
+      "name": "ChartDB System",
+      "path": "chartdb",
+      "status": "complete",
+      "tags": ["Database", "Schema", "Visualization"]
+    },
+    {
+      "name": "DeepWiki System",
+      "path": "deepwiki",
+      "status": "complete",
+      "tags": ["Documentation", "Automation", "AI"]
+    },
+    {
+      "name": "Garage MCP Infrastructure",
+      "path": "ctb/sys/infrastructure/garage-mcp",
+      "status": "complete",
+      "tags": ["Infrastructure", "MCP", "Services"]
+    },
+    {
+      "name": "CTB Template Scaffold",
+      "path": "ctb-template",
+      "status": "complete",
+      "tags": ["Template", "Scaffold", "CTB"]
+    },
+    {
+      "name": "Claude Agents Library",
+      "path": "claude-agents-library",
+      "status": "complete",
+      "tags": ["Agents", "Library", "Claude"]
+    },
+    {
+      "name": "HEIR Package",
+      "path": "packages/heir",
+      "status": "complete",
+      "tags": ["Package", "HEIR", "Compliance"]
+    },
+    {
+      "name": "Sidecar Package",
+      "path": "packages/sidecar",
+      "status": "complete",
+      "tags": ["Package", "Event Logging", "Telemetry"]
+    }
+  ],
+  "agents": [
+    {
+      "id": "global_engineer",
+      "name": "Global Engineer Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Engineering", "Audit"]
+    },
+    {
+      "id": "global_gateway",
+      "name": "Global Gateway Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Gateway", "Integration"]
+    },
+    {
+      "id": "global_validator",
+      "name": "Global Validator Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Validation", "Schema"]
+    },
+    {
+      "id": "global_monitor",
+      "name": "Global Monitor Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Monitoring", "Metrics"]
+    },
+    {
+      "id": "global_communicator",
+      "name": "Global Communicator Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Communication", "Alerts"]
+    },
+    {
+      "id": "global_orchestrator",
+      "name": "Global Orchestrator Agent",
+      "path": "ctb/docs/doctrine/agents/doctrine_global_agents.yaml",
+      "status": "active",
+      "tags": ["Global", "Orchestration", "Coordination"]
+    }
+  ],
+  "integrations": {
+    "Firebase": true,
+    "Neon": true,
+    "BigQuery": true,
+    "Composio": true,
+    "ChartDB": true,
+    "Activepieces": true,
+    "Windmill": true,
+    "Claude Skills": true,
+    "DeepWiki": true,
+    "Gemini AI": true,
+    "Builder.io": true,
+    "n8n": true,
+    "Grafana": true,
+    "Vercel": true,
+    "Render": true
+  },
+  "feature_tags": [
+    "CTB",
+    "HEIR",
+    "ORBT",
+    "SSOT",
+    "MCP",
+    "Doctrine",
+    "Compliance",
+    "Template",
+    "Scaffold",
+    "Agents",
+    "Blueprint",
+    "API",
+    "Backend",
+    "Frontend",
+    "Database",
+    "Integration",
+    "Automation",
+    "Documentation"
+  ],
+  "last_updated": "2025-10-30T18:30:00Z"
+}
+
+
