@@ -707,6 +707,40 @@ error_logging:
     - "Email: operations@barton.enterprises"
 
 # ============================================================
+# ORBT ERROR LOG CONFIGURATION
+# ============================================================
+error_log:
+  neon_table: shq.orbt_error_log
+  write_access: ["all_agents"]
+  read_access: ["repo-dashboard", "lovable", "deepwiki"]
+  required_fields:
+    - repo_name
+    - process_id
+    - unique_id
+    - error_layer
+    - altitude
+  automation:
+    n8n_hooks: true
+    composio_integration: true
+    auto_tag_by_repo: true
+    auto_tag_by_altitude: true
+    repo_dashboard_visibility: true
+  integration:
+    repos:
+      - imo-creator
+      - client-intake
+      - outreach-core
+      - blueprint-engine
+      - all_ctb_repos
+    agents:
+      - global_engineer
+      - global_validator
+      - global_monitor
+      - local_validator
+      - local_promoter
+      - all_agents
+
+# ============================================================
 # REPOSITORY TEMPLATES
 # ============================================================
 repo_templates:

@@ -123,6 +123,49 @@ acronyms:
     definition: "BigQuery schema for analytical and historical data."
 
 # ─────────────────────────────────────────────
+#  ORBT ERROR LOG
+# ─────────────────────────────────────────────
+orbt_error_log:
+  table: shq.orbt_error_log
+  schema: STAMPED
+  visibility: global
+  purpose: Tracks all repo-layer errors using the ORBT model (Operate, Repair, Build, Train)
+  fields:
+    - repo_name
+    - process_id
+    - unique_id
+    - agent_id
+    - blueprint_id
+    - error_layer
+    - altitude
+    - file_path
+    - error_summary
+    - error_detail
+    - resolution_status
+    - resolution_notes
+    - timestamp_created
+    - timestamp_resolved
+    - resolved_by
+  error_layers:
+    - System
+    - Operation
+    - Repair
+    - Build
+    - Training
+  altitude_levels:
+    - 60000
+    - 40000
+    - 30000
+    - 20000
+    - 10000
+    - 5000
+  resolution_statuses:
+    - unresolved
+    - in_progress
+    - resolved
+    - ignored
+
+# ─────────────────────────────────────────────
 #  META RELATIONSHIPS
 # ─────────────────────────────────────────────
 relationships:
