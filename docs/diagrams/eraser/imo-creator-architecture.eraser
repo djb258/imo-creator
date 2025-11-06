@@ -1,0 +1,53 @@
+// IMO-Creator System Architecture
+// Created with Eraser.io
+
+title IMO-Creator Architecture
+
+// Define components
+User [icon: user, color: blue]
+FastAPI [icon: server, color: green]
+ComposioMCP [icon: cloud, color: purple, label: Composio MCP Server]
+Firebase [icon: database, color: orange]
+NeonDB [icon: database, color: teal]
+GoogleWorkspace [icon: google, color: red, label: Google Workspace]
+
+// Subcomponents
+Gmail [icon: email, color: red]
+Drive [icon: folder, color: yellow]
+Calendar [icon: calendar, color: blue]
+Sheets [icon: table, color: green]
+
+// Define flows
+User > FastAPI: HTTP Requests
+FastAPI > ComposioMCP: MCP Protocol (Port 3001)
+ComposioMCP > GoogleWorkspace: OAuth Integration
+GoogleWorkspace > Gmail: Email Operations
+GoogleWorkspace > Drive: File Operations
+GoogleWorkspace > Calendar: Event Operations
+GoogleWorkspace > Sheets: Data Operations
+ComposioMCP > Firebase: Firebase Admin SDK
+FastAPI > NeonDB: Database Queries
+FastAPI > Firebase: Direct Access (via MCP)
+
+// Notes
+note right of ComposioMCP: 100+ services available
+note right of GoogleWorkspace: 3 connected accounts
+note right of FastAPI: Deployed on Render
+
+// Groups
+group "External Services" {
+  GoogleWorkspace
+  Gmail
+  Drive
+  Calendar
+  Sheets
+}
+
+group "Data Layer" {
+  Firebase
+  NeonDB
+}
+
+group "Integration Hub" {
+  ComposioMCP
+}

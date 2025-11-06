@@ -1,0 +1,56 @@
+// Composio MCP Integration Flow
+// Created with Eraser.io
+
+title Composio MCP Integration Flow
+
+// Main components
+Client [icon: user, label: Client Application]
+MCPServer [icon: server, label: Composio MCP Server, color: purple]
+ComposioAPI [icon: cloud, label: Composio API, color: blue]
+GoogleAPI [icon: google, label: Google APIs, color: red]
+OtherServices [icon: tools, label: 100+ Services, color: green]
+
+// Request flow
+Client > MCPServer: 1. MCP Request (HEIR/ORBT format)
+MCPServer > MCPServer: 2. Validate payload
+MCPServer > ComposioAPI: 3. Call Composio SDK
+ComposioAPI > GoogleAPI: 4. Execute Google action
+GoogleAPI > ComposioAPI: 5. Return result
+ComposioAPI > MCPServer: 6. Format response
+MCPServer > Client: 7. Return MCP response
+
+// Alternative flows
+MCPServer > OtherServices: Execute other integrations
+OtherServices > MCPServer: Return results
+
+// HEIR/ORBT Payload Structure
+payload {
+  tool: string
+  data: object
+  unique_id: HEIR-YYYY-MM-TYPE-XX
+  process_id: PRC-TYPE-XXX
+  orbt_layer: 1-4
+  blueprint_version: "1.0"
+}
+
+// Notes
+note right of MCPServer: Port 3001
+note right of ComposioAPI: Handles OAuth
+note right of GoogleAPI: Gmail, Drive, Calendar, Sheets
+note bottom of payload: Barton Doctrine compliant
+
+// Groups
+group "MCP Layer" {
+  MCPServer
+}
+
+group "External Services" {
+  ComposioAPI
+  GoogleAPI
+  OtherServices
+}
+
+// Error handling
+error [icon: alert, color: red, label: Error Handler]
+MCPServer > error: On failure
+error > Client: Return error response
