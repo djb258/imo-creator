@@ -1,0 +1,97 @@
+name: Feature Request
+description: Suggest a new feature for IMO-Creator
+title: "[FEATURE]: "
+labels: ["enhancement", "needs-triage"]
+projects: ["djb258/1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+        Thank you for suggesting a new feature for IMO-Creator!
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component does this feature relate to?
+      options:
+        - CTB Template
+        - Composio MCP Integration
+        - Google Workspace Integration
+        - Firebase MCP
+        - Role-Based System Manual
+        - GitHub Actions / CI/CD
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: altitude
+    attributes:
+      label: CTB Altitude
+      description: At what altitude should this feature operate?
+      options:
+        - 40k ft - Strategic/Vision
+        - 20k ft - Architecture/Integration
+        - 10k ft - Implementation/Code
+        - 5k ft - Data/Database
+        - Ground - Operations/DevOps
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: Describe the feature you'd like to see
+      placeholder: A clear and concise description of the feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: What problem does this solve?
+      placeholder: Describe the use case or problem this feature addresses
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Proposed Implementation
+      description: How should this feature be implemented?
+      placeholder: Suggest an approach or implementation details
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: integration
+    attributes:
+      label: Integration Impact
+      description: Which integrations will this affect?
+      options:
+        - label: Composio MCP Server
+        - label: Google Workspace (Gmail, Drive, Calendar, Sheets)
+        - label: Firebase
+        - label: Neon Database
+        - label: GitHub Actions
+        - label: Render Deployment
+        - label: None
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+        - P4 - Nice to have
+    validations:
+      required: true

@@ -1,0 +1,133 @@
+name: Bug Report
+description: Report a bug in IMO-Creator
+title: "[BUG]: "
+labels: ["bug", "needs-triage"]
+projects: ["djb258/1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        Thank you for reporting a bug in IMO-Creator!
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component has the bug?
+      options:
+        - CTB Template
+        - Composio MCP Integration
+        - Google Workspace Integration
+        - Firebase MCP
+        - GitHub Actions / CI/CD
+        - Role-Based System Manual
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: altitude
+    attributes:
+      label: CTB Altitude
+      description: At what altitude does this bug occur?
+      options:
+        - 40k ft - Strategic/Vision
+        - 20k ft - Architecture/Integration
+        - 10k ft - Implementation/Code
+        - 5k ft - Data/Database
+        - Ground - Operations/DevOps
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Start Composio MCP server
+        2. Execute command...
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Include any relevant error messages or logs
+      placeholder: Paste error logs here
+      render: shell
+    validations:
+      required: false
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did this bug occur?
+      options:
+        - Local Development
+        - Render Deployment
+        - GitHub Actions
+        - Composio MCP Server
+        - Firebase
+      multiple: true
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - S0 - Critical (System down)
+        - S1 - High (Major functionality broken)
+        - S2 - Medium (Feature partially broken)
+        - S3 - Low (Minor issue)
+        - S4 - Cosmetic
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: integration
+    attributes:
+      label: Affected Integrations
+      description: Which integrations are affected?
+      options:
+        - label: Composio MCP Server
+        - label: Google Workspace (Gmail, Drive, Calendar, Sheets)
+        - label: Firebase
+        - label: Neon Database
+        - label: GitHub Actions
+        - label: Render Deployment
