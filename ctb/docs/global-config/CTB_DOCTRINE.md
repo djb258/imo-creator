@@ -370,6 +370,159 @@ result = parser.run(raw_input="unstructured data...")
 
 ---
 
+## CTB Planner - AI-Driven Repository Organization
+
+### Overview
+
+The **CTB Planner** is an AI-driven system that automatically restructures repositories according to the CTB Doctrine. Unlike traditional refactoring, it operates in **JSON-only mode** - analyzing repositories and outputting structured instructions without directly modifying files.
+
+### How It Works
+
+```mermaid
+graph LR
+    A[Repository Files] --> B[Claude Analysis]
+    B --> C[ctb_plan.json]
+    C --> D[apply_ctb_plan.py]
+    D --> E[Restructured Repo]
+    E --> F[Tool Integration]
+```
+
+**1. Analysis Phase** (Claude Code):
+- Scans repository structure
+- Classifies files by altitude (30k/20k/10k/5k)
+- Assigns confidence scores
+- Generates `ctb_plan.json`
+
+**2. Validation Phase** (Python Script):
+```bash
+python ctb/docs/global-config/scripts/apply_ctb_plan.py
+```
+- Executes move/create_md/annotate actions
+- Generates `specs/ctb_manifest.yaml`
+- Updates global config
+- Commits with CTB signature
+
+**3. Integration Phase** (Tool Ecosystem):
+- **Obsidian**: Syncs doctrine `.md` files
+- **GitHub Projects**: Creates tasks from manifest
+- **GitKraken**: Visualizes CTB tree structure
+- **Lovable.dev**: Renders interactive explorer
+- **Grafana**: Monitors compliance metrics
+
+### Altitude Classification
+
+| Altitude | Name | Purpose | Examples |
+|----------|------|---------|----------|
+| **30000** | Vision | Architecture & design docs | `vision.md`, `architecture.md` |
+| **20000** | Category | Data models & schemas | `schema.sql`, `models.py` |
+| **10000** | Execution | Core application logic | `app.py`, `services/` |
+| **5000** | Visibility | UI & user interfaces | `dashboard.tsx`, `cli.py` |
+
+### JSON Output Format
+
+The planner generates `ctb_plan.json` with three main sections:
+
+**Actions Array**:
+```json
+{
+  "type": "move",
+  "from": "src/app.py",
+  "to": "10000_execution/src/app.py",
+  "reason": "Main application logic",
+  "confidence": 0.95
+}
+```
+
+**Manifest Object**:
+```json
+{
+  "branches": [
+    {"altitude": 30000, "files": ["30000_vision/vision.md"]},
+    {"altitude": 20000, "files": ["20000_category/schema.sql"]},
+    {"altitude": 10000, "files": ["10000_execution/app.py"]},
+    {"altitude": 5000, "files": ["5000_visibility/ui/"]}
+  ]
+}
+```
+
+**Metadata**:
+```json
+{
+  "summary": "CTB plan for 42 files across 4 altitude levels",
+  "confidence_avg": 0.89,
+  "low_confidence_files": [...]
+}
+```
+
+### Usage Example
+
+**Step 1**: Ask Claude to analyze your repository
+```
+User: "Analyze this repository and create a CTB plan"
+```
+
+**Step 2**: Claude outputs `ctb_plan.json`
+
+**Step 3**: Apply the plan
+```bash
+python ctb/docs/global-config/scripts/apply_ctb_plan.py
+```
+
+**Step 4**: Review in integrated tools
+- Obsidian: Edit `30000_vision/vision.md`
+- GitHub Projects: Track file migration tasks
+- GitKraken: Visualize new structure
+- Grafana: Monitor compliance
+
+### Confidence Scoring
+
+Each classification includes a confidence score (0.0-1.0):
+
+- **High (0.8-1.0)**: Clear classification, proceed
+- **Medium (0.6-0.8)**: Reasonable guess, review recommended
+- **Low (0.0-0.6)**: Uncertain, human confirmation required
+
+Files with low confidence are flagged in `low_confidence_files` array for manual review.
+
+### Tool Integration
+
+**Obsidian** (Doctrine ID: 04.05.04):
+- Auto-syncs `30000_vision/*.md` files
+- Provides editing interface for architecture docs
+- Git plugin commits changes back to repo
+
+**GitHub Projects** (Doctrine ID: 04.05.02):
+- Reads `specs/ctb_manifest.yaml`
+- Creates issue cards per altitude
+- Tracks file migration progress
+
+**GitKraken** (Doctrine ID: 04.05.03):
+- Visual diff of before/after restructuring
+- Color-coded altitude folders
+- Interactive file tree navigation
+
+**Grafana** (Doctrine ID: 04.05.01):
+- Monitors files by altitude over time
+- Tracks confidence trends
+- Alerts on low-confidence classifications
+
+### Documentation
+
+- **Full Guide**: `ctb/docs/CTB_PLANNER.md`
+- **Tool Integration**: `ctb/docs/CTB_TOOL_INTEGRATION.md`
+- **Example Plans**: `ctb/examples/ctb_plan_examples/`
+- **Validator Script**: `ctb/docs/global-config/scripts/apply_ctb_plan.py`
+
+### Best Practices
+
+1. **Review before applying**: Check `ctb_plan.json` for accuracy
+2. **Start with branches**: Test on feature branch first
+3. **Monitor confidence**: Address low-confidence files manually
+4. **Update docs**: Keep `30000_vision/` files current
+5. **Iterate**: Re-run planner as project evolves
+
+---
+
 ## Automation
 
 ### GitHub Actions

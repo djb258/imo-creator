@@ -162,7 +162,32 @@ for script in "$IMO_CREATOR_PATH/global-config/scripts"/*.sh; do
     chmod +x "global-config/scripts/$(basename "$script")"
   fi
 done
-log_info "  ✓ All CTB scripts (enforce, security, setup, etc.)"
+
+# Copy CTB scripts from new location (ctb/docs/global-config/scripts/)
+if [ -d "$IMO_CREATOR_PATH/ctb/docs/global-config/scripts" ]; then
+  for script in "$IMO_CREATOR_PATH/ctb/docs/global-config/scripts"/*.sh "$IMO_CREATOR_PATH/ctb/docs/global-config/scripts"/*.py; do
+    if [ -f "$script" ]; then
+      cp "$script" "global-config/scripts/"
+      chmod +x "global-config/scripts/$(basename "$script")" 2>/dev/null || true
+    fi
+  done
+fi
+log_info "  ✓ All CTB scripts (enforce, security, setup, planner, etc.)"
+
+# Copy CTB Planner documentation
+mkdir -p ctb/docs ctb/examples/ctb_plan_examples
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/CTB_PLANNER.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/CTB_PLANNER.md" "ctb/docs/" && log_info "  ✓ CTB_PLANNER.md"
+fi
+if [ -f "$IMO_CREATOR_PATH/ctb/docs/CTB_TOOL_INTEGRATION.md" ]; then
+  cp "$IMO_CREATOR_PATH/ctb/docs/CTB_TOOL_INTEGRATION.md" "ctb/docs/" && log_info "  ✓ CTB_TOOL_INTEGRATION.md"
+fi
+
+# Copy example CTB plans
+if [ -d "$IMO_CREATOR_PATH/ctb/examples/ctb_plan_examples" ]; then
+  cp -r "$IMO_CREATOR_PATH/ctb/examples/ctb_plan_examples"/* "ctb/examples/ctb_plan_examples/" 2>/dev/null || true
+  log_info "  ✓ CTB plan examples"
+fi
 
 log_success "Configuration files synced"
 echo ""
@@ -437,6 +462,10 @@ echo ""
 echo -e "${YELLOW}What was synced:${NC}"
 echo -e "  ${GREEN}✓${NC} CTB Doctrine configuration (v1.3.2)"
 echo -e "  ${GREEN}✓${NC} Version tracking system (ctb_version.json + auto-update script)"
+echo -e "  ${GREEN}✓${NC} CTB Planner system (AI-driven repository organization)"
+echo -e "  ${GREEN}✓${NC} Planner validator script (apply_ctb_plan.py)"
+echo -e "  ${GREEN}✓${NC} Tool integration guides (Obsidian, GitHub Projects, GitKraken, Grafana)"
+echo -e "  ${GREEN}✓${NC} Example CTB plans and templates"
 echo -e "  ${GREEN}✓${NC} All 19 CTB branches created/verified"
 echo -e "  ${GREEN}✓${NC} All 4 mandatory integration branches (04.04.07-10)"
 echo -e "  ${GREEN}✓${NC} Mandatory branch content (chartdb, activepieces, windmill, claude-skills)"
