@@ -1,0 +1,240 @@
+{
+  "name": "deepseek-agent",
+  "displayName": "DeepSeek AI Agent",
+  "description": "Integrate DeepSeek AI agent capabilities into VS Code for intelligent code assistance",
+  "version": "1.0.0",
+  "publisher": "imo-creator",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "deepseek",
+    "ai",
+    "agent",
+    "code-assistant",
+    "mcp"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "deepseek.chat",
+        "title": "DeepSeek: Start Chat",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.explainCode",
+        "title": "DeepSeek: Explain Selected Code",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.refactorCode",
+        "title": "DeepSeek: Refactor Code",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.generateTests",
+        "title": "DeepSeek: Generate Tests",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.fixBugs",
+        "title": "DeepSeek: Fix Bugs",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.optimizeCode",
+        "title": "DeepSeek: Optimize Code",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.generateDocumentation",
+        "title": "DeepSeek: Generate Documentation",
+        "category": "DeepSeek"
+      },
+      {
+        "command": "deepseek.customPrompt",
+        "title": "DeepSeek: Custom Prompt",
+        "category": "DeepSeek"
+      }
+    ],
+    "configuration": {
+      "title": "DeepSeek Agent",
+      "properties": {
+        "deepseek.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "DeepSeek API Key for authentication",
+          "order": 1
+        },
+        "deepseek.apiEndpoint": {
+          "type": "string",
+          "default": "https://api.deepseek.com/v1",
+          "description": "DeepSeek API endpoint URL",
+          "order": 2
+        },
+        "deepseek.model": {
+          "type": "string",
+          "default": "deepseek-chat",
+          "enum": [
+            "deepseek-chat",
+            "deepseek-coder"
+          ],
+          "description": "DeepSeek model to use",
+          "order": 3
+        },
+        "deepseek.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Temperature for response generation (0-2)",
+          "order": 4
+        },
+        "deepseek.maxTokens": {
+          "type": "number",
+          "default": 4096,
+          "minimum": 1,
+          "maximum": 32768,
+          "description": "Maximum tokens for response",
+          "order": 5
+        },
+        "deepseek.enableMCP": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Model Context Protocol integration",
+          "order": 6
+        },
+        "deepseek.mcpPort": {
+          "type": "number",
+          "default": 7002,
+          "description": "Port for MCP server",
+          "order": 7
+        },
+        "deepseek.autoSuggest": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic code suggestions",
+          "order": 8
+        },
+        "deepseek.contextWindow": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Number of lines to include as context",
+          "order": 9
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "deepseek-agent",
+          "title": "DeepSeek Agent",
+          "icon": "resources/deepseek-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "deepseek-agent": [
+        {
+          "id": "deepseek.chatView",
+          "name": "Chat",
+          "type": "webview"
+        },
+        {
+          "id": "deepseek.historyView",
+          "name": "History"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "deepseek.explainCode",
+          "when": "editorHasSelection",
+          "group": "deepseek@1"
+        },
+        {
+          "command": "deepseek.refactorCode",
+          "when": "editorHasSelection",
+          "group": "deepseek@2"
+        },
+        {
+          "command": "deepseek.generateTests",
+          "when": "editorHasSelection",
+          "group": "deepseek@3"
+        },
+        {
+          "command": "deepseek.fixBugs",
+          "when": "editorHasSelection",
+          "group": "deepseek@4"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "deepseek.explainCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "deepseek.refactorCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "deepseek.generateTests",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "deepseek.fixBugs",
+          "when": "editorHasSelection"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "deepseek.chat",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d"
+      },
+      {
+        "command": "deepseek.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js",
+    "test:integration": "node test-integration.js",
+    "start:mcp": "node src/mcpServer.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.50.0",
+    "@vscode/test-electron": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imo-creator/deepseek-agent"
+  },
+  "license": "MIT"
+}

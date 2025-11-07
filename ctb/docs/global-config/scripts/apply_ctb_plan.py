@@ -47,13 +47,13 @@ class Colors:
     NC = '\033[0m'  # No Color
 
 def log_success(msg: str):
-    print(f"{Colors.GREEN}[✓]{Colors.NC} {msg}")
+    print(f"{Colors.GREEN}[OK]{Colors.NC} {msg}")
 
 def log_warning(msg: str):
-    print(f"{Colors.YELLOW}[⚠]{Colors.NC} {msg}")
+    print(f"{Colors.YELLOW}[WARN]{Colors.NC} {msg}")
 
 def log_error(msg: str):
-    print(f"{Colors.RED}[✗]{Colors.NC} {msg}")
+    print(f"{Colors.RED}[ERROR]{Colors.NC} {msg}")
 
 def log_info(msg: str):
     print(f"{Colors.BLUE}[INFO]{Colors.NC} {msg}")
@@ -321,9 +321,9 @@ Co-Authored-By: Claude <noreply@anthropic.com>"""
 def main():
     """Main execution flow."""
     print("")
-    print(f"{Colors.CYAN}╔════════════════════════════════════════════════════════════════╗{Colors.NC}")
-    print(f"{Colors.CYAN}║         Barton CTB Planner - Validator Script v1.0.0          ║{Colors.NC}")
-    print(f"{Colors.CYAN}╚════════════════════════════════════════════════════════════════╝{Colors.NC}")
+    print(f"{Colors.CYAN}================================================================{Colors.NC}")
+    print(f"{Colors.CYAN}         Barton CTB Planner - Validator Script v1.0.0          {Colors.NC}")
+    print(f"{Colors.CYAN}================================================================{Colors.NC}")
     print("")
 
     # Get plan file path
@@ -355,9 +355,9 @@ def main():
 
     # Summary
     print("")
-    print(f"{Colors.GREEN}╔════════════════════════════════════════════════════════════════╗{Colors.NC}")
-    print(f"{Colors.GREEN}║                  ✅ CTB PLAN APPLIED                           ║{Colors.NC}")
-    print(f"{Colors.GREEN}╚════════════════════════════════════════════════════════════════╝{Colors.NC}")
+    print(f"{Colors.GREEN}================================================================{Colors.NC}")
+    print(f"{Colors.GREEN}                  CTB PLAN APPLIED SUCCESSFULLY                {Colors.NC}")
+    print(f"{Colors.GREEN}================================================================{Colors.NC}")
     print("")
 
     log_info("Next steps:")

@@ -1,0 +1,435 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-10-30T18:00:00Z",
+  "repository": "imo-creator",
+  "database_type": "PostgreSQL",
+  "schema_name": "public",
+  "tables": [
+    {
+      "name": "users",
+      "barton_id": "BART-SHQ-USERS-V1",
+      "description": "User accounts and authentication",
+      "enforcement_level": "STRICT",
+      "stamped_compliant": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primaryKey": true,
+          "autoIncrement": true,
+          "nullable": false,
+          "description": "Primary key identifier"
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR",
+          "length": 255,
+          "unique": true,
+          "nullable": false,
+          "description": "User email address"
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR",
+          "length": 255,
+          "nullable": false,
+          "description": "Hashed password"
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR",
+          "length": 255,
+          "nullable": true,
+          "description": "User full name"
+        },
+        {
+          "name": "role",
+          "type": "VARCHAR",
+          "length": 50,
+          "default": "user",
+          "nullable": false,
+          "description": "User role (user, admin, etc.)"
+        },
+        {
+          "name": "heir_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "HEIR tracking ID (STAMPED)"
+        },
+        {
+          "name": "process_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "Process tracking ID (STAMPED)"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Creation timestamp (STAMPED)"
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Last update timestamp (STAMPED)"
+        },
+        {
+          "name": "created_by",
+          "type": "VARCHAR",
+          "length": 100,
+          "nullable": false,
+          "description": "Creator user/system (STAMPED)"
+        },
+        {
+          "name": "orbt_layer",
+          "type": "INTEGER",
+          "default": 3,
+          "nullable": false,
+          "description": "ORBT layer (1-4) (STAMPED)"
+        },
+        {
+          "name": "blueprint_version",
+          "type": "VARCHAR",
+          "length": 20,
+          "default": "1.0",
+          "nullable": false,
+          "description": "Blueprint version (STAMPED)"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_users_email",
+          "columns": ["email"],
+          "unique": true,
+          "description": "Unique index on email"
+        },
+        {
+          "name": "idx_users_heir_id",
+          "columns": ["heir_id"],
+          "unique": true,
+          "description": "Unique index on heir_id"
+        }
+      ],
+      "constraints": [
+        {
+          "name": "users_email_unique",
+          "type": "UNIQUE",
+          "columns": ["email"]
+        },
+        {
+          "name": "users_heir_id_unique",
+          "type": "UNIQUE",
+          "columns": ["heir_id"]
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "barton_id": "BART-SHQ-PROJECTS-V1",
+      "description": "Project management and tracking",
+      "enforcement_level": "STANDARD",
+      "stamped_compliant": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primaryKey": true,
+          "autoIncrement": true,
+          "nullable": false,
+          "description": "Primary key identifier"
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "description": "Foreign key to users table",
+          "foreignKey": {
+            "references": "users(id)",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE"
+          }
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR",
+          "length": 255,
+          "nullable": false,
+          "description": "Project name"
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullable": true,
+          "description": "Project description"
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR",
+          "length": 50,
+          "default": "active",
+          "nullable": false,
+          "description": "Project status"
+        },
+        {
+          "name": "heir_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "HEIR tracking ID (STAMPED)"
+        },
+        {
+          "name": "process_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "Process tracking ID (STAMPED)"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Creation timestamp (STAMPED)"
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Last update timestamp (STAMPED)"
+        },
+        {
+          "name": "created_by",
+          "type": "VARCHAR",
+          "length": 100,
+          "nullable": false,
+          "description": "Creator user/system (STAMPED)"
+        },
+        {
+          "name": "orbt_layer",
+          "type": "INTEGER",
+          "default": 3,
+          "nullable": false,
+          "description": "ORBT layer (1-4) (STAMPED)"
+        },
+        {
+          "name": "blueprint_version",
+          "type": "VARCHAR",
+          "length": 20,
+          "default": "1.0",
+          "nullable": false,
+          "description": "Blueprint version (STAMPED)"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_projects_user_id",
+          "columns": ["user_id"],
+          "unique": false,
+          "description": "Index on user_id for foreign key lookups"
+        },
+        {
+          "name": "idx_projects_heir_id",
+          "columns": ["heir_id"],
+          "unique": true,
+          "description": "Unique index on heir_id"
+        }
+      ],
+      "constraints": [
+        {
+          "name": "fk_projects_user_id",
+          "type": "FOREIGN KEY",
+          "columns": ["user_id"],
+          "references": "users(id)",
+          "onDelete": "CASCADE",
+          "onUpdate": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "tasks",
+      "barton_id": "BART-SHQ-TASKS-V1",
+      "description": "Task management within projects",
+      "enforcement_level": "STANDARD",
+      "stamped_compliant": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primaryKey": true,
+          "autoIncrement": true,
+          "nullable": false,
+          "description": "Primary key identifier"
+        },
+        {
+          "name": "project_id",
+          "type": "INTEGER",
+          "nullable": false,
+          "description": "Foreign key to projects table",
+          "foreignKey": {
+            "references": "projects(id)",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE"
+          }
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR",
+          "length": 255,
+          "nullable": false,
+          "description": "Task title"
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullable": true,
+          "description": "Task description"
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR",
+          "length": 50,
+          "default": "todo",
+          "nullable": false,
+          "description": "Task status (todo, in_progress, done)"
+        },
+        {
+          "name": "priority",
+          "type": "INTEGER",
+          "default": 0,
+          "nullable": false,
+          "description": "Task priority (0-5)"
+        },
+        {
+          "name": "heir_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "HEIR tracking ID (STAMPED)"
+        },
+        {
+          "name": "process_id",
+          "type": "VARCHAR",
+          "length": 50,
+          "nullable": false,
+          "description": "Process tracking ID (STAMPED)"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Creation timestamp (STAMPED)"
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "nullable": false,
+          "description": "Last update timestamp (STAMPED)"
+        },
+        {
+          "name": "created_by",
+          "type": "VARCHAR",
+          "length": 100,
+          "nullable": false,
+          "description": "Creator user/system (STAMPED)"
+        },
+        {
+          "name": "orbt_layer",
+          "type": "INTEGER",
+          "default": 3,
+          "nullable": false,
+          "description": "ORBT layer (1-4) (STAMPED)"
+        },
+        {
+          "name": "blueprint_version",
+          "type": "VARCHAR",
+          "length": 20,
+          "default": "1.0",
+          "nullable": false,
+          "description": "Blueprint version (STAMPED)"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_tasks_project_id",
+          "columns": ["project_id"],
+          "unique": false,
+          "description": "Index on project_id for foreign key lookups"
+        },
+        {
+          "name": "idx_tasks_status",
+          "columns": ["status"],
+          "unique": false,
+          "description": "Index on status for filtering"
+        },
+        {
+          "name": "idx_tasks_heir_id",
+          "columns": ["heir_id"],
+          "unique": true,
+          "description": "Unique index on heir_id"
+        }
+      ],
+      "constraints": [
+        {
+          "name": "fk_tasks_project_id",
+          "type": "FOREIGN KEY",
+          "columns": ["project_id"],
+          "references": "projects(id)",
+          "onDelete": "CASCADE",
+          "onUpdate": "CASCADE"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "projects",
+      "to": "users",
+      "type": "many-to-one",
+      "foreignKey": "user_id",
+      "description": "Many projects belong to one user"
+    },
+    {
+      "from": "tasks",
+      "to": "projects",
+      "type": "many-to-one",
+      "foreignKey": "project_id",
+      "description": "Many tasks belong to one project"
+    }
+  ],
+  "metadata": {
+    "source_files": [
+      "ctb/data/neon/schemas/users.sql",
+      "ctb/data/neon/schemas/projects.sql",
+      "ctb/data/neon/schemas/tasks.sql"
+    ],
+    "migrations": [
+      "ctb/data/migrations/neon/2025-10-20_create_users_table.sql",
+      "ctb/data/migrations/neon/2025-10-20_create_projects_table.sql",
+      "ctb/data/migrations/neon/2025-10-20_create_tasks_table.sql"
+    ],
+    "linked_processes": [
+      "PRC-AUTH-LOGIN",
+      "PRC-AUTH-REGISTER",
+      "PRC-PROJECT-CREATE",
+      "PRC-TASK-CREATE"
+    ],
+    "linked_endpoints": [
+      "POST /api/auth/login",
+      "POST /api/auth/register",
+      "GET /api/projects",
+      "POST /api/projects",
+      "GET /api/tasks",
+      "POST /api/tasks"
+    ]
+  }
+}
+
+

@@ -1,0 +1,107 @@
+branches:
+- altitude: 30000
+  name: vision
+  description: Architecture, design, and high-level documentation
+  files:
+  - 30000_vision/vision.md
+  - 30000_vision/README.md
+  - 30000_vision/ENTRYPOINT.md
+  - 30000_vision/NAVIGATION_INDEX.md
+  - 30000_vision/QUICKREF.md
+  - 30000_vision/CTB_INDEX.md
+  - 30000_vision/CTB_ENFORCEMENT.md
+  - 30000_vision/CTB_IMPLEMENTATION_SUMMARY.md
+  - 30000_vision/CTB_VERIFICATION_CHECKLIST.md
+  - 30000_vision/BARTON_OUTREACH_CORE_UPDATES.md
+  - 30000_vision/CONTRIBUTING.md
+  - 30000_vision/SCAFFOLD_INSTRUCTIONS.md
+  - 30000_vision/INTEGRATION_SUMMARY_2025-10-21.md
+  - 30000_vision/IMPLEMENTATION_COMPLETE_2025-10-23.md
+  - 30000_vision/UPDATE_SUMMARY_2025-10-23.md
+  file_count: 15
+  ctb_existing:
+  - ctb/docs/CTB_PLANNER.md
+  - ctb/docs/CTB_TOOL_INTEGRATION.md
+  - ctb/docs/global-config/CTB_DOCTRINE.md
+  - ctb/docs/CLAUDE.md
+  - ctb/docs/composio/
+- altitude: 20000
+  name: category
+  description: Data models, schemas, and database definitions
+  files:
+  - 20000_category/schemas/example_chartdb_schema.json
+  - 20000_category/sql/
+  file_count: 2
+  ctb_existing:
+  - ctb/data/schemas/
+  - ctb/data/SCHEMA_REFERENCE.md
+  - ctb/data/warehouses/
+- altitude: 10000
+  name: execution
+  description: Core application logic, APIs, and utilities
+  files:
+  - 10000_execution/main.py
+  - 10000_execution/api/composio_direct.py
+  - 10000_execution/api/composio_tools.py
+  - 10000_execution/utils/heir_orbt.py
+  - 10000_execution/utils/database.py
+  - 10000_execution/scripts/
+  file_count: 6
+  ctb_existing:
+  - ctb/ai/orbt-utils/
+  - ctb/sys/
+  - ctb/meta/
+- altitude: 5000
+  name: visibility
+  description: User interfaces and presentation layer
+  files:
+  - 5000_visibility/index.html
+  - 5000_visibility/templates/
+  file_count: 2
+  ctb_existing:
+  - ctb/ui/
+stats:
+  total_files: 25
+  total_files_in_repo: 567
+  files_to_reorganize: 25
+  files_already_organized: 542
+  by_altitude:
+    '30000': 15
+    '20000': 2
+    '10000': 6
+    '5000': 2
+  total_actions: 27
+  action_types:
+    move: 22
+    create_md: 1
+    annotate: 5
+ctb_structure_note: Repository already has extensive CTB organization in ctb/ directory.
+  This plan organizes remaining root-level files into new altitude folders (30000_vision,
+  20000_category, 10000_execution, 5000_visibility) to complement existing ctb/ structure.
+deployment:
+  entry_point: 10000_execution/main.py
+  framework: FastAPI
+  deployment: Render + Vercel hybrid
+  python_version: 3.11.9
+  dependencies: requirements.txt
+  procfile: Procfile
+integrations:
+  composio_mcp:
+    tools: 1059
+    services: 24
+    port: 3001
+  databases:
+    neon: PostgreSQL
+    firebase: Firestore
+    bigquery: Analytics
+  required_tools:
+  - Grafana (04.05.01)
+  - GitHub Projects (04.05.02)
+  - GitKraken (04.05.03)
+  - Obsidian (04.05.04)
+  - Eraser.io (04.05.05)
+meta:
+  generated: '2025-11-07T12:52:45.552292'
+  ctb_version: 1.3.2
+  doctrine: Barton CTB
+  tool: apply_ctb_plan.py

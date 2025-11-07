@@ -1,0 +1,13 @@
+node_modules/
+*.vsix
+.env
+*.log
+dist/
+out/
+.vscode-test/
+coverage/
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMO Creator - Blueprint App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .button { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 5px; }
+        .button:hover { background: #0056b3; }
+        .api-test { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 10px 0; }
+        .status { padding: 5px 10px; border-radius: 3px; font-size: 12px; }
+        .status.checking { background: #fff3cd; color: #856404; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🎯 IMO Creator - Blueprint App</h1>
+    
+    <div class="card">
+        <h2>4-Page Blueprint System</h2>
+        <p>A complete planning app with SSOT manifest, flexible stages, and LLM-assisted prompt generation.</p>
+        
+        <a href="docs/blueprints/ui/overview.html" class="button">📊 Overview</a>
+        <a href="docs/blueprints/ui/input.html" class="button">📥 Input</a>
+        <a href="docs/blueprints/ui/middle.html" class="button">⚙️ Middle</a>
+        <a href="docs/blueprints/ui/output.html" class="button">📤 Output</a>
+    </div>
+
+    <div class="card">
+        <h2>LLM Endpoint Status</h2>
+        <p>Concurrent Anthropic and OpenAI support with graceful fallback.</p>
+        
+        <div class="api-test">
+            <strong>API Health Check:</strong>
+            <div id="api-status">
+                <span class="status checking">🔄 Checking API endpoints...</span>
+            </div>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <a href="/api/hello" class="button" target="_blank">Test Hello API</a>
+            <a href="/api/test" class="button" target="_blank">Test Basic API</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Setup Instructions</h2>
+        <ol>
+            <li><strong>Deploy:</strong> Works immediately without API keys</li>
+            <li><strong>Add Keys:</strong> Vercel Dashboard → Environment Variables</li>
+            <li><strong>Configure:</strong> ANTHROPIC_API_KEY, OPENAI_API_KEY</li>
+            <li><strong>Use:</strong> LLM assistance enabled automatically</li>
+        </ol>
+    </div>
+
+    <script>
+        async function checkAPIs() {
+            const statusEl = document.getElementById('api-status');
+            
+            try {
+                // Test basic API endpoint
+                const response = await fetch('/api/hello');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusEl.innerHTML = '<span class="status success">✅ API endpoints working!</span>';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.innerHTML = '<span class="status error">❌ API endpoints not responding</span>';
+                console.error('API check failed:', error);
+            }
+        }
+        
+        // Check API status on page load
+        checkAPIs();
+    </script>
+</body>
+</html>

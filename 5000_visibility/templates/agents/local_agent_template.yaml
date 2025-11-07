@@ -1,0 +1,89 @@
+meta:
+  template: true
+  last_updated: 2025-10-30
+  description: "Template for Local (Ground Crew) agents per repo (30k–10k)."
+
+agent:
+  id: "local_<type>"
+  label: "Local <Type> Agent"
+  lives_in: "<repo-name>"
+  type: [builder, validator, promoter, ui, reporter]
+  responsibilities:
+    - "Define specific responsibilities here"
+  triggers:
+    - event: "repo.push"
+  actions:
+    - run: "<action_name>"
+  calls_global_fleet:
+    - id: "global_gateway"
+      when: "cross-system data flow"
+  heir:
+    supervisor: "global_orchestrator"
+    orbt_layer: 2
+
+examples:
+  - id: local_builder
+    label: "Local Builder Agent"
+    lives_in: "imo-creator"
+    type: builder
+    responsibilities:
+      - "Builds/compiles/transforms files in repo"
+    triggers:
+      - event: "repo.push"
+      - command: "build.request"
+    actions:
+      - run: "build_project"
+      - run: "generate_artifacts"
+
+  - id: local_validator
+    label: "Local Validator Agent"
+    lives_in: "outreach-core"
+    type: validator
+    responsibilities:
+      - "Validates local schema before promotion to Neon"
+    triggers:
+      - event: "schema.changed"
+    actions:
+      - run: "validate_local_schema"
+    calls_global_fleet:
+      - id: "global_validator"
+        when: "promotion to STAMPED/SPVPET/STACKED"
+
+  - id: local_promoter
+    label: "Local Promoter Agent"
+    lives_in: "client-subhive"
+    type: promoter
+    responsibilities:
+      - "Pushes validated data/events to Gateway for system-wide processing"
+    triggers:
+      - event: "data.valid"
+    actions:
+      - run: "publish_to_gateway"
+    calls_global_fleet:
+      - id: "global_gateway"
+        when: "cross-system routing"
+
+  - id: local_ui
+    label: "Local UI Agent"
+    lives_in: "ui-repo"
+    type: ui
+    responsibilities:
+      - "Syncs UI components with backend schema (Lovable ↔ Firebase ↔ Neon)"
+    triggers:
+      - event: "schema.changed"
+    actions:
+      - run: "sync_ui_schema"
+
+  - id: local_reporter
+    label: "Local Reporter Agent"
+    lives_in: "analytics-repo"
+    type: reporter
+    responsibilities:
+      - "Generates summaries; pushes metrics to Grafana"
+    triggers:
+      - cron: "0 * * * *"
+    actions:
+      - run: "generate_summary"
+      - run: "emit_metrics"
+
+
