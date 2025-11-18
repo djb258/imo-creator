@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Repository>
+  <RemoteRepositories>
+    <Repository>
+      <Name>origin</Name>
+      <Url>https://github.com/djb258/imo-creator.git</Url>
+    </Repository>
+  </RemoteRepositories>
+  <RecentlyOpened>true</RecentlyOpened>
+  <Category>enrichment-hub</Category>
+  <Description>IMO Creator - Integrated Module Orchestrator for enrichment workflows</Description>
+</Repository>
