@@ -52,6 +52,88 @@ integrations:
     enabled: true
     factory_path: ctb/sys/github-factory/
 
+# Workbench Configuration
+workbench:
+  enabled: true
+  module_path: workbench
+  duckdb_path: workbench/workbench.duckdb
+  b2_keys_required: true
+  uses_neon: true
+  inherits_env: true
+  description: "Workbench: Backblaze B2 + DuckDB integration for enrichment, diffing, and validator deltas."
+
+  # Backblaze B2 Connection Configuration
+  backblaze_b2:
+    api_version: v2
+    api_type: native  # Uses native B2 API (not S3-compatible)
+    auth_endpoint: https://api.backblazeb2.com/b2api/v2/b2_authorize_account
+    supports_master_key: true
+    documentation_url: https://www.backblaze.com/docs/cloud-storage-create-and-manage-app-keys
+
+    # How to get B2 credentials:
+    setup_instructions: |
+      1. Log into Backblaze B2: https://secure.backblaze.com/b2_buckets.htm
+      2. Navigate to "App Keys": https://secure.backblaze.com/app_keys.htm
+      3. Create new Application Key or use existing Master Application Key
+      4. Copy the following values:
+         - keyID: Your Application Key ID (e.g., a98b56408dc7)
+         - applicationKey: Your Application Key secret (shown only once!)
+         - bucketName: Name of your B2 bucket (e.g., svg-enrichment)
+      5. Add to .env file:
+         B2_KEY_ID=<your_keyID>
+         B2_APPLICATION_KEY=<your_applicationKey>
+         B2_BUCKET=<your_bucket_name>
+      6. Run: python workbench/bootstrap.py
+
+    # Required permissions for Application Key
+    required_permissions:
+      - listBuckets
+      - listFiles
+      - readFiles
+      - writeFiles
+      - deleteFiles  # optional, for cleanup operations
+
+    # Connection test command
+    test_connection: python workbench/bootstrap.py
+
+    # Troubleshooting
+    common_issues:
+      - issue: "Authorization failed"
+        solution: "Verify keyID and applicationKey are correct. Check that key has not expired."
+      - issue: "Bucket not found"
+        solution: "Verify bucket name matches exactly (case-sensitive). Check key has access to bucket."
+      - issue: "File not found"
+        solution: "workbench.duckdb will be created if not found in bucket. This is normal for first run."
+
+  # Required Environment Variables
+  required_env_vars:
+    - B2_KEY_ID
+    - B2_APPLICATION_KEY
+    - B2_BUCKET
+    - POSTGRES_URL  # optional: only needed if using Neon integration
+    - VALIDATOR_ENDPOINT  # optional: only needed if using validator deltas
+
+  # Child Repository Inheritance
+  inheritance:
+    auto_copy_files:
+      - workbench/
+      - .env.template
+    auto_update_dependencies: true
+    required_packages:
+      - python-dotenv
+      - requests
+      - duckdb
+
+  # File Structure
+  file_structure:
+    b2_client: workbench/b2_client.py
+    load_duckdb: workbench/load_duckdb.py
+    save_duckdb: workbench/save_duckdb.py
+    neon_pull: workbench/neon_pull.py
+    run_diff: workbench/run_diff.py
+    apply_deltas: workbench/apply_deltas.py
+    bootstrap: workbench/bootstrap.py
+
 # HEIR/ORBT Configuration
 heir_orbt:
   enabled: true
