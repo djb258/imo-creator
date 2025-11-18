@@ -1,0 +1,274 @@
+# Workbench Configuration Examples
+# Reference configurations for different deployment scenarios
+
+# =============================================================================
+# EXAMPLE 1: Development Environment (Single Developer)
+# =============================================================================
+development:
+  environment: development
+
+  # Backblaze B2 Configuration
+  b2:
+    key_id: "a98b56408dc7"                                    # Master Application Key OK for dev
+    application_key: "005ebcc57e978d63d2ae82c5721366e41591ca30e2"
+    bucket: "workbench-dev"
+
+  # Optional integrations
+  neon:
+    enabled: false                                             # Not needed for local dev
+
+  validator:
+    enabled: false                                             # Not needed for local dev
+
+# =============================================================================
+# EXAMPLE 2: Staging Environment (Team Testing)
+# =============================================================================
+staging:
+  environment: staging
+
+  # Backblaze B2 Configuration
+  b2:
+    key_id: "005abc123def456ghi789jkl012"                     # Bucket-specific Application Key
+    application_key: "K005xyz...abc123"                       # Limited to staging bucket only
+    bucket: "workbench-staging"
+
+  # Neon PostgreSQL Integration
+  neon:
+    enabled: true
+    postgres_url: "postgresql://user:pass@staging-db.neon.tech/workbench"
+
+  # Validator Integration
+  validator:
+    enabled: true
+    endpoint: "https://staging-validator.yourcompany.com/api/deltas"
+
+# =============================================================================
+# EXAMPLE 3: Production Environment (Full Stack)
+# =============================================================================
+production:
+  environment: production
+
+  # Backblaze B2 Configuration
+  b2:
+    key_id: "005prod789xyz012abc345def"                      # Production-specific key
+    application_key: "K005prod...secret123"                  # Limited permissions, expires 90 days
+    bucket: "workbench-production"
+    versioning: true                                          # Enable file versioning for safety
+
+  # Neon PostgreSQL Integration
+  neon:
+    enabled: true
+    postgres_url: "postgresql://produser:securepass@prod-db.neon.tech/workbench"
+    connection_pool: 10
+
+  # Validator Integration
+  validator:
+    enabled: true
+    endpoint: "https://validator.yourcompany.com/api/deltas"
+    retry_attempts: 3
+    timeout: 30
+
+# =============================================================================
+# EXAMPLE 4: Multi-Tenant Setup (Shared Workbench, Separate Buckets)
+# =============================================================================
+multi_tenant:
+  # Tenant A
+  tenant_a:
+    b2:
+      key_id: "005tenanta123..."
+      application_key: "K005tenanta..."
+      bucket: "workbench-tenant-a"
+
+  # Tenant B
+  tenant_b:
+    b2:
+      key_id: "005tenantb456..."
+      application_key: "K005tenantb..."
+      bucket: "workbench-tenant-b"
+
+# =============================================================================
+# EXAMPLE 5: CI/CD Pipeline (Automated Testing)
+# =============================================================================
+ci_cd:
+  environment: ci
+
+  # Backblaze B2 Configuration
+  b2:
+    key_id: "${CI_B2_KEY_ID}"                                # From CI environment variables
+    application_key: "${CI_B2_APPLICATION_KEY}"
+    bucket: "workbench-ci-${CI_COMMIT_SHA}"                  # Unique bucket per commit
+    auto_cleanup: true                                        # Delete after tests pass
+
+  # Testing configuration
+  testing:
+    create_test_data: true
+    cleanup_after_tests: true
+
+# =============================================================================
+# EXAMPLE 6: Child Repository Inheritance
+# =============================================================================
+child_repository:
+  # Inherits from parent imo-creator repository
+  inherit_from: "imo-creator/global-config.yaml"
+
+  # Override specific values
+  b2:
+    key_id: "005child789..."                                 # Child-specific key
+    application_key: "K005child..."
+    bucket: "workbench-child-repo"                           # Child-specific bucket
+
+  # Inherit everything else from parent
+  use_parent_config:
+    - neon_settings
+    - validator_settings
+    - file_structure
+    - api_endpoints
+
+# =============================================================================
+# EXAMPLE 7: Air-Gapped/Offline Environment
+# =============================================================================
+offline:
+  environment: offline
+
+  # No B2 connection
+  b2:
+    enabled: false
+
+  # Use local file storage instead
+  storage:
+    type: local
+    path: "/data/workbench/"
+
+  # DuckDB configuration
+  duckdb:
+    local_only: true
+    path: "/data/workbench/workbench.duckdb"
+
+# =============================================================================
+# EXAMPLE 8: High-Security Environment (Encrypted + Versioned)
+# =============================================================================
+high_security:
+  environment: production
+  security_level: high
+
+  # Backblaze B2 Configuration
+  b2:
+    key_id: "005secure123..."
+    application_key: "K005secure..."                         # Stored in secrets manager
+    bucket: "workbench-secure"
+    encryption:
+      enabled: true
+      type: "SSE-B2"                                         # Server-side encryption
+    versioning:
+      enabled: true
+      keep_versions: 30                                      # Keep 30 days of versions
+    lifecycle:
+      delete_old_versions_after_days: 90
+
+  # Additional security
+  access_control:
+    ip_whitelist:
+      - "203.0.113.0/24"                                     # Only from specific IPs
+    require_mfa: true
+    key_rotation_days: 30                                    # Rotate keys monthly
+
+# =============================================================================
+# EXAMPLE 9: Development Team (Shared Bucket, Multiple Developers)
+# =============================================================================
+team_development:
+  environment: development
+  team: engineering
+
+  # Shared B2 bucket for team collaboration
+  b2:
+    key_id: "005team123..."                                  # Team-wide Application Key
+    application_key: "K005team..."
+    bucket: "workbench-team-dev"
+
+  # Developer-specific prefixes
+  developers:
+    alice:
+      prefix: "alice/"                                       # Alice's files: alice/workbench.duckdb
+    bob:
+      prefix: "bob/"                                         # Bob's files: bob/workbench.duckdb
+    charlie:
+      prefix: "charlie/"                                     # Charlie's files: charlie/workbench.duckdb
+
+# =============================================================================
+# EXAMPLE 10: Read-Only Analytics Environment
+# =============================================================================
+analytics:
+  environment: analytics
+
+  # Read-only B2 access
+  b2:
+    key_id: "005analytics123..."
+    application_key: "K005analytics..."                      # Read-only permissions
+    bucket: "workbench-production"                           # Read from production bucket
+    permissions:
+      - listBuckets
+      - listFiles
+      - readFiles
+      # NO writeFiles or deleteFiles
+
+  # DuckDB read-only mode
+  duckdb:
+    read_only: true
+
+  # No validator (read-only)
+  validator:
+    enabled: false
+
+# =============================================================================
+# Configuration Schema Reference
+# =============================================================================
+schema_reference:
+  # Required fields
+  required:
+    - b2.key_id
+    - b2.application_key
+    - b2.bucket
+
+  # Optional fields
+  optional:
+    - neon.postgres_url
+    - validator.endpoint
+    - storage.encryption
+    - access_control.ip_whitelist
+
+  # Environment variable mapping
+  env_vars:
+    B2_KEY_ID: "b2.key_id"
+    B2_APPLICATION_KEY: "b2.application_key"
+    B2_BUCKET: "b2.bucket"
+    POSTGRES_URL: "neon.postgres_url"
+    VALIDATOR_ENDPOINT: "validator.endpoint"
+
+# =============================================================================
+# Best Practices Summary
+# =============================================================================
+best_practices:
+  security:
+    - "Use bucket-specific Application Keys (not Master Key) in production"
+    - "Set expiration dates on Application Keys (30-90 days)"
+    - "Store credentials in .env file (never commit to source control)"
+    - "Rotate keys regularly"
+    - "Use separate keys for different environments"
+
+  performance:
+    - "Use connection pooling for Neon PostgreSQL"
+    - "Enable file versioning for production buckets"
+    - "Set lifecycle rules to clean up old versions"
+    - "Use local caching for frequently accessed files"
+
+  cost_optimization:
+    - "Delete old file versions after 90 days"
+    - "Use single bucket with prefixes for small teams"
+    - "Compress large DuckDB files before upload"
+    - "Monitor storage usage monthly"
+
+  reliability:
+    - "Enable B2 file versioning for rollback capability"
+    - "Test connection with bootstrap.py before deployment"
+    - "Set up monitoring for B2 API errors"
+    - "Have backup keys ready in case of key expiration"

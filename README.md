@@ -171,41 +171,51 @@ The Workbench system is inherited by all child repositories to ensure:
 
 ### Setup Instructions
 
+**📘 For detailed Backblaze B2 setup, see [BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md)**
+
+#### Quick Start
+
 1. **Copy environment template**:
    ```bash
    cp .env.template .env
    ```
 
-2. **Configure environment variables** in `.env`:
-   ```bash
-   # Backblaze B2 Configuration
-   B2_ENDPOINT=https://s3.us-west-004.backblazeb2.com
-   B2_KEY_ID=your_key_id_here
-   B2_APPLICATION_KEY=your_application_key_here
-   B2_BUCKET=your_bucket_name
+2. **Get Backblaze B2 credentials**:
+   - Log into Backblaze B2: https://secure.backblaze.com/app_keys.htm
+   - Create or use existing Application Key
+   - Copy `keyID` and `applicationKey`
 
-   # Neon PostgreSQL
+3. **Configure environment variables** in `.env`:
+   ```bash
+   # Backblaze B2 Configuration (REQUIRED)
+   B2_KEY_ID=a98b56408dc7                                    # Your Application Key ID
+   B2_APPLICATION_KEY=005ebcc57e978d63d2ae82c5721366e41591ca30e2  # Your Application Key
+   B2_BUCKET=svg-enrichment                                  # Your bucket name
+
+   # Neon PostgreSQL (OPTIONAL - only if using Neon integration)
    POSTGRES_URL=postgresql://user:pass@host/db
 
-   # Validator Endpoint
+   # Validator Endpoint (OPTIONAL - only if using validator deltas)
    VALIDATOR_ENDPOINT=https://your-validator.com/api/deltas
    ```
 
-3. **Install dependencies**:
+4. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run bootstrap validation**:
+5. **Run bootstrap validation**:
    ```bash
    python workbench/bootstrap.py
    ```
 
    This will:
    - Validate Backblaze B2 connectivity
-   - Download `workbench.duckdb` from B2
+   - Download `workbench.duckdb` from B2 (or create new)
    - Test DuckDB connection
    - Confirm all modules are working
+
+   **Expected output**: `Workbench ready - All systems operational`
 
 ### Module Overview
 
@@ -264,13 +274,49 @@ This ensures every child repo inherits the Workbench module and knows where to f
 
 ### Troubleshooting
 
-**Issue**: `boto3` connection errors
-**Solution**: Verify `B2_ENDPOINT` matches your Backblaze region (e.g., `s3.us-west-004.backblazeb2.com`)
+**Issue**: `Authorization failed`
+**Solution**:
+- Verify `B2_KEY_ID` and `B2_APPLICATION_KEY` are correct
+- Check Application Key has not expired
+- Ensure key has access to the specified bucket
+
+**Issue**: `Bucket not found`
+**Solution**:
+- Verify `B2_BUCKET` name matches exactly (case-sensitive)
+- Check Application Key has access to this bucket
+- Confirm bucket exists in B2 console
 
 **Issue**: DuckDB file not found
-**Solution**: Run `bootstrap.py` to download from B2, or it will create a new local file
+**Solution**: This is normal for first run! The system will create a new DuckDB file automatically
 
 **Issue**: PostgreSQL connection timeout
-**Solution**: Check `POSTGRES_URL` format and Neon database status
+**Solution**:
+- Check `POSTGRES_URL` format: `postgresql://user:pass@host/db`
+- Verify Neon database is running
+- Check firewall/network settings
 
-For detailed logs, check the bootstrap output when running `python workbench/bootstrap.py`.
+**Issue**: Missing environment variables
+**Solution**:
+- Ensure `.env` file exists
+- Verify all required variables are set (no extra spaces)
+- Restart your terminal/IDE to reload environment
+
+**For complete troubleshooting guide**: See [BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md#troubleshooting)
+
+### Quick Reference
+
+| Resource | Location |
+|----------|----------|
+| **B2 Setup Guide** | [docs/BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md) |
+| **Global Config** | `imo-creator/global-config.yaml` |
+| **Environment Template** | `.env.template` |
+| **Bootstrap Test** | `python workbench/bootstrap.py` |
+| **B2 Console** | https://secure.backblaze.com/b2_buckets.htm |
+| **App Keys** | https://secure.backblaze.com/app_keys.htm |
+
+### API Information
+
+- **B2 API Type**: Native B2 API v2 (not S3-compatible)
+- **Auth Endpoint**: `https://api.backblazeb2.com/b2api/v2/b2_authorize_account`
+- **Supports**: Master Application Keys and bucket-specific keys
+- **Dependencies**: `python-dotenv`, `requests`, `duckdb`
