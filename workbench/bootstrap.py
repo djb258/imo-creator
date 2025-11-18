@@ -48,12 +48,12 @@ def main():
     print("\n[2/4] Validating Backblaze B2 connectivity...")
     try:
         from workbench.b2_client import get_b2_client
-        s3_client, bucket = get_b2_client()
+        b2_client = get_b2_client()
 
-        # Attempt to list objects in the bucket
-        response = s3_client.list_objects_v2(Bucket=bucket, MaxKeys=1)
-        print(f"Successfully connected to Backblaze B2 bucket: {bucket}")
-        print(f"Bucket contains {response.get('KeyCount', 0)} objects (showing max 1)")
+        # Attempt to list files in the bucket
+        files = b2_client.list_files(max_files=5)
+        print(f"Successfully connected to Backblaze B2 bucket: {b2_client.bucket_name}")
+        print(f"Bucket contains {len(files)} files (showing max 5)")
 
     except Exception as e:
         print(f"ERROR: Failed to connect to Backblaze B2: {e}")

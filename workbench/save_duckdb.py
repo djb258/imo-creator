@@ -20,11 +20,12 @@ def save_workbench(local_path):
     if not os.path.exists(local_path):
         raise FileNotFoundError(f"DuckDB file not found at {local_path}")
 
-    s3_client, bucket = get_b2_client()
+    # Get B2 client
+    b2_client = get_b2_client()
 
     try:
         # Upload the DuckDB file to B2
-        s3_client.upload_file(local_path, bucket, 'workbench.duckdb')
+        b2_client.upload_file(local_path, 'workbench.duckdb')
         print(f"Successfully uploaded {local_path} to Backblaze B2")
         return True
     except Exception as e:
