@@ -1,0 +1,215 @@
+{
+  "_docstring": {
+    "description": "Agent configuration for IMO-Creator",
+    "version": "1.0.0",
+    "last_updated": "2025-11-25",
+    "rules": [
+      "One agent per major IMO phase",
+      "Each agent maps to a CTB layer",
+      "Kill switch behavior defined for all agents",
+      "Observability config linked for telemetry"
+    ]
+  },
+  "agents": [
+    {
+      "id": "input-validator",
+      "name": "Input Validator Agent",
+      "description": "Validates incoming requests, schemas, and authentication",
+      "imo_phase": "INPUT",
+      "ctb_layer": "system",
+      "responsibilities": [
+        "Schema validation (JSON Schema / Pydantic)",
+        "HEIR ID format verification",
+        "Auth token validation",
+        "Rate limit enforcement",
+        "Request sanitization"
+      ],
+      "tools": [
+        "heir.check",
+        "intake.mapping.validate"
+      ],
+      "kill_switch": {
+        "on_failure": "error_response",
+        "fallback": null,
+        "retry_count": 0,
+        "dlq": false
+      },
+      "observability": {
+        "events": ["input.received", "input.validated", "input.rejected"],
+        "metrics": ["input_count", "validation_errors", "auth_failures"]
+      }
+    },
+    {
+      "id": "router",
+      "name": "Composio Router Agent",
+      "description": "Routes requests through Composio Hub or fallback spokes",
+      "imo_phase": "MIDDLE",
+      "ctb_layer": "ai",
+      "responsibilities": [
+        "MCP protocol routing",
+        "Fallback spoke selection",
+        "Service health monitoring",
+        "Request queuing"
+      ],
+      "tools": [
+        "composio.route",
+        "sidecar.event"
+      ],
+      "kill_switch": {
+        "on_failure": "fallback_spoke",
+        "fallback": ["n8n", "make", "zapier"],
+        "retry_count": 3,
+        "dlq": false
+      },
+      "observability": {
+        "events": ["route.started", "route.completed", "route.fallback"],
+        "metrics": ["route_latency", "fallback_rate", "spoke_health"]
+      }
+    },
+    {
+      "id": "orchestrator",
+      "name": "Workflow Orchestrator Agent",
+      "description": "Executes multi-step workflows and manages state",
+      "imo_phase": "MIDDLE",
+      "ctb_layer": "app",
+      "responsibilities": [
+        "Workflow step execution",
+        "State management",
+        "Rollback on failure",
+        "Progress tracking"
+      ],
+      "tools": [
+        "heir.check",
+        "sidecar.event",
+        "intake.mapping.validate"
+      ],
+      "kill_switch": {
+        "on_failure": "rollback",
+        "fallback": null,
+        "retry_count": 0,
+        "dlq": false
+      },
+      "observability": {
+        "events": ["workflow.started", "workflow.step", "workflow.completed", "workflow.rollback"],
+        "metrics": ["workflow_duration", "step_count", "rollback_count"]
+      }
+    },
+    {
+      "id": "llm-dispatcher",
+      "name": "LLM Dispatcher Agent",
+      "description": "Routes LLM calls to appropriate providers",
+      "imo_phase": "MIDDLE",
+      "ctb_layer": "ai",
+      "responsibilities": [
+        "Provider selection (OpenAI/Anthropic)",
+        "Context assembly",
+        "Token management",
+        "Response parsing"
+      ],
+      "tools": [
+        "sidecar.event"
+      ],
+      "kill_switch": {
+        "on_failure": "fallback_provider",
+        "fallback": ["openai", "anthropic"],
+        "retry_count": 3,
+        "dlq": false
+      },
+      "observability": {
+        "events": ["llm.request", "llm.response", "llm.error"],
+        "metrics": ["llm_latency", "token_count", "provider_usage"]
+      }
+    },
+    {
+      "id": "data-writer",
+      "name": "Data Writer Agent",
+      "description": "Handles all database writes and external API calls",
+      "imo_phase": "OUTPUT",
+      "ctb_layer": "data",
+      "responsibilities": [
+        "Database transactions",
+        "B2 uploads",
+        "External API calls",
+        "Write confirmation"
+      ],
+      "tools": [
+        "neon.query",
+        "firebase.write",
+        "sidecar.event"
+      ],
+      "kill_switch": {
+        "on_failure": "retry_then_dlq",
+        "fallback": null,
+        "retry_count": 3,
+        "dlq": true
+      },
+      "observability": {
+        "events": ["output.write", "output.confirmed", "output.dlq"],
+        "metrics": ["write_latency", "write_errors", "dlq_depth"]
+      }
+    },
+    {
+      "id": "artifact-generator",
+      "name": "Artifact Generator Agent",
+      "description": "Generates diagrams, indexes, and documentation",
+      "imo_phase": "OUTPUT",
+      "ctb_layer": "app",
+      "responsibilities": [
+        "Mermaid diagram generation",
+        "SVG rendering",
+        "Search index creation",
+        "Summary generation"
+      ],
+      "tools": [
+        "sidecar.event"
+      ],
+      "kill_switch": {
+        "on_failure": "partial_output",
+        "fallback": null,
+        "retry_count": 1,
+        "dlq": false
+      },
+      "observability": {
+        "events": ["artifact.started", "artifact.generated", "artifact.error"],
+        "metrics": ["artifact_count", "generation_time", "render_errors"]
+      }
+    }
+  ],
+  "subagents": {
+    "registry_path": "garage-mcp/docs/subagents.registry.json",
+    "available": [
+      {
+        "id": "database-specialist",
+        "ctb_layer": "data",
+        "tools": ["neon.query", "firebase.write"]
+      },
+      {
+        "id": "devops-engineer",
+        "ctb_layer": "system",
+        "tools": ["deploy", "container.build"]
+      },
+      {
+        "id": "frontend-architect",
+        "ctb_layer": "ui",
+        "tools": ["scaffold", "component.gen"]
+      },
+      {
+        "id": "security-auditor",
+        "ctb_layer": "system",
+        "tools": ["heir.check", "audit"]
+      }
+    ]
+  },
+  "observability_config": {
+    "sidecar_url": "${IMOCREATOR_SIDECAR_URL}",
+    "event_format": "json",
+    "correlation_id_header": "x-correlation-id",
+    "heir_events": [
+      "app.start",
+      "blueprint.validated",
+      "action.invoked",
+      "output.confirmed",
+      "output.dlq.write"
+    ]
+  }
+}

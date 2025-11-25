@@ -1,0 +1,53 @@
+#!/bin/bash
+# post-merge hook - Auto-apply doctrine updates when global_config.yaml changes
+# Install: cp .githooks/post-merge .git/hooks/post-merge && chmod +x .git/hooks/post-merge
+
+# Check if global_config.yaml was changed in this merge
+CHANGED_FILES=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)
+
+if echo "$CHANGED_FILES" | grep -q "config/global_config.yaml"; then
+    echo ""
+    echo "=========================================="
+    echo "  Doctrine Update Detected"
+    echo "=========================================="
+    echo ""
+    echo "global_config.yaml was updated."
+    echo "Running doctrine bootstrap to apply changes..."
+    echo ""
+
+    # Check if Python is available
+    if command -v python3 &> /dev/null; then
+        PYTHON=python3
+    elif command -v python &> /dev/null; then
+        PYTHON=python
+    else
+        echo "ERROR: Python not found. Run manually:"
+        echo "  python scripts/apply-doctrine.py"
+        exit 0  # Don't block the merge
+    fi
+
+    # Run the bootstrap script
+    $PYTHON scripts/apply-doctrine.py
+
+    echo ""
+    echo "Doctrine update complete."
+    echo "Review changes above and commit any new files if needed."
+fi
+
+# Also check for heir.doctrine.yaml changes
+if echo "$CHANGED_FILES" | grep -q "heir.doctrine.yaml"; then
+    echo ""
+    echo "[INFO] heir.doctrine.yaml was updated - HEIR rules may have changed"
+fi
+
+# Also check for hook changes
+if echo "$CHANGED_FILES" | grep -q ".githooks/"; then
+    echo ""
+    echo "[INFO] Git hooks were updated - reinstalling..."
+    cp .githooks/pre-commit .git/hooks/pre-commit 2>/dev/null && chmod +x .git/hooks/pre-commit
+    cp .githooks/commit-msg .git/hooks/commit-msg 2>/dev/null && chmod +x .git/hooks/commit-msg
+    cp .githooks/post-merge .git/hooks/post-merge 2>/dev/null && chmod +x .git/hooks/post-merge
+    echo "[OK] Hooks reinstalled"
+fi
+
+exit 0

@@ -14,7 +14,11 @@
       "Bash(git commit:*)",
       "WebFetch(domain:composio-imo-creator6.vercel.app)",
       "Bash(find:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(for f in docs/00-toc.md docs/10-imo.md docs/20-ctb-*.md docs/altitude/*.md)",
+      "Bash(do head -1 $f)",
+      "Bash(echo:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": [],

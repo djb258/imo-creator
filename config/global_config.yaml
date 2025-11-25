@@ -1,0 +1,860 @@
+# =============================================================================
+# BARTON DOCTRINE MASTER TEMPLATE - GLOBAL CONFIGURATION
+# =============================================================================
+# Version: 1.0.0
+# Template: barton-doctrine-master
+# Mode: Solo Dev Operation (no team workflows, no approval chains)
+#
+# This file is the source of truth for doctrine structure, tool assignments,
+# and workflow gates. All child repos inherit from this configuration.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# SECTION 1: DOCTRINE METADATA
+# -----------------------------------------------------------------------------
+# Core identity of this doctrine template and the workflow it enforces
+doctrine:
+  version: "1.0.0"
+  template_name: "barton-doctrine-master"
+  schema_version: "HEIR/1.0"
+  last_updated: "2025-11-25"
+
+  # Canonical workflow order - this is the law
+  workflow:
+    sequence:
+      - brainstorm        # Ideation and requirements gathering
+      - linear            # Task creation with IMO/CTB/Altitude fields
+      - replit            # UI and I/O layer implementation
+      - claude_code       # Backend logic, processing, AI agents
+      - eraser            # Architecture diagrams and visualization
+      - obsidian          # Documentation and knowledge sync
+
+    description: "brainstorm → linear → replit(I/O) → claude-code(middle) → eraser → obsidian"
+
+  # Solo dev mode - no team overhead
+  operation_mode: "solo"
+  requires_approval: false
+  team_workflows: false
+
+# -----------------------------------------------------------------------------
+# SECTION 2: CTB (CODE-TEST-BOUNDARY) LAYERS
+# -----------------------------------------------------------------------------
+# Defines the five canonical layers and ownership rules
+ctb:
+  layers:
+    - system    # Infrastructure, config, auth, telemetry, DLQ
+    - data      # Persistence, schemas, clients, transformations
+    - app       # Business logic, workflows, orchestration
+    - ai        # LLM providers, prompts, MCP, subagents
+    - ui        # Web dashboard, CLI, generated docs
+
+  # Tool ownership mapping - who touches what
+  ownership:
+    replit:
+      primary: [ui]
+      partial: [system]  # Only env/bootstrap portions
+      forbidden: [data, app, ai]
+
+    claude_code:
+      primary: [data, app, ai]
+      partial: [system]  # Backend system concerns
+      forbidden: [ui]    # No UI work in Claude Code
+
+  # Layer structure requirements
+  paths:
+    source: "src/{layer}/"
+    tests: "tests/{layer}/"
+    docs: "docs/20-ctb-{layer}.md"
+
+  # Enforcement rules
+  rules:
+    files_must_stay_in_layer: true       # No cross-layer file placement
+    no_misc_folders: true                 # No /utils, /helpers, /common dumping grounds
+    mirror_tests: true                    # Every src/{layer}/ must have tests/{layer}/
+    init_files_required: true             # Every layer needs __init__.py
+    layer_docs_required: true             # Every layer needs 20-ctb-{layer}.md
+
+# -----------------------------------------------------------------------------
+# SECTION 3: IMO (INPUT-MIDDLE-OUTPUT) STRUCTURE
+# -----------------------------------------------------------------------------
+# Defines the three canonical phases and their failure modes
+imo:
+  phases:
+    - input     # Data ingestion, validation, auth
+    - middle    # Processing, transformation, business logic
+    - output    # Persistence, responses, notifications
+
+  # Tool-to-phase mapping
+  ownership:
+    replit:
+      primary_phases: [input, output]
+      description: "Handles user-facing I/O - forms, API endpoints, responses"
+
+    claude_code:
+      primary_phases: [middle]
+      description: "Handles all processing - validation, transformation, AI"
+
+  # Kill switch definitions - what happens on failure
+  kill_switches:
+    input:
+      strategy: "error_response"
+      fallback: null                      # Stateless - caller retries
+      dlq: false
+      description: "Return 4xx error, log to sidecar, no retry"
+
+    middle:
+      strategy: "rollback_and_alert"
+      fallback: "fallback_spokes"         # n8n → Make → Zapier
+      dlq: false
+      description: "Rollback partial state, try fallback, alert on exhaustion"
+
+    output:
+      strategy: "retry_queue"
+      fallback: null
+      dlq: true                           # Write to DLQ after retries exhausted
+      retry_count: 3
+      retry_backoff: "exponential"
+      description: "Retry 3x with backoff, then DLQ + alert"
+
+  # Gate enforcement
+  gates:
+    must_define_before_ctb: true          # IMO doc must exist before any CTB work
+    imo_doc_path: "docs/10-imo.md"
+    requires_approval: true               # Dev must approve IMO before proceeding
+
+# -----------------------------------------------------------------------------
+# SECTION 4: ALTITUDE LEVELS
+# -----------------------------------------------------------------------------
+# Strategic context layers from 40k (vision) to 5k (operations)
+altitude:
+  levels:
+    - id: "40k-vision"
+      name: "Vision"
+      description: "Strategic why - what does this exist to do?"
+      audience: ["stakeholders", "new_team_members"]
+
+    - id: "30k-category"
+      name: "Category"
+      description: "Architectural role - what category/type is this?"
+      audience: ["architects", "senior_engineers"]
+
+    - id: "20k-logic"
+      name: "Logic"
+      description: "Functional how - how does it work conceptually?"
+      audience: ["developers", "contributors"]
+
+    - id: "10k-ui"
+      name: "UI/UX"
+      description: "Interface layer - what does the user interact with?"
+      audience: ["end_users", "product_designers"]
+
+    - id: "5k-ops"
+      name: "Operations"
+      description: "Deployment and runtime - how does it run in production?"
+      audience: ["devops", "sre", "on_call"]
+
+  # Storage and sync
+  storage:
+    path: "docs/altitude/"
+    file_pattern: "{level_id}.md"         # e.g., 40k-vision.md
+
+  sync:
+    obsidian:
+      enabled: true
+      vault_path: "IMO-Creator/Altitude"
+      auto_sync: true
+
+  # Gate enforcement
+  gates:
+    cannot_build_before_imo: true
+    cannot_build_before_ctb: true
+
+# -----------------------------------------------------------------------------
+# SECTION 5: BRANCHING MODEL
+# -----------------------------------------------------------------------------
+# Git branch naming conventions tied to CTB layers
+branching:
+  format: "ctb-{layer}/{task-id}"
+
+  examples:
+    - "ctb-ui/IMO-001"
+    - "ctb-app/IMO-042"
+    - "ctb-ai/IMO-015"
+    - "ctb-data/IMO-103"
+    - "ctb-system/IMO-077"
+
+  rules:
+    prefix_must_match_layer: true         # Branch prefix must be valid CTB layer
+    must_have_linear_task: true           # Task ID must exist in Linear
+    no_random_names: true                 # No feature/fix/hotfix random naming
+
+  validation:
+    pattern: "^ctb-(system|data|app|ai|ui)/[A-Z]+-[0-9]+$"
+    error_message: "Branch must match pattern: ctb-{layer}/{TASK-ID}"
+
+  # Special branches exempt from rules
+  protected:
+    - main
+    - master
+    - develop
+
+# -----------------------------------------------------------------------------
+# SECTION 6: LINEAR INTEGRATION
+# -----------------------------------------------------------------------------
+# Task management configuration via Composio integration
+linear:
+  # Task sourcing
+  task_source: "brainstorming_sessions"
+  project_prefix: "IMO"
+
+  # Required custom fields for every task
+  required_fields:
+    - name: "imo_phase"
+      type: "select"
+      options: ["INPUT", "MIDDLE", "OUTPUT"]
+      required: true
+
+    - name: "ctb_layer"
+      type: "select"
+      options: ["system", "data", "app", "ai", "ui"]
+      required: true
+
+    - name: "altitude_level"
+      type: "select"
+      options: ["40k-vision", "30k-category", "20k-logic", "10k-ui", "5k-ops"]
+      required: false  # Not every task needs altitude context
+
+    - name: "branch_name"
+      type: "text"
+      auto_generated: true
+      pattern: "ctb-{ctb_layer}/{task_id}"
+
+  # Automation
+  branch_auto_generation: true
+  blocks_work_without_fields: true        # Can't start work until fields filled
+
+  # Labels (auto-applied based on IMO phase)
+  labels:
+    input:
+      name: "doctrine:input"
+      color: "#3B82F6"                    # Blue
+    middle:
+      name: "doctrine:middle"
+      color: "#F59E0B"                    # Amber
+    output:
+      name: "doctrine:output"
+      color: "#10B981"                    # Green
+
+  # Template reference
+  task_template: "config/linear-task-template.json"
+
+# -----------------------------------------------------------------------------
+# SECTION 7: TOOL ASSIGNMENTS
+# -----------------------------------------------------------------------------
+# Defines which tools own which parts of the doctrine
+tools:
+  replit:
+    purpose: "UI development and I/O layer implementation"
+    url: "https://replit.com"
+
+    ownership:
+      ctb_layers: [ui]
+      ctb_layers_partial: [system]        # Only env/bootstrap
+      imo_phases: [input, output]
+
+    responsibilities:
+      - "Frontend components and pages"
+      - "Form handling and validation UI"
+      - "API endpoint definitions (routing)"
+      - "Environment bootstrapping"
+      - "User-facing error displays"
+
+    forbidden:
+      - "Backend processing logic"
+      - "Database operations"
+      - "AI/LLM integrations"
+      - "Business rule implementation"
+
+  claude_code:
+    purpose: "Backend logic, processing, AI agents"
+
+    ownership:
+      ctb_layers: [data, app, ai]
+      ctb_layers_partial: [system]        # Backend system concerns
+      imo_phases: [middle]
+
+    responsibilities:
+      - "Data transformation and validation"
+      - "Business logic implementation"
+      - "Database client operations"
+      - "AI/LLM provider integrations"
+      - "MCP server and tools"
+      - "Workflow orchestration"
+      - "Kill switch implementations"
+
+    forbidden:
+      - "UI components"
+      - "Frontend styling"
+      - "User-facing form handling"
+
+  eraser_io:
+    purpose: "System diagrams and architecture visualization"
+    url: "https://eraser.io"
+
+    diagram_types:
+      - type: "imo_flow"
+        description: "Input → Middle → Output data flow diagrams"
+        source: "docs/10-imo.md"
+
+      - type: "ctb_structure"
+        description: "CTB layer architecture and dependencies"
+        source: "docs/20-ctb-*.md"
+
+      - type: "altitude_context"
+        description: "Strategic context from 40k to 5k"
+        source: "docs/altitude/"
+
+      - type: "sequence"
+        description: "Request/response sequence diagrams"
+        source: "docs/imo_architecture.md"
+
+    sync:
+      source_path: "docs/"
+      export_path: ".github/generated/diagrams/"
+      formats: [svg, mermaid, plantuml]
+
+  obsidian:
+    purpose: "Knowledge base and documentation"
+
+    vault:
+      name: "IMO-Creator"
+      path: "docs/"
+
+    sync:
+      auto_sync: true
+      watch_paths:
+        - "docs/*.md"
+        - "docs/altitude/*.md"
+        - "docs/blueprints/"
+
+    structure:
+      - folder: "IMO"
+        source: "docs/10-imo.md"
+      - folder: "CTB"
+        source: "docs/20-ctb-*.md"
+      - folder: "Altitude"
+        source: "docs/altitude/"
+      - folder: "Tasks"
+        source: "linear_sync"             # Synced from Linear
+
+# -----------------------------------------------------------------------------
+# SECTION 8: OBSERVABILITY
+# -----------------------------------------------------------------------------
+# Logging, metrics, and alerting configuration
+observability:
+  # Primary destination
+  destination: "axiom"
+
+  # Per-layer logging configs
+  layer_configs:
+    path_pattern: "config/observability/ctb-{layer}.logging.yaml"
+    layers:
+      system:
+        log_level: "info"
+        events: ["auth", "config", "health", "dlq"]
+      data:
+        log_level: "info"
+        events: ["query", "write", "transform", "validation"]
+      app:
+        log_level: "info"
+        events: ["workflow", "service", "route"]
+      ai:
+        log_level: "debug"                # More verbose for LLM debugging
+        events: ["llm_request", "llm_response", "mcp_call", "subagent"]
+      ui:
+        log_level: "warn"
+        events: ["render_error", "form_submit", "navigation"]
+
+  # IMO phase tracking
+  imo_tracking:
+    enabled: true
+    correlation_id_header: "x-correlation-id"
+    events:
+      input: ["input.received", "input.validated", "input.rejected"]
+      middle: ["process.started", "process.step", "process.completed", "process.fallback"]
+      output: ["output.write", "output.confirmed", "output.dlq"]
+
+  # Kill switch alerting
+  alerts:
+    enabled: true
+    channels:
+      - type: "email"
+        on_events: ["output.dlq", "process.fallback_exhausted"]
+      - type: "sidecar"
+        on_events: ["*"]                  # All events to sidecar
+
+  # HEIR compliance events (mandatory)
+  heir_events:
+    - "app.start"
+    - "blueprint.validated"
+    - "action.invoked"
+    - "output.confirmed"
+    - "output.dlq.write"
+
+# -----------------------------------------------------------------------------
+# SECTION 9: ENFORCEMENT
+# -----------------------------------------------------------------------------
+# Git hooks, audit scripts, and CI checks for solo dev
+enforcement:
+  # Git hooks (primary enforcement mechanism)
+  git_hooks:
+    pre_commit:
+      enabled: true
+      path: ".githooks/pre-commit"
+      checks:
+        - name: "validate_branch_name"
+          description: "Branch must match ctb-{layer}/{task-id} pattern"
+          blocking: true
+
+        - name: "check_ctb_placement"
+          description: "Files must be in correct CTB layer"
+          blocking: true
+
+        - name: "verify_linear_task"
+          description: "Task ID in branch must exist in Linear"
+          blocking: false               # Warning only - Linear might be offline
+
+        - name: "check_imo_exists"
+          description: "docs/10-imo.md must exist before any code commits"
+          blocking: true
+
+    commit_msg:
+      enabled: true
+      path: ".githooks/commit-msg"
+      format_suggestion: "[{ctb_layer}] {description}"
+
+  # Audit scripts (scheduled checks)
+  audit:
+    weekly_cron:
+      script: "scripts/audit-drift.sh"
+      schedule: "0 2 * * 0"              # Sunday 2am
+      output: "audit_results/"
+
+    checks:
+      - name: "orphan_branches"
+        description: "Branches without Linear task references"
+
+      - name: "orphan_files"
+        description: "Files outside CTB layer structure"
+
+      - name: "missing_docs"
+        description: "CTB layers without corresponding docs"
+
+      - name: "stale_imo"
+        description: "IMO doc not updated in 90+ days"
+
+      - name: "test_coverage"
+        description: "Source files without corresponding tests"
+
+  # CI pipeline (optional - hooks cover most)
+  ci:
+    enabled: true                        # Set to false if hooks are sufficient
+
+    checks:
+      - name: "validate_tests_mirror_src"
+        description: "Every src/{layer}/ has tests/{layer}/"
+        stage: "build"
+
+      - name: "check_imo_exists_before_deploy"
+        description: "Block deploy if IMO doc missing or unapproved"
+        stage: "deploy"
+
+      - name: "heir_compliance"
+        description: "Run HEIR checks before merge"
+        stage: "test"
+        command: "python -m packages.heir.checks"
+
+# -----------------------------------------------------------------------------
+# SECTION 10: WORKFLOW GATES
+# -----------------------------------------------------------------------------
+# Hard rules that block progress if not met
+gates:
+  # Document ordering gates
+  no_ctb_until_imo: true
+  no_altitude_until_ctb: true
+  no_code_until_structure: true
+
+  # Tool boundary gates
+  replit_cannot_touch_middle: true       # Replit = UI/I/O only
+  claude_code_owns_backend: true         # Claude Code = MIDDLE layer
+
+  # Quality gates
+  no_deploy_without_tests: true
+  no_merge_without_heir_check: true
+
+  # Gate definitions with error messages
+  definitions:
+    imo_required:
+      check: "file_exists"
+      path: "docs/10-imo.md"
+      error: "Cannot proceed without IMO definition. Create docs/10-imo.md first."
+
+    ctb_structure_required:
+      check: "directories_exist"
+      paths: ["src/system", "src/data", "src/app", "src/ai", "src/ui"]
+      error: "Cannot proceed without CTB structure. Run scaffold first."
+
+    altitude_docs_required:
+      check: "files_exist"
+      paths:
+        - "docs/altitude/40k-vision.md"
+        - "docs/altitude/30k-category.md"
+        - "docs/altitude/20k-logic.md"
+        - "docs/altitude/10k-ui.md"
+        - "docs/altitude/5k-ops.md"
+      error: "Cannot deploy without altitude documentation."
+
+# -----------------------------------------------------------------------------
+# SECTION 11: ENVIRONMENT
+# -----------------------------------------------------------------------------
+# Environment variables and secrets configuration
+environment:
+  # Required for all deployments
+  required:
+    - name: "COMPOSIO_API_KEY"
+      description: "Composio authentication for Linear/MCP integration"
+
+    - name: "ANTHROPIC_API_KEY"
+      description: "Claude API for AI layer"
+
+    - name: "OPENAI_API_KEY"
+      description: "OpenAI API for AI layer fallback"
+
+  # Service-specific
+  services:
+    vercel:
+      - "VERCEL_TOKEN"
+      - "VERCEL_PROJECT_ID"
+      - "VERCEL_ORG_ID"
+
+    render:
+      - "RENDER_TOKEN"
+      - "RENDER_SERVICE_ID"
+
+    backblaze:
+      - "B2_KEY_ID"
+      - "B2_APPLICATION_KEY"
+      - "B2_BUCKET"
+
+  # Template file
+  template: ".env.template"
+
+# -----------------------------------------------------------------------------
+# SECTION 12: INHERITANCE
+# -----------------------------------------------------------------------------
+# How child repos inherit from this master template
+inheritance:
+  # Files that MUST be copied to child repos
+  required_files:
+    - "config/global_config.yaml"         # This file (auto-executes on pull)
+    - "config/mcp_registry.json"          # Engine capabilities
+    - "heir.doctrine.yaml"                # HEIR compliance rules
+    - ".githooks/pre-commit"              # Enforcement hooks
+    - ".githooks/commit-msg"
+    - ".githooks/post-merge"              # Auto-apply doctrine on git pull
+    - "scripts/validate-structure.sh"
+    - "scripts/audit-drift.sh"
+    - "scripts/apply-doctrine.py"         # Bootstrap executor script
+
+  # Structure that MUST be created in child repos
+  required_structure:
+    - "docs/10-imo.md"                    # Must be customized
+    - "docs/20-ctb-*.md"                  # Layer docs
+    - "docs/altitude/"                    # Altitude docs
+    - "src/system/"
+    - "src/data/"
+    - "src/app/"
+    - "src/ai/"
+    - "src/ui/"
+    - "tests/system/"
+    - "tests/data/"
+    - "tests/app/"
+    - "tests/ai/"
+    - "tests/ui/"
+    - "config/"
+
+  # Sections child repos can customize
+  customizable:
+    - "imo.phases"                        # Add custom phases if needed
+    - "observability.destination"         # Different logging provider
+    - "environment.services"              # Different deployment platform
+
+  # Sections child repos CANNOT modify
+  locked:
+    - "ctb.layers"                        # Always 5 layers
+    - "altitude.levels"                   # Always 5 altitudes
+    - "gates"                             # Workflow gates are law
+    - "branching.format"                  # Branch naming is law
+
+# -----------------------------------------------------------------------------
+# SECTION 13: AUTO-EXECUTION (BOOTSTRAP ON PULL)
+# -----------------------------------------------------------------------------
+# When a child repo pulls this config, it MUST execute these actions.
+# This ensures all repos stay in sync with doctrine updates.
+bootstrap:
+  # Enable auto-execution
+  auto_execute: true
+
+  # Trigger conditions - when to run bootstrap
+  triggers:
+    - on_pull: true                       # Run when config is pulled/updated
+    - on_clone: true                      # Run on fresh clone
+    - on_config_change: true              # Run when this file changes
+    - manual: "scripts/apply-doctrine.py" # Manual trigger script
+
+  # Execution order - these run sequentially
+  execution_order:
+
+    # Phase 1: Validate current state
+    - phase: "validate"
+      description: "Check what exists vs what should exist"
+      actions:
+        - action: "check_config_version"
+          description: "Compare local vs master doctrine version"
+          on_mismatch: "continue"         # Don't block, just note
+
+        - action: "detect_missing_structure"
+          description: "Find missing CTB dirs, docs, tests"
+          output: "bootstrap_report.json"
+
+    # Phase 2: Create missing structure
+    - phase: "scaffold"
+      description: "Create any missing directories and files"
+      actions:
+        - action: "create_ctb_directories"
+          paths:
+            - "src/system"
+            - "src/data"
+            - "src/app"
+            - "src/ai"
+            - "src/ui"
+            - "tests/system"
+            - "tests/data"
+            - "tests/app"
+            - "tests/ai"
+            - "tests/ui"
+            - "docs/altitude"
+            - "config"
+            - "scripts"
+            - ".githooks"
+          create_init_files: true         # Add __init__.py to Python dirs
+
+        - action: "copy_required_files"
+          from_master: true               # Pull from imo-creator master
+          files:
+            - source: "config/mcp_registry.json"
+              dest: "config/mcp_registry.json"
+              overwrite: false            # Don't overwrite if customized
+
+            - source: "heir.doctrine.yaml"
+              dest: "heir.doctrine.yaml"
+              overwrite: true             # Always sync HEIR rules
+
+            - source: ".githooks/pre-commit"
+              dest: ".githooks/pre-commit"
+              overwrite: true
+              make_executable: true
+
+            - source: ".githooks/commit-msg"
+              dest: ".githooks/commit-msg"
+              overwrite: true
+              make_executable: true
+
+            - source: "scripts/validate-structure.sh"
+              dest: "scripts/validate-structure.sh"
+              overwrite: true
+              make_executable: true
+
+            - source: "scripts/audit-drift.sh"
+              dest: "scripts/audit-drift.sh"
+              overwrite: true
+              make_executable: true
+
+    # Phase 3: Install git hooks
+    - phase: "hooks"
+      description: "Install git hooks for enforcement"
+      actions:
+        - action: "install_git_hooks"
+          source: ".githooks/"
+          dest: ".git/hooks/"
+          hooks:
+            - "pre-commit"
+            - "commit-msg"
+
+    # Phase 4: Generate missing docs (templates)
+    - phase: "docs"
+      description: "Create template docs if missing"
+      actions:
+        - action: "create_if_missing"
+          files:
+            - path: "docs/10-imo.md"
+              template: "templates/10-imo.template.md"
+              prompt_user: true           # Must be customized - prompt dev
+
+            - path: "docs/20-ctb-system.md"
+              template: "templates/20-ctb-layer.template.md"
+              variables: {layer: "system"}
+
+            - path: "docs/20-ctb-data.md"
+              template: "templates/20-ctb-layer.template.md"
+              variables: {layer: "data"}
+
+            - path: "docs/20-ctb-app.md"
+              template: "templates/20-ctb-layer.template.md"
+              variables: {layer: "app"}
+
+            - path: "docs/20-ctb-ai.md"
+              template: "templates/20-ctb-layer.template.md"
+              variables: {layer: "ai"}
+
+            - path: "docs/20-ctb-ui.md"
+              template: "templates/20-ctb-layer.template.md"
+              variables: {layer: "ui"}
+
+            - path: "docs/altitude/40k-vision.md"
+              template: "templates/altitude.template.md"
+              variables: {level: "40k-vision"}
+              prompt_user: true
+
+            - path: "docs/altitude/30k-category.md"
+              template: "templates/altitude.template.md"
+              variables: {level: "30k-category"}
+              prompt_user: true
+
+            - path: "docs/altitude/20k-logic.md"
+              template: "templates/altitude.template.md"
+              variables: {level: "20k-logic"}
+
+            - path: "docs/altitude/10k-ui.md"
+              template: "templates/altitude.template.md"
+              variables: {level: "10k-ui"}
+
+            - path: "docs/altitude/5k-ops.md"
+              template: "templates/altitude.template.md"
+              variables: {level: "5k-ops"}
+
+    # Phase 5: Validate final state
+    - phase: "verify"
+      description: "Run validation to confirm compliance"
+      actions:
+        - action: "run_script"
+          script: "scripts/validate-structure.sh"
+          on_failure: "warn"              # Warn but don't block
+
+        - action: "generate_report"
+          output: "bootstrap_report.json"
+          include:
+            - "created_directories"
+            - "copied_files"
+            - "installed_hooks"
+            - "validation_result"
+
+    # Phase 6: Notify
+    - phase: "notify"
+      description: "Alert dev of what happened"
+      actions:
+        - action: "print_summary"
+          show_created: true
+          show_warnings: true
+          show_next_steps: true
+
+        - action: "emit_sidecar_event"
+          event: "doctrine.bootstrap.completed"
+          include_report: true
+
+  # Master repo location for pulling updates
+  master_repo:
+    url: "https://github.com/djb258/imo-creator"
+    branch: "master"
+    config_path: "config/global_config.yaml"
+
+  # Version checking
+  versioning:
+    check_on_pull: true
+    auto_update: false                    # Prompt user before updating
+    notify_on_new_version: true
+
+  # Rollback capability
+  rollback:
+    enabled: true
+    backup_before_apply: true
+    backup_path: ".doctrine_backup/"
+    max_backups: 5
+
+# -----------------------------------------------------------------------------
+# SECTION 14: SYNC PROTOCOL
+# -----------------------------------------------------------------------------
+# How repos stay in sync with master doctrine
+sync:
+  # Automatic sync settings
+  auto_sync:
+    enabled: true
+    check_interval: "daily"               # Check for updates daily
+    apply_automatically: false            # Require manual approval
+
+  # What syncs from master
+  sync_from_master:
+    always:
+      - "config/global_config.yaml"       # This file
+      - "heir.doctrine.yaml"              # HEIR rules
+      - ".githooks/*"                     # Enforcement hooks
+      - "scripts/validate-structure.sh"
+      - "scripts/audit-drift.sh"
+
+    if_not_customized:
+      - "config/mcp_registry.json"        # Engine capabilities
+      - "config/agents.json"              # Agent definitions
+
+  # What never syncs (repo-specific)
+  never_sync:
+    - "docs/10-imo.md"                    # Repo's own IMO
+    - "docs/altitude/*"                   # Repo's own altitude docs
+    - ".env"                              # Secrets
+    - "src/*"                             # Actual code
+    - "tests/*"                           # Actual tests
+
+  # Conflict resolution
+  conflicts:
+    strategy: "prompt"                    # Ask user on conflict
+    backup_local: true                    # Always backup before overwrite
+
+  # Post-sync actions
+  post_sync:
+    - "scripts/validate-structure.sh"     # Validate after sync
+    - "emit_event: doctrine.synced"       # Log to sidecar
+
+# =============================================================================
+# END OF GLOBAL CONFIGURATION
+# =============================================================================
+#
+# IMPORTANT: This config is EXECUTABLE.
+#
+# When pulled to a child repo, run:
+#   python scripts/apply-doctrine.py
+#
+# This will:
+#   1. Create missing CTB directories
+#   2. Copy/update enforcement scripts
+#   3. Install git hooks
+#   4. Generate template docs for missing files
+#   5. Validate the final structure
+#   6. Report what was created/updated
+#
+# References:
+#   - docs/10-imo.md: IMO definition
+#   - docs/20-ctb-*.md: CTB layer specs
+#   - docs/altitude/: Altitude documentation
+#   - config/agents.json: Agent-to-CTB mapping
+#   - config/linear-task-template.json: Linear task template
+#
+# =============================================================================

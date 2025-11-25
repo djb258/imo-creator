@@ -1,0 +1,92 @@
+{
+  "_docstring": {
+    "description": "Linear task template for Barton Doctrine compliance",
+    "usage": "Use this template when creating tasks in Linear via Composio",
+    "version": "1.0.0"
+  },
+  "template": {
+    "name": "Barton Doctrine Task",
+    "description_template": "## Task Overview\n\n[Brief description]\n\n## Doctrine References\n\n- **IMO Phase**: {{imo_phase}}\n- **CTB Layer**: {{ctb_layer}}\n- **Altitude Level**: {{altitude_level}}\n\n## Related Docs\n\n- [IMO Definition](/docs/10-imo.md)\n- [CTB Layer Doc](/docs/20-ctb-{{ctb_layer}}.md)\n- [Altitude Doc](/docs/altitude/{{altitude_level}}.md)\n\n## Acceptance Criteria\n\n- [ ] Code is in correct CTB layer (`src/{{ctb_layer}}/`)\n- [ ] Tests added in `tests/{{ctb_layer}}/`\n- [ ] Kill switch defined for failure cases\n- [ ] Sidecar events emitted for observability\n- [ ] HEIR ID format used for any new IDs\n\n## Kill Switch\n\nOn failure, this task should:\n- [ ] Return error response\n- [ ] Trigger fallback\n- [ ] Write to DLQ\n- [ ] Alert (specify channel)\n",
+    "custom_fields": [
+      {
+        "name": "IMO Phase",
+        "type": "select",
+        "options": ["INPUT", "MIDDLE", "OUTPUT"],
+        "required": true
+      },
+      {
+        "name": "CTB Layer",
+        "type": "select",
+        "options": ["system", "data", "app", "ai", "ui"],
+        "required": true
+      },
+      {
+        "name": "Altitude Level",
+        "type": "select",
+        "options": ["40k-vision", "30k-category", "20k-logic", "10k-ui", "5k-ops"],
+        "required": false
+      }
+    ],
+    "branch_naming": {
+      "pattern": "ctb-{{ctb_layer}}/{{task_id}}",
+      "examples": [
+        "ctb-system/IMO-123",
+        "ctb-data/IMO-456",
+        "ctb-app/IMO-789"
+      ]
+    },
+    "labels": [
+      {
+        "name": "doctrine:input",
+        "color": "#3B82F6",
+        "condition": "imo_phase == 'INPUT'"
+      },
+      {
+        "name": "doctrine:middle",
+        "color": "#F59E0B",
+        "condition": "imo_phase == 'MIDDLE'"
+      },
+      {
+        "name": "doctrine:output",
+        "color": "#10B981",
+        "condition": "imo_phase == 'OUTPUT'"
+      }
+    ]
+  },
+  "automation": {
+    "on_create": {
+      "actions": [
+        {
+          "type": "validate",
+          "rule": "imo_phase is required"
+        },
+        {
+          "type": "validate",
+          "rule": "ctb_layer is required"
+        },
+        {
+          "type": "set_label",
+          "based_on": "imo_phase"
+        }
+      ]
+    },
+    "on_move_to_done": {
+      "actions": [
+        {
+          "type": "check",
+          "rule": "PR merged to correct branch pattern"
+        },
+        {
+          "type": "notify",
+          "channel": "obsidian",
+          "message": "Task {{task_id}} completed - update docs if needed"
+        }
+      ]
+    }
+  },
+  "obsidian_sync": {
+    "enabled": true,
+    "vault_path": "IMO-Creator/Tasks",
+    "template": "## {{task_title}}\n\n**Status**: {{status}}\n**IMO Phase**: {{imo_phase}}\n**CTB Layer**: {{ctb_layer}}\n**Branch**: `{{branch_name}}`\n\n### Description\n\n{{description}}\n\n### Links\n\n- [Linear Task]({{linear_url}})\n- [PR]({{pr_url}})\n"
+  }
+}
