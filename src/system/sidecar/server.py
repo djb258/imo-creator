@@ -1,4 +1,8 @@
-"""Sidecar Server for IMO Creator event logging"""
+"""Sidecar Server for IMO Creator event logging
+
+CTB Layer: system
+IMO Phase: OUTPUT (telemetry emission)
+"""
 import os
 import json
 from fastapi import FastAPI, HTTPException
@@ -7,10 +11,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from typing import Dict, Any
 
-try:
-    from .models import SidecarEvent
-except ImportError:
-    from src.models import SidecarEvent
+from src.data.models.base import SidecarEvent
 
 # Load environment variables
 load_dotenv()
@@ -27,7 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 LOGS_DIR = BASE_DIR / "logs"
 SIDECAR_LOG_FILE = LOGS_DIR / "sidecar.ndjson"
 
@@ -42,17 +43,17 @@ async def log_event(event: SidecarEvent):
     try:
         # Convert event to JSON line
         event_json = event.model_dump_json()
-        
+
         # Append to NDJSON file
         with open(SIDECAR_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(event_json + "\n")
-        
+
         return {
             "status": "logged",
             "event_type": event.type,
             "timestamp": event.ts
         }
-        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to log event: {str(e)}")
 
@@ -73,28 +74,28 @@ async def get_recent_events(limit: int = 10):
     try:
         if not SIDECAR_LOG_FILE.exists():
             return {"events": [], "total": 0}
-        
+
         # Read last N lines from NDJSON file
         with open(SIDECAR_LOG_FILE, "r", encoding="utf-8") as f:
             lines = f.readlines()
-        
+
         # Get last N lines and parse as JSON
         recent_lines = lines[-limit:] if len(lines) > limit else lines
         events = []
-        
+
         for line in recent_lines:
             try:
                 event_data = json.loads(line.strip())
                 events.append(event_data)
             except json.JSONDecodeError:
                 continue
-        
+
         return {
             "events": events,
             "total": len(events),
             "total_logged": len(lines)
         }
-        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read events: {str(e)}")
 

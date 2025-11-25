@@ -1,4 +1,12 @@
-import os, time, hashlib, base64
+"""Blueprint ID generation utilities
+
+CTB Layer: app
+IMO Phase: MIDDLE (ID generation for doctrine compliance)
+"""
+import os
+import time
+import hashlib
+import base64
 from typing import Dict
 
 def _ts_ms() -> int:
@@ -14,20 +22,22 @@ def _compact_ts(ts_ms: int) -> str:
     return t.strftime("%Y%m%d-%H%M%S")
 
 def generate_unique_id(ssot: Dict) -> str:
-    db        = os.getenv("DOCTRINE_DB", "shq")
-    subhive   = os.getenv("DOCTRINE_SUBHIVE", "03")
-    app       = os.getenv("DOCTRINE_APP", "imo")
-    ts_ms     = int(ssot.get("meta", {}).get("_created_at_ms") or _ts_ms())
-    app_name  = (ssot.get("meta", {}).get("app_name") or "imo-creator").strip()
-    seed      = f"{db}|{subhive}|{app}|{app_name}|{ts_ms}"
+    """Generate doctrine-compliant unique ID for SSOT"""
+    db = os.getenv("DOCTRINE_DB", "shq")
+    subhive = os.getenv("DOCTRINE_SUBHIVE", "03")
+    app = os.getenv("DOCTRINE_APP", "imo")
+    ts_ms = int(ssot.get("meta", {}).get("_created_at_ms") or _ts_ms())
+    app_name = (ssot.get("meta", {}).get("app_name") or "imo-creator").strip()
+    seed = f"{db}|{subhive}|{app}|{app_name}|{ts_ms}"
     r = _rand16(seed)
     return f"{db}-{subhive}-{app}-{_compact_ts(ts_ms)}-{r}"
 
 def generate_process_id(ssot: Dict) -> str:
-    db      = os.getenv("DOCTRINE_DB", "shq")
+    """Generate doctrine-compliant process ID for SSOT"""
+    db = os.getenv("DOCTRINE_DB", "shq")
     subhive = os.getenv("DOCTRINE_SUBHIVE", "03")
-    app     = os.getenv("DOCTRINE_APP", "imo")
-    ver     = os.getenv("DOCTRINE_VER", "1")
+    app = os.getenv("DOCTRINE_APP", "imo")
+    ver = os.getenv("DOCTRINE_VER", "1")
 
     stage = (ssot.get("meta", {}).get("stage") or "overview").lower()
     ts_ms = int(ssot.get("meta", {}).get("_created_at_ms") or _ts_ms())
@@ -35,6 +45,7 @@ def generate_process_id(ssot: Dict) -> str:
     return f"{db}.{subhive}.{app}.V{ver}.{ymd}.{stage}"
 
 def ensure_ids(ssot: Dict) -> Dict:
+    """Ensure SSOT has required doctrine IDs"""
     ssot = dict(ssot or {})
     meta = dict(ssot.get("meta") or {})
     if "_created_at_ms" not in meta:

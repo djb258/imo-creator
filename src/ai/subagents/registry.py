@@ -1,16 +1,23 @@
-import os, httpx
+"""Subagent registry and orchestration
+
+CTB Layer: ai
+IMO Phase: MIDDLE (subagent dispatch)
+"""
+import os
+import httpx
 
 BASE = os.getenv("GARAGE_MCP_URL", "")
 TOKEN = os.getenv("GARAGE_MCP_TOKEN", "")
 PATH = os.getenv("SUBAGENT_REGISTRY_PATH", "/registry/subagents")
 
 FALLBACK = [
-    {"id":"validate-ssot","bay":"frontend","desc":"Validate SSOT against HEIR schema"},
-    {"id":"heir-check","bay":"backend","desc":"Run HEIR checks on blueprint"},
-    {"id":"register-blueprint","bay":"backend","desc":"Persist + emit registration event"},
+    {"id": "validate-ssot", "bay": "frontend", "desc": "Validate SSOT against HEIR schema"},
+    {"id": "heir-check", "bay": "backend", "desc": "Run HEIR checks on blueprint"},
+    {"id": "register-blueprint", "bay": "backend", "desc": "Persist + emit registration event"},
 ]
 
 def list_subagents():
+    """List available subagents from garage-mcp or fallback"""
     if not BASE:
         return FALLBACK
     try:

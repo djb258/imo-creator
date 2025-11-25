@@ -1,4 +1,8 @@
-"""MCP Server for IMO Creator HEIR integration"""
+"""MCP Server for IMO Creator HEIR integration
+
+CTB Layer: ai
+IMO Phase: MIDDLE (validation, tool invocation)
+"""
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,10 +11,7 @@ from typing import Dict, Any
 import yaml
 from pathlib import Path
 
-try:
-    from .models import HeirCheckRequest, HeirCheckResult
-except ImportError:
-    from src.models import HeirCheckRequest, HeirCheckResult
+from src.data.models.base import HeirCheckRequest, HeirCheckResult
 
 # Load environment variables
 load_dotenv()
@@ -27,7 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 @app.post("/heir/check", response_model=HeirCheckResult)
 async def heir_check(request: HeirCheckRequest):
@@ -38,27 +39,27 @@ async def heir_check(request: HeirCheckRequest):
     try:
         # Stub implementation - always returns ok:true for now
         # In full implementation, this would call packages.heir.checks
-        
+
         # Basic validation of SSOT structure
         ssot = request.ssot
         errors = []
         warnings = []
-        
+
         # Check for required SSOT fields
         required_fields = ["meta", "doctrine"]
         for field in required_fields:
             if field not in ssot:
                 errors.append(f"Missing required SSOT field: {field}")
-        
+
         # Check meta structure
         if "meta" in ssot:
             meta = ssot["meta"]
             if "app_name" not in meta:
                 warnings.append("Missing app_name in meta")
-        
+
         # For minimal implementation, consider it ok if no critical errors
         is_ok = len(errors) == 0
-        
+
         result = HeirCheckResult(
             ok=is_ok,
             errors=errors if errors else None,
@@ -69,9 +70,9 @@ async def heir_check(request: HeirCheckRequest):
                 "version": "1.0.0"
             }
         )
-        
+
         return result
-        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"HEIR check failed: {str(e)}")
 

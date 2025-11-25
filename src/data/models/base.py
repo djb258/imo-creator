@@ -1,4 +1,8 @@
-"""Pydantic models for IMO Creator HEIR/MCP integration"""
+"""Pydantic models for IMO Creator HEIR/MCP integration
+
+CTB Layer: data
+IMO Phase: INPUT (validation schemas), MIDDLE (transformation)
+"""
 from typing import Dict, List, Any, Optional
 from pydantic import BaseModel, Field
 import time
@@ -22,7 +26,7 @@ class SidecarEvent(BaseModel):
     payload: Dict[str, Any] = Field(..., description="Event payload data")
     tags: Dict[str, Any] = Field(default_factory=dict, description="Event metadata tags")
     ts: int = Field(default_factory=lambda: int(time.time()), description="Unix timestamp")
-    
+
     class Config:
         json_encoders = {
             # Ensure timestamps are integers
