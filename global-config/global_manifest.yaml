@@ -295,6 +295,12 @@ ctb_doctrine:
     - doctrine_id: "04.04.12"
       name: Google_Gemini_AI
       enabled: true
+    - doctrine_id: "04.04.13"
+      name: Hostinger
+      enabled: true
+    - doctrine_id: "04.04.14"
+      name: Abacus_AI
+      enabled: true
 
 # ============================================================
 # GEMINI AI CONFIGURATION
@@ -442,6 +448,90 @@ mcp_integration:
     api_key: "${BUILDER_IO_API_KEY}"
     visual_dev: true
 
+  # ============================================================
+  # HOSTINGER VPS & N8N INTEGRATION (Added 2025-12-01)
+  # ============================================================
+  hostinger:
+    enabled: true
+    doctrine_id: "04.04.13"
+    mcp_server:
+      command: "npx"
+      args: ["hostinger-api-mcp@latest"]
+      env:
+        API_TOKEN: "${HOSTINGER_API_TOKEN}"
+    vps_instance:
+      hostname: "srv1153077.hstgr.cloud"
+      ip: "72.61.65.44"
+      os: "Ubuntu 24.04 with n8n"
+      plan: "KVM 2"
+      specs:
+        cpu_cores: 2
+        memory_gb: 8
+        disk_gb: 100
+      location: "United States - Boston"
+    n8n:
+      url: "${N8N_HOSTINGER_URL}"
+      port: 5678
+      webhook_base: "${N8N_HOSTINGER_URL}/webhook/"
+    toolkit_tools:
+      - HOSTINGER_VPS_LIST
+      - HOSTINGER_VPS_START
+      - HOSTINGER_VPS_STOP
+      - HOSTINGER_VPS_RESTART
+      - HOSTINGER_VPS_STATUS
+      - HOSTINGER_DOMAIN_LIST
+      - HOSTINGER_SSL_STATUS
+      - HOSTINGER_DNS_MANAGE
+    required_env_vars:
+      - HOSTINGER_API_TOKEN
+      - N8N_HOSTINGER_URL
+    integration_files:
+      - "global-config/integrations/hostinger/integrations.yaml"
+      - "global-config/integrations/hostinger/README.md"
+
+  # ============================================================
+  # ABACUS.AI ENTERPRISE AI PLATFORM (Added 2025-12-01)
+  # ============================================================
+  abacus_ai:
+    enabled: true
+    doctrine_id: "04.04.14"
+    api_endpoint: "https://api.abacus.ai/v0"
+    authentication:
+      type: "api_key"
+      header_name: "X-API-Key"
+      env_var: "${ABACUS_AI_API_KEY}"
+    capabilities:
+      - custom_ai_agents
+      - ml_model_deployment
+      - ai_workflows
+      - predictive_analytics
+      - chatbot_creation
+      - data_connectors
+    toolkit_tools:
+      - ABACUS_CREATE_AGENT
+      - ABACUS_RUN_AGENT
+      - ABACUS_LIST_AGENTS
+      - ABACUS_DEPLOY_MODEL
+      - ABACUS_PREDICT
+      - ABACUS_GET_PREDICTIONS
+      - ABACUS_CREATE_WORKFLOW
+      - ABACUS_RUN_WORKFLOW
+      - ABACUS_GET_WORKFLOW_STATUS
+    api_endpoints:
+      agents: "/agents"
+      models: "/models"
+      predictions: "/predictions"
+      workflows: "/workflows"
+      deployments: "/deployments"
+    required_env_vars:
+      - ABACUS_AI_API_KEY
+    integration_files:
+      - "global-config/integrations/abacus-ai/integrations.yaml"
+      - "global-config/integrations/abacus-ai/README.md"
+    integration_points:
+      composio: "Custom integration via OpenAPI spec"
+      n8n: "HTTP Request node with API key auth"
+
 # ============================================================
 # SECURITY & COMPLIANCE
 # ============================================================
@@ -579,6 +669,152 @@ error_logging:
     - "Email: operations@barton.enterprises"
 
 # ============================================================
+# IMO-RA (Radial Architecture) CONFIGURATION
+# ============================================================
+imo_ra:
+  enabled: true
+  version: "1.1"
+  paradigm: "IMO-RA (Interconnected Modular Objects: Radial Architecture)"
+  alternative_name: "FHSA (Fractal Hub-and-Spoke Architecture)"
+
+  # Schema Files
+  schema_files:
+    template: "global-config/imo-ra-schema.json"
+    instance: "imo-architecture.json"
+
+  # Auto-propagation to child repos
+  propagation:
+    enabled: true
+    auto_copy_template: true
+    validate_on_update: true
+    require_instance: true
+
+  # Architecture Principles
+  principles:
+    - "Every repo, service, or domain is a hub (wheel)"
+    - "Each hub can contain sub-hubs recursively (fractal wheels-within-wheels)"
+    - "Failures branch off every hub as spokes"
+    - "All failures propagate to the Master Failure Hub"
+    - "All hubs feed metrics back to central CORE_METRIC"
+    - "Composio is the primary integration gateway"
+    - "Database operations bypass MCP (direct connections)"
+    - "Self-healing loop: Failure -> Master Hub -> Learning -> Auto-repair"
+
+  # Visualization Settings
+  visualization:
+    default_layout: "radial"
+    style: "sketch"
+    export_formats: ["svg", "png", "mermaid", "d3"]
+    color_scheme:
+      core: "#FFD700"
+      hub: "#8FD3FE"
+      subHub: "#C2F784"
+      failure: "#FF6B6B"
+      fallback: "#FFA07A"
+      masterFailure: "#DC143C"
+      autoRepair: "#32CD32"
+
+  # Master Failure Hub Configuration
+  failure_system:
+    enabled: true
+    strategy: "distributed_centralized_reporting"
+    master_failure_hub:
+      name: "MASTER_FAILURE_LOG"
+      doctrine_id: "00.00.FL"
+      table: "shq.master_failure_log"
+      responsibilities:
+        - "Aggregate failure events from all hubs and sub-hubs"
+        - "Classify severity and frequency patterns"
+        - "Trigger alerts via Slack/email"
+        - "Dispatch auto-repair hooks when enabled"
+        - "Feed diagnostic learning models"
+        - "Report health metrics back to CORE_METRIC"
+      endpoints:
+        report: "/api/failures/report"
+        query: "/api/failures/query"
+        dashboard: "/api/failures/dashboard"
+        health: "/api/failures/health"
+    propagation_rules:
+      on_failure: "report_to_parent_and_master"
+      retry_policy:
+        enabled: true
+        max_retries: 3
+        backoff_multiplier: 2
+        initial_delay_ms: 1000
+      auto_repair_hooks:
+        enabled: true
+        trigger_on: ["error", "critical"]
+        cooldown_seconds: 300
+      severity_levels:
+        - level: "info"
+          priority: 4
+          alerting: false
+          auto_repair: false
+        - level: "warning"
+          priority: 3
+          alerting: true
+          auto_repair: false
+        - level: "error"
+          priority: 2
+          alerting: true
+          auto_repair: true
+        - level: "critical"
+          priority: 1
+          alerting: true
+          auto_repair: true
+      escalation:
+        warning_to_error:
+          after_minutes: 30
+          if_unresolved: true
+        error_to_critical:
+          after_minutes: 60
+          if_unresolved: true
+    self_healing_loop:
+      enabled: true
+      components:
+        - "failure_aggregation"
+        - "pattern_detection"
+        - "auto_repair_dispatch"
+        - "learning_feedback"
+        - "metric_adjustment"
+      feedback_cycle:
+        frequency: "continuous"
+        batch_window: "5m"
+        learning_model: "anomaly_detection"
+
+  # Integration with existing systems
+  integrations:
+    composio:
+      maps_to: "COMPOSIO_HUB"
+      doctrine_id: "04.04.00"
+    heir_orbt:
+      compliance_required: true
+    deepwiki:
+      auto_generate_diagrams: true
+    chartdb:
+      include_in_schemas: true
+    grafana:
+      enabled: true
+      dashboard_id: "imo-ra-health"
+      metrics:
+        - "hub_status"
+        - "failure_rate"
+        - "auto_repair_success_rate"
+        - "mean_time_to_recovery"
+
+  # Validation Rules
+  validation:
+    required_fields:
+      - centralHub.name
+      - centralHub.metric
+      - centralHub.primaryHubs
+      - failureSystem.masterFailureHub
+    min_hubs: 1
+    max_depth: 5
+    require_failures: true
+    require_doctrine_ids: true
+
+# ============================================================
 # REPOSITORY TEMPLATES
 # ============================================================
 repo_templates:
@@ -592,6 +828,7 @@ repo_templates:
     include_files:
       - global-config/ctb.branchmap.yaml
       - global-config/global_manifest.yaml
+      - global-config/imo-ra-schema.json
       - .github/workflows/deepwiki_automation.yml
       - scripts/hooks/post_update_deepwiki.sh
 

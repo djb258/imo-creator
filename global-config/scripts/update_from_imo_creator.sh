@@ -155,6 +155,9 @@ fi
 # Copy MCP registry
 [ -f "$IMO_CREATOR_PATH/config/mcp_registry.json" ] && cp "$IMO_CREATOR_PATH/config/mcp_registry.json" "config/" && log_info "  ✓ mcp_registry.json (4 mandatory tools)"
 
+# Copy IMO-RA (Radial Architecture) schema
+[ -f "$IMO_CREATOR_PATH/global-config/imo-ra-schema.json" ] && cp "$IMO_CREATOR_PATH/global-config/imo-ra-schema.json" "global-config/" && log_info "  ✓ imo-ra-schema.json (Hub-and-Spoke Architecture)"
+
 # Copy ALL scripts (including new v1.3 scripts)
 for script in "$IMO_CREATOR_PATH/global-config/scripts"/*.sh; do
   if [ -f "$script" ]; then
@@ -277,6 +280,27 @@ mkdir -p docs
 [ -f "$IMO_CREATOR_PATH/docs/ARCHITECTURE.md" ] && cp "$IMO_CREATOR_PATH/docs/ARCHITECTURE.md" "docs/" && log_info "  ✓ ARCHITECTURE.md (complete system overview)"
 
 log_success "Documentation synced"
+echo ""
+
+# Step 7.1: Copy custom integrations (Hostinger, Abacus.AI, etc.)
+log_step "7.1/10 Syncing custom integrations (Composio extensions)..."
+
+mkdir -p global-config/integrations
+
+# Sync all custom integrations from imo-creator
+if [ -d "$IMO_CREATOR_PATH/global-config/integrations" ]; then
+  for integration_dir in "$IMO_CREATOR_PATH/global-config/integrations"/*; do
+    if [ -d "$integration_dir" ]; then
+      integration_name=$(basename "$integration_dir")
+      mkdir -p "global-config/integrations/$integration_name"
+      cp -r "$integration_dir"/* "global-config/integrations/$integration_name/" 2>/dev/null || true
+      log_info "  ✓ global-config/integrations/$integration_name/* (custom integration)"
+    fi
+  done
+  log_success "Custom integrations synced (Hostinger 04.04.13, Abacus.AI 04.04.14)"
+else
+  log_warning "  ⊘ No custom integrations found in SOURCE - skipping"
+fi
 echo ""
 
 # Step 7.3: Sync agent definitions/templates
@@ -460,7 +484,8 @@ echo -e "${CYAN}CTB Version:${NC}       1.3.2"
 echo -e "${CYAN}Updated:${NC}           $(date)"
 echo ""
 echo -e "${YELLOW}What was synced:${NC}"
-echo -e "  ${GREEN}✓${NC} CTB Doctrine configuration (v1.3.2)"
+echo -e "  ${GREEN}✓${NC} CTB Doctrine configuration (v1.3.4)"
+echo -e "  ${GREEN}✓${NC} IMO-RA Schema (Hub-and-Spoke Radial Architecture)"
 echo -e "  ${GREEN}✓${NC} Version tracking system (ctb_version.json + auto-update script)"
 echo -e "  ${GREEN}✓${NC} CTB Planner system (AI-driven repository organization)"
 echo -e "  ${GREEN}✓${NC} Planner validator script (apply_ctb_plan.py)"
@@ -469,6 +494,7 @@ echo -e "  ${GREEN}✓${NC} Example CTB plans and templates"
 echo -e "  ${GREEN}✓${NC} All 19 CTB branches created/verified"
 echo -e "  ${GREEN}✓${NC} All 4 mandatory integration branches (04.04.07-10)"
 echo -e "  ${GREEN}✓${NC} Mandatory branch content (chartdb, activepieces, windmill, claude-skills)"
+echo -e "  ${GREEN}✓${NC} Custom integrations (Hostinger 04.04.13, Abacus.AI 04.04.14)"
 echo -e "  ${GREEN}✓${NC} Testing infrastructure (pytest, coverage)"
 echo -e "  ${GREEN}✓${NC} Integration documentation (READMEs)"
 echo -e "  ${GREEN}✓${NC} GitHub templates (issues, PRs, workflows + auto-update)"
