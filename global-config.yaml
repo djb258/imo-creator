@@ -42,6 +42,26 @@ integrations:
     mcp_url: http://localhost:3001/tool
     api_key_env: COMPOSIO_API_KEY
     user_id_env: COMPOSIO_USER_ID
+  doppler:
+    enabled: true
+    project: example-project
+    config: dev
+    token_env: DOPPLER_TOKEN
+    api_url: https://api.doppler.com/v3
+    # Secrets managed in Doppler:
+    # - N8N_HOSTINGER_URL (Hostinger self-hosted n8n)
+    # - MILLIONVERIFIER_API_KEY
+    # - HOSTINGER_API_TOKEN
+    # - All API keys and credentials
+  n8n:
+    enabled: true
+    type: self-hosted
+    host: hostinger
+    url: https://srv1153077.hstgr.cloud:5678
+    webhook_url_env: N8N_HOSTINGER_URL  # Retrieved from Doppler
+    ip: 72.61.65.44
+    fallback_for: composio
+    doctrine_id: "04.04.F1"
   firebase:
     enabled: true
     config_path: ctb/sys/firebase/firebase.json

@@ -178,11 +178,59 @@ class MCPVaultResolver {
 
   /**
    * Resolve variable from Doppler vault
+   * Requires DOPPLER_TOKEN environment variable (Service Token)
+   * Or DOPPLER_PROJECT and DOPPLER_CONFIG with CLI authentication
    */
   private async resolveDoppler(key: string): Promise<string | null> {
-    // Doppler integration would go here
-    // This is a placeholder for future implementation
-    return null;
+    const dopplerToken = process.env.DOPPLER_TOKEN;
+    const dopplerProject = process.env.DOPPLER_PROJECT;
+    const dopplerConfig = process.env.DOPPLER_CONFIG || 'prd'; // Default to production
+
+    if (!dopplerToken) {
+      console.warn('[Doppler] No DOPPLER_TOKEN found, skipping Doppler vault');
+      return null;
+    }
+
+    try {
+      // Doppler API endpoint for fetching secrets
+      const url = new URL('https://api.doppler.com/v3/configs/config/secret');
+      url.searchParams.set('project', dopplerProject || 'example-project');
+      url.searchParams.set('config', dopplerConfig);
+      url.searchParams.set('name', key);
+
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${dopplerToken}`,
+          'Accept': 'application/json'
+        },
+        signal: AbortSignal.timeout(this.config.timeout!)
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Secret not found in Doppler
+          return null;
+        }
+        console.warn(`[Doppler] API error: ${response.status} ${response.statusText}`);
+        return null;
+      }
+
+      const data = await response.json();
+
+      // Doppler returns { name, value: { raw, computed } }
+      if (data.value?.computed) {
+        console.log(`[Doppler] Successfully resolved: ${key}`);
+        return data.value.computed;
+      } else if (data.value?.raw) {
+        return data.value.raw;
+      }
+
+      return null;
+    } catch (error) {
+      console.warn(`[Doppler] Failed to resolve ${key}:`, error);
+      return null;
+    }
   }
 
   /**

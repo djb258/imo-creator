@@ -421,6 +421,22 @@ security:
       - doppler
       - firebase
 
+    doppler_config:
+      project: example-project
+      config: dev
+      token_env: DOPPLER_TOKEN
+      api_url: https://api.doppler.com/v3
+      managed_secrets:
+        - N8N_HOSTINGER_URL
+        - N8N_HOSTINGER_HOST
+        - N8N_HOSTINGER_IP
+        - HOSTINGER_API_TOKEN
+        - MILLIONVERIFIER_API_KEY
+        - ABACUS_AI_API_KEY
+        - DB_URL
+        - STRIPE_KEY
+        - PRIVATE_KEY
+
 # ============================================================
 # AUTOMATION WORKFLOWS
 # ============================================================

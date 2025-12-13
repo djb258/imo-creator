@@ -1,0 +1,197 @@
+# n8n Custom Integration for Composio
+# This allows Composio to trigger n8n workflows via webhooks
+
+openapi: 3.0.0
+info:
+  title: n8n Webhook Integration
+  description: Custom integration to trigger n8n workflows from Composio
+  version: 1.0.0
+  x-composio-integration:
+    name: n8n_hostinger
+    display_name: n8n (Hostinger)
+    description: Self-hosted n8n workflow automation on Hostinger VPS
+    logo: https://n8n.io/favicon.ico
+    categories:
+      - workflow automation
+      - webhooks
+
+servers:
+  - url: https://srv1153077.hstgr.cloud:5678
+    description: n8n Hostinger Instance
+
+paths:
+  /webhook/{webhook_path}:
+    post:
+      operationId: trigger_n8n_workflow
+      summary: Trigger n8n Workflow
+      description: Triggers an n8n workflow via webhook with custom payload
+      parameters:
+        - name: webhook_path
+          in: path
+          required: true
+          description: The webhook path configured in n8n
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              description: Custom payload to send to n8n workflow
+      responses:
+        '200':
+          description: Workflow triggered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Webhook not found
+        '500':
+          description: Workflow execution error
+
+  /webhook-test/{webhook_path}:
+    post:
+      operationId: test_n8n_workflow
+      summary: Test n8n Workflow
+      description: Triggers n8n workflow in test mode
+      parameters:
+        - name: webhook_path
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Test execution successful
+
+  /rest/workflows:
+    get:
+      operationId: list_n8n_workflows
+      summary: List n8n Workflows
+      description: Get all workflows from n8n instance
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: List of workflows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        active:
+                          type: boolean
+
+  /rest/workflows/{workflowId}/activate:
+    post:
+      operationId: activate_n8n_workflow
+      summary: Activate n8n Workflow
+      description: Activate a specific workflow
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: workflowId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow activated
+
+  /rest/workflows/{workflowId}/deactivate:
+    post:
+      operationId: deactivate_n8n_workflow
+      summary: Deactivate n8n Workflow
+      description: Deactivate a specific workflow
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: workflowId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow deactivated
+
+  /rest/executions:
+    get:
+      operationId: list_n8n_executions
+      summary: List Workflow Executions
+      description: Get execution history
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: workflowId
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [success, error, waiting]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of executions
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-N8N-API-KEY
+      description: n8n API key for authenticated endpoints
+
+# Composio Integration Configuration
+x-composio:
+  auth:
+    type: API_KEY
+    header_name: X-N8N-API-KEY
+
+  actions:
+    - name: N8N_TRIGGER_WORKFLOW
+      operation_id: trigger_n8n_workflow
+      description: Trigger an n8n workflow via webhook
+
+    - name: N8N_LIST_WORKFLOWS
+      operation_id: list_n8n_workflows
+      description: List all workflows in n8n
+
+    - name: N8N_ACTIVATE_WORKFLOW
+      operation_id: activate_n8n_workflow
+      description: Activate an n8n workflow
+
+    - name: N8N_DEACTIVATE_WORKFLOW
+      operation_id: deactivate_n8n_workflow
+      description: Deactivate an n8n workflow
+
+    - name: N8N_LIST_EXECUTIONS
+      operation_id: list_n8n_executions
+      description: List workflow execution history

@@ -1,17 +1,19 @@
 #!/usr/bin/env node
+import Ajv from "ajv";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import Ajv from "ajv";
-import yaml from "js-yaml";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 
-// Parse YAML content
-const parseYaml = (content) => yaml.load(content);
+// Lazy load js-yaml to avoid ESM/CJS friction
+const loadYaml = (content) => {
+  const yaml = require("js-yaml");
+  return yaml.load(content);
+};
 
 const schemaDir = path.join(process.cwd(), "doctrine", "schemas");
 
@@ -42,7 +44,7 @@ for (const [file, schemaName] of Object.entries(manifestMap)) {
   }
 
   const raw = fs.readFileSync(absFile, "utf8");
-  const data = raw.trim().startsWith("{") ? JSON.parse(raw) : parseYaml(raw);
+  const data = raw.trim().startsWith("{") ? JSON.parse(raw) : loadYaml(raw);
   const schema = JSON.parse(fs.readFileSync(absSchema, "utf8"));
 
   const validate = ajv.compile(schema);

@@ -90,9 +90,15 @@
     {
       "tool": "n8n",
       "type": "Fallback",
-      "endpoint": "https://n8n-instance/webhook",
+      "endpoint": "https://srv1153077.hstgr.cloud:5678",
+      "endpoint_source": "doppler:N8N_HOSTINGER_URL",
+      "host": "srv1153077.hstgr.cloud",
+      "ip": "72.61.65.44",
+      "deployment": "self-hosted",
+      "provider": "hostinger",
       "doctrine_id": "04.04.F1",
-      "status": "active"
+      "status": "active",
+      "description": "Self-hosted n8n on Hostinger VPS - webhook URL managed via Doppler vault"
     },
     {
       "tool": "Make",
