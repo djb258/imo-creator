@@ -1,32 +1,79 @@
-# Hub-and-Spoke (HS) Template System
+# Hub-and-Spoke (HS) Templates — Doctrine & Definitions
 
-## Overview
+This directory contains the **authoritative templates** used to design, build,
+and enforce Hub-and-Spoke (HS) systems across all projects and domains
+(outreach, storage, insurance, etc.).
 
-This directory contains reusable templates for implementing the Hub-and-Spoke architecture pattern across any domain. These templates are domain-agnostic and can be applied to outreach systems, storage platforms, insurance workflows, or any other service architecture.
+These templates define **structure and control**, not implementation.
+Projects must conform to them.
 
-## Architecture Principles
+---
 
-### Hub Responsibilities
-- **Owns all tools** - Tools are registered and managed at the hub level
-- **Enforces doctrine** - All spokes inherit rules from the hub
-- **Manages failures** - Aggregates errors to Master Failure Hub
-- **Controls promotion** - Gates what flows to spokes
+## Canonical Definitions (Single Source of Truth)
 
-### Spoke Responsibilities
-- **Inherits from hub** - No independent tool registration
-- **Reports upstream** - All failures bubble to parent hub
-- **Executes locally** - Performs domain-specific operations
-- **Requests via hub** - External integrations route through hub
+The following terms are used throughout all PRDs, PRs, and ADRs.
+They are defined **once here** to prevent drift.
+
+### Hub
+
+A **Hub** is a bounded system.
+It owns its rules, data, tooling, guard rails, and failure modes.
+A hub must be independently understandable, testable, and stoppable.
+
+### Spoke
+
+A **Spoke** is a subordinate unit attached to a hub.
+It inherits rules and tooling from its parent hub.
+A spoke cannot exist without a hub.
+A spoke cannot define its own tools.
+
+### Connector
+
+A **Connector** is an interface between hubs or between a hub and an external system.
+Connectors are owned by exactly one hub.
+Connectors define the contract; they do not own business logic.
+
+### Tool
+
+A **Tool** is a capability registered to a hub.
+Tools are owned by hubs, never by spokes.
+New tools require an ADR.
+
+### Guard Rail
+
+A **Guard Rail** is a constraint that prevents harm.
+Examples: rate limits, timeouts, circuit breakers, validation rules.
+Guard rails are defined at the hub level and inherited by spokes.
+
+### Kill Switch
+
+A **Kill Switch** is a mechanism to halt a hub or spoke immediately.
+Every hub and spoke must have one.
+Kill switches must be tested before deployment.
+
+### Promotion Gate
+
+A **Promotion Gate** is a checkpoint that must pass before deployment.
+Gates are numbered G1–G5.
+All gates must pass; there are no exceptions.
+
+### Failure Mode
+
+A **Failure Mode** is a documented way a hub or spoke can fail.
+Every tool must have at least one failure mode defined.
+Failures propagate to the Master Failure Hub.
+
+---
 
 ## Directory Structure
 
 ```
 templates/
-├── README.md                           # This file
+├── README.md                           # This file (doctrine definitions)
 ├── checklists/
-│   └── HUB_COMPLIANCE.md              # Pre-flight checklist for hub/spoke compliance
+│   └── HUB_COMPLIANCE.md              # Pre-flight checklist for compliance
 ├── prd/
-│   └── PRD_HUB.md                     # Product requirements template for new hubs
+│   └── PRD_HUB.md                     # Product requirements template
 ├── pr/
 │   ├── PULL_REQUEST_TEMPLATE_HUB.md   # PR template for hub changes
 │   └── PULL_REQUEST_TEMPLATE_SPOKE.md # PR template for spoke changes
@@ -34,146 +81,63 @@ templates/
     └── ADR.md                         # Architecture Decision Record template
 ```
 
-## Quick Start
+---
 
-### Creating a New Hub
+## Required Artifacts for Any Hub
 
-1. Copy `prd/PRD_HUB.md` to your repo and fill it out
-2. Run through `checklists/HUB_COMPLIANCE.md` before implementation
-3. Use `pr/PULL_REQUEST_TEMPLATE_HUB.md` for all hub PRs
-4. Document tool additions with `adr/ADR.md`
+Before a hub can be deployed, it must have:
 
-### Creating a New Spoke
+1. **PRD**
+   - Created from `templates/prd/PRD_HUB.md`
+   - Defines spokes, connectors, tooling, and controls
 
-1. Identify parent hub (spokes cannot exist without a hub)
-2. Verify hub has required tools registered
-3. Run through spoke sections of `checklists/HUB_COMPLIANCE.md`
-4. Use `pr/PULL_REQUEST_TEMPLATE_SPOKE.md` for all spoke PRs
+2. **Hub Compliance Checklist**
+   - Created from `templates/checklists/HUB_COMPLIANCE.md`
+   - Must be satisfied before merge or deployment
 
-## Core Rules
+3. **PR Enforcement**
+   - Hub changes use the Hub PR template
+   - Spoke changes use the Spoke PR template
 
-### Tool Ownership
+4. **ADR(s)**
+   - Required for new tools or irreversible decisions
 
-```
-HUB owns tools → SPOKE inherits tools
-     ↓
-New tool? → ADR required → Hub approval → Registration
-```
+If any artifact is missing, incomplete, or bypassed,
+the hub is considered **non-viable**.
 
-**Spokes NEVER:**
-- Register their own tools
-- Bypass hub for external calls
-- Modify hub configurations
+---
 
-### Failure Propagation
+## Template Usage Rules
 
-```
-SPOKE failure → Parent HUB → MASTER_FAILURE_LOG
-                    ↓
-              Auto-repair (if enabled)
-                    ↓
-              CORE_METRIC update
-```
+- Templates in this directory are **never edited directly**.
+- Projects **copy and instantiate** templates.
+- Instantiated files live in project repos under:
+  - `/docs/prd/`
+  - `/docs/adr/`
+  - `.github/PULL_REQUEST_TEMPLATE/`
+- Projects declare which template version they conform to.
 
-### Promotion Gates
+---
 
-All changes must pass these gates before production:
+## Enforcement Model
 
-| Gate | Requirement |
-|------|-------------|
-| **G1** | All tests pass |
-| **G2** | Compliance checklist complete |
-| **G3** | ADR approved (if new tool) |
-| **G4** | Kill switch documented |
-| **G5** | Rollback plan exists |
+- PR templates enforce human attestation.
+- CI enforces truth (tests, schemas, logs).
+- Violations block merge or trigger kill switches.
 
-## Guard Rails
+Hope is not an enforcement strategy.
 
-### Mandatory for All Hubs
+---
 
-- [ ] Kill switch endpoint defined
-- [ ] Rate limiting configured
-- [ ] Timeout thresholds set
-- [ ] Failure escalation rules documented
-- [ ] Rollback procedure tested
+## Design Principle
 
-### Mandatory for All Spokes
+> If you cannot diagram it as a hub with spokes and connectors,
+> you are not allowed to build it.
 
-- [ ] Parent hub identified
-- [ ] Inheritance chain documented
-- [ ] No direct external integrations
-- [ ] Failure reporting configured
-- [ ] Health check endpoint exists
+---
 
-## Kill Switch Protocol
+## Authority
 
-Every hub and spoke MUST implement:
-
-```yaml
-kill_switch:
-  enabled: false          # Set true to disable
-  reason: ""              # Required when enabled
-  disabled_by: ""         # Who disabled it
-  disabled_at: ""         # Timestamp
-  emergency_contact: ""   # Who to call
-```
-
-**Activation:**
-1. Set `enabled: true`
-2. Fill in reason, disabled_by, disabled_at
-3. System immediately stops processing
-4. Alert sent to emergency_contact
-
-**Reactivation:**
-1. Resolve underlying issue
-2. Document resolution
-3. Set `enabled: false`
-4. Clear reason field
-
-## Usage Examples
-
-### Example: Outreach Domain
-
-```
-OUTREACH_HUB (owns: gmail, linkedin, apify)
-├── EMAIL_SPOKE (inherits: gmail)
-├── SOCIAL_SPOKE (inherits: linkedin)
-└── SCRAPING_SPOKE (inherits: apify)
-```
-
-### Example: Storage Domain
-
-```
-STORAGE_HUB (owns: s3, gcs, b2)
-├── ARCHIVE_SPOKE (inherits: s3, gcs)
-├── BACKUP_SPOKE (inherits: b2)
-└── CDN_SPOKE (inherits: s3)
-```
-
-### Example: Insurance Domain
-
-```
-INSURANCE_HUB (owns: policy_api, claims_api, underwriting)
-├── QUOTES_SPOKE (inherits: policy_api, underwriting)
-├── CLAIMS_SPOKE (inherits: claims_api)
-└── RENEWALS_SPOKE (inherits: policy_api)
-```
-
-## Compliance Enforcement
-
-These templates integrate with:
-
-- **HEIR/ORBT** - All operations tracked with unique_id and process_id
-- **Master Failure Hub** - Centralized error aggregation
-- **CTB Doctrine** - Branch and structure compliance
-- **Composio MCP** - External integration gateway
-
-## Version History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | 2025-12-12 | Initial template system |
-
-## Maintainer
-
-IMO-Core Engineering
+This repository defines doctrine.
+Projects conform to it.
+Doctrine does not conform to projects.

@@ -260,6 +260,43 @@ curl -X POST http://localhost:8000/api/composio/million_verifier/tool \
 - **Connection Status**: ⚠️ Local API key configuration
 - **Environment Variable**: `ANTHROPIC_API_KEY`
 
+### **5. Hostinger (VPS & N8N Hosting)**
+- **Purpose**: VPS management and N8N workflow automation hosting
+- **Connection Status**: ✅ Active - MCP Server integration
+- **MCP Server**: `npx hostinger-api-mcp@latest`
+- **Environment Variables**:
+  - `HOSTINGER_API_TOKEN` (stored in Doppler)
+  - `N8N_HOSTINGER_URL` (stored in Doppler)
+- **VPS Details**:
+  - Hostname: `srv1153077.hstgr.cloud`
+  - IP: `72.61.65.44`
+  - OS: Ubuntu 24.04 with n8n
+  - Plan: KVM 2 (2 CPU, 8GB RAM, 100GB)
+- **Available Tools**:
+  - `HOSTINGER_VPS_LIST`, `HOSTINGER_VPS_START`, `HOSTINGER_VPS_STOP`
+  - `HOSTINGER_VPS_RESTART`, `HOSTINGER_VPS_STATUS`
+  - `HOSTINGER_DOMAIN_LIST`, `HOSTINGER_SSL_STATUS`, `HOSTINGER_DNS_MANAGE`
+- **Use Cases**:
+  - VPS server management (start/stop/restart)
+  - N8N workflow hosting and management
+  - Domain and SSL certificate management
+  - Server monitoring and status checks
+
+### **6. Abacus.AI (Enterprise AI Platform)**
+- **Purpose**: Custom AI agents, ML model deployment, AI workflows
+- **Connection Status**: ✅ Active - Custom API integration
+- **API Endpoint**: `https://api.abacus.ai/v0`
+- **Environment Variable**: `ABACUS_AI_API_KEY` (stored in Doppler)
+- **Available Tools**:
+  - `ABACUS_CREATE_AGENT`, `ABACUS_RUN_AGENT`, `ABACUS_LIST_AGENTS`
+  - `ABACUS_DEPLOY_MODEL`, `ABACUS_PREDICT`, `ABACUS_GET_PREDICTIONS`
+  - `ABACUS_CREATE_WORKFLOW`, `ABACUS_RUN_WORKFLOW`
+- **Use Cases**:
+  - Custom AI chatbot creation and management
+  - ML model training and deployment
+  - AI workflow automation
+  - Predictive analytics and forecasting
+
 ## 🔑 Configuration
 
 ### **Environment Variables (.env)**

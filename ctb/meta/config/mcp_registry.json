@@ -21,8 +21,8 @@
       "Version tracking ensures compatibility across distributed repos"
     ]
   },
-  "engine_version": "1.3.3",
-  "last_updated": "2025-10-22T00:00:00Z",
+  "engine_version": "1.3.4",
+  "last_updated": "2025-12-01T00:00:00Z",
   "production_urls": {
     "frontend": "https://imo-creator.vercel.app",
     "composio_api": "https://backend.composio.dev",
@@ -90,15 +90,87 @@
     {
       "tool": "n8n",
       "type": "Fallback",
-      "endpoint": "https://srv1153077.hstgr.cloud:5678",
-      "endpoint_source": "doppler:N8N_HOSTINGER_URL",
-      "host": "srv1153077.hstgr.cloud",
-      "ip": "72.61.65.44",
-      "deployment": "self-hosted",
-      "provider": "hostinger",
+      "endpoint": "${N8N_HOSTINGER_URL}/webhook",
       "doctrine_id": "04.04.F1",
       "status": "active",
-      "description": "Self-hosted n8n on Hostinger VPS - webhook URL managed via Doppler vault"
+      "hosting": "hostinger",
+      "description": "N8N workflow automation hosted on Hostinger VPS"
+    },
+    {
+      "tool": "Hostinger",
+      "type": "MCP",
+      "mcp_server": {
+        "command": "npx",
+        "args": ["hostinger-api-mcp@latest"],
+        "env": {
+          "API_TOKEN": "${HOSTINGER_API_TOKEN}"
+        }
+      },
+      "doctrine_id": "04.04.13",
+      "status": "active",
+      "ctb_branch": "sys/hostinger",
+      "toolkit_tools": [
+        "HOSTINGER_VPS_LIST", "HOSTINGER_VPS_START", "HOSTINGER_VPS_STOP",
+        "HOSTINGER_VPS_RESTART", "HOSTINGER_VPS_STATUS", "HOSTINGER_DOMAIN_LIST",
+        "HOSTINGER_SSL_STATUS", "HOSTINGER_DNS_MANAGE"
+      ],
+      "capabilities": [
+        "vps_management",
+        "n8n_workflow_hosting",
+        "domain_management",
+        "ssl_certificates",
+        "server_monitoring",
+        "dns_configuration"
+      ],
+      "required_env_vars": [
+        "HOSTINGER_API_TOKEN"
+      ],
+      "integration_points": {
+        "n8n": "Hosts N8N workflow automation instance",
+        "composio": "Can be connected via custom MCP integration"
+      },
+      "description": "Hostinger API MCP server for VPS, domain, and N8N workflow management"
+    },
+    {
+      "tool": "Abacus_AI",
+      "type": "Custom API",
+      "endpoint": "https://api.abacus.ai/v0",
+      "doctrine_id": "04.04.14",
+      "status": "active",
+      "ctb_branch": "sys/abacus-ai",
+      "toolkit_tools": [
+        "ABACUS_CREATE_AGENT", "ABACUS_RUN_AGENT", "ABACUS_LIST_AGENTS",
+        "ABACUS_DEPLOY_MODEL", "ABACUS_PREDICT", "ABACUS_GET_PREDICTIONS",
+        "ABACUS_CREATE_WORKFLOW", "ABACUS_RUN_WORKFLOW", "ABACUS_GET_WORKFLOW_STATUS"
+      ],
+      "capabilities": [
+        "custom_ai_agents",
+        "ml_model_deployment",
+        "ai_workflows",
+        "predictive_analytics",
+        "chatbot_creation",
+        "data_connectors"
+      ],
+      "api_endpoints": {
+        "agents": "/agents",
+        "models": "/models",
+        "predictions": "/predictions",
+        "workflows": "/workflows",
+        "deployments": "/deployments"
+      },
+      "authentication": {
+        "type": "api_key",
+        "header_name": "X-API-Key",
+        "key_location": "header"
+      },
+      "required_env_vars": [
+        "ABACUS_AI_API_KEY"
+      ],
+      "integration_points": {
+        "composio": "Custom integration via OpenAPI spec",
+        "n8n": "HTTP Request node with API key auth"
+      },
+      "description": "Abacus.AI enterprise AI platform for custom agents, ML models, and AI workflow automation"
     },
     {
       "tool": "Make",
