@@ -1,0 +1,168 @@
+# Abacus.AI Custom Integration for Composio
+# Doctrine ID: 04.04.14
+# Created: 2025-12-01
+
+name: abacus_ai
+display_name: Abacus.AI
+description: Enterprise AI platform for custom agents, ML models, and AI workflow automation
+version: "1.0.0"
+
+# Authentication Configuration
+auth:
+  type: api_key
+  header_name: X-API-Key
+  description: "Abacus.AI API Key from dashboard"
+
+# Base Configuration
+base_url: https://api.abacus.ai/v0
+
+# Available Actions/Tools
+actions:
+  # Agent Management
+  - name: ABACUS_LIST_AGENTS
+    description: List all AI agents in your organization
+    method: GET
+    path: /agents
+
+  - name: ABACUS_CREATE_AGENT
+    description: Create a new custom AI agent
+    method: POST
+    path: /agents
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: Name of the agent
+      - name: description
+        type: string
+        required: false
+        description: Description of the agent's purpose
+      - name: model_id
+        type: string
+        required: false
+        description: Base model ID to use
+
+  - name: ABACUS_RUN_AGENT
+    description: Execute an AI agent with input
+    method: POST
+    path: /agents/{agent_id}/run
+    parameters:
+      - name: agent_id
+        type: string
+        required: true
+        in: path
+        description: ID of the agent to run
+      - name: input
+        type: object
+        required: true
+        description: Input data for the agent
+
+  # Model Management
+  - name: ABACUS_LIST_MODELS
+    description: List all deployed models
+    method: GET
+    path: /models
+
+  - name: ABACUS_DEPLOY_MODEL
+    description: Deploy a trained model
+    method: POST
+    path: /deployments
+    parameters:
+      - name: model_id
+        type: string
+        required: true
+        description: ID of the model to deploy
+      - name: name
+        type: string
+        required: true
+        description: Deployment name
+
+  # Predictions
+  - name: ABACUS_PREDICT
+    description: Get predictions from a deployed model
+    method: POST
+    path: /deployments/{deployment_id}/predict
+    parameters:
+      - name: deployment_id
+        type: string
+        required: true
+        in: path
+        description: ID of the deployment
+      - name: data
+        type: object
+        required: true
+        description: Input data for prediction
+
+  - name: ABACUS_GET_PREDICTIONS
+    description: Get batch prediction results
+    method: GET
+    path: /predictions/{prediction_id}
+    parameters:
+      - name: prediction_id
+        type: string
+        required: true
+        in: path
+        description: ID of the prediction job
+
+  # Workflow Management
+  - name: ABACUS_LIST_WORKFLOWS
+    description: List all AI workflows
+    method: GET
+    path: /workflows
+
+  - name: ABACUS_CREATE_WORKFLOW
+    description: Create a new AI workflow
+    method: POST
+    path: /workflows
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: Workflow name
+      - name: steps
+        type: array
+        required: true
+        description: Workflow steps configuration
+
+  - name: ABACUS_RUN_WORKFLOW
+    description: Execute an AI workflow
+    method: POST
+    path: /workflows/{workflow_id}/run
+    parameters:
+      - name: workflow_id
+        type: string
+        required: true
+        in: path
+        description: ID of the workflow to run
+      - name: input
+        type: object
+        required: false
+        description: Input data for the workflow
+
+  - name: ABACUS_GET_WORKFLOW_STATUS
+    description: Get workflow execution status
+    method: GET
+    path: /workflows/{workflow_id}/status
+    parameters:
+      - name: workflow_id
+        type: string
+        required: true
+        in: path
+        description: ID of the workflow
+
+# Rate Limiting
+rate_limit:
+  requests_per_minute: 60
+  burst_limit: 10
+
+# Metadata
+metadata:
+  category: AI/ML
+  tags:
+    - ai
+    - machine-learning
+    - agents
+    - workflows
+    - predictions
+  documentation_url: https://abacus.ai/help
+  support_url: https://abacus.ai/support
