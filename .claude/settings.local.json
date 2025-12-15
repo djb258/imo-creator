@@ -14,10 +14,23 @@
       "Bash(git commit:*)",
       "WebFetch(domain:composio-imo-creator6.vercel.app)",
       "Bash(find:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n🔧 Add required development tools configuration and automation\n\nImplement CTB Doctrine v1.3.2 requirement for 5 mandatory development tools across all repositories.\n\nNew Tools Configuration:\n- Grafana (04.05.01) - Monitoring & observability dashboards\n- GitHub Projects (04.05.02) - Project management integration  \n- GitKraken (04.05.03) - Visual git client for CTB navigation\n- Obsidian (04.05.04) - Documentation & knowledge management\n- Eraser.io (04.05.05) - Technical diagramming & architecture\n\nNew Files:\n- global-config/required_tools.yaml - Tool specifications with doctrine IDs\n- global-config/scripts/verify_required_tools.sh - Automated verification\n- global-config/scripts/install_required_tools.sh - Cross-platform installer\n- docs/TOOLS_SETUP_GUIDE.md - Comprehensive setup documentation\n\nUpdated Files:\n- global-config/scripts/dev_setup.sh (v1.1) - Added tool verification step\n- global-config/scripts/update_from_imo_creator.sh - Syncs tool configs\n- global-config/QUICK_REFERENCE.md - Added tools reference section\n\nAuto-Propagation:\nWhen child repos run \"update from imo-creator\", they receive:\n- Tool configuration and verification scripts\n- Installation automation for Windows/Mac/Linux\n- Complete setup guide with troubleshooting\n\nAll tools integrate with CTB branch structure for monitoring, documentation, \nand visualization workflows across the altitude levels.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset:*)",
+      "Bash(tree:*)",
+      "Bash(set PYTHONIOENCODING=utf-8:*)",
+      "Bash(git merge:*)",
+      "Bash(docker compose:*)",
+      "Bash(pip install:*)",
+      "Bash(set PYTHONPATH=.)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": [],
+    "defaultMode": "bypassPermissions",
     "additionalDirectories": [
       "C:\\Users\\CUSTOM PC\\Desktop\\Cursor Builds\\scraping-tool"
     ]

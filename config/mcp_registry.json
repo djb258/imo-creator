@@ -40,8 +40,22 @@
     {
       "tool": "n8n",
       "type": "Fallback",
-      "endpoint": "https://n8n-instance/webhook",
+      "endpoint": "${N8N_HOSTINGER_URL}/webhook",
       "doctrine_id": "04.04.F1",
+      "status": "active",
+      "hosting": "hostinger"
+    },
+    {
+      "tool": "Hostinger",
+      "type": "MCP",
+      "mcp_server": {
+        "command": "npx",
+        "args": ["hostinger-api-mcp@latest"],
+        "env": {
+          "API_TOKEN": "${HOSTINGER_API_TOKEN}"
+        }
+      },
+      "doctrine_id": "04.04.13",
       "status": "active"
     },
     {
