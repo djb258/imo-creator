@@ -1,67 +1,69 @@
-# Hub-and-Spoke (HS) Templates — Doctrine & Definitions
+# Hub & Spoke Templates — Doctrine & Definitions
 
 This directory contains the **authoritative templates** used to design, build,
-and enforce Hub-and-Spoke (HS) systems across all projects and domains
-(outreach, storage, insurance, etc.).
+and enforce Hub & Spoke systems across all projects and domains.
 
 These templates define **structure and control**, not implementation.
 Projects must conform to them.
 
 ---
 
+## Authoritative Doctrine
+
+**Read this first:**
+
+> [`doctrine/HUB_SPOKE_ARCHITECTURE.md`](doctrine/HUB_SPOKE_ARCHITECTURE.md)
+
+This is the master reference for:
+- Hub vs Spoke definitions
+- IMO (Ingress / Middle / Egress) model
+- CTB (Christmas Tree Backbone) structure
+- Altitude levels (30k → 5k)
+- Required identifiers (Hub ID, Process ID)
+- How to create and refactor repositories
+
+If any instruction conflicts with other guidance, **the doctrine wins**.
+
+---
+
 ## Canonical Definitions (Single Source of Truth)
 
-The following terms are used throughout all PRDs, PRs, and ADRs.
-They are defined **once here** to prevent drift.
-
 ### Hub
-
-A **Hub** is a bounded system.
-It owns its rules, data, tooling, guard rails, and failure modes.
-A hub must be independently understandable, testable, and stoppable.
+A **Hub is an application**.
+- Owns logic, decisions, state, CTB placement, altitude, full IMO flow
+- A repository MUST contain **exactly one hub**
+- If a repository contains more than one hub, it MUST be split
 
 ### Spoke
+A **Spoke is an interface**.
+- Typed as **I (Ingress)** or **O (Egress)** only
+- Owns NO logic, NO state, NO tools
+- There is **no such thing as a Middle spoke**
 
-A **Spoke** is a subordinate unit attached to a hub.
-It inherits rules and tooling from its parent hub.
-A spoke cannot exist without a hub.
-A spoke cannot define its own tools.
+### IMO (Inside Hubs Only)
+| Layer | Role |
+|-------|------|
+| **I — Ingress** | Dumb input only (UI, API, webhook) |
+| **M — Middle** | All logic, decisions, state, tools |
+| **O — Egress** | Output only (exports, notifications) |
 
-### Connector
+### CTB Branches
+| Branch | Purpose |
+|--------|---------|
+| `sys/` | System infrastructure |
+| `ui/` | User interfaces |
+| `ai/` | AI/ML agents |
+| `data/` | Data pipelines |
+| `ops/` | Operations |
+| `docs/` | Documentation |
 
-A **Connector** is an interface between hubs or between a hub and an external system.
-Connectors are owned by exactly one hub.
-Connectors define the contract; they do not own business logic.
-
-### Tool
-
-A **Tool** is a capability registered to a hub.
-Tools are owned by hubs, never by spokes.
-New tools require an ADR.
-
-### Guard Rail
-
-A **Guard Rail** is a constraint that prevents harm.
-Examples: rate limits, timeouts, circuit breakers, validation rules.
-Guard rails are defined at the hub level and inherited by spokes.
-
-### Kill Switch
-
-A **Kill Switch** is a mechanism to halt a hub or spoke immediately.
-Every hub and spoke must have one.
-Kill switches must be tested before deployment.
-
-### Promotion Gate
-
-A **Promotion Gate** is a checkpoint that must pass before deployment.
-Gates are numbered G1–G5.
-All gates must pass; there are no exceptions.
-
-### Failure Mode
-
-A **Failure Mode** is a documented way a hub or spoke can fail.
-Every tool must have at least one failure mode defined.
-Failures propagate to the Master Failure Hub.
+### Altitude Levels
+| Level | Scope |
+|-------|-------|
+| 30k | System architecture |
+| 20k | Domain / capability |
+| 10k | Process / logic |
+| 5k | Execution / implementation |
 
 ---
 
@@ -69,75 +71,77 @@ Failures propagate to the Master Failure Hub.
 
 ```
 templates/
-├── README.md                           # This file (doctrine definitions)
+├── README.md                           # This file
+├── doctrine/
+│   └── HUB_SPOKE_ARCHITECTURE.md       # Master doctrine (READ FIRST)
 ├── checklists/
-│   └── HUB_COMPLIANCE.md              # Pre-flight checklist for compliance
+│   └── HUB_COMPLIANCE.md               # Pre-ship compliance checklist
 ├── prd/
-│   └── PRD_HUB.md                     # Product requirements template
+│   └── PRD_HUB.md                      # Product requirements template
 ├── pr/
-│   ├── PULL_REQUEST_TEMPLATE_HUB.md   # PR template for hub changes
-│   └── PULL_REQUEST_TEMPLATE_SPOKE.md # PR template for spoke changes
+│   ├── PULL_REQUEST_TEMPLATE_HUB.md    # PR template for hub changes
+│   └── PULL_REQUEST_TEMPLATE_SPOKE.md  # PR template for spoke changes
 └── adr/
-    └── ADR.md                         # Architecture Decision Record template
+    └── ADR.md                          # Architecture Decision Record template
 ```
 
 ---
 
 ## Required Artifacts for Any Hub
 
-Before a hub can be deployed, it must have:
+Before a hub can ship, it must have:
 
-1. **PRD**
-   - Created from `templates/prd/PRD_HUB.md`
-   - Defines spokes, connectors, tooling, and controls
-
-2. **Hub Compliance Checklist**
-   - Created from `templates/checklists/HUB_COMPLIANCE.md`
-   - Must be satisfied before merge or deployment
-
-3. **PR Enforcement**
-   - Hub changes use the Hub PR template
-   - Spoke changes use the Spoke PR template
-
-4. **ADR(s)**
-   - Required for new tools or irreversible decisions
+| Artifact | Template | Purpose |
+|----------|----------|---------|
+| **PRD** | `prd/PRD_HUB.md` | Defines structure, IMO, CTB, spokes |
+| **Checklist** | `checklists/HUB_COMPLIANCE.md` | Binary ship gate |
+| **PR** | `pr/PULL_REQUEST_TEMPLATE_HUB.md` | Implements approved structure |
+| **ADR(s)** | `adr/ADR.md` | Documents decisions (why, not what) |
 
 If any artifact is missing, incomplete, or bypassed,
 the hub is considered **non-viable**.
 
 ---
 
+## Promotion Gates
+
+| Gate | Artifact | Requirement |
+|------|----------|-------------|
+| G1 | PRD | Hub definition approved |
+| G2 | ADR | Architecture decision recorded |
+| G3 | Linear Issue | Work item created and assigned |
+| G4 | PR | Code reviewed and merged |
+| G5 | Checklist | Deployment verification complete |
+
+---
+
 ## Template Usage Rules
 
-- Templates in this directory are **never edited directly**.
-- Projects **copy and instantiate** templates.
+- Templates in this directory are **never edited directly**
+- Projects **copy and instantiate** templates
 - Instantiated files live in project repos under:
   - `/docs/prd/`
   - `/docs/adr/`
   - `.github/PULL_REQUEST_TEMPLATE/`
-- Projects declare which template version they conform to.
+- Projects declare which template version they conform to
 
 ---
 
-## Enforcement Model
+## Hard Violations (Stop Immediately)
 
-- PR templates enforce human attestation.
-- CI enforces truth (tests, schemas, logs).
-- Violations block merge or trigger kill switches.
+- Logic exists in a spoke
+- Cross-hub state sharing
+- UI making decisions
+- Tools spanning hubs
+- Missing Hub ID or Process ID
+- Repo acting as multiple hubs
+- Architecture introduced in a PR
 
-Hope is not an enforcement strategy.
-
----
-
-## Design Principle
-
-> If you cannot diagram it as a hub with spokes and connectors,
-> you are not allowed to build it.
+These are **schema violations**, not preferences.
 
 ---
 
-## Authority
+## Final Rule
 
-This repository defines doctrine.
-Projects conform to it.
-Doctrine does not conform to projects.
+> **The system is correct only if the structure enforces the behavior.**
+> If discipline relies on memory, the design has failed.
