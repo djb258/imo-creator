@@ -1,322 +1,127 @@
-# AI/Human Readable Branch
+# IMO-Creator Hub
 
-This branch provides repository readability for both AI systems and human developers through automated analysis, diagram generation, and narrative summaries.
-
-## 🤖 Purpose
-
-Every repository explains itself to humans & AI by default through:
-
-- **GitIngest indexing** for semantic search and AI comprehension
-- **Diagram generation** using Mermaid, PlantUML, and SVG formats
-- **Narrative summaries** in IMO + ORBT format for project understanding
-
-## 🔄 Available Workflows
-
-### `git-ingest.yml`
-- **Purpose**: Generate comprehensive repository index for AI systems
-- **Features**:
-  - Full repository structure scanning with smart file filtering
-  - Semantic search index generation for keyword and pattern matching
-  - Repository analysis and project type detection
-  - Weekly automated updates with manual trigger option
-
-### `diagram.yml`
-- **Purpose**: Automated diagram generation for visual documentation
-- **Features**:
-  - IMO Architecture diagrams showing Input → Middle → Output flow
-  - MCP Registry flow diagrams from configuration files
-  - Dependency graphs for Python and Node.js projects
-  - Multiple output formats: Mermaid, SVG, PlantUML
-
-### `summary.yml`
-- **Purpose**: Human-readable project summaries and health scoring
-- **Features**:
-  - IMO narrative summaries with project maturity assessment
-  - ORBT format summaries (Objective/Result/Benefit/Timeline)
-  - Repository health scoring and optimization recommendations
-  - Daily automated updates with comprehensive analysis
-
-## 📊 Generated Outputs
-
-### GitIngest Files
-- **`.github/generated/git-ingest.json`** - Complete repository index
-- **`.github/generated/search-index.json`** - Semantic search database
-- **`.github/generated/repo-summary.json`** - Technical analysis summary
-
-### Diagram Files
-- **`.github/generated/diagrams/*.mmd`** - Mermaid diagram sources
-- **`.github/generated/diagrams/*.svg`** - Rendered SVG diagrams
-- **`.github/generated/diagrams/*.puml`** - PlantUML sequence diagrams
-
-### Summary Files
-- **`.github/generated/summaries/NARRATIVE.md`** - Human-readable project overview
-- **`.github/generated/summaries/ORBT.md`** - Structured project summary
-- **`.github/generated/summaries/repository-analysis.json`** - Detailed analysis data
-
-## 🎯 AI Integration Benefits
-
-### For AI Systems
-- **Structured Data**: JSON indexes enable semantic understanding
-- **Visual Context**: Diagrams provide architectural comprehension
-- **Narrative Context**: Summaries explain project purpose and status
-- **Search Capability**: Semantic indexes enable targeted file discovery
-
-### For Human Developers
-- **Project Health**: Automated health scoring with improvement suggestions
-- **Visual Documentation**: Auto-generated architecture and flow diagrams
-- **Onboarding**: Comprehensive summaries for new team members
-- **Maintenance**: Regular analysis identifies technical debt and gaps
-
-## 🚀 Integration with IMO-Creator
-
-These workflows automatically integrate with:
-
-```json
-{
-  "doctrine_branches": {
-    "ai-human-readable": {
-      "git_ingest": ".github/workflows/git-ingest.yml",
-      "diagram": ".github/workflows/diagram.yml",
-      "summary": ".github/workflows/summary.yml"
-    }
-  }
-}
-```
-
-## 📋 Workflow Triggers
-
-### Automatic Triggers
-- **Push to main**: Updates diagrams and summaries
-- **Schedule**: Daily summaries, weekly GitIngest updates
-- **File Changes**: Diagram updates on architecture file changes
-
-### Manual Triggers
-- **workflow_dispatch**: All workflows support manual execution
-- **Custom Parameters**: Choose specific diagram types or summary formats
-- **Force Options**: Full repository scans and complete regeneration
-
-## 🔧 Customization
-
-### File Filtering
-- **GitIngest**: Configurable file size limits and extension filtering
-- **Diagrams**: Adjustable complexity and tool selection
-- **Analysis**: Customizable health scoring criteria
-
-### Output Formats
-- **Multiple Formats**: JSON, Markdown, SVG, Mermaid, PlantUML
-- **Configurable Templates**: Customize narrative and ORBT formats
-- **Integration Ready**: Outputs designed for documentation systems
-
-## 📈 Usage Examples
-
-### Including Diagrams in Documentation
-```markdown
-<!-- Auto-generated IMO Architecture -->
-![IMO Architecture](.github/generated/diagrams/imo-architecture.svg)
-
-<!-- Mermaid diagram in markdown -->
-```mermaid
-graph TB
-    <!-- Content from .github/generated/diagrams/imo-architecture.mmd -->
-```
-
-### Accessing Analysis Data
-```javascript
-// Load repository analysis
-const analysis = await fetch('/.github/generated/summaries/repository-analysis.json')
-    .then(r => r.json());
-
-// Use semantic search
-const searchIndex = await fetch('/.github/generated/search-index.json')
-    .then(r => r.json());
-```
-
-## 🏷️ Branch Purpose
-
-This is a **doctrine branch** that provides foundational AI/human readability capabilities. Every IMO-Creator repository automatically inherits these analysis and documentation workflows, ensuring consistent project comprehension across the ecosystem.
-
-## 🔄 Update Frequency
-
-- **GitIngest**: Weekly automated, triggered by significant changes
-- **Diagrams**: On architecture file changes, manual on demand
-- **Summaries**: Daily automated, comprehensive project analysis
-- **All**: Available for manual trigger via GitHub Actions interface
+**Hub ID:** IMO-001
+**Altitude:** 30k (System Architecture)
+**Schema:** HEIR/1.0
 
 ---
 
-## 📦 Workbench System (Global Doctrine)
+## Overview
 
-The Workbench system provides a standardized pipeline for data enrichment, diffing, and validator integration across all IMO-Creator repositories.
+This repository is the master orchestration hub containing:
 
-### Architecture
+1. **imo-creator/** — Template submodule (authoritative doctrine and templates)
+2. **garage-mcp/** — MCP Server sub-hub (implementation)
+
+---
+
+## Structure
 
 ```
-Backblaze B2 → DuckDB → Enrichment → Diff Engine → Validator
+.
+├── imo-creator/              # Submodule: Pure templates & doctrine
+│   ├── templates/            # All authoritative templates
+│   │   ├── doctrine/         # Master doctrine
+│   │   ├── integrations/     # Tool integration templates
+│   │   ├── prd/              # PRD templates
+│   │   ├── adr/              # ADR templates
+│   │   ├── pr/               # PR templates
+│   │   └── checklists/       # Compliance checklists
+│   └── global-config/        # Shared configuration patterns
+├── garage-mcp/               # Sub-hub: MCP Server implementation
+│   ├── services/mcp/         # MCP server code
+│   ├── packages/heir/        # HEIR compliance checking
+│   ├── bays/                 # Bay configurations
+│   └── blueprints/           # Blueprint schemas
+├── .github/                  # GitHub workflows & templates
+├── heir.doctrine.yaml        # HEIR compliance config
+└── LICENSE
 ```
 
-The Workbench module enables:
-- **Cloud Storage**: Backblaze B2 for persistent DuckDB storage
-- **Local Processing**: DuckDB for high-performance data analysis
-- **Neon Integration**: Pull data from PostgreSQL for enrichment
-- **Delta Generation**: Diff engine to identify changes
-- **Validator Updates**: Send deltas to validator endpoint
+---
 
-### Why Workbench is Part of Global Doctrine
+## Getting Started
 
-The Workbench system is inherited by all child repositories to ensure:
-- **Consistent data pipelines** across all IMO projects
-- **Standardized enrichment workflows** for data validation
-- **Reusable infrastructure** for cloud storage and local processing
-- **Compliance with CTB standards** for data operations
+### Pull with Submodules
 
-### Setup Instructions
-
-**📘 For detailed Backblaze B2 setup, see [BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md)**
-
-#### Quick Start
-
-1. **Copy environment template**:
-   ```bash
-   cp .env.template .env
-   ```
-
-2. **Get Backblaze B2 credentials**:
-   - Log into Backblaze B2: https://secure.backblaze.com/app_keys.htm
-   - Create or use existing Application Key
-   - Copy `keyID` and `applicationKey`
-
-3. **Configure environment variables** in `.env`:
-   ```bash
-   # Backblaze B2 Configuration (REQUIRED)
-   B2_KEY_ID=a98b56408dc7                                    # Your Application Key ID
-   B2_APPLICATION_KEY=005ebcc57e978d63d2ae82c5721366e41591ca30e2  # Your Application Key
-   B2_BUCKET=svg-enrichment                                  # Your bucket name
-
-   # Neon PostgreSQL (OPTIONAL - only if using Neon integration)
-   POSTGRES_URL=postgresql://user:pass@host/db
-
-   # Validator Endpoint (OPTIONAL - only if using validator deltas)
-   VALIDATOR_ENDPOINT=https://your-validator.com/api/deltas
-   ```
-
-4. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Run bootstrap validation**:
-   ```bash
-   python workbench/bootstrap.py
-   ```
-
-   This will:
-   - Validate Backblaze B2 connectivity
-   - Download `workbench.duckdb` from B2 (or create new)
-   - Test DuckDB connection
-   - Confirm all modules are working
-
-   **Expected output**: `Workbench ready - All systems operational`
-
-### Module Overview
-
-| Module | Purpose |
-|--------|---------|
-| `b2_client.py` | S3-compatible Backblaze B2 client |
-| `load_duckdb.py` | Download DuckDB from B2 to local temp |
-| `save_duckdb.py` | Upload modified DuckDB back to B2 |
-| `neon_pull.py` | Pull table data from Neon PostgreSQL |
-| `run_diff.py` | Diff engine (placeholder) |
-| `apply_deltas.py` | Send deltas to validator endpoint |
-| `bootstrap.py` | Validation and setup script |
-
-### Security Best Practices
-
-⚠️ **NEVER commit real secrets to source control**
-
-- Real credentials go in `.env` (gitignored)
-- `.env.template` contains placeholders only
-- Use environment variables for all sensitive data
-- Rotate keys regularly and use least-privilege access
-
-### Usage Example
-
-```python
-from workbench import get_b2_client, load_workbench, save_workbench, pull_table
-
-# Load DuckDB from Backblaze B2
-db, db_path = load_workbench()
-
-# Pull data from Neon
-neon_data = pull_table('your_table_name')
-
-# Perform enrichment operations
-db.execute("CREATE TABLE IF NOT EXISTS enriched AS SELECT * FROM neon_data")
-
-# Save back to B2
-save_workbench(db_path)
+```bash
+git clone --recurse-submodules https://github.com/djb258/imo-creator.git
 ```
 
-### Integration with Global Config
+Or if already cloned:
 
-The Workbench configuration in `imo-creator/global-config.yaml`:
-
-```yaml
-workbench:
-  module_path: workbench
-  duckdb_path: workbench/workbench.duckdb
-  b2_keys_required: true
-  uses_neon: true
-  inherits_env: true
-  description: "Workbench: Backblaze B2 + DuckDB integration for enrichment, diffing, and validator deltas."
+```bash
+git submodule update --init --recursive
 ```
 
-This ensures every child repo inherits the Workbench module and knows where to find it.
+### Update Submodule
 
-### Troubleshooting
+```bash
+cd imo-creator
+git pull origin master
+cd ..
+git add imo-creator
+git commit -m "Update imo-creator submodule"
+```
 
-**Issue**: `Authorization failed`
-**Solution**:
-- Verify `B2_KEY_ID` and `B2_APPLICATION_KEY` are correct
-- Check Application Key has not expired
-- Ensure key has access to the specified bucket
+---
 
-**Issue**: `Bucket not found`
-**Solution**:
-- Verify `B2_BUCKET` name matches exactly (case-sensitive)
-- Check Application Key has access to this bucket
-- Confirm bucket exists in B2 console
+## Doctrine Reference
 
-**Issue**: DuckDB file not found
-**Solution**: This is normal for first run! The system will create a new DuckDB file automatically
+All doctrine and templates are in the `imo-creator/` submodule:
 
-**Issue**: PostgreSQL connection timeout
-**Solution**:
-- Check `POSTGRES_URL` format: `postgresql://user:pass@host/db`
-- Verify Neon database is running
-- Check firewall/network settings
+| Document | Path |
+|----------|------|
+| **Master Doctrine** | `imo-creator/templates/doctrine/HUB_SPOKE_ARCHITECTURE.md` |
+| **PRD Template** | `imo-creator/templates/prd/PRD_HUB.md` |
+| **ADR Template** | `imo-creator/templates/adr/ADR.md` |
+| **Compliance Checklist** | `imo-creator/templates/checklists/HUB_COMPLIANCE.md` |
 
-**Issue**: Missing environment variables
-**Solution**:
-- Ensure `.env` file exists
-- Verify all required variables are set (no extra spaces)
-- Restart your terminal/IDE to reload environment
+---
 
-**For complete troubleshooting guide**: See [BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md#troubleshooting)
+## Sub-Hubs
 
-### Quick Reference
+### garage-mcp (MCP Server)
 
-| Resource | Location |
-|----------|----------|
-| **B2 Setup Guide** | [docs/BACKBLAZE_B2_SETUP.md](docs/BACKBLAZE_B2_SETUP.md) |
-| **Global Config** | `imo-creator/global-config.yaml` |
-| **Environment Template** | `.env.template` |
-| **Bootstrap Test** | `python workbench/bootstrap.py` |
-| **B2 Console** | https://secure.backblaze.com/b2_buckets.htm |
-| **App Keys** | https://secure.backblaze.com/app_keys.htm |
+The MCP server sub-hub provides:
+- MCP tools for infrastructure operations
+- HEIR compliance checking (`packages/heir/`)
+- Bay configurations for frontend/backend/database
+- Blueprint validation
 
-### API Information
+```bash
+cd garage-mcp
+python -m packages.heir.checks  # Run HEIR validation
+```
 
-- **B2 API Type**: Native B2 API v2 (not S3-compatible)
-- **Auth Endpoint**: `https://api.backblazeb2.com/b2api/v2/b2_authorize_account`
-- **Supports**: Master Application Keys and bucket-specific keys
-- **Dependencies**: `python-dotenv`, `requests`, `duckdb`
+---
+
+## HEIR Compliance
+
+This hub follows HEIR/1.0 schema. Run compliance checks:
+
+```bash
+cd garage-mcp
+python -m packages.heir.checks
+```
+
+Configuration: `heir.doctrine.yaml`
+
+---
+
+## Integrations
+
+All hubs must use these integrations (templates in submodule):
+
+| Integration | Purpose |
+|-------------|---------|
+| Doppler | Secrets management |
+| Composio | MCP server connections |
+| HEIR | Compliance validation |
+| Obsidian | Knowledge management |
+
+---
+
+## License
+
+MIT License - See [LICENSE](LICENSE)
