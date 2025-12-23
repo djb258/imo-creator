@@ -19,10 +19,46 @@ public/
 # IDE
 .vscode/
 .idea/
+.cursor/
 
 # OS
 .DS_Store
 Thumbs.db
+nul
+
+# Dependencies
+node_modules/
 render-cli-source/
 render.exe
+
+# Generated/Ingest Files
+*-ingest*.md
+*-ingest*.txt
+*ingest*.md
+*ingest*.txt
+REPO_OVERVIEW.md
+my-composio-tools-full.json
+.composio-test-report.json
 .bootstrap-report.json
+
+# Logs and Audit Files
+*.log
+logs/*.log
+logs/*.json
+audit_output.log
+tagger_output.log
+*_audit.log
+*_error.log
+
+# CTB Generated Reports
+CTB_AUDIT_REPORT.md
+CTB_TAGGING_REPORT.md
+CTB_REMEDIATION_SUMMARY.md
+CTB_COMPLIANCE_SYSTEM_COMPLETE.md
+CTB_IMPLEMENTATION_REPORT.md
+COMPOSIO_VERIFICATION_REPORT.md
+
+# External Projects (should be submodules if needed)
+deepwiki/
+AutoDocs/
+chartdb/
