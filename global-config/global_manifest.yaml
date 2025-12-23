@@ -44,27 +44,34 @@ acronyms:
     stands_for: "Structured Table Architecture for Calculated Knowledge & Event Data"
     definition: "BigQuery schema for analytical and historical data."
   - acronym: ALTITUDE
-    stands_for: "System visibility levels (60k–5k)"
-    definition: "Defines perspective and scope of doctrine—from strategic overview to operational detail."
+    stands_for: "System visibility levels (50k–5k)"
+    definition: "Defines perspective, scope, and artifact legality—from hub identity to execution."
+    reference: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
     levels:
-      - level: 60k
-        name: Strategic Constellation
-        scope: Company‑wide doctrine, cross‑LLC alignment, long‑range objectives
+      - level: 50k
+        name: Shell
+        scope: Hub identity, attachment topology, I/O spoke declarations
+        artifacts_legal: ["Hub ID", "Attachment manifest"]
       - level: 40k
-        name: Program Constellation
-        scope: Multi‑system initiatives, capability roadmaps, dependency alignment
+        name: Hub-as-Application Decomposition
+        scope: Application behavior, functional areas, boundary definition
+        artifacts_legal: ["Application description", "Functional area list"]
       - level: 30k
-        name: Engineering Hangar
-        scope: Architecture, repo‑of‑repos, standards, CI/CD, enforcement (HEIR/ORBT)
+        name: CTB Placement
+        scope: Trunk/branch/leaf assignment, folder structure, integration config
+        artifacts_legal: ["CTB declaration", "Folder structure", "Integration configs"]
       - level: 20k
-        name: System Blueprint
-        scope: Service boundaries, contracts, schemas, interfaces, SLAs
+        name: IMO Definition
+        scope: Ingress/Middle/Egress flow, spoke-to-layer mapping
+        artifacts_legal: ["PRD", "IMO specification"]
       - level: 10k
-        name: Workflow/Module
-        scope: Pipelines, jobs, subagents, tool wiring (n8n/Composio, MCP)
+        name: Process Logic
+        scope: Internal flows, decision trees, state management
+        artifacts_legal: ["ADRs", "Process flows", "Architecture diagrams"]
       - level: 5k
-        name: Operational Runbook
-        scope: Concrete tasks, endpoints, migrations, health checks, dashboards
+        name: Execution
+        scope: Linear issues, PRs, code, tests, configuration
+        artifacts_legal: ["Linear issues", "PRs", "Code", "Compliance checklist"]
 
 # ============================================================
 # DEEP WIKI AUTOMATION CONFIGURATION
@@ -831,6 +838,222 @@ repo_templates:
       - global-config/imo-ra-schema.json
       - .github/workflows/deepwiki_automation.yml
       - scripts/hooks/post_update_deepwiki.sh
+
+# ============================================================
+# TEMPLATE REGISTRY (Altitude-Gated Artifacts)
+# ============================================================
+# Defines all templates and when they become legal per ALTITUDE_DESCENT_MODEL.md
+# Child repos pulling from imo-creator MUST implement required templates
+# at the appropriate altitude level before descending further.
+
+template_registry:
+  version: "1.0"
+  source: "templates/"
+
+  # ─────────────────────────────────────────────────────────
+  # DOCTRINE TEMPLATES (Read-only reference)
+  # ─────────────────────────────────────────────────────────
+  doctrine:
+    - template: "doctrine/HUB_SPOKE_ARCHITECTURE.md"
+      type: reference
+      required: true
+      legal_at_altitude: 50k
+      description: "Master doctrine for Hub/Spoke/IMO/CTB structure"
+      action: "Read and follow. Never copy or modify."
+
+    - template: "doctrine/ALTITUDE_DESCENT_MODEL.md"
+      type: reference
+      required: true
+      legal_at_altitude: 50k
+      description: "Governs WHEN and HOW templates become legal"
+      action: "Read and follow. Never copy or modify."
+
+  # ─────────────────────────────────────────────────────────
+  # ARTIFACT TEMPLATES (Copy and instantiate)
+  # ─────────────────────────────────────────────────────────
+  artifacts:
+    # 50k Altitude - Hub Identity
+    - template: "hub_identity"
+      type: declaration
+      required: true
+      legal_at_altitude: 50k
+      instantiate_to: "docs/hub_identity.md"
+      fields_required:
+        - hub_id
+        - hub_name
+        - hub_purpose
+        - i_type_attachments
+        - o_type_attachments
+      gate_for: "40k descent"
+
+    # 20k Altitude - PRD
+    - template: "prd/PRD_HUB.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 20k
+      instantiate_to: "docs/prd/PRD-{hub_name}.md"
+      prerequisites:
+        - "50k complete (Hub ID assigned)"
+        - "40k complete (Application decomposed)"
+        - "30k complete (CTB placed)"
+      gate_for: "10k descent"
+
+    # 10k Altitude - ADR
+    - template: "adr/ADR.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 10k
+      instantiate_to: "docs/adr/ADR-{sequence}-{title}.md"
+      prerequisites:
+        - "PRD approved"
+        - "IMO defined"
+      gate_for: "5k descent"
+      notes: "One ADR per architectural decision"
+
+    # 5k Altitude - PR
+    - template: "pr/PULL_REQUEST_TEMPLATE_HUB.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 5k
+      instantiate_to: ".github/PULL_REQUEST_TEMPLATE/hub.md"
+      prerequisites:
+        - "PRD exists"
+        - "ADRs recorded"
+      notes: "Must reference PRD and ADRs"
+
+    - template: "pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+      type: instantiate
+      required: false
+      legal_at_altitude: 5k
+      instantiate_to: ".github/PULL_REQUEST_TEMPLATE/spoke.md"
+      prerequisites:
+        - "PRD exists"
+      notes: "Use for spoke-only changes"
+
+    # Ship Gate - Compliance Checklist
+    - template: "checklists/HUB_COMPLIANCE.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 5k
+      instantiate_to: "docs/checklists/HUB_COMPLIANCE.md"
+      prerequisites:
+        - "All higher altitudes complete"
+        - "PRD approved"
+        - "All ADRs recorded"
+        - "All PRs merged"
+      gate_for: "Ship approval"
+
+  # ─────────────────────────────────────────────────────────
+  # INTEGRATION TEMPLATES (Copy and configure)
+  # ─────────────────────────────────────────────────────────
+  integrations:
+    - template: "integrations/DOPPLER.md"
+      config_template: "integrations/doppler.yaml.template"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_config_to: "doppler.yaml"
+      doctrine_id: "04.05.01"
+      description: "Secrets management - no exceptions"
+
+    - template: "integrations/HEIR.md"
+      config_template: "integrations/heir.doctrine.yaml.template"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_config_to: "heir.doctrine.yaml"
+      doctrine_id: "04.05.05"
+      description: "HEIR compliance validation"
+      validation_command: "python -m packages.heir.checks"
+
+    - template: "integrations/OBSIDIAN.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_to: "{hub_name}-vault/"
+      doctrine_id: "04.05.04"
+      description: "Knowledge management vault"
+      required_structure:
+        - "00-INBOX/"
+        - "10-PRD/"
+        - "20-ADR/"
+        - "30-DOCS/"
+        - "70-TEMPLATES/"
+
+    - template: "integrations/COMPOSIO.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      doctrine_id: "04.04.01"
+      description: "MCP server for external services"
+
+    - template: "integrations/TOOLS.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      description: "Tool doctrine + 19-step pipeline ledger"
+      notes: "All tools must be registered with ADRs"
+
+  # ─────────────────────────────────────────────────────────
+  # ENFORCEMENT RULES
+  # ─────────────────────────────────────────────────────────
+  enforcement:
+    # Gate validation
+    validate_gates: true
+    halt_on_missing_prerequisite: true
+
+    # Altitude descent rules
+    descent_rules:
+      - rule: "No hub descends without declared attachments"
+        check_at: 50k
+        blocks: 40k
+      - rule: "No CTB before application decomposition"
+        check_at: 40k
+        blocks: 30k
+      - rule: "No IMO before CTB"
+        check_at: 30k
+        blocks: 20k
+      - rule: "No PRD before CTB placement"
+        check_at: 30k
+        blocks: 20k
+      - rule: "No ADR before PRD approval"
+        check_at: 20k
+        blocks: 10k
+      - rule: "No PR before PRD + ADR"
+        check_at: 10k
+        blocks: 5k
+      - rule: "No code before process logic defined"
+        check_at: 10k
+        blocks: 5k
+
+    # On update from imo-creator
+    on_update:
+      sync_doctrine: true
+      sync_templates: true
+      validate_compliance: true
+      report_missing: true
+      auto_create_stubs: false
+
+  # ─────────────────────────────────────────────────────────
+  # UPDATE PROPAGATION
+  # ─────────────────────────────────────────────────────────
+  propagation:
+    trigger: "update_from_imo_creator.sh"
+    files_to_sync:
+      always:
+        - "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+        - "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+        - "global-config/global_manifest.yaml"
+      on_missing:
+        - "templates/prd/PRD_HUB.md"
+        - "templates/adr/ADR.md"
+        - "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+        - "templates/checklists/HUB_COMPLIANCE.md"
+        - "templates/integrations/*.md"
+        - "templates/integrations/*.template"
+    validation_after_sync:
+      - "Check template_registry.enforcement.descent_rules"
+      - "Report compliance status"
 
 # ============================================================
 # METRICS & ANALYTICS
