@@ -74,6 +74,11 @@ templates/
 ├── README.md                           # This file
 ├── doctrine/
 │   └── HUB_SPOKE_ARCHITECTURE.md       # Master doctrine (READ FIRST)
+├── integrations/
+│   ├── COMPOSIO.md                     # Composio MCP integration template
+│   ├── DOPPLER.md                      # Doppler secrets management template
+│   ├── TOOLS.md                        # Tool selection doctrine template
+│   └── doppler.yaml.template           # Doppler config template
 ├── checklists/
 │   └── HUB_COMPLIANCE.md               # Pre-ship compliance checklist
 ├── prd/
@@ -100,6 +105,25 @@ Before a hub can ship, it must have:
 
 If any artifact is missing, incomplete, or bypassed,
 the hub is considered **non-viable**.
+
+---
+
+## Required Integrations
+
+All hubs MUST use these integrations:
+
+| Integration | Template | Purpose |
+|-------------|----------|---------|
+| **Doppler** | `integrations/DOPPLER.md` | Secrets management (no exceptions) |
+| **Composio** | `integrations/COMPOSIO.md` | MCP server for external services |
+| **Tools** | `integrations/TOOLS.md` | Tool selection and registration |
+
+### Setup Checklist
+
+- [ ] Copy `integrations/doppler.yaml.template` to hub root as `doppler.yaml`
+- [ ] Create Doppler project matching hub name
+- [ ] Register all tools in tool ledger with ADRs
+- [ ] Configure Composio connections for external services
 
 ---
 

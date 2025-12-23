@@ -1,0 +1,9 @@
+# Doppler Configuration Template
+# Copy this file to your hub root as: doppler.yaml
+#
+# Replace <hub-name> with your actual hub name
+# Use lowercase, hyphens for spaces
+
+setup:
+  project: <hub-name>
+  config: dev
