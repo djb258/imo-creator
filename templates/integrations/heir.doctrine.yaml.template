@@ -1,0 +1,48 @@
+# HEIR Doctrine Template
+# Copy to hub root as: heir.doctrine.yaml
+# Replace all <placeholders> with actual values
+
+meta:
+  app_name: "<hub-name>"
+  repo_slug: "<org>/<repo>"
+  stack: ["<framework>", "<backend>", "<database>"]
+  llm:
+    providers:
+      - anthropic
+      - openai
+    default: "anthropic"
+
+doctrine:
+  unique_id: "<hub-id>-${TIMESTAMP}-${RANDOM_HEX}"
+  process_id: "<hub-id>-process-${SESSION_ID}"
+  schema_version: "HEIR/1.0"
+  blueprint_version_hash: "${AUTO_SHA256_OF_CANON}"
+  agent_execution_signature: "${AUTO_HASH(llm+tools)}"
+
+deliverables:
+  repos:
+    - name: "<hub-name>"
+      visibility: private
+  services:
+    - name: "mcp"
+      port: 7001
+    - name: "sidecar"
+      port: 8000
+  env:
+    MCP_URL: "http://localhost:7001"
+    SIDECAR_URL: "http://localhost:8000"
+    BEARER_TOKEN: "${DOPPLER:BEARER_TOKEN}"
+    COMPOSIO_API_KEY: "${DOPPLER:COMPOSIO_API_KEY}"
+    LLM_DEFAULT_PROVIDER: "anthropic"
+
+contracts:
+  acceptance:
+    - "All HEIR checks pass in CI"
+    - "Sidecar event emitted on app start"
+    - "MCP bay exposes required tools"
+
+build:
+  actions:
+    mcp_tools: ["heir.check", "sidecar.event"]
+    ci_checks: ["python -m packages.heir.checks"]
+    telemetry_events: ["app.start", "action.invoked"]

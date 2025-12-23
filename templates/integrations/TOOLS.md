@@ -150,6 +150,7 @@ Deterministic logic first, LLM only for edge cases.
 | GitHub | Version control | 04.05.02 |
 | Linear | Task management | 04.05.03 |
 | Obsidian | Knowledge management | 04.05.04 |
+| HEIR | Compliance validation | 04.05.05 |
 | Composio | MCP server | 04.04.01 |
 | n8n | Workflow automation | 04.04.02 |
 

@@ -77,9 +77,11 @@ templates/
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
 │   ├── DOPPLER.md                      # Doppler secrets management template
+│   ├── HEIR.md                         # HEIR compliance validation template
 │   ├── OBSIDIAN.md                     # Obsidian knowledge base template
 │   ├── TOOLS.md                        # Tool doctrine + 19-step pipeline ledger
-│   └── doppler.yaml.template           # Doppler config template
+│   ├── doppler.yaml.template           # Doppler config template
+│   └── heir.doctrine.yaml.template     # HEIR doctrine config template
 ├── checklists/
 │   └── HUB_COMPLIANCE.md               # Pre-ship compliance checklist
 ├── prd/
@@ -116,6 +118,7 @@ All hubs MUST use these integrations:
 | Integration | Template | Purpose |
 |-------------|----------|---------|
 | **Doppler** | `integrations/DOPPLER.md` | Secrets management (no exceptions) |
+| **HEIR** | `integrations/HEIR.md` | Compliance validation (programmatic) |
 | **Obsidian** | `integrations/OBSIDIAN.md` | Knowledge management vault |
 | **Composio** | `integrations/COMPOSIO.md` | MCP server for external services |
 | **Tools** | `integrations/TOOLS.md` | Tool selection and registration |
@@ -123,10 +126,12 @@ All hubs MUST use these integrations:
 ### Setup Checklist
 
 - [ ] Copy `integrations/doppler.yaml.template` to hub root as `doppler.yaml`
+- [ ] Copy `integrations/heir.doctrine.yaml.template` to hub root as `heir.doctrine.yaml`
 - [ ] Create Doppler project matching hub name
 - [ ] Create Obsidian vault with required structure
 - [ ] Register all tools in tool ledger with ADRs
 - [ ] Configure Composio connections for external services
+- [ ] Run HEIR checks: `python -m packages.heir.checks`
 
 ---
 
