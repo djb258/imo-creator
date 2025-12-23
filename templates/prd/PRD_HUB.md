@@ -9,21 +9,64 @@
 
 ---
 
-## 2. Purpose
+## 2. Hub Identity
 
-_What does this hub do? What boundary does it own?_
-
----
-
-## 3. Spokes
-
-| Spoke Name | Capability | Inherits Tools |
-|------------|------------|----------------|
-| | | |
+| Field | Value |
+|-------|-------|
+| **Hub ID** | _(unique, immutable identifier)_ |
+| **Process ID** | _(execution / trace ID)_ |
 
 ---
 
-## 4. Connectors
+## 3. Purpose
+
+_What does this hub do? What boundary does it own? A hub is the application — it owns logic, state, CTB structure, altitude, and full IMO._
+
+---
+
+## 4. CTB Placement
+
+| CTB Path | Branch Level | Parent Hub |
+|----------|--------------|------------|
+| | sys / ui / ai / infra | |
+
+---
+
+## 5. Altitude Scope
+
+| Level | Description | Selected |
+|-------|-------------|----------|
+| 30,000 ft | Strategic vision, system-wide boundaries | [ ] |
+| 20,000 ft | Domain architecture, hub relationships | [ ] |
+| 10,000 ft | Component design, interface contracts | [ ] |
+| 5,000 ft | Implementation detail, execution logic | [ ] |
+
+---
+
+## 6. IMO Structure
+
+_This hub owns all three IMO layers internally. Spokes are external interfaces only._
+
+| Layer | Role | Description |
+|-------|------|-------------|
+| **I — Ingress** | Dumb input only | Receives data; no logic, no state |
+| **M — Middle** | Logic, decisions, state | All processing occurs here inside the hub |
+| **O — Egress** | Output only | Emits results; no logic, no state |
+
+---
+
+## 7. Spokes
+
+_Spokes are interfaces ONLY. They carry no logic, tools, or state. Each spoke is typed as Ingress (I) or Egress (O)._
+
+| Spoke Name | Type | Direction | Contract |
+|------------|------|-----------|----------|
+| | I | Inbound | |
+| | O | Outbound | |
+
+---
+
+## 8. Connectors
 
 | Connector | Type | Direction | Contract |
 |-----------|------|-----------|----------|
@@ -31,15 +74,17 @@ _What does this hub do? What boundary does it own?_
 
 ---
 
-## 5. Tools
+## 9. Tools
 
-| Tool | Doctrine ID | Owner | ADR |
-|------|-------------|-------|-----|
-| | | This Hub | |
+_All tools are scoped strictly INSIDE this hub. Spokes do not own tools._
+
+| Tool | Doctrine ID | Scoped To | ADR |
+|------|-------------|-----------|-----|
+| | | This Hub (M layer) | |
 
 ---
 
-## 6. Guard Rails
+## 10. Guard Rails
 
 | Guard Rail | Type | Threshold |
 |------------|------|-----------|
@@ -47,7 +92,7 @@ _What does this hub do? What boundary does it own?_
 
 ---
 
-## 7. Kill Switch
+## 11. Kill Switch
 
 - **Endpoint:**
 - **Activation Criteria:**
@@ -55,19 +100,19 @@ _What does this hub do? What boundary does it own?_
 
 ---
 
-## 8. Promotion Gates
+## 12. Promotion Gates
 
-| Gate | Requirement |
-|------|-------------|
-| G1 | |
-| G2 | |
-| G3 | |
-| G4 | |
-| G5 | |
+| Gate | Artifact | Requirement |
+|------|----------|-------------|
+| G1 | PRD | Hub definition approved |
+| G2 | ADR | Architecture decision recorded |
+| G3 | Linear Issue | Work item created and assigned |
+| G4 | PR | Code reviewed and merged |
+| G5 | Checklist | Deployment verification complete |
 
 ---
 
-## 9. Failure Modes
+## 13. Failure Modes
 
 | Failure | Severity | Remediation |
 |---------|----------|-------------|
@@ -75,13 +120,13 @@ _What does this hub do? What boundary does it own?_
 
 ---
 
-## 10. Human Override Rules
+## 14. Human Override Rules
 
 _When can a human bypass automation? Who approves?_
 
 ---
 
-## 11. Observability
+## 15. Observability
 
 - **Logs:**
 - **Metrics:**
