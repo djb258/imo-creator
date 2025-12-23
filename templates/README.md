@@ -77,6 +77,7 @@ templates/
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
 │   ├── DOPPLER.md                      # Doppler secrets management template
+│   ├── OBSIDIAN.md                     # Obsidian knowledge base template
 │   ├── TOOLS.md                        # Tool doctrine + 19-step pipeline ledger
 │   └── doppler.yaml.template           # Doppler config template
 ├── checklists/
@@ -115,6 +116,7 @@ All hubs MUST use these integrations:
 | Integration | Template | Purpose |
 |-------------|----------|---------|
 | **Doppler** | `integrations/DOPPLER.md` | Secrets management (no exceptions) |
+| **Obsidian** | `integrations/OBSIDIAN.md` | Knowledge management vault |
 | **Composio** | `integrations/COMPOSIO.md` | MCP server for external services |
 | **Tools** | `integrations/TOOLS.md` | Tool selection and registration |
 
@@ -122,6 +124,7 @@ All hubs MUST use these integrations:
 
 - [ ] Copy `integrations/doppler.yaml.template` to hub root as `doppler.yaml`
 - [ ] Create Doppler project matching hub name
+- [ ] Create Obsidian vault with required structure
 - [ ] Register all tools in tool ledger with ADRs
 - [ ] Configure Composio connections for external services
 
