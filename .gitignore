@@ -19,7 +19,35 @@ public/
 # IDE
 .vscode/
 .idea/
+.cursor/
 
 # OS
 .DS_Store
 Thumbs.db
+nul
+
+# Dependencies
+node_modules/
+
+# External Projects (should be submodules if needed)
+deepwiki/
+AutoDocs/
+chartdb/
+render-cli-source/
+ctb-template/
+
+# Generated/Ingest Files
+*-ingest*.md
+*-ingest*.txt
+*ingest*.md
+*ingest*.txt
+REPO_OVERVIEW.md
+
+# Logs and Audit Files
+*.log
+audit_results/
+branches/
+
+# Build artifacts
+render.exe
+.bootstrap-report.json
