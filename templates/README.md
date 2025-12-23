@@ -10,15 +10,21 @@ Projects must conform to them.
 
 ## Authoritative Doctrine
 
-**Read this first:**
+**Read these first:**
 
 > [`doctrine/HUB_SPOKE_ARCHITECTURE.md`](doctrine/HUB_SPOKE_ARCHITECTURE.md)
 
-This is the master reference for:
+Master reference for Hub/Spoke definitions, IMO model, CTB structure, and required identifiers.
+
+> [`doctrine/ALTITUDE_DESCENT_MODEL.md`](doctrine/ALTITUDE_DESCENT_MODEL.md)
+
+Governs WHEN and HOW templates become legal. Defines mandatory descent sequence (50k → 5k) and gate conditions.
+
+**Key topics covered:**
 - Hub vs Spoke definitions
 - IMO (Ingress / Middle / Egress) model
 - CTB (Christmas Tree Backbone) structure
-- Altitude levels (30k → 5k)
+- Altitude levels (50k → 5k)
 - Required identifiers (Hub ID, Process ID)
 - How to create and refactor repositories
 
@@ -60,8 +66,10 @@ A **Spoke is an interface**.
 ### Altitude Levels
 | Level | Scope |
 |-------|-------|
-| 30k | System architecture |
-| 20k | Domain / capability |
+| 50k | Shell (Hub identity + attachments) |
+| 40k | Hub-as-application decomposition |
+| 30k | CTB placement |
+| 20k | IMO definition |
 | 10k | Process / logic |
 | 5k | Execution / implementation |
 
@@ -73,7 +81,8 @@ A **Spoke is an interface**.
 templates/
 ├── README.md                           # This file
 ├── doctrine/
-│   └── HUB_SPOKE_ARCHITECTURE.md       # Master doctrine (READ FIRST)
+│   ├── HUB_SPOKE_ARCHITECTURE.md       # Master doctrine (READ FIRST)
+│   └── ALTITUDE_DESCENT_MODEL.md       # Descent sequence & gate conditions
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
 │   ├── DOPPLER.md                      # Doppler secrets management template
