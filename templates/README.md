@@ -77,8 +77,7 @@ templates/
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
 │   ├── DOPPLER.md                      # Doppler secrets management template
-│   ├── TOOLS.md                        # Tool selection doctrine template
-│   ├── PIPELINE_TOOLS.md               # 19-step pipeline tool ledger
+│   ├── TOOLS.md                        # Tool doctrine + 19-step pipeline ledger
 │   └── doppler.yaml.template           # Doppler config template
 ├── checklists/
 │   └── HUB_COMPLIANCE.md               # Pre-ship compliance checklist
