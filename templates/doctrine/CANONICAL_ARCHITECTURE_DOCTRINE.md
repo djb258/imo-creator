@@ -1,63 +1,63 @@
 # Canonical Architecture Doctrine (CTB + CC)
 
-**Doctrine Version**: 1.0.0
+**Doctrine Version**: 1.1.0
 **Status**: LOCKED
 **Authority**: IMO-Creator
 **Change Protocol**: ADR approval required for any modification
 
 ---
 
-This doctrine defines the operating physics of all systems built with IMO-Creator. All PRDs, ADRs, PRs, checklists, repos, agents, and ERDs must derive from and comply with this doctrine. No downstream artifact may introduce concepts not already defined herein.
+This doctrine defines the operating physics of all derived systems. All downstream artifacts must derive from and comply with this doctrine. No downstream artifact may introduce concepts not defined herein.
 
 ---
 
 ## 1. Christmas Tree Backbone (CTB)
 
-CTB is the static structural spine. It defines where things live.
+CTB is the static structural spine. It defines where components are placed.
 
 ### 1.1 Definition
 
-- CTB is a hierarchical node structure representing physical placement of all system components.
-- All systems, services, repositories, and artifacts map to exactly one CTB node.
+- CTB is a hierarchical node structure representing physical placement of all components.
+- All components map to exactly one CTB node.
 - CTB nodes are immutable once assigned.
 
 ### 1.2 Constraints
 
 - A component exists at one and only one CTB location.
 - CTB placement is determined at design time, not runtime.
-- CTB restructuring requires ADR approval.
+- CTB restructuring requires explicit ADR approval.
 
 ### 1.3 Versioning
 
 - CTB structure is version-locked.
-- Version changes require explicit ADR approval and version bump.
-- Downstream systems must declare which CTB version they conform to.
+- Version changes require explicit ADR approval and version increment.
+- All downstream artifacts must declare which CTB version they conform to.
 
 ---
 
 ## 2. Canonical Chain (CC)
 
-CC defines positional meaning. It is not cardinality. It is authority hierarchy.
+CC defines positional authority. It is hierarchy, not cardinality.
 
 ### 2.1 Locked Layers
 
 | Layer | Name | Definition |
 |-------|------|------------|
-| CC-01 | Sovereign | Authority anchor. Root of all identity and permission. |
-| CC-02 | Hub / Sub-Hub | Domain ownership. Owns logic, state, and decisions within its boundary. |
-| CC-03 | Context | Scoped domain slice. Represents a bounded operational context. |
-| CC-04 | Process | Execution. Runtime instances operating within a context. |
+| CC-01 | Sovereign | Authority anchor. Root of all identity and permission. External to any single bounded context. |
+| CC-02 | Hub | Domain ownership. Owns logic, state, and decisions within its declared boundary. |
+| CC-03 | Context | Scoped operational slice. Represents a bounded execution context within a hub. |
+| CC-04 | Process | Execution instance. Runtime operations within a context. |
 
 ### 2.2 Movement Rules
 
-- No sideways movement between CC layers.
+- No lateral movement between CC layers.
 - Authority flows downward only: CC-01 → CC-02 → CC-03 → CC-04.
 - Data may flow upward for reads; writes require explicit authorization.
 
 ### 2.3 Debugging Rule
 
-- Debugging always walks up the CC.
-- Start at CC-04, trace upward through CC-03, CC-02, to CC-01.
+- Debugging always traverses upward through the CC.
+- Begin at CC-04, trace through CC-03, CC-02, to CC-01.
 - Root cause analysis terminates at the highest CC layer where the fault originated.
 
 ---
@@ -68,15 +68,15 @@ Hub-and-spoke defines authority boundaries and interface contracts.
 
 ### 3.1 Hub Rules
 
-- Hubs own authority within their domain.
+- Hubs own authority within their declared boundary.
 - Hubs own all logic, state, and decisions.
 - Identity mints only at hubs.
-- One hub per bounded context.
+- One hub per declared bounded context.
 
 ### 3.2 Spoke Rules
 
 - Spokes are interfaces only.
-- Spokes are typed as Ingress (I) or Egress (O).
+- Spokes are typed as Ingress or Egress.
 - Spokes carry data; they contain no logic.
 - Spokes do not own state.
 
@@ -84,7 +84,8 @@ Hub-and-spoke defines authority boundaries and interface contracts.
 
 - No spoke-to-spoke interaction.
 - All spoke communication routes through the owning hub.
-- Nested hub-and-spoke is permitted within a parent hub's boundary.
+- Nested hub-and-spoke is permitted within a parent hub's declared boundary.
+- Nested hubs operate at CC-03 relative to their parent; they are contexts, not peer sovereigns.
 
 ### 3.4 Violation Rule
 
@@ -103,14 +104,14 @@ Constants and variables are categorically distinct.
 - Constants define meaning and structure.
 - Constants are ADR-gated to change.
 - Constants are immutable at runtime.
-- CC-01 and CC-02 are predominantly constants.
+- CC-01 and CC-02 artifacts are constants unless explicitly declared otherwise.
 
 ### 4.2 Variables
 
 - Variables tune behavior.
-- Variables are changed via configuration or PID-scoped execution.
+- Variables are changed via configuration or process-scoped execution.
 - Variables are mutable at runtime within authorized bounds.
-- CC-04 is predominantly variables.
+- CC-04 artifacts are variables unless explicitly declared otherwise.
 
 ### 4.3 Inversion Rule
 
@@ -128,13 +129,13 @@ PID represents an execution instance. Nothing more.
 
 - A PID is a unique identifier for a single execution instance.
 - PIDs operate exclusively at CC-04.
-- PIDs are minted per run.
+- PIDs are minted per execution.
 
 ### 5.2 PID Contents
 
 A PID must carry:
 
-- Worker identity
+- Executor identity (abstract reference to the executing agent)
 - Version identifier
 - Timestamp of mint
 
@@ -143,7 +144,7 @@ A PID must carry:
 - PIDs are never reused.
 - PIDs are never promoted to higher CC layers.
 - Retries require a new PID.
-- Backfills require a new PID.
+- Recovery operations require a new PID.
 - PID reuse is a doctrine violation.
 
 ### 5.4 PID Permissions
@@ -161,12 +162,12 @@ The Authorization Matrix defines which CC layers may write to others.
 
 | Source | Target | Permission |
 |--------|--------|------------|
-| CC-01 | CC-01 | Permitted (CL identity processes only) |
+| CC-01 | CC-01 | Permitted (authorized sovereign-level process only) |
 | CC-01 | CC-02 | Permitted |
 | CC-01 | CC-03 | Permitted |
 | CC-01 | CC-04 | Permitted |
 | CC-02 | CC-01 | Denied |
-| CC-02 | CC-02 | Permitted (within same hub boundary) |
+| CC-02 | CC-02 | Permitted (within same declared boundary) |
 | CC-02 | CC-03 | Permitted (within owned contexts) |
 | CC-02 | CC-04 | Permitted (within owned contexts) |
 | CC-03 | CC-01 | Denied |
@@ -180,7 +181,7 @@ The Authorization Matrix defines which CC layers may write to others.
 
 ### 6.2 Sovereign Mutation Rule
 
-**Only CL identity processes may mutate CC-01.**
+Only an authorized sovereign-level process may mutate CC-01. Authorization must be declared externally to the system being mutated.
 
 ### 6.3 Enforcement
 
@@ -288,28 +289,70 @@ Each error entry must contain:
 
 ---
 
+## 10. Sovereign Creation
+
+Sovereigns (CC-01 entities) are created outside normal system operation.
+
+### 10.1 Creation Rules
+
+- Sovereign creation requires explicit external authorization.
+- Sovereign creation is not a runtime operation.
+- Each sovereign must have a unique, immutable identity.
+- Sovereign identity must be declared before any derived artifacts exist.
+
+### 10.2 Sovereign Scope
+
+- A sovereign may govern one or more hubs.
+- A hub belongs to exactly one sovereign.
+- Sovereign boundaries must be explicitly declared and immutable.
+
+---
+
+## 11. Boundary Declaration
+
+All boundaries must be explicitly declared.
+
+### 11.1 Required Declarations
+
+Every derived system must declare:
+
+- Its governing sovereign (CC-01 reference)
+- Its hub identity (CC-02 reference)
+- Its CTB placement
+- Doctrine version conformance
+- CTB version conformance
+
+### 11.2 Boundary Enforcement
+
+- Undeclared boundaries default to denied.
+- Cross-boundary operations require explicit authorization from both boundaries.
+- Boundary declarations are constants; they require ADR approval to change.
+
+---
+
 ## Global Rules
 
 ### Doctrine Authority
 
 1. This doctrine is version-locked.
-2. Templates reference this doctrine; they may not redefine it.
-3. Any doctrine change requires ADR approval and a version bump.
-4. No PRD, ADR, PR, or checklist may introduce concepts not defined in this doctrine.
+2. Downstream artifacts reference this doctrine; they may not redefine it.
+3. Any doctrine change requires ADR approval and a version increment.
+4. No downstream artifact may introduce concepts not defined in this doctrine.
 
 ### Violation Handling
 
 1. Doctrine violations halt promotion.
 2. Violations must be logged to the Master Error Log.
-3. Violations must be resolved before system may proceed.
+3. Violations must be resolved before the system may proceed.
 
 ### Conformance Declaration
 
-All systems must declare:
+All derived systems must declare:
 
 - Doctrine version they conform to
 - CTB version they conform to
 - CC layer at which they operate
+- Governing sovereign identity
 
 ---
 
@@ -318,7 +361,8 @@ All systems must declare:
 | Field | Value |
 |-------|-------|
 | Created | 2025-01-05 |
-| Doctrine Version | 1.0.0 |
+| Last Modified | 2025-01-05 |
+| Doctrine Version | 1.1.0 |
 | CTB Version | 1.0.0 |
 | Status | LOCKED |
-| Next Review | ADR-triggered only |
+| Change Protocol | ADR-triggered only |
