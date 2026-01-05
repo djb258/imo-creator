@@ -12,6 +12,10 @@ Projects must conform to them.
 
 **Read these first:**
 
+> [`doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`](doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md)
+
+**Root doctrine.** Defines CTB (Christmas Tree Backbone) and CC (Canonical Chain). All other documents derive from this. Covers authorization matrix, PID doctrine, lifecycle states, and master error log.
+
 > [`doctrine/HUB_SPOKE_ARCHITECTURE.md`](doctrine/HUB_SPOKE_ARCHITECTURE.md)
 
 Master reference for Hub/Spoke definitions, IMO model, CTB structure, and required identifiers.
@@ -21,10 +25,15 @@ Master reference for Hub/Spoke definitions, IMO model, CTB structure, and requir
 Governs WHEN and HOW templates become legal. Defines mandatory descent sequence (50k → 5k) and gate conditions.
 
 **Key topics covered:**
+- Canonical Chain (CC) layers: Sovereign, Hub, Context, Process
+- CTB (Christmas Tree Backbone) structure
 - Hub vs Spoke definitions
 - IMO (Ingress / Middle / Egress) model
-- CTB (Christmas Tree Backbone) structure
 - Altitude levels (50k → 5k)
+- Authorization matrix (who may write where)
+- Process ID (PID) doctrine
+- Lifecycle states and transitions
+- Constants vs Variables
 - Required identifiers (Hub ID, Process ID)
 - How to create and refactor repositories
 
@@ -81,7 +90,8 @@ A **Spoke is an interface**.
 templates/
 ├── README.md                           # This file
 ├── doctrine/
-│   ├── HUB_SPOKE_ARCHITECTURE.md       # Master doctrine (READ FIRST)
+│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  # Root doctrine (CTB + CC) — READ FIRST
+│   ├── HUB_SPOKE_ARCHITECTURE.md       # Hub/Spoke definitions & IMO model
 │   └── ALTITUDE_DESCENT_MODEL.md       # Descent sequence & gate conditions
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
