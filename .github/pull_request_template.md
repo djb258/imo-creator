@@ -1,9 +1,29 @@
 # Pull Request
 
+## Conformance
+
+| Field | Value |
+|-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | |
+
+---
+
 ## Description
 <!-- Brief description of what this PR does -->
 
 
+
+## CC Layer Scope
+
+| CC Layer | Affected |
+|----------|----------|
+| CC-01 (Sovereign) | [ ] |
+| CC-02 (Hub) | [ ] |
+| CC-03 (Context) | [ ] |
+| CC-04 (Process) | [ ] |
+
+---
 
 ## Type of Change
 - [ ] Bug fix
@@ -20,13 +40,19 @@
 -
 -
 
-## CTB Compliance Checklist
-- [ ] CTB enforcement passes: `bash global-config/scripts/ctb_enforce.sh`
-- [ ] Security scan passes: `bash global-config/scripts/security_lockdown.sh`
-- [ ] No hardcoded secrets (all secrets use MCP vault)
+## Doctrine Compliance Checklist
+
+### CC Layer Compliance
+- [ ] Doctrine version declared
+- [ ] Sovereign reference present (if CC-02 change)
+- [ ] Authorization matrix honored (no upward writes)
+- [ ] No cross-hub logic introduced
+
+### CTB Compliance
+- [ ] CTB placement correct (Trunk / Branch / Leaf)
+- [ ] No hardcoded secrets (all secrets use secrets provider)
 - [ ] No `.env` files committed
-- [ ] Tests pass (if applicable): `pytest`
-- [ ] Branch follows CTB structure (if new branch)
+- [ ] Tests pass (if applicable)
 - [ ] Updated relevant documentation
 
 ## Testing
@@ -47,9 +73,18 @@
 ## Additional Context
 <!-- Any other relevant information -->
 
+## Traceability
+
+| Artifact | Reference |
+|----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| PRD | |
+| ADR | |
+| Work Item | |
+
 ## Related Issues
 <!-- Link to related issues: Fixes #123, Relates to #456 -->
 
 ---
 
-**Reviewer Notes**: Please verify CTB enforcement passes before merging.
+**Reviewer Notes**: Please verify CC layer compliance and CTB placement before merging.

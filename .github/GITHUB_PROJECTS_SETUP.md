@@ -1,6 +1,8 @@
-# GitHub Projects Setup Guide for IMO-Creator
+# GitHub Projects Setup Guide
 
-This guide will help you set up GitHub Projects for the IMO-Creator repository.
+This guide will help you set up GitHub Projects for doctrine-compliant repositories.
+
+**Doctrine Reference**: `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`
 
 ## Quick Setup
 
@@ -39,10 +41,9 @@ This guide will help you set up GitHub Projects for the IMO-Creator repository.
    | Field Name | Type | Options |
    |------------|------|---------|
    | Priority | Single select | P0-Critical, P1-High, P2-Medium, P3-Low, P4-Nice |
-   | CTB Altitude | Single select | 40k, 20k, 10k, 5k, Ground |
-   | Component | Single select | CTB Template, Composio MCP, Google Workspace, Firebase, CI/CD, Docs |
-   | CTB Version | Text | e.g., "1.3.1", "1.4.0" |
-   | Integration | Multiple select | Composio, Gmail, Drive, Calendar, Sheets, Firebase, Neon, GitHub |
+   | CC Layer | Single select | CC-01 (Sovereign), CC-02 (Hub), CC-03 (Context), CC-04 (Process) |
+   | Component | Single select | Doctrine, Templates, Integrations, CI/CD, Docs |
+   | Doctrine Version | Text | e.g., "1.1.0" |
 
 5. **Link Issues Automatically**
 
@@ -139,16 +140,15 @@ Create multiple views for different perspectives:
 - Plan P1-High items
 - Track P2-P4 backlog
 
-### 3. **By CTB Altitude** (Group by CTB Altitude field)
-- Strategic view (40k ft)
-- Architecture view (20k ft)
-- Implementation view (10k ft)
-- Data view (5k ft)
-- Operations view (Ground)
+### 3. **By CC Layer** (Group by CC Layer field)
+- Sovereign view (CC-01)
+- Hub view (CC-02)
+- Context view (CC-03)
+- Process view (CC-04)
 
-### 4. **By Version** (Filter by CTB Version field)
-- Track what's going into v1.3.2
-- Plan for v1.4.0
+### 4. **By Doctrine Version** (Filter by Doctrine Version field)
+- Track work for current version
+- Plan for next version
 - View historical releases
 
 ## Integration with CI/CD

@@ -3,12 +3,30 @@
 This checklist must be completed before any hub can ship.
 No exceptions. No partial compliance.
 
+## Conformance
+
+| Field | Value |
+|-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-02 |
+
 ---
 
-## Hub Identity
+## Canonical Chain (CC) Compliance
+
+- [ ] Sovereign declared (CC-01 reference)
+- [ ] Hub ID assigned (unique, immutable) (CC-02)
+- [ ] All child contexts scoped to CC-03
+- [ ] All processes scoped to CC-04
+- [ ] Authorization matrix honored (no upward writes)
+- [ ] Doctrine version declared
+
+---
+
+## Hub Identity (CC-02)
 
 - [ ] Hub ID assigned (unique, immutable)
-- [ ] Process ID assigned (execution / trace ID)
+- [ ] Process ID pattern defined (CC-04 execution scope)
 - [ ] Hub Name defined
 - [ ] Hub Owner assigned
 
@@ -16,16 +34,9 @@ No exceptions. No partial compliance.
 
 ## CTB Placement
 
-- [ ] CTB path defined
-- [ ] Branch level specified (sys / ui / ai / infra)
-- [ ] Parent hub identified (if applicable)
-
----
-
-## Altitude Scope
-
-- [ ] Altitude level declared (30k / 20k / 10k / 5k)
-- [ ] Scope appropriate for declared altitude
+- [ ] CTB path defined (Trunk / Branch / Leaf)
+- [ ] Branch level specified (sys / ui / ai / data / ops / docs)
+- [ ] Parent hub identified (if nested hub)
 
 ---
 
@@ -139,13 +150,34 @@ No exceptions. No partial compliance.
 
 ## Traceability
 
-- [ ] PRD exists and is current
-- [ ] ADR exists (if decisions required)
-- [ ] Linear issue linked
-- [ ] PR linked
+- [ ] PRD exists and is current (CC-02)
+- [ ] ADR exists for each decision (CC-03)
+- [ ] Work item linked
+- [ ] PR linked (CC-04)
+- [ ] Canonical Doctrine referenced
+
+---
+
+## CC Layer Verification
+
+| Layer | Verified | Notes |
+|-------|----------|-------|
+| CC-01 (Sovereign) | [ ] | Reference declared |
+| CC-02 (Hub) | [ ] | Identity, PRD, CTB complete |
+| CC-03 (Context) | [ ] | ADRs, spokes, guard rails defined |
+| CC-04 (Process) | [ ] | PIDs, code, tests implemented |
 
 ---
 
 ## Compliance Rule
 
 If any box is unchecked, this hub may not ship.
+
+---
+
+## Traceability Reference
+
+| Artifact | Reference |
+|----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Hub/Spoke Doctrine | HUB_SPOKE_ARCHITECTURE.md |

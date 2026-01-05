@@ -1,48 +1,74 @@
 # HEIR Doctrine Template
 # Copy to hub root as: heir.doctrine.yaml
 # Replace all <placeholders> with actual values
+# Reference: CANONICAL_ARCHITECTURE_DOCTRINE.md
 
-meta:
-  app_name: "<hub-name>"
-  repo_slug: "<org>/<repo>"
-  stack: ["<framework>", "<backend>", "<database>"]
-  llm:
-    providers:
-      - anthropic
-      - openai
-    default: "anthropic"
+# --- Conformance ---
+conformance:
+  doctrine_version: "1.1.0"
+  ctb_version: "1.0.0"
+  schema_version: "HEIR/2.0"
 
-doctrine:
-  unique_id: "<hub-id>-${TIMESTAMP}-${RANDOM_HEX}"
-  process_id: "<hub-id>-process-${SESSION_ID}"
-  schema_version: "HEIR/1.0"
-  blueprint_version_hash: "${AUTO_SHA256_OF_CANON}"
-  agent_execution_signature: "${AUTO_HASH(llm+tools)}"
+# --- Sovereign Declaration (CC-01) ---
+sovereign:
+  identity: "<sovereign-id>"
+  boundary: "<sovereign-boundary-description>"
 
-deliverables:
-  repos:
-    - name: "<hub-name>"
-      visibility: private
-  services:
-    - name: "mcp"
-      port: 7001
-    - name: "sidecar"
-      port: 8000
-  env:
-    MCP_URL: "http://localhost:7001"
-    SIDECAR_URL: "http://localhost:8000"
-    BEARER_TOKEN: "${DOPPLER:BEARER_TOKEN}"
-    COMPOSIO_API_KEY: "${DOPPLER:COMPOSIO_API_KEY}"
-    LLM_DEFAULT_PROVIDER: "anthropic"
+# --- Hub Identity (CC-02) ---
+hub:
+  name: "<hub-name>"
+  id: "<hub-id>"
+  purpose: "<one-line-purpose>"
+  ctb_placement:
+    trunk: "<trunk>"
+    branch: "<branch>"
+    leaf: "<leaf>"
 
+# --- Process Identity (CC-04) ---
+process:
+  id_pattern: "<hub-id>-${TIMESTAMP}-${RANDOM_HEX}"
+  session_pattern: "<hub-id>-session-${SESSION_ID}"
+
+# --- IMO Structure ---
+imo:
+  ingress:
+    description: "<ingress-layer-description>"
+    spokes: []
+  middle:
+    description: "<middle-layer-description>"
+    owns_logic: true
+    owns_state: true
+  egress:
+    description: "<egress-layer-description>"
+    spokes: []
+
+# --- Services (Abstract) ---
+services:
+  - name: "<service-name>"
+    port: "<service-port>"
+    type: "<service-type>"
+
+# --- Environment (Abstract) ---
+environment:
+  secrets_provider: "<secrets-provider-name>"
+  variables:
+    - key: "<VARIABLE_NAME>"
+      source: "${SECRETS_PROVIDER:<KEY>}"
+
+# --- Contracts ---
 contracts:
   acceptance:
-    - "All HEIR checks pass in CI"
-    - "Sidecar event emitted on app start"
-    - "MCP bay exposes required tools"
+    - "<acceptance-criterion-1>"
+    - "<acceptance-criterion-2>"
 
+# --- Build Actions ---
 build:
-  actions:
-    mcp_tools: ["heir.check", "sidecar.event"]
-    ci_checks: ["python -m packages.heir.checks"]
-    telemetry_events: ["app.start", "action.invoked"]
+  ci_checks:
+    - "<ci-check-command>"
+  validation:
+    - "<validation-command>"
+
+# --- Traceability ---
+traceability:
+  prd: "<prd-reference>"
+  adrs: []

@@ -1,45 +1,67 @@
 name: Bug Report
-description: Report a bug in IMO-Creator
+description: Report a doctrine violation or system defect
 title: "[BUG]: "
 labels: ["bug", "needs-triage"]
-projects: ["djb258/1"]
 body:
   - type: markdown
     attributes:
       value: |
         ## Bug Report
-        Thank you for reporting a bug in IMO-Creator!
+        Report defects aligned to Canonical Chain architecture.
 
   - type: dropdown
-    id: component
+    id: cc-layer
     attributes:
-      label: Component
-      description: Which component has the bug?
+      label: CC Layer
+      description: At which Canonical Chain layer does this bug occur?
       options:
-        - CTB Template
-        - Composio MCP Integration
-        - Google Workspace Integration
-        - Firebase MCP
-        - GitHub Actions / CI/CD
-        - Role-Based System Manual
-        - Documentation
-        - Other
+        - CC-01 (Sovereign)
+        - CC-02 (Hub)
+        - CC-03 (Context)
+        - CC-04 (Process)
     validations:
       required: true
 
   - type: dropdown
-    id: altitude
+    id: imo-layer
     attributes:
-      label: CTB Altitude
-      description: At what altitude does this bug occur?
+      label: IMO Layer
+      description: Which IMO layer is affected?
       options:
-        - 40k ft - Strategic/Vision
-        - 20k ft - Architecture/Integration
-        - 10k ft - Implementation/Code
-        - 5k ft - Data/Database
-        - Ground - Operations/DevOps
+        - I (Ingress)
+        - M (Middle)
+        - O (Egress)
+        - Spoke (Interface)
+        - Not applicable
     validations:
       required: true
+
+  - type: input
+    id: ctb-placement
+    attributes:
+      label: CTB Placement
+      description: CTB path of affected component (trunk/branch/leaf)
+      placeholder: "sys/core/auth"
+    validations:
+      required: false
+
+  - type: input
+    id: doctrine-version
+    attributes:
+      label: Doctrine Version
+      description: Which doctrine version is this hub conforming to?
+      placeholder: "1.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: pid
+    attributes:
+      label: PID (if applicable)
+      description: Process ID if this is a CC-04 execution issue
+      placeholder: "hub-id-timestamp-hex"
+    validations:
+      required: false
 
   - type: textarea
     id: description
@@ -56,8 +78,8 @@ body:
       label: Steps to Reproduce
       description: How can we reproduce this bug?
       placeholder: |
-        1. Start Composio MCP server
-        2. Execute command...
+        1. Execute...
+        2. Observe...
         3. See error
     validations:
       required: true
@@ -66,7 +88,7 @@ body:
     id: expected
     attributes:
       label: Expected Behavior
-      description: What should happen?
+      description: What should happen according to doctrine?
       placeholder: Describe the expected behavior
     validations:
       required: true
@@ -80,28 +102,20 @@ body:
     validations:
       required: true
 
-  - type: textarea
-    id: logs
-    attributes:
-      label: Error Logs
-      description: Include any relevant error messages or logs
-      placeholder: Paste error logs here
-      render: shell
-    validations:
-      required: false
-
   - type: dropdown
-    id: environment
+    id: violation-type
     attributes:
-      label: Environment
-      description: Where did this bug occur?
+      label: Violation Type (if applicable)
+      description: Does this bug represent a doctrine violation?
       options:
-        - Local Development
-        - Render Deployment
-        - GitHub Actions
-        - Composio MCP Server
-        - Firebase
-      multiple: true
+        - Not a violation
+        - CC_VIOLATION
+        - CTB_VIOLATION
+        - HUB_SPOKE_VIOLATION
+        - PID_VIOLATION
+        - AUTH_VIOLATION
+        - STATE_VIOLATION
+        - CONSTANT_VIOLATION
     validations:
       required: true
 
@@ -119,15 +133,12 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: integration
+  - type: textarea
+    id: logs
     attributes:
-      label: Affected Integrations
-      description: Which integrations are affected?
-      options:
-        - label: Composio MCP Server
-        - label: Google Workspace (Gmail, Drive, Calendar, Sheets)
-        - label: Firebase
-        - label: Neon Database
-        - label: GitHub Actions
-        - label: Render Deployment
+      label: Error Logs
+      description: Include any relevant error messages or logs
+      placeholder: Paste error logs here
+      render: shell
+    validations:
+      required: false

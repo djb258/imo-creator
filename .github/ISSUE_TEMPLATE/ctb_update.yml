@@ -1,21 +1,34 @@
-name: CTB Update Task
-description: Track CTB template updates and version releases
-title: "[CTB]: v"
-labels: ["ctb-update", "documentation"]
-projects: ["djb258/1"]
+name: Doctrine Update Task
+description: Track doctrine and template updates
+title: "[DOCTRINE]: v"
+labels: ["doctrine-update", "documentation"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## CTB Update Task
-        Track updates to the Christmas Tree Backbone (CTB) template
+        ## Doctrine Update Task
+        Track updates to Canonical Doctrine and templates.
 
   - type: input
-    id: version
+    id: doctrine-version
     attributes:
-      label: CTB Version
+      label: Doctrine Version
       description: Version number for this update
-      placeholder: "1.3.2"
+      placeholder: "1.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cc-layer
+    attributes:
+      label: CC Layer Affected
+      description: Which Canonical Chain layer does this update affect?
+      options:
+        - CC-01 (Sovereign)
+        - CC-02 (Hub)
+        - CC-03 (Context)
+        - CC-04 (Process)
+        - Multiple layers
     validations:
       required: true
 
@@ -48,16 +61,15 @@ body:
     id: components
     attributes:
       label: Updated Components
-      description: Which CTB components are being updated?
+      description: Which components are being updated?
       options:
-        - label: ctb-template/ (Template structure)
-        - label: manual/ (System documentation)
-        - label: drivers/ (Vendor implementations)
-        - label: viewer-api/ (External API layer)
-        - label: .github/workflows/ (CI/CD workflows)
-        - label: docs/ctb/ (CTB documentation)
-        - label: global-config/ (Global configuration)
-        - label: scripts/ (Automation scripts)
+        - label: templates/doctrine/ (Doctrine documents)
+        - label: templates/prd/ (PRD templates)
+        - label: templates/adr/ (ADR templates)
+        - label: templates/pr/ (PR templates)
+        - label: templates/checklists/ (Compliance checklists)
+        - label: templates/integrations/ (Integration templates)
+        - label: .github/ (GitHub configuration)
 
   - type: checkboxes
     id: propagation
@@ -65,13 +77,12 @@ body:
       label: Propagation Checklist
       description: Steps to propagate this update
       options:
-        - label: Update version.json with new version
-        - label: Update CTB_VERSION_HISTORY.md
-        - label: Test auto-update script locally
-        - label: Verify workflow templates in ctb-template/
-        - label: Push to IMO-Creator master branch
-        - label: Trigger auto-sync in child repos
-        - label: Verify propagation to at least one child repo
+        - label: Doctrine version updated in CANONICAL_ARCHITECTURE_DOCTRINE.md
+        - label: All affected templates updated
+        - label: CC layer boundaries verified
+        - label: No upward writes in CC hierarchy
+        - label: Tests pass
+        - label: Push to master branch
 
   - type: textarea
     id: breaking-changes

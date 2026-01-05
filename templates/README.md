@@ -1,7 +1,9 @@
 # Hub & Spoke Templates — Doctrine & Definitions
 
+**Canonical Chain (CC) Level**: CC-01 (Sovereign)
+
 This directory contains the **authoritative templates** used to design, build,
-and enforce Hub & Spoke systems across all projects and domains.
+and enforce Hub & Spoke systems across all derived projects.
 
 These templates define **structure and control**, not implementation.
 Projects must conform to them.
@@ -25,17 +27,16 @@ Master reference for Hub/Spoke definitions, IMO model, CTB structure, and requir
 Governs WHEN and HOW templates become legal. Defines mandatory descent sequence (50k → 5k) and gate conditions.
 
 **Key topics covered:**
-- Canonical Chain (CC) layers: Sovereign, Hub, Context, Process
+- Canonical Chain (CC) layers: CC-01 (Sovereign), CC-02 (Hub), CC-03 (Context), CC-04 (Process)
 - CTB (Christmas Tree Backbone) structure
 - Hub vs Spoke definitions
 - IMO (Ingress / Middle / Egress) model
-- Altitude levels (50k → 5k)
+- CC Descent Protocol (gates between layers)
 - Authorization matrix (who may write where)
 - Process ID (PID) doctrine
 - Lifecycle states and transitions
 - Constants vs Variables
-- Required identifiers (Hub ID, Process ID)
-- How to create and refactor repositories
+- Required identifiers (Sovereign ID, Hub ID, Process ID)
 
 If any instruction conflicts with other guidance, **the doctrine wins**.
 
@@ -72,15 +73,13 @@ A **Spoke is an interface**.
 | `ops/` | Operations |
 | `docs/` | Documentation |
 
-### Altitude Levels
-| Level | Scope |
-|-------|-------|
-| 50k | Shell (Hub identity + attachments) |
-| 40k | Hub-as-application decomposition |
-| 30k | CTB placement |
-| 20k | IMO definition |
-| 10k | Process / logic |
-| 5k | Execution / implementation |
+### Canonical Chain (CC) Layers
+| CC Layer | Name | Scope |
+|----------|------|-------|
+| CC-01 | Sovereign | Authority anchor, boundary declaration |
+| CC-02 | Hub | Application ownership, PRD, CTB placement |
+| CC-03 | Context | ADRs, spokes, guard rails |
+| CC-04 | Process | PIDs, code execution, tests |
 
 ---
 
@@ -118,12 +117,12 @@ templates/
 
 Before a hub can ship, it must have:
 
-| Artifact | Template | Purpose |
-|----------|----------|---------|
-| **PRD** | `prd/PRD_HUB.md` | Defines structure, IMO, CTB, spokes |
-| **Checklist** | `checklists/HUB_COMPLIANCE.md` | Binary ship gate |
-| **PR** | `pr/PULL_REQUEST_TEMPLATE_HUB.md` | Implements approved structure |
-| **ADR(s)** | `adr/ADR.md` | Documents decisions (why, not what) |
+| Artifact | Template | CC Layer | Purpose |
+|----------|----------|----------|---------|
+| **PRD** | `prd/PRD_HUB.md` | CC-02 | Defines structure, IMO, CTB, spokes |
+| **ADR(s)** | `adr/ADR.md` | CC-03 | Documents decisions (why, not what) |
+| **Checklist** | `checklists/HUB_COMPLIANCE.md` | CC-02 | Binary ship gate |
+| **PR** | `pr/PULL_REQUEST_TEMPLATE_HUB.md` | CC-04 | Implements approved structure |
 
 If any artifact is missing, incomplete, or bypassed,
 the hub is considered **non-viable**.
@@ -156,13 +155,13 @@ All hubs MUST use these integrations:
 
 ## Promotion Gates
 
-| Gate | Artifact | Requirement |
-|------|----------|-------------|
-| G1 | PRD | Hub definition approved |
-| G2 | ADR | Architecture decision recorded |
-| G3 | Linear Issue | Work item created and assigned |
-| G4 | PR | Code reviewed and merged |
-| G5 | Checklist | Deployment verification complete |
+| Gate | Artifact | CC Layer | Requirement |
+|------|----------|----------|-------------|
+| G1 | PRD | CC-02 | Hub definition approved |
+| G2 | ADR | CC-03 | Architecture decision recorded |
+| G3 | Work Item | CC-04 | Work item created and assigned |
+| G4 | PR | CC-04 | Code reviewed and merged |
+| G5 | Checklist | CC-02 | Deployment verification complete |
 
 ---
 

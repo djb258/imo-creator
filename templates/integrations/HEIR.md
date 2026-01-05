@@ -2,10 +2,20 @@
 
 **HEIR = Hub Environment Identity Record**
 
-## Hub Identity
+## Conformance
 
 | Field | Value |
 |-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-03 (Validation Interface) |
+
+---
+
+## Hub Identity (CC-02)
+
+| Field | Value |
+|-------|-------|
+| **Sovereign ID** | |
 | **Hub Name** | |
 | **Hub ID** | |
 | **Schema Version** | HEIR/1.0 |
@@ -19,68 +29,74 @@ Every hub MUST have a `heir.doctrine.yaml` file at the root for compliance valid
 > **HEIR enforces doctrine programmatically.**
 > **No manual checks. No trust. Only validation.**
 
+HEIR operates as a CC-03 validation interface, ensuring CC layer compliance at runtime.
+
 ---
 
 ## Required File: `heir.doctrine.yaml`
 
 ```yaml
+# Canonical Chain (CC) Reference
+sovereign:
+  identity: "<sovereign-id>"              # CC-01
+
+# Hub Identity (CC-02)
+hub:
+  name: "<hub-name>"
+  id: "<hub-id>"
+
 meta:
   app_name: "<hub-name>"
   repo_slug: "<org>/<repo>"
   stack: ["<framework>", "<backend>", "<database>"]
   llm:
-    providers:
-      - anthropic
-      - openai
-    default: "anthropic"
+    providers: []                         # Define as needed
+    default: "<provider>"
 
+# Doctrine Compliance
 doctrine:
+  version: "<doctrine-version>"
   unique_id: "<hub-id>-${TIMESTAMP}-${RANDOM_HEX}"
-  process_id: "<hub-id>-process-${SESSION_ID}"
+  process_id: "<hub-id>-process-${SESSION_ID}"    # CC-04
   schema_version: "HEIR/1.0"
-  blueprint_version_hash: "${AUTO_SHA256_OF_CANON}"
-  agent_execution_signature: "${AUTO_HASH(llm+tools)}"
 
+# Deliverables (CC-03 Interfaces)
 deliverables:
   repos:
     - name: "<hub-name>"
       visibility: private
   services:
-    - name: "mcp"
-      port: 7001
-    - name: "sidecar"
-      port: 8000
+    - name: "<service-name>"
+      port: "<port>"
   env:
-    MCP_URL: "http://localhost:7001"
-    SIDECAR_URL: "http://localhost:8000"
-    BEARER_TOKEN: "${DOPPLER:BEARER_TOKEN}"
-    LLM_DEFAULT_PROVIDER: "anthropic"
+    <VARIABLE_NAME>: "${SECRETS_PROVIDER:<KEY>}"
 
+# Acceptance Contracts
 contracts:
   acceptance:
     - "All HEIR checks pass in CI"
-    - "Sidecar event emitted on app start"
-    - "MCP bay exposes required tools"
+    - "<additional-contract>"
 
+# Build Configuration
 build:
   actions:
-    mcp_tools: ["heir.check", "sidecar.event"]
-    ci_checks: ["python -m packages.heir.checks"]
-    telemetry_events: ["app.start", "action.invoked"]
+    ci_checks: ["<check-command>"]
+    telemetry_events: ["app.start"]
 ```
 
 ---
 
 ## HEIR Validation Checks
 
-| Check | What It Validates |
-|-------|-------------------|
-| **Meta** | app_name, repo_slug, stack, LLM providers |
-| **Doctrine** | unique_id, process_id, schema_version |
-| **Deliverables** | repos, services (mcp, sidecar), env vars |
-| **Contracts** | acceptance criteria defined |
-| **Build** | MCP tools, CI checks, telemetry events |
-| **Manifest** | IMO manifest integration |
+| Check | What It Validates | CC Layer |
+|-------|-------------------|----------|
+| **Sovereign** | sovereign reference present | CC-01 |
+| **Hub** | hub identity complete | CC-02 |
+| **Meta** | app_name, repo_slug, stack | CC-02 |
+| **Doctrine** | version, unique_id, process_id, schema | CC-02/CC-04 |
+| **Deliverables** | repos, services, env vars | CC-03 |
+| **Contracts** | acceptance criteria defined | CC-03 |
+| **Build** | CI checks, telemetry events | CC-04 |
 
 ---
 
@@ -127,39 +143,47 @@ HEIR Validation Summary
 
 ## Required Fields
 
-### Meta Section
+### Sovereign Section (CC-01)
+| Field | Required | Description |
+|-------|----------|-------------|
+| `sovereign.identity` | Yes | Reference to governing sovereign |
+
+### Hub Section (CC-02)
+| Field | Required | Description |
+|-------|----------|-------------|
+| `hub.name` | Yes | Hub name |
+| `hub.id` | Yes | Unique, immutable hub identifier |
+
+### Meta Section (CC-02)
 | Field | Required | Description |
 |-------|----------|-------------|
 | `app_name` | Yes | Hub name |
-| `repo_slug` | Yes | GitHub org/repo |
+| `repo_slug` | Yes | Repository identifier (org/repo) |
 | `stack` | Yes | Technology stack array |
-| `llm.providers` | Yes | LLM providers array |
-| `llm.default` | Yes | Default provider |
 
-### Doctrine Section
+### Doctrine Section (CC-02/CC-04)
 | Field | Required | Description |
 |-------|----------|-------------|
+| `version` | Yes | Doctrine version |
 | `unique_id` | Yes | Hub ID pattern |
-| `process_id` | Yes | Process ID pattern |
+| `process_id` | Yes | Process ID pattern (CC-04) |
 | `schema_version` | Yes | Must be "HEIR/1.0" |
 
-### Deliverables Section
+### Deliverables Section (CC-03)
 | Field | Required | Description |
 |-------|----------|-------------|
-| `services` | Yes | Must include mcp and sidecar |
-| `env` | Yes | Required environment variables |
+| `services` | Yes | Service definitions |
+| `env` | Yes | Environment variables |
 
 ---
 
-## Doppler Integration
+## Secrets Integration
 
-All secrets in `heir.doctrine.yaml` should reference Doppler:
+All secrets in `heir.doctrine.yaml` should reference your secrets provider:
 
 ```yaml
 env:
-  BEARER_TOKEN: "${DOPPLER:BEARER_TOKEN}"
-  COMPOSIO_API_KEY: "${DOPPLER:COMPOSIO_API_KEY}"
-  ANTHROPIC_API_KEY: "${DOPPLER:ANTHROPIC_API_KEY}"
+  <SECRET_NAME>: "${SECRETS_PROVIDER:<KEY>}"
 ```
 
 ---
@@ -167,10 +191,12 @@ env:
 ## Compliance Checklist
 
 - [ ] `heir.doctrine.yaml` exists at hub root
+- [ ] Sovereign reference present (CC-01)
+- [ ] Hub identity complete (CC-02)
 - [ ] Meta section complete
-- [ ] Doctrine IDs defined
-- [ ] Services include mcp and sidecar
-- [ ] Environment variables reference Doppler
+- [ ] Doctrine version and IDs defined
+- [ ] Services defined (CC-03)
+- [ ] Environment variables reference secrets provider
 - [ ] CI runs HEIR checks
 - [ ] All checks pass
 
@@ -180,6 +206,7 @@ env:
 
 | Artifact | Reference |
 |----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | PRD | |
 | ADR | |
-| Linear Issue | |
+| Work Item | |

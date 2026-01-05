@@ -1,43 +1,57 @@
 name: Feature Request
-description: Suggest a new feature for IMO-Creator
+description: Propose a new feature aligned to Canonical Chain architecture
 title: "[FEATURE]: "
 labels: ["enhancement", "needs-triage"]
-projects: ["djb258/1"]
 body:
   - type: markdown
     attributes:
       value: |
         ## Feature Request
-        Thank you for suggesting a new feature for IMO-Creator!
+        Propose features aligned to Canonical Chain architecture.
 
   - type: dropdown
-    id: component
+    id: cc-layer
     attributes:
-      label: Component
-      description: Which component does this feature relate to?
+      label: CC Layer
+      description: At which Canonical Chain layer should this feature operate?
       options:
-        - CTB Template
-        - Composio MCP Integration
-        - Google Workspace Integration
-        - Firebase MCP
-        - Role-Based System Manual
-        - GitHub Actions / CI/CD
-        - Documentation
-        - Other
+        - CC-01 (Sovereign)
+        - CC-02 (Hub)
+        - CC-03 (Context)
+        - CC-04 (Process)
     validations:
       required: true
 
   - type: dropdown
-    id: altitude
+    id: imo-layer
     attributes:
-      label: CTB Altitude
-      description: At what altitude should this feature operate?
+      label: IMO Layer
+      description: Which IMO layer will this feature affect?
       options:
-        - 40k ft - Strategic/Vision
-        - 20k ft - Architecture/Integration
-        - 10k ft - Implementation/Code
-        - 5k ft - Data/Database
-        - Ground - Operations/DevOps
+        - I (Ingress)
+        - M (Middle)
+        - O (Egress)
+        - Spoke (Interface)
+        - Multiple layers
+        - Not applicable
+    validations:
+      required: true
+
+  - type: input
+    id: ctb-placement
+    attributes:
+      label: Proposed CTB Placement
+      description: Where should this feature live in CTB? (trunk/branch/leaf)
+      placeholder: "sys/core/feature"
+    validations:
+      required: false
+
+  - type: input
+    id: doctrine-version
+    attributes:
+      label: Doctrine Version
+      description: Which doctrine version does this feature target?
+      placeholder: "1.1.0"
     validations:
       required: true
 
@@ -59,28 +73,43 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: artifact-type
+    attributes:
+      label: Artifact Type
+      description: What type of artifact will this feature produce?
+      options:
+        - Doctrine update (requires ADR)
+        - Template addition
+        - Template modification
+        - Hub structure change
+        - Spoke interface change
+        - Tool registration
+        - Configuration change
+    validations:
+      required: true
+
+  - type: dropdown
+    id: constant-or-variable
+    attributes:
+      label: Constant or Variable
+      description: Does this feature define structure (constant) or tune behavior (variable)?
+      options:
+        - Constant (requires ADR)
+        - Variable (configuration)
+        - Both
+        - Not applicable
+    validations:
+      required: true
+
   - type: textarea
     id: implementation
     attributes:
-      label: Proposed Implementation
-      description: How should this feature be implemented?
-      placeholder: Suggest an approach or implementation details
+      label: Proposed Approach
+      description: How should this feature be implemented? (Do not define execution logic)
+      placeholder: Describe structural approach, not implementation details
     validations:
       required: false
-
-  - type: checkboxes
-    id: integration
-    attributes:
-      label: Integration Impact
-      description: Which integrations will this affect?
-      options:
-        - label: Composio MCP Server
-        - label: Google Workspace (Gmail, Drive, Calendar, Sheets)
-        - label: Firebase
-        - label: Neon Database
-        - label: GitHub Actions
-        - label: Render Deployment
-        - label: None
 
   - type: dropdown
     id: priority
@@ -95,3 +124,14 @@ body:
         - P4 - Nice to have
     validations:
       required: true
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Pre-Check
+      description: Confirm this request aligns with doctrine
+      options:
+        - label: This feature does not introduce logic into spokes
+        - label: This feature does not create cross-hub dependencies
+        - label: This feature respects CC layer boundaries
+        - label: If this modifies constants, I understand an ADR is required

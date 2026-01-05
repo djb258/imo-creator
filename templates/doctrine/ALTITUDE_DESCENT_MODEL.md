@@ -1,287 +1,217 @@
-# Altitude Descent Model
+# CC Descent Protocol
 
-**Governs WHEN and HOW templates become legal.**
+**Governs WHEN and HOW artifacts become legal within the Canonical Chain.**
 
-This document defines the mandatory descent sequence through altitude levels.
-No level may be skipped. No artifact may be created out of sequence.
+## Conformance
 
-This file MUST be read and followed by:
-- Humans designing hubs
-- LLMs generating structure or artifacts
-- Any agent proposing architectural change
-
-If any instruction conflicts with other guidance, **this file wins**.
+| Field | Value |
+|-------|-------|
+| **Doctrine Version** | 1.1.0 |
+| **Authority** | Canonical Architecture Doctrine |
+| **Status** | LOCKED |
 
 ---
 
-## Altitude Levels (Mandatory Order)
+## Overview
 
-| Altitude | Name | Scope |
-|----------|------|-------|
-| **50k** | Shell | Hub identity + attachment topology |
-| **40k** | Decomposition | Hub-as-application breakdown |
-| **30k** | CTB Placement | Structural positioning per hub |
-| **20k** | IMO Definition | Flow definition per hub |
-| **10k** | Process Logic | Internal decisions and state |
-| **5k** | Execution | Linear issues, PRs, code |
+This protocol defines the mandatory descent sequence through Canonical Chain (CC) layers. Artifacts are created in strict order. No layer may be skipped. No artifact may be created out of sequence.
+
+> **CC is authoritative. This protocol operationalizes CC.**
+
+---
+
+## CC Layer to Artifact Mapping
+
+| CC Layer | Name | Artifacts Legal | Gate Before Descent |
+|----------|------|-----------------|---------------------|
+| **CC-01** | Sovereign | Sovereign declaration, boundary definition | External authorization |
+| **CC-02** | Hub | Hub identity, PRD, CTB placement, IMO definition | CC-01 complete |
+| **CC-03** | Context | ADR, process flows, state diagrams, spoke definitions | CC-02 complete |
+| **CC-04** | Process | PIDs, execution code, tests, configuration | CC-03 complete |
 
 Descent is **one-way** and **irreversible** within a design cycle.
-You may not ascend to fix structural problems — you must restart.
 
 ---
 
-## 50k — Shell
+## CC-01 — Sovereign Layer
 
 ### Purpose
-Establish hub identity and declare all attachments (spokes, dependencies, boundaries).
 
-### Allowed
-- Declare Hub ID
-- Declare hub name and purpose (one sentence)
-- List all I-type attachments (ingress spokes)
-- List all O-type attachments (egress spokes)
-- Identify upstream/downstream hub dependencies (if any)
+Establish sovereign identity and declare system boundaries.
+
+### Artifacts Legal
+
+- Sovereign declaration (identity, boundary, authority)
+- Downstream hub manifest
+
+### Gate Condition (Before Descending)
+
+- [ ] Sovereign identity assigned (unique, immutable)
+- [ ] Sovereign boundary declared
+- [ ] External authorization obtained
+- [ ] Doctrine version declared
 
 ### Forbidden
+
+- Hub definitions
 - CTB placement
-- IMO layer definitions
 - Any internal structure
 - Any code or configuration
-- Any diagrams
-
-### Artifacts Legal at This Altitude
-- Hub identity declaration (name, ID, one-line purpose)
-- Attachment manifest (typed I/O spoke list)
-
-### Gate Condition (Before Descending)
-- [ ] Hub ID assigned
-- [ ] Hub purpose declared (one sentence, no implementation detail)
-- [ ] All I-type attachments listed
-- [ ] All O-type attachments listed
-- [ ] No orphan attachments (every spoke connects to exactly one hub)
 
 ---
 
-## 40k — Hub-as-Application Decomposition
+## CC-02 — Hub Layer
 
 ### Purpose
-Break down the hub into its application-level components without structural placement.
 
-### Allowed
-- Describe what the hub does (application behavior)
-- Identify major functional areas (not folders, not code)
-- Define boundaries between hub responsibility and spoke responsibility
-- Confirm hub owns all logic, spokes own none
+Define hub identity, structure, and placement within CTB.
 
-### Forbidden
-- CTB branch assignment
-- IMO layer assignment
-- Folder structure
-- File names
-- Code
-- Diagrams
+### Artifacts Legal
 
-### Artifacts Legal at This Altitude
-- Application description (what the hub does, not how)
-- Functional area list (logical groupings, not structure)
-
-### Gate Condition (Before Descending)
-- [ ] 50k complete (Hub ID, attachments declared)
-- [ ] Application behavior described
-- [ ] Functional areas identified
-- [ ] No logic assigned to spokes
-- [ ] No structural decisions made
-
----
-
-## 30k — CTB Placement
-
-### Purpose
-Assign the hub to its CTB position (trunk/branch/leaf).
-
-### Allowed
-- Declare CTB trunk (sys, ui, ai, data, ops, docs)
-- Declare CTB branch (domain)
-- Declare CTB leaf (capability)
-- Define folder structure per CTB assignment
-
-### Forbidden
+- Hub identity declaration (Hub ID, name, purpose)
+- CTB placement (trunk/branch/leaf)
 - IMO layer definitions
-- Process logic
-- Code
-- PRDs (not yet legal)
-- ADRs (not yet legal)
-
-### Artifacts Legal at This Altitude
-- CTB declaration (trunk/branch/leaf)
-- Folder structure specification
+- Spoke manifest (I/O attachments)
+- Hub PRD
 
 ### Gate Condition (Before Descending)
-- [ ] 40k complete (application decomposed)
-- [ ] CTB trunk assigned
-- [ ] CTB branch assigned
-- [ ] CTB leaf assigned
-- [ ] Folder structure defined
 
----
-
-## 20k — IMO Definition
-
-### Purpose
-Define the Ingress / Middle / Egress flow for the hub.
-
-### Allowed
-- Define I layer (inputs, validation, no logic)
-- Define M layer (all logic, all state, all decisions)
-- Define O layer (outputs, exports, read-only)
-- Map spokes to I or O layers
-- Write System PRD (if multi-hub)
-- Write Hub Sub-PRD
-
-### Forbidden
-- Internal process logic (that's 10k)
-- Code
-- PRs
-- Linear issues
-
-### Artifacts Legal at This Altitude
-- PRD (System or Hub Sub-PRD)
-- IMO layer specification
-- Spoke-to-layer mapping
-
-### Gate Condition (Before Descending)
-- [ ] 30k complete (CTB placed)
-- [ ] I layer defined
-- [ ] M layer defined
-- [ ] O layer defined
-- [ ] All spokes mapped to I or O
+- [ ] CC-01 complete (Sovereign declared)
+- [ ] Hub ID assigned (unique within sovereign)
+- [ ] CTB placement declared
+- [ ] IMO layers defined (I/M/O)
+- [ ] All spokes declared and typed (I or O)
 - [ ] PRD written and approved
 
+### Forbidden
+
+- Process logic
+- ADRs (not yet legal)
+- Code
+- Configuration
+- PIDs
+
 ---
 
-## 10k — Process Logic
+## CC-03 — Context Layer
 
 ### Purpose
-Define internal process flows, decision trees, and state management.
 
-### Allowed
-- Define process flows within M layer
-- Define decision logic
-- Define state transitions
-- Write ADRs for architectural decisions
-- Create architecture diagrams
+Define bounded contexts, decisions, and process architecture.
 
-### Forbidden
-- Code implementation
-- PRs
-- Linear issues
-- Test files
+### Artifacts Legal
 
-### Artifacts Legal at This Altitude
-- ADR (one per decision)
+- ADR (one per architectural decision)
 - Process flow documentation
-- State transition diagrams
-- Architecture diagrams
+- State transition definitions
+- Interface contracts
+- Spoke implementation details
 
 ### Gate Condition (Before Descending)
-- [ ] 20k complete (IMO defined, PRD approved)
-- [ ] Process flows documented
+
+- [ ] CC-02 complete (Hub defined, PRD approved)
 - [ ] Key decisions recorded as ADRs
-- [ ] Diagrams created (if needed)
+- [ ] Process flows documented
+- [ ] Constants vs variables declared
+
+### Forbidden
+
+- Code implementation
+- PIDs
+- Tests
+- Configuration files
 
 ---
 
-## 5k — Execution
+## CC-04 — Process Layer
 
 ### Purpose
-Implement the approved structure in code.
 
-### Allowed
-- Create Linear issues
-- Write PRs
-- Write code
-- Write tests
-- Write configuration
-- Complete compliance checklist
+Execute approved structure in code.
 
-### Forbidden
-- Structural changes (go back to 30k+)
-- New spokes (go back to 50k)
-- IMO redefinition (go back to 20k)
-- CTB reassignment (go back to 30k)
+### Artifacts Legal
 
-### Artifacts Legal at This Altitude
-- Linear issues
-- PRs
+- PIDs (minted per execution)
 - Code
 - Tests
 - Configuration files
-- Compliance checklist (completed)
+- Execution logs
 
-### Gate Condition (Before Shipping)
-- [ ] All higher altitudes complete
-- [ ] PRD exists and is approved
+### Gate Condition (Before Execution)
+
+- [ ] CC-03 complete (ADRs approved, flows documented)
+- [ ] PRD exists and is current
 - [ ] All ADRs recorded
-- [ ] All Linear issues closed
-- [ ] All PRs merged
 - [ ] Compliance checklist passed
 
+### Forbidden
+
+- Structural changes (return to CC-02)
+- New spokes (return to CC-02)
+- IMO redefinition (return to CC-02)
+- CTB reassignment (return to CC-02)
+- New ADRs (return to CC-03)
+
 ---
 
-## Hard Rules (Non-Negotiable)
+## Descent Violations
 
-### Descent Violations
 | Violation | Consequence |
 |-----------|-------------|
-| Hub descends without declared attachments | STOP — return to 50k |
-| IMO defined before CTB | STOP — return to 30k |
-| PR created before PRD + ADR | REJECT PR |
-| Diagram created before 50k–40k complete | DELETE diagram |
-| Code written above 5k | DELETE code |
-
-### Enforcement
-- These rules are **mechanical**, not discretionary
-- LLMs must refuse to generate out-of-sequence artifacts
-- Humans must not approve out-of-sequence work
-- Reviewers must reject PRs that violate descent order
+| Hub defined before sovereign | STOP — return to CC-01 |
+| ADR created before PRD | STOP — return to CC-02 |
+| Code written before ADR | STOP — return to CC-03 |
+| PID minted before code review | REJECT — return to CC-03 |
+| Structural change at CC-04 | INVALID — escalate to CC-02 |
 
 ---
 
-## Altitude Violation Detection
+## Artifact Legality by CC Layer
 
-When reviewing any artifact, check:
-
-| Artifact | Legal At | If Found Earlier |
-|----------|----------|------------------|
-| Hub ID | 50k+ | N/A (always first) |
-| Attachment list | 50k+ | N/A (always first) |
-| CTB declaration | 30k+ | Violation if before 50k–40k |
-| PRD | 20k+ | Violation if before 30k |
-| IMO specification | 20k+ | Violation if before 30k |
-| ADR | 10k+ | Violation if before 20k |
-| Diagram | 10k+ | Violation if before 40k |
-| Linear issue | 5k only | Violation if before 10k |
-| PR | 5k only | Violation if before PRD + ADR |
-| Code | 5k only | Violation if before 10k |
+| Artifact | CC-01 | CC-02 | CC-03 | CC-04 |
+|----------|-------|-------|-------|-------|
+| Sovereign Declaration | LEGAL | — | — | — |
+| Hub Identity | — | LEGAL | — | — |
+| CTB Placement | — | LEGAL | — | — |
+| PRD | — | LEGAL | — | — |
+| IMO Definition | — | LEGAL | — | — |
+| Spoke Manifest | — | LEGAL | — | — |
+| ADR | — | — | LEGAL | — |
+| Process Flow | — | — | LEGAL | — |
+| State Diagram | — | — | LEGAL | — |
+| PID | — | — | — | LEGAL |
+| Code | — | — | — | LEGAL |
+| Tests | — | — | — | LEGAL |
+| Configuration | — | — | — | LEGAL |
 
 ---
 
 ## Restart Protocol
 
-If a violation is detected:
+If a descent violation is detected:
 
-1. Identify the lowest altitude that was correctly completed
-2. Delete all artifacts created at or below the violated altitude
-3. Resume descent from the last valid gate
-4. Do not preserve "good parts" of invalid work
+1. Identify the lowest CC layer that was correctly completed.
+2. Delete all artifacts created at or below the violated layer.
+3. Resume descent from the last valid gate.
+4. Do not preserve "good parts" of invalid work.
 
 > **There is no partial credit.**
 > **Structure is either correct or it is not.**
 
 ---
 
-## Final Rule
+## Enforcement
 
-> **Altitude descent is the law of construction.**
-> **Artifacts exist only when earned.**
-> **Skipping altitude is not innovation — it is violation.**
+- These rules are **mechanical**, not discretionary.
+- Agents must refuse to generate out-of-sequence artifacts.
+- Reviewers must reject work that violates descent order.
+- Violations must be logged to the Master Error Log.
+
+---
+
+## Traceability
+
+| Artifact | Reference |
+|----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Hub/Spoke Doctrine | HUB_SPOKE_ARCHITECTURE.md |

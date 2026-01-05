@@ -1,5 +1,14 @@
 # ADR: [Decision Title]
 
+## Conformance
+
+| Field | Value |
+|-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-03 |
+
+---
+
 ## ADR Identity
 
 | Field | Value |
@@ -10,22 +19,43 @@
 
 ---
 
-## Owning Hub
+## Owning Hub (CC-02)
 
 | Field | Value |
 |-------|-------|
+| **Sovereign ID** | |
 | **Hub Name** | |
 | **Hub ID** | |
 
 ---
 
-## Scope
+## CC Layer Scope
+
+| Layer | Affected | Description |
+|-------|----------|-------------|
+| CC-01 (Sovereign) | [ ] | |
+| CC-02 (Hub) | [ ] | |
+| CC-03 (Context) | [ ] | |
+| CC-04 (Process) | [ ] | |
+
+---
+
+## IMO Layer Scope
 
 | Layer | Affected |
 |-------|----------|
 | I — Ingress | [ ] |
 | M — Middle | [ ] |
 | O — Egress | [ ] |
+
+---
+
+## Constant vs Variable
+
+| Classification | Value |
+|----------------|-------|
+| **This decision defines** | [ ] Constant (structure/meaning) / [ ] Variable (behavior tuning) |
+| **Mutability** | [ ] Immutable / [ ] ADR-gated / [ ] Configuration |
 
 ---
 
@@ -62,15 +92,25 @@ _State the decision clearly. Document WHY this choice was made, not WHAT to buil
 
 ---
 
+## PID Impact (if CC-04 affected)
+
+| Field | Value |
+|-------|-------|
+| **New PID required** | [ ] Yes / [ ] No |
+| **PID pattern change** | [ ] Yes / [ ] No |
+| **Audit trail impact** | |
+
+---
+
 ## Guard Rails
 
 _Constraints that bound this decision. Do not define logic or implementation._
 
-| Type | Value |
-|------|-------|
-| Rate Limit | |
-| Timeout | |
-| Kill Switch | |
+| Type | Value | CC Layer |
+|------|-------|----------|
+| Rate Limit | | |
+| Timeout | | |
+| Kill Switch | | |
 
 ---
 
@@ -84,9 +124,9 @@ _How is this decision reversed if it fails? Do not define remediation logic._
 
 | Artifact | Reference |
 |----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | PRD | |
-| Sub-PRD | |
-| Linear Issue | |
+| Work Items | |
 | PR(s) | |
 
 ---
@@ -95,5 +135,5 @@ _How is this decision reversed if it fails? Do not define remediation logic._
 
 | Role | Name | Date |
 |------|------|------|
-| Hub Owner | | |
+| Hub Owner (CC-02) | | |
 | Reviewer | | |

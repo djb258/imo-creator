@@ -1,20 +1,32 @@
-# Doppler Secrets Management Template
+# Secrets Management Integration Template
 
-## Hub Identity
+## Conformance
 
 | Field | Value |
 |-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-03 (Spoke Interface) |
+
+---
+
+## Hub Identity (CC-02)
+
+| Field | Value |
+|-------|-------|
+| **Sovereign ID** | |
 | **Hub Name** | |
 | **Hub ID** | |
-| **Doppler Project** | |
+| **Secrets Project** | |
 
 ---
 
 ## Overview
 
-All hubs MUST use Doppler for secrets management.
+All hubs MUST use centralized secrets management.
 
 **No exceptions. No local `.env` files in production.**
+
+This template defines the interface for secrets management spokes (CC-03).
 
 ---
 
@@ -42,13 +54,12 @@ setup:
 
 ## Required Secrets (All Hubs)
 
-| Secret | Description | Required |
-|--------|-------------|----------|
-| `HUB_ID` | Unique hub identifier | Yes |
-| `PROCESS_ID` | Execution trace ID | Yes |
-| `COMPOSIO_API_KEY` | Composio integration | If using Composio |
-| `ANTHROPIC_API_KEY` | Claude integration | If using AI |
-| `OPENAI_API_KEY` | OpenAI integration | If using AI |
+| Secret | Description | CC Layer | Required |
+|--------|-------------|----------|----------|
+| `HUB_ID` | Unique hub identifier | CC-02 | Yes |
+| `<SECRET_NAME>` | _Description_ | _CC Layer_ | _Yes/No_ |
+
+**Note:** Define secrets based on your hub's specific integrations. Reference CC layers for scope.
 
 ---
 
@@ -143,6 +154,7 @@ doppler secrets download --no-file --format env | vercel env add
 
 | Artifact | Reference |
 |----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | PRD | |
 | ADR | |
-| Linear Issue | |
+| Work Item | |

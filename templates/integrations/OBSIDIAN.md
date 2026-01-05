@@ -1,9 +1,19 @@
-# Obsidian Knowledge Base Template
+# Knowledge Base Template
 
-## Hub Identity
+## Conformance
 
 | Field | Value |
 |-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-03 (Documentation Interface) |
+
+---
+
+## Hub Identity (CC-02)
+
+| Field | Value |
+|-------|-------|
+| **Sovereign ID** | |
 | **Hub Name** | |
 | **Hub ID** | |
 | **Vault Name** | |
@@ -12,9 +22,11 @@
 
 ## Overview
 
-Every hub MUST have an Obsidian vault for knowledge management.
+Every hub SHOULD have a knowledge base for documentation and knowledge management.
 
-> **Code lives in Git. Knowledge lives in Obsidian.**
+> **Code lives in Git. Knowledge lives in the vault.**
+
+This template defines the structure for documentation as a CC-03 interface.
 
 ---
 
@@ -85,7 +97,7 @@ Copy from `templates/adr/ADR.md`
 
 ## Hub Focus
 - **Hub:**
-- **Altitude:**
+- **CC Layer:**
 
 ## Today's Tasks
 - [ ]
@@ -122,14 +134,15 @@ Copy from `templates/adr/ADR.md`
 
 ### Hub References
 ```markdown
-Hub ID: `HUB-XXX`
-Process ID: `PROC-XXX`
+Hub ID: `<hub-id>`
+Process ID: `<hub-id>-<timestamp>-<random>`
+Sovereign ID: `<sovereign-id>`
 ```
 
 ### Tags
 ```markdown
-#hub/hub-name
-#altitude/30k
+#hub/<hub-name>
+#cc/cc-02
 #status/active
 #type/prd
 #type/adr
@@ -172,12 +185,7 @@ Process ID: `PROC-XXX`
 <hub-name>-vault/
 ```
 
-Example:
-```
-imo-creator-vault/
-barton-outreach-vault/
-garage-mcp-vault/
-```
+Follow your organization's naming conventions.
 
 ---
 
@@ -229,7 +237,8 @@ WHERE !completed
 - [ ] Git integration configured
 - [ ] .gitignore updated
 - [ ] README.md created
-- [ ] Hub PRD added to 10-PRD/
+- [ ] Hub PRD added to 10-PRD/ (CC-02)
+- [ ] ADRs added to 20-ADR/ (CC-03)
 - [ ] Naming convention followed
 
 ---
@@ -238,6 +247,7 @@ WHERE !completed
 
 | Artifact | Reference |
 |----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | PRD | |
 | ADR | |
-| Linear Issue | |
+| Work Item | |

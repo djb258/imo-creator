@@ -1,219 +1,192 @@
 # Hub & Spoke Architecture Doctrine
-**(CTB + IMO + Altitude Enforcement Guide)**
 
-This document is the **authoritative doctrine** for constructing or refactoring repositories
-using the **Hub & Spoke architecture**.
+**Defines the geometry of authority and interface contracts.**
 
-This file MUST be read and followed by:
-- Humans creating new repositories
-- LLMs refactoring existing repositories
-- LLMs generating new code, structure, or documentation
+## Conformance
 
-If any instruction in this file conflicts with other guidance, **this file wins**.
+| Field | Value |
+|-------|-------|
+| **Doctrine Version** | 1.1.0 |
+| **Authority** | Canonical Architecture Doctrine |
+| **CC Layers** | CC-02 (Hub), CC-03 (Context/Spoke) |
 
 ---
 
-## 1. Core Mental Model (Non-Negotiable)
+## Overview
 
-### Hub
-- A **Hub is an application**
+This document defines the **Hub & Spoke geometry** for all systems derived from this doctrine.
+
+> **If any instruction conflicts with the Canonical Architecture Doctrine, the Canonical Doctrine wins.**
+
+---
+
+## 1. Core Definitions
+
+### Hub (CC-02)
+
+A **Hub is an application** that owns authority within its declared boundary.
+
 - A hub owns:
   - Logic
   - Decisions
   - State
   - CTB placement
-  - Altitude scope
   - Full IMO flow
-- A repository MUST contain **exactly one hub**
-- If a repository contains more than one hub, it MUST be split
+- A hub operates at **CC-02** in the Canonical Chain.
+- A bounded context MUST contain **exactly one hub**.
+- Hubs mint identities; spokes do not.
 
-### Spoke
-- A **Spoke is an interface**
-- A spoke is **ONLY**:
+### Spoke (CC-03 Interface)
+
+A **Spoke is an interface** that carries data between boundaries.
+
+- A spoke is typed as:
   - **I (Ingress)** — data entering a hub
   - **O (Egress)** — data leaving a hub
 - A spoke:
   - Owns NO logic
   - Owns NO state
   - Owns NO tools
-- There is **no such thing as a Middle spoke**
+- Spokes operate as **CC-03 interfaces**.
+- There is **no such thing as a Middle spoke**.
 
 ### Golden Rule
-> **Logic lives only inside hubs.
-> Spokes only carry data.**
+
+> **Logic lives only inside hubs.**
+> **Spokes only carry data.**
 
 ---
 
-## 2. IMO Model (Applies ONLY Inside a Hub)
+## 2. CC Layer Mapping
+
+| Component | CC Layer | Role |
+|-----------|----------|------|
+| Hub | CC-02 | Domain ownership, logic, state, decisions |
+| Spoke (I) | CC-03 | Ingress interface, data entry |
+| Spoke (O) | CC-03 | Egress interface, data exit |
+| Nested Hub | CC-03 | Context within parent hub |
+| Process | CC-04 | Execution instance within hub |
+
+---
+
+## 3. IMO Model (Inside Hubs Only)
+
+IMO layers exist **only inside hubs**. Spokes are external interfaces.
 
 ### I — Ingress
-- UI, API, file, event, webhook
+
+- Data entry point
 - May validate schema and shape
 - MUST NOT make decisions
 - MUST NOT mutate business state
 
 ### M — Middle
+
 - All logic
 - All decisions
 - All transformations
 - All state ownership
-- All orchestration
+- All tool invocations
 
 ### O — Egress
-- Outputs, exports, notifications, APIs
+
+- Outputs and exports
 - Read-only views
 - Downstream signals
+- MUST NOT contain logic
 
 ---
 
-## 3. CTB — Christmas Tree Backbone
+## 4. CTB — Christmas Tree Backbone
 
-CTB defines **where things live**, not how they execute.
+CTB defines **where things live** (placement), not how they execute.
 
 Every hub MUST declare:
+
 - **Trunk** (system category)
 - **Branch** (domain)
 - **Leaf** (capability)
 
-CTB is **structural**, not logical.
+CTB is **structural** and maps to CC-02 boundaries.
 
 ### Standard CTB Branches
 
 | Branch | Purpose |
 |--------|---------|
-| `sys/` | System infrastructure, backends, databases |
-| `ui/` | User interfaces, frontends |
-| `ai/` | AI/ML agents, models, prompts |
-| `data/` | Data pipelines, schemas, migrations |
-| `ops/` | Operations, scripts, automation |
-| `docs/` | Documentation, guides |
+| `sys/` | System infrastructure |
+| `ui/` | User interfaces |
+| `ai/` | AI/ML components |
+| `data/` | Data pipelines |
+| `ops/` | Operations |
+| `docs/` | Documentation |
 
 ---
 
-## 4. Altitude Model (Zoom Discipline)
-
-Altitude defines **how detailed the work is**.
-
-| Level | Scope | Focus |
-|-------|-------|-------|
-| **30k** | System architecture | Multiple hubs, topology |
-| **20k** | Domain / capability | Hub boundaries, interfaces |
-| **10k** | Process / logic | Internal flows, decisions |
-| **5k** | Execution / implementation | Code, configs, tests |
-
-### Rules
-- You may only add detail by going **down** in altitude
-- You may not introduce new structure sideways
-- Higher altitude = broader scope, less detail
-- Lower altitude = narrower scope, more detail
-
----
-
-## 5. Required Artifacts (The Only Ones That Matter)
-
-### PRD (Product Requirements Document)
-- Defines structure
-- Defines hubs
-- Defines spokes
-- Defines IMO flow
-- Defines CTB + Altitude
-- Lives as:
-  - **System PRD** (topology)
-  - **Hub Sub-PRD** (internal hub design)
-
-### ADR (Architecture Decision Record)
-- Explains **why** a decision was made
-- One decision per ADR
-- Never defines structure
-- Never defines tasks
-
-### PR (Pull Request)
-- Implements approved structure
-- References PRD / ADR
-- Contains actual change
-
-### Checklist
-- Binary ship gate
-- Proves work is complete
-- No discussion, no vibes
-
-> Linear Issues are **execution control**, not documentation doctrine.
-
----
-
-## 6. Required Identifiers
+## 5. Required Identifiers
 
 Every hub MUST have:
-- **Hub ID** — unique, immutable identifier
-- **Process ID** — execution / trace ID
+
+| Identifier | CC Layer | Description |
+|------------|----------|-------------|
+| **Sovereign ID** | CC-01 | Reference to governing sovereign |
+| **Hub ID** | CC-02 | Unique, immutable hub identifier |
+| **Process ID** | CC-04 | Execution/trace ID (minted per run) |
 
 These identifiers:
-- Are assigned at hub creation
+
+- Are assigned at creation
 - Never change
-- Are referenced in all PRDs, ADRs, PRs
+- Are referenced in all PRDs, ADRs, and PRs
 - Enable traceability across the system
 
 ---
 
-## 7. How to CREATE a New Repository
+## 6. Hub Creation Protocol
 
-1. Define the hub (one per repo)
-2. Assign Hub ID + Process ID
-3. Write System PRD (if needed)
-4. Write Hub Sub-PRD
+1. Declare sovereign reference (CC-01)
+2. Define the hub identity (CC-02)
+3. Assign Hub ID
+4. Write Hub PRD
 5. Define CTB placement
-6. Define Altitude scope
-7. Define full IMO internally
-8. Define I/O spokes
-9. Apply CTB folder structure
-10. Add PR / ADR / Checklist templates
-11. Implement code
-12. Validate with checklist
+6. Define full IMO internally
+7. Define I/O spokes
+8. Create ADRs for decisions (CC-03)
+9. Implement code (CC-04)
+10. Validate with compliance checklist
 
 ---
 
-## 8. How to REFACTOR an Existing Repository (LLM Instructions)
-
-When refactoring an existing repo:
-
-1. Identify how many hubs exist
-2. If more than one → split
-3. Move all logic into M
-4. Convert integrations to I/O spokes
-5. Remove sideways hub calls
-6. Assign Hub ID + Process ID
-7. Generate PRD and ADRs
-8. Enforce CTB folders
-9. Validate against checklist
-
----
-
-## 9. Hard Violations (Stop Immediately)
+## 7. Hard Violations
 
 If ANY of the following occur, STOP and flag the issue:
 
-- Logic exists in a spoke
-- Cross-hub state sharing
-- UI making decisions
-- Tools spanning hubs
-- Missing Hub ID or Process ID
-- Repo acting as multiple hubs
-- Architecture introduced in a PR
+| Violation | Type |
+|-----------|------|
+| Logic exists in a spoke | HUB_SPOKE_VIOLATION |
+| Cross-hub state sharing | CC_VIOLATION |
+| Spoke making decisions | HUB_SPOKE_VIOLATION |
+| Tools spanning hubs | CC_VIOLATION |
+| Missing Hub ID or Sovereign reference | CTB_VIOLATION |
+| Bounded context with multiple hubs | CC_VIOLATION |
+| Architecture introduced in a PR | CC_VIOLATION |
 
-These are **schema violations**, not preferences.
-
----
-
-## 10. Design Twins (Reference Only)
-
-- **Miro** = design twin (visual PRD)
-- **Linear** = execution twin (task control)
-
-Neither replaces doctrine.
+These are **doctrine violations**, not preferences.
 
 ---
 
-## Final Rule
+## 8. Nested Hub-and-Spoke
 
-> **The system is correct only if the structure enforces the behavior.**
-> If discipline relies on memory, the design has failed.
+Nested hub-and-spoke is permitted within a parent hub's boundary.
+
+- Nested hubs operate at **CC-03** relative to their parent.
+- Nested hubs are contexts, not peer sovereigns.
+- The parent hub retains ultimate authority.
+
+---
+
+## Traceability
+
+| Artifact | Reference |
+|----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| CC Descent Protocol | ALTITUDE_DESCENT_MODEL.md |

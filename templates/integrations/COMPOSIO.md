@@ -1,18 +1,30 @@
-# Composio MCP Integration Template
+# MCP Integration Template
 
-## Hub Identity
+## Conformance
 
 | Field | Value |
 |-------|-------|
+| **Doctrine Version** | |
+| **CC Layer** | CC-03 (Spoke Interface) |
+
+---
+
+## Hub Identity (CC-02)
+
+| Field | Value |
+|-------|-------|
+| **Sovereign ID** | |
 | **Hub Name** | |
 | **Hub ID** | |
-| **Composio Account** | |
+| **MCP Provider** | |
 
 ---
 
 ## Overview
 
-This hub uses Composio as the Model Context Protocol (MCP) server for external service integration.
+This template defines the Model Context Protocol (MCP) spoke interface for external service integration.
+
+MCP operates as a CC-03 spoke — it carries data, not logic.
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -29,74 +41,68 @@ This hub uses Composio as the Model Context Protocol (MCP) server for external s
 
 ---
 
-## Connected Services
+## Connected Services (CC-03 Interfaces)
 
-| Service | Purpose | Status | Doctrine ID |
-|---------|---------|--------|-------------|
-| GitHub | Repository management | [ ] Connected | |
-| Vercel | Deployment | [ ] Connected | |
-| OpenAI | LLM integration | [ ] Connected | |
-| Anthropic | Claude integration | [ ] Connected | |
+| Service | Purpose | Direction | Status | CC Layer |
+|---------|---------|-----------|--------|----------|
+| | | I (Ingress) | [ ] Connected | CC-03 |
+| | | O (Egress) | [ ] Connected | CC-03 |
+
+**Note:** Define services based on your hub's specific integrations.
 
 ---
 
 ## Environment Configuration
 
-All Composio integrations require these environment variables.
-**Use Doppler for secrets management.**
+All MCP integrations require environment variables.
+**Use centralized secrets management.**
 
 ```bash
-# Composio Integration (Required)
-COMPOSIO_API_KEY=
-MCP_API_URL=https://backend.composio.dev
+# MCP Integration (Required)
+MCP_API_KEY=
+MCP_API_URL=
 
 # LLM Providers (As needed)
-ANTHROPIC_API_KEY=
-OPENAI_API_KEY=
+<PROVIDER>_API_KEY=
 LLM_DEFAULT_PROVIDER=
 
 # MCP Server (Local development)
-MCP_URL=http://localhost:7001
+MCP_URL=http://localhost:<port>
 MCP_BEARER_TOKEN=
 
-# Doctrine ID Generation
-DOCTRINE_DB=
-DOCTRINE_SUBHIVE=
-DOCTRINE_APP=
-DOCTRINE_VER=
+# Hub Identity (CC-02)
+HUB_ID=
 ```
+
+**Note:** Define environment variables based on your specific MCP provider.
 
 ---
 
-## Doctrine ID Generation
+## Process ID Generation (CC-04)
 
-All Composio operations MUST generate doctrine-compliant IDs:
+All MCP operations MUST generate CC-compliant Process IDs:
 
 ```javascript
-function generateDoctrineId() {
-  const db = process.env.DOCTRINE_DB;
-  const subhive = process.env.DOCTRINE_SUBHIVE;
-  const app = process.env.DOCTRINE_APP;
-  const ver = process.env.DOCTRINE_VER;
-
+function generateProcessId(hubId) {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-  return `${db}-${subhive}-${app}-${ver}-${timestamp}-${random}`;
+  return `${hubId}-${timestamp}-${random}`;
 }
 ```
+
+Process IDs are minted at CC-04 and are never reused.
 
 ---
 
 ## IMO Placement
 
-| Layer | Composio Role |
-|-------|---------------|
-| **I — Ingress** | MCP Bridge receives external data |
-| **M — Middle** | Hub logic decides what to do with data |
-| **O — Egress** | MCP Bridge sends data to external services |
+| Layer | MCP Role | CC Layer |
+|-------|----------|----------|
+| **I — Ingress** | MCP Bridge receives external data | CC-03 (Spoke) |
+| **M — Middle** | Hub logic decides what to do with data | CC-02 (Hub) |
+| **O — Egress** | MCP Bridge sends data to external services | CC-03 (Spoke) |
 
-Composio is an **interface** (spoke), not a hub. It carries data, not logic.
+MCP is an **interface** (spoke), not a hub. It carries data, not logic.
 
 ---
 
@@ -114,12 +120,12 @@ Composio is an **interface** (spoke), not a hub. It carries data, not logic.
 ## Testing
 
 ```bash
-# Test Composio connectivity
-curl -X GET https://backend.composio.dev/api/v3/connected_accounts \
-  -H "x-api-key: $COMPOSIO_API_KEY"
+# Test MCP connectivity
+curl -X GET <MCP_API_URL>/health \
+  -H "x-api-key: $MCP_API_KEY"
 
 # Test local MCP server
-curl -X POST http://localhost:7001/mcp/test \
+curl -X POST http://localhost:<port>/mcp/test \
   -H "Authorization: Bearer $MCP_BEARER_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"action": "ping"}'
@@ -131,6 +137,7 @@ curl -X POST http://localhost:7001/mcp/test \
 
 | Artifact | Reference |
 |----------|-----------|
+| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | PRD | |
 | ADR | |
-| Linear Issue | |
+| Work Item | |
