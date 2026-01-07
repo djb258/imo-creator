@@ -51,7 +51,7 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|--------|
-| `tools/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
+| `templates/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
 
 ### Integration Specs
 
@@ -72,7 +72,7 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 ### Snap-On Toolbox Authority
 
-`tools/SNAP_ON_TOOLBOX.yaml` is the **master tool registry**. Before suggesting ANY tool, library, or vendor:
+`templates/SNAP_ON_TOOLBOX.yaml` is the **master tool registry**. Before suggesting ANY tool, library, or vendor:
 
 | Step | Action |
 |------|--------|
