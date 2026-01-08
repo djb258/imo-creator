@@ -8,8 +8,6 @@
 # Output: 90_ops/doctrine_audit.md + 90_ops/doctrine_audit.json
 # ═══════════════════════════════════════════════════════════════════════════════
 
-set -e
-
 # ───────────────────────────────────────────────────────────────────
 # CONFIGURATION
 # ───────────────────────────────────────────────────────────────────
@@ -41,10 +39,15 @@ VIOLATIONS=0
 WARNINGS=0
 CHECKS_PASSED=0
 
-# Arrays for findings
-declare -a VIOLATION_LIST
-declare -a WARNING_LIST
-declare -a PASSED_LIST
+# Findings (stored as temp files for portability)
+TEMP_DIR=$(mktemp -d)
+VIOLATIONS_FILE="$TEMP_DIR/violations.json"
+WARNINGS_FILE="$TEMP_DIR/warnings.json"
+PASSED_FILE="$TEMP_DIR/passed.txt"
+
+echo "[]" > "$VIOLATIONS_FILE"
+echo "[]" > "$WARNINGS_FILE"
+echo "" > "$PASSED_FILE"
 
 # ───────────────────────────────────────────────────────────────────
 # HELPER FUNCTIONS
@@ -55,8 +58,17 @@ add_violation() {
     local location="$2"
     local rule="$3"
     local action="$4"
-    VIOLATION_LIST+=("{\"severity\":\"violation\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}")
-    ((VIOLATIONS++))
+
+    # Append to JSON array
+    local content=$(cat "$VIOLATIONS_FILE")
+    if [ "$content" = "[]" ]; then
+        echo "[{\"severity\":\"violation\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}]" > "$VIOLATIONS_FILE"
+    else
+        # Remove trailing ] and add new entry
+        echo "${content%]},{\"severity\":\"violation\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}]" > "$VIOLATIONS_FILE"
+    fi
+
+    VIOLATIONS=$((VIOLATIONS + 1))
     echo -e "${RED}[VIOLATION]${NC} $type: $location"
     echo "            Rule: $rule"
     echo "            Action: $action"
@@ -67,8 +79,15 @@ add_warning() {
     local location="$2"
     local rule="$3"
     local action="$4"
-    WARNING_LIST+=("{\"severity\":\"warning\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}")
-    ((WARNINGS++))
+
+    local content=$(cat "$WARNINGS_FILE")
+    if [ "$content" = "[]" ]; then
+        echo "[{\"severity\":\"warning\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}]" > "$WARNINGS_FILE"
+    else
+        echo "${content%]},{\"severity\":\"warning\",\"type\":\"$type\",\"location\":\"$location\",\"rule\":\"$rule\",\"action\":\"$action\"}]" > "$WARNINGS_FILE"
+    fi
+
+    WARNINGS=$((WARNINGS + 1))
     echo -e "${YELLOW}[WARNING]${NC} $type: $location"
     echo "          Rule: $rule"
     echo "          Action: $action"
@@ -76,8 +95,8 @@ add_warning() {
 
 add_passed() {
     local check="$1"
-    PASSED_LIST+=("$check")
-    ((CHECKS_PASSED++))
+    echo "$check" >> "$PASSED_FILE"
+    CHECKS_PASSED=$((CHECKS_PASSED + 1))
     echo -e "${GREEN}[PASSED]${NC} $check"
 }
 
@@ -107,7 +126,6 @@ if [ ! -f "$REPO_ROOT/IMO_CONTROL.json" ]; then
     echo "        Governance file missing. Cannot proceed with audit."
     echo ""
 
-    # Create minimal output for CI
     mkdir -p "$OUTPUT_DIR"
 
     cat > "$OUTPUT_DIR/doctrine_audit.json" << EOF
@@ -120,9 +138,11 @@ if [ ! -f "$REPO_ROOT/IMO_CONTROL.json" ]; then
   },
   "status": "FATAL",
   "reason": "IMO_CONTROL.json not found - governance missing",
-  "violations": 1,
-  "warnings": 0,
-  "passed": 0,
+  "summary": {
+    "violations": 1,
+    "warnings": 0,
+    "passed": 0
+  },
   "findings": [
     {
       "severity": "violation",
@@ -174,6 +194,7 @@ EOF
     echo "  - $OUTPUT_DIR/doctrine_audit.md"
     echo "  - $OUTPUT_DIR/doctrine_audit.json"
     echo ""
+    rm -rf "$TEMP_DIR"
     exit 1
 fi
 
@@ -186,21 +207,13 @@ add_passed "IMO_CONTROL.json exists"
 echo ""
 echo "Checking forbidden folders..."
 
-FORBIDDEN_FOLDERS=("utils" "helpers" "common" "shared" "lib" "misc")
-
 if [ -d "$REPO_ROOT/src" ]; then
-    for folder in "${FORBIDDEN_FOLDERS[@]}"; do
+    FORBIDDEN_FOUND=false
+
+    for folder in utils helpers common shared lib misc; do
         if [ -d "$REPO_ROOT/src/$folder" ]; then
             add_violation "CTB_VIOLATION" "src/$folder/" "No $folder folders allowed in CTB structure" "Move contents to src/{sys,data,app,ai,ui} or DELETE"
-        fi
-    done
-
-    # Check if any forbidden folders were found
-    FORBIDDEN_FOUND=false
-    for folder in "${FORBIDDEN_FOLDERS[@]}"; do
-        if [ -d "$REPO_ROOT/src/$folder" ]; then
             FORBIDDEN_FOUND=true
-            break
         fi
     done
 
@@ -219,16 +232,19 @@ echo ""
 echo "Checking for loose files in src/..."
 
 if [ -d "$REPO_ROOT/src" ]; then
-    LOOSE_FILES=$(find "$REPO_ROOT/src" -maxdepth 1 -type f -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.jsx" -o -name "*.tsx" 2>/dev/null | head -10)
+    LOOSE_FOUND=false
 
-    if [ -n "$LOOSE_FILES" ]; then
-        while IFS= read -r file; do
-            if [ -n "$file" ]; then
+    for ext in js ts py jsx tsx; do
+        for file in "$REPO_ROOT/src"/*.$ext; do
+            if [ -f "$file" ]; then
                 rel_path="${file#$REPO_ROOT/}"
                 add_violation "LOOSE_FILE_VIOLATION" "$rel_path" "No code files allowed in src/ root" "Move to appropriate CTB branch"
+                LOOSE_FOUND=true
             fi
-        done <<< "$LOOSE_FILES"
-    else
+        done
+    done
+
+    if [ "$LOOSE_FOUND" = false ]; then
         add_passed "No loose files in src/ root"
     fi
 fi
@@ -240,57 +256,46 @@ fi
 echo ""
 echo "Checking CTB altitude structure..."
 
-CTB_BRANCHES=("sys" "data" "app" "ai" "ui")
-
 if [ -d "$REPO_ROOT/src" ]; then
-    MISSING_BRANCHES=()
+    MISSING_FOUND=false
 
-    for branch in "${CTB_BRANCHES[@]}"; do
+    for branch in sys data app ai ui; do
         if [ ! -d "$REPO_ROOT/src/$branch" ]; then
-            MISSING_BRANCHES+=("$branch")
+            add_warning "CTB_INCOMPLETE" "src/$branch/" "CTB branch missing" "Create src/$branch/ directory"
+            MISSING_FOUND=true
         fi
     done
 
-    if [ ${#MISSING_BRANCHES[@]} -gt 0 ]; then
-        for branch in "${MISSING_BRANCHES[@]}"; do
-            add_warning "CTB_INCOMPLETE" "src/$branch/" "CTB branch missing" "Create src/$branch/ directory"
-        done
-    else
+    if [ "$MISSING_FOUND" = false ]; then
         add_passed "All CTB branches present (sys, data, app, ai, ui)"
     fi
 fi
 
 # ───────────────────────────────────────────────────────────────────
-# CHECK 4: Required hub files
+# CHECK 4: Required hub files (skip for imo-creator)
 # ───────────────────────────────────────────────────────────────────
 
 echo ""
 echo "Checking required hub files..."
 
-# Skip these checks for imo-creator itself (sovereign)
 if [ "$REPO_NAME" != "imo-creator" ]; then
-
-    # REGISTRY.yaml
     if [ ! -f "$REPO_ROOT/REGISTRY.yaml" ]; then
         add_warning "ANCHOR_MISSING" "REGISTRY.yaml" "Hub declaration file required" "Create REGISTRY.yaml per REPO_REFACTOR_PROTOCOL.md"
     else
         add_passed "REGISTRY.yaml exists"
     fi
 
-    # DOCTRINE.md
     if [ ! -f "$REPO_ROOT/DOCTRINE.md" ]; then
         add_warning "ANCHOR_MISSING" "DOCTRINE.md" "Doctrine reference file required" "Create DOCTRINE.md pointing to imo-creator"
     else
         add_passed "DOCTRINE.md exists"
     fi
 
-    # README.md
     if [ ! -f "$REPO_ROOT/README.md" ]; then
         add_warning "ANCHOR_MISSING" "README.md" "Hub identity file required" "Create README.md with hub identity"
     else
         add_passed "README.md exists"
     fi
-
 else
     add_passed "Sovereign repo - hub file checks skipped"
 fi
@@ -303,14 +308,12 @@ echo ""
 echo "Checking maturity artifacts..."
 
 if [ "$REPO_NAME" != "imo-creator" ]; then
-    # CHECKLIST.md
     if [ ! -f "$REPO_ROOT/CHECKLIST.md" ]; then
         add_warning "MATURITY_ARTIFACT" "CHECKLIST.md" "Acceptance gate checklist recommended" "Create CHECKLIST.md for compliance tracking"
     else
         add_passed "CHECKLIST.md exists"
     fi
 
-    # AGENT_CONTEXT.yaml
     if [ ! -f "$REPO_ROOT/AGENT_CONTEXT.yaml" ]; then
         add_warning "MATURITY_ARTIFACT" "AGENT_CONTEXT.yaml" "Agent context file recommended" "Create AGENT_CONTEXT.yaml for Claude Code"
     else
@@ -319,21 +322,19 @@ if [ "$REPO_NAME" != "imo-creator" ]; then
 fi
 
 # ───────────────────────────────────────────────────────────────────
-# CHECK 6: Descent gate compliance (if src/ exists)
+# CHECK 6: Descent gate compliance
 # ───────────────────────────────────────────────────────────────────
 
 echo ""
 echo "Checking descent gate compliance..."
 
 if [ -d "$REPO_ROOT/src" ]; then
-    # Check for PRD (CC-02 gate)
     if [ ! -f "$REPO_ROOT/docs/PRD.md" ] && [ ! -f "$REPO_ROOT/PRD.md" ]; then
         add_warning "DESCENT_GATE" "PRD.md" "CC-02 gate: PRD required before code" "Create docs/PRD.md"
     else
         add_passed "PRD exists (CC-02 gate)"
     fi
 
-    # Check for at least one ADR if code exists (CC-03 gate)
     ADR_COUNT=$(find "$REPO_ROOT" -name "ADR*.md" -o -name "ADR-*.md" 2>/dev/null | wc -l)
     if [ "$ADR_COUNT" -eq 0 ]; then
         add_warning "DESCENT_GATE" "ADR-*.md" "CC-03 gate: ADR required for decisions" "Create docs/ADR-001-*.md"
@@ -343,35 +344,28 @@ if [ -d "$REPO_ROOT/src" ]; then
 fi
 
 # ───────────────────────────────────────────────────────────────────
-# CHECK 7: UI structure (if ui/ exists)
+# CHECK 7: UI structure
 # ───────────────────────────────────────────────────────────────────
 
 echo ""
 echo "Checking UI structure..."
 
 if [ -d "$REPO_ROOT/src/ui" ]; then
-    # Check for ui.manifest.json
     if [ ! -f "$REPO_ROOT/src/ui/ui.manifest.json" ]; then
         add_warning "UI_STRUCTURE" "src/ui/ui.manifest.json" "UI manifest recommended for Lovable.dev" "Create ui.manifest.json"
     else
         add_passed "ui.manifest.json exists"
     fi
 
-    # Check UI subfolders
-    UI_FOLDERS=("pages" "components" "layouts" "styles" "assets")
-    UI_MISSING=()
-
-    for folder in "${UI_FOLDERS[@]}"; do
+    UI_MISSING=false
+    for folder in pages components layouts styles assets; do
         if [ ! -d "$REPO_ROOT/src/ui/$folder" ]; then
-            UI_MISSING+=("$folder")
+            add_warning "UI_STRUCTURE" "src/ui/$folder/" "UI subfolder missing" "Create src/ui/$folder/"
+            UI_MISSING=true
         fi
     done
 
-    if [ ${#UI_MISSING[@]} -gt 0 ]; then
-        for folder in "${UI_MISSING[@]}"; do
-            add_warning "UI_STRUCTURE" "src/ui/$folder/" "UI subfolder missing" "Create src/ui/$folder/"
-        done
-    else
+    if [ "$UI_MISSING" = false ]; then
         add_passed "All UI subfolders present"
     fi
 else
@@ -398,36 +392,27 @@ else
     STATUS_COLOR="${GREEN}"
 fi
 
-# Create output directory
 mkdir -p "$OUTPUT_DIR"
 
 # ───────────────────────────────────────────────────────────────────
 # GENERATE JSON OUTPUT
 # ───────────────────────────────────────────────────────────────────
 
-# Build findings array
-FINDINGS_JSON="["
-FIRST=true
+VIOLATIONS_JSON=$(cat "$VIOLATIONS_FILE")
+WARNINGS_JSON=$(cat "$WARNINGS_FILE")
 
-for v in "${VIOLATION_LIST[@]}"; do
-    if [ "$FIRST" = true ]; then
-        FIRST=false
-    else
-        FINDINGS_JSON+=","
-    fi
-    FINDINGS_JSON+="$v"
-done
-
-for w in "${WARNING_LIST[@]}"; do
-    if [ "$FIRST" = true ]; then
-        FIRST=false
-    else
-        FINDINGS_JSON+=","
-    fi
-    FINDINGS_JSON+="$w"
-done
-
-FINDINGS_JSON+="]"
+# Merge findings
+if [ "$VIOLATIONS_JSON" = "[]" ] && [ "$WARNINGS_JSON" = "[]" ]; then
+    FINDINGS_JSON="[]"
+elif [ "$VIOLATIONS_JSON" = "[]" ]; then
+    FINDINGS_JSON="$WARNINGS_JSON"
+elif [ "$WARNINGS_JSON" = "[]" ]; then
+    FINDINGS_JSON="$VIOLATIONS_JSON"
+else
+    # Merge both arrays
+    FINDINGS_JSON="${VIOLATIONS_JSON%]}${WARNINGS_JSON#[}"
+    FINDINGS_JSON="${FINDINGS_JSON/]\[/,}"
+fi
 
 cat > "$OUTPUT_DIR/doctrine_audit.json" << EOF
 {
@@ -482,12 +467,12 @@ if [ $VIOLATIONS -gt 0 ]; then
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
     echo "These must be fixed before proceeding:" >> "$OUTPUT_DIR/doctrine_audit.md"
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
-
-    for v in "${VIOLATION_LIST[@]}"; do
-        type=$(echo "$v" | grep -o '"type":"[^"]*"' | cut -d'"' -f4)
-        location=$(echo "$v" | grep -o '"location":"[^"]*"' | cut -d'"' -f4)
-        rule=$(echo "$v" | grep -o '"rule":"[^"]*"' | cut -d'"' -f4)
-        action=$(echo "$v" | grep -o '"action":"[^"]*"' | cut -d'"' -f4)
+    # Parse violations from JSON and output to markdown
+    echo "$VIOLATIONS_JSON" | grep -o '{[^}]*}' | while read -r finding; do
+        type=$(echo "$finding" | grep -o '"type":"[^"]*"' | cut -d'"' -f4)
+        location=$(echo "$finding" | grep -o '"location":"[^"]*"' | cut -d'"' -f4)
+        rule=$(echo "$finding" | grep -o '"rule":"[^"]*"' | cut -d'"' -f4)
+        action=$(echo "$finding" | grep -o '"action":"[^"]*"' | cut -d'"' -f4)
 
         echo "### $type" >> "$OUTPUT_DIR/doctrine_audit.md"
         echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
@@ -503,14 +488,12 @@ if [ $WARNINGS -gt 0 ]; then
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
     echo "These should be addressed when possible:" >> "$OUTPUT_DIR/doctrine_audit.md"
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
+    echo "$WARNINGS_JSON" | grep -o '{[^}]*}' | while read -r finding; do
+        type=$(echo "$finding" | grep -o '"type":"[^"]*"' | cut -d'"' -f4)
+        location=$(echo "$finding" | grep -o '"location":"[^"]*"' | cut -d'"' -f4)
+        action=$(echo "$finding" | grep -o '"action":"[^"]*"' | cut -d'"' -f4)
 
-    for w in "${WARNING_LIST[@]}"; do
-        type=$(echo "$w" | grep -o '"type":"[^"]*"' | cut -d'"' -f4)
-        location=$(echo "$w" | grep -o '"location":"[^"]*"' | cut -d'"' -f4)
-        rule=$(echo "$w" | grep -o '"rule":"[^"]*"' | cut -d'"' -f4)
-        action=$(echo "$w" | grep -o '"action":"[^"]*"' | cut -d'"' -f4)
-
-        echo "- **$type** (\`$location\`): $rule → $action" >> "$OUTPUT_DIR/doctrine_audit.md"
+        echo "- **$type** (\`$location\`): $action" >> "$OUTPUT_DIR/doctrine_audit.md"
     done
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
 fi
@@ -518,16 +501,20 @@ fi
 if [ $CHECKS_PASSED -gt 0 ]; then
     echo "## Passed Checks" >> "$OUTPUT_DIR/doctrine_audit.md"
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
-
-    for p in "${PASSED_LIST[@]}"; do
-        echo "- $p" >> "$OUTPUT_DIR/doctrine_audit.md"
-    done
+    while IFS= read -r line; do
+        if [ -n "$line" ]; then
+            echo "- $line" >> "$OUTPUT_DIR/doctrine_audit.md"
+        fi
+    done < "$PASSED_FILE"
     echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
 fi
 
 echo "---" >> "$OUTPUT_DIR/doctrine_audit.md"
 echo "" >> "$OUTPUT_DIR/doctrine_audit.md"
 echo "*Generated by doctrine audit mode v1.0.0*" >> "$OUTPUT_DIR/doctrine_audit.md"
+
+# Cleanup
+rm -rf "$TEMP_DIR"
 
 # ───────────────────────────────────────────────────────────────────
 # FINAL OUTPUT
@@ -544,7 +531,6 @@ echo "  - $OUTPUT_DIR/doctrine_audit.md"
 echo "  - $OUTPUT_DIR/doctrine_audit.json"
 echo ""
 
-# Exit with appropriate code
 if [ $VIOLATIONS -gt 0 ]; then
     exit 1
 else
