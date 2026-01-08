@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "name": "LOVABLE_CONTROL",
+    "version": "1.0.0",
+    "created": "2026-01-08",
+    "authority": "imo-creator",
+    "status": "CONSTITUTIONAL",
+    "description": "Deterministic contract for Lovable.dev UI builds"
+  },
+
+  "governance": {
+    "authoritative_source": "IMO_CONTROL.json",
+    "relationship": "SUBORDINATE",
+    "rule": "LOVABLE_CONTROL inherits from and cannot contradict IMO_CONTROL"
+  },
+
+  "ui_rendering": {
+    "mode": "CTB_ALTITUDE",
+    "definition": "UI components are placed according to CTB branch structure",
+    "root_location": "src/ui/",
+    "enforcement": "MANDATORY"
+  },
+
+  "altitude_mapping": {
+    "description": "Maps CTB altitude folders to UI rendering sections",
+    "mapping": {
+      "src/ui/pages/": {
+        "render_as": "routes",
+        "purpose": "Top-level page components, one per route",
+        "lovable_treatment": "Route generation"
+      },
+      "src/ui/components/": {
+        "render_as": "components",
+        "purpose": "Reusable UI components",
+        "lovable_treatment": "Component library"
+      },
+      "src/ui/layouts/": {
+        "render_as": "layouts",
+        "purpose": "Page layout wrappers",
+        "lovable_treatment": "Layout templates"
+      },
+      "src/ui/styles/": {
+        "render_as": "styles",
+        "purpose": "CSS, Tailwind, theme definitions",
+        "lovable_treatment": "Style injection"
+      },
+      "src/ui/assets/": {
+        "render_as": "assets",
+        "purpose": "Images, icons, static files",
+        "lovable_treatment": "Asset bundling"
+      }
+    }
+  },
+
+  "manifest_requirement": {
+    "file": "src/ui/ui.manifest.json",
+    "required_when": "src/ui/ directory exists",
+    "purpose": "Declares UI components for Lovable ingestion",
+    "schema": {
+      "version": "string (semver)",
+      "pages": "array of page definitions",
+      "components": "array of component definitions",
+      "layouts": "array of layout definitions",
+      "theme": "object with theme configuration"
+    }
+  },
+
+  "pre_conditions": {
+    "description": "Conditions that MUST be satisfied before Lovable renders UI",
+    "required": [
+      {
+        "condition": "IMO_CONTROL.json exists",
+        "check": "file_exists(IMO_CONTROL.json)",
+        "on_fail": "BLOCK_BUILD"
+      },
+      {
+        "condition": "PRD exists (CC-02 gate)",
+        "check": "file_exists(docs/PRD.md) OR file_exists(PRD.md)",
+        "on_fail": "BLOCK_BUILD"
+      },
+      {
+        "condition": "src/ui/ follows altitude structure",
+        "check": "directory_structure_valid(src/ui/)",
+        "on_fail": "BLOCK_BUILD"
+      },
+      {
+        "condition": "No forbidden folders in src/",
+        "check": "no_forbidden_folders(src/)",
+        "on_fail": "BLOCK_BUILD"
+      },
+      {
+        "condition": "ui.manifest.json exists if src/ui/ exists",
+        "check": "if directory_exists(src/ui/) then file_exists(src/ui/ui.manifest.json)",
+        "on_fail": "WARN_AND_CONTINUE"
+      }
+    ]
+  },
+
+  "build_behavior": {
+    "on_violation": {
+      "action": "FAIL_BUILD",
+      "output": "Structured error with violation type and required fix"
+    },
+    "on_warning": {
+      "action": "LOG_WARNING",
+      "output": "Warning message, continue build"
+    },
+    "on_success": {
+      "action": "PROCEED",
+      "output": "Build log with component count"
+    }
+  },
+
+  "forbidden": {
+    "description": "Patterns that cause Lovable build failure",
+    "patterns": [
+      {
+        "pattern": "UI code outside src/ui/",
+        "violation": "CTB_VIOLATION",
+        "action": "FAIL_BUILD"
+      },
+      {
+        "pattern": "UI work without PRD",
+        "violation": "DESCENT_GATE_VIOLATION",
+        "action": "FAIL_BUILD"
+      },
+      {
+        "pattern": "Hardcoded business logic in components",
+        "violation": "SEPARATION_VIOLATION",
+        "action": "WARN"
+      },
+      {
+        "pattern": "Direct API calls in UI components",
+        "violation": "LAYER_VIOLATION",
+        "action": "WARN"
+      },
+      {
+        "pattern": "src/utils/ or src/helpers/",
+        "violation": "CTB_VIOLATION",
+        "action": "FAIL_BUILD"
+      }
+    ]
+  },
+
+  "lovable_directives": {
+    "description": "Instructions for Lovable.dev renderer",
+    "directives": [
+      "READ LOVABLE_CONTROL.json before any UI operation",
+      "READ IMO_CONTROL.json as authoritative governance",
+      "VALIDATE pre_conditions before rendering",
+      "FAIL on any violation in forbidden.patterns",
+      "MAP altitude folders to render sections per altitude_mapping",
+      "REQUIRE ui.manifest.json for component discovery",
+      "DO NOT invent UI structure beyond altitude_mapping",
+      "DO NOT render components from non-ui CTB branches"
+    ],
+    "role": "Lovable is a RENDERER, not a DESIGNER",
+    "constraint": "Lovable executes structure, it does not create structure"
+  },
+
+  "ui_manifest_template": {
+    "description": "Template for ui.manifest.json that repos should create",
+    "template": {
+      "version": "1.0.0",
+      "doctrine_version": "1.1.0",
+      "pages": [
+        {
+          "name": "string",
+          "path": "string (route path)",
+          "file": "string (relative to src/ui/pages/)",
+          "layout": "string (layout name) | null"
+        }
+      ],
+      "components": [
+        {
+          "name": "string",
+          "file": "string (relative to src/ui/components/)",
+          "category": "string (e.g., 'forms', 'navigation', 'display')"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "string",
+          "file": "string (relative to src/ui/layouts/)"
+        }
+      ],
+      "theme": {
+        "framework": "string (e.g., 'tailwind', 'css-modules')",
+        "config_file": "string (relative path)"
+      }
+    }
+  },
+
+  "validation_endpoint": {
+    "description": "How CI/CD should validate before Lovable build",
+    "steps": [
+      "1. Run scripts/apply_doctrine_audit.sh",
+      "2. Check 90_ops/doctrine_audit.json for violations",
+      "3. If violations > 0: BLOCK Lovable build",
+      "4. If warnings only: PROCEED with warnings logged",
+      "5. Pass ui.manifest.json to Lovable renderer"
+    ]
+  }
+}

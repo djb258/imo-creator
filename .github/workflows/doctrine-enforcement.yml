@@ -1,0 +1,228 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCTRINE ENFORCEMENT CI
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Mirror pre-commit doctrine checks in CI
+# Behavior: FAIL on violations, WARN on warnings
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Doctrine Enforcement
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - 'feature/**'
+      - 'fix/**'
+  pull_request:
+    branches:
+      - master
+      - main
+
+jobs:
+  doctrine-audit:
+    name: Doctrine Compliance Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      # ─────────────────────────────────────────────────────────────
+      # SETUP
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make audit script executable
+        run: chmod +x scripts/apply_doctrine_audit.sh
+
+      # ─────────────────────────────────────────────────────────────
+      # GOVERNANCE CHECK
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Check IMO_CONTROL.json exists
+        id: governance
+        run: |
+          if [ ! -f "IMO_CONTROL.json" ]; then
+            echo "::error::IMO_CONTROL.json not found - governance missing"
+            echo "governance_exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "governance_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ IMO_CONTROL.json found"
+          fi
+
+      # ─────────────────────────────────────────────────────────────
+      # DOCTRINE AUDIT
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Run Doctrine Audit
+        id: audit
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  DOCTRINE ENFORCEMENT CI"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+
+          # Run audit script
+          ./scripts/apply_doctrine_audit.sh . || AUDIT_EXIT=$?
+
+          # Capture exit code
+          if [ -z "$AUDIT_EXIT" ]; then
+            AUDIT_EXIT=0
+          fi
+
+          echo "audit_exit_code=$AUDIT_EXIT" >> $GITHUB_OUTPUT
+
+          # Parse results if audit file exists
+          if [ -f "90_ops/doctrine_audit.json" ]; then
+            VIOLATIONS=$(cat 90_ops/doctrine_audit.json | grep -o '"violations": [0-9]*' | grep -o '[0-9]*')
+            WARNINGS=$(cat 90_ops/doctrine_audit.json | grep -o '"warnings": [0-9]*' | grep -o '[0-9]*')
+            STATUS=$(cat 90_ops/doctrine_audit.json | grep -o '"status": "[^"]*"' | cut -d'"' -f4)
+
+            echo "violations=$VIOLATIONS" >> $GITHUB_OUTPUT
+            echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+          fi
+
+          exit $AUDIT_EXIT
+        continue-on-error: true
+
+      # ─────────────────────────────────────────────────────────────
+      # RESULTS SUMMARY
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Display Audit Results
+        run: |
+          echo ""
+          echo "───────────────────────────────────────────────────────────────"
+          echo "  AUDIT RESULTS"
+          echo "───────────────────────────────────────────────────────────────"
+          echo ""
+
+          if [ -f "90_ops/doctrine_audit.md" ]; then
+            cat 90_ops/doctrine_audit.md
+          else
+            echo "⚠️ Audit report not generated"
+          fi
+
+      # ─────────────────────────────────────────────────────────────
+      # WARNINGS OUTPUT
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Print Warnings
+        if: steps.audit.outputs.warnings != '0' && steps.audit.outputs.warnings != ''
+        run: |
+          echo ""
+          echo "::warning::Doctrine audit found ${{ steps.audit.outputs.warnings }} warning(s)"
+          echo ""
+          echo "Warnings do not block the build but should be addressed."
+
+      # ─────────────────────────────────────────────────────────────
+      # UPLOAD ARTIFACTS
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Upload Audit Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: doctrine-audit-report
+          path: |
+            90_ops/doctrine_audit.json
+            90_ops/doctrine_audit.md
+          retention-days: 30
+          if-no-files-found: warn
+
+      # ─────────────────────────────────────────────────────────────
+      # ENFORCEMENT GATE
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Enforce Doctrine Compliance
+        if: steps.audit.outputs.audit_exit_code != '0'
+        run: |
+          echo ""
+          echo "::error::DOCTRINE VIOLATION DETECTED"
+          echo ""
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  BUILD BLOCKED"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+          echo "Violations found: ${{ steps.audit.outputs.violations }}"
+          echo ""
+          echo "Fix all violations before merging."
+          echo "See doctrine_audit.md artifact for details."
+          echo ""
+          exit 1
+
+      - name: Doctrine Compliance Passed
+        if: steps.audit.outputs.audit_exit_code == '0'
+        run: |
+          echo ""
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  ✅ DOCTRINE COMPLIANCE PASSED"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+          echo "Status: ${{ steps.audit.outputs.status }}"
+          echo "Warnings: ${{ steps.audit.outputs.warnings }}"
+          echo ""
+
+  # ─────────────────────────────────────────────────────────────────
+  # LOVABLE GATE (UI builds only)
+  # ─────────────────────────────────────────────────────────────────
+
+  lovable-gate:
+    name: Lovable.dev Pre-Build Gate
+    runs-on: ubuntu-latest
+    needs: doctrine-audit
+    if: always()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Lovable Control
+        id: lovable
+        run: |
+          echo "───────────────────────────────────────────────────────────────"
+          echo "  LOVABLE.DEV PRE-BUILD GATE"
+          echo "───────────────────────────────────────────────────────────────"
+          echo ""
+
+          # Check LOVABLE_CONTROL.json exists
+          if [ ! -f "LOVABLE_CONTROL.json" ]; then
+            echo "::warning::LOVABLE_CONTROL.json not found - UI builds ungoverned"
+            echo "lovable_ready=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "✅ LOVABLE_CONTROL.json found"
+
+          # Check if src/ui exists
+          if [ ! -d "src/ui" ]; then
+            echo "ℹ️ No src/ui directory - Lovable gate not applicable"
+            echo "lovable_ready=skip" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check for ui.manifest.json
+          if [ ! -f "src/ui/ui.manifest.json" ]; then
+            echo "::warning::src/ui/ui.manifest.json missing - Lovable cannot discover components"
+            echo "lovable_ready=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ ui.manifest.json found"
+            echo "lovable_ready=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Lovable Gate Status
+        run: |
+          echo ""
+          echo "Lovable Ready: ${{ steps.lovable.outputs.lovable_ready }}"
+          echo ""
+
+          if [ "${{ steps.lovable.outputs.lovable_ready }}" = "true" ]; then
+            echo "✅ Repository ready for Lovable.dev UI builds"
+          elif [ "${{ steps.lovable.outputs.lovable_ready }}" = "skip" ]; then
+            echo "ℹ️ No UI components - Lovable gate skipped"
+          else
+            echo "⚠️ Repository not ready for Lovable.dev UI builds"
+            echo "   Create src/ui/ui.manifest.json to enable"
+          fi
