@@ -1,0 +1,151 @@
+#!/bin/bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRE-COMMIT HOOK — DOCTRINE COMPLIANCE GATE
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Block commits that violate doctrine
+# Install: ./scripts/install-hooks.sh
+# ═══════════════════════════════════════════════════════════════════════════════
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+VIOLATIONS=0
+WARNINGS=0
+
+echo ""
+echo "═══════════════════════════════════════════════════════════════"
+echo "  DOCTRINE COMPLIANCE CHECK"
+echo "═══════════════════════════════════════════════════════════════"
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 1: Forbidden folders in src/
+# ───────────────────────────────────────────────────────────────────
+FORBIDDEN_FOLDERS=("utils" "helpers" "common" "shared" "lib" "misc")
+
+if [ -d "src" ]; then
+    for folder in "${FORBIDDEN_FOLDERS[@]}"; do
+        if [ -d "src/$folder" ]; then
+            echo -e "${RED}[VIOLATION]${NC} CTB_VIOLATION: src/$folder/ exists"
+            echo "            Doctrine: No utils/helpers/common/shared/lib/misc folders"
+            echo "            Action: Move contents to src/{sys,data,app,ai,ui} or DELETE"
+            ((VIOLATIONS++))
+        fi
+    done
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 2: Loose files in src/ root (if src exists)
+# ───────────────────────────────────────────────────────────────────
+if [ -d "src" ]; then
+    LOOSE_FILES=$(find src -maxdepth 1 -type f 2>/dev/null | head -5)
+    if [ -n "$LOOSE_FILES" ]; then
+        echo -e "${RED}[VIOLATION]${NC} CTB_VIOLATION: Loose files in src/ root"
+        echo "            Files found:"
+        echo "$LOOSE_FILES" | while read -r f; do echo "              - $f"; done
+        echo "            Action: Move to src/{sys,data,app,ai,ui} or DELETE"
+        ((VIOLATIONS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 3: CTB folder structure (if src exists)
+# ───────────────────────────────────────────────────────────────────
+CTB_BRANCHES=("sys" "data" "app" "ai" "ui")
+
+if [ -d "src" ]; then
+    MISSING_BRANCHES=""
+    for branch in "${CTB_BRANCHES[@]}"; do
+        if [ ! -d "src/$branch" ]; then
+            MISSING_BRANCHES="$MISSING_BRANCHES $branch"
+        fi
+    done
+
+    if [ -n "$MISSING_BRANCHES" ]; then
+        echo -e "${YELLOW}[WARNING]${NC} CTB structure incomplete"
+        echo "          Missing branches:$MISSING_BRANCHES"
+        echo "          Expected: src/{sys,data,app,ai,ui}"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 4: REGISTRY.yaml exists (for hub repos)
+# ───────────────────────────────────────────────────────────────────
+if [ -d "src" ] && [ ! -f "REGISTRY.yaml" ]; then
+    echo -e "${YELLOW}[WARNING]${NC} REGISTRY.yaml missing"
+    echo "          Hub repos require REGISTRY.yaml at root"
+    echo "          See: REPO_REFACTOR_PROTOCOL.md section 3"
+    ((WARNINGS++))
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 5: DOCTRINE.md exists (for child repos)
+# ───────────────────────────────────────────────────────────────────
+# Skip this check if we're in imo-creator itself
+REPO_NAME=$(basename "$(pwd)")
+if [ "$REPO_NAME" != "imo-creator" ] && [ -d "src" ] && [ ! -f "DOCTRINE.md" ]; then
+    echo -e "${YELLOW}[WARNING]${NC} DOCTRINE.md missing"
+    echo "          Child repos must reference imo-creator doctrine"
+    echo "          See: REPO_REFACTOR_PROTOCOL.md section 8"
+    ((WARNINGS++))
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 6: No secrets in staged files
+# ───────────────────────────────────────────────────────────────────
+STAGED_FILES=$(git diff --cached --name-only 2>/dev/null || true)
+SECRET_PATTERNS=(".env" "credentials" "secret" "api_key" "apikey" "password")
+
+for file in $STAGED_FILES; do
+    for pattern in "${SECRET_PATTERNS[@]}"; do
+        if echo "$file" | grep -qi "$pattern"; then
+            echo -e "${RED}[VIOLATION]${NC} Potential secret file staged: $file"
+            echo "            Action: Remove from staging or add to .gitignore"
+            ((VIOLATIONS++))
+        fi
+    done
+done
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 7: PRD exists before code changes (CC descent rule)
+# ───────────────────────────────────────────────────────────────────
+if [ -d "src" ]; then
+    CODE_CHANGES=$(echo "$STAGED_FILES" | grep -E "^src/" | head -1 || true)
+    if [ -n "$CODE_CHANGES" ] && [ ! -f "docs/PRD.md" ] && [ ! -f "PRD.md" ]; then
+        echo -e "${YELLOW}[WARNING]${NC} Code changes without PRD"
+        echo "          Descent rule: PRD (CC-02) before code (CC-04)"
+        echo "          Action: Create docs/PRD.md first"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# SUMMARY
+# ───────────────────────────────────────────────────────────────────
+echo ""
+echo "───────────────────────────────────────────────────────────────"
+
+if [ $VIOLATIONS -gt 0 ]; then
+    echo -e "${RED}BLOCKED${NC}: $VIOLATIONS violation(s) found"
+    echo ""
+    echo "Commit rejected. Fix violations before committing."
+    echo "To bypass (not recommended): git commit --no-verify"
+    echo ""
+    exit 1
+elif [ $WARNINGS -gt 0 ]; then
+    echo -e "${YELLOW}PASSED WITH WARNINGS${NC}: $WARNINGS warning(s)"
+    echo ""
+    echo "Commit allowed. Address warnings when possible."
+    echo ""
+    exit 0
+else
+    echo -e "${GREEN}PASSED${NC}: Doctrine compliant"
+    echo ""
+    exit 0
+fi
