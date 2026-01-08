@@ -30,6 +30,12 @@ These are **local policy**, delegated to individual repositories.
 
 ---
 
+## Scope Boundary
+
+IMO-Creator governs structure and declaration only. Runtime behavior, execution history, retries, and state mutation are explicitly out of scope and must live in downstream systems.
+
+---
+
 ## Canonical Invariants
 
 - **CTB branches**: `sys` / `data` / `app` / `ai` / `ui`
