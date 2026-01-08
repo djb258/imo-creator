@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "name": "IMO_CONTROL",
+    "version": "1.0.0",
+    "created": "2026-01-08",
+    "authority": "imo-creator",
+    "status": "CONSTITUTIONAL",
+    "description": "Binding contract between repo structure, doctrine, Claude Code behavior, and UI ingestion"
+  },
+
+  "governance": {
+    "sovereign": "imo-creator",
+    "sovereignty_type": "ABSOLUTE",
+    "conformance_direction": "DOWNSTREAM_ONLY",
+    "interpretation_allowed": false,
+    "modification_requires": ["ADR", "HUMAN_APPROVAL"]
+  },
+
+  "doctrine_files": {
+    "authority": "CONSTITUTIONAL",
+    "location": "templates/doctrine/",
+    "required": [
+      {
+        "file": "CANONICAL_ARCHITECTURE_DOCTRINE.md",
+        "purpose": "Operating physics - CC layers, hub-spoke, constants vs variables",
+        "version": "1.1.0"
+      },
+      {
+        "file": "HUB_SPOKE_ARCHITECTURE.md",
+        "purpose": "Geometry law - hub owns logic, spokes are interfaces",
+        "version": "1.1.0"
+      },
+      {
+        "file": "ALTITUDE_DESCENT_MODEL.md",
+        "purpose": "Descent law - CC-01→02→03→04 sequence",
+        "version": "1.1.0"
+      },
+      {
+        "file": "REPO_REFACTOR_PROTOCOL.md",
+        "purpose": "Structure law - CTB folders, file placement, refactor sequence",
+        "version": "1.1.0"
+      }
+    ],
+    "treatment": "EXECUTABLE_LAW"
+  },
+
+  "structure": {
+    "model": "HUB_SUBHUB_ALTITUDE",
+    "hub": {
+      "definition": "Repository root = Hub",
+      "required_files": [
+        "REGISTRY.yaml",
+        "DOCTRINE.md",
+        "README.md"
+      ],
+      "optional_files": [
+        "CHECKLIST.md",
+        "AGENT_CONTEXT.yaml"
+      ]
+    },
+    "subhub": {
+      "definition": "Major functional boundary within hub",
+      "location": "src/",
+      "inherits_altitude": true
+    },
+    "altitude": {
+      "definition": "CTB branches - categorical placement for all files",
+      "branches": {
+        "sys": {
+          "purpose": "System infrastructure",
+          "contains": ["env loaders", "bootstraps", "infrastructure", "config readers"]
+        },
+        "data": {
+          "purpose": "Data layer",
+          "contains": ["schemas", "queries", "migrations", "data models", "repositories"]
+        },
+        "app": {
+          "purpose": "Application logic",
+          "contains": ["modules", "services", "workflows", "business logic", "use cases"]
+        },
+        "ai": {
+          "purpose": "AI components",
+          "contains": ["agents", "routers", "prompts", "LLM integrations"]
+        },
+        "ui": {
+          "purpose": "User interface",
+          "contains": ["pages", "components", "layouts", "styles", "assets"]
+        }
+      },
+      "path_pattern": "src/{sys,data,app,ai,ui}/",
+      "enforcement": "MANDATORY"
+    }
+  },
+
+  "forbidden": {
+    "folders": [
+      {"name": "utils", "violation": "CTB_VIOLATION"},
+      {"name": "helpers", "violation": "CTB_VIOLATION"},
+      {"name": "common", "violation": "CTB_VIOLATION"},
+      {"name": "shared", "violation": "CTB_VIOLATION"},
+      {"name": "lib", "violation": "CTB_VIOLATION"},
+      {"name": "misc", "violation": "CTB_VIOLATION"}
+    ],
+    "patterns": [
+      {"pattern": "src/*.{js,ts,py}", "violation": "LOOSE_FILE_VIOLATION"},
+      {"pattern": "spoke-to-spoke communication", "violation": "GEOMETRY_VIOLATION"},
+      {"pattern": "logic in spokes", "violation": "HUB_SPOKE_VIOLATION"}
+    ]
+  },
+
+  "descent_gates": {
+    "model": "CC-01 → CC-02 → CC-03 → CC-04",
+    "rule": "No artifact at CC-N until CC-(N-1) gate passes",
+    "layers": {
+      "CC-01": {
+        "name": "Sovereign",
+        "artifacts": ["boundary declaration"],
+        "gate": "Sovereignty declared"
+      },
+      "CC-02": {
+        "name": "Hub",
+        "artifacts": ["PRD", "REGISTRY.yaml", "hub identity"],
+        "gate": "PRD approved"
+      },
+      "CC-03": {
+        "name": "Context",
+        "artifacts": ["ADR", "process flows", "spoke definitions"],
+        "gate": "ADR approved"
+      },
+      "CC-04": {
+        "name": "Process",
+        "artifacts": ["code", "tests", "config", "UI components"],
+        "gate": "Implementation complete"
+      }
+    }
+  },
+
+  "ui_builds": {
+    "platform_target": "lovable.dev",
+    "requirements": {
+      "structure": "CTB_ALTITUDE",
+      "location": "src/ui/",
+      "pre_conditions": [
+        "PRD exists (CC-02 gate)",
+        "ADR exists for UI decisions (CC-03 gate)",
+        "Component placement follows altitude model"
+      ]
+    },
+    "component_placement": {
+      "pages": "src/ui/pages/",
+      "components": "src/ui/components/",
+      "layouts": "src/ui/layouts/",
+      "styles": "src/ui/styles/",
+      "assets": "src/ui/assets/"
+    },
+    "forbidden": [
+      "UI code outside src/ui/",
+      "UI work before PRD",
+      "Hardcoded business logic in components"
+    ]
+  },
+
+  "claude_code_behavior": {
+    "execution_order": [
+      "1. Locate and read IMO_CONTROL.json",
+      "2. Read all doctrine files listed",
+      "3. Audit repository structure against structure.altitude",
+      "4. Identify violations against forbidden patterns",
+      "5. STOP if violations found - report and request fix",
+      "6. Verify descent gates are satisfied for intended work",
+      "7. Only then: proceed with requested task"
+    ],
+    "must": [
+      "Check IMO_CONTROL.json exists before any work",
+      "Treat doctrine as executable law",
+      "Enforce CTB altitude structure",
+      "Refuse work if structure violates control plane",
+      "Report violations explicitly"
+    ],
+    "must_not": [
+      "Invent structure beyond doctrine",
+      "Skip descent gates",
+      "Place files outside altitude branches",
+      "Proceed despite violations",
+      "Interpret doctrine - apply as written"
+    ]
+  },
+
+  "inheritance": {
+    "mechanism": "Downstream repos inherit by reference",
+    "requirements": {
+      "child_repo": [
+        "Copy IMO_CONTROL.json to root",
+        "Create DOCTRINE.md pointing to imo-creator",
+        "Follow structure.altitude exactly",
+        "Run pre-commit hooks"
+      ]
+    },
+    "override_allowed": false
+  }
+}
