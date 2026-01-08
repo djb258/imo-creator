@@ -39,7 +39,8 @@
     "phase_prompts": {
       "constitutional_admission": "templates/claude/APPLY_DOCTRINE.prompt.md",
       "structural_instantiation": "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md",
-      "data_declaration": "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md"
+      "data_declaration": "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md",
+      "execution_wiring": "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md"
     }
   },
 
