@@ -2,11 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "meta": {
     "name": "IMO_CONTROL",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "created": "2026-01-08",
     "authority": "imo-creator",
     "status": "CONSTITUTIONAL",
-    "description": "Binding contract between repo structure, doctrine, Claude Code behavior, and UI ingestion"
+    "description": "Binding contract between repo structure, doctrine, Claude Code behavior, and UI ingestion",
+    "constitution_file": "CONSTITUTION.md"
   },
 
   "control_plane": {

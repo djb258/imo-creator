@@ -6,6 +6,14 @@ This repository MUST conform to doctrine before any work is done.
 
 ---
 
+## FIRST READ
+
+**Read `CONSTITUTION.md` before all other doctrine.**
+
+This file provides constitutional orientation — what is governed, what is not, and how enforcement works. It is the entry point for understanding this system.
+
+---
+
 ## CONTROL PLANE
 
 **Primary control file:** `IMO_CONTROL.json`
@@ -24,6 +32,10 @@ This file is the binding contract. It defines:
 ## EXECUTION ORDER (MANDATORY)
 
 ```
+0. READ CONSTITUTION.md at repository root
+   └─ Constitutional orientation: what is governed, what is not
+   └─ If missing in child repo: proceed (only required in imo-creator)
+
 1. LOCATE IMO_CONTROL.json at repository root
    └─ If missing: STOP. Report: "IMO_CONTROL.json not found. Cannot proceed."
 
@@ -142,7 +154,8 @@ COMPLIANCE CHECK:
 |-------|-------|
 | Created | 2026-01-08 |
 | Last Modified | 2026-01-08 |
-| Version | 2.0.0 |
+| Version | 2.1.0 |
 | Status | LOCKED |
 | Authority | imo-creator (Constitutional) |
+| First Read | CONSTITUTION.md |
 | Control Plane | IMO_CONTROL.json |
