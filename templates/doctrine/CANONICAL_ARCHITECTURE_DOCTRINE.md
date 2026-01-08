@@ -1,6 +1,6 @@
 # Canonical Architecture Doctrine (CTB + CC)
 
-**Doctrine Version**: 1.1.0
+**Doctrine Version**: 1.3.0
 **Status**: LOCKED
 **Authority**: IMO-Creator
 **Change Protocol**: ADR approval required for any modification
@@ -355,6 +355,73 @@ Every derived system must declare:
 
 ---
 
+## 12. AI-Ready Data Doctrine
+
+All databases governed by this doctrine MUST be AI-ready. AI-ready means every table and column has sufficient metadata for both human and AI agent interpretation without guesswork.
+
+### 12.1 Definition
+
+- AI-ready data is self-describing data.
+- Metadata eliminates ambiguity for any reader (human or machine).
+- Schema metadata lives under CTB `data/` branch: `src/data/schema/` or `src/subhubs/<subhub>/data/schema/`.
+
+### 12.2 Table-Level Requirements
+
+Every table MUST declare:
+
+| Field | Description |
+|-------|-------------|
+| `table_unique_id` | Globally unique identifier within sovereign boundary |
+| `owning_hub_unique_id` | Hub (CC-02) that owns this table |
+| `owning_subhub_unique_id` | Sub-hub (CC-03) that owns this table |
+| `description` | Plain English description of what this table represents |
+| `source_of_truth` | Where authoritative data originates (system, API, manual entry) |
+| `row_identity_strategy` | How rows are uniquely identified (PK strategy) |
+
+### 12.3 Column-Level Requirements
+
+Every column MUST declare:
+
+| Field | Description |
+|-------|-------------|
+| `column_unique_id` | Globally unique identifier within sovereign boundary |
+| `description` | Plain English description (no abbreviations, no jargon) |
+| `data_type` | Database data type (e.g., UUID, VARCHAR(255), INTEGER) |
+| `format` | Semantic format (e.g., ISO-8601, USD_CENTS, ENUM, EMAIL) |
+| `nullable` | true/false |
+| `semantic_role` | One of: `identifier`, `attribute`, `metric`, `foreign_key` |
+
+### 12.4 Relationship Requirements
+
+All relationships MUST be explicitly declared:
+
+| Field | Description |
+|-------|-------------|
+| `relationship_id` | Unique identifier for the relationship |
+| `source_table_id` | Table where FK originates |
+| `target_table_id` | Table being referenced |
+| `cardinality` | One of: `one-to-one`, `one-to-many`, `many-to-many` |
+| `constraint_name` | Database FK constraint name (if any) |
+
+### 12.5 Placement Rules
+
+- Schema metadata files live under `data/schema/` within the owning hub/sub-hub.
+- Metadata is documentation; it MUST NOT contain runtime logic.
+- Metadata is derived from actual database schema; it MUST NOT contradict runtime schema.
+- ERD artifacts are generated into `docs/diagrams/` and are read-only.
+
+### 12.6 Enforcement
+
+| Violation | Category |
+|-----------|----------|
+| Table missing required metadata | DATA_VIOLATION |
+| Column missing required metadata | DATA_VIOLATION |
+| Undeclared relationship | DATA_VIOLATION |
+| Metadata contradicts runtime schema | DATA_VIOLATION |
+| Schema metadata outside `data/` branch | CTB_VIOLATION |
+
+---
+
 ## Global Rules
 
 ### Doctrine Authority
@@ -432,7 +499,7 @@ If a local policy contradicts a global invariant, the invariant wins. No excepti
 |-------|-------|
 | Created | 2025-01-05 |
 | Last Modified | 2026-01-08 |
-| Doctrine Version | 1.2.0 |
+| Doctrine Version | 1.3.0 |
 | CTB Version | 1.1.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |

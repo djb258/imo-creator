@@ -33,11 +33,13 @@
     "allowed_phases": [
       "constitutional_admission",
       "structural_instantiation",
+      "data_declaration",
       "execution_wiring"
     ],
     "phase_prompts": {
       "constitutional_admission": "templates/claude/APPLY_DOCTRINE.prompt.md",
-      "structural_instantiation": "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md"
+      "structural_instantiation": "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md",
+      "data_declaration": "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md"
     }
   },
 
@@ -47,8 +49,8 @@
     "required": [
       {
         "file": "CANONICAL_ARCHITECTURE_DOCTRINE.md",
-        "purpose": "Operating physics - CC layers, hub-spoke, CTB branches, global vs local authority",
-        "version": "1.2.0"
+        "purpose": "Operating physics - CC layers, hub-spoke, CTB branches, global vs local authority, AI-ready data",
+        "version": "1.3.0"
       },
       {
         "file": "HUB_SPOKE_ARCHITECTURE.md",
