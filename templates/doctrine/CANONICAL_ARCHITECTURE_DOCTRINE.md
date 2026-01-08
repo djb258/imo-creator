@@ -27,7 +27,32 @@ CTB is the static structural spine. It defines where components are placed.
 - CTB placement is determined at design time, not runtime.
 - CTB restructuring requires explicit ADR approval.
 
-### 1.3 Versioning
+### 1.3 Canonical CTB Branches
+
+CTB branches are the **physical placement categories** for all source code within a hub.
+
+| Branch | Purpose |
+|--------|---------|
+| `sys/` | System infrastructure: env loaders, bootstraps, config readers |
+| `data/` | Data layer: schemas, queries, migrations, repositories |
+| `app/` | Application logic: modules, services, workflows, business logic |
+| `ai/` | AI components: agents, routers, prompts, LLM integrations |
+| `ui/` | User interface: pages, components, layouts, styles |
+
+**Structural rules:**
+- CTB branches exist under `src/` (i.e., `src/sys/`, `src/data/`, etc.)
+- Every source file MUST map to exactly one CTB branch
+- Files that do not fit any branch must be deleted or refactored
+
+**Not CTB branches:**
+- `docs/` — Documentation (top-level support folder)
+- `config/` — Configuration (top-level support folder)
+- `scripts/` — Automation (top-level support folder)
+- `ops/` — Operations (if used, top-level support folder)
+
+These are **support folders**, not CTB branches. They exist at the repository root level, not under `src/`.
+
+### 1.4 Versioning
 
 - CTB structure is version-locked.
 - Version changes require explicit ADR approval and version increment.
@@ -356,13 +381,58 @@ All derived systems must declare:
 
 ---
 
+## Global Invariants vs Local Policy
+
+This doctrine defines **global invariants** — structural laws that apply universally.
+Individual repositories define **local policy** — execution rules that apply within their boundary.
+
+### Global Invariants (Defined by IMO-Creator)
+
+These are **non-negotiable structural constraints**:
+
+| Invariant | Authority |
+|-----------|-----------|
+| CTB branch structure (sys, data, app, ai, ui) | This doctrine |
+| CC layer hierarchy (CC-01 → CC-02 → CC-03 → CC-04) | This doctrine |
+| CC descent gates (PRD before code, ADR before code) | This doctrine |
+| IMO flow (Ingress → Middle → Egress) | This doctrine |
+| Hub/Spoke geometry (logic in hub, data in spoke) | This doctrine |
+| Forbidden folders (utils, helpers, common, shared, lib, misc) | This doctrine |
+
+**Child repos may NOT override, redefine, or interpret these invariants.**
+
+### Local Policy (Defined by Individual Repos)
+
+These are **repo-specific execution decisions**:
+
+| Policy | Authority |
+|--------|-----------|
+| Which CTB branches are populated | Individual repo |
+| Specific technology choices within branches | Individual repo |
+| Internal folder structure within CTB branches | Individual repo |
+| Naming conventions for files and modules | Individual repo |
+| Test organization and coverage requirements | Individual repo |
+| Deployment and operational procedures | Individual repo |
+| Tool selection (per SNAP_ON_TOOLBOX constraints) | Individual repo |
+
+**IMO-Creator does NOT dictate execution specifics. Repos have autonomy within invariant boundaries.**
+
+### Authority Rule
+
+> Global invariants constrain **what structure must exist**.
+> Local policy determines **how that structure is used**.
+
+If a local policy contradicts a global invariant, the invariant wins. No exceptions.
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2025-01-05 |
-| Last Modified | 2025-01-05 |
-| Doctrine Version | 1.1.0 |
-| CTB Version | 1.0.0 |
+| Last Modified | 2026-01-08 |
+| Doctrine Version | 1.2.0 |
+| CTB Version | 1.1.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |

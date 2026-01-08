@@ -6,9 +6,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Doctrine Version** | 1.1.0 |
+| **Doctrine Version** | 1.2.0 |
 | **Authority** | Canonical Architecture Doctrine |
 | **CC Layers** | CC-02 (Hub), CC-03 (Context/Spoke) |
+| **Last Modified** | 2026-01-08 |
 
 ---
 
@@ -109,16 +110,18 @@ Every hub MUST declare:
 
 CTB is **structural** and maps to CC-02 boundaries.
 
-### Standard CTB Branches
+### CTB Branch Reference
 
-| Branch | Purpose |
-|--------|---------|
-| `sys/` | System infrastructure |
-| `ui/` | User interfaces |
-| `ai/` | AI/ML components |
-| `data/` | Data pipelines |
-| `ops/` | Operations |
-| `docs/` | Documentation |
+**Canonical CTB branches are defined in CANONICAL_ARCHITECTURE_DOCTRINE.md section 1.3.**
+
+This document does not redefine them. The canonical branches are:
+- `sys/` — System infrastructure
+- `data/` — Data layer
+- `app/` — Application logic
+- `ai/` — AI components
+- `ui/` — User interface
+
+Note: `docs/`, `ops/`, `config/`, `scripts/` are **support folders**, not CTB branches.
 
 ---
 

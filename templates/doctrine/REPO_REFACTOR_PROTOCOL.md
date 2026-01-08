@@ -6,9 +6,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Doctrine Version** | 1.1.0 |
+| **Doctrine Version** | 1.2.0 |
 | **Authority** | Canonical Architecture Doctrine |
 | **Status** | LOCKED |
+| **CTB Definition** | CANONICAL_ARCHITECTURE_DOCTRINE.md §1.3 |
 
 ---
 
@@ -20,7 +21,9 @@ This protocol defines the mandatory structure for all repos operating under the 
 
 ## 1. Folder Structure (CTB-Enforced)
 
-Every repo MUST have this structure:
+**CTB branches are canonically defined in CANONICAL_ARCHITECTURE_DOCTRINE.md section 1.3.**
+
+This section implements the canonical structure. Every repo MUST have this structure:
 
 ```
 repo/
@@ -43,7 +46,7 @@ repo/
 
 ## 2. File Placement Rule
 
-**IMMUTABLE RULE:**
+**IMMUTABLE RULE (per Canonical Architecture Doctrine 1.3):**
 
 > Every file MUST map to exactly one CTB branch: `sys`, `data`, `app`, `ai`, `ui`.
 > 
@@ -307,6 +310,6 @@ Do not duplicate. Reference and obey.
 |-------|-------|
 | Created | 2026-01-08 |
 | Last Modified | 2026-01-08 |
-| Doctrine Version | 1.1.0 |
+| Doctrine Version | 1.2.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |
