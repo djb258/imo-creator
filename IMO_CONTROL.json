@@ -9,6 +9,17 @@
     "description": "Binding contract between repo structure, doctrine, Claude Code behavior, and UI ingestion"
   },
 
+  "control_plane": {
+    "control_version": "1.0.0",
+    "upstream_repo": "imo-creator",
+    "upstream_commit": "11a024a536a719c06c659ef82fc70b1cedcbbd53",
+    "drift_detection": {
+      "enabled": true,
+      "warn_on_outdated": true,
+      "check_frequency": "on_audit"
+    }
+  },
+
   "governance": {
     "sovereign": "imo-creator",
     "sovereignty_type": "ABSOLUTE",
