@@ -48,6 +48,16 @@ See **CANONICAL_ARCHITECTURE_DOCTRINE.md** for the full authority definition.
 
 ---
 
+## Structural Instantiation & Visualization
+
+After constitutional admission, repositories may perform **structural instantiation** to declare hubs, sub-hubs, mint unique identifiers, normalize physical layout, and render a Christmas Tree diagram derived from registry data.
+
+This phase may reorganize files but must not alter logic.
+
+See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
+
+---
+
 ## How Enforcement Works
 
 | Layer | Mechanism |
