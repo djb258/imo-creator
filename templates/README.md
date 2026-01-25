@@ -1,6 +1,8 @@
 # Hub & Spoke Templates — Doctrine & Definitions
 
 **Canonical Chain (CC) Level**: CC-01 (Sovereign)
+**Status**: CONSTITUTIONAL
+**Authority**: IMO-Creator
 
 This directory contains the **authoritative templates** used to design, build,
 and enforce Hub & Spoke systems across all derived projects.
@@ -10,33 +12,116 @@ Projects must conform to them.
 
 ---
 
+## AI Employee: Start Here
+
+If you are an AI agent operating in any repository governed by IMO-Creator:
+
+### Reading Order (Mandatory)
+
+```
+1. THIS FILE (templates/README.md) — understand the system
+2. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md — root law
+3. doctrine/TEMPLATE_IMMUTABILITY.md — what you cannot do
+4. The specific prompt for your current task (in claude/)
+```
+
+### Authority Pyramid
+
+When rules conflict, higher levels win. No exceptions.
+
+```
+┌─────────────────────────────────────────┐
+│  1. CONSTITUTION.md (repo root)         │  ← Governs what is governed
+├─────────────────────────────────────────┤
+│  2. IMO_CONTROL.json (repo root)        │  ← Structural governance contract
+├─────────────────────────────────────────┤
+│  3. CANONICAL_ARCHITECTURE_DOCTRINE.md  │  ← Root doctrine (all others derive)
+├─────────────────────────────────────────┤
+│  4. Other doctrine/ files               │  ← Specialized rules
+├─────────────────────────────────────────┤
+│  5. Templates (prd/, adr/, pr/, etc.)   │  ← Artifacts to instantiate
+├─────────────────────────────────────────┤
+│  6. Claude prompts (claude/)            │  ← Execution instructions
+└─────────────────────────────────────────┘
+```
+
+### What You MUST Do
+
+1. **Read IMO_CONTROL.json first** in any repo you operate in
+2. **Check for violations** before any work
+3. **Halt and report** if violations exist
+4. **Reference doctrine** — do not interpret it
+
+### What You MUST NOT Do
+
+1. **Modify doctrine files** — PROHIBITED
+2. **Reorder rules** — PROHIBITED
+3. **Reinterpret meaning** — PROHIBITED
+4. **Proceed despite violations** — PROHIBITED
+5. **Invent structure** beyond doctrine — PROHIBITED
+
+### Halt Conditions
+
+Stop immediately and report if:
+
+- IMO_CONTROL.json is missing
+- Doctrine files are missing
+- Structure violates CTB branches
+- Forbidden folders exist
+- Descent gates not satisfied
+- You are asked to modify doctrine
+
+---
+
+## Folder Authority Model
+
+| Folder | Purpose | Status | AI Can Modify |
+|--------|---------|--------|---------------|
+| `doctrine/` | Constitutional law — the rules | LOCKED | NO |
+| `claude/` | System prompts — how to execute | LOCKED | NO |
+| `prd/` | PRD template — copy and fill in | TEMPLATE | NO (copy only) |
+| `adr/` | ADR template — copy and fill in | TEMPLATE | NO (copy only) |
+| `pr/` | PR templates — copy and fill in | TEMPLATE | NO (copy only) |
+| `checklists/` | Compliance checklists — run per project | TEMPLATE | NO (copy only) |
+| `integrations/` | Setup guides — reference docs | GUIDANCE | NO |
+| `validators/` | Validation pattern docs | GUIDANCE | NO |
+
+**LOCKED** = AI cannot modify under any circumstances
+**TEMPLATE** = AI copies to derived repos, fills in values
+**GUIDANCE** = AI reads for reference, does not copy
+
+---
+
+## LOCKED Status Definition
+
+| Status | AI Can Read | AI Can Modify | Human Can Modify |
+|--------|-------------|---------------|------------------|
+| LOCKED | Yes | NO | Yes (ADR + approval required) |
+| TEMPLATE | Yes | NO (copy only) | Yes (ADR + approval required) |
+| GUIDANCE | Yes | NO | Yes |
+
+**Enforcement**: Human review + ADR check. Violations block merge.
+
+---
+
 ## Authoritative Doctrine
 
-**Read these first:**
+**Root doctrine (read first):**
 
 > [`doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`](doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md)
 
-**Root doctrine.** Defines CTB (Christmas Tree Backbone) and CC (Canonical Chain). All other documents derive from this. Covers authorization matrix, PID doctrine, lifecycle states, and master error log.
+Defines CTB (Christmas Tree Backbone) and CC (Canonical Chain). All other documents derive from this. Covers authorization matrix, PID doctrine, lifecycle states, and master error log.
 
-> [`doctrine/HUB_SPOKE_ARCHITECTURE.md`](doctrine/HUB_SPOKE_ARCHITECTURE.md)
+**Derived doctrine (read after root):**
 
-Master reference for Hub/Spoke definitions, IMO model, CTB structure, and required identifiers.
-
-> [`doctrine/ALTITUDE_DESCENT_MODEL.md`](doctrine/ALTITUDE_DESCENT_MODEL.md)
-
-Governs WHEN and HOW templates become legal. Defines mandatory descent sequence (50k → 5k) and gate conditions.
-
-> [`doctrine/DBA_ENFORCEMENT_DOCTRINE.md`](doctrine/DBA_ENFORCEMENT_DOCTRINE.md)
-
-**DBA enforcement rules.** Governs all database and structural changes. Type A/B classification, Gate A/B verification, metadata requirements.
-
-> [`doctrine/TEMPLATE_IMMUTABILITY.md`](doctrine/TEMPLATE_IMMUTABILITY.md)
-
-**Immutability rules.** Defines what is LOCKED, AI non-modification clause, human approval protocol. **ALL doctrine files are LOCKED.**
-
-> [`doctrine/DOCUMENTATION_ERD_DOCTRINE.md`](doctrine/DOCUMENTATION_ERD_DOCTRINE.md)
-
-**Documentation & ERD rules.** Mermaid ERD standard, column dictionary requirements, AI readability test. **Enforces documentation compliance.**
+| Doctrine | Purpose |
+|----------|---------|
+| [`HUB_SPOKE_ARCHITECTURE.md`](doctrine/HUB_SPOKE_ARCHITECTURE.md) | Hub/Spoke geometry, IMO model, required identifiers |
+| [`ALTITUDE_DESCENT_MODEL.md`](doctrine/ALTITUDE_DESCENT_MODEL.md) | CC descent sequence, gate conditions |
+| [`REPO_REFACTOR_PROTOCOL.md`](doctrine/REPO_REFACTOR_PROTOCOL.md) | Repo structure requirements, file placement |
+| [`DBA_ENFORCEMENT_DOCTRINE.md`](doctrine/DBA_ENFORCEMENT_DOCTRINE.md) | Database change rules, Type A/B classification |
+| [`TEMPLATE_IMMUTABILITY.md`](doctrine/TEMPLATE_IMMUTABILITY.md) | Immutability rules, AI prohibition clause |
+| [`DOCUMENTATION_ERD_DOCTRINE.md`](doctrine/DOCUMENTATION_ERD_DOCTRINE.md) | ERD standard, column dictionary requirements |
 
 **Key topics covered:**
 - Canonical Chain (CC) layers: CC-01 (Sovereign), CC-02 (Hub), CC-03 (Context), CC-04 (Process)
@@ -50,7 +135,7 @@ Governs WHEN and HOW templates become legal. Defines mandatory descent sequence 
 - Constants vs Variables
 - Required identifiers (Sovereign ID, Hub ID, Process ID)
 
-If any instruction conflicts with other guidance, **the doctrine wins**.
+If any instruction conflicts with other guidance, **CANONICAL_ARCHITECTURE_DOCTRINE.md wins**.
 
 ---
 
@@ -58,7 +143,7 @@ If any instruction conflicts with other guidance, **the doctrine wins**.
 
 ### Hub
 A **Hub is an application**.
-- Owns logic, decisions, state, CTB placement, altitude, full IMO flow
+- Owns logic, decisions, state, CTB placement, full IMO flow
 - A repository MUST contain **exactly one hub**
 - If a repository contains more than one hub, it MUST be split
 
@@ -75,15 +160,22 @@ A **Spoke is an interface**.
 | **M — Middle** | All logic, decisions, state, tools |
 | **O — Egress** | Output only (exports, notifications) |
 
-### CTB Branches
+### CTB Branches (Source Code Only)
+
+**These are the ONLY valid branches under `src/`:**
+
 | Branch | Purpose |
 |--------|---------|
-| `sys/` | System infrastructure |
-| `ui/` | User interfaces |
-| `ai/` | AI/ML agents |
-| `data/` | Data pipelines |
-| `ops/` | Operations |
-| `docs/` | Documentation |
+| `sys/` | System infrastructure (env loaders, bootstraps, config) |
+| `data/` | Data layer (schemas, queries, migrations, repositories) |
+| `app/` | Application logic (modules, services, workflows) |
+| `ai/` | AI components (agents, routers, prompts) |
+| `ui/` | User interface (pages, components, layouts) |
+
+**NOT CTB branches (support folders at repo root):**
+- `docs/` — Documentation
+- `config/` — Configuration
+- `scripts/` — Automation
 
 ### Canonical Chain (CC) Layers
 | CC Layer | Name | Scope |
@@ -99,40 +191,50 @@ A **Spoke is an interface**.
 
 ```
 templates/
-├── README.md                           # This file
-├── SNAP_ON_TOOLBOX.yaml                # Tool registry
-├── doctrine/                           # LOCKED — DO NOT MODIFY
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  # Root doctrine (CTB + CC) — READ FIRST
-│   ├── HUB_SPOKE_ARCHITECTURE.md       # Hub/Spoke definitions & IMO model
-│   ├── ALTITUDE_DESCENT_MODEL.md       # Descent sequence & gate conditions
-│   ├── REPO_REFACTOR_PROTOCOL.md       # Repo structure requirements
-│   ├── DBA_ENFORCEMENT_DOCTRINE.md     # DBA enforcement rules
-│   ├── TEMPLATE_IMMUTABILITY.md        # Immutability rules — AI CANNOT MODIFY
-│   └── DOCUMENTATION_ERD_DOCTRINE.md   # Documentation & ERD standard
-├── claude/                             # LOCKED — DO NOT MODIFY
-│   ├── APPLY_DOCTRINE.prompt.md        # Doctrine execution prompt
+├── README.md                           # This file — START HERE
+├── SNAP_ON_TOOLBOX.yaml                # Tool registry (approved tools only)
+│
+├── doctrine/                           # LOCKED — AI CANNOT MODIFY
+│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  # Root doctrine — READ FIRST
+│   ├── HUB_SPOKE_ARCHITECTURE.md       # Hub/Spoke geometry
+│   ├── ALTITUDE_DESCENT_MODEL.md       # Descent gates
+│   ├── REPO_REFACTOR_PROTOCOL.md       # Structure requirements
+│   ├── DBA_ENFORCEMENT_DOCTRINE.md     # DBA rules
+│   ├── TEMPLATE_IMMUTABILITY.md        # Immutability rules
+│   └── DOCUMENTATION_ERD_DOCTRINE.md   # ERD standard
+│
+├── claude/                             # LOCKED — AI CANNOT MODIFY
+│   ├── APPLY_DOCTRINE.prompt.md        # Doctrine execution
 │   ├── DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md
 │   ├── DECLARE_DATA_AND_RENDER_ERD.prompt.md
 │   ├── DECLARE_EXECUTION_WIRING.prompt.md
-│   ├── DBA_ENFORCEMENT.prompt.md       # DBA enforcement prompt
-│   └── DOCUMENTATION_ERD_ENFORCEMENT.prompt.md  # Documentation enforcement
-├── integrations/
-│   ├── COMPOSIO.md                     # Composio MCP integration template
-│   ├── DOPPLER.md                      # Doppler secrets management template
-│   ├── HEIR.md                         # HEIR compliance validation template
-│   ├── OBSIDIAN.md                     # Obsidian knowledge base template
-│   ├── TOOLS.md                        # Tool doctrine + 19-step pipeline ledger
-│   ├── doppler.yaml.template           # Doppler config template
-│   └── heir.doctrine.yaml.template     # HEIR doctrine config template
-├── checklists/
-│   └── HUB_COMPLIANCE.md               # Pre-ship compliance checklist
-├── prd/
-│   └── PRD_HUB.md                      # Product requirements template
-├── pr/
-│   ├── PULL_REQUEST_TEMPLATE_HUB.md    # PR template for hub changes
-│   └── PULL_REQUEST_TEMPLATE_SPOKE.md  # PR template for spoke changes
-└── adr/
-    └── ADR.md                          # Architecture Decision Record template
+│   ├── DBA_ENFORCEMENT.prompt.md       # DBA enforcement
+│   └── DOCUMENTATION_ERD_ENFORCEMENT.prompt.md
+│
+├── prd/                                # TEMPLATE — Copy to derived repos
+│   └── PRD_HUB.md
+│
+├── adr/                                # TEMPLATE — Copy to derived repos
+│   └── ADR.md
+│
+├── pr/                                 # TEMPLATE — Copy to derived repos
+│   ├── PULL_REQUEST_TEMPLATE_HUB.md
+│   └── PULL_REQUEST_TEMPLATE_SPOKE.md
+│
+├── checklists/                         # TEMPLATE — Copy to derived repos
+│   └── HUB_COMPLIANCE.md
+│
+├── integrations/                       # GUIDANCE — Reference only
+│   ├── COMPOSIO.md
+│   ├── DOPPLER.md
+│   ├── HEIR.md
+│   ├── OBSIDIAN.md
+│   ├── TOOLS.md
+│   ├── doppler.yaml.template
+│   └── heir.doctrine.yaml.template
+│
+└── validators/                         # GUIDANCE — Per-repo implementation
+    └── README.md
 ```
 
 ---
@@ -203,21 +305,25 @@ All hubs MUST use these integrations:
 
 ## Hard Violations (Stop Immediately)
 
-- Logic exists in a spoke
-- Cross-hub state sharing
-- UI making decisions
-- Tools spanning hubs
-- Missing Hub ID or Process ID
-- Repo acting as multiple hubs
-- Architecture introduced in a PR
+| Violation | Type | Action |
+|-----------|------|--------|
+| Logic exists in a spoke | HUB_SPOKE_VIOLATION | HALT |
+| Cross-hub state sharing | CC_VIOLATION | HALT |
+| UI making decisions | HUB_SPOKE_VIOLATION | HALT |
+| Tools spanning hubs | CC_VIOLATION | HALT |
+| Missing Hub ID or Process ID | CTB_VIOLATION | HALT |
+| Repo acting as multiple hubs | CC_VIOLATION | HALT |
+| Architecture introduced in a PR | CC_VIOLATION | HALT |
+| Forbidden folder exists (utils, helpers, common, shared, lib, misc) | CTB_VIOLATION | HALT |
+| File in `src/` root (not in CTB branch) | CTB_VIOLATION | HALT |
 
-These are **schema violations**, not preferences.
+These are **schema violations**, not preferences. **HALT means HALT.**
 
 ---
 
 ## Template Immutability (CRITICAL)
 
-All files in this directory are **LOCKED**.
+All files in `doctrine/` and `claude/` are **LOCKED**.
 
 | Prohibition | Applies To |
 |-------------|-----------|
@@ -230,9 +336,9 @@ All files in this directory are **LOCKED**.
 **If AI is asked to modify doctrine:**
 1. REFUSE
 2. Report: "Template Immutability Doctrine prohibits AI modification"
-3. Escalate to human
+3. Escalate to human via ADR + block merge
 
-See `doctrine/TEMPLATE_IMMUTABILITY.md` for full rules.
+See `doctrine/TEMPLATE_IMMUTABILITY.md` for full rules and escalation mechanism.
 
 ---
 

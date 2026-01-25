@@ -4,6 +4,19 @@
 
 > Also known as: CC Descent Protocol
 
+---
+
+## What "Altitude" and "Descent" Mean
+
+| Term | Definition |
+|------|------------|
+| **Altitude** | Position in the CC hierarchy. Higher altitude = higher authority. CC-01 (Sovereign) is the highest; CC-04 (Process) is the lowest. |
+| **Descent** | The mandatory sequence of moving from higher to lower CC layers. You must complete each layer before creating artifacts at the next. |
+
+**Metaphor**: Think of building a house. You cannot install plumbing (CC-04) before the walls exist (CC-03), and walls cannot exist before the foundation (CC-02), which cannot exist before the land is surveyed (CC-01). Descent enforces this order.
+
+---
+
 ## Conformance
 
 | Field | Value |
@@ -216,4 +229,17 @@ If a descent violation is detected:
 | Artifact | Reference |
 |----------|-----------|
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub/Spoke Doctrine | HUB_SPOKE_ARCHITECTURE.md |
+| Hub/Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
+| CC Layers | CANONICAL_ARCHITECTURE_DOCTRINE.md §2 |
+
+---
+
+## Document Control
+
+| Field | Value |
+|-------|-------|
+| Created | 2026-01-11 |
+| Last Modified | 2026-01-25 |
+| Version | 1.2.0 |
+| Status | LOCKED |
+| Authority | CANONICAL_ARCHITECTURE_DOCTRINE.md |

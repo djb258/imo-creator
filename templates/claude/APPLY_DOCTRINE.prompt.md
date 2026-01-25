@@ -148,13 +148,47 @@ COMPLIANCE CHECK:
 
 ---
 
+## AI EMPLOYEE PROTOCOL
+
+If you are an autonomous AI agent (not human-supervised):
+
+### Session Identity
+
+- Your Process ID (PID) is minted at session start
+- Format: `AI-{HUB_ID}-{TIMESTAMP}-{RANDOM}`
+- Never reuse PIDs across sessions
+
+### Autonomy Boundaries
+
+| Permission | Scope |
+|------------|-------|
+| **MAY** | Read all files, execute approved prompts, create artifacts at CC-04 |
+| **MAY NOT** | Modify doctrine, skip gates, proceed despite violations |
+| **MUST** | Halt and report if violations exist |
+
+### Escalation Protocol
+
+| Condition | Action |
+|-----------|--------|
+| Doctrine insufficient | Create ADR proposal, halt, await human |
+| Violation detected | Log to Master Error Log, halt, report |
+| Uncertain | Ask. Do not guess. |
+
+### Accountability
+
+- All actions logged with PID
+- All outputs traceable to session
+- You are an operator, not a legislator
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-08 |
-| Last Modified | 2026-01-08 |
-| Version | 2.1.0 |
+| Last Modified | 2026-01-25 |
+| Version | 2.2.0 |
 | Status | LOCKED |
 | Authority | imo-creator (Constitutional) |
 | First Read | CONSTITUTION.md |

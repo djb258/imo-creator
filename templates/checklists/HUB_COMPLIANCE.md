@@ -12,31 +12,48 @@ No exceptions. No partial compliance.
 
 ---
 
+## Priority Definitions
+
+| Priority | Meaning | Ship Without? |
+|----------|---------|---------------|
+| **CRITICAL** | Blocks ship | NO — must be checked |
+| **HIGH** | Strongly recommended | Only with ADR exception |
+| **MEDIUM** | Nice to have | Yes, but document why |
+
+---
+
 ## Canonical Chain (CC) Compliance
 
-- [ ] Sovereign declared (CC-01 reference)
-- [ ] Hub ID assigned (unique, immutable) (CC-02)
-- [ ] All child contexts scoped to CC-03
-- [ ] All processes scoped to CC-04
-- [ ] Authorization matrix honored (no upward writes)
-- [ ] Doctrine version declared
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Sovereign declared (CC-01 reference) |
+| CRITICAL | [ ] Hub ID assigned (unique, immutable) (CC-02) |
+| CRITICAL | [ ] Authorization matrix honored (no upward writes) |
+| CRITICAL | [ ] Doctrine version declared |
+| HIGH | [ ] All child contexts scoped to CC-03 |
+| HIGH | [ ] All processes scoped to CC-04 |
 
 ---
 
 ## Hub Identity (CC-02)
 
-- [ ] Hub ID assigned (unique, immutable)
-- [ ] Process ID pattern defined (CC-04 execution scope)
-- [ ] Hub Name defined
-- [ ] Hub Owner assigned
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Hub ID assigned (unique, immutable) |
+| CRITICAL | [ ] Process ID pattern defined (CC-04 execution scope) |
+| HIGH | [ ] Hub Name defined |
+| HIGH | [ ] Hub Owner assigned |
 
 ---
 
 ## CTB Placement
 
-- [ ] CTB path defined (Trunk / Branch / Leaf)
-- [ ] Branch level specified (sys / ui / ai / data / ops / docs)
-- [ ] Parent hub identified (if nested hub)
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] CTB path defined (Trunk / Branch / Leaf) |
+| CRITICAL | [ ] No forbidden folders (utils, helpers, common, shared, lib, misc) |
+| HIGH | [ ] Branch level specified (sys / ui / ai / data / app) |
+| MEDIUM | [ ] Parent hub identified (if nested hub) |
 
 ---
 
@@ -44,134 +61,160 @@ No exceptions. No partial compliance.
 
 ### Ingress (I Layer)
 
-- [ ] Ingress points defined
-- [ ] Ingress contains no logic
-- [ ] Ingress contains no state
-- [ ] UI (if present) is dumb ingress only
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Ingress contains no logic |
+| CRITICAL | [ ] Ingress contains no state |
+| HIGH | [ ] Ingress points defined |
+| MEDIUM | [ ] UI (if present) is dumb ingress only |
 
 ### Middle (M Layer)
 
-- [ ] All logic resides in M layer
-- [ ] All state resides in M layer
-- [ ] All decisions occur in M layer
-- [ ] Tools scoped to M layer only
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] All logic resides in M layer |
+| CRITICAL | [ ] All state resides in M layer |
+| CRITICAL | [ ] All decisions occur in M layer |
+| CRITICAL | [ ] Tools scoped to M layer only |
 
 ### Egress (O Layer)
 
-- [ ] Egress points defined
-- [ ] Egress contains no logic
-- [ ] Egress contains no state
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Egress contains no logic |
+| CRITICAL | [ ] Egress contains no state |
+| HIGH | [ ] Egress points defined |
 
 ---
 
 ## Spokes
 
-- [ ] All spokes typed as I or O only
-- [ ] No spoke contains logic
-- [ ] No spoke contains state
-- [ ] No spoke owns tools
-- [ ] No spoke performs decisions
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] All spokes typed as I or O only |
+| CRITICAL | [ ] No spoke contains logic |
+| CRITICAL | [ ] No spoke contains state |
+| CRITICAL | [ ] No spoke owns tools |
+| CRITICAL | [ ] No spoke performs decisions |
 
 ---
 
 ## Tools
 
-- [ ] All tools scoped inside this hub
-- [ ] All tools have Doctrine ID
-- [ ] All tools have ADR reference
-- [ ] No tools exposed to spokes
-
----
-
-## Connectors
-
-- [ ] Connectors (API / CSV / Event) defined
-- [ ] Connector direction specified (Inbound / Outbound)
-- [ ] Connector contracts documented
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] All tools scoped inside this hub |
+| CRITICAL | [ ] No tools exposed to spokes |
+| HIGH | [ ] All tools have Doctrine ID |
+| HIGH | [ ] All tools have ADR reference |
 
 ---
 
 ## Cross-Hub Isolation
 
-- [ ] No sideways hub-to-hub calls
-- [ ] No cross-hub logic
-- [ ] No shared mutable state between hubs
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] No sideways hub-to-hub calls |
+| CRITICAL | [ ] No cross-hub logic |
+| CRITICAL | [ ] No shared mutable state between hubs |
 
 ---
 
 ## Guard Rails
 
-- [ ] Rate limits defined
-- [ ] Timeouts defined
-- [ ] Validation implemented
-- [ ] Permissions enforced
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Rate limits defined |
+| CRITICAL | [ ] Timeouts defined |
+| HIGH | [ ] Validation implemented |
+| HIGH | [ ] Permissions enforced |
 
 ---
 
 ## Kill Switch
 
-- [ ] Kill switch endpoint defined
-- [ ] Kill switch activation criteria documented
-- [ ] Kill switch tested and verified
-- [ ] Emergency contact assigned
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Kill switch endpoint defined |
+| CRITICAL | [ ] Kill switch activation criteria documented |
+| HIGH | [ ] Kill switch tested and verified |
+| HIGH | [ ] Emergency contact assigned |
 
 ---
 
 ## Rollback
 
-- [ ] Rollback plan documented
-- [ ] Rollback tested and verified
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Rollback plan documented |
+| HIGH | [ ] Rollback tested and verified |
 
 ---
 
 ## Observability
 
-- [ ] Logging implemented
-- [ ] Metrics implemented
-- [ ] Alerts configured
-- [ ] Shipping without observability is forbidden
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] Logging implemented |
+| HIGH | [ ] Metrics implemented |
+| HIGH | [ ] Alerts configured |
+| CRITICAL | [ ] Shipping without observability is forbidden |
 
 ---
 
 ## Failure Modes
 
-- [ ] Failure modes documented
-- [ ] Severity levels assigned
-- [ ] Remediation steps defined
+| Priority | Check |
+|----------|-------|
+| HIGH | [ ] Failure modes documented |
+| HIGH | [ ] Severity levels assigned |
+| MEDIUM | [ ] Remediation steps defined |
 
 ---
 
 ## Human Override
 
-- [ ] Override conditions defined
-- [ ] Override approvers assigned
+| Priority | Check |
+|----------|-------|
+| HIGH | [ ] Override conditions defined |
+| HIGH | [ ] Override approvers assigned |
 
 ---
 
 ## Traceability
 
-- [ ] PRD exists and is current (CC-02)
-- [ ] ADR exists for each decision (CC-03)
-- [ ] Work item linked
-- [ ] PR linked (CC-04)
-- [ ] Canonical Doctrine referenced
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] PRD exists and is current (CC-02) |
+| CRITICAL | [ ] ADR exists for each decision (CC-03) |
+| HIGH | [ ] Work item linked |
+| HIGH | [ ] PR linked (CC-04) |
+| HIGH | [ ] Canonical Doctrine referenced |
 
 ---
 
 ## CC Layer Verification
 
-| Layer | Verified | Notes |
-|-------|----------|-------|
-| CC-01 (Sovereign) | [ ] | Reference declared |
-| CC-02 (Hub) | [ ] | Identity, PRD, CTB complete |
-| CC-03 (Context) | [ ] | ADRs, spokes, guard rails defined |
-| CC-04 (Process) | [ ] | PIDs, code, tests implemented |
+| Priority | Layer | Check |
+|----------|-------|-------|
+| CRITICAL | CC-01 (Sovereign) | [ ] Reference declared |
+| CRITICAL | CC-02 (Hub) | [ ] Identity, PRD, CTB complete |
+| HIGH | CC-03 (Context) | [ ] ADRs, spokes, guard rails defined |
+| HIGH | CC-04 (Process) | [ ] PIDs, code, tests implemented |
 
 ---
 
-## Compliance Rule
+## Compliance Summary
 
-If any box is unchecked, this hub may not ship.
+**Before shipping, count your checks:**
+
+| Priority | Must Have | Your Count |
+|----------|-----------|------------|
+| CRITICAL | ALL checked | ___ / ___ |
+| HIGH | Most checked (ADR for exceptions) | ___ / ___ |
+| MEDIUM | Optional | ___ / ___ |
+
+**If any CRITICAL item is unchecked, this hub may not ship.**
 
 ---
 
@@ -180,4 +223,4 @@ If any box is unchecked, this hub may not ship.
 | Artifact | Reference |
 |----------|-----------|
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub/Spoke Doctrine | HUB_SPOKE_ARCHITECTURE.md |
+| Hub/Spoke Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |

@@ -1,6 +1,6 @@
 # Canonical Architecture Doctrine (CTB + CC)
 
-**Doctrine Version**: 1.3.0
+**Doctrine Version**: 1.4.0
 **Status**: LOCKED
 **Authority**: IMO-Creator
 **Change Protocol**: ADR approval required for any modification
@@ -117,6 +117,47 @@ Hub-and-spoke defines authority boundaries and interface contracts.
 - Any hub-and-spoke violation is a CC violation.
 - CC violations are doctrine violations.
 - Doctrine violations halt promotion.
+
+### 3.5 IMO Model (Inside Hubs Only)
+
+IMO layers exist **only inside hubs**. Spokes are external interfaces.
+
+| Layer | Name | Role |
+|-------|------|------|
+| **I** | Ingress | Data entry point. May validate schema. MUST NOT make decisions. MUST NOT mutate business state. |
+| **M** | Middle | All logic, all decisions, all transformations, all state ownership, all tool invocations. |
+| **O** | Egress | Outputs and exports. Read-only views. Downstream signals. MUST NOT contain logic. |
+
+**Golden Rule**: Logic lives only inside hubs. Spokes only carry data.
+
+### 3.6 Required Identifiers
+
+Every hub MUST have:
+
+| Identifier | CC Layer | Description |
+|------------|----------|-------------|
+| **Sovereign ID** | CC-01 | Reference to governing sovereign |
+| **Hub ID** | CC-02 | Unique, immutable hub identifier |
+| **Process ID** | CC-04 | Execution/trace ID (minted per run) |
+
+These identifiers:
+- Are assigned at creation
+- Never change
+- Are referenced in all PRDs, ADRs, and PRs
+- Enable traceability across the system
+
+### 3.7 Hub Creation Protocol
+
+1. Declare sovereign reference (CC-01)
+2. Define the hub identity (CC-02)
+3. Assign Hub ID
+4. Write Hub PRD
+5. Define CTB placement
+6. Define full IMO internally
+7. Define I/O spokes
+8. Create ADRs for decisions (CC-03)
+9. Implement code (CC-04)
+10. Validate with compliance checklist
 
 ---
 
@@ -498,8 +539,8 @@ If a local policy contradicts a global invariant, the invariant wins. No excepti
 | Field | Value |
 |-------|-------|
 | Created | 2025-01-05 |
-| Last Modified | 2026-01-08 |
-| Doctrine Version | 1.3.0 |
+| Last Modified | 2026-01-25 |
+| Doctrine Version | 1.4.0 |
 | CTB Version | 1.1.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |
