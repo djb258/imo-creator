@@ -26,6 +26,18 @@ Master reference for Hub/Spoke definitions, IMO model, CTB structure, and requir
 
 Governs WHEN and HOW templates become legal. Defines mandatory descent sequence (50k → 5k) and gate conditions.
 
+> [`doctrine/DBA_ENFORCEMENT_DOCTRINE.md`](doctrine/DBA_ENFORCEMENT_DOCTRINE.md)
+
+**DBA enforcement rules.** Governs all database and structural changes. Type A/B classification, Gate A/B verification, metadata requirements.
+
+> [`doctrine/TEMPLATE_IMMUTABILITY.md`](doctrine/TEMPLATE_IMMUTABILITY.md)
+
+**Immutability rules.** Defines what is LOCKED, AI non-modification clause, human approval protocol. **ALL doctrine files are LOCKED.**
+
+> [`doctrine/DOCUMENTATION_ERD_DOCTRINE.md`](doctrine/DOCUMENTATION_ERD_DOCTRINE.md)
+
+**Documentation & ERD rules.** Mermaid ERD standard, column dictionary requirements, AI readability test. **Enforces documentation compliance.**
+
 **Key topics covered:**
 - Canonical Chain (CC) layers: CC-01 (Sovereign), CC-02 (Hub), CC-03 (Context), CC-04 (Process)
 - CTB (Christmas Tree Backbone) structure
@@ -88,10 +100,22 @@ A **Spoke is an interface**.
 ```
 templates/
 ├── README.md                           # This file
-├── doctrine/
+├── SNAP_ON_TOOLBOX.yaml                # Tool registry
+├── doctrine/                           # LOCKED — DO NOT MODIFY
 │   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  # Root doctrine (CTB + CC) — READ FIRST
 │   ├── HUB_SPOKE_ARCHITECTURE.md       # Hub/Spoke definitions & IMO model
-│   └── ALTITUDE_DESCENT_MODEL.md       # Descent sequence & gate conditions
+│   ├── ALTITUDE_DESCENT_MODEL.md       # Descent sequence & gate conditions
+│   ├── REPO_REFACTOR_PROTOCOL.md       # Repo structure requirements
+│   ├── DBA_ENFORCEMENT_DOCTRINE.md     # DBA enforcement rules
+│   ├── TEMPLATE_IMMUTABILITY.md        # Immutability rules — AI CANNOT MODIFY
+│   └── DOCUMENTATION_ERD_DOCTRINE.md   # Documentation & ERD standard
+├── claude/                             # LOCKED — DO NOT MODIFY
+│   ├── APPLY_DOCTRINE.prompt.md        # Doctrine execution prompt
+│   ├── DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md
+│   ├── DECLARE_DATA_AND_RENDER_ERD.prompt.md
+│   ├── DECLARE_EXECUTION_WIRING.prompt.md
+│   ├── DBA_ENFORCEMENT.prompt.md       # DBA enforcement prompt
+│   └── DOCUMENTATION_ERD_ENFORCEMENT.prompt.md  # Documentation enforcement
 ├── integrations/
 │   ├── COMPOSIO.md                     # Composio MCP integration template
 │   ├── DOPPLER.md                      # Doppler secrets management template
@@ -191,7 +215,31 @@ These are **schema violations**, not preferences.
 
 ---
 
+## Template Immutability (CRITICAL)
+
+All files in this directory are **LOCKED**.
+
+| Prohibition | Applies To |
+|-------------|-----------|
+| AI modification | ALL doctrine files |
+| AI reordering | ALL doctrine rules |
+| AI reinterpretation | ALL doctrine meaning |
+| Changes without ADR | ALL templates |
+| Changes without human approval | ALL constitutional files |
+
+**If AI is asked to modify doctrine:**
+1. REFUSE
+2. Report: "Template Immutability Doctrine prohibits AI modification"
+3. Escalate to human
+
+See `doctrine/TEMPLATE_IMMUTABILITY.md` for full rules.
+
+---
+
 ## Final Rule
 
 > **The system is correct only if the structure enforces the behavior.**
 > If discipline relies on memory, the design has failed.
+>
+> **Doctrine is LAW. Templates are LAW. Structure is LAW.**
+> **If you cannot comply, you do not proceed.**

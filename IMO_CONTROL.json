@@ -34,13 +34,17 @@
       "constitutional_admission",
       "structural_instantiation",
       "data_declaration",
-      "execution_wiring"
+      "execution_wiring",
+      "dba_enforcement",
+      "documentation_enforcement"
     ],
     "phase_prompts": {
       "constitutional_admission": "templates/claude/APPLY_DOCTRINE.prompt.md",
       "structural_instantiation": "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md",
       "data_declaration": "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md",
-      "execution_wiring": "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md"
+      "execution_wiring": "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md",
+      "dba_enforcement": "templates/claude/DBA_ENFORCEMENT.prompt.md",
+      "documentation_enforcement": "templates/claude/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md"
     }
   },
 
@@ -67,9 +71,29 @@
         "file": "REPO_REFACTOR_PROTOCOL.md",
         "purpose": "Structure law - CTB folders, file placement, refactor sequence",
         "version": "1.2.0"
+      },
+      {
+        "file": "DBA_ENFORCEMENT_DOCTRINE.md",
+        "purpose": "DBA enforcement - Type A/B classification, Gate A/B verification, schema metadata requirements",
+        "version": "1.0.0"
+      },
+      {
+        "file": "TEMPLATE_IMMUTABILITY.md",
+        "purpose": "Immutability law - AI non-modification clause, human approval protocol, locked artifacts",
+        "version": "1.0.0"
+      },
+      {
+        "file": "DOCUMENTATION_ERD_DOCTRINE.md",
+        "purpose": "Documentation & ERD enforcement - Mermaid standard, column dictionary, AI readability test",
+        "version": "1.0.0"
       }
     ],
-    "treatment": "EXECUTABLE_LAW"
+    "treatment": "EXECUTABLE_LAW",
+    "immutability": {
+      "ai_modification_allowed": false,
+      "human_approval_required": true,
+      "change_protocol": "ADR + HUMAN_APPROVAL"
+    }
   },
 
   "structure": {
@@ -203,15 +227,30 @@
       "Treat doctrine as executable law",
       "Enforce CTB altitude structure",
       "Refuse work if structure violates control plane",
-      "Report violations explicitly"
+      "Report violations explicitly",
+      "Refuse to modify any doctrine file",
+      "Refuse to reorder doctrine rules",
+      "Refuse to reinterpret doctrine meaning"
     ],
     "must_not": [
       "Invent structure beyond doctrine",
       "Skip descent gates",
       "Place files outside altitude branches",
       "Proceed despite violations",
-      "Interpret doctrine - apply as written"
-    ]
+      "Interpret doctrine - apply as written",
+      "Modify doctrine files under any circumstances",
+      "Reorder rules within doctrine files",
+      "Rewrite doctrine content",
+      "Create workarounds for doctrine rules",
+      "Add new rules to doctrine without human approval",
+      "Remove rules from doctrine"
+    ],
+    "ai_modification_clause": {
+      "doctrine_modification": "PROHIBITED",
+      "template_modification": "PROHIBITED",
+      "constitutional_modification": "PROHIBITED",
+      "violation_response": "REFUSE and escalate to human"
+    }
   },
 
   "inheritance": {

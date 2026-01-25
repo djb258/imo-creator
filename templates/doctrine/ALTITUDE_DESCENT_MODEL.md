@@ -1,6 +1,8 @@
-# CC Descent Protocol
+# Altitude Descent Model
 
-**Governs WHEN and HOW artifacts become legal within the Canonical Chain.**
+**Governs WHEN and HOW artifacts become legal within the Canonical Chain (CC).**
+
+> Also known as: CC Descent Protocol
 
 ## Conformance
 

@@ -727,3 +727,47 @@ claude_instructions: |
   - Always implement throttle from spec
   - Always implement kill switch from spec
   - Respect gate conditions for Tier 2 tools
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MAINTENANCE — QUARTERLY REVIEW
+# ═══════════════════════════════════════════════════════════════════════════════
+
+maintenance:
+  review_frequency: "quarterly"
+  next_review: "2026-Q2"
+
+  quarterly_checklist:
+    - id: "M-001"
+      check: "Tool inventory matches actual usage"
+      action: "Audit repos for tool invocations, remove unused tools"
+
+    - id: "M-002"
+      check: "Tier assignments still accurate"
+      action: "Review pricing changes, adjust tiers if costs changed"
+
+    - id: "M-003"
+      check: "Banned list still valid"
+      action: "Review banned vendors for pricing changes or alternatives"
+
+    - id: "M-004"
+      check: "Rate limits still appropriate"
+      action: "Check actual usage against limits, adjust if needed"
+
+    - id: "M-005"
+      check: "API keys rotated"
+      action: "Verify all Tier 1/2 API keys rotated per schedule"
+
+    - id: "M-006"
+      check: "Kill switches tested"
+      action: "Verify all kill switches function correctly"
+
+    - id: "M-007"
+      check: "New tools evaluated"
+      action: "Review any new tool requests, create ADRs if approved"
+
+  review_output: |
+    After quarterly review, update:
+    - last_updated field at top of file
+    - next_review field in maintenance section
+    - Create ADR for any tool additions/removals
+    - Log review completion in sovereign audit trail
