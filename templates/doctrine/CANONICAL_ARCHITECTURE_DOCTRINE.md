@@ -1,6 +1,6 @@
 # Canonical Architecture Doctrine (CTB + CC)
 
-**Doctrine Version**: 1.4.0
+**Doctrine Version**: 1.5.0
 **Status**: LOCKED
 **Authority**: IMO-Creator
 **Change Protocol**: ADR approval required for any modification
@@ -463,6 +463,49 @@ All relationships MUST be explicitly declared:
 
 ---
 
+## 13. Data Isolation Lanes
+
+Lanes define boundaries for data isolation within a hub.
+
+### 13.1 Definition
+
+- A lane is a named boundary that groups related data tables.
+- Lanes exist at CC-03 (Context layer).
+- Lanes isolate data flows; they do not define logic.
+
+### 13.2 Lane Properties
+
+| Property | Description |
+|----------|-------------|
+| **Name** | Unique identifier within the hub |
+| **Tables** | List of tables belonging to this lane |
+| **Isolation Rule** | What data operations cannot cross this boundary |
+
+### 13.3 Lane Constraints
+
+- Data within a lane may be freely joined.
+- Cross-lane joins are forbidden unless explicitly declared in the Authorization Matrix.
+- Lanes do not own logic; logic lives in the M layer.
+- Lanes do not define business rules; business rules are declared elsewhere.
+
+### 13.4 What Lanes Do NOT Define
+
+Lanes are structural isolation only. They do not define:
+
+- Business logic
+- Scoring algorithms
+- Workflow sequences
+- Runtime behavior
+- Data transformation rules
+
+### 13.5 Lane Declaration
+
+Child repos declare lanes in their `doctrine/REPO_DOMAIN_SPEC.md` file.
+
+Parent doctrine defines only that lanes MUST exist when multiple data contexts require isolation.
+
+---
+
 ## Global Rules
 
 ### Doctrine Authority
@@ -539,8 +582,8 @@ If a local policy contradicts a global invariant, the invariant wins. No excepti
 | Field | Value |
 |-------|-------|
 | Created | 2025-01-05 |
-| Last Modified | 2026-01-25 |
-| Doctrine Version | 1.4.0 |
+| Last Modified | 2026-01-28 |
+| Doctrine Version | 1.5.0 |
 | CTB Version | 1.1.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |

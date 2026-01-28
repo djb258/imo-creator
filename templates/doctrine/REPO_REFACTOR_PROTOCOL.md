@@ -15,7 +15,7 @@
 
 ## Overview
 
-This protocol defines the mandatory structure for all repos operating under the Barton Doctrine. Every repo is a hub. Every hub conforms to CTB. No exceptions.
+This protocol defines the mandatory structure for all repos operating under the CTB Doctrine. Every repo is a hub. Every hub conforms to CTB. No exceptions.
 
 ---
 
@@ -105,7 +105,7 @@ doctrine_version: "1.1.0"
 ctb_version: "1.0.0"
 
 # CC-01: Sovereign reference (declared externally)
-sovereign_ref: "SOV-BARTON"
+sovereign_ref: "[SOV_ID]"
 
 # CC-02: Hub declaration
 hub:
@@ -250,14 +250,14 @@ For multi-repo systems:
 ```
 IMO-Creator (Sovereign)
     │
-    ├── Hub: barton-outreach
-    │   ├── Spoke-I: DOL data ingress
-    │   ├── Spoke-I: Census API ingress
-    │   ├── Spoke-O: Neon write egress
-    │   └── Spoke-O: Email send egress
+    ├── Hub: example-hub-alpha
+    │   ├── Spoke-I: External API ingress
+    │   ├── Spoke-I: File upload ingress
+    │   ├── Spoke-O: Database write egress
+    │   └── Spoke-O: Notification egress
     │
-    ├── Hub: storage-facility-build
-    │   ├── Spoke-I: Market data ingress
+    ├── Hub: example-hub-beta
+    │   ├── Spoke-I: Webhook ingress
     │   └── Spoke-O: Report egress
     │
     └── Hub: [next project]
@@ -278,7 +278,7 @@ Every repo MUST contain a `DOCTRINE.md` with ONLY this content:
 ```markdown
 # Doctrine Reference
 
-This repo conforms to Barton Doctrine v1.1.0.
+This repo conforms to CTB Doctrine v1.1.0.
 
 **Source of truth:**
 imo-creator/templates/doctrine/

@@ -1,14 +1,14 @@
 blank_issues_enabled: true
 contact_links:
   - name: 📚 Documentation
-    url: https://github.com/djb258/imo-creator/tree/master/docs
+    url: https://github.com/[OWNER]/[REPO]/tree/master/docs
     about: Browse the IMO-Creator documentation
   - name: 🎯 CTB Documentation
-    url: https://github.com/djb258/imo-creator/tree/master/docs/ctb
+    url: https://github.com/[OWNER]/[REPO]/tree/master/docs/ctb
     about: Learn about the Christmas Tree Backbone (CTB) architecture
   - name: 🔗 Composio Integration Guide
-    url: https://github.com/djb258/imo-creator/blob/master/COMPOSIO_INTEGRATION.md
+    url: https://github.com/[OWNER]/[REPO]/blob/master/COMPOSIO_INTEGRATION.md
     about: Complete guide to Composio MCP integrations
   - name: 🚀 Quick Start (CLAUDE.md)
-    url: https://github.com/djb258/imo-creator/blob/master/CLAUDE.md
+    url: https://github.com/[OWNER]/[REPO]/blob/master/CLAUDE.md
     about: Bootstrap guide for new contributors

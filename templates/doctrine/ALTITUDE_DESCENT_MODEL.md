@@ -21,7 +21,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Doctrine Version** | 1.1.0 |
+| **Doctrine Version** | 1.2.0 |
 | **Authority** | Canonical Architecture Doctrine |
 | **Status** | LOCKED |
 

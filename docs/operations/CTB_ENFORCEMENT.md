@@ -8,13 +8,13 @@
 
 ## Mandatory External Repository Integration
 
-**CRITICAL**: All repositories following the Barton CTB Doctrine MUST include the following external repository integrations:
+**CRITICAL**: All repositories following the CTB Doctrine MUST include the following external repository integrations:
 
 | Branch | Repository | Doctrine ID | Status |
 |--------|-----------|-------------|--------|
-| `sys/chartdb` | github.com/djb258/chartdb | 04.04.07 | REQUIRED |
-| `sys/activepieces` | github.com/djb258/activepieces | 04.04.08 | REQUIRED |
-| `sys/windmill` | github.com/djb258/windmill | 04.04.09 | REQUIRED |
+| `sys/chartdb` | github.com/[OWNER]/chartdb | 04.04.07 | REQUIRED |
+| `sys/activepieces` | github.com/[OWNER]/activepieces | 04.04.08 | REQUIRED |
+| `sys/windmill` | github.com/[OWNER]/windmill | 04.04.09 | REQUIRED |
 | `sys/claude-skills` | Anthropic via Composio MCP | 04.04.10 | REQUIRED |
 
 ---
@@ -54,10 +54,10 @@ The CTB enforcement system performs the following checks on every repo creation,
 **Manual Enforcement:**
 ```bash
 # Standard mode (recommended)
-bash global-config/scripts/ctb_enforce.sh
+bash templates/scripts/ctb_enforce.sh
 
 # Strict mode (requires all ports healthy)
-bash global-config/scripts/ctb_enforce.sh --strict
+bash templates/scripts/ctb_enforce.sh --strict
 ```
 
 **Automated Enforcement:**
@@ -112,13 +112,13 @@ Log format:
 **Remediation:**
 ```bash
 # Option 1: Run initialization
-bash global-config/scripts/ctb_init.sh
+bash templates/scripts/ctb_init.sh
 
 # Option 2: Update from IMO-Creator
-bash global-config/scripts/update_from_imo_creator.sh
+bash templates/scripts/update_from_imo_creator.sh
 
 # Verify fix
-bash global-config/scripts/ctb_enforce.sh
+bash templates/scripts/ctb_enforce.sh
 ```
 
 ---
@@ -137,4 +137,4 @@ If a repository cannot support these integrations due to technical constraints, 
 |-------|-------|
 | Type | Operational Runbook |
 | Authority | Subordinate to Canonical Doctrine |
-| Extracted From | global-config/CTB_DOCTRINE.md |
+| Extracted From | templates/config/CTB_DOCTRINE.md |

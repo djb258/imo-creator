@@ -260,7 +260,7 @@ jobs:
         if: steps.check-changes.outputs.has_changes == 'true' && steps.deepwiki-run.outputs.success == 'true'
         run: |
           git config user.name "DeepWiki Bot"
-          git config user.email "deepwiki-bot@bartonenterprises.com"
+          git config user.email "[BOT_EMAIL]"
 
           git add deep_wiki/ logs/
           git commit -m "📚 DeepWiki: Auto-update documentation [skip ci]

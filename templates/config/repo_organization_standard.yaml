@@ -1,0 +1,676 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.664464
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 80%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+# ============================================================
+# GLOBAL REPOSITORY ORGANIZATION STANDARD
+# Version: 1.0.0
+# Last Updated: 2025-10-22
+# ============================================================
+#
+# This file defines the universal structure and organization pattern
+# that MUST be applied to ALL repositories in the governed ecosystem.
+#
+# When scaffolding a new repo or updating an existing one, use this
+# as the canonical reference for directory structure, required files,
+# and organizational standards.
+#
+# Copy this file to each repo as: .governance/repo_config.yaml
+# ============================================================
+
+metadata:
+  standard_version: "1.0.0"
+  last_updated: "2025-10-22T00:00:00Z"
+  organization: "[ORGANIZATION_NAME]"
+  enforcement: "mandatory"
+  validation_tool: "global-config/scripts/ctb_enforce.sh"
+
+# ============================================================
+# REQUIRED ROOT FILES
+# These files MUST exist in every repository
+# ============================================================
+required_root_files:
+  # Core documentation
+  - name: "README.md"
+    description: "Project overview, quick start, and links to detailed docs"
+    template: "templates/README.template.md"
+    sections:
+      - "Project Title and Description"
+      - "Quick Start (5 minute setup)"
+      - "Installation"
+      - "Usage Examples"
+      - "Documentation Links"
+      - "Contributing"
+      - "License"
+
+  - name: "CLAUDE.md"
+    description: "AI/LLM context file for Claude Code and other AI assistants"
+    template: "templates/CLAUDE.template.md"
+    sections:
+      - "Instant Repo Overview"
+      - "Critical Paths & Commands"
+      - "Repository Structure Map"
+      - "Common Task Patterns"
+      - "Debugging Quick Reference"
+      - "Essential Documentation Files"
+
+  - name: "LLM_ONBOARDING.md"
+    description: "Comprehensive orientation guide for AI agents"
+    template: "templates/LLM_ONBOARDING.template.md"
+    sections:
+      - "CTB Architecture Explanation"
+      - "Branch Organization (40k/20k/10k/5k ft)"
+      - "HEIR/ORBT Concepts"
+      - "Security Policies"
+      - "Learning Path (Level 1-4)"
+      - "Common Tasks and FAQs"
+
+  - name: ".env.example"
+    description: "Example environment variables (NO SECRETS)"
+    template: "templates/.env.example.template"
+    rules:
+      - "Use placeholder values only"
+      - "Group by function (Database, API Keys, etc.)"
+      - "Include comments explaining each variable"
+      - "Mark required vs optional"
+
+  - name: ".gitignore"
+    description: "Standard gitignore with standard exclusions"
+    template: "templates/.gitignore.template"
+    must_exclude:
+      - ".env"
+      - ".env.local"
+      - "*.pem"
+      - "*.key"
+      - "*credentials*.json"
+      - "node_modules/"
+      - "__pycache__/"
+      - ".DS_Store"
+
+  - name: "LICENSE"
+    description: "Project license (typically MIT for internal projects)"
+    template: "templates/LICENSE.template"
+
+  - name: "package.json"
+    description: "Node.js project metadata (if applicable)"
+    required_if: "project uses Node.js"
+    must_include:
+      - "name"
+      - "version"
+      - "description"
+      - "scripts"
+      - "engines"
+
+  - name: "requirements.txt"
+    description: "Python dependencies (if applicable)"
+    required_if: "project uses Python"
+
+  - name: "Procfile"
+    description: "Process definition for deployment"
+    required_if: "project deploys to cloud"
+
+# ============================================================
+# STANDARD DIRECTORY STRUCTURE
+# All repos should follow this organization
+# ============================================================
+standard_directories:
+  # Root-level directories
+  root:
+    - name: "global-config"
+      description: "Global configuration files copied from imo-creator"
+      required: true
+      contents:
+        - "ctb.branchmap.yaml"
+        - "repo_organization_standard.yaml"
+        - "global_manifest.yaml"
+        - "CTB_DOCTRINE.md"
+        - "scripts/"
+
+    - name: "config"
+      description: "Project-specific configuration files"
+      required: true
+      contents:
+        - "mcp_registry.json"
+        - "deployment_config.yaml"
+        - "feature_flags.json"
+
+    - name: "docs"
+      description: "Comprehensive project documentation"
+      required: true
+      subdirectories:
+        - "api"          # API documentation
+        - "architecture" # Architecture diagrams and decisions
+        - "guides"       # How-to guides and tutorials
+        - "reference"    # Reference documentation
+        - "changelog"    # Version history
+
+    - name: "src"
+      description: "Source code (for compiled languages) or main app code"
+      required: true
+      subdirectories:
+        - "components"   # Reusable components
+        - "utils"        # Utility functions
+        - "services"     # Business logic services
+        - "models"       # Data models
+        - "types"        # TypeScript types/interfaces
+
+    - name: "scripts"
+      description: "Build, deployment, and maintenance scripts"
+      required: true
+      subdirectories:
+        - "build"        # Build scripts
+        - "deploy"       # Deployment automation
+        - "maintenance"  # Database migrations, cleanup, etc.
+        - "hooks"        # Git hooks and automation
+
+    - name: "tests"
+      description: "Test files and test utilities"
+      required: true
+      subdirectories:
+        - "unit"         # Unit tests
+        - "integration"  # Integration tests
+        - "e2e"          # End-to-end tests
+        - "fixtures"     # Test data
+
+    - name: "logs"
+      description: "Application logs (gitignored)"
+      required: true
+      gitignored: true
+      contents:
+        - "README.md"    # Explanation of log structure
+        - ".gitkeep"     # Keep directory in git
+
+    - name: ".github"
+      description: "GitHub-specific files"
+      required: true
+      subdirectories:
+        - "workflows"    # GitHub Actions
+        - "ISSUE_TEMPLATE"
+        - "PULL_REQUEST_TEMPLATE"
+
+    - name: ".governance"
+      description: "Governance internal config"
+      required: true
+      contents:
+        - "repo_config.yaml"     # This file, copied locally
+        - "doctrine_id.txt"      # Repo's unique doctrine ID
+        - "hive_assignment.txt"  # Hive code (shq/clnt/dpr/mkt/pers/edu/sys)
+
+  # Optional but recommended
+  optional:
+    - name: "tools"
+      description: "CLI tools and utilities for this project"
+
+    - name: "examples"
+      description: "Example code and usage demonstrations"
+
+    - name: "assets"
+      description: "Static assets (images, fonts, etc.)"
+
+    - name: "deploy"
+      description: "Deployment configurations and infrastructure code"
+
+    - name: "data"
+      description: "Seed data, fixtures, and sample datasets"
+
+# ============================================================
+# BRANCH ORGANIZATION (CTB - Christmas Tree Backbone)
+# ============================================================
+branch_structure:
+  required_branches:
+    - name: "master"
+      description: "Production-ready code, always deployable"
+      protection:
+        - "Require pull request reviews"
+        - "Require status checks"
+        - "No force push"
+      merge_strategy: "squash"
+
+  altitude_branches:
+    40k_ft:
+      prefix: "sys/"
+      description: "System infrastructure (databases, deployment, global config)"
+      examples:
+        - "sys/chartdb"
+        - "sys/deepwiki"
+        - "sys/monitoring"
+      merge_target: "master"
+      merge_frequency: "monthly"
+
+    20k_ft:
+      prefix: "feat/"
+      description: "Domain logic and business rules"
+      examples:
+        - "feat/client-onboarding"
+        - "feat/compliance-engine"
+        - "feat/billing-automation"
+      merge_target: "master"
+      merge_frequency: "bi-weekly"
+
+    10k_ft:
+      prefix: "feature/"
+      description: "UI features and integrations"
+      examples:
+        - "feature/dashboard-ui"
+        - "feature/pdf-export"
+        - "feature/email-templates"
+      merge_target: "master"
+      merge_frequency: "weekly"
+
+    5k_ft:
+      prefix: "data/"
+      description: "Data, schemas, and content"
+      examples:
+        - "data/seed-database"
+        - "data/migration-scripts"
+        - "data/reference-tables"
+      merge_target: "master"
+      merge_frequency: "as-needed"
+
+  special_branches:
+    - name: "doctrine/"
+      description: "Doctrine enforcement and validation updates"
+      prefix: "doctrine/"
+      examples:
+        - "doctrine/schema-update"
+        - "doctrine/heir-tracking"
+
+    - name: "docs/"
+      description: "Documentation-only updates"
+      prefix: "docs/"
+      examples:
+        - "docs/api-reference"
+        - "docs/onboarding-guide"
+
+# ============================================================
+# CONFIGURATION FILE STANDARDS
+# ============================================================
+configuration_standards:
+  mcp_registry:
+    location: "config/mcp_registry.json"
+    description: "MCP tool registry with doctrine IDs"
+    required_fields:
+      - "engine_version"
+      - "last_updated"
+      - "production_urls"
+      - "engine_capabilities"
+      - "repo_usage"
+
+  environment_variables:
+    location: ".env.example"
+    groups:
+      - "API Keys and Secrets"
+      - "Database Configuration"
+      - "Service URLs"
+      - "Feature Flags"
+      - "Doctrine Configuration"
+    format: "KEY=value # Description"
+
+  package_management:
+    nodejs:
+      file: "package.json"
+      required_scripts:
+        - "dev"         # Local development
+        - "build"       # Production build
+        - "test"        # Run tests
+        - "lint"        # Code linting
+    python:
+      file: "requirements.txt"
+      format: "package==version  # Purpose"
+      dev_file: "requirements-dev.txt"
+
+# ============================================================
+# DOCUMENTATION STANDARDS
+# ============================================================
+documentation_standards:
+  format: "Markdown"
+  style: "GitHub Flavored Markdown"
+
+  structure:
+    api_docs:
+      location: "docs/api/"
+      format: "OpenAPI 3.0 or Markdown"
+      must_include:
+        - "Authentication"
+        - "Endpoints"
+        - "Request/Response examples"
+        - "Error codes"
+
+    architecture:
+      location: "docs/architecture/"
+      must_include:
+        - "System overview diagram"
+        - "Data flow diagrams"
+        - "Integration points"
+        - "Technology stack"
+
+    guides:
+      location: "docs/guides/"
+      types:
+        - "Getting Started"
+        - "Development Guide"
+        - "Deployment Guide"
+        - "Troubleshooting"
+
+  code_comments:
+    python:
+      style: "Google Style Docstrings"
+      required_for:
+        - "All public functions"
+        - "All classes"
+        - "Complex algorithms"
+
+    javascript:
+      style: "JSDoc"
+      required_for:
+        - "All exported functions"
+        - "All classes"
+        - "Complex logic"
+
+# ============================================================
+# NAMING CONVENTIONS
+# ============================================================
+naming_conventions:
+  files:
+    python: "snake_case.py"
+    javascript: "camelCase.js or PascalCase.jsx"
+    typescript: "camelCase.ts or PascalCase.tsx"
+    markdown: "kebab-case.md"
+    yaml: "kebab-case.yaml"
+    json: "snake_case.json or kebab-case.json"
+
+  directories:
+    style: "kebab-case"
+    examples:
+      - "global-config"
+      - "api-endpoints"
+      - "test-fixtures"
+
+  variables:
+    python: "snake_case"
+    javascript: "camelCase"
+    constants: "UPPER_SNAKE_CASE"
+    environment: "UPPER_SNAKE_CASE"
+
+  functions:
+    python: "snake_case"
+    javascript: "camelCase"
+    classes: "PascalCase"
+
+  git_branches:
+    format: "{prefix}/{kebab-case-description}"
+    examples:
+      - "feat/client-onboarding"
+      - "sys/database-migration"
+      - "feature/export-pdf"
+      - "docs/api-reference"
+
+  git_commits:
+    format: "{emoji} {imperative verb} {description} [tag]"
+    examples:
+      - "✨ Add client onboarding workflow"
+      - "🐛 Fix authentication token refresh"
+      - "📚 Update API documentation [skip ci]"
+      - "🔒 Add security lockdown script"
+
+    emoji_guide:
+      - "✨ New feature"
+      - "🐛 Bug fix"
+      - "📚 Documentation"
+      - "🔧 Configuration"
+      - "🔒 Security"
+      - "⚡ Performance"
+      - "♻️  Refactoring"
+      - "🎨 UI/Style"
+      - "🧪 Tests"
+      - "🚀 Deployment"
+
+# ============================================================
+# SECURITY STANDARDS
+# ============================================================
+security_standards:
+  zero_tolerance_policy:
+    forbidden_files:
+      - ".env"
+      - "*.pem"
+      - "*.key"
+      - "*credentials*.json"
+      - "*secret*.txt"
+
+    forbidden_patterns:
+      - "password="
+      - "api_key="
+      - "secret="
+      - "token="
+      - "private_key="
+
+    enforcement:
+      - "Pre-commit hooks"
+      - "GitHub Actions scanning"
+      - "TruffleHog secret detection"
+      - "git-secrets history scan"
+
+  mcp_vault_usage:
+    all_secrets_must_use: "MCP Vault or Environment Variables"
+    runtime_injection: "src/mcp_vault_resolver.ts"
+    configuration: "global-config/global_manifest.yaml"
+
+  authentication:
+    api_keys: "Environment variables only"
+    jwt_tokens: "Secure storage with rotation"
+    oauth: "Composio-managed where possible"
+
+# ============================================================
+# TESTING STANDARDS
+# ============================================================
+testing_standards:
+  coverage:
+    minimum: "80%"
+    target: "90%"
+    measurement: "Line coverage"
+
+  test_types:
+    unit:
+      location: "tests/unit/"
+      framework:
+        python: "pytest"
+        javascript: "Jest or Vitest"
+      naming: "test_*.py or *.test.js"
+
+    integration:
+      location: "tests/integration/"
+      scope: "Multi-component interactions"
+      database: "Use test database"
+
+    e2e:
+      location: "tests/e2e/"
+      framework:
+        web: "Playwright or Cypress"
+      scope: "Full user workflows"
+
+  ci_integration:
+    platform: "GitHub Actions"
+    triggers:
+      - "Pull requests"
+      - "Commits to master"
+      - "Nightly builds"
+    requirements:
+      - "All tests pass"
+      - "Coverage threshold met"
+      - "Linting passes"
+      - "Security scan passes"
+
+# ============================================================
+# DEPLOYMENT STANDARDS
+# ============================================================
+deployment_standards:
+  platforms:
+    frontend:
+      primary: "Vercel"
+      staging: "Vercel Preview"
+      configuration: "vercel.json"
+
+    backend:
+      primary: "Composio Hosted"
+      alternative: "Cloud Function / Lambda"
+
+    database:
+      primary: "Neon PostgreSQL"
+      backup: "Daily automated"
+      migration: "Alembic (Python) or Prisma (JS)"
+
+    storage:
+      primary: "Firebase Storage"
+      cdn: "Vercel or Cloudflare"
+
+  environment_tiers:
+    development:
+      branch: "feature/*"
+      auto_deploy: true
+      environment: "DEVELOPMENT"
+
+    staging:
+      branch: "master (pre-production)"
+      auto_deploy: true
+      environment: "STAGING"
+      testing: "Required before production"
+
+    production:
+      branch: "master (tagged release)"
+      auto_deploy: false
+      environment: "PRODUCTION"
+      approval: "Manual approval required"
+
+# ============================================================
+# LOGGING AND MONITORING STANDARDS
+# ============================================================
+logging_standards:
+  location: "logs/"
+
+  files:
+    application: "logs/app.log"
+    error: "logs/error.log"
+    access: "logs/access.log"
+    audit: "logs/audit.log"
+    ctb_enforcement: "logs/ctb_enforcement.log"
+    security: "logs/security_audit.log"
+
+  format: "JSON structured logging"
+  required_fields:
+    - "timestamp"
+    - "level"
+    - "message"
+    - "context"
+    - "unique_id (HEIR)"
+    - "process_id"
+
+  retention:
+    development: "7 days"
+    staging: "30 days"
+    production: "90 days"
+
+  log_levels:
+    - "DEBUG"   # Detailed diagnostic info
+    - "INFO"    # General informational messages
+    - "WARNING" # Warning messages
+    - "ERROR"   # Error messages
+    - "CRITICAL" # Critical errors
+
+# ============================================================
+# DOCTRINE ENFORCEMENT
+# ============================================================
+doctrine_enforcement:
+  validation_script: "global-config/scripts/ctb_enforce.sh"
+
+  checks:
+    - name: "Required files exist"
+      files:
+        - "CLAUDE.md"
+        - "LLM_ONBOARDING.md"
+        - ".env.example"
+        - "config/mcp_registry.json"
+
+    - name: "Branch structure valid"
+      validation: "At least one sys/ branch exists"
+
+    - name: "Doctrine ID assigned"
+      location: ".governance/doctrine_id.txt"
+      format: "{HIVE}.{NUMBER}"
+
+    - name: "Security scan passes"
+      tool: "global-config/scripts/security_lockdown.sh"
+      zero_tolerance: true
+
+  automation:
+    - "GitHub Actions on every PR"
+    - "Pre-commit hooks"
+    - "Nightly validation"
+
+# ============================================================
+# INTEGRATION WITH IMO-CREATOR
+# ============================================================
+imo_creator_integration:
+  scaffolding:
+    command: "npm run scaffold {repo-name} {hive}"
+    copies:
+      - "global-config/ directory"
+      - "config/mcp_registry.json"
+      - "CLAUDE.md template"
+      - "LLM_ONBOARDING.md template"
+      - ".github/workflows/"
+
+  updates:
+    command: "npm run update-doctrine"
+    sync:
+      - "global-config/repo_organization_standard.yaml"
+      - "global-config/global_manifest.yaml"
+      - "global-config/CTB_DOCTRINE.md"
+
+  validation:
+    command: "npm run validate-structure"
+    reports: "logs/ctb_enforcement.log"
+
+# ============================================================
+# VERSIONING
+# ============================================================
+versioning:
+  semantic_versioning: true
+  format: "MAJOR.MINOR.PATCH"
+
+  bump_rules:
+    major: "Breaking changes"
+    minor: "New features (backwards compatible)"
+    patch: "Bug fixes"
+
+  tagging:
+    format: "v{MAJOR}.{MINOR}.{PATCH}"
+    examples:
+      - "v1.0.0"
+      - "v1.2.3"
+      - "v2.0.0-beta.1"
+
+  changelog:
+    location: "CHANGELOG.md"
+    format: "Keep a Changelog"
+    sections:
+      - "Added"
+      - "Changed"
+      - "Deprecated"
+      - "Removed"
+      - "Fixed"
+      - "Security"
+
+# ============================================================
+# NOTES FOR AI ASSISTANTS
+# ============================================================
+ai_assistant_notes:
+  - "This standard should be applied to ALL new repositories"
+  - "When scaffolding, copy this file to .governance/repo_config.yaml"
+  - "Use ctb_enforce.sh to validate compliance"
+  - "All configuration should reference this file"
+  - "Update version when making changes to this standard"
+  - "Treat this as the source of truth for repo organization"

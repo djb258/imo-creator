@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "name": "IMO_CONTROL",
+    "version": "1.0.0",
+    "created": "[YYYY-MM-DD]",
+    "authority": "imo-creator",
+    "status": "ACTIVE",
+    "description": "Child repo governance contract",
+    "constitution_file": "CONSTITUTION.md"
+  },
+
+  "control_plane": {
+    "control_version": "1.0.0",
+    "upstream_repo": "imo-creator",
+    "upstream_commit": "[COMMIT_HASH]",
+    "drift_detection": {
+      "enabled": true,
+      "warn_on_outdated": true,
+      "check_frequency": "on_audit"
+    }
+  },
+
+  "governance": {
+    "sovereign": "imo-creator",
+    "sovereignty_type": "INHERITED",
+    "conformance_direction": "UPSTREAM",
+    "interpretation_allowed": false,
+    "modification_requires": ["ADR", "HUMAN_APPROVAL"]
+  },
+
+  "identity": {
+    "repo_name": "[REPO_NAME]",
+    "hub_id": "[HUB_ID]",
+    "sovereign_reference": "[CC-01_REFERENCE]",
+    "domain_spec": "doctrine/REPO_DOMAIN_SPEC.md"
+  },
+
+  "lifecycle": {
+    "current_phase": "constitutional_admission",
+    "allowed_phases": [
+      "constitutional_admission",
+      "structural_instantiation",
+      "data_declaration",
+      "execution_wiring",
+      "dba_enforcement",
+      "documentation_enforcement",
+      "hygiene_audit",
+      "cleanup_execution"
+    ]
+  },
+
+  "structure": {
+    "model": "HUB_SUBHUB_ALTITUDE",
+    "hub": {
+      "definition": "Repository root = Hub",
+      "required_files": [
+        "REGISTRY.yaml",
+        "DOCTRINE.md",
+        "README.md"
+      ]
+    },
+    "altitude": {
+      "branches": ["sys", "data", "app", "ai", "ui"],
+      "path_pattern": "src/{sys,data,app,ai,ui}/",
+      "enforcement": "MANDATORY"
+    }
+  },
+
+  "forbidden": {
+    "folders": ["utils", "helpers", "common", "shared", "lib", "misc"]
+  },
+
+  "claude_code_behavior": {
+    "must": [
+      "Check IMO_CONTROL.json exists before any work",
+      "Read doctrine/REPO_DOMAIN_SPEC.md for domain bindings",
+      "Enforce CTB altitude structure",
+      "Refuse to modify parent doctrine"
+    ],
+    "must_not": [
+      "Modify parent doctrine files",
+      "Skip descent gates",
+      "Invent structure beyond doctrine"
+    ]
+  }
+}

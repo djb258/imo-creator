@@ -6,8 +6,8 @@
 # Location: imo-creator/templates/SNAP_ON_TOOLBOX.yaml
 # ═══════════════════════════════════════════════════════════════════════════════
 
-version: "1.0.0"
-last_updated: "2026-01-07"
+version: "2.0.0"
+last_updated: "2026-01-28"
 doctrine: "Snap-on - One tool, many jobs, config is the variable"
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -30,100 +30,40 @@ criteria:
     priority: "Fire only when criteria met"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# TIER 0: FREE TOOLS (12 tools)
+# EVALUATION ORDER (MANDATORY)
+# ═══════════════════════════════════════════════════════════════════════════════
+evaluation_order:
+  - step: 1
+    action: "CHECK BANNED LIST FIRST"
+    on_match: "STOP — suggest approved alternative"
+
+  - step: 2
+    action: "CHECK TIER 0 (FREE)"
+    question: "Can this be done with existing free tools?"
+
+  - step: 3
+    action: "CHECK TIER 1 (CHEAP)"
+    question: "Is there an existing subscription that covers this?"
+
+  - step: 4
+    action: "CHECK TIER 2 (SURGICAL)"
+    question: "Does this meet gate conditions for paid per-call tools?"
+
+  - step: 5
+    action: "IF NOT LISTED"
+    on_match: "ASK — may need ADR for new tool"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 0: GENERIC FREE TOOLS
+# ═══════════════════════════════════════════════════════════════════════════════
+# These tools are DOMAIN-AGNOSTIC and may be used by any child repo.
+# Child repos define their own consumers in their REPO_DOMAIN_SPEC.md.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 tools:
 
-  CensusHarvester:
-    tool_id: "TOOL-001"
-    tier: 0
-    status: "active"
-    software:
-      primary: "Census API"
-      dependencies: ["httpx>=0.25"]
-      vendor: null
-      requires_api_key: true
-      api_key_source: "CENSUS_API_KEY"
-    purpose:
-      summary: "Fetches demographics, housing, permits from Census Bureau"
-      what_it_does:
-        - "ACS 5-Year demographic data by ZIP/county"
-        - "Building permits survey data"
-        - "Population, income, poverty, renter rates"
-      consumers:
-        - "storage-facility-build: Layer 2 Demographics"
-        - "barton-outreach: Market sizing"
-    throttle:
-      rate_limits:
-        - {scope: "per_minute", limit: 50}
-        - {scope: "per_day", limit: 500}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "exponential", initial_delay_ms: 1000, max_retries: 3}
-    guardrails:
-      kill_switch: {trigger: "error_rate > 50% in 5 minutes", action: "halt_and_alert"}
-      data_quality: {staleness_threshold_hours: 720}
-    accuracy: "100%"
-    accuracy_notes: "Government source of truth"
-
-  DOLHarvester:
-    tool_id: "TOOL-002"
-    tier: 0
-    status: "active"
-    software:
-      primary: "DOL EFAST API / Bulk CSV"
-      dependencies: ["httpx>=0.25", "pandas>=2.0"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Harvests Form 5500 data, EINs, plan details from DOL"
-      what_it_does:
-        - "Bulk download Form 5500 filings"
-        - "Extract Schedule A renewal dates"
-        - "Map EIN to company identity"
-      consumers:
-        - "barton-outreach: DOL Filings sub-hub"
-    throttle:
-      rate_limits:
-        - {scope: "per_day", limit: 10}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "fixed", initial_delay_ms: 5000, max_retries: 2}
-    guardrails:
-      kill_switch: {trigger: "download_failure", action: "halt_and_alert"}
-    accuracy: "100%"
-    accuracy_notes: "Government source of truth"
-
-  TrendSignal:
-    tool_id: "TOOL-003"
-    tier: 0
-    status: "active"
-    software:
-      primary: "pytrends (Google Trends unofficial)"
-      dependencies: ["pytrends>=4.9", "httpx>=0.25"]
-      vendor: "Google Trends"
-      requires_api_key: false
-    purpose:
-      summary: "Monitors search trend signals for keywords by geography"
-      what_it_does:
-        - "Interest over time for keyword sets"
-        - "Regional interest breakdown"
-        - "Rising/declining trend detection"
-      consumers:
-        - "storage-facility-build: PASS0 TrendSignal spoke"
-        - "barton-outreach: Blog Content timing signals"
-    throttle:
-      rate_limits:
-        - {scope: "per_day", limit: 100}
-        - {scope: "per_request", limit: 1, window: "3s"}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "exponential", initial_delay_ms: 3000, max_retries: 3}
-    guardrails:
-      kill_switch: {trigger: "429_rate_limit", action: "circuit_break_24h"}
-    accuracy: "85%"
-    accuracy_notes: "Relative index, not absolute volume"
-
   MXLookup:
-    tool_id: "TOOL-004"
+    tool_id: "TOOL-001"
     tier: 0
     status: "active"
     software:
@@ -136,8 +76,6 @@ tools:
       what_it_does:
         - "DNS MX record lookup"
         - "Mail server existence validation"
-      consumers:
-        - "barton-outreach: Company Target - Gate Zero"
     throttle:
       rate_limits:
         - {scope: "per_second", limit: 50}
@@ -151,7 +89,7 @@ tools:
     accuracy_notes: "Binary - MX exists or not"
 
   SMTPCheck:
-    tool_id: "TOOL-005"
+    tool_id: "TOOL-002"
     tier: 0
     status: "active"
     software:
@@ -165,8 +103,6 @@ tools:
         - "SMTP connection test"
         - "RCPT TO validation (where allowed)"
         - "Catch-all detection"
-      consumers:
-        - "barton-outreach: Company Target - email validation"
     throttle:
       rate_limits:
         - {scope: "per_domain", limit: 1, window: "2s"}
@@ -180,7 +116,7 @@ tools:
     accuracy_notes: "Some servers reject all RCPT TO probes"
 
   LinkedInCheck:
-    tool_id: "TOOL-006"
+    tool_id: "TOOL-003"
     tier: 0
     status: "active"
     software:
@@ -195,8 +131,6 @@ tools:
         - "200 vs 404 validation"
       what_it_does_NOT_do:
         - "Scrape LinkedIn content (ToS violation)"
-      consumers:
-        - "barton-outreach: Company Target - LinkedIn validation"
     throttle:
       rate_limits:
         - {scope: "per_minute", limit: 30}
@@ -209,197 +143,12 @@ tools:
     accuracy: "90%"
     accuracy_notes: "URL exists != person still there"
 
-  EINMatcher:
-    tool_id: "TOOL-007"
-    tier: 0
-    status: "active"
-    software:
-      primary: "pg_trgm + rapidfuzz"
-      dependencies: ["rapidfuzz>=3.0", "psycopg2>=2.9"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Fuzzy matches company names to EIN records"
-      what_it_does:
-        - "Trigram similarity matching (>0.8 threshold)"
-        - "State → City → Name cascade"
-        - "DBA/trade name resolution"
-      consumers:
-        - "barton-outreach: DOL Filings - entity resolution"
-    throttle:
-      rate_limits:
-        - {scope: "per_second", limit: 100}
-        - {scope: "per_batch", limit: 10000}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "none", max_retries: 1}
-    guardrails:
-      kill_switch: {trigger: "db_connection_failure", action: "halt_and_alert"}
-      data_quality: {min_similarity_threshold: 0.8, require_state_match: true}
-    accuracy: "85-95%"
-    accuracy_notes: "Depends on name cleanliness"
-
-  TitleClassifier:
-    tool_id: "TOOL-008"
-    tier: 0
-    status: "active"
-    software:
-      primary: "Rules engine + Claude (tail)"
-      dependencies: ["pyyaml>=6.0"]
-      vendor: "Claude (free via Claude Code)"
-      requires_api_key: false
-    purpose:
-      summary: "Maps raw title text to slot (CEO, CFO, HR, Ops)"
-      what_it_does:
-        - "Pattern matching against title rules"
-        - "Slot assignment (CEO/CFO/HR/Ops)"
-        - "LLM fallback for ambiguous titles"
-      consumers:
-        - "barton-outreach: People Intelligence - slot resolver"
-    throttle:
-      rate_limits:
-        - {scope: "per_second", limit: 100}
-        - {scope: "llm_fallback_per_day", limit: 100}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "none", max_retries: 1}
-    guardrails:
-      kill_switch: {trigger: "llm_fallback_rate > 30%", action: "alert_review_rules"}
-      data_quality: {require_confidence: 0.7}
-    accuracy: "95%"
-    accuracy_notes: "Rules handle 85%, LLM handles edge cases"
-
-  NewsRadar:
-    tool_id: "TOOL-009"
-    tier: 0
-    status: "active"
-    software:
-      primary: "feedparser + httpx"
-      dependencies: ["feedparser>=6.0", "httpx>=0.25", "selectolax>=0.3"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Scans RSS feeds and news sources for keyword signals"
-      what_it_does:
-        - "Fetch RSS/Atom feeds"
-        - "Extract headlines, summaries, dates"
-        - "Score relevance against keywords"
-      what_it_does_NOT_do:
-        - "Full article scraping (use Firecrawl)"
-        - "Sentiment analysis (use SignalClassifier)"
-      consumers:
-        - "storage-facility-build: PASS0 NewsEvents spoke"
-        - "barton-outreach: Blog Content - NewsFeedParser"
-    throttle:
-      rate_limits:
-        - {scope: "per_source", limit: 1, window: "2s"}
-        - {scope: "per_day", limit: 1000}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "exponential", initial_delay_ms: 1000, max_retries: 3}
-    guardrails:
-      kill_switch: {trigger: "error_rate > 50% in 5 minutes", action: "halt_and_alert"}
-      data_quality: {min_sources_required: 1, staleness_threshold_hours: 48}
-    accuracy: "80%"
-    accuracy_notes: "Relevance scoring is heuristic"
-
-  SignalClassifier:
-    tool_id: "TOOL-010"
-    tier: 0
-    status: "active"
-    software:
-      primary: "Python rules engine"
-      dependencies: ["pyyaml>=6.0"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Scores and classifies signals for BIT calculation"
-      what_it_does:
-        - "Ingest signals from multiple sources"
-        - "Apply weighted scoring rules"
-        - "Calculate composite BIT score"
-      consumers:
-        - "barton-outreach: Blog Content - BIT modulation"
-        - "storage-facility-build: PASS0 MomentumFusion"
-    throttle:
-      rate_limits:
-        - {scope: "per_second", limit: 1000}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "none", max_retries: 1}
-    guardrails:
-      kill_switch: {trigger: "calculation_error", action: "return_null_score"}
-      data_quality: {min_signals_required: 3}
-    accuracy: "90%"
-    accuracy_notes: "Depends on rule quality and signal freshness"
-
-  PeopleHarvester:
-    tool_id: "TOOL-011"
-    tier: 0
-    status: "active"
-    software:
-      primary: "httpx + selectolax + playwright"
-      fallback: "curl_cffi for anti-bot"
-      dependencies: ["httpx>=0.25", "selectolax>=0.3", "playwright>=1.40", "curl_cffi>=0.5"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Scrapes executive identity from company websites"
-      what_it_does:
-        - "Fetch /about, /team, /leadership pages"
-        - "Extract name + raw role text"
-        - "Detect JS-rendered pages, escalate to playwright"
-      what_it_does_NOT_do:
-        - "Scrape LinkedIn (ToS violation)"
-        - "Make slot assignment decisions"
-      consumers:
-        - "barton-outreach: People Intelligence - harvester"
-    throttle:
-      rate_limits:
-        - {scope: "per_domain", limit: 1, window: "2s"}
-        - {scope: "pages_per_company", limit: 16}
-        - {scope: "playwright_per_day", limit: 5000}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "exponential", initial_delay_ms: 2000, max_retries: 2}
-    guardrails:
-      kill_switch: {trigger: "blocked_rate > 30%", action: "halt_and_review"}
-      time_limit: {per_company_seconds: 30}
-      data_quality: {early_stop: "4+ people with role keywords"}
-    accuracy: "75-85%"
-    accuracy_notes: "Depends on website structure consistency"
-
-  MovementDetector:
-    tool_id: "TOOL-012"
-    tier: 0
-    status: "active"
-    software:
-      primary: "httpx + hashlib + difflib"
-      dependencies: ["httpx>=0.25", "xxhash>=3.0"]
-      vendor: null
-      requires_api_key: false
-    purpose:
-      summary: "Detects executive role changes via content hashing"
-      what_it_does:
-        - "Fetch leadership page"
-        - "Hash extracted text (not HTML)"
-        - "Compare to stored hash"
-        - "Flag changes for re-harvest"
-      consumers:
-        - "barton-outreach: People Intelligence - talent flow"
-    throttle:
-      rate_limits:
-        - {scope: "per_domain", limit: 1, window: "2s"}
-        - {scope: "per_month", limit: 100000}
-      cost: {model: "free", estimated_cost_per_call: 0.00}
-      backoff: {strategy: "exponential", initial_delay_ms: 1000, max_retries: 2}
-    guardrails:
-      kill_switch: {trigger: "change_rate > 50%", action: "halt_and_review"}
-      data_quality: {hash_algorithm: "xxhash64", compare_text_not_html: true}
-    accuracy: "90%"
-    accuracy_notes: "Detects change, not what changed"
-
 # ═══════════════════════════════════════════════════════════════════════════════
-# TIER 1: CHEAP TOOLS (4 tools)
+# TIER 1: GENERIC CHEAP TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════
 
   Firecrawl:
-    tool_id: "TOOL-013"
+    tool_id: "TOOL-004"
     tier: 1
     status: "active"
     software:
@@ -414,9 +163,6 @@ tools:
         - "Fetch and render JS-heavy pages"
         - "Convert to clean markdown"
         - "Handle anti-bot measures"
-      consumers:
-        - "storage-facility-build: PASS0 NewsEvents - article scraping"
-        - "barton-outreach: Company Target - website intel"
     throttle:
       rate_limits:
         - {scope: "per_minute", limit: 100}
@@ -429,7 +175,7 @@ tools:
     accuracy_notes: "Best-in-class for JS rendering"
 
   ScraperAPI:
-    tool_id: "TOOL-014"
+    tool_id: "TOOL-005"
     tier: 1
     status: "active"
     software:
@@ -443,8 +189,6 @@ tools:
       what_it_does:
         - "Proxy requests through rotating IPs"
         - "Handle CAPTCHAs and blocks"
-      consumers:
-        - "barton-outreach: MovementDetector - blocked sites"
     throttle:
       rate_limits:
         - {scope: "per_second", limit: 10}
@@ -457,7 +201,7 @@ tools:
     accuracy_notes: "High success rate on blocked sites"
 
   GooglePlaces:
-    tool_id: "TOOL-015"
+    tool_id: "TOOL-006"
     tier: 1
     status: "active"
     software:
@@ -467,14 +211,11 @@ tools:
       requires_api_key: true
       api_key_source: "GOOGLE_API_KEY"
     purpose:
-      summary: "Business validation, address lookup, demand anchor discovery"
+      summary: "Business validation, address lookup, geocoding"
       what_it_does:
         - "Text search for business types"
         - "Place details lookup"
         - "Address validation and geocoding"
-      consumers:
-        - "storage-facility-build: Demand Anchors builder"
-        - "barton-outreach: Company Target - address validation"
     throttle:
       rate_limits:
         - {scope: "per_second", limit: 10}
@@ -488,7 +229,7 @@ tools:
     accuracy_notes: "Google source of truth for places"
 
   ComposioRouter:
-    tool_id: "TOOL-016"
+    tool_id: "TOOL-007"
     tier: 1
     status: "active"
     software:
@@ -504,8 +245,6 @@ tools:
         - "Slack notifications"
         - "Google Sheets read/write"
         - "500+ more via single interface"
-      consumers:
-        - "All repos - integration layer"
     throttle:
       rate_limits:
         - {scope: "per_app_per_minute", limit: 60}
@@ -517,11 +256,14 @@ tools:
     accuracy_notes: "Depends on downstream app"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# TIER 2: SURGICAL TOOLS (4 tools - Gated)
+# TIER 2: GENERIC SURGICAL TOOLS (Gated)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Gate conditions are DEFINED BY CHILD REPOS in their REPO_DOMAIN_SPEC.md.
+# Parent only specifies that gates MUST exist.
 # ═══════════════════════════════════════════════════════════════════════════════
 
   HunterEnricher:
-    tool_id: "TOOL-017"
+    tool_id: "TOOL-008"
     tier: 2
     status: "active"
     software:
@@ -535,12 +277,9 @@ tools:
       what_it_does:
         - "Find email by name + domain"
         - "Domain email pattern detection"
-      consumers:
-        - "barton-outreach: Company Target - Tier 1 enrichment"
     gate:
-      required_conditions:
-        - "lifecycle_state >= ACTIVE"
-        - "bit_score >= 25"
+      required: true
+      note: "Child repo MUST define gate conditions in REPO_DOMAIN_SPEC.md"
       max_attempts_per_context: 1
     throttle:
       rate_limits:
@@ -555,7 +294,7 @@ tools:
     accuracy_notes: "Pattern-based, verify before send"
 
   ApolloEnricher:
-    tool_id: "TOOL-018"
+    tool_id: "TOOL-009"
     tier: 2
     status: "active"
     software:
@@ -570,12 +309,9 @@ tools:
         - "People search by company + title"
         - "Email + phone enrichment"
         - "Company firmographics"
-      consumers:
-        - "barton-outreach: Company Target + People Intelligence"
     gate:
-      required_conditions:
-        - "lifecycle_state >= ACTIVE"
-        - "bit_score >= 25"
+      required: true
+      note: "Child repo MUST define gate conditions in REPO_DOMAIN_SPEC.md"
       max_attempts_per_context: 1
     throttle:
       rate_limits:
@@ -590,7 +326,7 @@ tools:
     accuracy_notes: "Data freshness varies"
 
   EmailVerifier:
-    tool_id: "TOOL-019"
+    tool_id: "TOOL-010"
     tier: 2
     status: "active"
     software:
@@ -605,12 +341,9 @@ tools:
         - "Real-time email validation"
         - "Catch-all detection"
         - "Disposable email detection"
-      consumers:
-        - "barton-outreach: Outreach Execution - pre-send gate"
     gate:
-      required_conditions:
-        - "lifecycle_state >= TARGETABLE"
-        - "email_not_previously_verified"
+      required: true
+      note: "Child repo MUST define gate conditions in REPO_DOMAIN_SPEC.md"
       max_attempts_per_email: 1
     throttle:
       rate_limits:
@@ -625,7 +358,7 @@ tools:
     accuracy_notes: "Industry-leading accuracy"
 
   RetellCaller:
-    tool_id: "TOOL-020"
+    tool_id: "TOOL-011"
     tier: 2
     status: "active"
     software:
@@ -640,13 +373,10 @@ tools:
         - "Automated voice calls"
         - "Conversation transcription"
         - "Lead qualification"
-      consumers:
-        - "storage-facility-build: Facility outreach"
-        - "barton-outreach: Voice outreach channel"
     gate:
-      required_conditions:
-        - "human_approval_required"
-        - "campaign_budget_approved"
+      required: true
+      note: "Child repo MUST define gate conditions in REPO_DOMAIN_SPEC.md"
+      human_approval_required: true
       max_attempts_per_contact: 3
     throttle:
       rate_limits:
@@ -703,6 +433,68 @@ infrastructure:
   ci_cd: {name: "GitHub Actions", role: "CI/CD pipelines", cost: "Free tier"}
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# TOOL DEFINITION TEMPLATE (For Child Repos)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Child repos MUST use this template when defining domain-specific tools.
+# Add domain-specific tools to: doctrine/REPO_DOMAIN_SPEC.md
+# ═══════════════════════════════════════════════════════════════════════════════
+
+tool_definition_template:
+  description: |
+    Child repos define domain-specific tools in their REPO_DOMAIN_SPEC.md.
+    Use this template structure for consistency.
+
+  template: |
+    # In doctrine/REPO_DOMAIN_SPEC.md, add:
+
+    ## Domain-Specific Tools
+
+    tools:
+      [ToolName]:
+        tool_id: "[TOOL-DOMAIN-NNN]"
+        tier: [0|1|2]
+        status: "active"
+        software:
+          primary: "[primary library or API]"
+          dependencies: ["[dep1]", "[dep2]"]
+          vendor: "[vendor name or null]"
+          requires_api_key: [true|false]
+          api_key_source: "[ENV_VAR_NAME]"
+        purpose:
+          summary: "[one-line summary]"
+          what_it_does:
+            - "[capability 1]"
+            - "[capability 2]"
+        consumers:
+          - "[sub-hub or module that uses this tool]"
+        gate:  # Required for Tier 2
+          required_conditions:
+            - "[condition 1]"
+            - "[condition 2]"
+        throttle:
+          rate_limits:
+            - {scope: "[scope]", limit: [N]}
+          cost: {model: "[free|per_call|monthly_fixed]", estimated_cost_per_call: [N]}
+          backoff: {strategy: "[none|linear|exponential|fixed]", initial_delay_ms: [N], max_retries: [N]}
+        guardrails:
+          kill_switch: {trigger: "[condition]", action: "[action]"}
+
+  required_fields:
+    - tool_id
+    - tier
+    - status
+    - software.primary
+    - purpose.summary
+    - throttle.rate_limits
+    - guardrails.kill_switch
+
+  notes:
+    - "Tool IDs for domain tools use format: TOOL-[DOMAIN]-NNN"
+    - "All Tier 2 tools MUST have gate conditions"
+    - "Consumers list who within YOUR repo uses this tool"
+    - "Do NOT reference other repos in consumers"
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # CLAUDE CODE INSTRUCTIONS
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -719,7 +511,7 @@ claude_instructions: |
      - Already paying for Composio, Firecrawl free tier, ScraperAPI
 
   4. CHECK TIER 2 (SURGICAL) LAST
-     - Require gate conditions (BIT score, lifecycle state)
+     - Require gate conditions defined in REPO_DOMAIN_SPEC.md
 
   5. IF NOT LISTED → ASK, may need ADR
 
@@ -727,6 +519,7 @@ claude_instructions: |
   - Always implement throttle from spec
   - Always implement kill switch from spec
   - Respect gate conditions for Tier 2 tools
+  - Gate conditions are defined BY THE CHILD REPO, not this file
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # MAINTENANCE — QUARTERLY REVIEW
@@ -738,8 +531,8 @@ maintenance:
 
   quarterly_checklist:
     - id: "M-001"
-      check: "Tool inventory matches actual usage"
-      action: "Audit repos for tool invocations, remove unused tools"
+      check: "Generic tool inventory still appropriate"
+      action: "Review if tools should be promoted to/demoted from generic"
 
     - id: "M-002"
       check: "Tier assignments still accurate"

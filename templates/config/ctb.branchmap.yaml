@@ -1,0 +1,268 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.619148
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+meta:
+  version: 1.3
+  last_updated: 2025-10-18
+  description: |
+    Canonical CTB (Christmas Tree Backbone) branch structure and merge rules for all governed repos.
+    Enforced automatically by Claude-Code and GitHub Actions.
+
+    CTB Philosophy:
+    - Main branch is the trunk (40k altitude - immutable doctrine)
+    - System branches are major limbs (doctrine/*, sys/*)
+    - Business logic branches are mid-branches (imo/*)
+    - UI/UX branches are upper branches (ui/*)
+    - Operations branches are the ornaments (ops/*)
+
+altitudes:
+  "40k":
+    name: Doctrine Core
+    description: Immutable truths, global manifests, and system infrastructure
+    branches:
+      - main
+      - doctrine/get-ingest
+      - sys/composio-mcp
+      - sys/neon-vault
+      - sys/firebase-workbench
+      - sys/bigquery-warehouse
+      - sys/github-factory
+      - sys/builder-bridge
+      - sys/security-audit
+      - sys/chartdb
+      - sys/activepieces
+      - sys/windmill
+      - sys/claude-skills
+    merge_to: none
+    protection: strict
+    auto_create: true
+
+  "20k":
+    name: IMO Factory Layer
+    description: Business process engine - data intake, logic, and output generation
+    branches:
+      - imo/input
+      - imo/middle
+      - imo/output
+    merge_to: "sys/composio-mcp"
+    protection: moderate
+    auto_create: true
+
+  "10k":
+    name: UI Layer
+    description: User interface components and visual design systems
+    branches:
+      - ui/figma-bolt
+      - ui/builder-templates
+    merge_to: "imo/output"
+    protection: light
+    auto_create: true
+
+  "5k":
+    name: Operations Layer
+    description: Automation scripts, reporting, and operational tooling
+    branches:
+      - ops/automation-scripts
+      - ops/report-builder
+    merge_to: "ui/figma-bolt"
+    protection: light
+    auto_create: true
+
+merge_flow:
+  description: |
+    Upward merge flow - changes flow from operations up to doctrine core
+    Like a Christmas tree: ornaments (ops) → upper branches (ui) → mid branches (imo) → limbs (sys) → trunk (main)
+  rules:
+    - from: ops/*
+      to: ui/*
+      requires_review: false
+    - from: ui/*
+      to: imo/*
+      requires_review: false
+    - from: imo/*
+      to: sys/*
+      requires_review: true
+    - from: sys/*
+      to: main
+      requires_review: true
+      requires_status_checks: true
+
+automation_hooks:
+  doctrine_sync:
+    trigger: nightly
+    schedule: "0 2 * * *"
+    runs: .github/workflows/doctrine_sync.yml
+    description: Syncs doctrine changes across all branches
+
+  compliance_audit:
+    trigger: on_merge_to_main
+    runs: .github/workflows/audit.yml
+    description: Validates HEIR compliance and CTB Doctrine adherence
+
+  ctb_health_check:
+    trigger: weekly
+    schedule: "0 0 * * 0"
+    runs: .github/workflows/ctb_health.yml
+    description: Verifies all CTB branches exist and are properly configured
+
+branch_protection:
+  main:
+    required_reviews: 2
+    status_checks: [doctrine_sync, compliance_audit, heir_validation]
+    dismiss_stale_reviews: true
+    require_code_owner_reviews: true
+
+  doctrine/*:
+    required_reviews: 1
+    status_checks: [doctrine_sync]
+
+  sys/*:
+    required_reviews: 1
+    status_checks: [compliance_audit]
+
+  imo/*:
+    required_reviews: 0
+    status_checks: []
+
+  ui/*:
+    required_reviews: 0
+    status_checks: []
+
+  ops/*:
+    required_reviews: 0
+    status_checks: []
+
+file_organization:
+  description: |
+    Guide for organizing files into appropriate CTB branches
+
+  doctrine/get-ingest:
+    - "heir.doctrine.yaml"
+    - "CLAUDE.md"
+    - "COMPOSIO_INTEGRATION.md"
+    - "global-config/**"
+    - "*.doctrine.yaml"
+
+  sys/composio-mcp:
+    - "src/api/composio_*.py"
+    - "tools/million_verifier.py"
+    - "composio-*.yaml"
+    - "composio-*.json"
+
+  sys/neon-vault:
+    - "src/server/blueprints/**"
+    - "packages/heir/**"
+
+  sys/firebase-workbench:
+    - "firebase_*.js"
+    - "firebase_*.json"
+    - "firebase_*.yml"
+
+  sys/bigquery-warehouse:
+    - "analytics/**"
+    - "reports/**"
+
+  sys/github-factory:
+    - ".github/**"
+    - "Makefile"
+    - "bootstrap-repo.cjs"
+
+  sys/builder-bridge:
+    - "builder/**"
+    - "figma/**"
+    - "*figma*.sh"
+    - "*figma*.bat"
+
+  sys/security-audit:
+    - ".env.example"
+    - "VERCEL_ENVS.md"
+
+  sys/chartdb:
+    - "chartdb/**"
+    - "database/schema/**"
+    - "db/visualization/**"
+    - "*chartdb*.json"
+    - "*chartdb*.yaml"
+
+  sys/activepieces:
+    - "activepieces/**"
+    - "workflows/**"
+    - "automation/flows/**"
+    - "*activepieces*.json"
+    - "*activepieces*.yaml"
+
+  sys/windmill:
+    - "windmill/**"
+    - "scripts/windmill/**"
+    - "apps/windmill/**"
+    - "*windmill*.ts"
+    - "*windmill*.json"
+
+  sys/claude-skills:
+    - "sys/claude-skills/**"
+    - "claude.skills.md"
+    - "claude.manifest.json"
+    - "*claude-skills*.ts"
+    - "*claude-skills*.json"
+
+  imo/input:
+    - "garage_bay.py"
+    - "simple_garage_bay.py"
+    - "test_*.py"
+    - "scraping-tool/**"
+    - "libs/imo_tools/**"
+
+  imo/middle:
+    - "src/server/main.py"
+    - "src/models.py"
+    - "main.py"
+    - "tools/blueprint_*.py"
+    - "libs/imo_tools/**"
+
+  imo/output:
+    - "docs/blueprints/**"
+    - "index.html"
+    - "libs/imo_tools/**"
+
+  ui/figma-bolt:
+    - "docs/blueprints/ui/**"
+    - "*.html"
+    - "*.css"
+
+  ui/builder-templates:
+    - "templates/**"
+    - "components/**"
+
+  ops/automation-scripts:
+    - "scripts/**"
+    - "tools/repo_*.py"
+    - "add-doctrine-headers.js"
+    - "check-*.cjs"
+
+  ops/report-builder:
+    - "analyze_*.py"
+
+repo_types:
+  SOURCE:
+    description: Doctrine-level repositories that define standards
+    examples: [imo-creator, doctrine-core]
+    inherits_from: none
+    provides_to: all
+
+  IMPORT:
+    description: Child repositories that inherit CTB structure
+    examples: [outreach-core, sales-process-imo, client-hive-*]
+    inherits_from: imo-creator
+    provides_to: none
+
+scaffold_config:
+  enabled: true
+  auto_apply_to_new_repos: true
+  template_source: "imo-creator/templates/config/ctb.branchmap.yaml"
+  initialization_script: "templates/scripts/ctb_init.sh"
+  verification_script: "templates/scripts/ctb_verify.sh"

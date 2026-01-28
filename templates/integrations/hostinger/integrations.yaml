@@ -1,0 +1,160 @@
+# Hostinger Custom Integration for Composio
+# Doctrine ID: 04.04.13
+# Created: 2025-12-01
+
+name: hostinger
+display_name: Hostinger
+description: VPS management and N8N workflow hosting via Hostinger API
+version: "1.0.0"
+
+# MCP Server Configuration (Preferred Method)
+mcp_server:
+  command: npx
+  args:
+    - hostinger-api-mcp@latest
+  env:
+    API_TOKEN: "${HOSTINGER_API_TOKEN}"
+
+# Authentication Configuration (for direct API use)
+auth:
+  type: api_key
+  header_name: Authorization
+  prefix: "Bearer "
+  description: "Hostinger API Token from control panel"
+
+# Base Configuration
+base_url: https://api.hostinger.com/v1
+
+# VPS Instance Details (Current Configuration)
+vps_instances:
+  - name: n8n-production
+    hostname: [VPS_HOSTNAME]
+    ip: [VPS_IP_ADDRESS]
+    os: Ubuntu 24.04 with n8n
+    plan: KVM 2
+    specs:
+      cpu_cores: 2
+      memory_gb: 8
+      disk_gb: 100
+    location: United States - Boston
+    services:
+      - name: n8n
+        port: 5678
+        url: "https://[VPS_HOSTNAME]:5678"
+
+# Available Actions/Tools
+actions:
+  # VPS Management
+  - name: HOSTINGER_VPS_LIST
+    description: List all VPS instances
+    method: GET
+    path: /vps
+
+  - name: HOSTINGER_VPS_STATUS
+    description: Get VPS instance status
+    method: GET
+    path: /vps/{vps_id}/status
+    parameters:
+      - name: vps_id
+        type: string
+        required: true
+        in: path
+        description: VPS instance ID
+
+  - name: HOSTINGER_VPS_START
+    description: Start a VPS instance
+    method: POST
+    path: /vps/{vps_id}/start
+    parameters:
+      - name: vps_id
+        type: string
+        required: true
+        in: path
+
+  - name: HOSTINGER_VPS_STOP
+    description: Stop a VPS instance
+    method: POST
+    path: /vps/{vps_id}/stop
+    parameters:
+      - name: vps_id
+        type: string
+        required: true
+        in: path
+
+  - name: HOSTINGER_VPS_RESTART
+    description: Restart a VPS instance
+    method: POST
+    path: /vps/{vps_id}/restart
+    parameters:
+      - name: vps_id
+        type: string
+        required: true
+        in: path
+
+  # Domain Management
+  - name: HOSTINGER_DOMAIN_LIST
+    description: List all domains
+    method: GET
+    path: /domains
+
+  - name: HOSTINGER_DOMAIN_DNS
+    description: Get DNS records for a domain
+    method: GET
+    path: /domains/{domain}/dns
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        in: path
+
+  - name: HOSTINGER_DNS_MANAGE
+    description: Update DNS records
+    method: PUT
+    path: /domains/{domain}/dns
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        in: path
+      - name: records
+        type: array
+        required: true
+        description: DNS records to update
+
+  # SSL Management
+  - name: HOSTINGER_SSL_STATUS
+    description: Get SSL certificate status
+    method: GET
+    path: /ssl/{domain}/status
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        in: path
+
+  - name: HOSTINGER_SSL_INSTALL
+    description: Install SSL certificate
+    method: POST
+    path: /ssl/{domain}/install
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        in: path
+
+# Rate Limiting
+rate_limit:
+  requests_per_minute: 60
+  burst_limit: 10
+
+# Metadata
+metadata:
+  category: Infrastructure
+  tags:
+    - vps
+    - hosting
+    - n8n
+    - domains
+    - ssl
+  documentation_url: https://developers.hostinger.com
+  support_url: https://www.hostinger.com/support

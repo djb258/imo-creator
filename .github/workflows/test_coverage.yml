@@ -66,8 +66,8 @@ jobs:
 
       - name: Verify CTB enforcement passes
         run: |
-          chmod +x global-config/scripts/ctb_enforce.sh
-          bash global-config/scripts/ctb_enforce.sh
+          chmod +x templates/scripts/ctb_enforce.sh
+          bash templates/scripts/ctb_enforce.sh
 
   test-registry:
     name: MCP Registry Validation

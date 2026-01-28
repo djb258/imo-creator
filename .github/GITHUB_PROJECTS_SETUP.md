@@ -9,7 +9,7 @@ This guide will help you set up GitHub Projects for doctrine-compliant repositor
 ### Option 1: Web Interface (Recommended)
 
 1. **Navigate to Projects**
-   - Go to: https://github.com/djb258/imo-creator
+   - Go to: https://github.com/[OWNER]/[REPO]
    - Click the **"Projects"** tab at the top
 
 2. **Create New Project**
@@ -47,7 +47,7 @@ This guide will help you set up GitHub Projects for doctrine-compliant repositor
 
 5. **Link Issues Automatically**
 
-   - All new issues with `projects: ["djb258/1"]` in the template will auto-add to the project
+   - All new issues with `projects: ["[OWNER]/1"]` in the template will auto-add to the project
    - Our issue templates (Bug Report, Feature Request, CTB Update) are pre-configured
 
 ### Option 2: GitHub CLI (Advanced)
@@ -56,13 +56,13 @@ If you have GitHub CLI authenticated:
 
 ```bash
 # Create a new project
-gh project create "IMO-Creator Development" --owner djb258
+gh project create "IMO-Creator Development" --owner [OWNER]
 
 # List projects
-gh project list --owner djb258
+gh project list --owner [OWNER]
 
 # Add an issue to the project
-gh project item-add <PROJECT_ID> --owner djb258 --url <ISSUE_URL>
+gh project item-add <PROJECT_ID> --owner [OWNER] --url <ISSUE_URL>
 ```
 
 ## Project Workflows

@@ -61,7 +61,7 @@ jobs:
 
           REQUIRED_FILES=(
             "ctb-template/version.json"
-            "ctb-template/.barton_policy.json"
+            "ctb-template/.governance_policy.json"
             "ctb-template/CTB_BRANCHMAP.yaml"
             "ctb-template/tiers/full.json"
             "ctb-template/tiers/mid.json"
@@ -120,27 +120,27 @@ jobs:
 
           echo "✅ All required directories present"
 
-      - name: Validate Barton Policy
+      - name: Validate Governance Policy
         run: |
-          echo "🔍 Validating Barton policy configuration..."
+          echo "🔍 Validating governance policy configuration..."
 
-          # Check .barton_policy.json content
-          if ! grep -q '"requires_composio": true' ctb-template/.barton_policy.json; then
-            echo "::error::Barton policy must require Composio"
+          # Check .governance_policy.json content
+          if ! grep -q '"requires_composio": true' ctb-template/.governance_policy.json; then
+            echo "::error::governance policy must require Composio"
             exit 1
           fi
 
-          if ! grep -q '"allow_direct_neon": false' ctb-template/.barton_policy.json; then
-            echo "::error::Barton policy must disallow direct Neon access"
+          if ! grep -q '"allow_direct_neon": false' ctb-template/.governance_policy.json; then
+            echo "::error::governance policy must disallow direct Neon access"
             exit 1
           fi
 
-          if ! grep -q '"gatekeeper_enforced": true' ctb-template/.barton_policy.json; then
-            echo "::error::Barton policy must enforce gatekeeper"
+          if ! grep -q '"gatekeeper_enforced": true' ctb-template/.governance_policy.json; then
+            echo "::error::governance policy must enforce gatekeeper"
             exit 1
           fi
 
-          echo "✅ Barton policy validation passed"
+          echo "✅ governance policy validation passed"
 
       - name: Validate Tier Configurations
         run: |
@@ -177,7 +177,7 @@ jobs:
           echo "  ✅ Version consistency verified"
           echo "  ✅ Required files present"
           echo "  ✅ Directory structure complete"
-          echo "  ✅ Barton policy enforced"
+          echo "  ✅ governance policy enforced"
           echo "  ✅ Tier configurations valid"
           echo ""
           echo "Repository is CTB-compliant ✨"

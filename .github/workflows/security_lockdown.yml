@@ -28,12 +28,12 @@ jobs:
           sudo apt-get install -y jq git
 
       - name: Make security script executable
-        run: chmod +x global-config/scripts/security_lockdown.sh
+        run: chmod +x templates/scripts/security_lockdown.sh
 
       - name: Run Security Lockdown Scan
         id: security_scan
         run: |
-          bash global-config/scripts/security_lockdown.sh || echo "scan_failed=true" >> $GITHUB_OUTPUT
+          bash templates/scripts/security_lockdown.sh || echo "scan_failed=true" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Upload security audit log
@@ -107,7 +107,7 @@ ${logData.status === 'FAILED' ? `
 #### Remediation:
 \`\`\`bash
 # Run security scan locally
-bash global-config/scripts/security_lockdown.sh
+bash templates/scripts/security_lockdown.sh
 
 # Fix violations, then re-commit
 git add -A

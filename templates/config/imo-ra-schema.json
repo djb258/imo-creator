@@ -1,0 +1,358 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "imo-ra-schema-v1.1",
+  "title": "IMO-RA (Interconnected Modular Objects: Radial Architecture)",
+  "description": "Universal, fractal hub-and-spoke (bicycle-wheel) model for all IMO-Creator repositories and systems.",
+
+  "model": "IMO-Radial Architecture",
+  "version": "1.1",
+
+  "_template": {
+    "description": "This is the TEMPLATE schema. Copy this to your repo as /imo-architecture.json and customize.",
+    "instructions": [
+      "1. Copy this file to your repo root as 'imo-architecture.json'",
+      "2. Replace CORE_SYSTEM with your app/service name",
+      "3. Add your domain hubs (major subsystems)",
+      "4. Define sub-hubs (components, microservices)",
+      "5. Map failure modes for each hub",
+      "6. Configure your CORE_METRIC aggregation",
+      "7. All failures auto-propagate to MASTER_FAILURE_LOG",
+      "8. Run update_from_imo_creator.sh to validate"
+    ]
+  },
+
+  "centralHub": {
+    "name": "CORE_SYSTEM",
+    "type": "root",
+    "description": "Main application or organization node. Serves as the axle of the wheel.",
+    "metric": {
+      "name": "CORE_METRIC",
+      "description": "Central intelligence or performance metric (e.g., BIT, System Health, Reliability Index).",
+      "formula": "weighted_average(hub_status * hub_weight)",
+      "thresholds": {
+        "healthy": ">= 0.9",
+        "degraded": ">= 0.7",
+        "critical": "< 0.7"
+      }
+    },
+    "primaryHubs": [
+      {
+        "name": "DOMAIN_HUB",
+        "type": "domain | service | repo",
+        "description": "Major functional area or microservice.",
+        "doctrine_id": "XX.XX.XX",
+        "weight": 1.0,
+        "subHubs": [
+          {
+            "name": "SUB_MODULE",
+            "type": "component | feature | dataflow",
+            "description": "Smaller wheel (mini-hub) belonging to this domain.",
+            "doctrine_id": "XX.XX.XX.XX",
+            "tools": [],
+            "subHubs": [],
+            "failures": [
+              {
+                "code": "SUB_MODULE_FAILURE",
+                "severity": "warning | error | critical",
+                "description": "What triggers this failure",
+                "remediation": "How to fix it",
+                "autoRepairEnabled": false
+              }
+            ]
+          }
+        ],
+        "failures": [
+          {
+            "code": "DOMAIN_HUB_FAILURE",
+            "severity": "error",
+            "description": "Domain-level failure condition",
+            "remediation": "Domain-level remediation steps",
+            "autoRepairEnabled": false
+          }
+        ]
+      }
+    ]
+  },
+
+  "failureSystem": {
+    "strategy": "distributed_centralized_reporting",
+    "description": "Each hub tracks local failures but also reports upward to the Master Failure Hub.",
+    "masterFailureHub": {
+      "name": "MASTER_FAILURE_LOG",
+      "type": "core_monitor",
+      "description": "Centralized collection of all failure spokes across the radial network.",
+      "doctrine_id": "00.00.FL",
+      "responsibilities": [
+        "Aggregate failure events from all hubs and sub-hubs",
+        "Classify severity and frequency",
+        "Trigger alerts or auto-repairs",
+        "Feed diagnostic learning models",
+        "Report health metrics back to CORE_METRIC"
+      ],
+      "dataModel": {
+        "table": "shq.master_failure_log",
+        "fields": [
+          {"name": "id", "type": "uuid", "description": "Unique failure event ID"},
+          {"name": "source_hub", "type": "string", "description": "Hub where failure originated"},
+          {"name": "sub_hub", "type": "string", "description": "Sub-hub if applicable"},
+          {"name": "failure_type", "type": "string", "description": "Failure code from hub definition"},
+          {"name": "timestamp", "type": "datetime", "description": "When failure occurred"},
+          {"name": "severity", "type": "enum", "values": ["info", "warning", "error", "critical"]},
+          {"name": "resolution_status", "type": "enum", "values": ["open", "acknowledged", "in_progress", "resolved", "auto_repaired"]},
+          {"name": "auto_repair_triggered", "type": "boolean", "description": "Whether auto-repair was attempted"},
+          {"name": "unique_id", "type": "string", "description": "HEIR tracking ID"},
+          {"name": "process_id", "type": "string", "description": "ORBT process ID"},
+          {"name": "context", "type": "json", "description": "Additional context/metadata"}
+        ]
+      },
+      "endpoints": {
+        "report": "/api/failures/report",
+        "query": "/api/failures/query",
+        "dashboard": "/api/failures/dashboard",
+        "health": "/api/failures/health"
+      }
+    },
+    "propagationRules": {
+      "onFailure": "report_to_parent_and_master",
+      "retryPolicy": {
+        "enabled": true,
+        "maxRetries": 3,
+        "backoffMultiplier": 2,
+        "initialDelayMs": 1000
+      },
+      "autoRepairHooks": {
+        "enabled": true,
+        "triggerOn": ["error", "critical"],
+        "cooldownSeconds": 300
+      },
+      "severityLevels": [
+        {"level": "info", "priority": 4, "alerting": false, "autoRepair": false},
+        {"level": "warning", "priority": 3, "alerting": true, "autoRepair": false},
+        {"level": "error", "priority": 2, "alerting": true, "autoRepair": true},
+        {"level": "critical", "priority": 1, "alerting": true, "autoRepair": true}
+      ],
+      "escalation": {
+        "warningToError": {"afterMinutes": 30, "ifUnresolved": true},
+        "errorToCritical": {"afterMinutes": 60, "ifUnresolved": true}
+      }
+    },
+    "selfHealingLoop": {
+      "enabled": true,
+      "description": "Master Failure Hub feeds BIT/Core Metric for adjustment and learning",
+      "components": [
+        "failure_aggregation",
+        "pattern_detection",
+        "auto_repair_dispatch",
+        "learning_feedback",
+        "metric_adjustment"
+      ],
+      "feedbackCycle": {
+        "frequency": "continuous",
+        "batchWindow": "5m",
+        "learningModel": "anomaly_detection"
+      }
+    }
+  },
+
+  "rules": {
+    "recursion": true,
+    "failurePropagation": "bubble_up_to_core_and_master",
+    "metricAggregation": "weighted_sum",
+    "defaultSpokeStyle": "radial",
+    "visualStyle": "sketch",
+
+    "composioFirst": {
+      "enabled": true,
+      "description": "All external integrations MUST route through Composio MCP first",
+      "fallbackConditions": [
+        "Composio service unavailable (503)",
+        "MCP endpoint timeout exceeds threshold",
+        "Tool explicitly configured for fallback-only",
+        "Development bypass with explicit flag"
+      ]
+    },
+
+    "databaseException": {
+      "enabled": true,
+      "description": "Database operations use direct connections, NOT Composio MCP",
+      "services": ["neon", "firebase_firestore", "bigquery"],
+      "pattern": "direct_client_connection"
+    },
+
+    "heirOrbtCompliance": {
+      "enabled": true,
+      "heirFormat": "HEIR-YYYY-MM-SYSTEM-MODE-VN",
+      "processIdFormat": "PRC-SYSTEM-EPOCHTIMESTAMP",
+      "requiredFields": ["unique_id", "process_id", "orbt_layer", "blueprint_version"]
+    }
+  },
+
+  "visualization": {
+    "layout": "radial",
+    "style": "sketch",
+    "showFailures": true,
+    "showMetrics": true,
+    "showMasterFailureHub": true,
+    "centerIncludesMetric": true,
+    "colorMapping": {
+      "core": "#FFD700",
+      "hub": "#8FD3FE",
+      "subHub": "#C2F784",
+      "failure": "#FF6B6B",
+      "fallback": "#FFA07A",
+      "local": "#DDA0DD",
+      "masterFailure": "#DC143C",
+      "autoRepair": "#32CD32"
+    },
+    "annotations": [
+      "Every repo, service, or domain is a hub in a larger wheel.",
+      "Each hub may contain nested mini-hubs (wheels-within-wheels).",
+      "Each hub and sub-hub has its own failure spoke.",
+      "All failures propagate to the Master Failure Hub.",
+      "The CORE_METRIC in the center aggregates performance and health.",
+      "Self-healing loop: Failures -> Master Hub -> Learning -> Auto-repair -> Metrics"
+    ],
+    "exportFormats": ["svg", "png", "mermaid", "d3"]
+  },
+
+  "integrationPatterns": {
+    "composio": {
+      "description": "Primary integration gateway via MCP",
+      "endpoint": "http://localhost:3001/tool",
+      "userIdRequired": true,
+      "payloadFormat": {
+        "tool": "tool_name",
+        "data": {},
+        "unique_id": "HEIR-YYYY-MM-SYSTEM-MODE-VN",
+        "process_id": "PRC-SYSTEM-EPOCHTIMESTAMP",
+        "orbt_layer": 2,
+        "blueprint_version": "1.0"
+      }
+    },
+    "fallback": {
+      "description": "Fallback spokes when primary is unavailable",
+      "types": ["n8n", "make", "zapier", "pipedream"],
+      "activationConditions": ["503_error", "timeout", "explicit_bypass"]
+    },
+    "direct": {
+      "description": "Direct connections bypassing MCP",
+      "use_for": ["database_operations", "file_system", "local_services"],
+      "never_for": ["external_apis", "third_party_services"]
+    }
+  },
+
+  "observability": {
+    "healthChecks": {
+      "enabled": true,
+      "endpoints": {
+        "core": "/api/health",
+        "mcp": "/api/health/mcp",
+        "fallbacks": "/api/health/fallbacks",
+        "failures": "/api/failures/health"
+      },
+      "interval_seconds": 60
+    },
+    "metrics": {
+      "track": [
+        "hub_status",
+        "response_time_ms",
+        "failure_rate",
+        "fallback_activation_count",
+        "auto_repair_success_rate",
+        "mean_time_to_recovery"
+      ],
+      "exportTo": ["grafana", "bigquery", "firebase"]
+    },
+    "alerts": {
+      "channels": ["slack", "email"],
+      "thresholds": {
+        "failure_rate_warning": 0.05,
+        "failure_rate_critical": 0.15,
+        "response_time_warning_ms": 2000,
+        "response_time_critical_ms": 5000
+      }
+    }
+  },
+
+  "meta": {
+    "framework": "IMO-Creator",
+    "paradigm": "IMO-RA (Interconnected Modular Objects: Radial Architecture)",
+    "alternativeName": "FHSA (Fractal Hub-and-Spoke Architecture)",
+    "author": "IMO-Core Engineering / SVG Agency",
+    "created": "2025-12-12",
+    "updated": "2025-12-12",
+    "purpose": "Provide a single JSON schema for diagramming, programming, and monitoring across all repositories.",
+    "keywords": [
+      "hub-and-spoke",
+      "radial-architecture",
+      "fractal-systems",
+      "diagram-as-code",
+      "self-healing-architecture",
+      "composio",
+      "mcp",
+      "integration-hub"
+    ],
+    "inheritance": {
+      "auto_copy_to_repos": true,
+      "validate_on_update": true,
+      "source": "imo-creator/global-config/imo-ra-schema.json"
+    }
+  },
+
+  "_examples": {
+    "crm_platform": {
+      "centralHub": {
+        "name": "CRM_PLATFORM",
+        "metric": {"name": "CUSTOMER_HEALTH_SCORE"},
+        "primaryHubs": [
+          {"name": "CONTACT_MANAGEMENT", "type": "domain"},
+          {"name": "PIPELINE_TRACKING", "type": "domain"},
+          {"name": "REPORTING", "type": "domain"}
+        ]
+      }
+    },
+    "ml_pipeline": {
+      "centralHub": {
+        "name": "ML_PIPELINE",
+        "metric": {"name": "MODEL_ACCURACY_INDEX"},
+        "primaryHubs": [
+          {"name": "DATA_INGESTION", "type": "service"},
+          {"name": "FEATURE_ENGINEERING", "type": "service"},
+          {"name": "MODEL_TRAINING", "type": "service"},
+          {"name": "INFERENCE_API", "type": "service"}
+        ]
+      }
+    },
+    "devops_platform": {
+      "centralHub": {
+        "name": "DEVOPS_PLATFORM",
+        "metric": {"name": "DEPLOYMENT_SUCCESS_RATE"},
+        "primaryHubs": [
+          {"name": "CI_CD", "type": "module"},
+          {"name": "MONITORING", "type": "module"},
+          {"name": "INFRASTRUCTURE", "type": "module"}
+        ]
+      }
+    }
+  },
+
+  "_conceptualModel": {
+    "summary": "Fractal Hub-and-Spoke Architecture (FHSA)",
+    "principles": [
+      "Each hub is a wheel; all wheels connect to the central core",
+      "Distributed Failure Reporting: Every hub logs errors locally but bubbles them to Master Failure Hub",
+      "Self-Healing Feedback Loop: Master Failure Hub -> BIT/Core Metric -> adjustment & learning -> back to system",
+      "Diagram-as-Code Standard: Same JSON drives both program structure and visual topology"
+    ],
+    "feedbackLoop": {
+      "1_detect": "Hub detects failure condition",
+      "2_log_local": "Failure logged at hub level",
+      "3_propagate": "Failure bubbles to parent and Master Failure Hub",
+      "4_aggregate": "Master hub aggregates and classifies",
+      "5_analyze": "Pattern detection and severity assessment",
+      "6_respond": "Auto-repair triggered if enabled",
+      "7_learn": "Learning model updated with outcome",
+      "8_adjust": "CORE_METRIC adjusted based on system health"
+    }
+  }
+}

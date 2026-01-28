@@ -26,12 +26,12 @@ jobs:
       - name: Configure Git
         run: |
           git config user.name "CTB Doctrine Bot"
-          git config user.email "doctrine-bot@barton-enterprises.com"
+          git config user.email "[BOT_EMAIL]"
 
       - name: Load CTB Branch Map
         id: load-map
         run: |
-          if [ -f "global-config/ctb.branchmap.yaml" ]; then
+          if [ -f "templates/config/ctb.branchmap.yaml" ]; then
             echo "CTB branch map found"
             echo "branchmap_exists=true" >> $GITHUB_OUTPUT
           else
@@ -82,7 +82,7 @@ jobs:
           # Doctrine files that should exist on all branches
           DOCTRINE_FILES=(
             "heir.doctrine.yaml"
-            "global-config/ctb.branchmap.yaml"
+            "templates/config/ctb.branchmap.yaml"
             ".github/workflows/doctrine_sync.yml"
             ".github/workflows/ctb_health.yml"
             ".github/workflows/audit.yml"

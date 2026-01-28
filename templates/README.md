@@ -19,11 +19,15 @@ If you are an AI agent operating in any repository governed by IMO-Creator:
 ### Reading Order (Mandatory)
 
 ```
-1. THIS FILE (templates/README.md) — understand the system
-2. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md — root law
-3. doctrine/TEMPLATE_IMMUTABILITY.md — what you cannot do
-4. The specific prompt for your current task (in claude/)
+1. IMO_SYSTEM_SPEC.md — compiled system index (FIRST READ)
+2. AI_EMPLOYEE_OPERATING_CONTRACT.md — agent constraints and permissions
+3. SNAP_ON_TOOLBOX.yaml — tool registry
+4. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md — root law
+5. doctrine/TEMPLATE_IMMUTABILITY.md — what you cannot do
+6. The specific prompt for your current task (in claude/)
 ```
+
+> **WARNING**: No prompt in `claude/` is valid unless IMO_SYSTEM_SPEC.md has been loaded first.
 
 ### Authority Pyramid
 
@@ -35,13 +39,17 @@ When rules conflict, higher levels win. No exceptions.
 ├─────────────────────────────────────────┤
 │  2. IMO_CONTROL.json (repo root)        │  ← Structural governance contract
 ├─────────────────────────────────────────┤
-│  3. CANONICAL_ARCHITECTURE_DOCTRINE.md  │  ← Root doctrine (all others derive)
+│  3. IMO_SYSTEM_SPEC.md                  │  ← Compiled system index (FIRST READ)
 ├─────────────────────────────────────────┤
-│  4. Other doctrine/ files               │  ← Specialized rules
+│  4. AI_EMPLOYEE_OPERATING_CONTRACT.md   │  ← Agent constraints
 ├─────────────────────────────────────────┤
-│  5. Templates (prd/, adr/, pr/, etc.)   │  ← Artifacts to instantiate
+│  5. CANONICAL_ARCHITECTURE_DOCTRINE.md  │  ← Root doctrine (all others derive)
 ├─────────────────────────────────────────┤
-│  6. Claude prompts (claude/)            │  ← Execution instructions
+│  6. Other doctrine/ files               │  ← Specialized rules
+├─────────────────────────────────────────┤
+│  7. Templates (prd/, adr/, pr/, etc.)   │  ← Artifacts to instantiate
+├─────────────────────────────────────────┤
+│  8. Claude prompts (claude/)            │  ← Execution instructions
 └─────────────────────────────────────────┘
 ```
 
@@ -191,7 +199,9 @@ A **Spoke is an interface**.
 
 ```
 templates/
-├── README.md                           # This file — START HERE
+├── IMO_SYSTEM_SPEC.md                  # FIRST READ — Compiled system index
+├── AI_EMPLOYEE_OPERATING_CONTRACT.md   # Agent constraints and permissions
+├── README.md                           # This file — Directory guide
 ├── SNAP_ON_TOOLBOX.yaml                # Tool registry (approved tools only)
 │
 ├── doctrine/                           # LOCKED — AI CANNOT MODIFY

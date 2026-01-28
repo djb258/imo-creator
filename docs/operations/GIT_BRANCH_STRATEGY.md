@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document defines the **git branch structure** for repositories following the Barton Doctrine.
+This document defines the **git branch structure** for repositories following the CTB Doctrine.
 
 **IMPORTANT DISTINCTION:**
 - **This document** defines GIT BRANCHES (where code is committed)

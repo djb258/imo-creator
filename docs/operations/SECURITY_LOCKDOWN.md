@@ -8,7 +8,7 @@
 
 ## Zero-Tolerance Security Policy
 
-**CRITICAL**: All Barton systems run under Composio MCP vault. Local `.env` files are **STRICTLY FORBIDDEN**.
+**CRITICAL**: All governed systems run under Composio MCP vault. Local `.env` files are **STRICTLY FORBIDDEN**.
 
 | Policy | Status |
 |--------|--------|

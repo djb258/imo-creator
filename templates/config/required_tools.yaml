@@ -1,0 +1,195 @@
+# Required Development Tools for CTB Doctrine v1.3.2
+# These tools are mandatory for all repositories following the CTB Doctrine
+# Last Updated: 2025-11-06
+
+version: "1.0.0"
+doctrine_version: "1.3.2"
+
+tools:
+  # Monitoring & Observability
+  grafana:
+    name: "Grafana"
+    category: "monitoring"
+    required: true
+    doctrine_id: "04.05.01"
+    purpose: "Visualization and dashboard creation for metrics"
+    installation:
+      windows: "winget install GrafanaLabs.Grafana.OSS"
+      mac: "brew install grafana"
+      linux: "sudo apt-get install grafana"
+    verification: "grafana-server --version"
+    port: 3000
+    documentation: "https://grafana.com/docs/"
+
+  # Project Management
+  github_projects:
+    name: "GitHub Projects"
+    category: "project_management"
+    required: true
+    doctrine_id: "04.05.02"
+    purpose: "Issue tracking and project management integration"
+    installation:
+      note: "GitHub Projects is a web-based service - no local installation required"
+      setup: |
+        1. Navigate to repository on GitHub
+        2. Click 'Projects' tab
+        3. Create new project using 'Board' or 'Table' view
+        4. Link to repository issues and pull requests
+    verification: "gh project list --owner=<org>"
+    documentation: "https://docs.github.com/en/issues/planning-and-tracking-with-projects"
+    integration:
+      - "Automated via .github/workflows/project_sync.yml"
+      - "Issue labeling triggers project board updates"
+
+  # Git GUI Client
+  gitkraken:
+    name: "GitKraken"
+    category: "git_client"
+    required: true
+    doctrine_id: "04.05.03"
+    purpose: "Visual git interface for branch management and CTB navigation"
+    installation:
+      windows: "winget install Axosoft.GitKraken"
+      mac: "brew install --cask gitkraken"
+      linux: "snap install gitkraken --classic"
+    verification: "gitkraken --version"
+    documentation: "https://help.gitkraken.com/"
+    ctb_usage: |
+      GitKraken provides visual CTB branch navigation:
+      - View all 19 CTB branches simultaneously
+      - Drag-and-drop merge flow visualization
+      - Branch altitude color coding
+
+  # Documentation & Knowledge Management
+  obsidian:
+    name: "Obsidian"
+    category: "documentation"
+    required: true
+    doctrine_id: "04.05.04"
+    purpose: "Markdown documentation and knowledge graph management"
+    installation:
+      windows: "winget install Obsidian.Obsidian"
+      mac: "brew install --cask obsidian"
+      linux: "snap install obsidian --classic"
+    verification: "obsidian --version"
+    documentation: "https://help.obsidian.md/"
+    integration:
+      vault_location: "docs/obsidian-vault"
+      plugins:
+        - "Git sync"
+        - "Dataview"
+        - "Templater"
+      usage: |
+        Use Obsidian for:
+        - CTB doctrine documentation
+        - Architecture decision records (ADRs)
+        - Knowledge graphs linking code to concepts
+
+  # Diagramming & Architecture
+  eraser_io:
+    name: "Eraser.io"
+    category: "diagramming"
+    required: true
+    doctrine_id: "04.05.05"
+    purpose: "Technical diagramming and architecture visualization"
+    installation:
+      note: "Eraser.io is a web-based service with optional desktop app"
+      web: "https://app.eraser.io"
+      desktop:
+        windows: "Download from https://www.eraser.io/download"
+        mac: "brew install --cask eraser"
+    verification: |
+      Check for .eraserdiagram files in docs/diagrams/
+    documentation: "https://docs.eraser.io/"
+    integration:
+      diagram_location: "docs/diagrams/"
+      file_types:
+        - ".eraserdiagram"
+        - ".diagram.md"
+      usage: |
+        Use Eraser.io for:
+        - CTB branch structure diagrams
+        - System architecture diagrams
+        - Data flow diagrams
+        - Integration maps
+    examples:
+      - "docs/diagrams/ctb-structure.eraserdiagram"
+      - "docs/diagrams/imo-factory-flow.eraserdiagram"
+
+# Verification Script
+verification:
+  script_path: "ctb/docs/global-config/scripts/verify_required_tools.sh"
+  checks:
+    - name: "Grafana"
+      command: "grafana-server --version"
+      optional: false
+    - name: "GitHub CLI (for Projects)"
+      command: "gh --version"
+      optional: false
+    - name: "GitKraken"
+      command: "gitkraken --version"
+      optional: true  # Desktop app may not be in PATH
+    - name: "Obsidian"
+      command: "obsidian --version"
+      optional: true  # Desktop app may not be in PATH
+    - name: "Eraser.io Diagrams"
+      check: "ls docs/diagrams/*.eraserdiagram"
+      optional: true
+
+# Auto-propagation settings
+propagation:
+  enabled: true
+  sync_via: "update_from_imo_creator.sh"
+  update_frequency: "On every 'update from imo-creator' command"
+  files_to_sync:
+    - "ctb/docs/global-config/required_tools.yaml"
+    - "ctb/docs/global-config/scripts/verify_required_tools.sh"
+    - "ctb/docs/global-config/scripts/install_required_tools.sh"
+    - "ctb/docs/TOOLS_SETUP_GUIDE.md"
+
+# Platform-specific notes
+platform_notes:
+  windows:
+    note: "Use winget (Windows Package Manager) for automated installation"
+    prerequisites:
+      - "Windows 10 1809 or later"
+      - "winget installed (comes with App Installer)"
+  mac:
+    note: "Use Homebrew for automated installation"
+    prerequisites:
+      - "Homebrew installed: /bin/bash -c '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)'"
+  linux:
+    note: "Use apt-get or snap depending on distribution"
+    prerequisites:
+      - "Ubuntu/Debian: apt-get available"
+      - "Snap available for GUI apps"
+
+# Integration with CTB branches
+ctb_integration:
+  doctrine_get_ingest:
+    tools: ["obsidian", "eraser_io"]
+    purpose: "Document global manifests and architecture"
+  sys_chartdb:
+    tools: ["eraser_io"]
+    purpose: "ERD visualization"
+  sys_activepieces:
+    tools: ["grafana"]
+    purpose: "Monitor workflow execution"
+  sys_windmill:
+    tools: ["grafana"]
+    purpose: "Monitor script performance"
+  sys_github_factory:
+    tools: ["github_projects", "gitkraken"]
+    purpose: "CI/CD management and visualization"
+  ops_automation_scripts:
+    tools: ["grafana"]
+    purpose: "Monitor automation health"
+  ops_report_builder:
+    tools: ["grafana", "obsidian"]
+    purpose: "Report visualization and documentation"
+
+# Additional resources
+resources:
+  setup_guide: "ctb/docs/TOOLS_SETUP_GUIDE.md"
+  troubleshooting: "ctb/docs/TROUBLESHOOTING.md#required-tools"
+  video_tutorial: "[ORGANIZATION_VIDEO_URL]"

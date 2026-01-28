@@ -1,0 +1,6 @@
+repos:
+- name: imo-creator
+  manifest: specs/ctb_manifest.yaml
+  doctrine: CTB
+  last_updated: '2025-11-07T12:52:45.559486'
+  ctb_version: 1.3.2

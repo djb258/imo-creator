@@ -1,0 +1,838 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.678760
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 75%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+# ============================================================
+# REPOSITORY TAXONOMY TEMPLATE
+# Version: 1.0.0
+# Last Updated: 2025-10-22
+# ============================================================
+#
+# This file defines the canonical repository structure for
+# [ORGANIZATION_NAME], organized
+# by Hive and aligned with CTB (Christmas Tree Backbone) doctrine.
+#
+# Altitude Legend:
+#   40k ft - System Infrastructure (core engines, global config)
+#   20k ft - Domain Logic (business rules, workflows)
+#   10k ft - Features (UI components, integrations)
+#   5k ft  - Data/Content (schemas, seed data, docs)
+#
+# Status Values: active, development, planned, archived
+# ============================================================
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-10-22T00:00:00Z"
+  organization: "[ORGANIZATION_NAME]"
+  aka: ["[ORG_ALIAS_1]", "[ORG_ALIAS_2]"]
+  doctrine: "CTB (Christmas Tree Backbone)"
+  total_hives: 7
+  total_repos: 42
+
+# ============================================================
+# HIVE: SHQ (Supreme Headquarters)
+# Purpose: Master control, templates, and global orchestration
+# ============================================================
+hives:
+  shq:
+    name: "SHQ - Supreme Headquarters"
+    code: "shq"
+    description: "Master control center for all operations, templates, and global orchestration"
+    altitude: 40k
+
+    repositories:
+      - name: shq-imo-creator
+        full_name: "imo-creator"
+        description: "Master template repository + repo factory for all projects"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "SHQ.01"
+        github_url: "https://github.com/[OWNER]/imo-creator"
+        deployment:
+          frontend: "https://imo-creator.vercel.app"
+          backend: "Composio Hosted"
+        tech_stack:
+          - "Node.js"
+          - "Python FastAPI"
+          - "React"
+          - "Firebase"
+          - "Composio MCP"
+        key_features:
+          - "CTB Doctrine enforcement"
+          - "Multi-altitude branch management"
+          - "MCP tool registry"
+          - "Automatic repo scaffolding"
+        blueprint_link: "firebase://blueprints/shq-imo-creator"
+
+      - name: shq-doctrine-core
+        description: "CTB Doctrine definition, schema enforcement, and validation engine"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Architecture"
+        doctrine_id: "SHQ.02"
+        github_url: "https://github.com/[OWNER]/doctrine-core"
+        key_features:
+          - "CTB branch map validation"
+          - "HEIR/ORBT tracking schemas"
+          - "Doctrine ID generation"
+          - "Global configuration standards"
+        blueprint_link: "firebase://blueprints/shq-doctrine-core"
+
+      - name: shq-audit-engine
+        description: "Neon audit trails, validation tools, and compliance monitoring"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "SHQ.03"
+        github_url: "https://github.com/[OWNER]/audit-engine"
+        tech_stack:
+          - "PostgreSQL (Neon)"
+          - "Python"
+          - "Firebase"
+        key_features:
+          - "Real-time audit logging"
+          - "SHQ master error log integration"
+          - "Compliance report generation"
+          - "Multi-repo validation"
+        blueprint_link: "firebase://blueprints/shq-audit-engine"
+
+      - name: shq-blueprint-engine
+        description: "Core blueprint design and altitude logic engine"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Architecture"
+        doctrine_id: "SHQ.04"
+        github_url: "https://github.com/[OWNER]/blueprint-engine"
+        key_features:
+          - "Blueprint validation"
+          - "Altitude calculation"
+          - "Firebase blueprint storage"
+          - "Version control for blueprints"
+        blueprint_link: "firebase://blueprints/shq-blueprint-engine"
+
+      - name: shq-mcp-orchestrator
+        description: "Central MCP server orchestration and tool routing"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "SHQ.05"
+        tech_stack:
+          - "Node.js"
+          - "Composio SDK"
+          - "Express"
+        key_features:
+          - "100+ service integrations"
+          - "Tool execution routing"
+          - "HEIR/ORBT tracking"
+          - "Composio hosted backend"
+        blueprint_link: "firebase://blueprints/shq-mcp-orchestrator"
+
+  # ============================================================
+  # HIVE: CLNT (Client Systems)
+  # Purpose: Client onboarding, compliance, and vendor integration
+  # ============================================================
+  clnt:
+    name: "CLNT - Client Systems"
+    code: "clnt"
+    description: "Client onboarding, census management, compliance monitoring, and vendor integrations"
+    altitude: 20k
+
+    repositories:
+      - name: clnt-intake
+        description: "Client onboarding pipeline + census management system"
+        altitude: 20k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Client Operations"
+        doctrine_id: "CLNT.01"
+        github_url: "https://github.com/[OWNER]/client-intake"
+        tech_stack:
+          - "Python FastAPI"
+          - "Neon PostgreSQL"
+          - "React"
+        key_features:
+          - "Client registration workflow"
+          - "Census data collection"
+          - "Document management"
+          - "Onboarding status tracking"
+        blueprint_link: "firebase://blueprints/clnt-intake"
+
+      - name: clnt-vendor-integration
+        description: "Vendor sync engine + ID mapping + data reconciliation"
+        altitude: 20k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Integration Engineering"
+        doctrine_id: "CLNT.02"
+        github_url: "https://github.com/[OWNER]/vendor-integration"
+        tech_stack:
+          - "Python"
+          - "Composio MCP"
+          - "Neon PostgreSQL"
+        key_features:
+          - "Multi-vendor ID mapping"
+          - "Automated data sync"
+          - "Conflict resolution"
+          - "Audit trail logging"
+        blueprint_link: "firebase://blueprints/clnt-vendor-integration"
+
+      - name: clnt-compliance-monitor
+        description: "Federal/state/local compliance engine with real-time alerts"
+        altitude: 20k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Compliance"
+        doctrine_id: "CLNT.03"
+        github_url: "https://github.com/[OWNER]/compliance-monitor"
+        tech_stack:
+          - "Python"
+          - "Neon PostgreSQL"
+          - "Firebase"
+        key_features:
+          - "Multi-jurisdiction compliance checks"
+          - "Real-time violation alerts"
+          - "Automated reporting"
+          - "Regulation updates tracking"
+        blueprint_link: "firebase://blueprints/clnt-compliance-monitor"
+
+      - name: clnt-billing-automation
+        description: "Client billing, invoicing, and payment tracking"
+        altitude: 20k
+        status: development
+        primary_owner: "[OWNER_NAME]"
+        team: "Finance Operations"
+        doctrine_id: "CLNT.04"
+        tech_stack:
+          - "Python FastAPI"
+          - "Stripe"
+          - "Xero"
+          - "Neon PostgreSQL"
+        key_features:
+          - "Automated invoice generation"
+          - "Payment processing"
+          - "Xero integration"
+          - "Revenue recognition"
+        blueprint_link: "firebase://blueprints/clnt-billing-automation"
+
+  # ============================================================
+  # HIVE: DPR (Doctrine & Libraries)
+  # Purpose: Reusable specs, schemas, validators, and reference data
+  # ============================================================
+  dpr:
+    name: "DPR - Doctrine & Libraries"
+    code: "dpr"
+    description: "Blueprint libraries, schema validators, and reusable JSON specifications"
+    altitude: 5k
+
+    repositories:
+      - name: dpr-library
+        description: "Blueprint library + reusable JSON specs + template repository"
+        altitude: 5k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Architecture"
+        doctrine_id: "DPR.01"
+        github_url: "https://github.com/[OWNER]/dpr-library"
+        tech_stack:
+          - "JSON Schema"
+          - "YAML"
+          - "Firebase"
+        key_features:
+          - "Reusable blueprint templates"
+          - "JSON Schema definitions"
+          - "Version-controlled specs"
+          - "Template inheritance"
+        blueprint_link: "firebase://blueprints/dpr-library"
+
+      - name: dpr-validators
+        description: "Schema and data validation engines with error reporting"
+        altitude: 5k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "DPR.02"
+        github_url: "https://github.com/[OWNER]/dpr-validators"
+        tech_stack:
+          - "Python"
+          - "JSON Schema"
+          - "Pydantic"
+        key_features:
+          - "Multi-format validation (JSON, YAML, CSV)"
+          - "Custom rule engine"
+          - "Detailed error messages"
+          - "Batch validation"
+        blueprint_link: "firebase://blueprints/dpr-validators"
+
+      - name: dpr-schema-mapper
+        description: "Column Compass Mapper + Neon schema utilities + migration tools"
+        altitude: 5k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Data Engineering"
+        doctrine_id: "DPR.03"
+        github_url: "https://github.com/[OWNER]/schema-mapper"
+        tech_stack:
+          - "Python"
+          - "Neon PostgreSQL"
+          - "Alembic"
+        key_features:
+          - "Automated schema mapping"
+          - "Column type inference"
+          - "Migration generation"
+          - "Schema visualization"
+        blueprint_link: "firebase://blueprints/dpr-schema-mapper"
+
+      - name: dpr-seed-data
+        description: "Reference data sets, lookup tables, and test fixtures"
+        altitude: 5k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Data Engineering"
+        doctrine_id: "DPR.04"
+        tech_stack:
+          - "JSON"
+          - "CSV"
+          - "SQL"
+        key_features:
+          - "Industry standard datasets"
+          - "State/federal reference data"
+          - "Test data generators"
+          - "Lookup table management"
+        blueprint_link: "firebase://blueprints/dpr-seed-data"
+
+  # ============================================================
+  # HIVE: MKT (Marketing & Outreach)
+  # Purpose: Company enrichment, sales targeting, and analytics
+  # ============================================================
+  mkt:
+    name: "MKT - Marketing & Outreach"
+    code: "mkt"
+    description: "Company ingest, enrichment, outbound campaigns, and analytics dashboards"
+    altitude: 20k
+
+    repositories:
+      - name: mkt-outreach-core
+        description: "Company ingest + enrichment + outbound campaign engine"
+        altitude: 20k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Marketing Operations"
+        doctrine_id: "MKT.01"
+        github_url: "https://github.com/[OWNER]/outreach-core"
+        tech_stack:
+          - "Python"
+          - "Instantly.ai"
+          - "HeyReach"
+          - "Composio MCP"
+        key_features:
+          - "Automated company enrichment"
+          - "Multi-channel outreach (email + LinkedIn)"
+          - "Campaign orchestration"
+          - "Response tracking"
+        blueprint_link: "firebase://blueprints/mkt-outreach-core"
+
+      - name: mkt-sales-navigator
+        description: "Monte Carlo targeting + sniper logic + lead scoring"
+        altitude: 20k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Sales Engineering"
+        doctrine_id: "MKT.02"
+        github_url: "https://github.com/[OWNER]/sales-navigator"
+        tech_stack:
+          - "Python"
+          - "Machine Learning"
+          - "Neon PostgreSQL"
+        key_features:
+          - "Monte Carlo simulation"
+          - "Lead scoring algorithms"
+          - "Territory optimization"
+          - "Conversion prediction"
+        blueprint_link: "firebase://blueprints/mkt-sales-navigator"
+
+      - name: mkt-analytics-dashboard
+        description: "Looker + Supabase visualization layer + KPI tracking"
+        altitude: 10k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Analytics"
+        doctrine_id: "MKT.03"
+        github_url: "https://github.com/[OWNER]/analytics-dashboard"
+        tech_stack:
+          - "Next.js"
+          - "Looker"
+          - "Supabase"
+          - "D3.js"
+        key_features:
+          - "Real-time KPI dashboards"
+          - "Campaign performance metrics"
+          - "Revenue attribution"
+          - "Custom report builder"
+        blueprint_link: "firebase://blueprints/mkt-analytics-dashboard"
+
+      - name: mkt-content-engine
+        description: "Content generation, scheduling, and multi-platform publishing"
+        altitude: 10k
+        status: development
+        primary_owner: "[OWNER_NAME]"
+        team: "Content Marketing"
+        doctrine_id: "MKT.04"
+        tech_stack:
+          - "Python"
+          - "Google Gemini"
+          - "Builder.io"
+        key_features:
+          - "AI-powered content generation"
+          - "Multi-platform scheduling"
+          - "SEO optimization"
+          - "Content analytics"
+        blueprint_link: "firebase://blueprints/mkt-content-engine"
+
+  # ============================================================
+  # HIVE: PERS (Personal / Family Ops)
+  # Purpose: Personal automation, finance, real estate, and family management
+  # ============================================================
+  pers:
+    name: "PERS - Personal / Family Operations"
+    code: "pers"
+    description: "Personal automation, finance tracking, property management, and family task coordination"
+    altitude: 10k
+
+    repositories:
+      - name: pers-finance
+        description: "Personal accounting + Xero integrations + expense tracking"
+        altitude: 10k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Personal"
+        doctrine_id: "PERS.01"
+        github_url: "https://github.com/[OWNER]/pers-finance"
+        tech_stack:
+          - "Python"
+          - "Xero API"
+          - "Neon PostgreSQL"
+        key_features:
+          - "Automated expense categorization"
+          - "Xero sync"
+          - "Tax document management"
+          - "Financial reporting"
+        blueprint_link: "firebase://blueprints/pers-finance"
+
+      - name: pers-realestate
+        description: "Property tracking + storage viability models + investment analysis"
+        altitude: 10k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Personal"
+        doctrine_id: "PERS.02"
+        github_url: "https://github.com/[OWNER]/pers-realestate"
+        tech_stack:
+          - "Python"
+          - "Google Sheets"
+          - "Firebase"
+        key_features:
+          - "Property portfolio tracking"
+          - "ROI calculations"
+          - "Storage unit viability analysis"
+          - "Market trend monitoring"
+        blueprint_link: "firebase://blueprints/pers-realestate"
+
+      - name: pers-tasks
+        description: "Personal task automation + Google Calendar/Tasks sync + Firebase coordination"
+        altitude: 10k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Personal"
+        doctrine_id: "PERS.03"
+        github_url: "https://github.com/[OWNER]/pers-tasks"
+        tech_stack:
+          - "Python"
+          - "Google Calendar API"
+          - "Google Tasks API"
+          - "Firebase"
+        key_features:
+          - "Multi-calendar sync"
+          - "Smart task scheduling"
+          - "Recurring task automation"
+          - "Family coordination"
+        blueprint_link: "firebase://blueprints/pers-tasks"
+
+      - name: pers-health
+        description: "Health tracking, medical records, and appointment management"
+        altitude: 10k
+        status: planned
+        primary_owner: "[OWNER_NAME]"
+        team: "Personal"
+        doctrine_id: "PERS.04"
+        tech_stack:
+          - "Python"
+          - "Firebase"
+        key_features:
+          - "Medical record storage"
+          - "Appointment scheduling"
+          - "Health metrics tracking"
+          - "Insurance coordination"
+        blueprint_link: "firebase://blueprints/pers-health"
+
+  # ============================================================
+  # HIVE: EDU (Education / Training)
+  # Purpose: Tyler's education, curriculum planning, and learning resources
+  # ============================================================
+  edu:
+    name: "EDU - Education / Training"
+    code: "edu"
+    description: "Tyler's education path, curriculum planning, progress tracking, and learning resources"
+    altitude: 10k
+
+    repositories:
+      - name: edu-planner
+        description: "Tyler's education path + curriculum design + progress tracking"
+        altitude: 10k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Family Education"
+        doctrine_id: "EDU.01"
+        github_url: "https://github.com/[OWNER]/edu-planner"
+        tech_stack:
+          - "React"
+          - "Firebase"
+          - "Google Classroom API"
+        key_features:
+          - "Custom curriculum builder"
+          - "Progress tracking"
+          - "Resource library"
+          - "Schedule management"
+        blueprint_link: "firebase://blueprints/edu-planner"
+
+      - name: edu-resource-library
+        description: "Curated learning resources, tutorials, and reference materials"
+        altitude: 5k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Family Education"
+        doctrine_id: "EDU.02"
+        tech_stack:
+          - "Markdown"
+          - "Firebase Storage"
+          - "Next.js"
+        key_features:
+          - "Subject-organized resources"
+          - "Video library"
+          - "Interactive exercises"
+          - "Progress quizzes"
+        blueprint_link: "firebase://blueprints/edu-resource-library"
+
+      - name: edu-coding-academy
+        description: "Tyler's coding education path with project-based learning"
+        altitude: 10k
+        status: development
+        primary_owner: "[OWNER_NAME]"
+        team: "Family Education"
+        doctrine_id: "EDU.03"
+        tech_stack:
+          - "Python"
+          - "JavaScript"
+          - "GitHub"
+        key_features:
+          - "Structured coding curriculum"
+          - "Project assignments"
+          - "Code review system"
+          - "Portfolio builder"
+        blueprint_link: "firebase://blueprints/edu-coding-academy"
+
+      - name: edu-college-prep
+        description: "College application tracking, essay management, and scholarship search"
+        altitude: 10k
+        status: planned
+        primary_owner: "[OWNER_NAME]"
+        team: "Family Education"
+        doctrine_id: "EDU.04"
+        tech_stack:
+          - "React"
+          - "Firebase"
+          - "PDF generation"
+        key_features:
+          - "Application deadline tracking"
+          - "Essay version control"
+          - "Scholarship database"
+          - "Recommendation letter management"
+        blueprint_link: "firebase://blueprints/edu-college-prep"
+
+  # ============================================================
+  # HIVE: SYS (System Infrastructure)
+  # Purpose: Core system tools, databases, monitoring, and DevOps
+  # ============================================================
+  sys:
+    name: "SYS - System Infrastructure"
+    code: "sys"
+    description: "Core system infrastructure, databases, monitoring, deployment automation, and DevOps tools"
+    altitude: 40k
+
+    repositories:
+      - name: sys-chartdb
+        description: "Database schema visualization and ER diagram generation"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "04.04.07"
+        github_url: "https://github.com/[OWNER]/chartdb"
+        tech_stack:
+          - "TypeScript"
+          - "React"
+          - "Vite"
+        key_features:
+          - "Visual schema design"
+          - "DDL export"
+          - "Schema comparison"
+          - "Database documentation"
+        blueprint_link: "firebase://blueprints/sys-chartdb"
+
+      - name: sys-activepieces
+        description: "Workflow automation platform with 100+ integrations"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "04.04.08"
+        github_url: "https://github.com/[OWNER]/activepieces"
+        tech_stack:
+          - "TypeScript"
+          - "Node.js"
+          - "PostgreSQL"
+        key_features:
+          - "No-code workflow builder"
+          - "API integrations"
+          - "Scheduled tasks"
+          - "Webhook triggers"
+        blueprint_link: "firebase://blueprints/sys-activepieces"
+
+      - name: sys-windmill
+        description: "Developer platform for scripts, workflows, and app deployment"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "04.04.09"
+        github_url: "https://github.com/[OWNER]/windmill"
+        tech_stack:
+          - "TypeScript"
+          - "Python"
+          - "Go"
+          - "PostgreSQL"
+        key_features:
+          - "Multi-language script execution"
+          - "Workflow orchestration"
+          - "App deployment"
+          - "Resource management"
+        blueprint_link: "firebase://blueprints/sys-windmill"
+
+      - name: sys-deepwiki
+        description: "AI-powered automatic wiki generator with RAG-powered Q&A"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "Documentation"
+        doctrine_id: "04.04.11"
+        github_url: "https://github.com/[OWNER]/deepwiki-open"
+        tech_stack:
+          - "Next.js 15"
+          - "Python FastAPI"
+          - "Google Gemini"
+          - "Mermaid.js"
+        key_features:
+          - "Automatic documentation generation"
+          - "Code analysis"
+          - "RAG-powered chat"
+          - "Diagram generation"
+        blueprint_link: "firebase://blueprints/sys-deepwiki"
+
+      - name: sys-claude-skills
+        description: "Anthropic Claude Skills integration for AI/SHQ reasoning"
+        altitude: 40k
+        status: active
+        primary_owner: "[OWNER_NAME]"
+        team: "AI Engineering"
+        doctrine_id: "04.04.10"
+        tech_stack:
+          - "Python"
+          - "Claude API"
+          - "Composio MCP"
+        key_features:
+          - "Extended context processing (200k tokens)"
+          - "Multi-step reasoning"
+          - "Content generation"
+          - "Workflow orchestration"
+        blueprint_link: "firebase://blueprints/sys-claude-skills"
+
+      - name: sys-monitoring
+        description: "System health monitoring, alerting, and performance metrics"
+        altitude: 40k
+        status: development
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "SYS.06"
+        tech_stack:
+          - "Prometheus"
+          - "Grafana"
+          - "Firebase"
+        key_features:
+          - "Real-time monitoring"
+          - "Alert management"
+          - "Performance metrics"
+          - "Incident response"
+        blueprint_link: "firebase://blueprints/sys-monitoring"
+
+      - name: sys-backup-recovery
+        description: "Automated backup system and disaster recovery procedures"
+        altitude: 40k
+        status: planned
+        primary_owner: "[OWNER_NAME]"
+        team: "Platform Engineering"
+        doctrine_id: "SYS.07"
+        tech_stack:
+          - "Python"
+          - "PostgreSQL"
+          - "Firebase"
+          - "Cloud Storage"
+        key_features:
+          - "Automated backups"
+          - "Point-in-time recovery"
+          - "Cross-region replication"
+          - "Disaster recovery testing"
+        blueprint_link: "firebase://blueprints/sys-backup-recovery"
+
+# ============================================================
+# CROSS-CUTTING CONCERNS
+# ============================================================
+cross_cutting:
+  documentation:
+    - "All repos follow LLM_ONBOARDING.md pattern"
+    - "CTB branch structure documented in global-config/"
+    - "Blueprint links stored in Firebase"
+    - "CLAUDE.md provides quick context"
+
+  security:
+    - "Zero-tolerance policy for .env files in commits"
+    - "MCP vault for all secrets"
+    - "Security lockdown scripts in global-config/"
+    - "Automated secret scanning (TruffleHog, git-secrets)"
+
+  testing:
+    - "Doctrine enforcement validation on every commit"
+    - "CTB branch structure validation"
+    - "Schema validation before deployment"
+    - "Integration tests via GitHub Actions"
+
+  deployment:
+    - "Frontend: Vercel"
+    - "API: Composio Hosted"
+    - "Database: Neon PostgreSQL"
+    - "Storage: Firebase"
+    - "CI/CD: GitHub Actions"
+
+# ============================================================
+# TAXONOMY STATISTICS
+# ============================================================
+statistics:
+  by_hive:
+    shq: 5
+    clnt: 4
+    dpr: 4
+    mkt: 4
+    pers: 4
+    edu: 4
+    sys: 7
+
+  by_altitude:
+    40k_ft: 12  # System Infrastructure
+    20k_ft: 10  # Domain Logic
+    10k_ft: 14  # Features
+    5k_ft: 6    # Data/Content
+
+  by_status:
+    active: 32
+    development: 5
+    planned: 5
+    archived: 0
+
+  total_repositories: 42
+
+# ============================================================
+# NAMING CONVENTIONS
+# ============================================================
+naming_conventions:
+  format: "{hive}-{domain}-{purpose}"
+  examples:
+    - "shq-imo-creator"
+    - "clnt-intake"
+    - "mkt-outreach-core"
+    - "sys-chartdb"
+
+  rules:
+    - "Hive code must be lowercase (shq, clnt, dpr, mkt, pers, edu, sys)"
+    - "Use hyphens to separate words"
+    - "Keep names concise but descriptive"
+    - "Avoid abbreviations unless widely known"
+    - "Core/engine repos use -core or -engine suffix"
+
+# ============================================================
+# DOCTRINE ENFORCEMENT
+# ============================================================
+doctrine_enforcement:
+  required_files:
+    - "CLAUDE.md"
+    - "LLM_ONBOARDING.md"
+    - ".env.example"
+    - "config/mcp_registry.json"
+    - "global-config/ctb.branchmap.yaml"
+
+  required_branches:
+    - "master"
+    - "At least one sys/ branch (per doctrine)"
+
+  validation_scripts:
+    - "global-config/scripts/ctb_enforce.sh"
+    - "global-config/scripts/security_lockdown.sh"
+
+  audit_logging:
+    - "logs/ctb_enforcement.log"
+    - "logs/security_audit.log"
+
+# ============================================================
+# FUTURE EXPANSION
+# ============================================================
+future_hives:
+  - name: "INTL - International Operations"
+    description: "Multi-country expansion, localization, and international compliance"
+    planned_repos: 3
+
+  - name: "R&D - Research & Development"
+    description: "Experimental projects, prototypes, and innovation lab"
+    planned_repos: 5
+
+  - name: "PART - Partner Integration"
+    description: "Strategic partner integrations and white-label solutions"
+    planned_repos: 4
+
+# ============================================================
+# NOTES
+# ============================================================
+notes:
+  - "This taxonomy is version-controlled and should be updated when repos are added/removed"
+  - "Each repo should have a corresponding blueprint in Firebase"
+  - "Doctrine IDs must be unique across all hives"
+  - "Use this file for automated repo discovery and validation"
+  - "Integration with DeepWiki for automatic documentation generation"
+  - "Feeds into CTB Doctrine enforcement and visualization tools"

@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# REGISTRY — Hub Identity Declaration
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Inherited)
+# Status: REQUIRED — Every hub MUST have a REGISTRY.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "1.0.0"
+last_updated: "[YYYY-MM-DD]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HUB IDENTITY (CC-02)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+hub:
+  hub_id: "[HUB_ID]"
+  hub_name: "[HUB_NAME]"
+  description: "[Brief description of what this hub does]"
+  owner: "[OWNER_NAME]"
+  sovereign_reference: "[CC-01_REFERENCE]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFORMANCE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+conformance:
+  parent: "imo-creator"
+  doctrine_version: "[DOCTRINE_VERSION]"
+  ctb_version: "[CTB_VERSION]"
+  domain_spec: "doctrine/REPO_DOMAIN_SPEC.md"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CTB PLACEMENT
+# ═══════════════════════════════════════════════════════════════════════════════
+
+ctb:
+  branches_used:
+    - sys: "[true/false]"
+    - data: "[true/false]"
+    - app: "[true/false]"
+    - ai: "[true/false]"
+    - ui: "[true/false]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SUB-HUBS (CC-03)
+# ═══════════════════════════════════════════════════════════════════════════════
+# List major functional boundaries within this hub.
+# Each sub-hub operates at CC-03 relative to the hub.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+subhubs: []
+  # - subhub_id: "[SUBHUB_ID]"
+  #   name: "[SUBHUB_NAME]"
+  #   description: "[What this sub-hub does]"
+  #   path: "src/[subhub_path]/"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SPOKES (CC-03 Interfaces)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Spokes are interfaces ONLY. They carry no logic.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+spokes:
+  ingress: []
+    # - spoke_id: "[SPOKE_ID]"
+    #   name: "[SPOKE_NAME]"
+    #   contract: "[Interface contract reference]"
+
+  egress: []
+    # - spoke_id: "[SPOKE_ID]"
+    #   name: "[SPOKE_NAME]"
+    #   contract: "[Interface contract reference]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCUMENT CONTROL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+document_control:
+  created: "[YYYY-MM-DD]"
+  last_modified: "[YYYY-MM-DD]"
+  status: "DRAFT"

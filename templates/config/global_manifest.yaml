@@ -1,0 +1,1161 @@
+# # CTB Metadata
+# # Generated: 2025-10-23T14:32:39.648010
+# # CTB Version: 1.3.3
+# # Division: Documentation
+# # Category: global-config
+# # Compliance: 90%
+# # HEIR ID: HEIR-2025-10-DOC-GLOBAL-01
+
+# IMO Creator - Global Configuration Manifest
+# Version: 1.3.3
+# Last Updated: 2025-10-22
+
+meta:
+  version: 1.3.3
+  last_updated: 2025-10-22T00:00:00Z
+  description: |
+    Global configuration manifest for IMO Creator ecosystem.
+    This file defines system-wide settings, automation rules, and integration patterns
+    that apply across all repositories using the CTB Doctrine.
+
+# ============================================================
+# DOCTRINE ACRONYMS (Machine-readable)
+# ============================================================
+acronyms:
+  - acronym: IMO
+    stands_for: "Input–Middle–Output"
+    definition: "Framework used to design every process with clear intake, transformation, and delivery phases."
+  - acronym: CTB
+    stands_for: "Christmas Tree Backbone"
+    definition: "Hierarchical architecture mapping all systems from 60k‑ft overview down to 5k‑ft detailed processes."
+  - acronym: HEIR
+    stands_for: "Hierarchy, Enforcement, Integration, Reporting"
+    definition: "Supervisory governance system that oversees all doctrinal layers and ensures compliance across agents and databases."
+  - acronym: ORBT
+    stands_for: "Operate, Repair, Build, Train"
+    definition: "Core doctrine enforcing self‑documenting, self‑repairing, and teachable systems."
+  - acronym: STAMPED
+    stands_for: "Structured Table Architecture for Managed Persistent Enterprise Data"
+    definition: "Doctrine schema for Neon vault—validated, version‑locked data."
+  - acronym: SPVPET
+    stands_for: "Structured Processing Vault for Persistent Event Tracking"
+    definition: "Firebase schema for realtime working memory."
+  - acronym: STACKED
+    stands_for: "Structured Table Architecture for Calculated Knowledge & Event Data"
+    definition: "BigQuery schema for analytical and historical data."
+  - acronym: ALTITUDE
+    stands_for: "System visibility levels (50k–5k)"
+    definition: "Defines perspective, scope, and artifact legality—from hub identity to execution."
+    reference: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+    levels:
+      - level: 50k
+        name: Shell
+        scope: Hub identity, attachment topology, I/O spoke declarations
+        artifacts_legal: ["Hub ID", "Attachment manifest"]
+      - level: 40k
+        name: Hub-as-Application Decomposition
+        scope: Application behavior, functional areas, boundary definition
+        artifacts_legal: ["Application description", "Functional area list"]
+      - level: 30k
+        name: CTB Placement
+        scope: Trunk/branch/leaf assignment, folder structure, integration config
+        artifacts_legal: ["CTB declaration", "Folder structure", "Integration configs"]
+      - level: 20k
+        name: IMO Definition
+        scope: Ingress/Middle/Egress flow, spoke-to-layer mapping
+        artifacts_legal: ["PRD", "IMO specification"]
+      - level: 10k
+        name: Process Logic
+        scope: Internal flows, decision trees, state management
+        artifacts_legal: ["ADRs", "Process flows", "Architecture diagrams"]
+      - level: 5k
+        name: Execution
+        scope: Linear issues, PRs, code, tests, configuration
+        artifacts_legal: ["Linear issues", "PRs", "Code", "Compliance checklist"]
+
+# ============================================================
+# DEEP WIKI AUTOMATION CONFIGURATION
+# ============================================================
+deep_wiki:
+  enabled: true
+  run_on_update: true
+  index_path: /deep_wiki/deepwiki_index.json
+
+  # Repository Configuration
+  target_repos:
+    - name: outreach-core
+      enabled: true
+      priority: high
+      auto_commit: true
+    - name: client-intake
+      enabled: true
+      priority: high
+      auto_commit: true
+    - name: blueprint-engine
+      enabled: true
+      priority: medium
+      auto_commit: true
+    - name: imo-creator
+      enabled: true
+      priority: critical
+      auto_commit: true
+
+  # Trigger Configuration
+  triggers:
+    on_push: true
+    on_pull_request: false
+    on_merge: true
+    on_schedule: true
+    schedule_cron: "0 2 * * *"  # Daily at 2 AM
+
+  # AI Provider Settings
+  ai_provider:
+    default: google
+    fallback: openai
+    embedder_type: google
+    models:
+      google: gemini-pro
+      openai: gpt-4-turbo
+
+  # Processing Options
+  processing:
+    generate_diagrams: true
+    analyze_diffs_only: true
+    max_file_size_mb: 50
+    exclude_patterns:
+      - "node_modules/**"
+      - "*.log"
+      - ".git/**"
+      - "**/__pycache__/**"
+      - "*.pyc"
+      - "build/**"
+      - "dist/**"
+
+  # Output Configuration
+  output:
+    base_path: /deep_wiki
+    create_index: true
+    commit_message_template: "📚 DeepWiki: Auto-update documentation [skip ci]"
+    branch_naming: "docs/deepwiki-update-{timestamp}"
+
+  # Logging & Observability
+  logging:
+    enabled: true
+    audit_log: /logs/deepwiki_audit.log
+    error_log: /logs/deepwiki_error.log
+    level: INFO
+    retention_days: 90
+    include_metrics: true
+
+  # Error Handling
+  error_handling:
+    retry_count: 3
+    retry_delay_seconds: 60
+    halt_on_error: true
+    notify_on_failure: true
+    notification_channels:
+      - slack
+      - email
+
+  # Kill Switch Configuration
+  kill_switch:
+    enabled: false
+    reason: ""
+    disabled_by: ""
+    disabled_at: ""
+    emergency_contact: "[ADMIN_EMAIL]"
+
+# ============================================================
+# CHARTDB AUTOMATION CONFIGURATION
+# ============================================================
+chartdb:
+  enabled: true
+  run_on_update: true
+  index_path: /chartdb_schemas/schema_index.json
+
+  # Repository Configuration
+  target_repos:
+    - name: outreach-core
+      enabled: true
+      priority: high
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: main_db
+        - type: mysql
+          name: analytics_db
+    - name: client-intake
+      enabled: true
+      priority: high
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: client_db
+    - name: blueprint-engine
+      enabled: true
+      priority: medium
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: blueprint_db
+    - name: imo-creator
+      enabled: true
+      priority: critical
+      auto_commit: true
+      database_connections:
+        - type: postgresql
+          name: imo_db
+
+  # Trigger Configuration
+  triggers:
+    on_push: true
+    on_pull_request: false
+    on_merge: true
+    on_schema_change: true
+    on_schedule: true
+    schedule_cron: "0 3 * * *"  # Daily at 3 AM (1 hour after DeepWiki)
+
+  # Schema Detection
+  schema_detection:
+    auto_detect: true
+    scan_patterns:
+      - "*.sql"
+      - "migrations/**"
+      - "prisma/schema.prisma"
+      - "sequelize/models/**"
+      - "typeorm/entities/**"
+      - "database/schema/**"
+    exclude_patterns:
+      - "node_modules/**"
+      - "*.bak"
+      - "*.tmp"
+
+  # Output Configuration
+  output:
+    base_path: /chartdb_schemas
+    format: ["json", "sql", "png", "svg"]
+    create_index: true
+    commit_message_template: "📊 ChartDB: Auto-update database schemas [skip ci]"
+    branch_naming: "docs/chartdb-update-{timestamp}"
+
+  # Diagram Generation
+  diagram:
+    auto_generate: true
+    include_relationships: true
+    include_indexes: true
+    include_constraints: true
+    theme: "light"
+    export_formats: ["png", "svg"]
+
+  # Logging & Observability
+  logging:
+    enabled: true
+    audit_log: /logs/chartdb_audit.log
+    error_log: /logs/chartdb_error.log
+    level: INFO
+    retention_days: 90
+
+  # Error Handling
+  error_handling:
+    retry_count: 3
+    retry_delay_seconds: 30
+    halt_on_error: true
+    notify_on_failure: true
+
+  # Kill Switch Configuration
+  kill_switch:
+    enabled: false
+    reason: ""
+    disabled_by: ""
+    disabled_at: ""
+
+# ============================================================
+# CTB DOCTRINE ENFORCEMENT
+# ============================================================
+ctb_doctrine:
+  enforcement_mode: standard
+  version: 1.3.3
+
+  required_branches:
+    - sys/chartdb
+    - sys/activepieces
+    - sys/windmill
+    - sys/claude-skills
+    - sys/deepwiki
+
+  required_tools:
+    - doctrine_id: "04.04.07"
+      name: ChartDB
+      enabled: true
+    - doctrine_id: "04.04.08"
+      name: Activepieces
+      enabled: true
+    - doctrine_id: "04.04.09"
+      name: Windmill
+      enabled: true
+    - doctrine_id: "04.04.10"
+      name: Anthropic_Claude_Skills
+      enabled: true
+    - doctrine_id: "04.04.11"
+      name: DeepWiki
+      enabled: true
+    - doctrine_id: "04.04.12"
+      name: Google_Gemini_AI
+      enabled: true
+    - doctrine_id: "04.04.13"
+      name: Hostinger
+      enabled: true
+    - doctrine_id: "04.04.14"
+      name: Abacus_AI
+      enabled: true
+
+# ============================================================
+# GEMINI AI CONFIGURATION
+# ============================================================
+gemini_ai:
+  enabled: true
+  default_model: gemini-2.5-flash
+  available_models:
+    - gemini-2.5-flash
+    - gemini-2.5-flash-preview-05-20
+    - gemini-2.5-pro-preview-03-25
+    - gemini-2.5-pro-preview-05-06
+    - gemini-2.5-flash-lite-preview-06-17
+
+  # Integration Points
+  integrations:
+    composio_mcp: true
+    standalone_cli: true
+    deepwiki: true
+    chartdb: false  # Future enhancement
+
+  # Generation Settings
+  generation_config:
+    max_tokens: 2048
+    temperature: 0.7
+    top_p: 1.0
+    top_k: 40
+
+  # Performance Settings
+  performance:
+    caching_enabled: true
+    cache_duration_minutes: 10
+    rate_limit_rpm: 60  # Requests per minute
+
+  # HEIR/ORBT Tracking
+  heir_orbt:
+    enabled: true
+    track_all_operations: true
+    external_service_flag: true
+    ai_provider: "google"
+
+  # Toolkit Tools
+  toolkit_tools:
+    - name: gemini_generate
+      description: "Generate text from prompt"
+      enabled: true
+    - name: gemini_chat
+      description: "Interactive chat session"
+      enabled: true
+    - name: gemini_analyze
+      description: "Analyze code or content"
+      enabled: true
+    - name: gemini_status
+      description: "Check Gemini service status"
+      enabled: true
+    - name: gemini_clear_cache
+      description: "Clear response cache"
+      enabled: true
+
+  # Environment Variables
+  required_env_vars:
+    - GOOGLE_API_KEY  # or GEMINI_API_KEY
+  optional_env_vars:
+    - GEMINI_MODEL
+
+  # Kill Switch
+  kill_switch:
+    enabled: false
+    reason: ""
+    disabled_by: ""
+    disabled_at: ""
+
+# ============================================================
+# MCP INTEGRATION SETTINGS
+# ============================================================
+mcp_integration:
+  enabled: true
+  server_port: 3001
+  health_check_interval: 60
+
+  composio:
+    enabled: true
+    endpoint: "http://localhost:3001/tool"
+    api_base: "https://api.composio.dev"
+    connected_services: 24
+    total_tools: 1059
+
+    # ⚠️ CRITICAL: Database Operations Pattern (Updated 2025-10-23)
+    # Source: [PROJECT_NAME] (100% CTB Doctrine compliant)
+    database_operations:
+      # Database operations MUST use direct connections
+      # Composio does NOT provide database tools (neon_execute_sql does NOT exist)
+      method: "direct_pg_client"
+      connection_source: "DATABASE_URL"  # Use environment variable
+      pattern: |
+        const { Client } = require('pg');
+        const client = new Client({ connectionString: process.env.DATABASE_URL });
+        await client.connect();
+        const result = await client.query(sql);
+        await client.end();
+
+      # What to use Composio for:
+      composio_for:
+        - apify_run_actor
+        - gmail_send
+        - drive_upload
+        - sheets_append
+        - calendar_create_event
+        - github_create_issue
+        - "40+ external API integrations"
+
+      # What NOT to use Composio for:
+      not_composio:
+        - neon_execute_sql  # Does NOT exist
+        - neon_query        # Does NOT exist
+        - database_operations  # Use direct pg client
+
+    # HEIR/ORBT Payload Requirements
+    payload_format:
+      required_fields:
+        - tool
+        - data
+        - unique_id  # Format: HEIR-YYYY-MM-SYSTEM-MODE-VN
+        - process_id  # Format: PRC-SYSTEM-EPOCHTIMESTAMP
+        - orbt_layer  # Execution layer (1-4)
+        - blueprint_version  # Version tracking
+      example: |
+        {
+          "tool": "apify_run_actor",
+          "data": { "actorId": "..." },
+          "unique_id": "HEIR-2025-10-IMO-ACTION-01",
+          "process_id": "PRC-ACTION-1729651200",
+          "orbt_layer": 2,
+          "blueprint_version": "1.0"
+        }
+
+  firebase:
+    enabled: true
+    project_id: "${FIREBASE_PROJECT_ID}"
+    staging_memory: true
+    ctb_doctrine: true
+
+  builder_io:
+    enabled: true
+    api_key: "${BUILDER_IO_API_KEY}"
+    visual_dev: true
+
+  # ============================================================
+  # HOSTINGER VPS & N8N INTEGRATION (Added 2025-12-01)
+  # ============================================================
+  hostinger:
+    enabled: true
+    doctrine_id: "04.04.13"
+    mcp_server:
+      command: "npx"
+      args: ["hostinger-api-mcp@latest"]
+      env:
+        API_TOKEN: "${HOSTINGER_API_TOKEN}"
+    vps_instance:
+      hostname: "[VPS_HOSTNAME]"
+      ip: "[VPS_IP_ADDRESS]"
+      os: "Ubuntu 24.04 with n8n"
+      plan: "KVM 2"
+      specs:
+        cpu_cores: 2
+        memory_gb: 8
+        disk_gb: 100
+      location: "United States - Boston"
+    n8n:
+      url: "${N8N_HOSTINGER_URL}"
+      port: 5678
+      webhook_base: "${N8N_HOSTINGER_URL}/webhook/"
+    toolkit_tools:
+      - HOSTINGER_VPS_LIST
+      - HOSTINGER_VPS_START
+      - HOSTINGER_VPS_STOP
+      - HOSTINGER_VPS_RESTART
+      - HOSTINGER_VPS_STATUS
+      - HOSTINGER_DOMAIN_LIST
+      - HOSTINGER_SSL_STATUS
+      - HOSTINGER_DNS_MANAGE
+    required_env_vars:
+      - HOSTINGER_API_TOKEN
+      - N8N_HOSTINGER_URL
+    integration_files:
+      - "global-config/integrations/hostinger/integrations.yaml"
+      - "global-config/integrations/hostinger/README.md"
+
+  # ============================================================
+  # ABACUS.AI ENTERPRISE AI PLATFORM (Added 2025-12-01)
+  # ============================================================
+  abacus_ai:
+    enabled: true
+    doctrine_id: "04.04.14"
+    api_endpoint: "https://api.abacus.ai/v0"
+    authentication:
+      type: "api_key"
+      header_name: "X-API-Key"
+      env_var: "${ABACUS_AI_API_KEY}"
+    capabilities:
+      - custom_ai_agents
+      - ml_model_deployment
+      - ai_workflows
+      - predictive_analytics
+      - chatbot_creation
+      - data_connectors
+    toolkit_tools:
+      - ABACUS_CREATE_AGENT
+      - ABACUS_RUN_AGENT
+      - ABACUS_LIST_AGENTS
+      - ABACUS_DEPLOY_MODEL
+      - ABACUS_PREDICT
+      - ABACUS_GET_PREDICTIONS
+      - ABACUS_CREATE_WORKFLOW
+      - ABACUS_RUN_WORKFLOW
+      - ABACUS_GET_WORKFLOW_STATUS
+    api_endpoints:
+      agents: "/agents"
+      models: "/models"
+      predictions: "/predictions"
+      workflows: "/workflows"
+      deployments: "/deployments"
+    required_env_vars:
+      - ABACUS_AI_API_KEY
+    integration_files:
+      - "global-config/integrations/abacus-ai/integrations.yaml"
+      - "global-config/integrations/abacus-ai/README.md"
+    integration_points:
+      composio: "Custom integration via OpenAPI spec"
+      n8n: "HTTP Request node with API key auth"
+
+# ============================================================
+# SECURITY & COMPLIANCE
+# ============================================================
+security:
+  zero_tolerance: true
+  forbidden_files:
+    - ".env"
+    - "*.pem"
+    - "*.key"
+    - "*credentials*.json"
+    - "*secret*.txt"
+
+  secret_scanning:
+    enabled: true
+    tools:
+      - truffleHog
+      - git-secrets
+    halt_on_violation: true
+
+  mcp_vault:
+    enabled: true
+    required: true
+    sources:
+      - mcp
+      - doppler
+      - firebase
+
+# ============================================================
+# AUTOMATION WORKFLOWS
+# ============================================================
+automation:
+  github_actions:
+    enabled: true
+    workflows:
+      - deepwiki_automation
+      - ctb_enforcement
+      - security_lockdown
+      - doctrine_sync
+
+  hooks:
+    pre_commit:
+      - security_scan
+      - format_check
+    post_commit:
+      - deepwiki_update
+      - audit_log
+    pre_push:
+      - test_suite
+      - compliance_check
+
+# ============================================================
+# DEPLOYMENT CONFIGURATION
+# ============================================================
+deployment:
+  platforms:
+    render:
+      enabled: true
+      auto_deploy: true
+      environment: production
+    vercel:
+      enabled: true
+      auto_deploy: true
+      environment: production
+
+  health_checks:
+    enabled: true
+    endpoints:
+      - url: "http://localhost:8001/health"
+        service: deepwiki-api
+      - url: "http://localhost:3001/mcp/health"
+        service: composio-mcp
+      - url: "http://localhost:3000"
+        service: deepwiki-frontend
+
+# ============================================================
+# NOTIFICATION SETTINGS
+# ============================================================
+notifications:
+  enabled: true
+  channels:
+    slack:
+      enabled: true
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+      notify_on:
+        - errors
+        - deployments
+        - security_violations
+    email:
+      enabled: true
+      recipients:
+        - [ADMIN_EMAIL]
+      notify_on:
+        - critical_errors
+        - security_violations
+
+  templates:
+    deepwiki_success: "✅ DeepWiki updated for {repo} - {branch} ({commit_hash})"
+    deepwiki_failure: "❌ DeepWiki failed for {repo} - {branch}: {error_message}"
+    security_violation: "🚨 SECURITY VIOLATION in {repo}: {violation_type}"
+
+# ============================================================
+# ERROR LOGGING & CORRELATION (Master Error Log)
+# ============================================================
+error_logging:
+  master_log:
+    name: "shq.master_error_log"
+    ids:
+      - unique_id
+      - process_id
+      - blueprint_version_hash
+    required_fields:
+      - error_id
+      - occurred_at
+      - agent_id
+      - stage
+      - severity
+      - message
+      - error_type
+  correlation:
+    lookup:
+      by_ids: [unique_id, process_id]
+      blueprint_fetch: "by blueprint_version_hash (preferred) or by IDs"
+    remediation_sequence:
+      - locate_failing_stage
+      - fetch_ssot_snapshot
+      - reproduce_and_patch
+      - validate_locally
+      - promote_via_gateway
+      - verify_with_global_validator
+  slo_targets:
+    time_to_correlate: "<=10min"
+    time_to_remediate: "<=60min"
+  alert_routes:
+    - "Grafana Alerts → Global Communicator Agent"
+    - "Email: [OPERATIONS_EMAIL]"
+
+# ============================================================
+# IMO-RA (Radial Architecture) CONFIGURATION
+# ============================================================
+imo_ra:
+  enabled: true
+  version: "1.1"
+  paradigm: "IMO-RA (Interconnected Modular Objects: Radial Architecture)"
+  alternative_name: "FHSA (Fractal Hub-and-Spoke Architecture)"
+
+  # Schema Files
+  schema_files:
+    template: "global-config/imo-ra-schema.json"
+    instance: "imo-architecture.json"
+
+  # Auto-propagation to child repos
+  propagation:
+    enabled: true
+    auto_copy_template: true
+    validate_on_update: true
+    require_instance: true
+
+  # Architecture Principles
+  principles:
+    - "Every repo, service, or domain is a hub (wheel)"
+    - "Each hub can contain sub-hubs recursively (fractal wheels-within-wheels)"
+    - "Failures branch off every hub as spokes"
+    - "All failures propagate to the Master Failure Hub"
+    - "All hubs feed metrics back to central CORE_METRIC"
+    - "Composio is the primary integration gateway"
+    - "Database operations bypass MCP (direct connections)"
+    - "Self-healing loop: Failure -> Master Hub -> Learning -> Auto-repair"
+
+  # Visualization Settings
+  visualization:
+    default_layout: "radial"
+    style: "sketch"
+    export_formats: ["svg", "png", "mermaid", "d3"]
+    color_scheme:
+      core: "#FFD700"
+      hub: "#8FD3FE"
+      subHub: "#C2F784"
+      failure: "#FF6B6B"
+      fallback: "#FFA07A"
+      masterFailure: "#DC143C"
+      autoRepair: "#32CD32"
+
+  # Master Failure Hub Configuration
+  failure_system:
+    enabled: true
+    strategy: "distributed_centralized_reporting"
+    master_failure_hub:
+      name: "MASTER_FAILURE_LOG"
+      doctrine_id: "00.00.FL"
+      table: "shq.master_failure_log"
+      responsibilities:
+        - "Aggregate failure events from all hubs and sub-hubs"
+        - "Classify severity and frequency patterns"
+        - "Trigger alerts via Slack/email"
+        - "Dispatch auto-repair hooks when enabled"
+        - "Feed diagnostic learning models"
+        - "Report health metrics back to CORE_METRIC"
+      endpoints:
+        report: "/api/failures/report"
+        query: "/api/failures/query"
+        dashboard: "/api/failures/dashboard"
+        health: "/api/failures/health"
+    propagation_rules:
+      on_failure: "report_to_parent_and_master"
+      retry_policy:
+        enabled: true
+        max_retries: 3
+        backoff_multiplier: 2
+        initial_delay_ms: 1000
+      auto_repair_hooks:
+        enabled: true
+        trigger_on: ["error", "critical"]
+        cooldown_seconds: 300
+      severity_levels:
+        - level: "info"
+          priority: 4
+          alerting: false
+          auto_repair: false
+        - level: "warning"
+          priority: 3
+          alerting: true
+          auto_repair: false
+        - level: "error"
+          priority: 2
+          alerting: true
+          auto_repair: true
+        - level: "critical"
+          priority: 1
+          alerting: true
+          auto_repair: true
+      escalation:
+        warning_to_error:
+          after_minutes: 30
+          if_unresolved: true
+        error_to_critical:
+          after_minutes: 60
+          if_unresolved: true
+    self_healing_loop:
+      enabled: true
+      components:
+        - "failure_aggregation"
+        - "pattern_detection"
+        - "auto_repair_dispatch"
+        - "learning_feedback"
+        - "metric_adjustment"
+      feedback_cycle:
+        frequency: "continuous"
+        batch_window: "5m"
+        learning_model: "anomaly_detection"
+
+  # Integration with existing systems
+  integrations:
+    composio:
+      maps_to: "COMPOSIO_HUB"
+      doctrine_id: "04.04.00"
+    heir_orbt:
+      compliance_required: true
+    deepwiki:
+      auto_generate_diagrams: true
+    chartdb:
+      include_in_schemas: true
+    grafana:
+      enabled: true
+      dashboard_id: "imo-ra-health"
+      metrics:
+        - "hub_status"
+        - "failure_rate"
+        - "auto_repair_success_rate"
+        - "mean_time_to_recovery"
+
+  # Validation Rules
+  validation:
+    required_fields:
+      - centralHub.name
+      - centralHub.metric
+      - centralHub.primaryHubs
+      - failureSystem.masterFailureHub
+    min_hubs: 1
+    max_depth: 5
+    require_failures: true
+    require_doctrine_ids: true
+
+# ============================================================
+# REPOSITORY TEMPLATES
+# ============================================================
+repo_templates:
+  source_repos:
+    - imo-creator
+    - ctb-doctrine
+
+  scaffold_config:
+    auto_apply: true
+    inherit_from: imo-creator
+    include_files:
+      - global-config/ctb.branchmap.yaml
+      - global-config/global_manifest.yaml
+      - global-config/imo-ra-schema.json
+      - .github/workflows/deepwiki_automation.yml
+      - scripts/hooks/post_update_deepwiki.sh
+
+# ============================================================
+# TEMPLATE REGISTRY (Altitude-Gated Artifacts)
+# ============================================================
+# Defines all templates and when they become legal per ALTITUDE_DESCENT_MODEL.md
+# Child repos pulling from imo-creator MUST implement required templates
+# at the appropriate altitude level before descending further.
+
+template_registry:
+  version: "1.0"
+  source: "templates/"
+
+  # ─────────────────────────────────────────────────────────
+  # DOCTRINE TEMPLATES (Read-only reference)
+  # ─────────────────────────────────────────────────────────
+  doctrine:
+    - template: "doctrine/HUB_SPOKE_ARCHITECTURE.md"
+      type: reference
+      required: true
+      legal_at_altitude: 50k
+      description: "Master doctrine for Hub/Spoke/IMO/CTB structure"
+      action: "Read and follow. Never copy or modify."
+
+    - template: "doctrine/ALTITUDE_DESCENT_MODEL.md"
+      type: reference
+      required: true
+      legal_at_altitude: 50k
+      description: "Governs WHEN and HOW templates become legal"
+      action: "Read and follow. Never copy or modify."
+
+  # ─────────────────────────────────────────────────────────
+  # ARTIFACT TEMPLATES (Copy and instantiate)
+  # ─────────────────────────────────────────────────────────
+  artifacts:
+    # 50k Altitude - Hub Identity
+    - template: "hub_identity"
+      type: declaration
+      required: true
+      legal_at_altitude: 50k
+      instantiate_to: "docs/hub_identity.md"
+      fields_required:
+        - hub_id
+        - hub_name
+        - hub_purpose
+        - i_type_attachments
+        - o_type_attachments
+      gate_for: "40k descent"
+
+    # 20k Altitude - PRD
+    - template: "prd/PRD_HUB.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 20k
+      instantiate_to: "docs/prd/PRD-{hub_name}.md"
+      prerequisites:
+        - "50k complete (Hub ID assigned)"
+        - "40k complete (Application decomposed)"
+        - "30k complete (CTB placed)"
+      gate_for: "10k descent"
+
+    # 10k Altitude - ADR
+    - template: "adr/ADR.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 10k
+      instantiate_to: "docs/adr/ADR-{sequence}-{title}.md"
+      prerequisites:
+        - "PRD approved"
+        - "IMO defined"
+      gate_for: "5k descent"
+      notes: "One ADR per architectural decision"
+
+    # 5k Altitude - PR
+    - template: "pr/PULL_REQUEST_TEMPLATE_HUB.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 5k
+      instantiate_to: ".github/PULL_REQUEST_TEMPLATE/hub.md"
+      prerequisites:
+        - "PRD exists"
+        - "ADRs recorded"
+      notes: "Must reference PRD and ADRs"
+
+    - template: "pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+      type: instantiate
+      required: false
+      legal_at_altitude: 5k
+      instantiate_to: ".github/PULL_REQUEST_TEMPLATE/spoke.md"
+      prerequisites:
+        - "PRD exists"
+      notes: "Use for spoke-only changes"
+
+    # Ship Gate - Compliance Checklist
+    - template: "checklists/HUB_COMPLIANCE.md"
+      type: instantiate
+      required: true
+      legal_at_altitude: 5k
+      instantiate_to: "docs/checklists/HUB_COMPLIANCE.md"
+      prerequisites:
+        - "All higher altitudes complete"
+        - "PRD approved"
+        - "All ADRs recorded"
+        - "All PRs merged"
+      gate_for: "Ship approval"
+
+  # ─────────────────────────────────────────────────────────
+  # INTEGRATION TEMPLATES (Copy and configure)
+  # ─────────────────────────────────────────────────────────
+  integrations:
+    - template: "integrations/DOPPLER.md"
+      config_template: "integrations/doppler.yaml.template"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_config_to: "doppler.yaml"
+      doctrine_id: "04.05.01"
+      description: "Secrets management - no exceptions"
+
+    - template: "integrations/HEIR.md"
+      config_template: "integrations/heir.doctrine.yaml.template"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_config_to: "heir.doctrine.yaml"
+      doctrine_id: "04.05.05"
+      description: "HEIR compliance validation"
+      validation_command: "python -m packages.heir.checks"
+
+    - template: "integrations/OBSIDIAN.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      instantiate_to: "{hub_name}-vault/"
+      doctrine_id: "04.05.04"
+      description: "Knowledge management vault"
+      required_structure:
+        - "00-INBOX/"
+        - "10-PRD/"
+        - "20-ADR/"
+        - "30-DOCS/"
+        - "70-TEMPLATES/"
+
+    - template: "integrations/COMPOSIO.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      doctrine_id: "04.04.01"
+      description: "MCP server for external services"
+
+    - template: "integrations/TOOLS.md"
+      type: integration
+      required: true
+      legal_at_altitude: 30k
+      description: "Tool doctrine + 19-step pipeline ledger"
+      notes: "All tools must be registered with ADRs"
+
+  # ─────────────────────────────────────────────────────────
+  # ENFORCEMENT RULES
+  # ─────────────────────────────────────────────────────────
+  enforcement:
+    # Gate validation
+    validate_gates: true
+    halt_on_missing_prerequisite: true
+
+    # Altitude descent rules
+    descent_rules:
+      - rule: "No hub descends without declared attachments"
+        check_at: 50k
+        blocks: 40k
+      - rule: "No CTB before application decomposition"
+        check_at: 40k
+        blocks: 30k
+      - rule: "No IMO before CTB"
+        check_at: 30k
+        blocks: 20k
+      - rule: "No PRD before CTB placement"
+        check_at: 30k
+        blocks: 20k
+      - rule: "No ADR before PRD approval"
+        check_at: 20k
+        blocks: 10k
+      - rule: "No PR before PRD + ADR"
+        check_at: 10k
+        blocks: 5k
+      - rule: "No code before process logic defined"
+        check_at: 10k
+        blocks: 5k
+
+    # On update from imo-creator
+    on_update:
+      sync_doctrine: true
+      sync_templates: true
+      validate_compliance: true
+      report_missing: true
+      auto_create_stubs: false
+
+  # ─────────────────────────────────────────────────────────
+  # UPDATE PROPAGATION
+  # ─────────────────────────────────────────────────────────
+  propagation:
+    trigger: "update_from_imo_creator.sh"
+    files_to_sync:
+      always:
+        - "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+        - "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+        - "global-config/global_manifest.yaml"
+      on_missing:
+        - "templates/prd/PRD_HUB.md"
+        - "templates/adr/ADR.md"
+        - "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+        - "templates/checklists/HUB_COMPLIANCE.md"
+        - "templates/integrations/*.md"
+        - "templates/integrations/*.template"
+    validation_after_sync:
+      - "Check template_registry.enforcement.descent_rules"
+      - "Report compliance status"
+
+# ============================================================
+# METRICS & ANALYTICS
+# ============================================================
+metrics:
+  enabled: true
+  collect:
+    - deepwiki_runs
+    - documentation_updates
+    - error_rates
+    - processing_time
+    - repo_coverage
+
+  export_to:
+    - bigquery
+    - firebase_analytics
+
+  dashboards:
+    enabled: true
+    url: "${METRICS_DASHBOARD_URL}"
+
+# ============================================================
+# MAINTENANCE WINDOWS
+# ============================================================
+maintenance:
+  scheduled_windows:
+    - day: Sunday
+      time: "02:00-04:00 UTC"
+      tasks:
+        - deepwiki_full_refresh
+        - log_rotation
+        - cache_cleanup
+
+  auto_updates:
+    enabled: true
+    check_interval: weekly
+    source_repo: imo-creator
+
+# ============================================================
+# FEATURE FLAGS
+# ============================================================
+feature_flags:
+  experimental:
+    deepwiki_ml_insights: false
+    auto_pr_generation: false
+    cross_repo_analysis: true
+
+  beta:
+    real_time_sync: false
+    collaborative_editing: false
+
+  stable:
+    auto_documentation: true
+    diff_analysis: true
+    diagram_generation: true
+
+# ============================================================
+# ERROR LOG REGISTRY (ORBT Error Logging System)
+# ============================================================
+error_log_registry:
+  destination_table: shq.orbt_error_log
+  repo_origin: imo-creator
+  required_fields:
+    - timestamp
+    - repo_name
+    - altitude_level
+    - orbt_layer
+    - error_message
+    - resolution_status
+    - process_id
+    - unique_id
+  optional_fields:
+    - error_layer
+    - context_metadata
+  altitude_levels:
+    - 60k
+    - 40k
+    - 30k
+    - 20k
+    - 10k
+    - 5k
+  orbt_layers:
+    - System
+    - Operation
+    - Repair
+    - Build
+    - Training
+  automation_hooks:
+    - n8n
+    - Composio
+  access_control:
+    write:
+      - all_agents
+    read:
+      - repo-dashboard
+      - lovable
+      - deepwiki
+  enforcement:
+    required_on_repo_build: true
+    enforce_on_push: true
+    repo_manifest_override_allowed: false
+    validate_fields: true
+    auto_tag_process_id: true
+    auto_tag_altitude: true
+    error_log_view_required: true

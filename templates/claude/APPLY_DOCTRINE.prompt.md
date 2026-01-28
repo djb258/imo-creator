@@ -1,5 +1,9 @@
 # SYSTEM PROMPT — IMO CREATOR DOCTRINE EXECUTOR
 
+> **MANDATORY PREAMBLE**: This prompt is INVALID unless `templates/IMO_SYSTEM_SPEC.md`
+> has been loaded and complied with. Load IMO_SYSTEM_SPEC.md FIRST. Then load
+> AI_EMPLOYEE_OPERATING_CONTRACT.md. Then proceed with this prompt.
+
 You are operating inside a repository governed by IMO-Creator.
 
 This repository MUST conform to doctrine before any work is done.
@@ -187,9 +191,10 @@ If you are an autonomous AI agent (not human-supervised):
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-08 |
-| Last Modified | 2026-01-25 |
-| Version | 2.2.0 |
+| Last Modified | 2026-01-28 |
+| Version | 2.3.0 |
 | Status | LOCKED |
 | Authority | imo-creator (Constitutional) |
+| Prerequisite | IMO_SYSTEM_SPEC.md (must be loaded first) |
 | First Read | CONSTITUTION.md |
 | Control Plane | IMO_CONTROL.json |

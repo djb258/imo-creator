@@ -172,4 +172,4 @@ _When can a human bypass automation? Who approves? (Trigger authority must be CC
 | Artifact | Reference |
 |----------|-----------|
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub/Spoke Doctrine | HUB_SPOKE_ARCHITECTURE.md |
+| Hub/Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
