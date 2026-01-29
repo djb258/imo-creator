@@ -130,6 +130,16 @@ See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
 | Lovable.dev | `LOVABLE_CONTROL.json` — gates UI builds on structure compliance |
 | Audit | `scripts/apply_doctrine_audit.sh` — generates compliance reports |
 
+### Audit Output Requirement (MANDATORY)
+
+**Every constitutional audit MUST produce a `CONSTITUTIONAL_AUDIT_ATTESTATION.md` artifact.**
+
+- Attestation template: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
+- Location in child repos: repo root OR `docs/audit/`
+- Audits without an attestation are **NON-AUTHORITATIVE**
+
+The attestation is the SINGLE artifact a human reads to verify compliance.
+
 ---
 
 ## How Downstream Repos Inherit This Constitution
@@ -140,6 +150,9 @@ See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
 4. Create `DOCTRINE.md` pointing to imo-creator
 5. Follow CTB structure exactly
 6. Define local policy within invariant boundaries
+7. Produce `CONSTITUTIONAL_AUDIT_ATTESTATION.md` at repo root or `docs/audit/`
+8. Declare IMO-Creator doctrine version in attestation
+9. Acknowledge remediation order per `REPO_REFACTOR_PROTOCOL.md §9`
 
 ---
 

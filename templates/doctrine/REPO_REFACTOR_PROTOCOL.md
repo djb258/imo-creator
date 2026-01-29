@@ -304,6 +304,48 @@ Do not duplicate. Reference and obey.
 
 ---
 
+## 9. Remediation Order (CONSTITUTIONAL LAW)
+
+When an audit identifies violations, remediation MUST follow this exact order.
+**Audits may NOT recommend fixes that violate this sequence.**
+
+### Canonical Remediation Sequence
+
+| Order | Phase | Description | Gate |
+|-------|-------|-------------|------|
+| 1 | **Constitutional Validity** | Verify CONST → VAR transformation is declared | Must pass before Phase 2 |
+| 2 | **PRD Alignment** | PRD exists and declares constants, variables, passes | Must pass before Phase 3 |
+| 3 | **Hub Manifest Alignment** | REGISTRY.yaml matches PRD declarations | Must pass before Phase 4 |
+| 4 | **ERD Validation** | All tables pass Pressure Test and Upstream Flow Test | Must pass before Phase 5 |
+| 5 | **Process Declaration** | Process references PRD/ERD, introduces no new CONST/VAR | Must pass before Phase 6 |
+| 6 | **Audit Attestation** | CONSTITUTIONAL_AUDIT_ATTESTATION.md produced | Compliance proven |
+
+### Remediation Rules
+
+| Rule | Enforcement |
+|------|-------------|
+| No skipping phases | MANDATORY |
+| No parallel remediation across phases | MANDATORY |
+| Each phase must pass before next begins | MANDATORY |
+| Attestation required at completion | MANDATORY |
+
+### Why This Order Matters
+
+```
+INVALID: "Fix ERD first, then write PRD"
+         → ERD cannot be validated without PRD constants/variables
+
+INVALID: "Add process, then fix hub manifest"
+         → Process references manifest; manifest must be correct first
+
+VALID:   "Constitutional → PRD → Manifest → ERD → Process → Attest"
+         → Each phase builds on proven foundation
+```
+
+**Constitutional rule**: Remediation order is not a suggestion. It is law. Violations of remediation order are doctrine violations.
+
+---
+
 ## Document Control
 
 | Field | Value |

@@ -5,6 +5,9 @@ No exceptions. No partial compliance.
 
 **This is NOT a one-time audit.** Compliance is continuous — revalidate after every change.
 
+**This checklist MUST be referenced by an attestation document.**
+See: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
+
 ## Conformance
 
 | Field | Value |
@@ -31,9 +34,12 @@ No exceptions. No partial compliance.
 These sections verify the hub satisfies the Transformation Law.
 Failure in Part A invalidates the hub regardless of Part B status.
 
+**Section Anchors**: §A.1 through §A.6
+
 ---
 
-## Constitutional Validity (CONST → VAR)
+## Constitutional Validity (CONST → VAR) {#section-a1}
+<!-- §A.1 -->
 
 | Priority | Check |
 |----------|-------|
@@ -50,7 +56,8 @@ If this statement cannot be completed, the hub is invalid.
 
 ---
 
-## PRD Compliance (Behavioral Proof)
+## PRD Compliance (Behavioral Proof) {#section-a2}
+<!-- §A.2 -->
 
 | Priority | Check |
 |----------|-------|
@@ -72,7 +79,8 @@ If this statement cannot be completed, the hub is invalid.
 
 ---
 
-## ERD Compliance (Structural Proof)
+## ERD Compliance (Structural Proof) {#section-a3}
+<!-- §A.3 -->
 
 | Priority | Check |
 |----------|-------|
@@ -92,7 +100,8 @@ If this statement cannot be completed, the hub is invalid.
 
 ---
 
-## ERD Pressure Test (Static)
+## ERD Pressure Test (Static) {#section-a4}
+<!-- §A.4 -->
 
 For **each table**, all four questions must pass:
 
@@ -114,7 +123,8 @@ For **each table**, all four questions must pass:
 
 ---
 
-## ERD Upstream Flow Test (Simulated)
+## ERD Upstream Flow Test (Simulated) {#section-a5}
+<!-- §A.5 -->
 
 | Priority | Check |
 |----------|-------|
@@ -128,7 +138,8 @@ For **each table**, all four questions must pass:
 
 ---
 
-## Process Compliance (Execution Declaration)
+## Process Compliance (Execution Declaration) {#section-a6}
+<!-- §A.6 -->
 
 | Priority | Check |
 |----------|-------|
@@ -156,9 +167,12 @@ Part B assumes Part A passes.
 **Part B governs ship-readiness, not existence legitimacy.**
 Items marked CRITICAL define minimum operational safety, not architectural purity.
 
+**Section Anchors**: §B.1 through §B.11
+
 ---
 
-## Canonical Chain (CC) Compliance
+## Canonical Chain (CC) Compliance {#section-b1}
+<!-- §B.1 -->
 
 | Priority | Check |
 |----------|-------|
@@ -171,7 +185,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Hub Identity (CC-02)
+## Hub Identity (CC-02) {#section-b2}
+<!-- §B.2 -->
 
 | Priority | Check |
 |----------|-------|
@@ -182,7 +197,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## CTB Placement
+## CTB Placement {#section-b3}
+<!-- §B.3 -->
 
 | Priority | Check |
 |----------|-------|
@@ -193,7 +209,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## IMO Structure
+## IMO Structure {#section-b4}
+<!-- §B.4 -->
 
 ### Ingress (I Layer)
 
@@ -223,7 +240,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Spokes
+## Spokes {#section-b5}
+<!-- §B.5 -->
 
 | Priority | Check |
 |----------|-------|
@@ -235,7 +253,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Tools
+## Tools {#section-b6}
+<!-- §B.6 -->
 
 | Priority | Check |
 |----------|-------|
@@ -246,7 +265,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Cross-Hub Isolation
+## Cross-Hub Isolation {#section-b7}
+<!-- §B.7 -->
 
 | Priority | Check |
 |----------|-------|
@@ -256,7 +276,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Guard Rails
+## Guard Rails {#section-b8}
+<!-- §B.8 -->
 
 | Priority | Check |
 |----------|-------|
@@ -267,7 +288,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Kill Switch
+## Kill Switch {#section-b9}
+<!-- §B.9 -->
 
 | Priority | Check |
 |----------|-------|
@@ -278,7 +300,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Rollback
+## Rollback {#section-b10}
+<!-- §B.10 -->
 
 | Priority | Check |
 |----------|-------|
@@ -287,7 +310,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Observability
+## Observability {#section-b11}
+<!-- §B.11 -->
 
 | Priority | Check |
 |----------|-------|
