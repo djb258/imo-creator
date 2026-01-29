@@ -1,0 +1,109 @@
+# AI_EMPLOYEE_TASK.yaml
+# Authority: OPERATIONAL
+# Governing Doctrine: CONSTITUTION.md, AI_EMPLOYEE_PROTOCOL.md
+# Change Protocol: HUMAN APPROVAL REQUIRED
+
+task_id: AE-YYYY-MM-DD-NNN
+status: ASSIGNED  # ASSIGNED | IN_PROGRESS | BLOCKED | ESCALATED | FAILED | COMPLETED
+
+# --- IDENTITY ---
+ai_employee:
+  name: claude-code
+  role: executor
+  cc_level: CC-04
+
+sovereign:
+  type: human
+  identifier: primary_owner
+
+# --- SCOPE ---
+repository:
+  name: child-repo-name
+  path: /absolute/or/relative/path
+  territory: CHILD_REPO_ONLY
+
+hub:
+  hub_id: HUB-XYZ
+  sub_hub_id: optional-sub-hub
+  governing_prd: docs/prd/PRD.md
+  governing_erd: docs/erd/ERD.md
+  governing_process: docs/process/PROCESS.md
+
+# --- TASK DEFINITION ---
+task:
+  title: "Short, explicit task description"
+  objective: "What must exist when this task is complete"
+  in_scope:
+    - item_1
+    - item_2
+  out_of_scope:
+    - explicitly_not_allowed_thing
+
+# --- TRACEABILITY (MANDATORY) ---
+traceability:
+  constant: CONST_NAME
+  variable: VAR_NAME
+  transformation: CONST_TO_VAR_DESCRIPTION
+
+# --- AUTHORITY & AUTONOMY ---
+authority:
+  autonomy_level: 1  # 0=Supervised | 1=Guided | 2=Autonomous | 3=Trusted
+  commits_allowed: false
+  prs_allowed: false
+  deploys_allowed: false
+
+# --- EXECUTION CONSTRAINTS ---
+constraints:
+  allow_refactor: false
+  allow_optimization: false
+  allow_scope_expansion: false
+  require_existing_prd: true
+  require_existing_erd: true
+  require_existing_process: true
+
+# --- TOOLS ---
+tools:
+  allowed:
+    - tool_name_1
+    - tool_name_2
+  source_of_truth: SNAP_ON_TOOLBOX.yaml
+
+# --- REPORTING ---
+reporting:
+  progress_required: true
+  report_on:
+    - TASK_STARTED
+    - MILESTONE_REACHED
+    - BLOCKED
+    - COMPLETED
+    - FAILED
+  format: PROTOCOL_DEFINED
+
+# --- ESCALATION ---
+escalation:
+  on_missing_prd: BLOCKING
+  on_missing_erd: BLOCKING
+  on_conflict: BLOCKING
+  on_uncertainty: CLARIFICATION
+  on_authority_violation: HARD_STOP
+  on_unapproved_tool: DECISION
+
+# --- FAIL HARD CONDITIONS ---
+fail_hard:
+  on_untraceable_action: true
+  on_new_source_of_truth: true
+  on_ctb_violation: true
+  on_missing_derived_from: true
+  on_pass_owner_missing: true
+
+# --- COMPLETION ---
+completion:
+  require_attestation: true
+  attestation_path: templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md
+  deliverables:
+    - path/to/file1
+    - path/to/file2
+
+# --- NOTES ---
+notes:
+  - "Optional human guidance or context"
