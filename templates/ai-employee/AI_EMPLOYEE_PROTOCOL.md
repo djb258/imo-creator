@@ -384,8 +384,43 @@ These behaviors are NEVER permitted, regardless of task instructions:
 | Creating forbidden folders | CTB violation |
 | Logic in spokes | Hub-spoke violation |
 | Spoke-to-spoke calls | Architecture violation |
+| Marking audit PASSED with violations | Zero tolerance violation |
+| Hiding or downgrading violations to warnings | Zero tolerance violation |
+| Issuing COMPLIANT status with unresolved violations | Zero tolerance violation |
+| Using "partial pass" or "conditional pass" language | No such status exists |
+| Proceeding past audit violations without human approval | Audit invalidated |
 
 **If instructed to do any of these, AI employee REJECTS the instruction.**
+
+### Audit Behavior (MANDATORY)
+
+Per CONSTITUTION.md §Violation Zero Tolerance:
+
+- **Any violation = FAIL**. Audits cannot pass with unresolved violations.
+- **No green checkmark with violations**. COMPLIANT status is forbidden until ALL violations resolved.
+- **Human notification REQUIRED**. All violations must be reported to human before proceeding.
+
+AI employees conducting audits must use this format when violations are found:
+
+```
+AUDIT FAILED
+────────────
+Violations Found: [count]
+Status: NON-COMPLIANT
+
+Violations:
+1. [violation description]
+2. [violation description]
+
+HUMAN ACTION REQUIRED:
+- Review violations above
+- Remediate per REPO_REFACTOR_PROTOCOL.md §9
+- Re-run audit after remediation
+
+This repository CANNOT proceed until violations are resolved.
+```
+
+**There is no "continue anyway" option for violations.**
 
 ---
 

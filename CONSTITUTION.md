@@ -142,6 +142,73 @@ The attestation is the SINGLE artifact a human reads to verify compliance.
 
 ---
 
+## Violation Zero Tolerance (CRITICAL)
+
+**If ANY violation exists, the audit FAILS. No exceptions.**
+
+### Absolute Rules
+
+| Rule | Enforcement |
+|------|-------------|
+| Any violation = FAIL | Audit cannot pass with unresolved violations |
+| No "pass with warnings" for violations | Warnings are not violations; violations are not warnings |
+| Violations MUST be surfaced | Hidden violations are themselves critical violations |
+| Human notification REQUIRED | All violations must be reported to human before proceeding |
+| No green checkmark with violations | COMPLIANT status is forbidden until ALL violations resolved |
+
+### What Constitutes a Violation
+
+A **violation** is any failure of:
+- Part A (Constitutional Validity) checks — ALL are CRITICAL
+- Part B CRITICAL checks — as marked in HUB_COMPLIANCE.md
+- Remediation order — per REPO_REFACTOR_PROTOCOL.md §9
+- Transformation law — CONST → VAR proof missing
+
+A **warning** is:
+- Part B HIGH or MEDIUM checks that are incomplete
+- Recommendations for improvement
+- Non-blocking observations
+
+**Warnings do NOT block. Violations ALWAYS block.**
+
+### AI Agent Prohibition
+
+AI agents conducting audits are PROHIBITED from:
+
+| Prohibited Action | Consequence |
+|-------------------|-------------|
+| Marking audit as PASSED when violations exist | CRITICAL violation — audit invalidated |
+| Hiding or downgrading violations to warnings | CRITICAL violation — audit invalidated |
+| Proceeding past violations without human approval | DOCTRINE violation — work invalidated |
+| Issuing "COMPLIANT" status with unresolved violations | CRITICAL violation — audit invalidated |
+| Using "partial pass" or "conditional pass" language | DOCTRINE violation — no such status exists |
+
+### Required Audit Behavior
+
+When violations are found:
+
+```
+AUDIT FAILED
+────────────
+Violations Found: [count]
+Status: NON-COMPLIANT
+
+Violations:
+1. [violation description]
+2. [violation description]
+
+HUMAN ACTION REQUIRED:
+- Review violations above
+- Remediate per REPO_REFACTOR_PROTOCOL.md §9
+- Re-run audit after remediation
+
+This repository CANNOT proceed until violations are resolved.
+```
+
+**There is no "continue anyway" option for violations.**
+
+---
+
 ## How Downstream Repos Inherit This Constitution
 
 1. Copy `IMO_CONTROL.json` to repository root
