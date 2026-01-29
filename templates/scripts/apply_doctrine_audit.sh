@@ -557,7 +557,7 @@ if [ $VIOLATIONS -eq 0 ]; then
 | Claude Code | APPLY_DOCTRINE.prompt.md |
 | Pre-commit | scripts/hooks/pre-commit |
 | CI | .github/workflows/doctrine-enforcement.yml |
-| Lovable.dev | LOVABLE_CONTROL.json |
+| UI Builder | UI_CONTROL_CONTRACT.json |
 
 ---
 
@@ -566,7 +566,7 @@ if [ $VIOLATIONS -eq 0 ]; then
 | File | Purpose |
 |------|---------|
 | IMO_CONTROL.json | Primary control plane |
-| LOVABLE_CONTROL.json | UI ingestion validator |
+| UI_CONTROL_CONTRACT.json | UI build control |
 
 ---
 

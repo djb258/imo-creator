@@ -175,11 +175,11 @@ jobs:
           echo ""
 
   # ─────────────────────────────────────────────────────────────────
-  # LOVABLE GATE (UI builds only)
+  # UI BUILDER GATE (UI builds only)
   # ─────────────────────────────────────────────────────────────────
 
-  lovable-gate:
-    name: Lovable.dev Pre-Build Gate
+  ui-builder-gate:
+    name: UI Builder Pre-Build Gate
     runs-on: ubuntu-latest
     needs: doctrine-audit
     if: always()
@@ -188,50 +188,50 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check Lovable Control
-        id: lovable
+      - name: Check UI Control Contract
+        id: ui_control
         run: |
           echo "───────────────────────────────────────────────────────────────"
-          echo "  LOVABLE.DEV PRE-BUILD GATE"
+          echo "  UI BUILDER PRE-BUILD GATE"
           echo "───────────────────────────────────────────────────────────────"
           echo ""
 
-          # Check LOVABLE_CONTROL.json exists
-          if [ ! -f "LOVABLE_CONTROL.json" ]; then
-            echo "::warning::LOVABLE_CONTROL.json not found - UI builds ungoverned"
-            echo "lovable_ready=false" >> $GITHUB_OUTPUT
+          # Check UI_CONTROL_CONTRACT.json exists
+          if [ ! -f "UI_CONTROL_CONTRACT.json" ]; then
+            echo "::warning::UI_CONTROL_CONTRACT.json not found - UI builds ungoverned"
+            echo "ui_ready=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          echo "✅ LOVABLE_CONTROL.json found"
+          echo "✅ UI_CONTROL_CONTRACT.json found"
 
           # Check if src/ui exists
           if [ ! -d "src/ui" ]; then
-            echo "ℹ️ No src/ui directory - Lovable gate not applicable"
-            echo "lovable_ready=skip" >> $GITHUB_OUTPUT
+            echo "ℹ️ No src/ui directory - UI gate not applicable"
+            echo "ui_ready=skip" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           # Check for ui.manifest.json
           if [ ! -f "src/ui/ui.manifest.json" ]; then
-            echo "::warning::src/ui/ui.manifest.json missing - Lovable cannot discover components"
-            echo "lovable_ready=false" >> $GITHUB_OUTPUT
+            echo "::warning::src/ui/ui.manifest.json missing - UI builder cannot discover components"
+            echo "ui_ready=false" >> $GITHUB_OUTPUT
           else
             echo "✅ ui.manifest.json found"
-            echo "lovable_ready=true" >> $GITHUB_OUTPUT
+            echo "ui_ready=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Lovable Gate Status
+      - name: UI Builder Gate Status
         run: |
           echo ""
-          echo "Lovable Ready: ${{ steps.lovable.outputs.lovable_ready }}"
+          echo "UI Ready: ${{ steps.ui_control.outputs.ui_ready }}"
           echo ""
 
-          if [ "${{ steps.lovable.outputs.lovable_ready }}" = "true" ]; then
-            echo "✅ Repository ready for Lovable.dev UI builds"
-          elif [ "${{ steps.lovable.outputs.lovable_ready }}" = "skip" ]; then
-            echo "ℹ️ No UI components - Lovable gate skipped"
+          if [ "${{ steps.ui_control.outputs.ui_ready }}" = "true" ]; then
+            echo "✅ Repository ready for UI builds"
+          elif [ "${{ steps.ui_control.outputs.ui_ready }}" = "skip" ]; then
+            echo "ℹ️ No UI components - UI gate skipped"
           else
-            echo "⚠️ Repository not ready for Lovable.dev UI builds"
+            echo "⚠️ Repository not ready for UI builds"
             echo "   Create src/ui/ui.manifest.json to enable"
           fi

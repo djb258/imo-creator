@@ -127,7 +127,7 @@ See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
 | Claude Code | `APPLY_DOCTRINE.prompt.md` — reads doctrine, audits structure, blocks violations |
 | Pre-commit | `scripts/hooks/pre-commit` — validates on every commit |
 | CI | `.github/workflows/doctrine-enforcement.yml` — fails PR on violations |
-| Lovable.dev | `LOVABLE_CONTROL.json` — gates UI builds on structure compliance |
+| UI Builder | `UI_CONTROL_CONTRACT.json` — gates UI builds on structure compliance |
 | Audit | `scripts/apply_doctrine_audit.sh` — generates compliance reports |
 
 ### Audit Output Requirement (MANDATORY)
@@ -145,7 +145,7 @@ The attestation is the SINGLE artifact a human reads to verify compliance.
 ## How Downstream Repos Inherit This Constitution
 
 1. Copy `IMO_CONTROL.json` to repository root
-2. Copy `LOVABLE_CONTROL.json` if UI exists
+2. Copy `UI_CONTROL_CONTRACT.json` if UI exists
 3. Run `scripts/install-hooks.sh` to install pre-commit
 4. Create `DOCTRINE.md` pointing to imo-creator
 5. Follow CTB structure exactly

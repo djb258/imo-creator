@@ -166,7 +166,7 @@ No `docs/SYSTEM_MANIFEST.md` exists to declare:
 | ALTITUDE_DESCENT_MODEL.md | Subordinate | None | References canonical |
 | REPO_REFACTOR_PROTOCOL.md | Subordinate | None | References canonical |
 | CTB_DOCTRINE.md | **UNCLEAR** | 3 | Needs reconciliation |
-| LOVABLE_CONTROL.json | Control Plane | None | Clean |
+| UI_CONTROL_CONTRACT.json | Control Plane | None | Clean |
 | global_manifest.yaml | Configuration | Not audited | Operational |
 
 ---

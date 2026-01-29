@@ -28,7 +28,7 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 |------|---------|-----------|
 | `CONSTITUTION.md` | Governing law | CONSTITUTIONAL |
 | `IMO_CONTROL.json` | Control plane binding | CONSTITUTIONAL |
-| `LOVABLE_CONTROL.json` | UI build control | CONSTITUTIONAL |
+| `UI_CONTROL_CONTRACT.json` | UI build control | CONSTITUTIONAL |
 | `CLAUDE.md` | AI assistant context | OPERATIONAL |
 
 ### Doctrine (templates/doctrine/)
@@ -95,7 +95,7 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 Child repositories inherit from IMO-Creator by:
 
 1. Copying `IMO_CONTROL.json` to root
-2. Copying `LOVABLE_CONTROL.json` if UI exists
+2. Copying `UI_CONTROL_CONTRACT.json` if UI exists
 3. Running `scripts/install-hooks.sh`
 4. Creating `DOCTRINE.md` pointing to imo-creator
 5. Following CTB structure exactly
@@ -140,7 +140,7 @@ All other documents are operational and subordinate to doctrine.
 | Manifest | Location | Purpose |
 |----------|----------|---------|
 | IMO_CONTROL.json | Root | Claude Code behavior binding |
-| LOVABLE_CONTROL.json | Root | UI build control |
+| UI_CONTROL_CONTRACT.json | Root | UI build control |
 | global_manifest.yaml | global-config/ | Ecosystem configuration |
 | imo-ra-schema.json | global-config/ | Fractal architecture template |
 | REGISTRY.yaml | N/A (in child repos) | Child repo component registry |

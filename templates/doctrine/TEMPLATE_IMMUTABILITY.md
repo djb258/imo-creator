@@ -36,7 +36,7 @@ The following artifacts are LOCKED and IMMUTABLE:
 |------|--------|-----------------|
 | `CONSTITUTION.md` | CONSTITUTIONAL | Human Approval Only |
 | `IMO_CONTROL.json` | CONSTITUTIONAL | Human Approval Only |
-| `LOVABLE_CONTROL.json` | CONSTITUTIONAL | Human Approval Only |
+| `UI_CONTROL_CONTRACT.json` | CONSTITUTIONAL | Human Approval Only |
 
 ### Template Files
 
