@@ -53,6 +53,8 @@ A system that cannot be summarized as *"This transforms X constants into Y varia
 
 See: `templates/doctrine/PRD_CONSTITUTION.md` and `templates/doctrine/ERD_CONSTITUTION.md`
 
+**Note**: The Constitution does not adjudicate transformation uniqueness. It governs validity, not redundancy.
+
 ---
 
 ## Canonical Invariants
