@@ -1,124 +1,115 @@
-# System Flow Projection — Constitutional Compiler Prompt
+# System Flow Projection — Canonical (Derived View)
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 
 ---
 
 ## ROLE
 
-You are **Claude Code acting as a Constitutional System Flow Compiler** under **IMO-Creator authority**.
+You are **Claude Code acting as a Constitutional Projection Compiler**.
 
-You are:
+Your job is to **read existing constitutional artifacts** in this repository and generate **one derived, read-only system flow projection** for human visualization.
 
-- NOT designing architecture
-- NOT modifying doctrine
-- NOT inventing structure
-
-You ARE:
-
-- Reading authoritative doctrine artifacts
-- Producing a **derived, read-only, regenerable system projection**
-- Emitting **one** machine-readable artifact for visualization only
+You **MUST NOT** invent structure, infer missing elements, or create new doctrine.
+If something cannot be traced, **FAIL HARD**.
 
 ---
 
-## GOVERNING LAW (NON-NEGOTIABLE)
+## DOCTRINAL POSITION (NON-NEGOTIABLE)
 
-Authority hierarchy is immutable:
+- This output is **DERIVED**
+- This output is **READ-ONLY**
+- This output is **REGENERABLE**
+- This output is **NOT a source of truth**
+
+**Authoritative hierarchy remains:**
 
 ```
 CONSTITUTION
-  → PRD
-    → ERD
-      → PROCESS
+→ PRDs
+→ ERDs
+→ Process Declarations
+→ (THIS FILE = PROJECTION ONLY)
 ```
-
-This output:
-
-- Is **NOT** a source of truth
-- Must never override PRD / ERD / Process
-- Must be fully regenerable from existing files
-- Must fail if ambiguity exists
 
 ---
 
-## ALLOWED INPUT PATHS (STRICT)
+## INPUTS (ONLY GUARANTEED PATHS)
 
-You may read ONLY from these locations if present:
+You may ONLY read from paths that exist constitutionally.
 
 ### Doctrine
 
-- `templates/doctrine/` (IMO-Creator)
-- OR explicit doctrine pointer referenced by `REGISTRY.yaml`
-- OR `DOCTRINE.md` if declared as pointer (child repos)
+- `templates/doctrine/*.md`
+- `CONSTITUTION.md` (if present)
+- `REPO_REFACTOR_PROTOCOL.md` (if present)
 
-### Specifications
+### Product / System Definition
 
-- `docs/PRD*.md`
+- `docs/prd/**/*.md`
+
+### Data Model
+
 - `docs/ERD*.md`
-- `docs/processes/*.md`
 
-### Registry & Taxonomy
+### Registry / Hub Declaration
 
 - `REGISTRY.yaml`
-- `config/` (CC layer mappings, repo taxonomy)
+
+### Process Declarations
+
+- `docs/processes/**/*.md`
 
 **DO NOT** assume folders.
-**DO NOT** reference phantom files.
-**DO NOT** infer missing data.
+**DO NOT** create new doctrine.
+**DO NOT** reference phantom paths.
 
 ---
 
-## OUTPUT (MANDATORY, SINGLE ARTIFACT)
+## OUTPUT (SINGLE ARTIFACT ONLY)
 
-Generate exactly **one file**:
+Produce **exactly one file**:
 
 ```
 docs/system-flow/SYSTEM_FLOW_PROJECTION.json
 ```
 
-No other files.
-No folders beyond this.
-No side artifacts.
+No additional files. No alternates.
 
 ---
 
-## OUTPUT PURPOSE
-
-This file is a **viewer projection**.
-
-It must allow a human or tool to:
-
-- See the entire system
-- Follow CONST → VAR transformations
-- Trace PRD → ERD → Process bindings
-- Understand CAPTURE / COMPUTE / GOVERN
-- Navigate CC layers
-- Visualize flow without reading raw markdown
-
-This file is **NOT governance**.
-
----
-
-## REQUIRED JSON SCHEMA (AUTHORITATIVE)
+## OUTPUT AUTHORITY HEADER (REQUIRED)
 
 ```json
 {
   "meta": {
-    "type": "system_flow_projection",
     "authority": "derived",
+    "projection_type": "system_flow",
+    "doctrine_authority": "IMO-Creator",
     "generated_by": "Claude Code",
+    "generated_at": "<ISO-8601 timestamp>",
     "regenerable": true,
-    "source_of_truth": ["PRD", "ERD", "Process"]
-  },
-  "governance": {
-    "cc_layers": ["CC-01", "CC-02", "CC-03", "CC-04"],
-    "passes": ["CAPTURE", "COMPUTE", "GOVERN"],
-    "imo_layers": ["I", "M", "O"]
-  },
+    "source_of_truth": [
+      "PRD",
+      "ERD",
+      "PROCESS"
+    ]
+  }
+}
+```
+
+---
+
+## REQUIRED JSON SCHEMA
+
+### Root Shape
+
+```json
+{
+  "meta": { ... },
   "nodes": [],
   "edges": []
 }
@@ -126,95 +117,151 @@ This file is **NOT governance**.
 
 ---
 
-## NODE RULES (STRICT)
+## NODE TYPES (STRICT)
 
-Create nodes for:
+Each node MUST include `id`, `type`, and `derived_from`.
 
-- System / Sovereign
-- Hub
-- Sub-Hub
-- Table
-- Process
+### Allowed node types:
 
-Each node MUST include:
+- `hub`
+- `table`
+- `process`
+- `view`
+
+---
+
+### HUB NODE (MANDATORY FIELDS)
 
 ```json
 {
-  "id": "string",
-  "label": "string",
-  "type": "system | hub | subhub | table | process",
-  "cc_layer": "CC-01 | CC-02 | CC-03 | CC-04",
-  "pass": "CAPTURE | COMPUTE | GOVERN | null",
-  "imo_layer": "I | M | O | null",
+  "id": "hub.company_target",
+  "type": "hub",
+  "name": "Company Target",
+  "cc_layer": "CC-02",
+  "imo_layer": null,
   "constants": [],
   "variables": [],
-  "refs": {
-    "prd": "path or null",
-    "erd": "path or null",
-    "process": "path or null"
+  "derived_from": {
+    "registry": "REGISTRY.yaml",
+    "prd": "docs/prd/PRD_COMPANY_HUB.md"
   }
 }
 ```
 
-### Node Constraints
+Rules:
 
-- `constants` / `variables` are **required for hub + subhub nodes**
-- Tables MUST declare `pass`
-- Processes MUST reference both PRD and ERD
-- No node may exist without at least one valid `refs` path
+- `cc_layer` is authoritative
+- `imo_layer` is OPTIONAL (null allowed)
+- `constants` / `variables` MUST come from PRD — never inferred
 
 ---
 
-## EDGE RULES (TRACEABILITY REQUIRED)
-
-Each edge MUST include:
+### TABLE NODE
 
 ```json
 {
-  "from": "node_id",
-  "to": "node_id",
-  "kind": "ownership | data_flow | produces | governs",
-  "derived_from": "path to PRD | ERD | Process"
+  "id": "table.outreach.company_target",
+  "type": "table",
+  "schema": "outreach",
+  "name": "company_target",
+  "pass_owner": "COMPUTE",
+  "imo_layer": "M",
+  "derived_from": {
+    "erd": "docs/ERD_SUMMARY.md"
+  }
 }
 ```
 
-Edges must express:
+Rules:
 
-- CONST → VAR transformation
-- PRD → ERD → Process lineage
-- CAPTURE → COMPUTE → GOVERN flow
-- No cycles without governance explanation
+- `pass_owner` MUST match ERD declaration
+- `imo_layer` MUST align with pass_owner
+- If pass ownership is missing → FAIL
 
 ---
 
-## ALTITUDE RULE (VISUAL ONLY)
+### PROCESS NODE
 
-Altitude may appear ONLY as metadata.
+```json
+{
+  "id": "process.company_target",
+  "type": "process",
+  "cc_layer": "CC-04",
+  "passes": ["CAPTURE", "COMPUTE", "GOVERN"],
+  "derived_from": {
+    "process_doc": "docs/processes/company-target-process.md"
+  }
+}
+```
 
-Mapping is explicit:
+---
 
-| Altitude | CC Layer |
-|----------|----------|
-| 30k | CC-01 |
-| 20k | CC-02 |
-| 10k | CC-03 |
-| 5k | CC-04 |
+### VIEW NODE
 
-Altitude has **no authority**.
+```json
+{
+  "id": "view.company_dashboard",
+  "type": "view",
+  "cc_layer": "CC-04",
+  "imo_layer": "O",
+  "derived_from": {
+    "prd": "docs/prd/PRD_COMPANY_HUB.md"
+  }
+}
+```
+
+---
+
+## EDGE (FLOW DECLARATION)
+
+```json
+{
+  "from": "hub.company_target",
+  "to": "table.outreach.company_target",
+  "flow_type": "writes",
+  "derived_from": {
+    "prd": "docs/prd/PRD_COMPANY_HUB.md",
+    "erd": "docs/ERD_SUMMARY.md"
+  }
+}
+```
+
+### Allowed `flow_type` values:
+
+- `writes`
+- `reads`
+- `emits`
+- `governs`
+- `derives`
+
+---
+
+## ALTITUDE HANDLING (IMPORTANT)
+
+Altitude is **visual metadata only**.
+
+If present, include as:
+
+```json
+"altitude_hint": "hub_view | data_view | process_view"
+```
+
+Altitude MUST NOT replace CC layers.
 
 ---
 
 ## HARD FAIL CONDITIONS
 
-Abort generation if:
+Immediately stop and report an error if:
 
-- A node cannot be traced to a file
-- A table lacks pass ownership
+- A node lacks `derived_from`
+- A table lacks `pass_owner`
+- A process lacks pass declaration
 - A hub lacks CONST → VAR declaration
-- A process lacks PRD + ERD binding
+- Any element cannot be traced to a source file
 - Any new "source of truth" is implied
 
-Fail fast. Do not guess.
+Fail fast. Do not guess. Do not infer.
 
 ---
 
@@ -223,7 +270,7 @@ Fail fast. Do not guess.
 On completion, output:
 
 1. Generated file path
-2. Node count
+2. Node count (by type)
 3. Edge count
 4. Skipped items (with explicit reason)
 
@@ -243,27 +290,13 @@ PRD, ERD, and Process remain supreme.
 
 ---
 
-## Compliance Summary
-
-| Check | Status |
-|-------|--------|
-| CTB compliant | Required |
-| CC hierarchy preserved | Required |
-| CONST → VAR visible | Required |
-| IMO + Pass separated | Required |
-| Single artifact | Required |
-| Viewer-agnostic | Required |
-| Zero ambiguity | Required |
-
----
-
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-29 |
 | Last Modified | 2026-01-29 |
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Status | LOCKED |
 | Authority | CONSTITUTIONAL |
 | Change Protocol | ADR + HUMAN APPROVAL REQUIRED |
