@@ -24,8 +24,90 @@ See: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
 | Priority | Meaning | Ship Without? |
 |----------|---------|---------------|
 | **CRITICAL** | Blocks ship | NO — must be checked |
-| **HIGH** | Strongly recommended | Only with ADR exception |
+| **HIGH** | Blocks compliance | NO — must fix or downgrade with ADR |
 | **MEDIUM** | Nice to have | Yes, but document why |
+| **LOW** | Optional | Yes |
+
+---
+
+## COMPLIANCE GATE (MANDATORY)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      ZERO-TOLERANCE ENFORCEMENT RULE                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  You CANNOT mark a hub as COMPLIANT if:                                       ║
+║                                                                               ║
+║    1. ANY CRITICAL items are unchecked                                        ║
+║    2. ANY HIGH violations exist (unfixed)                                     ║
+║                                                                               ║
+║  HIGH violations are NOT "fix later" items.                                   ║
+║  HIGH violations BLOCK compliance.                                            ║
+║                                                                               ║
+║  The ONLY path forward is:                                                    ║
+║    → FIX the violation, OR                                                    ║
+║    → DOWNGRADE to MEDIUM with documented justification + ADR                  ║
+║                                                                               ║
+║  NEVER mark COMPLIANT with open HIGH/CRITICAL violations.                     ║
+║  This is a HARD RULE. No exceptions.                                          ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Common Mistake (DO NOT DO THIS)
+
+```
+❌ WRONG: "5 HIGH violations found. Status: COMPLIANT"
+   This is INVALID. HIGH violations block compliance.
+
+✅ RIGHT: "5 HIGH violations found. Status: NON-COMPLIANT"
+   Then fix the violations and re-audit.
+
+✅ RIGHT: "0 HIGH/CRITICAL violations. 3 MEDIUM. Status: COMPLIANT WITH NOTES"
+   Medium violations are documented but don't block.
+```
+
+**Constitutional Authority**: See CONSTITUTION.md §Violation Zero Tolerance
+
+---
+
+### AI Agent Compliance Rule (MANDATORY)
+
+**AI agents filling out this checklist are bound by CONSTITUTION.md §Violation Zero Tolerance.**
+
+| Prohibited Action | Consequence |
+|-------------------|-------------|
+| Marking COMPLIANT when CRITICAL items are unchecked | AUDIT INVALIDATED |
+| Marking COMPLIANT when HIGH violations exist (unfixed) | AUDIT INVALIDATED |
+| Downgrading violations to skip the gate | DOCTRINE VIOLATION |
+| Using "partial pass" or "conditional compliance" | NO SUCH STATUS EXISTS |
+| Proceeding past violations without human approval | WORK INVALIDATED |
+
+**Required behavior when violations exist:**
+
+```
+CHECKLIST FAILED
+────────────────
+Hub: [HUB-ID]
+Status: NON-COMPLIANT
+
+CRITICAL unchecked: [count]
+HIGH violations: [count]
+
+Violations:
+1. §[section] — [description]
+2. §[section] — [description]
+
+HUMAN ACTION REQUIRED:
+- Review violations above
+- Fix violations OR downgrade with ADR justification
+- Re-run checklist after remediation
+
+This hub CANNOT ship until violations are resolved.
+```
+
+**There is no "continue anyway" option. AI agents must STOP and report.**
 
 ---
 
@@ -398,6 +480,21 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 | MEDIUM | Optional | ___ / ___ |
 
 **If any CRITICAL item is unchecked, this hub may not ship.**
+**If any HIGH violation exists, this hub is NON-COMPLIANT.**
+
+---
+
+## Compliance Gate Verification
+
+Before marking this hub as COMPLIANT, verify:
+
+| Check | Status |
+|-------|--------|
+| All CRITICAL items checked | [ ] YES / [ ] NO → BLOCKED |
+| All HIGH violations fixed | [ ] YES / [ ] NO → BLOCKED |
+| MEDIUM items documented | [ ] YES / [ ] N/A |
+
+**Gate Result**: [ ] COMPLIANT / [ ] COMPLIANT WITH NOTES / [ ] NON-COMPLIANT
 
 ---
 
@@ -405,6 +502,7 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 > **This hub remains valid only while all checklist items pass.**
 > **Any change that causes failure invalidates the hub until corrected.**
+> **HIGH violations BLOCK compliance — they are NOT "fix later" items.**
 
 ---
 
