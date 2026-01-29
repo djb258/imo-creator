@@ -36,8 +36,28 @@ IMO-Creator governs structure and declaration only. Runtime behavior, execution 
 
 ---
 
+## The Transformation Law (CONST → VAR)
+
+**This is the supreme governing principle. All other invariants derive from it.**
+
+> Nothing may exist unless it transforms declared constants into declared variables.
+
+| Proof Type | Purpose | Authority |
+|------------|---------|-----------|
+| **PRD** | Explains WHY and HOW the transformation occurs | Behavioral proof |
+| **ERD** | Proves WHAT structural artifacts are allowed to exist | Structural proof |
+
+**Constitutional rule**: No hub, table, schema, or identifier may be instantiated without both proofs.
+
+A system that cannot be summarized as *"This transforms X constants into Y variables"* is not a valid system under this constitution.
+
+See: `templates/doctrine/PRD_CONSTITUTION.md` and `templates/doctrine/ERD_CONSTITUTION.md`
+
+---
+
 ## Canonical Invariants
 
+- **Transformation law**: Constants → Variables (requires PRD + ERD proof)
 - **CTB branches**: `sys` / `data` / `app` / `ai` / `ui`
 - **CC descent gates**: PRD before code, ADR before code
 - **Hub owns logic**: Spokes carry data only, no logic

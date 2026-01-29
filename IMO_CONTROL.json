@@ -90,6 +90,16 @@
         "file": "DOCUMENTATION_ERD_DOCTRINE.md",
         "purpose": "Documentation & ERD enforcement - Mermaid standard, column dictionary, AI readability test",
         "version": "1.0.0"
+      },
+      {
+        "file": "PRD_CONSTITUTION.md",
+        "purpose": "PRD behavioral proof - CONST→VAR transformation declaration, pass structure, scope boundary",
+        "version": "1.0.0"
+      },
+      {
+        "file": "ERD_CONSTITUTION.md",
+        "purpose": "ERD structural proof - Pressure test, upstream flow test, table validity",
+        "version": "1.0.0"
       }
     ],
     "treatment": "EXECUTABLE_LAW",

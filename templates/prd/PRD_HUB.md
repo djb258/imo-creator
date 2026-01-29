@@ -30,9 +30,50 @@
 
 ---
 
-## 3. Purpose
+## 3. Purpose & Transformation Declaration
 
 _What does this hub do? What boundary does it own? A hub is the application — it owns logic, state, CTB structure, and full IMO._
+
+### Transformation Statement (REQUIRED)
+
+_Complete this sentence: "This system transforms [CONSTANTS] into [VARIABLES]."_
+
+| Field | Value |
+|-------|-------|
+| **Transformation Summary** | |
+
+### Constants (Inputs)
+
+_What immutable inputs does this system receive? These are ADR-gated to change._
+
+| Constant | Source | Description |
+|----------|--------|-------------|
+| | | |
+
+### Variables (Outputs)
+
+_What mutable outputs does this system produce?_
+
+| Variable | Destination | Description |
+|----------|-------------|-------------|
+| | | |
+
+### Pass Structure
+
+_Which passes occur and in what order?_
+
+| Pass | Type | IMO Layer | Description |
+|------|------|-----------|-------------|
+| | CAPTURE | I (Ingress) | |
+| | COMPUTE | M (Middle) | |
+| | GOVERN | O (Egress) | |
+
+### Scope Boundary
+
+| Scope | Description |
+|-------|-------------|
+| **IN SCOPE** | |
+| **OUT OF SCOPE** | |
 
 ---
 
