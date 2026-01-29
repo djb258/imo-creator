@@ -79,6 +79,37 @@ See **CANONICAL_ARCHITECTURE_DOCTRINE.md** for the full authority definition.
 
 ---
 
+## Governance Direction (CRITICAL)
+
+**Doctrine flows DOWN. Never UP.**
+
+```
+IMO-CREATOR (Parent/Sovereign)
+       │
+       ▼  PULL doctrine down
+       │
+   CHILD REPO
+       │
+       ▼  APPLY locally
+       │
+   LOCAL CONFORMANCE
+```
+
+| Action | Permitted |
+|--------|-----------|
+| Child pulls doctrine from parent | YES |
+| Child applies doctrine locally | YES |
+| Child creates local PRD/ERD/Process | YES |
+| Child pushes changes to parent | **NO — FORBIDDEN** |
+| Child modifies parent doctrine | **NO — FORBIDDEN** |
+| Child submits ADR to parent for human review | YES (change request only) |
+
+**Constitutional rule**: Child repositories CONFORM to imo-creator. They do not CONTRIBUTE to it. Any change to parent doctrine requires ADR submission and human approval within the parent repository.
+
+**AI agents operating in child repos**: You may READ parent doctrine. You may APPLY it locally. You may NOT modify, propose changes to, or push commits to the parent repository. If doctrine does not fit your use case, escalate to a human — do not attempt to "fix" the parent.
+
+---
+
 ## Structural Instantiation & Visualization
 
 After constitutional admission, repositories may perform **structural instantiation** to declare hubs, sub-hubs, mint unique identifiers, normalize physical layout, and render a Christmas Tree diagram derived from registry data.

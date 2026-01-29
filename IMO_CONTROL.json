@@ -26,7 +26,13 @@
     "sovereignty_type": "ABSOLUTE",
     "conformance_direction": "DOWNSTREAM_ONLY",
     "interpretation_allowed": false,
-    "modification_requires": ["ADR", "HUMAN_APPROVAL"]
+    "modification_requires": ["ADR", "HUMAN_APPROVAL"],
+    "direction_rule": {
+      "doctrine_flows": "PARENT_TO_CHILD",
+      "child_may": ["PULL", "APPLY", "CONFORM"],
+      "child_may_not": ["PUSH", "MODIFY_PARENT", "CONTRIBUTE_TO_PARENT"],
+      "change_request": "Submit ADR to parent repo for human review"
+    }
   },
 
   "lifecycle": {
@@ -267,7 +273,10 @@
       "Rewrite doctrine content",
       "Create workarounds for doctrine rules",
       "Add new rules to doctrine without human approval",
-      "Remove rules from doctrine"
+      "Remove rules from doctrine",
+      "Push changes to parent repository (imo-creator)",
+      "Modify parent repository from child context",
+      "Treat child repo changes as parent doctrine updates"
     ],
     "ai_modification_clause": {
       "doctrine_modification": "PROHIBITED",
