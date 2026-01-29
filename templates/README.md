@@ -232,7 +232,11 @@ templates/
 │   └── PULL_REQUEST_TEMPLATE_SPOKE.md
 │
 ├── checklists/                         # TEMPLATE — Copy to derived repos
-│   └── HUB_COMPLIANCE.md
+│   ├── HUB_COMPLIANCE.md
+│   └── QUARTERLY_HYGIENE_AUDIT.md
+│
+├── audit/                              # TEMPLATE — Copy to derived repos
+│   └── CONSTITUTIONAL_AUDIT_ATTESTATION.md
 │
 ├── integrations/                       # GUIDANCE — Reference only
 │   ├── COMPOSIO.md
@@ -262,6 +266,20 @@ Before a hub can ship, it must have:
 
 If any artifact is missing, incomplete, or bypassed,
 the hub is considered **non-viable**.
+
+---
+
+## Required Audit Artifacts
+
+Every audit MUST produce these artifacts:
+
+| Artifact | Template | Purpose |
+|----------|----------|---------|
+| **Quarterly Hygiene Audit** | `checklists/QUARTERLY_HYGIENE_AUDIT.md` | Quarterly audit checklist |
+| **Hub Compliance** | `checklists/HUB_COMPLIANCE.md` | Hub-specific compliance verification |
+| **Constitutional Attestation** | `audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md` | Final sign-off document |
+
+**Audits without attestation are NON-AUTHORITATIVE.**
 
 ---
 
@@ -326,8 +344,50 @@ All hubs MUST use these integrations:
 | Architecture introduced in a PR | CC_VIOLATION | HALT |
 | Forbidden folder exists (utils, helpers, common, shared, lib, misc) | CTB_VIOLATION | HALT |
 | File in `src/` root (not in CTB branch) | CTB_VIOLATION | HALT |
+| **Marking COMPLIANT with HIGH violations** | COMPLIANCE_GATE_VIOLATION | HALT |
+| **Marking COMPLIANT with CRITICAL violations** | COMPLIANCE_GATE_VIOLATION | HALT |
 
 These are **schema violations**, not preferences. **HALT means HALT.**
+
+---
+
+## COMPLIANCE GATE (ZERO TOLERANCE)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      ZERO-TOLERANCE ENFORCEMENT RULE                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  You CANNOT mark an audit as COMPLIANT if:                                    ║
+║                                                                               ║
+║    1. ANY CRITICAL violations exist                                           ║
+║    2. ANY HIGH violations exist                                               ║
+║                                                                               ║
+║  HIGH violations are NOT "fix later" items.                                   ║
+║  HIGH violations BLOCK compliance.                                            ║
+║                                                                               ║
+║  The ONLY path forward is:                                                    ║
+║    → FIX the violation, OR                                                    ║
+║    → DOWNGRADE to MEDIUM with documented justification + ADR                  ║
+║                                                                               ║
+║  NEVER mark COMPLIANT with open HIGH/CRITICAL violations.                     ║
+║  This is a HARD RULE. No exceptions.                                          ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+**This rule applies to ALL audits:**
+- Quarterly Hygiene Audits
+- Hub Compliance Checks
+- Constitutional Attestations
+- Post-Change Audits
+- Post-Cleanup Audits
+
+**If AI marks an audit as COMPLIANT with HIGH/CRITICAL violations:**
+1. REJECT the audit
+2. The audit is NON-AUTHORITATIVE
+3. Violations must be fixed
+4. Re-audit required
 
 ---
 

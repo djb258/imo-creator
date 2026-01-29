@@ -201,13 +201,64 @@ If doctrine violations are detected:
 
 ---
 
+## COMPLIANCE GATE (MANDATORY)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      ZERO-TOLERANCE ENFORCEMENT RULE                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  You CANNOT mark an audit as PASS if:                                         ║
+║                                                                               ║
+║    1. ANY CRITICAL violations exist                                           ║
+║    2. ANY HIGH violations exist                                               ║
+║                                                                               ║
+║  HIGH violations are NOT "fix later" items.                                   ║
+║  HIGH violations BLOCK the audit.                                             ║
+║                                                                               ║
+║  AUDIT VERDICT RULES:                                                         ║
+║    → CRITICAL or HIGH violations = BLOCKED (cannot proceed)                   ║
+║    → MEDIUM violations only = PASS WITH WARNINGS                              ║
+║    → No violations = PASS                                                     ║
+║                                                                               ║
+║  NEVER mark PASS with open HIGH/CRITICAL violations.                          ║
+║  This is a HARD RULE. No exceptions.                                          ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Violation Severity Levels
+
+| Severity | Audit Verdict | Action Required |
+|----------|---------------|-----------------|
+| **CRITICAL** | BLOCKED | Must fix before proceeding |
+| **HIGH** | BLOCKED | Must fix before marking PASS |
+| **MEDIUM** | PASS WITH WARNINGS | Document in report |
+| **LOW** | PASS | Optional to document |
+
+### Common Mistake (DO NOT DO THIS)
+
+```
+❌ WRONG: "5 HIGH violations found. AUDIT VERDICT: PASS"
+   This is INVALID. HIGH violations block the audit.
+
+✅ RIGHT: "5 HIGH violations found. AUDIT VERDICT: BLOCKED"
+   Violations must be resolved before re-audit.
+
+✅ RIGHT: "0 HIGH/CRITICAL violations. 3 MEDIUM. AUDIT VERDICT: PASS WITH WARNINGS"
+   Medium violations are documented but don't block.
+```
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-25 |
-| Last Modified | 2026-01-25 |
-| Version | 1.0.0 |
+| Last Modified | 2026-01-29 |
+| Version | 1.1.0 |
 | Status | LOCKED |
 | Authority | CONSTITUTIONAL |
 | Schedule | Weekly / Monthly |
+| Change Log | v1.1.0: Added COMPLIANCE GATE zero-tolerance enforcement |
