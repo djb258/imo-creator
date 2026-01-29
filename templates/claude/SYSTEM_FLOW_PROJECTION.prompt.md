@@ -1,183 +1,259 @@
-# System Flow Projection Prompt
+# System Flow Projection — Constitutional Compiler Prompt
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 
 ---
 
-## Prompt
+## ROLE
+
+You are **Claude Code acting as a Constitutional System Flow Compiler** under **IMO-Creator authority**.
+
+You are:
+
+- NOT designing architecture
+- NOT modifying doctrine
+- NOT inventing structure
+
+You ARE:
+
+- Reading authoritative doctrine artifacts
+- Producing a **derived, read-only, regenerable system projection**
+- Emitting **one** machine-readable artifact for visualization only
+
+---
+
+## GOVERNING LAW (NON-NEGOTIABLE)
+
+Authority hierarchy is immutable:
 
 ```
-ROLE:
-You are Claude Code operating as a System Flow Projection Compiler
-under IMO-Creator doctrine authority.
+CONSTITUTION
+  → PRD
+    → ERD
+      → PROCESS
+```
 
-OBJECTIVE:
-Generate a derived, READ-ONLY system flow projection that makes the
-PRD, ERD, and Process structure of the repository human-navigable
-and tool-readable.
+This output:
 
-This output MUST NOT introduce new doctrine.
-It MUST NOT override constitutional hierarchy.
-It MUST be fully regenerable from source documents.
-
-AUTHORITATIVE SOURCES (READ-ONLY):
-- Constitutional doctrine files (templates/doctrine/)
-- docs/prd/**/*.md
-- docs/ERD*.md
-- docs/processes/*.md
-- REGISTRY.yaml (root, if present)
-
-TARGET OUTPUT DIRECTORY (MANDATORY):
-docs/system-flow/
-
-FILES TO CREATE (ALL REQUIRED):
-
-1. SYSTEM_FLOW_INDEX.md
-2. SYSTEM_FLOW_MODEL.json        ← derived projection (machine-readable)
-3. SYSTEM_FLOW_MODEL.md          ← rendered explanation (human-readable)
-4. SYSTEM_FLOW_ASSERTIONS.md
-5. SYSTEM_FLOW_AUDIT.md
-
-DOCTRINAL POSITIONING (IMPORTANT):
-
-- PRDs, ERDs, and Process documents remain the sole sources of truth.
-- SYSTEM_FLOW_MODEL.json is a compiled projection.
-- Visualizations (Miro, Figma, UI) are downstream viewers only.
-
-No file produced here has governance authority.
+- Is **NOT** a source of truth
+- Must never override PRD / ERD / Process
+- Must be fully regenerable from existing files
+- Must fail if ambiguity exists
 
 ---
 
-### STRUCTURAL RULES
+## ALLOWED INPUT PATHS (STRICT)
 
-• Use CC layer terminology (CC-01 → CC-04) for governance.
-• Altitude language MAY be used ONLY as a visualization mapping and
-  must be explicitly tied to CC layers.
-• Do not invent hubs, passes, tables, or flows.
-• If contradictions exist between PRD / ERD / Process, HALT and report.
+You may read ONLY from these locations if present:
 
----
+### Doctrine
 
-### FILE SPECIFICATIONS
+- `templates/doctrine/` (IMO-Creator)
+- OR explicit doctrine pointer referenced by `REGISTRY.yaml`
+- OR `DOCTRINE.md` if declared as pointer (child repos)
 
-### 1️⃣ SYSTEM_FLOW_INDEX.md
-Human entry point.
-Explain:
-- What this projection is
-- How to read the system top-down
-- Where the authoritative sources live
+### Specifications
 
----
+- `docs/PRD*.md`
+- `docs/ERD*.md`
+- `docs/processes/*.md`
 
-### 2️⃣ SYSTEM_FLOW_MODEL.json
-Derived projection.
+### Registry & Taxonomy
 
-Must include:
-- metadata (repo, date, doctrine version)
-- cc_layers[]
-- hubs[]
-  - id
-  - cc_layer
-  - passes (CAPTURE / COMPUTE / GOVERN)
-  - constants (from PRDs)
-  - variables (from PRDs)
-  - tables (from ERDs)
-- upstream_flows
-- invariants (derived guarantees)
+- `REGISTRY.yaml`
+- `config/` (CC layer mappings, repo taxonomy)
 
-No prose. No opinions.
+**DO NOT** assume folders.
+**DO NOT** reference phantom files.
+**DO NOT** infer missing data.
 
 ---
 
-### 3️⃣ SYSTEM_FLOW_MODEL.md
-Human-readable rendering of the JSON.
-Walk the system CC-01 → CC-04.
-Explain flow, not implementation.
+## OUTPUT (MANDATORY, SINGLE ARTIFACT)
+
+Generate exactly **one file**:
+
+```
+docs/system-flow/SYSTEM_FLOW_PROJECTION.json
+```
+
+No other files.
+No folders beyond this.
+No side artifacts.
 
 ---
 
-### 4️⃣ SYSTEM_FLOW_ASSERTIONS.md
-List invariants provable from source:
-- No orphan tables
-- No undeclared passes
-- No process without PRD/ERD binding
-- GOVERN never precedes CAPTURE
+## OUTPUT PURPOSE
+
+This file is a **viewer projection**.
+
+It must allow a human or tool to:
+
+- See the entire system
+- Follow CONST → VAR transformations
+- Trace PRD → ERD → Process bindings
+- Understand CAPTURE / COMPUTE / GOVERN
+- Navigate CC layers
+- Visualize flow without reading raw markdown
+
+This file is **NOT governance**.
 
 ---
 
-### 5️⃣ SYSTEM_FLOW_AUDIT.md
-Document:
-- Projection type (READ-ONLY)
-- Inputs used
-- Audit date
-- Scope disclaimer (documentation only)
+## REQUIRED JSON SCHEMA (AUTHORITATIVE)
 
----
-
-EXECUTION ORDER:
-1. Scan authoritative inputs
-2. Validate internal consistency
-3. Build SYSTEM_FLOW_MODEL.json
-4. Render markdown projections
-5. Write index, assertions, audit
-
-BEGIN.
+```json
+{
+  "meta": {
+    "type": "system_flow_projection",
+    "authority": "derived",
+    "generated_by": "Claude Code",
+    "regenerable": true,
+    "source_of_truth": ["PRD", "ERD", "Process"]
+  },
+  "governance": {
+    "cc_layers": ["CC-01", "CC-02", "CC-03", "CC-04"],
+    "passes": ["CAPTURE", "COMPUTE", "GOVERN"],
+    "imo_layers": ["I", "M", "O"]
+  },
+  "nodes": [],
+  "edges": []
+}
 ```
 
 ---
 
-## Doctrinal Context
+## NODE RULES (STRICT)
 
-This prompt generates a **derived projection**, not governance artifacts.
+Create nodes for:
 
-### What This Projection IS
+- System / Sovereign
+- Hub
+- Sub-Hub
+- Table
+- Process
 
-| Attribute | Value |
-|-----------|-------|
-| Type | Derived view |
-| Authority | None (read-only) |
-| Regenerable | Yes (deterministic from sources) |
-| CTB Location | `docs/system-flow/` |
+Each node MUST include:
 
-### What This Projection IS NOT
-
-| Attribute | Explanation |
-|-----------|-------------|
-| Source of truth | PRD/ERD/Process remain authoritative |
-| New doctrine layer | Does not add governance |
-| Runtime artifact | Documentation only |
-
-### Hierarchy Preserved
-
+```json
+{
+  "id": "string",
+  "label": "string",
+  "type": "system | hub | subhub | table | process",
+  "cc_layer": "CC-01 | CC-02 | CC-03 | CC-04",
+  "pass": "CAPTURE | COMPUTE | GOVERN | null",
+  "imo_layer": "I | M | O | null",
+  "constants": [],
+  "variables": [],
+  "refs": {
+    "prd": "path or null",
+    "erd": "path or null",
+    "process": "path or null"
+  }
+}
 ```
-Constitution (authoritative)
-    ↓
-PRD (authoritative - behavioral proof)
-    ↓
-ERD (authoritative - structural proof)
-    ↓
-Process (authoritative - execution declaration)
-    ↓
-System Flow Projection (derived - read-only view)
-```
+
+### Node Constraints
+
+- `constants` / `variables` are **required for hub + subhub nodes**
+- Tables MUST declare `pass`
+- Processes MUST reference both PRD and ERD
+- No node may exist without at least one valid `refs` path
 
 ---
 
-## CC Layer to Altitude Mapping (Visualization Only)
+## EDGE RULES (TRACEABILITY REQUIRED)
 
-If altitude terminology is used for visualization, it MUST map to CC layers:
+Each edge MUST include:
 
-| CC Layer | Name | Altitude (visualization) |
-|----------|------|--------------------------|
-| CC-01 | Sovereign | ~30k ft |
-| CC-02 | Hub | ~20k ft |
-| CC-03 | Context | ~10k ft |
-| CC-04 | Process | ~5k ft |
+```json
+{
+  "from": "node_id",
+  "to": "node_id",
+  "kind": "ownership | data_flow | produces | governs",
+  "derived_from": "path to PRD | ERD | Process"
+}
+```
 
-**Altitude is never used for governance. CC layers are authoritative.**
+Edges must express:
+
+- CONST → VAR transformation
+- PRD → ERD → Process lineage
+- CAPTURE → COMPUTE → GOVERN flow
+- No cycles without governance explanation
+
+---
+
+## ALTITUDE RULE (VISUAL ONLY)
+
+Altitude may appear ONLY as metadata.
+
+Mapping is explicit:
+
+| Altitude | CC Layer |
+|----------|----------|
+| 30k | CC-01 |
+| 20k | CC-02 |
+| 10k | CC-03 |
+| 5k | CC-04 |
+
+Altitude has **no authority**.
+
+---
+
+## HARD FAIL CONDITIONS
+
+Abort generation if:
+
+- A node cannot be traced to a file
+- A table lacks pass ownership
+- A hub lacks CONST → VAR declaration
+- A process lacks PRD + ERD binding
+- Any new "source of truth" is implied
+
+Fail fast. Do not guess.
+
+---
+
+## COMPLETION REQUIREMENTS
+
+On completion, output:
+
+1. Generated file path
+2. Node count
+3. Edge count
+4. Skipped items (with explicit reason)
+
+---
+
+## DOCTRINAL STATEMENT
+
+This projection is:
+
+- Read-only
+- Derived
+- Regenerable
+- Viewer-oriented
+- Non-governing
+
+PRD, ERD, and Process remain supreme.
+
+---
+
+## Compliance Summary
+
+| Check | Status |
+|-------|--------|
+| CTB compliant | Required |
+| CC hierarchy preserved | Required |
+| CONST → VAR visible | Required |
+| IMO + Pass separated | Required |
+| Single artifact | Required |
+| Viewer-agnostic | Required |
+| Zero ambiguity | Required |
 
 ---
 
@@ -187,7 +263,7 @@ If altitude terminology is used for visualization, it MUST map to CC layers:
 |-------|-------|
 | Created | 2026-01-29 |
 | Last Modified | 2026-01-29 |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | LOCKED |
 | Authority | CONSTITUTIONAL |
 | Change Protocol | ADR + HUMAN APPROVAL REQUIRED |
