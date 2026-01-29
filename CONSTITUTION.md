@@ -46,12 +46,15 @@ IMO-Creator governs structure and declaration only. Runtime behavior, execution 
 |------------|---------|-----------|
 | **PRD** | Explains WHY and HOW the transformation occurs | Behavioral proof |
 | **ERD** | Proves WHAT structural artifacts are allowed to exist | Structural proof |
+| **Process** | Executes constitutionally approved transformations | Execution declaration |
 
 **Constitutional rule**: No hub, table, schema, or identifier may be instantiated without both proofs.
 
+**Execution rule**: Processes do not define legitimacy. They execute transformations already approved via PRD and ERD. Tools implement processes but do not define them — tools are explicitly downstream and replaceable.
+
 A system that cannot be summarized as *"This transforms X constants into Y variables"* is not a valid system under this constitution.
 
-See: `templates/doctrine/PRD_CONSTITUTION.md` and `templates/doctrine/ERD_CONSTITUTION.md`
+See: `templates/doctrine/PRD_CONSTITUTION.md`, `templates/doctrine/ERD_CONSTITUTION.md`, and `templates/doctrine/PROCESS_DOCTRINE.md`
 
 **Note**: The Constitution does not adjudicate transformation uniqueness. It governs validity, not redundancy.
 
