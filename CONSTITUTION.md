@@ -60,6 +60,72 @@ See: `templates/doctrine/PRD_CONSTITUTION.md`, `templates/doctrine/ERD_CONSTITUT
 
 ---
 
+## Design Declaration Requirement (CRITICAL)
+
+**Scope**: Global — All PRDs — Human and AI enforced
+**Authority**: Constitutional
+**Effect**: PRD validity gating
+
+### The Rule
+
+**All PRDs are INVALID unless they begin with a completed Design Declaration that precedes and informs the authoritative PRD sections.**
+
+### What This Means
+
+| Statement | Meaning |
+|-----------|---------|
+| Design Declaration is MANDATORY | Every PRD must have it |
+| Design Declaration is NON-AUTHORITATIVE | It is a worksheet, not a contract |
+| PRD body (§§1-15) remains the sole contract | Only the numbered sections carry authority |
+| ERDs are forbidden without a valid PRD | ERD creation requires valid PRD first |
+| Execution is forbidden without a valid PRD | No task execution without valid PRD |
+
+### Design Declaration Contents
+
+A valid Design Declaration MUST contain:
+
+| Field | Purpose |
+|-------|---------|
+| Idea/Need | Problem or need that caused this hub to exist |
+| Hub Justification | CONST → VAR transformation statement |
+| Hub-Spoke Decision | IMPLEMENTED or DECLINED (explicit choice) |
+| Candidate Constants | Draft list of invariant inputs |
+| Candidate Variables | Draft list of governed outputs |
+| Candidate Tools | SNAP-ON TOOLBOX references only |
+
+### Validity Chain
+
+```
+Design Declaration (completed)
+        │
+        ▼ informs
+PRD Body (§§1-15 restate all decisions)
+        │
+        ▼ gates
+ERD (structural proof)
+        │
+        ▼ gates
+Process / Execution
+```
+
+**No step may proceed without the prior step being valid.**
+
+### AI Employee Enforcement
+
+AI employees MUST FAIL HARD if:
+
+| Condition | Action |
+|-----------|--------|
+| PRD has no Design Declaration | REJECT — PRD invalid |
+| Design Declaration is incomplete | REJECT — list missing fields |
+| PRD body does not restate Declaration | REJECT — authority leakage |
+| ERD requested without valid PRD | REJECT — PRD must exist first |
+| Execution requested without valid PRD | REJECT — no constitutional basis |
+
+**There is no "infer missing inputs" option. Missing = Invalid.**
+
+---
+
 ## Canonical Invariants
 
 - **Transformation law**: Constants → Variables (requires PRD + ERD proof)

@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.3.0"
+  version: "1.4.0"
   last_updated: "2026-01-30"
-  total_file_count: 90
+  total_file_count: 92
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -229,6 +229,11 @@ files:
       required: true
       locked: true
 
+    - path: "templates/claude/HUB_DESIGN_DECLARATION_INTAKE.prompt.md"
+      purpose: "Hub declaration intake agent - generates fillable YAML, validates, enforces ordering"
+      required: true
+      locked: true
+
   # ═══════════════════════════════════════════════════════════════════════════
   # AI EMPLOYEE
   # ═══════════════════════════════════════════════════════════════════════════
@@ -323,6 +328,12 @@ files:
       purpose: "Child repo registry template"
       required: true
       action: "Copy to child repos"
+
+    - path: "templates/child/HUB_DESIGN_DECLARATION.yaml.template"
+      purpose: "Hub design declaration template - must be filled before PRD"
+      required: true
+      action: "Generate per hub, human fills, AI validates"
+      workflow: "Declaration → PRD → ERD → Process"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # CONFIG

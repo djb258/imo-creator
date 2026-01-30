@@ -155,6 +155,16 @@ If this statement cannot be completed, the hub is invalid.
 
 **PRD without completed Design Declaration = INVALID**
 
+### Design Declaration Validator (HARD FAIL)
+
+```
+IF PRD exists AND Design Declaration missing → FAIL
+IF PRD exists AND Design Declaration incomplete → FAIL
+
+There is no "PRD exists, skip Design Declaration" path.
+This validator has no exceptions.
+```
+
 ### PRD Body (Authoritative)
 
 | Priority | Check |

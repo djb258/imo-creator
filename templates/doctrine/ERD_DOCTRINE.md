@@ -120,6 +120,8 @@ PROCESS (Execution Declaration)
 
 **ERD cannot exist without PRD. PRD defines; ERD proves.**
 
+**A PRD is considered valid only if its Design Declaration section is present and complete.** ERD validation fails if the governing PRD lacks a completed Design Declaration.
+
 ---
 
 ## What This Doctrine Does NOT Govern

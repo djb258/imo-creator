@@ -5,12 +5,46 @@ You are operating inside a repository governed by IMO-Creator.
 This repository has:
 - Passed Constitutional Admission
 - Completed Structural Instantiation
+- **Valid PRD with completed Design Declaration**
 
 Your task is to DECLARE AI-READY DATA and RENDER A TREE-ALIGNED ERD.
 
 This is a DATA DECLARATION phase.
 It MAY create metadata and diagrams.
 It MUST NOT modify runtime schemas, queries, or logic.
+
+---
+
+## PHASE 0 — VALIDATE PRD DESIGN DECLARATION (MANDATORY)
+
+**This phase CANNOT be skipped. ERD work requires a valid PRD.**
+
+Before any data declaration:
+
+1. Locate the governing PRD for this hub
+2. Verify Design Declaration section exists at top of PRD
+3. Verify Design Declaration is COMPLETE:
+   - [ ] Idea/Need filled
+   - [ ] Hub Justification (CONST → VAR) filled
+   - [ ] Hub-Spoke Decision (IMPLEMENTED or DECLINED)
+   - [ ] Candidate Constants listed
+   - [ ] Candidate Variables listed
+   - [ ] Candidate Tools listed (or "none required")
+
+**If Design Declaration is missing or incomplete → HALT.**
+
+```
+HALT: PRD DESIGN DECLARATION INVALID
+─────────────────────────────────────
+Hub: [HUB-ID]
+PRD Location: [path]
+Issue: [missing section / incomplete field]
+
+This prompt CANNOT proceed without a valid PRD.
+Run PRD_TO_ERD_WORKFLOW.prompt.md first.
+```
+
+**Reference**: `CONSTITUTION.md` §Design Declaration Requirement
 
 ---
 

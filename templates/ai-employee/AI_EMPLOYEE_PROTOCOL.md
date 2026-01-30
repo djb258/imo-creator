@@ -292,7 +292,29 @@ Is this task in imo-creator?
   └─ NO → Continue to Gate 2
 ```
 
-### Gate 2: Constitutional Validity
+### Gate 2: Declaration Check (NEW)
+
+```
+Does the target hub have HUB_DESIGN_DECLARATION.yaml?
+  │
+  ├─ MISSING → Run HUB_DESIGN_DECLARATION_INTAKE.prompt.md
+  │            Generate DRAFT declaration
+  │            HALT and wait for human to complete
+  │            DO NOT proceed until status = CONFIRMED
+  │
+  ├─ DRAFT → HALT. Declaration incomplete.
+  │          Instruct human to complete and sign.
+  │
+  └─ CONFIRMED → Validate declaration fields
+                 If valid → Continue to Gate 3
+                 If invalid → HALT and list defects
+```
+
+**No PRD work without confirmed declaration. No inference. No bypass.**
+
+Reference: `templates/claude/HUB_DESIGN_DECLARATION_INTAKE.prompt.md`
+
+### Gate 3: Constitutional Validity
 
 ```
 Does the target hub have:
@@ -312,8 +334,9 @@ If ANY missing → REJECT or REQUEST creation first
 ```
 
 **PRD without completed Design Declaration = INVALID. No exceptions.**
+**PRD Design Declaration must match HUB_DESIGN_DECLARATION.yaml.**
 
-### Gate 3: Task Traceability
+### Gate 4: Task Traceability
 
 ```
 Can this task be traced to:
@@ -324,7 +347,7 @@ Can this task be traced to:
 If NO → REJECT. Task has no constitutional basis.
 ```
 
-### Gate 4: Authority Level
+### Gate 5: Authority Level
 
 ```
 Does this task require:
@@ -343,6 +366,7 @@ TASK ACCEPTED
 ─────────────
 Territory: [child repo name]
 Hub: [HUB-ID]
+Declaration: [path to HUB_DESIGN_DECLARATION.yaml] — CONFIRMED
 Governing PRD: [path]
 Governing ERD: [path]
 Task traces to: [CONST] → [VAR]
@@ -359,9 +383,29 @@ If any gate fails, AI employee responds:
 ```
 TASK REJECTED
 ─────────────
-Failed Gate: [1|2|3|4]
+Failed Gate: [1|2|3|4|5]
 Reason: [specific reason]
 Resolution: [what human must do first]
+```
+
+### Gate 2 Rejection (Declaration Missing/Incomplete)
+
+When Gate 2 fails, use this specific format:
+
+```
+DECLARATION REQUIRED
+────────────────────
+Hub: [hub name]
+Declaration Status: MISSING | DRAFT | INVALID
+
+Resolution:
+1. Run HUB_DESIGN_DECLARATION_INTAKE.prompt.md
+2. Complete the generated YAML
+3. Change status to CONFIRMED
+4. Sign off on the declaration
+5. Resubmit task
+
+I CANNOT proceed without a confirmed declaration.
 ```
 
 **AI employee does not attempt workarounds. Rejection is final until resolution.**

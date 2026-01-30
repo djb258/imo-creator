@@ -1,0 +1,153 @@
+# HUB DESIGN DECLARATION
+# ══════════════════════════════════════════════════════════════════════════════
+# This declaration MUST be completed by a human before any PRD, ERD, or Process
+# can be created. AI agents may NOT infer or fill these fields.
+#
+# WORKFLOW:
+#   1. AI generates this file with status: DRAFT
+#   2. Human fills ALL placeholder fields
+#   3. Human changes status to CONFIRMED and signoff.status to SIGNED
+#   4. Human submits to AI for validation
+#   5. AI validates and proceeds to PRD governance
+#
+# GOVERNANCE:
+#   - This file gates PRD creation
+#   - PRD gates ERD creation
+#   - ERD gates Process creation
+#   - No downstream artifact may exist without this declaration
+#
+# ══════════════════════════════════════════════════════════════════════════════
+
+hub_design_declaration:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # METADATA
+  # ─────────────────────────────────────────────────────────────────────────────
+  status: DRAFT  # DRAFT | CONFIRMED | REJECTED
+  hub_name: "<FILL>"
+  hub_id: "<FILL - unique immutable identifier, e.g., HUB-OUTREACH-001>"
+  hub_type: HUB  # HUB | SUBHUB
+  created_by: "<FILL - human name>"
+  created_date: "<FILL - ISO date, e.g., 2026-01-30>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # IDEA / NEED
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Why does this hub exist? What problem does it solve?
+  # Be specific. "Manage X" is not a valid answer.
+
+  idea_need:
+    problem_statement: "<WHY DOES THIS HUB EXIST? What specific problem requires this hub?>"
+    anti_goal: "<WHAT DOES THIS HUB EXPLICITLY NOT SOLVE? What is out of scope?>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # HUB JUSTIFICATION (CONST → VAR)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # The supreme law: Nothing exists unless it transforms constants into variables.
+  # Complete the sentence: "This hub transforms [X] into [Y]"
+
+  hub_justification:
+    const_to_var_transform: "<This hub transforms [CONSTANTS] into [VARIABLES]>"
+    success_criteria: "<WHAT PROVES THIS HUB WORKED? How do you know the transformation succeeded?>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # HUB-SPOKE DECISION
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Hub-Spoke does NOT exist by default.
+  # Spokes are boundary-crossing transport ONLY. No logic, no state, no tools.
+  # You must explicitly choose IMPLEMENTED or DECLINED.
+
+  hub_spoke_decision:
+    implemented: false  # true | false — MUST be explicit
+    rationale: "<WHY SPOKES EXIST OR ARE DECLINED — justify your choice>"
+
+    # If implemented: false, leave spokes empty: []
+    # If implemented: true, list each spoke:
+    spokes: []
+      # - spoke_name: "<NAME>"
+      #   purpose: "<WHAT DATA MOVES through this spoke>"
+      #   direction: INGRESS  # INGRESS | EGRESS | BIDIRECTIONAL
+      #   licensed_capability: "<WHAT CAPABILITY DOES THE HUB OWN for this spoke>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CANDIDATE CONSTANTS (INPUTS)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # What immutable inputs does this hub receive?
+  # These are ADR-gated to change.
+
+  candidate_constants:
+    - name: "<CONSTANT NAME>"
+      source: "<WHERE IT COMES FROM — external system, API, file, user input>"
+      description: "<WHAT IT IS — plain English>"
+    # Add more as needed:
+    # - name: "<CONSTANT NAME>"
+    #   source: "<SOURCE>"
+    #   description: "<DESCRIPTION>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CANDIDATE VARIABLES (OUTPUTS)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # What mutable outputs does this hub produce?
+  # These are the governed results of the transformation.
+
+  candidate_variables:
+    - name: "<VARIABLE NAME>"
+      destination: "<WHERE IT GOES — database, API, file, downstream system>"
+      description: "<WHAT IT IS — plain English>"
+    # Add more as needed:
+    # - name: "<VARIABLE NAME>"
+    #   destination: "<DESTINATION>"
+    #   description: "<DESCRIPTION>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SNAP-ON TOOLS
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Tools are scoped to M layer only (per TOOLS.md doctrine).
+  # Reference SNAP_ON_TOOLBOX.yaml for approved tools.
+  # Use TOOL-NNN IDs only, no vendor names.
+
+  snap_on_tools: []
+    # If no tools required, leave empty or add:
+    # - tool_id: "NONE_REQUIRED"
+    #   usage: MIDDLE
+    #   justification: "This hub requires no external tools"
+    #
+    # Otherwise list tools:
+    # - tool_id: "<TOOL-NNN from SNAP_ON_TOOLBOX.yaml>"
+    #   usage: MIDDLE  # INGRESS | MIDDLE | EGRESS — tools belong in MIDDLE
+    #   justification: "<WHY THIS TOOL IS NEEDED for the transformation>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DOWNSTREAM ARTIFACTS
+  # ─────────────────────────────────────────────────────────────────────────────
+  # What artifacts will be created from this declaration?
+
+  downstream_artifacts:
+    prd_expected: true   # PRD_HUB.md will be created
+    erd_expected: true   # ERD will be created (after PRD)
+    process_expected: true  # Process declaration will be created (after ERD)
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SIGNOFF
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Human must sign off before AI can proceed.
+
+  signoff:
+    human_owner: "<NAME — the human responsible for this hub>"
+    ai_agent: "Claude Code"
+    confirmation_date: "<FILL WHEN status changes to CONFIRMED>"
+    status: UNSIGNED  # UNSIGNED | SIGNED — human must change to SIGNED
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VALIDATION RULES (AI ENFORCED)
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# AI will reject this declaration if:
+#   - status is not CONFIRMED
+#   - signoff.status is not SIGNED
+#   - Any field contains placeholder text (< or >)
+#   - hub_justification does not mention transformation
+#   - hub_spoke_decision.implemented is not explicit true/false
+#   - candidate_constants is empty
+#   - candidate_variables is empty
+#
+# ══════════════════════════════════════════════════════════════════════════════
