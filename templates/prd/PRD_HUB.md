@@ -1,3 +1,89 @@
+# DESIGN DECLARATION (NON-AUTHORITATIVE — FILL FIRST)
+
+> **This section is a fill-first design worksheet.**
+> It exists to force architectural clarity before formal specification.
+> It has NO governing authority.
+> The authoritative PRD begins in §1.
+> All decisions declared here MUST be restated formally below.
+
+---
+
+## Idea / Need
+
+[FILL: What problem or need caused this hub to exist?]
+
+---
+
+## Hub Justification
+
+[FILL: This hub exists to transform _________________ (CONSTANTS) into _________________ (VARIABLES).]
+
+---
+
+## Hub–Spoke Decision
+
+**Hub–Spoke does NOT exist by default.**
+Spokes are boundary-crossing transport only.
+Logic, decisions, and transformations belong ONLY in the hub (Middle layer).
+
+Choose ONE and complete:
+
+### Option A: IMPLEMENTED
+
+[FILL: List intended spokes and why variability requires them.]
+
+| Spoke | Type (I/O) | Justification |
+|-------|------------|---------------|
+| | | |
+
+### Option B: DECLINED
+
+[FILL: Explain why hub–spoke is not justified for this hub.]
+
+**Selected option**: [ IMPLEMENTED / DECLINED ]
+
+---
+
+## Candidate Constants
+
+[FILL: Draft list of invariant inputs. These are ADR-gated to change.]
+
+| Constant | Source | Description |
+|----------|--------|-------------|
+| | | |
+
+---
+
+## Candidate Variables
+
+[FILL: Draft list of governed outputs. These are mutable at runtime.]
+
+| Variable | Destination | Description |
+|----------|-------------|-------------|
+| | | |
+
+---
+
+## Candidate Tools (SNAP-ON TOOLBOX ONLY)
+
+[FILL: Snap-On tool IDs only. No vendors or implementations.]
+
+| Tool ID | Tier | Purpose |
+|---------|------|---------|
+| | | |
+
+---
+
+# VALIDATION RULE
+
+**The PRD is INVALID unless §§1–15 fully restate all authoritative decisions.**
+
+No section below may reference or defer to the Design Declaration.
+Statements such as "see declaration above" are forbidden.
+
+---
+---
+
 # PRD — Hub
 
 ## Conformance
@@ -102,6 +188,8 @@ _This hub owns all three IMO layers internally. Spokes are external CC-03 interf
 ## 6. Spokes (CC-03 Interfaces)
 
 _Spokes are interfaces ONLY. They carry no logic, tools, or state. Each spoke is typed as Ingress (I) or Egress (O)._
+
+**Hub–Spoke Status**: [ IMPLEMENTED / DECLINED ]
 
 | Spoke Name | Type | Direction | Contract | CC Layer |
 |------------|------|-----------|----------|----------|
