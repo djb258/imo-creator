@@ -212,14 +212,33 @@ When refactoring an existing repo:
 1. Add CTB/IMO comments to code files
 2. Register in REGISTRY.yaml
 
-### Step 7: Validate
+### Step 7: Validate Structure
 ```bash
 ./validators/ctb-structure-check.sh
 ./validators/cc-descent-check.sh
 ./validators/hub-spoke-check.sh
 ```
 
-### Step 8: Reference Doctrine
+### Step 8: Execute Compliance Checklist (MANDATORY)
+
+**You CANNOT declare refactor complete without this step.**
+
+Per CONSTITUTION.md §Violation Zero Tolerance:
+
+1. Execute `templates/checklists/HUB_COMPLIANCE.md` for the hub
+2. Fill out EVERY section with actual counts
+3. Complete the Compliance Gate Verification section
+4. Complete the AI Agent Acknowledgment (if you are an AI agent)
+
+| Outcome | Action |
+|---------|--------|
+| CRITICAL unchecked > 0 | STOP. Status = NON-COMPLIANT. Fix and re-run. |
+| HIGH violations > 0 | STOP. Status = NON-COMPLIANT. Fix and re-run. |
+| Both = 0 | MAY proceed to Step 9 |
+
+**"I created all the files" is NOT compliance. Checklist verification IS compliance.**
+
+### Step 9: Reference Doctrine
 1. Create `DOCTRINE.md` pointing to IMO-Creator
 2. Do NOT duplicate doctrine content
 
@@ -351,7 +370,7 @@ VALID:   "Constitutional → PRD → Manifest → ERD → Process → Attest"
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-08 |
-| Last Modified | 2026-01-08 |
-| Doctrine Version | 1.2.0 |
+| Last Modified | 2026-01-30 |
+| Doctrine Version | 1.3.0 |
 | Status | LOCKED |
 | Change Protocol | ADR-triggered only |

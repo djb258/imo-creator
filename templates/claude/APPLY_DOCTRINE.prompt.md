@@ -152,6 +152,87 @@ COMPLIANCE CHECK:
 
 ---
 
+## ZERO-TOLERANCE COMPLIANCE DECLARATION (CONSTITUTIONAL)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    YOU CANNOT DECLARE COMPLIANCE WITHOUT PROOF                ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Per CONSTITUTION.md §Violation Zero Tolerance:                               ║
+║                                                                               ║
+║  PROHIBITED:                                                                  ║
+║  • Declaring "compliant" without running HUB_COMPLIANCE.md checklist          ║
+║  • Saying "100% compliant" based on subjective assessment                     ║
+║  • Marking work as complete without checklist verification                    ║
+║  • Confusing "I created files" with "The repo passes verification"            ║
+║                                                                               ║
+║  REQUIRED:                                                                    ║
+║  • Execute templates/checklists/HUB_COMPLIANCE.md for EACH hub                ║
+║  • Fill out EVERY section with actual counts                                  ║
+║  • Produce the filled-out checklist as proof                                  ║
+║  • If ANY CRITICAL unchecked or ANY HIGH violation → NON-COMPLIANT            ║
+║                                                                               ║
+║  "Feeling compliant" is NOT compliance. Checklist output IS compliance.       ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Compliance Declaration Protocol
+
+**BEFORE you can declare any hub or repo as "compliant":**
+
+| Step | Action | Proof Required |
+|------|--------|----------------|
+| 1 | Execute HUB_COMPLIANCE.md checklist | Filled-out checklist |
+| 2 | Count CRITICAL items unchecked | Actual number |
+| 3 | Count HIGH violations unfixed | Actual number |
+| 4 | Apply gate logic | IF counts > 0 → NON-COMPLIANT |
+| 5 | Declare status | Based on checklist, not vibes |
+
+### What You MUST Produce
+
+When claiming compliance, you MUST show:
+
+```
+COMPLIANCE VERIFICATION
+───────────────────────
+Hub: [HUB-ID]
+Checklist executed: YES
+Checklist location: [path to filled-out checklist]
+
+Part A (Constitutional Validity):
+  CRITICAL items: [X] / [Y] checked
+
+Part B (Operational Compliance):
+  CRITICAL items: [X] / [Y] checked
+  HIGH violations: [count]
+
+Gate Result:
+  CRITICAL unchecked: [count]
+  HIGH violations: [count]
+
+Status: [COMPLIANT / COMPLIANT WITH NOTES / NON-COMPLIANT]
+
+Basis: Checklist verification (not subjective assessment)
+```
+
+**If you cannot produce this output, you have NOT verified compliance.**
+
+### Prohibited Declarations
+
+| Declaration | Why Prohibited |
+|-------------|----------------|
+| "100% compliant" without checklist | No objective verification |
+| "Looks compliant to me" | Subjective assessment |
+| "I created all the files so it's compliant" | Creation ≠ compliance |
+| "The structure is correct" | Structure ≠ full compliance |
+| "Compliant" with CRITICAL/HIGH counts > 0 | Zero-tolerance violation |
+
+**Violation of this protocol invalidates all compliance claims.**
+
+---
+
 ## AI EMPLOYEE PROTOCOL
 
 If you are an autonomous AI agent (not human-supervised):
@@ -191,8 +272,8 @@ If you are an autonomous AI agent (not human-supervised):
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-08 |
-| Last Modified | 2026-01-28 |
-| Version | 2.3.0 |
+| Last Modified | 2026-01-30 |
+| Version | 2.4.0 |
 | Status | LOCKED |
 | Authority | imo-creator (Constitutional) |
 | Prerequisite | IMO_SYSTEM_SPEC.md (must be loaded first) |
