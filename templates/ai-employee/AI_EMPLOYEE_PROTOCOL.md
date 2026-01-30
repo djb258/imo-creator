@@ -2,7 +2,7 @@
 
 **Status**: DRAFT
 **Authority**: OPERATIONAL
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 
 ---
@@ -87,6 +87,95 @@ AI EMPLOYEE (This protocol)
 | "Improve" templates | DOCTRINE VIOLATION |
 | Add "helpful" features | DOCTRINE VIOLATION |
 | Proceed when blocked | ESCALATION REQUIRED |
+
+---
+
+## Repository Detection Protocol (MANDATORY FIRST STEP)
+
+**Before any operation, you MUST determine repository type.**
+
+AI agents operate differently in parent vs child repositories. Incorrect detection leads to incorrect behavior.
+
+### Detection Method (Structural Markers)
+
+Use file/folder existence, NOT content parsing:
+
+```
+STEP 1: Does IMO_CONTROL.json exist at repo root?
+        │
+        ├─ YES → This is a CHILD repo (governed by imo-creator)
+        │        Your authority: OPERATIONAL
+        │        Your actions: May modify child artifacts
+        │
+        └─ NO → Continue to Step 2
+
+STEP 2: Does templates/doctrine/ directory exist?
+        │
+        ├─ YES → This is IMO-CREATOR (parent repo)
+        │        Your authority: READ-ONLY
+        │        Your actions: May read, may NOT modify doctrine
+        │
+        └─ NO → UNGOVERNED repo
+                 Action: HALT and request governance setup
+```
+
+### Detection Summary Table
+
+| Marker | Parent (imo-creator) | Child Repo |
+|--------|---------------------|------------|
+| `templates/doctrine/` directory | ✅ EXISTS | ❌ ABSENT |
+| `IMO_CONTROL.json` at root | ❌ ABSENT | ✅ EXISTS |
+| `TEMPLATES_MANIFEST.yaml` | ✅ EXISTS (authoritative) | ❌ ABSENT or synced copy |
+
+### Authority by Repository Type
+
+| Repository Type | Your Authority | Permitted Actions |
+|-----------------|---------------|-------------------|
+| **PARENT (imo-creator)** | READ-ONLY | Read doctrine, read templates, may NOT modify |
+| **CHILD** | OPERATIONAL | Read parent doctrine, modify child artifacts within gates |
+| **UNGOVERNED** | NONE | HALT immediately, request governance setup |
+
+### Reading Order by Repository Type
+
+**If PARENT (imo-creator):**
+```
+1. CONSTITUTION.md (repo root)
+2. templates/TEMPLATES_MANIFEST.yaml
+3. templates/IMO_SYSTEM_SPEC.md
+4. templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
+5. Task-specific prompts in templates/claude/
+```
+
+**If CHILD:**
+```
+1. IMO_CONTROL.json (repo root)
+2. DOCTRINE.md (repo root - points to parent)
+3. REGISTRY.yaml (hub identity)
+4. docs/PRD.md (if exists)
+5. Parent doctrine as referenced
+```
+
+### Mandatory Detection Report
+
+After detection, you MUST output:
+
+```
+REPOSITORY DETECTION
+────────────────────
+Repository: [repo name]
+Type: [PARENT / CHILD / UNGOVERNED]
+
+Detection markers:
+  IMO_CONTROL.json at root: [YES / NO]
+  templates/doctrine/ exists: [YES / NO]
+
+Authority level: [READ-ONLY / OPERATIONAL / NONE]
+Reading order: [in_parent_repo / in_child_repo / N/A]
+
+Proceeding: [YES / HALTED - reason]
+```
+
+**Failure to run detection before operations is a PROTOCOL VIOLATION.**
 
 ---
 
