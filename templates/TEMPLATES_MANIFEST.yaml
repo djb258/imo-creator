@@ -24,7 +24,7 @@
 manifest:
   version: "1.3.0"
   last_updated: "2026-01-30"
-  total_file_count: 88
+  total_file_count: 90
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -216,6 +216,16 @@ files:
 
     - path: "templates/claude/CLEANUP_EXECUTOR.prompt.md"
       purpose: "Cleanup execution after audits"
+      required: true
+      locked: true
+
+    - path: "templates/claude/PRD_MIGRATION.prompt.md"
+      purpose: "Retrofit existing PRDs with Design Declaration"
+      required: true
+      locked: true
+
+    - path: "templates/claude/PRD_TO_ERD_WORKFLOW.prompt.md"
+      purpose: "PRD validation, question generation, ERD creation workflow"
       required: true
       locked: true
 

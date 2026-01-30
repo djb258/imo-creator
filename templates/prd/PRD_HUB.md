@@ -302,3 +302,5 @@ _When can a human bypass automation? Who approves? (Trigger authority must be CC
 |----------|-----------|
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | Hub/Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
+| **Governing ERD** | _(path to ERD that implements this PRD)_ |
+| **Governing Process** | _(path to Process declaration)_ |

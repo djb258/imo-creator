@@ -296,12 +296,22 @@ Is this task in imo-creator?
 
 ```
 Does the target hub have:
-  ├─ PRD with CONST → VAR declaration?
+  ├─ PRD with Design Declaration section?
+  │     ├─ Idea/Need completed?
+  │     ├─ Hub Justification (CONST → VAR) completed?
+  │     ├─ Hub-Spoke Decision (IMPLEMENTED/DECLINED)?
+  │     ├─ Candidate Constants listed?
+  │     ├─ Candidate Variables listed?
+  │     └─ Candidate Tools (SNAP-ON only)?
+  ├─ PRD body (§§1-15) restates all decisions?
   ├─ ERD with structural proof?
   └─ Process declaration?
 
+If PRD missing Design Declaration → INVALID PRD
 If ANY missing → REJECT or REQUEST creation first
 ```
+
+**PRD without completed Design Declaration = INVALID. No exceptions.**
 
 ### Gate 3: Task Traceability
 
