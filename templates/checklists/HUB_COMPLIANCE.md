@@ -249,7 +249,7 @@ Part B assumes Part A passes.
 **Part B governs ship-readiness, not existence legitimacy.**
 Items marked CRITICAL define minimum operational safety, not architectural purity.
 
-**Section Anchors**: §B.1 through §B.11
+**Section Anchors**: §B.1 through §B.12
 
 ---
 
@@ -432,6 +432,44 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 | HIGH | [ ] Work item linked |
 | HIGH | [ ] PR linked (CC-04) |
 | HIGH | [ ] Canonical Doctrine referenced |
+
+---
+
+## Documentation Alignment (MANDATORY) {#section-b12}
+<!-- §B.12 -->
+
+**MD files are AI instructions. Stale documentation causes AI agents to operate on bad information.**
+
+### Core Documentation Files
+
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] CLAUDE.md exists and references correct doctrine |
+| CRITICAL | [ ] CLAUDE.md locked files list is accurate for this repo |
+| CRITICAL | [ ] README.md folder structure matches actual structure |
+| CRITICAL | [ ] PRD constants/variables match actual implementation |
+| HIGH | [ ] DOCTRINE.md points to correct imo-creator version |
+| HIGH | [ ] REGISTRY.yaml hub ID is consistent across all files |
+| HIGH | [ ] All ADRs reference correct file paths |
+
+### Path and Reference Accuracy
+
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] No MD files reference moved or deleted files |
+| CRITICAL | [ ] No MD files reference old folder structure |
+| HIGH | [ ] All doctrine template references are valid |
+| HIGH | [ ] All internal links between MD files work |
+
+### Post-Refactor Verification
+
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] All MD files reviewed after structure changes |
+| CRITICAL | [ ] Hub identity consistent across CLAUDE.md, README.md, REGISTRY.yaml |
+| HIGH | [ ] No stale examples or code snippets in docs |
+
+**Documentation drift is a violation. If structure changed, docs MUST be updated.**
 
 ---
 

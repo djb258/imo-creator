@@ -212,14 +212,58 @@ When refactoring an existing repo:
 1. Add CTB/IMO comments to code files
 2. Register in REGISTRY.yaml
 
-### Step 7: Validate Structure
+### Step 7: Review and Update All MD Files (MANDATORY)
+
+**After refactor, all documentation must be verified and updated.**
+
+MD files are AI instructions. Stale or incorrect MD files cause AI agents to operate on bad information. This step is MANDATORY.
+
+#### Required MD File Review
+
+| File | Review For |
+|------|------------|
+| `CLAUDE.md` | Correct doctrine references, hub identity, locked files list |
+| `README.md` | Accurate project description, correct folder structure |
+| `docs/PRD.md` | Constants/Variables match actual implementation |
+| `docs/ADR-*.md` | Decisions still valid, references correct |
+| `DOCTRINE.md` | Points to correct imo-creator version |
+| `REGISTRY.yaml` | Hub ID, spokes, IMO definition all accurate |
+
+#### MD File Review Checklist
+
+| Check | Status |
+|-------|--------|
+| [ ] All file paths in MD files are correct (no references to moved/deleted files) |
+| [ ] All doctrine references point to correct imo-creator templates |
+| [ ] CLAUDE.md lists correct locked files for this repo |
+| [ ] README.md folder structure matches actual structure |
+| [ ] PRD constants and variables match what the system actually does |
+| [ ] No references to old structure remain |
+| [ ] Hub ID is consistent across all files |
+
+#### Why This Matters
+
+```
+PROBLEM: Refactored structure, but CLAUDE.md still references old paths
+RESULT:  AI agent reads wrong instructions, makes wrong decisions
+
+PROBLEM: PRD declares old constants, but system now uses different inputs
+RESULT:  AI agent validates against wrong spec, misses real violations
+
+PROBLEM: README shows old folder structure
+RESULT:  Humans and AI confused about where things live
+```
+
+**Documentation drift is a violation. MD files MUST match reality.**
+
+### Step 8: Validate Structure
 ```bash
 ./validators/ctb-structure-check.sh
 ./validators/cc-descent-check.sh
 ./validators/hub-spoke-check.sh
 ```
 
-### Step 8: Execute Compliance Checklist (MANDATORY)
+### Step 9: Execute Compliance Checklist (MANDATORY)
 
 **You CANNOT declare refactor complete without this step.**
 
@@ -234,11 +278,11 @@ Per CONSTITUTION.md §Violation Zero Tolerance:
 |---------|--------|
 | CRITICAL unchecked > 0 | STOP. Status = NON-COMPLIANT. Fix and re-run. |
 | HIGH violations > 0 | STOP. Status = NON-COMPLIANT. Fix and re-run. |
-| Both = 0 | MAY proceed to Step 9 |
+| Both = 0 | MAY proceed to Step 10 |
 
 **"I created all the files" is NOT compliance. Checklist verification IS compliance.**
 
-### Step 9: Reference Doctrine
+### Step 10: Reference Doctrine
 1. Create `DOCTRINE.md` pointing to IMO-Creator
 2. Do NOT duplicate doctrine content
 
