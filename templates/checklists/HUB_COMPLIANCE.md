@@ -469,7 +469,64 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 | CRITICAL | [ ] Hub identity consistent across CLAUDE.md, README.md, REGISTRY.yaml |
 | HIGH | [ ] No stale examples or code snippets in docs |
 
+### Data Accuracy Verification (MANDATORY)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    "EXISTS" IS NOT THE SAME AS "ACCURATE"                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Checking that a file EXISTS is NOT verification.                             ║
+║  Checking that structure is CORRECT is NOT verification.                      ║
+║                                                                               ║
+║  Verification means: DATA VALUES IN MD FILES MATCH SOURCE OF TRUTH.           ║
+║                                                                               ║
+║  If your MD file says "42,833 records" but the database has 42,192:           ║
+║    → That is STALE DATA                                                       ║
+║    → That is a VIOLATION                                                      ║
+║    → AI agents operating on that file will make BAD DECISIONS                 ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+**To pass this section, you MUST:**
+
+| Step | Action | Required |
+|------|--------|----------|
+| 1 | Identify all data values in MD files (counts, statistics, metrics) | YES |
+| 2 | Query the source of truth (database, API, live system) | YES |
+| 3 | Compare MD file values against source of truth | YES |
+| 4 | If mismatch → Update MD file OR flag as violation | YES |
+
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] All record counts in MD files verified against database |
+| CRITICAL | [ ] All statistics in MD files verified against source of truth |
+| CRITICAL | [ ] All metrics in MD files verified against live system |
+| HIGH | [ ] Exclusion/inclusion counts match actual filter results |
+| HIGH | [ ] Date ranges and timestamps are current |
+
+**Data Accuracy Verification Output (REQUIRED):**
+
+```
+DATA ACCURACY CHECK
+───────────────────
+Source of Truth: [database name / API / system]
+
+| MD File | Value Claimed | Actual Value | Status |
+|---------|---------------|--------------|--------|
+| CLAUDE.md | [value] | [queried value] | MATCH/MISMATCH |
+| DATA_REGISTRY.md | [value] | [queried value] | MATCH/MISMATCH |
+| [other files] | [value] | [queried value] | MATCH/MISMATCH |
+
+Mismatches found: [count]
+Action taken: [updated files / flagged as violation]
+```
+
+**If you cannot query the source of truth, you CANNOT mark this section as PASS.**
+
 **Documentation drift is a violation. If structure changed, docs MUST be updated.**
+**Data drift is a violation. If values changed, docs MUST be updated.**
 
 ---
 

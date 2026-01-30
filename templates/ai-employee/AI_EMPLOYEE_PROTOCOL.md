@@ -554,6 +554,46 @@ This repository CANNOT proceed until violations are resolved.
 
 **There is no "continue anyway" option for violations.**
 
+### Verification Depth (MANDATORY)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    "EXISTS" ≠ "VERIFIED" ≠ "ACCURATE"                         ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  When verifying documentation (MD files), you MUST check THREE levels:        ║
+║                                                                               ║
+║  Level 1: EXISTS                                                              ║
+║    □ Does the file exist?                                                     ║
+║    □ Is the file in the expected location?                                    ║
+║    → This is NOT verification. This is just file presence.                    ║
+║                                                                               ║
+║  Level 2: STRUCTURE                                                           ║
+║    □ Does the file have correct sections?                                     ║
+║    □ Are references/paths valid?                                              ║
+║    → This is NOT verification. This is just format checking.                  ║
+║                                                                               ║
+║  Level 3: ACCURACY (REQUIRED FOR PASS)                                        ║
+║    □ Do DATA VALUES match the source of truth?                                ║
+║    □ Do record counts match the database?                                     ║
+║    □ Do statistics match live system queries?                                 ║
+║    → THIS IS VERIFICATION.                                                    ║
+║                                                                               ║
+║  If you only check Levels 1-2, you have NOT verified. You have LOOKED.        ║
+║  Marking PASS without Level 3 is a VERIFICATION FAILURE.                      ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+**Prohibited shortcut:**
+```
+❌ WRONG: "CLAUDE.md exists, structure is correct → PASS"
+✅ RIGHT: "CLAUDE.md exists, structure correct, queried Neon → 42,192 records,
+          file says 42,833 → MISMATCH → FAIL until updated"
+```
+
+**If MD files contain data values (counts, statistics, metrics), you MUST query the source of truth.**
+
 ---
 
 ## Recovery Protocol
