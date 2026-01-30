@@ -469,64 +469,55 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 | CRITICAL | [ ] Hub identity consistent across CLAUDE.md, README.md, REGISTRY.yaml |
 | HIGH | [ ] No stale examples or code snippets in docs |
 
-### Data Accuracy Verification (MANDATORY)
+### ERD Metrics Verification (MANDATORY)
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                    "EXISTS" IS NOT THE SAME AS "ACCURATE"                     ║
+║                    METRICS LIVE IN ERD_METRICS.yaml, NOT MD FILES             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
-║  Checking that a file EXISTS is NOT verification.                             ║
-║  Checking that structure is CORRECT is NOT verification.                      ║
+║  MD files are ARCHITECTURE (CONST) — structure, rules, relationships.        ║
+║  ERD_METRICS.yaml is DATA (VAR) — counts, statistics, runtime state.         ║
 ║                                                                               ║
-║  Verification means: DATA VALUES IN MD FILES MATCH SOURCE OF TRUTH.           ║
+║  DO NOT put record counts in MD files.                                        ║
+║  DO put record counts in erd/ERD_METRICS.yaml.                                ║
 ║                                                                               ║
-║  If your MD file says "42,833 records" but the database has 42,192:           ║
-║    → That is STALE DATA                                                       ║
-║    → That is a VIOLATION                                                      ║
-║    → AI agents operating on that file will make BAD DECISIONS                 ║
+║  Before work sessions, sync ERD_METRICS.yaml from database.                   ║
+║  This ensures decisions are based on CURRENT data.                            ║
 ║                                                                               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-**To pass this section, you MUST:**
-
-| Step | Action | Required |
-|------|--------|----------|
-| 1 | Identify all data values in MD files (counts, statistics, metrics) | YES |
-| 2 | Query the source of truth (database, API, live system) | YES |
-| 3 | Compare MD file values against source of truth | YES |
-| 4 | If mismatch → Update MD file OR flag as violation | YES |
-
 | Priority | Check |
 |----------|-------|
-| CRITICAL | [ ] All record counts in MD files verified against database |
-| CRITICAL | [ ] All statistics in MD files verified against source of truth |
-| CRITICAL | [ ] All metrics in MD files verified against live system |
-| HIGH | [ ] Exclusion/inclusion counts match actual filter results |
-| HIGH | [ ] Date ranges and timestamps are current |
+| CRITICAL | [ ] erd/ERD_METRICS.yaml exists (created from template) |
+| CRITICAL | [ ] ERD_METRICS.yaml has been synced this session |
+| CRITICAL | [ ] sync.last_updated is within stale_after_hours threshold |
+| HIGH | [ ] All tables from ERD.md are represented in ERD_METRICS.yaml |
+| HIGH | [ ] Queries section documents how to refresh each metric |
 
-**Data Accuracy Verification Output (REQUIRED):**
+**Metrics Sync Verification Output (REQUIRED):**
 
 ```
-DATA ACCURACY CHECK
-───────────────────
-Source of Truth: [database name / API / system]
+ERD METRICS STATUS
+──────────────────
+File: erd/ERD_METRICS.yaml
+Last Synced: [timestamp]
+Stale Threshold: [hours]
+Status: [CURRENT / STALE]
 
-| MD File | Value Claimed | Actual Value | Status |
-|---------|---------------|--------------|--------|
-| CLAUDE.md | [value] | [queried value] | MATCH/MISMATCH |
-| DATA_REGISTRY.md | [value] | [queried value] | MATCH/MISMATCH |
-| [other files] | [value] | [queried value] | MATCH/MISMATCH |
+Key Metrics:
+  [table_name]: [count] records
+  [table_name]: [count] records
+  [aggregate_name]: [value]
 
-Mismatches found: [count]
-Action taken: [updated files / flagged as violation]
+Alerts: [count]
 ```
 
-**If you cannot query the source of truth, you CANNOT mark this section as PASS.**
+**If ERD_METRICS.yaml is missing or stale, sync before proceeding.**
 
 **Documentation drift is a violation. If structure changed, docs MUST be updated.**
-**Data drift is a violation. If values changed, docs MUST be updated.**
+**Metrics are NOT in MD files. Metrics are in ERD_METRICS.yaml.**
 
 ---
 

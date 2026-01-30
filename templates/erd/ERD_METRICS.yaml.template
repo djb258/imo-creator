@@ -1,0 +1,137 @@
+# ERD Metrics - Runtime Data Snapshot
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE: Current state of ERD tables for operational decision-making
+# AUTHORITY: CC-04 (Process/Runtime)
+# UPDATE FREQUENCY: Before any work session, minimum daily
+#
+# THIS FILE IS AUTO-UPDATED. Manual edits will be overwritten.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# SYNC METADATA
+# ─────────────────────────────────────────────────────────────────────────────────
+sync:
+  last_updated: <TIMESTAMP>           # ISO 8601 format: 2026-01-30T14:32:00Z
+  updated_by: <AGENT_OR_SCRIPT>       # e.g., "claude-code", "sync-metrics.sh"
+  source: <DATABASE_CONNECTION>       # e.g., "doppler://neon/company-lifecycle"
+  next_sync_due: <TIMESTAMP>          # When this data becomes stale
+
+  # Sync configuration
+  frequency: daily                    # daily | hourly | on_session_start | manual
+  stale_after_hours: 24               # Data considered stale after this many hours
+  auto_sync_on_session: true          # Sync automatically when AI session starts
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# HUB IDENTITY
+# ─────────────────────────────────────────────────────────────────────────────────
+hub:
+  hub_id: <HUB_ID>
+  hub_name: <HUB_NAME>
+  sovereign_id: <SOVEREIGN_ID>
+  erd_version: <ERD_VERSION>          # Version of ERD this metrics file maps to
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# TABLE METRICS
+# ─────────────────────────────────────────────────────────────────────────────────
+# For each table defined in ERD.md, record current counts and key statistics.
+# This section should mirror your ERD structure.
+
+tables:
+  # Example table - replace with your actual tables
+  <table_name>:
+    total_records: <COUNT>
+    created_last_24h: <COUNT>
+    updated_last_24h: <COUNT>
+    # Add table-specific metrics below
+    # active_records: <COUNT>
+    # archived_records: <COUNT>
+
+  # Add more tables as defined in your ERD
+  # <another_table>:
+  #   total_records: <COUNT>
+  #   ...
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# AGGREGATE METRICS
+# ─────────────────────────────────────────────────────────────────────────────────
+# Cross-table statistics and computed values
+
+aggregates:
+  total_records_all_tables: <COUNT>
+  # Add domain-specific aggregates
+  # Example for company-lifecycle:
+  # total_companies: <COUNT>
+  # excluded_companies: <COUNT>
+  # active_companies: <COUNT>
+  # exclusion_rate_percent: <PERCENT>
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# FILTER/EXCLUSION METRICS (if applicable)
+# ─────────────────────────────────────────────────────────────────────────────────
+# Track what's being filtered out and why
+
+filters:
+  # Example - customize for your domain
+  # total_excluded: <COUNT>
+  # exclusion_reasons:
+  #   - reason: "duplicate"
+  #     count: <COUNT>
+  #   - reason: "invalid_data"
+  #     count: <COUNT>
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# DATA QUALITY METRICS
+# ─────────────────────────────────────────────────────────────────────────────────
+data_quality:
+  null_rate_percent: <PERCENT>        # Percentage of null values in key fields
+  duplicate_rate_percent: <PERCENT>   # Percentage of detected duplicates
+  last_quality_check: <TIMESTAMP>
+  quality_status: <PASS|WARN|FAIL>
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# SYNC QUERIES (Reference)
+# ─────────────────────────────────────────────────────────────────────────────────
+# Document the queries used to populate this file.
+# AI agents can run these to refresh metrics.
+
+queries:
+  # Example queries - customize for your database
+  total_records: |
+    SELECT COUNT(*) FROM <table_name>;
+
+  created_last_24h: |
+    SELECT COUNT(*) FROM <table_name>
+    WHERE created_at > NOW() - INTERVAL '24 hours';
+
+  # Add more queries as needed
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# ALERTS / THRESHOLDS
+# ─────────────────────────────────────────────────────────────────────────────────
+# Define thresholds that trigger alerts or require attention
+
+thresholds:
+  # Example thresholds
+  # min_total_records: 1000           # Alert if below this
+  # max_exclusion_rate: 20            # Alert if exclusion rate exceeds 20%
+  # max_null_rate: 5                  # Alert if null rate exceeds 5%
+
+alerts:
+  # Populated by sync script when thresholds are breached
+  # - type: "threshold_breach"
+  #   field: "exclusion_rate"
+  #   threshold: 20
+  #   actual: 25
+  #   timestamp: <TIMESTAMP>
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCUMENT CONTROL
+# ═══════════════════════════════════════════════════════════════════════════════
+document_control:
+  template_version: "1.0.0"
+  template_source: "imo-creator/templates/erd/ERD_METRICS.yaml.template"
+  created: <DATE>
+  authority: CC-04
+  change_protocol: "Auto-updated by sync process"

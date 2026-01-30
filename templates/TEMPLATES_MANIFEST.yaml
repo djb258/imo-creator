@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.2.0"
+  version: "1.3.0"
   last_updated: "2026-01-30"
-  total_file_count: 81
+  total_file_count: 82
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -273,6 +273,14 @@ files:
       purpose: "Audit attestation template"
       required: true
       action: "Produce after audits"
+
+  erd:
+    - path: "templates/erd/ERD_METRICS.yaml.template"
+      purpose: "Runtime metrics template - sync before work sessions"
+      required: true
+      action: "Copy to child repos, auto-update from database"
+      sync_frequency: "Before each work session, minimum daily"
+      note: "Metrics are VAR (runtime data). MD files are CONST (architecture). Keep them separate."
 
   child:
     - path: "templates/child/DOCTRINE.md.template"
