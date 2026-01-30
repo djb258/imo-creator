@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.5.0"
+  version: "1.6.0"
   last_updated: "2026-01-30"
-  total_file_count: 93
+  total_file_count: 94
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -245,6 +245,16 @@ files:
     - path: "templates/ai-employee/AI_EMPLOYEE_TASK.yaml"
       purpose: "AI employee task payload format"
       required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # GPT (CUSTOM GPT INSTRUCTIONS)
+  # ═══════════════════════════════════════════════════════════════════════════
+  gpt:
+    - path: "templates/gpt/PRD_INTAKE_GUIDE.md"
+      purpose: "Custom GPT instructions for PRD intake - collects structured information"
+      required: false
+      action: "Paste into Custom GPT instructions"
+      note: "Intake only - GPT cannot approve tools or architectural decisions"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # TEMPLATES (COPY TO CHILD REPOS)
