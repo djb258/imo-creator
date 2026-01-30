@@ -1,0 +1,504 @@
+# TEMPLATES MANIFEST
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: CONSTITUTIONAL
+# Purpose: Complete file list for AI agents pulling templates from imo-creator
+# Version: 1.0.0
+# Last Updated: 2026-01-30
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# AI AGENTS: READ THIS FIRST WHEN PULLING TEMPLATES
+#
+# This manifest lists EVERY file in the templates folder.
+# When pulling templates, you MUST download ALL files listed here.
+# Partial downloads are PROHIBITED.
+#
+# VERIFICATION:
+#   1. Download all files listed below
+#   2. Count files downloaded
+#   3. Compare to total_file_count
+#   4. If mismatch → FAIL and report
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+manifest:
+  version: "1.0.0"
+  last_updated: "2026-01-30"
+  total_file_count: 81
+  authority: "CONSTITUTIONAL"
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# PULLING PROTOCOL (MANDATORY)
+# ─────────────────────────────────────────────────────────────────────────────────
+
+pull_protocol:
+  step_1: "Read this manifest FIRST"
+  step_2: "Download ALL files listed in 'files' section below"
+  step_3: "Verify file count matches total_file_count"
+  step_4: "If any file missing → STOP and report"
+  step_5: "Confirm pull complete before proceeding"
+
+  prohibited:
+    - "Partial downloads"
+    - "Skipping files you think are not needed"
+    - "Guessing what files exist"
+    - "Downloading only some folders"
+
+  required_output: |
+    TEMPLATE PULL COMPLETE
+    ──────────────────────
+    Source: github.com/djb258/imo-creator
+    Files downloaded: [count]
+    Expected: [total_file_count]
+    Status: [COMPLETE / INCOMPLETE]
+
+    Missing files (if any):
+    - [list]
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# FILE REGISTRY (COMPLETE LIST)
+# ─────────────────────────────────────────────────────────────────────────────────
+
+files:
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ROOT LEVEL FILES
+  # ═══════════════════════════════════════════════════════════════════════════
+  root:
+    - path: "templates/TEMPLATES_MANIFEST.yaml"
+      purpose: "This file - complete file list for pulling"
+      required: true
+
+    - path: "templates/README.md"
+      purpose: "Directory guide and reading order"
+      required: true
+
+    - path: "templates/IMO_SYSTEM_SPEC.md"
+      purpose: "Compiled system index - FIRST READ for AI agents"
+      required: true
+
+    - path: "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
+      purpose: "Agent constraints and permissions"
+      required: true
+
+    - path: "templates/SNAP_ON_TOOLBOX.yaml"
+      purpose: "Master tool registry - approved tools only"
+      required: true
+
+    - path: "templates/GUARDSPEC.md"
+      purpose: "Guard specifications"
+      required: true
+
+    - path: "templates/TEMPLATE_STAMP_PROTOCOL.md"
+      purpose: "Template stamping protocol"
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DOCTRINE (LOCKED - AI CANNOT MODIFY)
+  # ═══════════════════════════════════════════════════════════════════════════
+  doctrine:
+    - path: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+      purpose: "Root doctrine - CC layers, CTB structure"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+      purpose: "Hub/Spoke geometry, IMO model"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+      purpose: "Descent gates, altitude levels"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+      purpose: "Refactor sequence, structure requirements"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+      purpose: "Immutability rules, AI prohibition"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/PRD_CONSTITUTION.md"
+      purpose: "PRD governance rules"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/ERD_CONSTITUTION.md"
+      purpose: "ERD governance rules"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/ERD_DOCTRINE.md"
+      purpose: "ERD structure and validation"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/PROCESS_DOCTRINE.md"
+      purpose: "Process declaration rules"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+      purpose: "Database change rules"
+      required: true
+      locked: true
+
+    - path: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+      purpose: "Documentation ERD standards"
+      required: true
+      locked: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CLAUDE PROMPTS (LOCKED - AI CANNOT MODIFY)
+  # ═══════════════════════════════════════════════════════════════════════════
+  claude:
+    - path: "templates/claude/APPLY_DOCTRINE.prompt.md"
+      purpose: "Main doctrine execution prompt"
+      required: true
+      locked: true
+
+    - path: "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md"
+      purpose: "Structure declaration and CTB rendering"
+      required: true
+      locked: true
+
+    - path: "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md"
+      purpose: "Data declaration and ERD rendering"
+      required: true
+      locked: true
+
+    - path: "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md"
+      purpose: "Execution wiring declaration"
+      required: true
+      locked: true
+
+    - path: "templates/claude/DBA_ENFORCEMENT.prompt.md"
+      purpose: "DBA enforcement prompt"
+      required: true
+      locked: true
+
+    - path: "templates/claude/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md"
+      purpose: "Documentation ERD enforcement"
+      required: true
+      locked: true
+
+    - path: "templates/claude/SYSTEM_FLOW_PROJECTION.prompt.md"
+      purpose: "System flow visualization"
+      required: true
+      locked: true
+
+    - path: "templates/claude/SYSTEM_MODEL_REGENERATOR.prompt.md"
+      purpose: "System model compilation"
+      required: true
+      locked: true
+
+    - path: "templates/claude/UI_DOCTRINE_GENERATOR.prompt.md"
+      purpose: "UI doctrine bootstrap"
+      required: true
+      locked: true
+
+    - path: "templates/claude/UI_DOCTRINE_REGENERATOR.prompt.md"
+      purpose: "UI doctrine CI sync"
+      required: true
+      locked: true
+
+    - path: "templates/claude/HYGIENE_AUDITOR.prompt.md"
+      purpose: "Scheduled hygiene audits"
+      required: true
+      locked: true
+
+    - path: "templates/claude/CLEANUP_EXECUTOR.prompt.md"
+      purpose: "Cleanup execution after audits"
+      required: true
+      locked: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # AI EMPLOYEE
+  # ═══════════════════════════════════════════════════════════════════════════
+  ai_employee:
+    - path: "templates/ai-employee/AI_EMPLOYEE_PROTOCOL.md"
+      purpose: "AI employee operational protocol"
+      required: true
+
+    - path: "templates/ai-employee/AI_EMPLOYEE_TASK.yaml"
+      purpose: "AI employee task payload format"
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # TEMPLATES (COPY TO CHILD REPOS)
+  # ═══════════════════════════════════════════════════════════════════════════
+  prd:
+    - path: "templates/prd/PRD_HUB.md"
+      purpose: "Hub PRD template"
+      required: true
+      action: "Copy and fill in"
+
+  adr:
+    - path: "templates/adr/ADR.md"
+      purpose: "ADR template"
+      required: true
+      action: "Copy and fill in"
+
+  pr:
+    - path: "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+      purpose: "Hub PR template"
+      required: true
+      action: "Copy and fill in"
+
+    - path: "templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+      purpose: "Spoke PR template"
+      required: true
+      action: "Copy and fill in"
+
+  checklists:
+    - path: "templates/checklists/HUB_COMPLIANCE.md"
+      purpose: "Hub compliance checklist"
+      required: true
+      action: "Execute per hub"
+
+    - path: "templates/checklists/QUARTERLY_HYGIENE_AUDIT.md"
+      purpose: "Quarterly audit checklist"
+      required: true
+      action: "Execute quarterly"
+
+  audit:
+    - path: "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+      purpose: "Audit attestation template"
+      required: true
+      action: "Produce after audits"
+
+  child:
+    - path: "templates/child/DOCTRINE.md.template"
+      purpose: "Child repo doctrine pointer template"
+      required: true
+      action: "Copy to child repos"
+
+    - path: "templates/child/IMO_CONTROL.json.template"
+      purpose: "Child repo control file template"
+      required: true
+      action: "Copy to child repos"
+
+    - path: "templates/child/REGISTRY.yaml.template"
+      purpose: "Child repo registry template"
+      required: true
+      action: "Copy to child repos"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CONFIG
+  # ═══════════════════════════════════════════════════════════════════════════
+  config:
+    - path: "templates/config/global_manifest.yaml"
+      purpose: "Global automation config"
+      required: true
+
+    - path: "templates/config/ctb.branchmap.yaml"
+      purpose: "CTB branch mapping"
+      required: true
+
+    - path: "templates/config/CTB_DOCTRINE.md"
+      purpose: "CTB doctrine reference"
+      required: true
+
+    - path: "templates/config/ctb_version.json"
+      purpose: "CTB version tracking"
+      required: true
+
+    - path: "templates/config/imo_global_config.yaml"
+      purpose: "IMO global config"
+      required: true
+
+    - path: "templates/config/imo-ra-schema.json"
+      purpose: "IMO-RA schema definition"
+      required: true
+
+    - path: "templates/config/QUICK_REFERENCE.md"
+      purpose: "Quick reference guide"
+      required: true
+
+    - path: "templates/config/repo_organization_standard.yaml"
+      purpose: "Repo organization standards"
+      required: true
+
+    - path: "templates/config/repo_taxonomy.yaml"
+      purpose: "Repo taxonomy definitions"
+      required: true
+
+    - path: "templates/config/required_tools.yaml"
+      purpose: "Required tools list"
+      required: true
+
+    - path: "templates/config/branch_protection_config.json"
+      purpose: "Branch protection settings"
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # INTEGRATIONS
+  # ═══════════════════════════════════════════════════════════════════════════
+  integrations:
+    - path: "templates/integrations/TOOLS.md"
+      purpose: "Tool doctrine"
+      required: true
+
+    - path: "templates/integrations/COMPOSIO.md"
+      purpose: "Composio integration guide"
+      required: true
+
+    - path: "templates/integrations/DOPPLER.md"
+      purpose: "Doppler integration guide"
+      required: true
+
+    - path: "templates/integrations/doppler.yaml.template"
+      purpose: "Doppler config template"
+      required: true
+
+    - path: "templates/integrations/HEIR.md"
+      purpose: "HEIR integration guide"
+      required: true
+
+    - path: "templates/integrations/heir.doctrine.yaml.template"
+      purpose: "HEIR config template"
+      required: true
+
+    - path: "templates/integrations/OBSIDIAN.md"
+      purpose: "Obsidian integration guide"
+      required: true
+
+    - path: "templates/integrations/doppler/doppler.bash"
+      purpose: "Doppler bash config"
+      required: false
+
+    - path: "templates/integrations/doppler/doppler.fish"
+      purpose: "Doppler fish config"
+      required: false
+
+    - path: "templates/integrations/doppler/doppler.zsh"
+      purpose: "Doppler zsh config"
+      required: false
+
+    - path: "templates/integrations/hostinger/integrations.yaml"
+      purpose: "Hostinger integration config"
+      required: false
+
+    - path: "templates/integrations/hostinger/README.md"
+      purpose: "Hostinger integration guide"
+      required: false
+
+    - path: "templates/integrations/abacus-ai/integrations.yaml"
+      purpose: "Abacus AI integration config"
+      required: false
+
+    - path: "templates/integrations/abacus-ai/README.md"
+      purpose: "Abacus AI integration guide"
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCRIPTS
+  # ═══════════════════════════════════════════════════════════════════════════
+  scripts:
+    - path: "templates/scripts/apply_doctrine_audit.sh"
+      purpose: "Doctrine audit script"
+      required: true
+
+    - path: "templates/scripts/install-hooks.sh"
+      purpose: "Git hooks installer (Unix)"
+      required: true
+
+    - path: "templates/scripts/install-hooks.ps1"
+      purpose: "Git hooks installer (Windows)"
+      required: true
+
+    - path: "templates/scripts/update_from_imo_creator.sh"
+      purpose: "Pull updates from imo-creator"
+      required: true
+
+    - path: "templates/scripts/push-doctrine-update.sh"
+      purpose: "Push doctrine updates (Unix)"
+      required: true
+
+    - path: "templates/scripts/push-doctrine-update.ps1"
+      purpose: "Push doctrine updates (Windows)"
+      required: true
+
+    - path: "templates/scripts/ctb_init.sh"
+      purpose: "CTB initialization"
+      required: true
+
+    - path: "templates/scripts/ctb_verify.sh"
+      purpose: "CTB verification"
+      required: true
+
+    - path: "templates/scripts/ctb_enforce.sh"
+      purpose: "CTB enforcement"
+      required: true
+
+    - path: "templates/scripts/ctb_check_version.sh"
+      purpose: "CTB version check"
+      required: true
+
+    - path: "templates/scripts/ctb_scaffold_new_repo.sh"
+      purpose: "New repo scaffolding"
+      required: true
+
+    - path: "templates/scripts/apply_ctb_plan.py"
+      purpose: "CTB plan application"
+      required: true
+
+    - path: "templates/scripts/dev_setup.sh"
+      purpose: "Development setup"
+      required: true
+
+    - path: "templates/scripts/security_lockdown.sh"
+      purpose: "Security lockdown"
+      required: true
+
+    - path: "templates/scripts/install_required_tools.sh"
+      purpose: "Install required tools"
+      required: true
+
+    - path: "templates/scripts/verify_required_tools.sh"
+      purpose: "Verify required tools"
+      required: true
+
+    - path: "templates/scripts/hooks/pre-commit"
+      purpose: "Pre-commit hook"
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # VALIDATORS
+  # ═══════════════════════════════════════════════════════════════════════════
+  validators:
+    - path: "templates/validators/README.md"
+      purpose: "Validator documentation"
+      required: true
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# VERIFICATION CHECKLIST
+# ─────────────────────────────────────────────────────────────────────────────────
+
+verification:
+  after_pull: |
+    After pulling templates, verify:
+
+    [ ] All files in this manifest exist locally
+    [ ] File count matches total_file_count (80 files)
+    [ ] No files were skipped or missed
+    [ ] Doctrine files are present and locked
+    [ ] Claude prompts are present and locked
+    [ ] Scripts are present and executable
+
+    If any check fails → STOP and re-pull.
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# DOCUMENT CONTROL
+# ─────────────────────────────────────────────────────────────────────────────────
+
+document_control:
+  created: "2026-01-30"
+  last_modified: "2026-01-30"
+  version: "1.0.0"
+  status: "ACTIVE"
+  authority: "CONSTITUTIONAL"
+  update_trigger: "Any file added/removed from templates/"
