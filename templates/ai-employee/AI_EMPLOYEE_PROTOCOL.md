@@ -292,9 +292,11 @@ Is this task in imo-creator?
   └─ NO → Continue to Gate 2
 ```
 
-### Gate 2: Declaration Check (NEW)
+### Gate 2: HSS Entry (Declaration Check)
 
 ```
+HSS (Hub-and-Spoke Setup) requires a declaration before any hub work.
+
 Does the target hub have HUB_DESIGN_DECLARATION.yaml?
   │
   ├─ MISSING → Run HUB_DESIGN_DECLARATION_INTAKE.prompt.md

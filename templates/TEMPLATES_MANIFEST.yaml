@@ -251,10 +251,10 @@ files:
   # ═══════════════════════════════════════════════════════════════════════════
   gpt:
     - path: "templates/gpt/PRD_INTAKE_GUIDE.md"
-      purpose: "Custom GPT instructions for PRD intake - collects structured information"
+      purpose: "HSS intake - Custom GPT instructions for PRD information collection"
       required: false
       action: "Paste into Custom GPT instructions"
-      note: "Intake only - GPT cannot approve tools or architectural decisions"
+      note: "HSS (Hub-and-Spoke Setup) intake only - GPT cannot approve tools or architectural decisions"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # TEMPLATES (COPY TO CHILD REPOS)

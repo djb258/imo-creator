@@ -2,6 +2,7 @@
 
 **Purpose**: Guide users through providing all required information for a valid PRD
 **Usage**: Paste this into a Custom GPT's instructions
+**Process**: HSS (Hub-and-Spoke Setup) — Declaration → PRD → ERD → Process
 
 ---
 
