@@ -25,7 +25,7 @@ A PRD is valid if and only if it can be summarized as:
 
 If a PRD cannot be reduced to this statement, it is invalid and the system it describes may not exist.
 
-**A PRD is considered valid only if its Design Declaration section is present and complete.** See `CONSTITUTION.md` §Design Declaration Requirement.
+**A PRD is considered valid only if its HSS (Hub-and-Spoke Set Up) section is present and complete.** See `CONSTITUTION.md` §HSS Requirement.
 
 ---
 

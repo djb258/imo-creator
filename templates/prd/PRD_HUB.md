@@ -1,4 +1,4 @@
-# DESIGN DECLARATION (NON-AUTHORITATIVE — FILL FIRST)
+# HSS — Hub-and-Spoke Set Up (NON-AUTHORITATIVE — FILL FIRST)
 
 > **This section is a fill-first design worksheet.**
 > It exists to force architectural clarity before formal specification.
@@ -78,7 +78,7 @@ Choose ONE and complete:
 
 **The PRD is INVALID unless §§1–15 fully restate all authoritative decisions.**
 
-No section below may reference or defer to the Design Declaration.
+No section below may reference or defer to the HSS section.
 Statements such as "see declaration above" are forbidden.
 
 ---

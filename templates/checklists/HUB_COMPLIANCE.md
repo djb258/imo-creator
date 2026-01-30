@@ -141,11 +141,11 @@ If this statement cannot be completed, the hub is invalid.
 ## PRD Compliance (Behavioral Proof) {#section-a2}
 <!-- §A.2 -->
 
-### Design Declaration (MANDATORY)
+### HSS — Hub-and-Spoke Set Up (MANDATORY)
 
 | Priority | Check |
 |----------|-------|
-| CRITICAL | [ ] Design Declaration section exists at top of PRD |
+| CRITICAL | [ ] HSS section exists at top of PRD |
 | CRITICAL | [ ] Idea/Need field is completed |
 | CRITICAL | [ ] Hub Justification (CONST → VAR) is completed |
 | CRITICAL | [ ] Hub-Spoke Decision is explicitly IMPLEMENTED or DECLINED |
@@ -153,15 +153,15 @@ If this statement cannot be completed, the hub is invalid.
 | CRITICAL | [ ] Candidate Variables are listed |
 | CRITICAL | [ ] Candidate Tools reference SNAP-ON TOOLBOX only |
 
-**PRD without completed Design Declaration = INVALID**
+**PRD without completed HSS section = INVALID**
 
-### Design Declaration Validator (HARD FAIL)
+### HSS Validator (HARD FAIL)
 
 ```
-IF PRD exists AND Design Declaration missing → FAIL
-IF PRD exists AND Design Declaration incomplete → FAIL
+IF PRD exists AND HSS section missing → FAIL
+IF PRD exists AND HSS section incomplete → FAIL
 
-There is no "PRD exists, skip Design Declaration" path.
+There is no "PRD exists, skip HSS" path.
 This validator has no exceptions.
 ```
 
@@ -175,8 +175,8 @@ This validator has no exceptions.
 | CRITICAL | [ ] PRD declares constants (inputs) |
 | CRITICAL | [ ] PRD declares variables (outputs) |
 | CRITICAL | [ ] PRD declares pass structure (CAPTURE / COMPUTE / GOVERN) |
-| CRITICAL | [ ] PRD §6 Hub-Spoke Status matches Design Declaration |
-| CRITICAL | [ ] PRD §§1-15 restate all Design Declaration decisions (no deferrals) |
+| CRITICAL | [ ] PRD §6 Hub-Spoke Status matches HSS section |
+| CRITICAL | [ ] PRD §§1-15 restate all HSS decisions (no deferrals) |
 | HIGH | [ ] PRD explicitly states what is IN scope |
 | HIGH | [ ] PRD explicitly states what is OUT of scope |
 

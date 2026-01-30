@@ -12,7 +12,7 @@
 | **Prerequisites** | `HUB_DESIGN_DECLARATION.yaml` status = CONFIRMED, PRD exists |
 | **Runs After** | `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` |
 | **Next Prompt** | `DECLARE_DATA_AND_RENDER_ERD.prompt.md` (after ERD created) |
-| **Halt Conditions** | PRD missing Design Declaration, human hasn't answered questions |
+| **Halt Conditions** | PRD missing HSS section, human hasn't answered questions |
 
 **This is the ONLY authorized ERD creation path.**
 
@@ -23,14 +23,14 @@
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  PHASE 1: VALIDATE PRD                                          │
-│  Check Design Declaration completeness                          │
+│  Check HSS (Hub-and-Spoke Set Up) completeness                  │
 │  Check PRD body consistency                                     │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  PHASE 2: GENERATE QUESTIONS                                    │
-│  Auto-detect gaps in Design Declaration                         │
+│  Auto-detect gaps in HSS section                                │
 │  Generate clarifying questions for each gap                     │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -53,15 +53,15 @@
 
 ## Phase 1: Validate PRD
 
-### Step 1.1: Check Design Declaration Exists
+### Step 1.1: Check HSS Section Exists
 
 ```
-Does PRD have Design Declaration section at top?
+Does PRD have HSS (Hub-and-Spoke Set Up) section at top?
   ├─ YES → Continue
   └─ NO → HALT. Run PRD_MIGRATION.prompt.md first.
 ```
 
-### Step 1.2: Check Design Declaration Completeness
+### Step 1.2: Check HSS Completeness
 
 For each field, check if completed:
 
@@ -79,10 +79,10 @@ For each field, check if completed:
 
 | Check | Validation |
 |-------|------------|
-| §3 Constants match Declaration | Same items, same count |
-| §3 Variables match Declaration | Same items, same count |
-| §6 Hub-Spoke Status matches Declaration | IMPLEMENTED/DECLINED consistent |
-| §8 Tools match Declaration | Same tools referenced |
+| §3 Constants match HSS | Same items, same count |
+| §3 Variables match HSS | Same items, same count |
+| §6 Hub-Spoke Status matches HSS | IMPLEMENTED/DECLINED consistent |
+| §8 Tools match HSS | Same tools referenced |
 
 ---
 
@@ -95,7 +95,7 @@ For each gap detected in Phase 1, generate a clarifying question.
 **If Idea/Need is empty or vague:**
 ```
 QUESTION: What specific problem or need caused this hub to exist?
-CONTEXT: The Design Declaration requires a clear statement of the problem being solved.
+CONTEXT: The HSS section requires a clear statement of the problem being solved.
 EXAMPLE: "Customer data arrives in multiple formats and needs standardization."
 ```
 
@@ -196,7 +196,7 @@ Proceeding to ERD creation...
 ### Step 3.3: Update PRD with Answers
 
 If answers require PRD updates:
-1. Update Design Declaration with clarified information
+1. Update HSS section with clarified information
 2. Update corresponding PRD body sections
 3. Verify consistency again
 
@@ -275,9 +275,9 @@ Next: Run HUB_COMPLIANCE.md §A.3 (ERD Compliance)
 ## Halt Conditions
 
 HALT and report if:
-- PRD has no Design Declaration (run migration first)
-- Design Declaration has CRITICAL gaps and human doesn't answer
-- PRD body contradicts Design Declaration
+- PRD has no HSS section (run migration first)
+- HSS has CRITICAL gaps and human doesn't answer
+- PRD body contradicts HSS section
 - Human explicitly rejects proceeding
 
 ---

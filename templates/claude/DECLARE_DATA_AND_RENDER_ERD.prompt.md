@@ -23,7 +23,7 @@ You are operating inside a repository governed by IMO-Creator.
 This repository has:
 - Passed Constitutional Admission
 - Completed Structural Instantiation
-- **Valid PRD with completed Design Declaration**
+- **Valid PRD with completed HSS (Hub-and-Spoke Set Up) section**
 - **ERD created via PRD_TO_ERD_WORKFLOW**
 
 Your task is to DECLARE AI-READY DATA and RENDER A TREE-ALIGNED ERD.
@@ -41,11 +41,11 @@ It MUST NOT modify runtime schemas, queries, or logic.
 
 Before any data declaration, verify ALL prerequisites:
 
-### 0.1 — Check PRD exists with Design Declaration
+### 0.1 — Check PRD exists with HSS section
 
 1. Locate the governing PRD for this hub
-2. Verify Design Declaration section exists at top of PRD
-3. Verify Design Declaration is COMPLETE:
+2. Verify HSS (Hub-and-Spoke Set Up) section exists at top of PRD
+3. Verify HSS section is COMPLETE:
    - [ ] Idea/Need filled
    - [ ] Hub Justification (CONST → VAR) filled
    - [ ] Hub-Spoke Decision (IMPLEMENTED or DECLINED)
@@ -68,14 +68,14 @@ Hub: [HUB-ID]
 
 Issue: [select one]
   [ ] PRD missing or invalid → Run PRD_TO_ERD_WORKFLOW.prompt.md
-  [ ] Design Declaration incomplete → Run HUB_DESIGN_DECLARATION_INTAKE.prompt.md
+  [ ] HSS section incomplete → Run HUB_DESIGN_DECLARATION_INTAKE.prompt.md
   [ ] ERD not created → Run PRD_TO_ERD_WORKFLOW.prompt.md
 
 This prompt is DOWNSTREAM of PRD_TO_ERD_WORKFLOW.
 It cannot create ERD structure — only add metadata to existing ERD.
 ```
 
-**Reference**: `CONSTITUTION.md` §Design Declaration Requirement
+**Reference**: `CONSTITUTION.md` §HSS Requirement
 
 ---
 

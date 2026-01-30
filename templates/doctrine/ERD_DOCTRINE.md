@@ -120,7 +120,7 @@ PROCESS (Execution Declaration)
 
 **ERD cannot exist without PRD. PRD defines; ERD proves.**
 
-**A PRD is considered valid only if its Design Declaration section is present and complete.** ERD validation fails if the governing PRD lacks a completed Design Declaration.
+**A PRD is considered valid only if its HSS (Hub-and-Spoke Set Up) section is present and complete.** ERD validation fails if the governing PRD lacks a completed HSS section.
 
 ---
 

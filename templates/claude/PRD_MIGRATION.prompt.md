@@ -1,6 +1,6 @@
 # PRD Migration Prompt
 
-**Purpose**: Retrofit existing PRDs with mandatory Design Declaration
+**Purpose**: Retrofit existing PRDs with mandatory HSS (Hub-and-Spoke Set Up) section
 **Authority**: OPERATIONAL
 **Status**: LOCKED
 
@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Prerequisites** | Existing PRD without Design Declaration section |
-| **Runs After** | `APPLY_DOCTRINE.prompt.md` (when audit flags missing declaration) |
+| **Prerequisites** | Existing PRD without HSS section |
+| **Runs After** | `APPLY_DOCTRINE.prompt.md` (when audit flags missing HSS) |
 | **Next Prompt** | `PRD_TO_ERD_WORKFLOW.prompt.md` (after migration complete) |
 | **Halt Conditions** | PRD not found, cannot extract required fields, human review needed |
 
@@ -21,9 +21,9 @@
 ## When to Use
 
 Use this prompt when:
-- An existing PRD lacks the Design Declaration section
-- A PRD was created before Design Declaration became mandatory
-- Compliance audit flags PRD as missing Design Declaration
+- An existing PRD lacks the HSS (Hub-and-Spoke Set Up) section
+- A PRD was created before HSS became mandatory
+- Compliance audit flags PRD as missing HSS
 
 ---
 
@@ -48,12 +48,12 @@ Read the existing PRD and extract:
 - Spoke declarations from §6 (if any)
 - Tools from §8 (if any)
 
-### Step 2: Generate Design Declaration
+### Step 2: Generate HSS Section
 
 Insert the following at the VERY TOP of the PRD file:
 
 ```markdown
-# DESIGN DECLARATION (NON-AUTHORITATIVE — FILL FIRST)
+# HSS — Hub-and-Spoke Set Up (NON-AUTHORITATIVE — FILL FIRST)
 
 > **This section is a fill-first design worksheet.**
 > It exists to force architectural clarity before formal specification.
@@ -133,7 +133,7 @@ Choose ONE and complete:
 
 **The PRD is INVALID unless §§1–15 fully restate all authoritative decisions.**
 
-No section below may reference or defer to the Design Declaration.
+No section below may reference or defer to the HSS section.
 Statements such as "see declaration above" are forbidden.
 
 ---
@@ -160,10 +160,10 @@ Ensure Traceability section includes:
 ### Step 5: Verify Consistency
 
 Check that:
-- Design Declaration constants match §3 constants
-- Design Declaration variables match §3 variables
-- Design Declaration Hub-Spoke decision matches §6
-- Design Declaration tools match §8
+- HSS constants match §3 constants
+- HSS variables match §3 variables
+- HSS Hub-Spoke decision matches §6
+- HSS tools match §8
 
 If ANY mismatch → ASK HUMAN to resolve
 
@@ -180,7 +180,7 @@ PRD: [path]
 Hub: [HUB-ID]
 
 Migration actions:
-  [x] Design Declaration inserted
+  [x] HSS section inserted
   [x] Hub-Spoke Status added to §6
   [x] Governing ERD field added
   [x] Consistency verified
@@ -210,4 +210,4 @@ After migration, human MUST:
 |-------|-------|
 | Created | 2026-01-30 |
 | Authority | OPERATIONAL |
-| Purpose | Retrofit existing PRDs with Design Declaration |
+| Purpose | Retrofit existing PRDs with HSS (Hub-and-Spoke Set Up) |

@@ -220,7 +220,7 @@ files:
       locked: true
 
     - path: "templates/claude/PRD_MIGRATION.prompt.md"
-      purpose: "Retrofit existing PRDs with Design Declaration"
+      purpose: "Retrofit existing PRDs with HSS (Hub-and-Spoke Set Up)"
       required: true
       locked: true
 

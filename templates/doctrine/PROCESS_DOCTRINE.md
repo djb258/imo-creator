@@ -129,7 +129,7 @@ TOOL (Implementation)
 
 **No layer may bypass its upstream. Process cannot exist without ERD approval. ERD cannot exist without PRD approval.**
 
-**A PRD is considered valid only if its Design Declaration section is present and complete.** Process validation fails if the governing PRD lacks a completed Design Declaration.
+**A PRD is considered valid only if its HSS (Hub-and-Spoke Set Up) section is present and complete.** Process validation fails if the governing PRD lacks a completed HSS section.
 
 ---
 

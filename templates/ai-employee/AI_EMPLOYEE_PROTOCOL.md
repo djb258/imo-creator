@@ -320,7 +320,7 @@ Reference: `templates/claude/HUB_DESIGN_DECLARATION_INTAKE.prompt.md`
 
 ```
 Does the target hub have:
-  ├─ PRD with Design Declaration section?
+  ├─ PRD with HSS (Hub-and-Spoke Set Up) section?
   │     ├─ Idea/Need completed?
   │     ├─ Hub Justification (CONST → VAR) completed?
   │     ├─ Hub-Spoke Decision (IMPLEMENTED/DECLINED)?
@@ -331,12 +331,12 @@ Does the target hub have:
   ├─ ERD with structural proof?
   └─ Process declaration?
 
-If PRD missing Design Declaration → INVALID PRD
+If PRD missing HSS section → INVALID PRD
 If ANY missing → REJECT or REQUEST creation first
 ```
 
-**PRD without completed Design Declaration = INVALID. No exceptions.**
-**PRD Design Declaration must match HUB_DESIGN_DECLARATION.yaml.**
+**PRD without completed HSS section = INVALID. No exceptions.**
+**PRD HSS section must match HUB_DESIGN_DECLARATION.yaml.**
 
 ### Gate 4: Task Traceability
 
