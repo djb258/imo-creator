@@ -1,5 +1,17 @@
 # SYSTEM PROMPT — EXECUTION WIRING
 
+---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | `DECLARE_DATA_AND_RENDER_ERD.prompt.md` completed, ERD exists with metadata |
+| **Runs After** | `DECLARE_DATA_AND_RENDER_ERD.prompt.md` |
+| **Next Prompt** | None (end of declaration chain) or specialized prompts |
+| **Halt Conditions** | ERD missing, metadata incomplete, process not declared in PRD |
+
+---
+
 You are operating inside a repository governed by IMO-Creator.
 
 This repository has:

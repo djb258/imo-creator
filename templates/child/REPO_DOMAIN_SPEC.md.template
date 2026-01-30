@@ -1,0 +1,173 @@
+# Repository Domain Specification
+
+**Repository**: [FILL: repo name]
+**Domain**: [FILL: domain name, e.g., "outreach", "sales", "client"]
+**Parent**: IMO-Creator
+**Status**: DRAFT
+
+---
+
+## CRITICAL: What This File MUST NOT Contain
+
+- NO SQL statements
+- NO code snippets or functions
+- NO workflow logic or decision trees
+- NO scoring formulas or calculations
+- NO implementation details
+- NO prose descriptions of "how it works"
+
+This file contains BINDINGS ONLY — mapping generic roles to domain-specific names.
+
+---
+
+## Domain Identity
+
+| Field | Value |
+|-------|-------|
+| Domain Name | [FILL: e.g., outreach] |
+| Sovereign Reference | [FILL: CC-01 reference, e.g., IMO-SOVEREIGN-001] |
+| Hub ID | [FILL: CC-02 hub identifier, e.g., HUB-OUTREACH-001] |
+
+---
+
+## Hub and Sub-Hub Structure
+
+| Hub/Sub-Hub | ID | Purpose (10 words max) |
+|-------------|----|-----------------------|
+| [FILL: name] | [FILL: HUB-XXX-NNN] | [FILL: brief purpose] |
+
+---
+
+## Fact Schema Bindings
+
+Map generic FACT role to your domain's source-of-truth tables.
+
+| Generic Role | Domain Table | Owner Schema | Description (10 words max) |
+|--------------|--------------|--------------|---------------------------|
+| FACT_TABLE | [FILL: actual table name] | [FILL: schema] | [FILL: brief] |
+
+**Validation**: At least 1 row required.
+
+---
+
+## Intent Layer Bindings
+
+Map generic concepts to your domain's implementation.
+
+| Generic Role | Domain Column/Table | Data Type | Description (10 words max) |
+|--------------|---------------------|-----------|---------------------------|
+| LIFECYCLE_STATE | [FILL: column name] | [FILL: type] | [FILL: brief] |
+
+**Validation**: LIFECYCLE_STATE required.
+
+---
+
+## External Boundaries
+
+What systems does this domain interact with?
+
+| External System | Direction | Data Exchanged | Boundary Type |
+|-----------------|-----------|----------------|---------------|
+| [FILL: system name] | INGRESS / EGRESS | [FILL: what data] | [FILL: API/File/DB] |
+
+---
+
+## Data Classes Owned
+
+| Data Class | Tables | Owner Hub | Mutability |
+|------------|--------|-----------|------------|
+| [FILL: class name] | [FILL: table list] | [FILL: HUB-XXX] | CONST / VAR |
+
+---
+
+## Approved Tools (Snap-On IDs)
+
+| Tool ID | Purpose | Usage Layer |
+|---------|---------|-------------|
+| [FILL: TOOL-NNN or "NONE"] | [FILL: why needed] | INGRESS / MIDDLE / EGRESS |
+
+**Reference**: templates/SNAP_ON_TOOLBOX.yaml
+
+---
+
+## Lane Definitions
+
+Define data isolation boundaries within this domain.
+
+| Lane Name | Tables Included | Isolation Rule |
+|-----------|-----------------|----------------|
+| [FILL: lane name] | [FILL: tables] | [FILL: boundary rule] |
+
+**Validation**: At least 1 lane required if multiple data contexts exist.
+
+---
+
+## Downstream Consumers (Read-Only)
+
+| Consumer | Access Level | Tables Exposed |
+|----------|--------------|----------------|
+| [FILL: consumer name or "NONE"] | READ | [FILL: tables] |
+
+---
+
+## Forbidden Joins
+
+| Source Table | Target Table | Reason |
+|--------------|--------------|--------|
+| [FILL: table A] | [FILL: table B] | [FILL: why forbidden] |
+
+**Validation**: Required if multiple lanes exist.
+
+---
+
+## What This Repo Explicitly Does NOT Do
+
+| Excluded Scope | Reason |
+|----------------|--------|
+| [FILL: what's out of scope] | [FILL: why] |
+
+---
+
+## Domain Lifecycle States
+
+| State | Maps To Canonical | Description |
+|-------|-------------------|-------------|
+| [FILL: domain state] | DRAFT / ACTIVE / SUSPENDED / TERMINATED | [FILL: 10 words max] |
+
+**Validation**: All states MUST map to canonical states.
+
+---
+
+## Binding Completeness Check
+
+Before this file is valid, verify:
+
+- [ ] Domain Name: Non-placeholder value
+- [ ] Sovereign Reference: Valid CC-01 ID
+- [ ] Hub ID: Valid CC-02 ID
+- [ ] At least 1 Hub/Sub-Hub defined
+- [ ] At least 1 Fact Schema binding
+- [ ] LIFECYCLE_STATE binding present
+- [ ] At least 1 External Boundary (or explicit "NONE")
+- [ ] At least 1 Data Class owned
+- [ ] Tool list completed (or explicit "NONE")
+- [ ] At least 1 Lane definition (if multiple data contexts)
+- [ ] At least 1 "Does NOT Do" entry
+- [ ] All Lifecycle States map to canonical
+- [ ] NO SQL, code, or logic present
+- [ ] NO [FILL: ...] placeholders remain
+
+**If ANY check fails, this file is INVALID.**
+
+---
+
+## Document Control
+
+| Field | Value |
+|-------|-------|
+| Created | [FILL: YYYY-MM-DD] |
+| Last Modified | [FILL: YYYY-MM-DD] |
+| Version | 1.0.0 |
+| Status | DRAFT |
+| Parent Doctrine | IMO-Creator |
+| Validated | [ ] YES / [ ] NO |

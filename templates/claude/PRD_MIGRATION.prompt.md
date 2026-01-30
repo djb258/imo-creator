@@ -5,6 +5,18 @@
 **Status**: LOCKED
 
 ---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | Existing PRD without Design Declaration section |
+| **Runs After** | `APPLY_DOCTRINE.prompt.md` (when audit flags missing declaration) |
+| **Next Prompt** | `PRD_TO_ERD_WORKFLOW.prompt.md` (after migration complete) |
+| **Halt Conditions** | PRD not found, cannot extract required fields, human review needed |
+
+**Use this prompt ONLY for legacy PRDs. New PRDs should use `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` first.**
+
+---
 
 ## When to Use
 

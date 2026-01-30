@@ -127,6 +127,7 @@ _Complete this sentence: "This system transforms [CONSTANTS] into [VARIABLES]."_
 | Field | Value |
 |-------|-------|
 | **Transformation Summary** | |
+| **Success Criteria** | _(How do you know the transformation worked?)_ |
 
 ### Constants (Inputs)
 
@@ -187,14 +188,17 @@ _This hub owns all three IMO layers internally. Spokes are external CC-03 interf
 
 ## 6. Spokes (CC-03 Interfaces)
 
-_Spokes are interfaces ONLY. They carry no logic, tools, or state. Each spoke is typed as Ingress (I) or Egress (O)._
+_Spokes are interfaces ONLY. They carry no logic, tools, or state. Each spoke is typed as INGRESS or EGRESS._
 
 **Hub–Spoke Status**: [ IMPLEMENTED / DECLINED ]
 
-| Spoke Name | Type | Direction | Contract | CC Layer |
-|------------|------|-----------|----------|----------|
-| | I | Inbound | | CC-03 |
-| | O | Outbound | | CC-03 |
+| Spoke Name | Type | Direction | Licensed Capability | Contract | CC Layer |
+|------------|------|-----------|---------------------|----------|----------|
+| | INGRESS | Inbound | | | CC-03 |
+| | EGRESS | Outbound | | | CC-03 |
+
+_Type: INGRESS (data flows into hub) or EGRESS (data flows out of hub)_
+_Licensed Capability: What transformation capability does this spoke enable?_
 
 ---
 

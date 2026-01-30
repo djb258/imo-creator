@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.4.0"
+  version: "1.5.0"
   last_updated: "2026-01-30"
-  total_file_count: 92
+  total_file_count: 93
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -334,6 +334,12 @@ files:
       required: true
       action: "Generate per hub, human fills, AI validates"
       workflow: "Declaration → PRD → ERD → Process"
+
+    - path: "templates/child/REPO_DOMAIN_SPEC.md.template"
+      purpose: "Repository domain specification - bindings for child repos"
+      required: true
+      action: "Generate stub, human fills domain-specific bindings"
+      note: "Child repos HALT without this file"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # CONFIG

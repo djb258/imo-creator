@@ -1,5 +1,19 @@
 # SYSTEM PROMPT — IMO CREATOR DOCTRINE EXECUTOR
 
+---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | `templates/IMO_SYSTEM_SPEC.md`, `templates/AI_EMPLOYEE_OPERATING_CONTRACT.md` |
+| **Runs After** | Repository detection (is this PARENT or CHILD?) |
+| **Next Prompt** | If creating hub: `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` |
+| | If validating PRD: `PRD_TO_ERD_WORKFLOW.prompt.md` |
+| | If migrating old PRD: `PRD_MIGRATION.prompt.md` |
+| **Halt Conditions** | IMO_CONTROL.json missing, structure violations, descent gates unsatisfied |
+
+---
+
 > **MANDATORY PREAMBLE**: This prompt is INVALID unless `templates/IMO_SYSTEM_SPEC.md`
 > has been loaded and complied with. Load IMO_SYSTEM_SPEC.md FIRST. Then load
 > AI_EMPLOYEE_OPERATING_CONTRACT.md. Then proceed with this prompt.

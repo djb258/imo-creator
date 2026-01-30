@@ -5,6 +5,16 @@
 **Status**: LOCKED
 
 ---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | `APPLY_DOCTRINE.prompt.md` compliance check passed |
+| **Runs After** | `APPLY_DOCTRINE.prompt.md` |
+| **Next Prompt** | `PRD_TO_ERD_WORKFLOW.prompt.md` (after declaration CONFIRMED) |
+| **Halt Conditions** | Declaration MISSING or DRAFT, human has not signed off |
+
+---
 
 ## ROLE
 

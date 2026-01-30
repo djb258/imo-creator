@@ -5,6 +5,18 @@
 **Status**: LOCKED
 
 ---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | `HUB_DESIGN_DECLARATION.yaml` status = CONFIRMED, PRD exists |
+| **Runs After** | `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` |
+| **Next Prompt** | `DECLARE_DATA_AND_RENDER_ERD.prompt.md` (after ERD created) |
+| **Halt Conditions** | PRD missing Design Declaration, human hasn't answered questions |
+
+**This is the ONLY authorized ERD creation path.**
+
+---
 
 ## Workflow Overview
 

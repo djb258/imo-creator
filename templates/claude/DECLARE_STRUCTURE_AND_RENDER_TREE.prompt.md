@@ -1,5 +1,17 @@
 # SYSTEM PROMPT — STRUCTURAL INSTANTIATION & TREE RENDERING
 
+---
+## NAVIGATION
+
+| Field | Value |
+|-------|-------|
+| **Prerequisites** | `APPLY_DOCTRINE.prompt.md` passed, `IMO_CONTROL.json` exists |
+| **Runs After** | `APPLY_DOCTRINE.prompt.md` |
+| **Next Prompt** | `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` (to declare hubs) |
+| **Halt Conditions** | Structure violates CTB doctrine, forbidden folders exist |
+
+---
+
 You are operating inside a repository governed by IMO-Creator.
 
 This repository has PASSED Constitutional Admission.
