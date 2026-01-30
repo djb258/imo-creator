@@ -396,9 +396,50 @@ Human intervention required.
 
 ## Completion Protocol
 
-### Task Completion Checklist
+### MANDATORY: Execute HUB_COMPLIANCE.md Before Completion
 
-Before declaring task complete, AI employee verifies:
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                     YOU CANNOT DECLARE TASK COMPLETE                          ║
+║                  WITHOUT RUNNING HUB_COMPLIANCE.md CHECKLIST                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Per CONSTITUTION.md §Violation Zero Tolerance:                               ║
+║                                                                               ║
+║  BEFORE declaring any task complete, you MUST:                                ║
+║                                                                               ║
+║  1. Execute templates/checklists/HUB_COMPLIANCE.md                            ║
+║  2. Fill out EVERY section with actual counts                                 ║
+║  3. Complete the Compliance Gate Verification                                 ║
+║  4. Complete the AI Agent Acknowledgment                                      ║
+║                                                                               ║
+║  If CRITICAL unchecked > 0 or HIGH violations > 0:                            ║
+║     → Task is NOT complete                                                    ║
+║     → Status = NON-COMPLIANT                                                  ║
+║     → Fix violations before declaring complete                                ║
+║                                                                               ║
+║  "I finished the work" is NOT completion.                                     ║
+║  "Checklist passed" IS completion.                                            ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Final Verification Sequence (MANDATORY)
+
+| Step | Action | Required |
+|------|--------|----------|
+| 1 | Execute `templates/checklists/HUB_COMPLIANCE.md` | YES |
+| 2 | Count CRITICAL items unchecked | YES |
+| 3 | Count HIGH violations | YES |
+| 4 | If counts > 0 → FIX before proceeding | YES |
+| 5 | Complete AI Agent Acknowledgment | YES |
+| 6 | Produce Completion Report (below) | YES |
+
+**Skipping this sequence is a PROTOCOL VIOLATION.**
+
+### Task Completion Checklist (Quick Verify)
+
+Before executing HUB_COMPLIANCE.md, quick-verify:
 
 | Check | Status |
 |-------|--------|
@@ -411,6 +452,8 @@ Before declaring task complete, AI employee verifies:
 | All tools in approved list | [ ] |
 | No constitutional violations | [ ] |
 | Attestation produced (if required) | [ ] |
+
+**This is a quick-verify, NOT a substitute for HUB_COMPLIANCE.md.**
 
 ### Completion Report
 
