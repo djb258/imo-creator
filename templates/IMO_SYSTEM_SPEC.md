@@ -2,19 +2,39 @@
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
 **Status**: CONSTITUTIONAL
-**Version**: 1.3.0
+**Version**: 1.4.0
 **Purpose**: Compiled System Index — First Read for All Agents
+
+---
+
+## Machine-Readable Entry Point
+
+**For programmatic access, parse `TEMPLATES_MANIFEST.yaml` first.**
+
+This YAML file contains:
+- Complete file inventory with purposes
+- Reading order with prerequisites
+- Category permissions (ai_can_modify flags)
+- Bootstrap instructions for new repos
+- Update manifest for sync scripts
+- Changelog for version tracking
+
+```yaml
+# Parse this for structured data:
+templates/TEMPLATES_MANIFEST.yaml
+```
 
 ---
 
 ## Reading Order
 
 ```
-1. THIS FILE (IMO_SYSTEM_SPEC.md) — system index
-2. AI_EMPLOYEE_OPERATING_CONTRACT.md — agent constraints + inheritance law
-3. SNAP_ON_TOOLBOX.yaml — tool registry
-4. Doctrine files as needed
-5. REPO_DOMAIN_SPEC.md — REQUIRED for CHILD repos only
+1. TEMPLATES_MANIFEST.yaml — machine-readable index (parse first)
+2. THIS FILE (IMO_SYSTEM_SPEC.md) — human-readable system index
+3. AI_EMPLOYEE_OPERATING_CONTRACT.md — agent constraints + inheritance law
+4. SNAP_ON_TOOLBOX.yaml — tool registry
+5. Doctrine files as needed
+6. REPO_DOMAIN_SPEC.md — REQUIRED for CHILD repos only
 ```
 
 This file is the **authoritative index** to the IMO-Creator system. It compiles existing doctrine into a single reference. It introduces NO new concepts.
