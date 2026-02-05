@@ -225,9 +225,58 @@ These terms have fixed meanings. They may not be redefined.
 
 ---
 
-## 5. Allowed and Forbidden Joins
+## 5. Semantic Precedence Rule (OSAM)
 
-### 5.1 Allowed Joins
+### 5.1 OSAM Authority
+
+The **Operational Semantic Access Map (OSAM)** is the authoritative query-routing contract.
+
+| Principle | Meaning |
+|-----------|---------|
+| **OSAM is authoritative** | All query routing derives from OSAM declarations |
+| **ERDs are downstream proofs** | ERDs implement OSAM contracts; they do not extend or discover |
+| **PRDs must declare OSAM dependency** | PRD Traceability must reference governing OSAM |
+| **Agents must follow OSAM strictly** | No ad-hoc queries, no undeclared joins |
+
+### 5.2 OSAM Hierarchy
+
+```
+PRD (WHAT transformation)
+    │
+    ▼
+OSAM (WHERE to query, HOW to join) ← Authoritative Query Contract
+    │
+    ▼
+ERD (WHAT tables implement OSAM)
+```
+
+**OSAM sits ABOVE ERDs and DRIVES them.**
+
+### 5.3 OSAM Enforcement
+
+| Rule | Enforcement |
+|------|-------------|
+| Query path not in OSAM | INVALID — Agent must HALT |
+| ERD join not in OSAM | VIOLATION — ERD fails audit |
+| PRD question not routable via OSAM | VIOLATION — PRD fails audit |
+| SOURCE/ENRICHMENT table queried | VIOLATION — Not a query surface |
+
+### 5.4 Table Classifications (OSAM)
+
+| Classification | Query Surface | Use |
+|----------------|---------------|-----|
+| **QUERY** | YES | Tables that answer questions |
+| **SOURCE** | NO | Raw ingested data — never query directly |
+| **ENRICHMENT** | NO | Lookup/reference — joined for enrichment only |
+| **AUDIT** | NO | Logging/tracking — not for business queries |
+
+**Source**: templates/semantic/OSAM.md
+
+---
+
+## 6. Allowed and Forbidden Joins
+
+### 6.1 Allowed Joins
 
 | Source | Target | Condition |
 |--------|--------|-----------|
@@ -238,7 +287,7 @@ These terms have fixed meanings. They may not be redefined.
 | CC-04 → CC-04 | Write | Same PID scope only |
 | Any → Any | Read | Permitted |
 
-### 5.2 Forbidden Joins
+### 6.2 Forbidden Joins
 
 | Source | Target | Reason |
 |--------|--------|--------|
@@ -252,9 +301,9 @@ These terms have fixed meanings. They may not be redefined.
 
 ---
 
-## 6. Doctrine File References
+## 7. Doctrine File References
 
-### 6.1 Constitutional Law (Root Doctrine)
+### 7.1 Constitutional Law (Root Doctrine)
 
 | File | Purpose | Status |
 |------|---------|--------|
@@ -262,14 +311,14 @@ These terms have fixed meanings. They may not be redefined.
 | `doctrine/ALTITUDE_DESCENT_MODEL.md` | Descent law — CC-01→02→03→04 sequence and gates | LOCKED |
 | `doctrine/TEMPLATE_IMMUTABILITY.md` | Immutability rules — AI prohibition clause | LOCKED |
 
-### 6.2 Tool Law
+### 7.2 Tool Law
 
 | File | Purpose | Status |
 |------|---------|--------|
 | `SNAP_ON_TOOLBOX.yaml` | Master tool registry — all approved tools, throttles, gates, banned list | LOCKED |
 | `integrations/TOOLS.md` | Tool registration doctrine — determinism first, LLM as tail only | LOCKED |
 
-### 6.3 Templates
+### 7.3 Templates
 
 | File | Purpose | Status |
 |------|---------|--------|
@@ -279,7 +328,7 @@ These terms have fixed meanings. They may not be redefined.
 | `pr/PULL_REQUEST_TEMPLATE_HUB.md` | Hub PR format | TEMPLATE |
 | `pr/PULL_REQUEST_TEMPLATE_SPOKE.md` | Spoke PR format | TEMPLATE |
 
-### 6.4 Execution Prompts
+### 7.4 Execution Prompts
 
 | File | Purpose | Status |
 |------|---------|--------|
@@ -294,7 +343,7 @@ These terms have fixed meanings. They may not be redefined.
 
 ---
 
-## 7. Violation Categories
+## 8. Violation Categories
 
 | Category | Definition | Source |
 |----------|------------|--------|
@@ -310,10 +359,14 @@ These terms have fixed meanings. They may not be redefined.
 | DESCENT_VIOLATION | Artifact created out of CC sequence | ALTITUDE_DESCENT_MODEL.md |
 | INHERITANCE_VIOLATION | Domain meaning leaked to parent OR parent altered by child | AI_EMPLOYEE_OPERATING_CONTRACT.md §3 |
 | BINDING_MISSING | CHILD repo without REPO_DOMAIN_SPEC.md | AI_EMPLOYEE_OPERATING_CONTRACT.md §3 |
+| OSAM_MISSING | CHILD repo without OSAM | GUARDSPEC.md §5 |
+| OSAM_JOIN_VIOLATION | ERD contains joins not in OSAM | GUARDSPEC.md §5 |
+| OSAM_ROUTING_VIOLATION | PRD question not routable via OSAM | GUARDSPEC.md §5 |
+| OSAM_SURFACE_VIOLATION | Query targets SOURCE/ENRICHMENT table | semantic/OSAM.md |
 
 ---
 
-## 8. Halt Conditions
+## 9. Halt Conditions
 
 Stop immediately and report if ANY of these conditions exist:
 
@@ -330,14 +383,17 @@ Stop immediately and report if ANY of these conditions exist:
 | CHILD repo without REPO_DOMAIN_SPEC.md | HALT — provide stub, wait |
 | Domain meaning in PARENT repo | HALT — remove domain specifics |
 | Parent doctrine altered by child | HALT — inheritance violation |
+| OSAM missing in CHILD repo | HALT — provide template, wait |
+| Query path not declared in OSAM | HALT — routing unknown |
+| ERD join not declared in OSAM | HALT — join violation |
 
 **Source**: README.md, APPLY_DOCTRINE.prompt.md, AI_EMPLOYEE_OPERATING_CONTRACT.md
 
 ---
 
-## 9. Tool Doctrine Summary
+## 10. Tool Doctrine Summary
 
-### 9.1 Evaluation Order
+### 10.1 Evaluation Order
 
 ```
 1. CHECK BANNED LIST FIRST → If banned, STOP, suggest alternative
@@ -347,7 +403,7 @@ Stop immediately and report if ANY of these conditions exist:
 5. IF NOT LISTED → ASK, may need ADR
 ```
 
-### 9.2 Core Rules
+### 10.2 Core Rules
 
 | Rule | Violation Type |
 |------|----------------|
@@ -358,7 +414,7 @@ Stop immediately and report if ANY of these conditions exist:
 | ADR required for every tool | PR rejected |
 | Tool not in SNAP_ON_TOOLBOX.yaml | Doctrine violation |
 
-### 9.3 LLM Containment
+### 10.3 LLM Containment
 
 ```
 ALLOWED:
@@ -374,7 +430,7 @@ FORBIDDEN:
 
 ---
 
-## 10. Required Identifiers
+## 11. Required Identifiers
 
 Every hub MUST have:
 
@@ -388,7 +444,7 @@ Every hub MUST have:
 
 ---
 
-## 11. Lifecycle States
+## 12. Lifecycle States
 
 | State | Definition |
 |-------|------------|
@@ -407,7 +463,7 @@ Every hub MUST have:
 
 ---
 
-## 12. Authority Pyramid
+## 13. Authority Pyramid
 
 When rules conflict, higher levels win. No exceptions.
 

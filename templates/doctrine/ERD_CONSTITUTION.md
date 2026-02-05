@@ -171,6 +171,71 @@ Every ERD must satisfy:
 | 4 | Every table has lineage mechanism | Pressure Test Q4 |
 | 5 | Upstream flow is provable | Upstream Flow Test |
 | 6 | Mermaid format compliance | Per DOCUMENTATION_ERD_DOCTRINE.md |
+| 7 | All joins declared in OSAM | OSAM Alignment |
+
+---
+
+## OSAM Alignment (MANDATORY)
+
+**ERDs exist to IMPLEMENT OSAM, not extend it.**
+
+### Alignment Requirements
+
+| Requirement | Enforcement |
+|-------------|-------------|
+| Every relationship in ERD is declared in OSAM | CRITICAL |
+| No exploratory or undocumented joins | CRITICAL |
+| No joins between SOURCE/ENRICHMENT tables and QUERY tables (as query surfaces) | CRITICAL |
+| ERD table classifications match OSAM | CRITICAL |
+
+### OSAM Alignment Check
+
+For every relationship (join) in the ERD:
+
+```
+OSAM ALIGNMENT CHECK: [RELATIONSHIP]
+═══════════════════════════════════════════════════════════════
+
+From Table: [TABLE_A]
+To Table: [TABLE_B]
+Join Key: [KEY_NAME]
+
+OSAM Declaration:
+  └─ Declared in OSAM Allowed Join Paths? [YES | NO]
+  └─ OSAM Reference: [Section/Line or MISSING]
+
+Result: [ALIGNED | VIOLATION]
+
+If VIOLATION:
+  └─ ERD is INVALID until join is declared in OSAM or removed from ERD
+  └─ ADR required to add new join to OSAM
+```
+
+### Alignment Validation Output
+
+```
+OSAM ALIGNMENT VALIDATION
+═══════════════════════════════════════════════════════════════
+
+ERD: [ERD file path]
+OSAM: [OSAM file path]
+OSAM Version: [version]
+
+JOIN ALIGNMENT:
+┌─────────────────────┬─────────────────────┬──────────────┬────────┐
+│ From                │ To                  │ In OSAM?     │ Result │
+├─────────────────────┼─────────────────────┼──────────────┼────────┤
+│ [TABLE_A]           │ [TABLE_B]           │ YES          │ PASS   │
+│ [TABLE_C]           │ [TABLE_D]           │ NO           │ FAIL   │
+└─────────────────────┴─────────────────────┴──────────────┴────────┘
+
+UNDECLARED JOINS (must be removed or declared in OSAM via ADR):
+- [TABLE_C] → [TABLE_D]: Not in OSAM
+
+FINAL RESULT: [ALIGNED | NOT ALIGNED]
+```
+
+**An ERD with undeclared joins is INVALID. No exceptions.**
 
 ---
 

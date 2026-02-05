@@ -201,6 +201,7 @@ This validator has no exceptions.
 | CRITICAL | [ ] Each table has a producing pass (CAPTURE / COMPUTE / GOVERN) |
 | CRITICAL | [ ] Lineage to constants is enforced |
 | CRITICAL | [ ] No orphan tables (not referenced in PRD) |
+| CRITICAL | [ ] ERD aligns with OSAM (all joins declared) |
 | HIGH | [ ] No speculative tables (for future use) |
 | HIGH | [ ] No convenience tables (not serving transformation) |
 
@@ -208,6 +209,7 @@ This validator has no exceptions.
 |-------|-------|
 | ERD Location | |
 | ERD Version | |
+| Governing OSAM | |
 
 ---
 
@@ -249,8 +251,59 @@ For **each table**, all four questions must pass:
 
 ---
 
-## Process Compliance (Execution Declaration) {#section-a6}
+## OSAM Compliance (Semantic Access Map) {#section-a6}
 <!-- §A.6 -->
+
+**OSAM is the authoritative query-routing contract. Violations are BLOCKING.**
+
+| Priority | Check |
+|----------|-------|
+| CRITICAL | [ ] OSAM exists for this hub (`doctrine/OSAM.md`) |
+| CRITICAL | [ ] OSAM declares universal join key |
+| CRITICAL | [ ] OSAM declares spine table |
+| CRITICAL | [ ] All ERD joins are declared in OSAM |
+| CRITICAL | [ ] No queries target SOURCE tables |
+| CRITICAL | [ ] No queries target ENRICHMENT tables as primary query surface |
+| CRITICAL | [ ] PRD questions are routable via OSAM |
+| HIGH | [ ] All tables classified (QUERY/SOURCE/ENRICHMENT/AUDIT) |
+| HIGH | [ ] Query routing table is complete |
+
+### OSAM Alignment Verification
+
+| Check | Result |
+|-------|--------|
+| ERD joins in OSAM | ______ / ______ aligned |
+| Undeclared joins | ______ (must be 0) |
+| SOURCE table queries | ______ (must be 0) |
+| Unroutable PRD questions | ______ (must be 0) |
+
+### OSAM Violation Detection
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         OSAM VIOLATIONS ARE BLOCKING                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  IF OSAM is missing                        → FAIL (constitutional violation)  ║
+║  IF ERD contains joins not in OSAM         → FAIL (alignment violation)       ║
+║  IF PRD requires unanswered questions      → FAIL (routing violation)         ║
+║  IF agent references undocumented paths    → FAIL (agent violation)           ║
+║  IF queries touch SOURCE/ENRICHMENT tables → FAIL (surface violation)         ║
+║                                                                               ║
+║  OSAM violations BLOCK compliance. There are no warnings.                     ║
+║                                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+| Field | Value |
+|-------|-------|
+| OSAM Location | |
+| OSAM Version | |
+
+---
+
+## Process Compliance (Execution Declaration) {#section-a7}
+<!-- §A.7 -->
 
 | Priority | Check |
 |----------|-------|
@@ -582,9 +635,10 @@ Alerts: [count]
 |------|---------|----------------|------------|
 | A | Constitutional Validity | 4 | ___ / 4 |
 | A | PRD Compliance | 8 | ___ / 8 |
-| A | ERD Compliance | 6 | ___ / 6 |
+| A | ERD Compliance | 7 | ___ / 7 |
 | A | Pressure Test | 4 | ___ / 4 |
 | A | Upstream Flow Test | 5 | ___ / 5 |
+| A | **OSAM Compliance** | 7 | ___ / 7 |
 | A | Process Compliance | 6 | ___ / 6 |
 | B | All Operational Sections | varies | ___ / ___ |
 
@@ -683,5 +737,6 @@ If CRITICAL > 0 or HIGH > 0 and I selected COMPLIANT, this audit is INVALID.
 | ERD Constitution | templates/doctrine/ERD_CONSTITUTION.md |
 | Process Doctrine | templates/doctrine/PROCESS_DOCTRINE.md |
 | ERD Doctrine | templates/doctrine/ERD_DOCTRINE.md |
+| **OSAM (Semantic Access Map)** | templates/semantic/OSAM.md |
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | Hub/Spoke Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |

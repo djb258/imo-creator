@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.6.0"
-  last_updated: "2026-01-30"
-  total_file_count: 94
+  version: "1.7.0"
+  last_updated: "2026-02-05"
+  total_file_count: 95
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -154,6 +154,22 @@ files:
       purpose: "Documentation ERD standards"
       required: true
       locked: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SEMANTIC (OSAM - QUERY ROUTING CONTRACT)
+  # ═══════════════════════════════════════════════════════════════════════════
+  semantic:
+    - path: "templates/semantic/OSAM.md"
+      purpose: "Operational Semantic Access Map - authoritative query-routing contract"
+      required: true
+      locked: true
+      action: "Copy to child repos as doctrine/OSAM.md, fill in domain bindings"
+      note: "OSAM drives ERDs. ERDs may only implement joins declared in OSAM. Failure to include OSAM fails constitutional audit."
+      enforcement:
+        - "OSAM is mandatory for all child repos"
+        - "Must be updated when PRDs or ERDs change"
+        - "Drives ERD validity - ERD joins must exist in OSAM"
+        - "SOURCE/ENRICHMENT tables are NEVER query surfaces"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # CLAUDE PROMPTS (LOCKED - AI CANNOT MODIFY)

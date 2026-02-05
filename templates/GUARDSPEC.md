@@ -119,9 +119,52 @@ The following version references MUST be consistent:
 
 ---
 
-## 5. PASS / FAIL Criteria
+## 5. Semantic Precedence Rule (OSAM)
 
-### 5.1 PASS Conditions
+### 5.1 OSAM Authority
+
+The **Operational Semantic Access Map (OSAM)** is the authoritative query contract for any repository.
+
+| Principle | Enforcement |
+|-----------|-------------|
+| OSAM is authoritative | All query routing derives from OSAM |
+| ERDs are downstream proofs | ERDs implement OSAM; they do not extend it |
+| PRDs must declare OSAM dependency | PRD Traceability must reference governing OSAM |
+| Agents must follow OSAM strictly | No ad-hoc queries or undeclared joins |
+
+### 5.2 OSAM Enforcement Rules
+
+A repository FAILS if ANY of the following are true:
+
+| Condition | Violation Type |
+|-----------|----------------|
+| OSAM is missing | OSAM_MISSING |
+| ERD contains joins not declared in OSAM | OSAM_JOIN_VIOLATION |
+| PRD requires questions not routable via OSAM | OSAM_ROUTING_VIOLATION |
+| Agent references undocumented query paths | OSAM_AGENT_VIOLATION |
+| Queries target SOURCE or ENRICHMENT tables | OSAM_SURFACE_VIOLATION |
+
+### 5.3 OSAM Required Files
+
+| File | Required |
+|------|----------|
+| `doctrine/OSAM.md` | YES (child repos) |
+| `templates/semantic/OSAM.md` | Template (parent repo) |
+
+### 5.4 OSAM Validation
+
+When validating OSAM compliance:
+
+1. **Check OSAM exists** — `doctrine/OSAM.md` must be present
+2. **Check ERD alignment** — Every ERD join must be declared in OSAM
+3. **Check PRD routing** — Every PRD question must be routable via OSAM
+4. **Check table classification** — SOURCE/ENRICHMENT tables must not be query surfaces
+
+---
+
+## 6. PASS / FAIL Criteria
+
+### 6.1 PASS Conditions
 
 A repository PASSES enforcement if ALL of the following are true:
 
@@ -131,8 +174,11 @@ A repository PASSES enforcement if ALL of the following are true:
 - [ ] No loose files in `src/` root
 - [ ] Version references are consistent
 - [ ] `doctrine/REPO_DOMAIN_SPEC.md` exists and is non-empty
+- [ ] `doctrine/OSAM.md` exists and is valid (child repos)
+- [ ] ERD joins align with OSAM declarations
+- [ ] No queries target SOURCE/ENRICHMENT tables
 
-### 5.2 FAIL Conditions
+### 6.2 FAIL Conditions
 
 A repository FAILS enforcement if ANY of the following are true:
 
@@ -142,12 +188,15 @@ A repository FAILS enforcement if ANY of the following are true:
 - [ ] Loose files exist in `src/` root
 - [ ] Version mismatch detected
 - [ ] `doctrine/REPO_DOMAIN_SPEC.md` is missing or empty
+- [ ] `doctrine/OSAM.md` is missing (child repos)
+- [ ] ERD contains joins not declared in OSAM
+- [ ] PRD requires questions not routable via OSAM
 
 ---
 
-## 6. HALT Behavior
+## 7. HALT Behavior
 
-### 6.1 On Failure
+### 7.1 On Failure
 
 When enforcement FAILS, the CI system MUST:
 
@@ -160,7 +209,7 @@ When enforcement FAILS, the CI system MUST:
 3. **BLOCK** merge to protected branches
 4. **NOTIFY** the author
 
-### 6.2 Violation Report Format
+### 7.2 Violation Report Format
 
 Each violation MUST be reported in this format:
 
@@ -174,7 +223,7 @@ Pattern: [MATCHED_PATTERN]
 Required: [WHAT_MUST_BE_DONE]
 ```
 
-### 6.3 No Silent Passes
+### 7.3 No Silent Passes
 
 A CI system MUST NOT:
 - Silently pass a failing repository
@@ -183,9 +232,9 @@ A CI system MUST NOT:
 
 ---
 
-## 7. Enforcement Scope
+## 8. Enforcement Scope
 
-### 7.1 When to Enforce
+### 8.1 When to Enforce
 
 | Trigger | Enforcement |
 |---------|-------------|
@@ -194,7 +243,7 @@ A CI system MUST NOT:
 | Scheduled audit | RECOMMENDED |
 | Manual trigger | ALLOWED |
 
-### 7.2 Protected Branches
+### 8.2 Protected Branches
 
 The following branches SHOULD be protected:
 
@@ -206,9 +255,9 @@ The following branches SHOULD be protected:
 
 ---
 
-## 8. Exemptions
+## 9. Exemptions
 
-### 8.1 Allowed Exemptions
+### 9.1 Allowed Exemptions
 
 | Exemption | Condition |
 |-----------|-----------|
@@ -216,7 +265,7 @@ The following branches SHOULD be protected:
 | Parent repository | `imo-creator` itself (contains templates) |
 | Documentation files | Files in `docs/` that are not governance artifacts |
 
-### 8.2 Disallowed Exemptions
+### 9.2 Disallowed Exemptions
 
 No exemption is permitted for:
 - `IMO_CONTROL.json`

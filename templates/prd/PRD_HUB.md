@@ -306,5 +306,23 @@ _When can a human bypass automation? Who approves? (Trigger authority must be CC
 |----------|-----------|
 | Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
 | Hub/Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
+| **Governing OSAM** | _(path to OSAM that defines query routing)_ |
+| **OSAM Version** | _(version or hash of OSAM)_ |
 | **Governing ERD** | _(path to ERD that implements this PRD)_ |
 | **Governing Process** | _(path to Process declaration)_ |
+
+---
+
+## OSAM Compliance Declaration (MANDATORY)
+
+**All PRD questions must be routable via OSAM.**
+
+| Check | Status |
+|-------|--------|
+| [ ] Governing OSAM referenced above | |
+| [ ] All questions in this PRD can be answered via OSAM query routes | |
+| [ ] No new query paths introduced in this PRD | |
+| [ ] All required tables exist in OSAM | |
+
+**Prohibition**: This PRD may NOT introduce new query paths that are not declared in OSAM.
+If a question cannot be routed via OSAM, the OSAM must be updated via ADR BEFORE this PRD is approved.
