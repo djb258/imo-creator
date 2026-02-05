@@ -40,6 +40,12 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 |------|---------|
 | `templates/checklists/HUB_COMPLIANCE.md` | Hub compliance checklist format |
 
+### Semantic Access (CONSTITUTIONAL)
+
+| File | Purpose |
+|------|---------|
+| `templates/semantic/OSAM.md` | Operational Semantic Access Map - authoritative query-routing contract |
+
 ### PR Templates
 
 | File | Purpose |
@@ -162,6 +168,7 @@ Every repo that derives from imo-creator MUST:
    | Hub-Spoke | templates/doctrine/HUB_SPOKE_ARCHITECTURE.md | 1.1.0 |
    | Descent | templates/doctrine/ALTITUDE_DESCENT_MODEL.md | 1.1.0 |
    | Tools | templates/integrations/TOOLS.md | 1.1.0 |
+   | OSAM | templates/semantic/OSAM.md | 1.0.0 |
    | PRD | templates/prd/PRD_HUB.md | 1.0.0 |
    | ADR | templates/adr/ADR.md | 1.0.0 |
    | Checklist | templates/checklists/HUB_COMPLIANCE.md | 1.0.0 |
@@ -202,6 +209,9 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   └── ALTITUDE_DESCENT_MODEL.md
 │
 ├── templates/integrations/TOOLS.md ← CONSTITUTIONAL LAW (locked)
+│
+├── templates/semantic/     ← CONSTITUTIONAL LAW (locked)
+│   └── OSAM.md
 │
 ├── templates/prd/          ← TEMPLATE LAW (locked)
 ├── templates/adr/          ← TEMPLATE LAW (locked)

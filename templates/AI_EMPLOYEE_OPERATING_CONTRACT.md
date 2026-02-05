@@ -42,9 +42,10 @@ Before acting, you MUST read and verify presence of:
 2. templates/AI_EMPLOYEE_OPERATING_CONTRACT.md (this file)
 3. templates/README.md
 4. templates/SNAP_ON_TOOLBOX.yaml
-5. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
-6. doctrine/TEMPLATE_IMMUTABILITY.md
-7. ALL prompts in templates/claude/
+5. templates/semantic/OSAM.md (REQUIRED for any data/ERD work)
+6. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
+7. doctrine/TEMPLATE_IMMUTABILITY.md
+8. ALL prompts in templates/claude/
 ```
 
 If ANY file is missing:
@@ -536,6 +537,7 @@ Action: CANNOT proceed. Human intervention required.
 |-----------|----------|
 | IMO_CONTROL.json missing | **HALT** — "IMO_CONTROL.json not found" |
 | IMO_SYSTEM_SPEC.md not loaded | **HALT** — Load it first |
+| OSAM.md missing (for data work) | **HALT** — "semantic/OSAM.md not found" |
 | Doctrine files missing | **HALT** — Report exact filename |
 | Structure violates CTB branches | **HALT** — Report violation type and path |
 | Forbidden folders exist | **HALT** — Report: utils, helpers, common, shared, lib, misc |
@@ -678,6 +680,7 @@ PRELOAD STATUS:
 - AI_EMPLOYEE_OPERATING_CONTRACT.md: [LOADED | MISSING → HALT]
 - README.md: [LOADED | MISSING → HALT]
 - SNAP_ON_TOOLBOX.yaml: [LOADED | MISSING → HALT]
+- semantic/OSAM.md: [LOADED | MISSING → HALT for data work]
 - CANONICAL_ARCHITECTURE_DOCTRINE.md: [LOADED | MISSING → HALT]
 - TEMPLATE_IMMUTABILITY.md: [LOADED | MISSING → HALT]
 - claude/ prompts: [LOADED | MISSING → HALT]

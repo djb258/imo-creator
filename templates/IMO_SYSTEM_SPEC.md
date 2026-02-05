@@ -33,8 +33,9 @@ templates/TEMPLATES_MANIFEST.yaml
 2. THIS FILE (IMO_SYSTEM_SPEC.md) — human-readable system index
 3. AI_EMPLOYEE_OPERATING_CONTRACT.md — agent constraints + inheritance law
 4. SNAP_ON_TOOLBOX.yaml — tool registry
-5. Doctrine files as needed
-6. REPO_DOMAIN_SPEC.md — REQUIRED for CHILD repos only
+5. semantic/OSAM.md — query-routing contract (REQUIRED for data/ERD work)
+6. Doctrine files as needed
+7. REPO_DOMAIN_SPEC.md — REQUIRED for CHILD repos only
 ```
 
 This file is the **authoritative index** to the IMO-Creator system. It compiles existing doctrine into a single reference. It introduces NO new concepts.

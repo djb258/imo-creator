@@ -24,7 +24,8 @@ If you are an AI agent operating in any repository governed by IMO-Creator:
 3. SNAP_ON_TOOLBOX.yaml — tool registry
 4. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md — root law
 5. doctrine/TEMPLATE_IMMUTABILITY.md — what you cannot do
-6. The specific prompt for your current task (in claude/)
+6. semantic/OSAM.md — query-routing contract (REQUIRED for any data work)
+7. The specific prompt for your current task (in claude/)
 ```
 
 > **WARNING**: No prompt in `claude/` is valid unless IMO_SYSTEM_SPEC.md has been loaded first.
@@ -86,6 +87,7 @@ Stop immediately and report if:
 | Folder | Purpose | Status | AI Can Modify |
 |--------|---------|--------|---------------|
 | `doctrine/` | Constitutional law — the rules | LOCKED | NO |
+| `semantic/` | Semantic access contracts (OSAM) | LOCKED | NO |
 | `claude/` | System prompts — how to execute | LOCKED | NO |
 | `prd/` | PRD template — copy and fill in | TEMPLATE | NO (copy only) |
 | `adr/` | ADR template — copy and fill in | TEMPLATE | NO (copy only) |
@@ -238,6 +240,9 @@ templates/
 ├── audit/                              # TEMPLATE — Copy to derived repos
 │   └── CONSTITUTIONAL_AUDIT_ATTESTATION.md
 │
+├── semantic/                           # LOCKED — AI CANNOT MODIFY
+│   └── OSAM.md                         # Operational Semantic Access Map
+│
 ├── integrations/                       # GUIDANCE — Reference only
 │   ├── COMPOSIO.md
 │   ├── DOPPLER.md
@@ -260,6 +265,7 @@ Before a hub can ship, it must have:
 | Artifact | Template | CC Layer | Purpose |
 |----------|----------|----------|---------|
 | **PRD** | `prd/PRD_HUB.md` | CC-02 | Defines structure, IMO, CTB, spokes |
+| **OSAM** | `semantic/OSAM.md` | CC-02 | Query-routing contract (REQUIRED before ERD) |
 | **ADR(s)** | `adr/ADR.md` | CC-03 | Documents decisions (why, not what) |
 | **Checklist** | `checklists/HUB_COMPLIANCE.md` | CC-02 | Binary ship gate |
 | **PR** | `pr/PULL_REQUEST_TEMPLATE_HUB.md` | CC-04 | Implements approved structure |
