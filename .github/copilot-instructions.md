@@ -2,7 +2,7 @@
 
 This repository is "IMO Creator" — a meta-repository template factory that generates doctrine-compliant templates for Hub & Spoke architecture systems.
 
-**Authoritative Doctrine**: All work MUST conform to `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`
+**Authoritative Doctrine**: All work MUST conform to `templates/doctrine/ARCHITECTURE.md`
 
 ## Canonical Chain (CC) Architecture
 
@@ -37,9 +37,7 @@ templates/
 
 ## Key Files
 
-- `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` — Root doctrine (read first)
-- `templates/doctrine/HUB_SPOKE_ARCHITECTURE.md` — Hub/Spoke definitions
-- `templates/doctrine/ALTITUDE_DESCENT_MODEL.md` — CC Descent Protocol
+- `templates/doctrine/ARCHITECTURE.md` — Root doctrine (read first, consolidates all architecture doctrine)
 
 ## Conventions and Patterns
 
@@ -71,8 +69,7 @@ templates/
 ## Files to Inspect First
 
 **Doctrine (read first):**
-- `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`
-- `templates/doctrine/HUB_SPOKE_ARCHITECTURE.md`
+- `templates/doctrine/ARCHITECTURE.md`
 
 **Templates:**
 - `templates/README.md` — Template directory overview

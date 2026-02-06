@@ -61,10 +61,9 @@ This file is the binding contract. It defines:
    └─ Parse governance, doctrine_files, structure, forbidden, descent_gates
 
 3. READ all doctrine files listed in doctrine_files.required[]
-   └─ templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
-   └─ templates/doctrine/HUB_SPOKE_ARCHITECTURE.md
-   └─ templates/doctrine/ALTITUDE_DESCENT_MODEL.md
+   └─ templates/doctrine/ARCHITECTURE.md (primary architecture doctrine)
    └─ templates/doctrine/REPO_REFACTOR_PROTOCOL.md
+   └─ (Note: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are redirects to ARCHITECTURE.md)
 
 4. AUDIT repository structure against IMO_CONTROL.json
    └─ Check: src/{sys,data,app,ai,ui}/ exists (if src/ exists)

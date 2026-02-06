@@ -18,10 +18,11 @@ This audit identified **3 critical contradictions** and **2 structural issues** 
 |-------|----------|----------|---------|--------|
 | 1 | CONSTITUTION.md | Root | N/A | LOCKED |
 | 2 | IMO_CONTROL.json | Root | 1.2.0 | CONSTITUTIONAL |
-| 3a | CANONICAL_ARCHITECTURE_DOCTRINE.md | templates/doctrine/ | 1.3.0 | LOCKED |
-| 3b | HUB_SPOKE_ARCHITECTURE.md | templates/doctrine/ | 1.2.0 | SUBORDINATE |
-| 3c | ALTITUDE_DESCENT_MODEL.md | templates/doctrine/ | 1.1.0 | SUBORDINATE |
-| 3d | REPO_REFACTOR_PROTOCOL.md | templates/doctrine/ | 1.2.0 | SUBORDINATE |
+| 3a | ARCHITECTURE.md | templates/doctrine/ | 2.0.0 | LOCKED (PRIMARY) |
+| 3b | CANONICAL_ARCHITECTURE_DOCTRINE.md | templates/doctrine/ | REDIRECT | REDIRECT to ARCHITECTURE.md |
+| 3c | HUB_SPOKE_ARCHITECTURE.md | templates/doctrine/ | REDIRECT | REDIRECT to ARCHITECTURE.md Part IV |
+| 3d | ALTITUDE_DESCENT_MODEL.md | templates/doctrine/ | REDIRECT | REDIRECT to ARCHITECTURE.md Part VI |
+| 3e | REPO_REFACTOR_PROTOCOL.md | templates/doctrine/ | 1.2.0 | SUBORDINATE |
 | 4 | CTB_DOCTRINE.md | global-config/ | 1.3.3 | **UNCLEAR** |
 
 ---
@@ -38,7 +39,7 @@ This audit identified **3 critical contradictions** and **2 structural issues** 
 5k ft (Operations): Automation scripts, reporting
 ```
 
-### In `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`:
+### In `templates/doctrine/ARCHITECTURE.md` (v2.0.0):
 ```
 CC-01 (Sovereign): Authority anchor, root of identity
 CC-02 (Hub): Domain ownership, logic, state, decisions
@@ -51,7 +52,7 @@ These are **two different hierarchies** using similar language:
 - **Altitude (40k→5k)** = Physical branch structure (where files go)
 - **CC Layers (CC-01→04)** = Authority hierarchy (who can do what)
 
-CTB_DOCTRINE.md conflates these concepts. The canonical doctrine keeps them separate.
+CTB_DOCTRINE.md conflates these concepts. ARCHITECTURE.md keeps them separate.
 
 ### Resolution Required:
 Human must decide: Does CTB_DOCTRINE.md supplement or contradict the canonical doctrine?
@@ -62,7 +63,7 @@ Human must decide: Does CTB_DOCTRINE.md supplement or contradict the canonical d
 
 **Severity**: CRITICAL
 
-### In `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` (Section 1.3):
+### In `templates/doctrine/ARCHITECTURE.md` (Part II):
 ```
 Canonical CTB branches under src/:
 - sys/    (System infrastructure)
@@ -88,7 +89,7 @@ Canonical CTB branches under src/:
 ```
 
 ### Problem:
-- Canonical doctrine defines 5 CTB branches: `sys`, `data`, `app`, `ai`, `ui`
+- ARCHITECTURE.md defines 5 CTB branches: `sys`, `data`, `app`, `ai`, `ui`
 - CTB_DOCTRINE.md defines 15+ branches with different names: `imo/*`, `doctrine/*`, `ops/*`
 
 These are **incompatible structures**.
@@ -106,12 +107,12 @@ Human must clarify:
 
 | Document | Stated CTB Version | Stated Doctrine Version |
 |----------|-------------------|------------------------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.1.0 | 1.3.0 |
+| ARCHITECTURE.md | 2.0.0 | 2.0.0 |
 | CTB_DOCTRINE.md | 1.3.3 | N/A |
-| IMO_CONTROL.json | N/A | 1.3.0 (references canonical) |
+| IMO_CONTROL.json | N/A | 1.4.0 (references ARCHITECTURE.md) |
 
 ### Problem:
-CTB_DOCTRINE.md claims CTB Version 1.3.3, but CANONICAL_ARCHITECTURE_DOCTRINE.md (the authoritative source) declares CTB Version 1.1.0.
+CTB_DOCTRINE.md claims CTB Version 1.3.3, but ARCHITECTURE.md (the authoritative source) declares version 2.0.0.
 
 ### Resolution Required:
 Which version is authoritative? Version numbers must align.
@@ -161,9 +162,9 @@ No `docs/SYSTEM_MANIFEST.md` exists to declare:
 |------|-----------------|----------------|-------|
 | CONSTITUTION.md | Constitutional | None | Clean |
 | IMO_CONTROL.json | Control Plane | None | Clean |
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | Master Doctrine | None | Authoritative |
-| HUB_SPOKE_ARCHITECTURE.md | Subordinate | None | References canonical |
-| ALTITUDE_DESCENT_MODEL.md | Subordinate | None | References canonical |
+| ARCHITECTURE.md | Master Doctrine | None | Authoritative (v2.0.0 consolidation) |
+| HUB_SPOKE_ARCHITECTURE.md | Redirect | None | Redirect to ARCHITECTURE.md Part IV |
+| ALTITUDE_DESCENT_MODEL.md | Redirect | None | Redirect to ARCHITECTURE.md Part VI |
 | REPO_REFACTOR_PROTOCOL.md | Subordinate | None | References canonical |
 | CTB_DOCTRINE.md | **UNCLEAR** | 3 | Needs reconciliation |
 | UI_CONTROL_CONTRACT.json | Control Plane | None | Clean |
@@ -199,7 +200,7 @@ No `docs/SYSTEM_MANIFEST.md` exists to declare:
 
 **Cannot proceed with automated reconciliation until contradictions #1 and #2 are resolved by human authority.**
 
-The canonical doctrine files (templates/doctrine/*.md) are internally consistent. The issue is `global-config/CTB_DOCTRINE.md` which appears to be a separate operational document that has drifted into doctrine-like content without clear authority designation.
+The canonical doctrine file (templates/doctrine/ARCHITECTURE.md v2.0.0) is the authoritative source. Old files (CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, ALTITUDE_DESCENT_MODEL.md) are now redirects. The issue is `global-config/CTB_DOCTRINE.md` which appears to be a separate operational document that has drifted into doctrine-like content without clear authority designation.
 
 ---
 

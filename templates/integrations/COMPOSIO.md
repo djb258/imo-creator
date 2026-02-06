@@ -137,7 +137,7 @@ curl -X POST http://localhost:<port>/mcp/test \
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Architecture Doctrine | ARCHITECTURE.md |
 | PRD | |
 | ADR | |
 | Work Item | |

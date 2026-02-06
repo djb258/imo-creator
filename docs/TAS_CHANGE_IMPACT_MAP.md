@@ -16,7 +16,7 @@ This document defines **what must be updated when X changes**. This prevents dri
 
 ## 1. Doctrine File Changes
 
-### If CANONICAL_ARCHITECTURE_DOCTRINE.md changes:
+### If ARCHITECTURE.md changes:
 
 | Must Update | Reason |
 |-------------|--------|
@@ -24,18 +24,10 @@ This document defines **what must be updated when X changes**. This prevents dri
 | IMO_SYSTEM_SPEC.md | Cross-references |
 | TAS_AUTHORITY_MAP.md | Version matrix |
 | TAS_CANONICAL_DIAGRAM.md | If structure changed |
-| ALTITUDE_DESCENT_MODEL.md | If CC layers changed |
 | REPO_REFACTOR_PROTOCOL.md | If CTB changed |
 | All child repo DOCTRINE.md | Version reference |
 
-### If ALTITUDE_DESCENT_MODEL.md changes:
-
-| Must Update | Reason |
-|-------------|--------|
-| IMO_CONTROL.json | Version number |
-| TAS_AUTHORITY_MAP.md | Version matrix |
-| TAS_CANONICAL_DIAGRAM.md | CC descent diagram |
-| TAS_ANTI_PATTERNS.md | If forbidden patterns changed |
+**Note**: ARCHITECTURE.md now consolidates CTB, CC, Hub-Spoke, IMO, and Descent concepts (previously spread across CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md).
 
 ### If any doctrine file version changes:
 
@@ -163,7 +155,7 @@ This document defines **what must be updated when X changes**. This prevents dri
 
 | When This Changes | Update These |
 |-------------------|--------------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | IMO_CONTROL.json, IMO_SYSTEM_SPEC.md, TAS_*.md, child DOCTRINE.md |
+| ARCHITECTURE.md | IMO_CONTROL.json, IMO_SYSTEM_SPEC.md, TAS_*.md, child DOCTRINE.md |
 | Any doctrine version | IMO_CONTROL.json, TAS_AUTHORITY_MAP.md |
 | Table added | ERD, Dictionary, REGISTRY.yaml (if sub-hub), Lanes |
 | Column added | Dictionary, ERD (if FK) |

@@ -206,7 +206,7 @@ env:
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Architecture Doctrine | ARCHITECTURE.md |
 | PRD | |
 | ADR | |
 | Work Item | |

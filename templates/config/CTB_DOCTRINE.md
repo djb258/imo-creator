@@ -1,7 +1,7 @@
 # CTB (Christmas Tree Backbone) Doctrine
 
 **Status**: POINTER DOCUMENT
-**Authority**: SUBORDINATE to `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`
+**Authority**: SUBORDINATE to `templates/doctrine/ARCHITECTURE.md`
 
 ---
 
@@ -28,10 +28,10 @@ To update any repository with the latest CTB structure:
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| **CANONICAL_ARCHITECTURE_DOCTRINE.md** | templates/doctrine/ | Master doctrine - CTB structure, CC layers, hub-spoke geometry |
-| **HUB_SPOKE_ARCHITECTURE.md** | templates/doctrine/ | Hub-spoke geometry rules |
-| **ALTITUDE_DESCENT_MODEL.md** | templates/doctrine/ | CC descent gates (PRD before code, ADR before code) |
+| **ARCHITECTURE.md** | templates/doctrine/ | CTB Constitutional Law (v2.0.0) - CTB structure, CC layers, hub-spoke geometry, descent gates |
 | **REPO_REFACTOR_PROTOCOL.md** | templates/doctrine/ | Repo structure requirements |
+
+**Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 
 ### Operational Runbooks
 
@@ -55,7 +55,7 @@ To update any repository with the latest CTB structure:
 | `ai/` | AI components |
 | `ui/` | User interface |
 
-**Full definition**: See `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` Section 1.3
+**Full definition**: See `templates/doctrine/ARCHITECTURE.md` Part II
 
 ---
 
@@ -68,7 +68,7 @@ To update any repository with the latest CTB structure:
 | CC-03 | Context | ADR, process flows |
 | CC-04 | Process | Code, tests, config |
 
-**Full definition**: See `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` Section 2
+**Full definition**: See `templates/doctrine/ARCHITECTURE.md` Part III
 
 ---
 
@@ -119,4 +119,4 @@ bash global-config/scripts/ctb_verify.sh
 
 ---
 
-> **RULE**: If any content in this document conflicts with `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md`, the canonical doctrine wins. No exceptions.
+> **RULE**: If any content in this document conflicts with `templates/doctrine/ARCHITECTURE.md`, the canonical doctrine wins. No exceptions.

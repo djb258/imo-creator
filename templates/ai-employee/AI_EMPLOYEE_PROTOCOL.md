@@ -22,13 +22,13 @@ This protocol derives all authority from existing constitutional doctrine:
 | Source Document | Authority Inherited |
 |-----------------|---------------------|
 | `CONSTITUTION.md` | Transformation Law (CONST → VAR), Governance Direction |
-| `CANONICAL_ARCHITECTURE_DOCTRINE.md` | CC layers, CTB structure, Hub-Spoke geometry |
+| `ARCHITECTURE.md` | CC layers, CTB structure, Hub-Spoke geometry |
 | `AI_EMPLOYEE_OPERATING_CONTRACT.md` | Operator role, escalation rules, halt conditions |
 | `REPO_REFACTOR_PROTOCOL.md` | Remediation order, validation requirements |
 
 **This protocol does not define authority. It operationalizes authority defined elsewhere.**
 
-For definitions of Sovereign, CC layers, Governance Direction, and Territory ownership, see `CONSTITUTION.md` and `CANONICAL_ARCHITECTURE_DOCTRINE.md`.
+For definitions of Sovereign, CC layers, Governance Direction, and Territory ownership, see `CONSTITUTION.md` and `ARCHITECTURE.md`.
 
 ---
 
@@ -52,9 +52,9 @@ CHILD REPOS (Operating Territory)
 AI EMPLOYEE (This protocol)
 ```
 
-**Diagram does not confer authority.** For authoritative hierarchy, see `CANONICAL_ARCHITECTURE_DOCTRINE.md` §2 (Canonical Chain).
+**Diagram does not confer authority.** For authoritative hierarchy, see `ARCHITECTURE.md` Part III (Canonical Chain).
 
-**AI employees operate at CC-04.** Per `CANONICAL_ARCHITECTURE_DOCTRINE.md` §2.1, CC-04 is the Process layer: execution instances within a context. AI employees execute. They do not define, govern, or legislate.
+**AI employees operate at CC-04.** Per `ARCHITECTURE.md` Part III, CC-04 is the Process layer: execution instances within a context. AI employees execute. They do not define, govern, or legislate.
 
 ---
 
@@ -142,7 +142,7 @@ STEP 2: Does templates/doctrine/ directory exist?
 1. CONSTITUTION.md (repo root)
 2. templates/TEMPLATES_MANIFEST.yaml
 3. templates/IMO_SYSTEM_SPEC.md
-4. templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
+4. templates/doctrine/ARCHITECTURE.md
 5. Task-specific prompts in templates/claude/
 ```
 

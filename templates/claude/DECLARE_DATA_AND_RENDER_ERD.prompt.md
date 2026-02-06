@@ -92,7 +92,7 @@ It cannot create ERD structure — only add metadata to existing ERD.
 
 Read in order:
 1. `CONSTITUTION.md`
-2. `CANONICAL_ARCHITECTURE_DOCTRINE.md`
+2. `doctrine/ARCHITECTURE.md`
 3. `IMO_CONTROL.json`
 4. `REGISTRY.yaml` files (sovereign, hub, sub-hub)
 

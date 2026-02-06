@@ -44,7 +44,7 @@ imo-creator/
 
 ### For New Projects
 
-1. Read [`templates/doctrine/HUB_SPOKE_ARCHITECTURE.md`](templates/doctrine/HUB_SPOKE_ARCHITECTURE.md)
+1. Read [`templates/doctrine/ARCHITECTURE.md`](templates/doctrine/ARCHITECTURE.md)
 2. Copy required templates to your project
 3. Configure integrations per templates
 4. Run HEIR compliance checks
@@ -82,7 +82,7 @@ Every hub needs:
 - **CTB** = sys/, ui/, ai/, data/, ops/, docs/
 - **Altitude** = 30k (system) → 5k (execution)
 
-See full doctrine: [`templates/doctrine/HUB_SPOKE_ARCHITECTURE.md`](templates/doctrine/HUB_SPOKE_ARCHITECTURE.md)
+See full doctrine: [`templates/doctrine/ARCHITECTURE.md`](templates/doctrine/ARCHITECTURE.md)
 
 ---
 

@@ -158,6 +158,6 @@ Before admitting any LLM-based tool:
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Architecture Doctrine | ARCHITECTURE.md |
 | Hub PRD | (per hub) |
 | Tool ADRs | (per tool) |

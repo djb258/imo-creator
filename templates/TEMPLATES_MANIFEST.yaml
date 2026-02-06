@@ -628,9 +628,9 @@ reading_order:
         prerequisites: ["IMO_SYSTEM_SPEC.md"]
 
       - order: 5
-        file: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+        file: "templates/doctrine/ARCHITECTURE.md"
         location: "templates/doctrine/"
-        purpose: "Root doctrine - CC layers, CTB structure"
+        purpose: "Primary architecture doctrine - CC layers, CTB structure, Hub-Spoke, IMO, Descent"
         required: true
         prerequisites: ["AI_EMPLOYEE_OPERATING_CONTRACT.md"]
 
@@ -639,7 +639,7 @@ reading_order:
         location: "templates/"
         purpose: "Tool registry - check before using any tool"
         required: true
-        prerequisites: ["CANONICAL_ARCHITECTURE_DOCTRINE.md"]
+        prerequisites: ["ARCHITECTURE.md"]
 
       - order: 7
         file: "templates/claude/APPLY_DOCTRINE.prompt.md"
@@ -915,6 +915,7 @@ update_manifest:
   always_sync:
     description: "These files are ALWAYS synced on update"
     files:
+      - "templates/doctrine/ARCHITECTURE.md"
       - "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
       - "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
       - "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"

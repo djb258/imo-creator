@@ -60,7 +60,7 @@ _What changed and why? Reference the approved PRD/ADR — do not define architec
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Canonical Doctrine | ARCHITECTURE.md |
 | PRD | |
 | Sub-PRD | |
 | ADR | |

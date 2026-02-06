@@ -124,7 +124,7 @@ _How is this decision reversed if it fails? Do not define remediation logic._
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Canonical Doctrine | ARCHITECTURE.md |
 | PRD | |
 | Work Items | |
 | PR(s) | |

@@ -23,9 +23,10 @@ The following artifacts are LOCKED and IMMUTABLE:
 
 | File | Status | Change Protocol |
 |------|--------|-----------------|
-| `CANONICAL_ARCHITECTURE_DOCTRINE.md` | LOCKED | ADR + Human Approval |
-| `HUB_SPOKE_ARCHITECTURE.md` | LOCKED | ADR + Human Approval |
-| `ALTITUDE_DESCENT_MODEL.md` | LOCKED | ADR + Human Approval |
+| `ARCHITECTURE.md` | LOCKED | ADR + Human Approval |
+| `CANONICAL_ARCHITECTURE_DOCTRINE.md` | REDIRECT | Points to ARCHITECTURE.md |
+| `HUB_SPOKE_ARCHITECTURE.md` | REDIRECT | Points to ARCHITECTURE.md Part IV |
+| `ALTITUDE_DESCENT_MODEL.md` | REDIRECT | Points to ARCHITECTURE.md Part VI |
 | `REPO_REFACTOR_PROTOCOL.md` | LOCKED | ADR + Human Approval |
 | `DBA_ENFORCEMENT_DOCTRINE.md` | LOCKED | ADR + Human Approval |
 | `TEMPLATE_IMMUTABILITY.md` | LOCKED | ADR + Human Approval |
@@ -158,9 +159,10 @@ templates/
 ├── README.md                              # Directory guide
 ├── SNAP_ON_TOOLBOX.yaml                   # Tool registry
 ├── doctrine/                              # LOCKED DOCTRINE
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md # Master doctrine
-│   ├── HUB_SPOKE_ARCHITECTURE.md          # Hub-spoke rules
-│   ├── ALTITUDE_DESCENT_MODEL.md          # Descent gates
+│   ├── ARCHITECTURE.md                    # Primary architecture doctrine (v2.0.0)
+│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md # REDIRECT → ARCHITECTURE.md
+│   ├── HUB_SPOKE_ARCHITECTURE.md          # REDIRECT → ARCHITECTURE.md Part IV
+│   ├── ALTITUDE_DESCENT_MODEL.md          # REDIRECT → ARCHITECTURE.md Part VI
 │   ├── REPO_REFACTOR_PROTOCOL.md          # Structure rules
 │   ├── DBA_ENFORCEMENT_DOCTRINE.md        # DBA rules
 │   └── TEMPLATE_IMMUTABILITY.md           # This file

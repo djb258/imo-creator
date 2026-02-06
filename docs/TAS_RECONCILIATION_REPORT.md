@@ -28,9 +28,10 @@ This report documents the reconciliation of all doctrine, configuration, and str
 ### Doctrine Layer
 | File | Path | Version | Status |
 |------|------|---------|--------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | /templates/doctrine/ | 1.5.0 | ✓ Read |
-| ALTITUDE_DESCENT_MODEL.md | /templates/doctrine/ | 1.2.0 | ✓ Read |
-| HUB_SPOKE_ARCHITECTURE.md | /templates/doctrine/ | REDIRECT | ✓ Read |
+| ARCHITECTURE.md | /templates/doctrine/ | 2.0.0 | ✓ Read (PRIMARY) |
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | /templates/doctrine/ | REDIRECT | ✓ Read (redirect to ARCHITECTURE.md) |
+| ALTITUDE_DESCENT_MODEL.md | /templates/doctrine/ | REDIRECT | ✓ Read (redirect to ARCHITECTURE.md Part VI) |
+| HUB_SPOKE_ARCHITECTURE.md | /templates/doctrine/ | REDIRECT | ✓ Read (redirect to ARCHITECTURE.md Part IV) |
 | REPO_REFACTOR_PROTOCOL.md | /templates/doctrine/ | 1.2.0 | ✓ Read |
 | DBA_ENFORCEMENT_DOCTRINE.md | /templates/doctrine/ | 1.0.0 | ✓ Read |
 | DOCUMENTATION_ERD_DOCTRINE.md | /templates/doctrine/ | 1.0.0 | ✓ Read |
@@ -66,15 +67,16 @@ This report documents the reconciliation of all doctrine, configuration, and str
 
 | Doctrine File | IMO_CONTROL.json | Actual | Verdict |
 |---------------|------------------|--------|---------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.5.0 | 1.5.0 | ✓ MATCH |
-| HUB_SPOKE_ARCHITECTURE.md | 1.2.0 | REDIRECT | ⚠ SEE NOTE |
-| ALTITUDE_DESCENT_MODEL.md | 1.2.0 | 1.2.0 | ✓ MATCH |
+| ARCHITECTURE.md | 2.0.0 | 2.0.0 | ✓ MATCH (PRIMARY) |
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md |
+| HUB_SPOKE_ARCHITECTURE.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md Part IV |
+| ALTITUDE_DESCENT_MODEL.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md Part VI |
 | REPO_REFACTOR_PROTOCOL.md | 1.2.0 | 1.2.0 | ✓ MATCH |
 | DBA_ENFORCEMENT_DOCTRINE.md | 1.0.0 | 1.0.0 | ✓ MATCH |
 | TEMPLATE_IMMUTABILITY.md | 1.0.0 | 1.0.0 | ✓ MATCH |
 | DOCUMENTATION_ERD_DOCTRINE.md | 1.0.0 | 1.0.0 | ✓ MATCH |
 
-**NOTE**: HUB_SPOKE_ARCHITECTURE.md is a redirect file pointing to CANONICAL_ARCHITECTURE_DOCTRINE.md §3. This is intentional consolidation. IMO_CONTROL.json lists it for backwards compatibility.
+**NOTE**: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are redirect files pointing to ARCHITECTURE.md. This is intentional consolidation. IMO_CONTROL.json lists them for backwards compatibility.
 
 ---
 
@@ -108,9 +110,9 @@ All doctrine files are internally consistent:
 | Diagram | Source Documents | Alignment |
 |---------|------------------|-----------|
 | Authority Hierarchy | CONSTITUTION.md, IMO_CONTROL.json, IMO_SYSTEM_SPEC.md | ✓ ALIGNED |
-| CC Descent Model | CANONICAL_ARCHITECTURE_DOCTRINE.md §2, ALTITUDE_DESCENT_MODEL.md | ✓ ALIGNED |
-| CTB Branch Structure | CANONICAL_ARCHITECTURE_DOCTRINE.md §1.3, IMO_CONTROL.json | ✓ ALIGNED |
-| Hub-Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 | ✓ ALIGNED |
+| CC Descent Model | ARCHITECTURE.md Part III, Part VI | ✓ ALIGNED |
+| CTB Branch Structure | ARCHITECTURE.md Part II, IMO_CONTROL.json | ✓ ALIGNED |
+| Hub-Spoke Geometry | ARCHITECTURE.md Part IV | ✓ ALIGNED |
 | Lifecycle Phases | IMO_CONTROL.json lifecycle section | ✓ ALIGNED |
 | Repo Mode Classification | AI_EMPLOYEE_OPERATING_CONTRACT.md | ✓ ALIGNED |
 

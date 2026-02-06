@@ -43,7 +43,7 @@ Before acting, you MUST read and verify presence of:
 3. templates/README.md
 4. templates/SNAP_ON_TOOLBOX.yaml
 5. templates/semantic/OSAM.md (REQUIRED for any data/ERD work)
-6. doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md
+6. doctrine/ARCHITECTURE.md (CTB Constitutional Law v2.0.0)
 7. doctrine/TEMPLATE_IMMUTABILITY.md
 8. ALL prompts in templates/claude/
 ```
@@ -681,7 +681,7 @@ PRELOAD STATUS:
 - README.md: [LOADED | MISSING → HALT]
 - SNAP_ON_TOOLBOX.yaml: [LOADED | MISSING → HALT]
 - semantic/OSAM.md: [LOADED | MISSING → HALT for data work]
-- CANONICAL_ARCHITECTURE_DOCTRINE.md: [LOADED | MISSING → HALT]
+- ARCHITECTURE.md: [LOADED | MISSING → HALT]
 - TEMPLATE_IMMUTABILITY.md: [LOADED | MISSING → HALT]
 - claude/ prompts: [LOADED | MISSING → HALT]
 

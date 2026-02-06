@@ -1,7 +1,7 @@
 # HEIR Doctrine Template
 # Copy to hub root as: heir.doctrine.yaml
 # Replace all <placeholders> with actual values
-# Reference: CANONICAL_ARCHITECTURE_DOCTRINE.md
+# Reference: ARCHITECTURE.md (CTB Constitutional Law v2.0.0)
 
 # --- Conformance ---
 conformance:

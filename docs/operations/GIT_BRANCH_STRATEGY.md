@@ -1,6 +1,6 @@
 # Git Branch Strategy (Altitude Model)
 
-**Authority**: Operational runbook (subordinate to CANONICAL_ARCHITECTURE_DOCTRINE.md)
+**Authority**: Operational runbook (subordinate to ARCHITECTURE.md)
 **Status**: ACTIVE
 **Last Updated**: 2026-01-11
 
@@ -12,7 +12,7 @@ This document defines the **git branch structure** for repositories following th
 
 **IMPORTANT DISTINCTION:**
 - **This document** defines GIT BRANCHES (where code is committed)
-- **CANONICAL_ARCHITECTURE_DOCTRINE.md** defines FOLDER STRUCTURE under `src/` and CC AUTHORITY LAYERS
+- **ARCHITECTURE.md** defines FOLDER STRUCTURE under `src/` and CC AUTHORITY LAYERS
 - These are DIFFERENT concepts. Do not conflate them.
 
 ---

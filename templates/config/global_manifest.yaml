@@ -46,7 +46,7 @@ acronyms:
   - acronym: ALTITUDE
     stands_for: "System visibility levels (50k–5k)"
     definition: "Defines perspective, scope, and artifact legality—from hub identity to execution."
-    reference: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+    reference: "templates/doctrine/ARCHITECTURE.md Part VI"
     levels:
       - level: 50k
         name: Shell
@@ -854,19 +854,13 @@ template_registry:
   # DOCTRINE TEMPLATES (Read-only reference)
   # ─────────────────────────────────────────────────────────
   doctrine:
-    - template: "doctrine/HUB_SPOKE_ARCHITECTURE.md"
+    - template: "doctrine/ARCHITECTURE.md"
       type: reference
       required: true
       legal_at_altitude: 50k
-      description: "Master doctrine for Hub/Spoke/IMO/CTB structure"
+      description: "CTB Constitutional Law (v2.0.0) - Master doctrine for CTB, CC, Hub/Spoke, IMO, Descent"
       action: "Read and follow. Never copy or modify."
-
-    - template: "doctrine/ALTITUDE_DESCENT_MODEL.md"
-      type: reference
-      required: true
-      legal_at_altitude: 50k
-      description: "Governs WHEN and HOW templates become legal"
-      action: "Read and follow. Never copy or modify."
+      note: "Consolidates HUB_SPOKE_ARCHITECTURE.md (Part IV) and ALTITUDE_DESCENT_MODEL.md (Part VI)"
 
   # ─────────────────────────────────────────────────────────
   # ARTIFACT TEMPLATES (Copy and instantiate)
@@ -1041,8 +1035,7 @@ template_registry:
     trigger: "update_from_imo_creator.sh"
     files_to_sync:
       always:
-        - "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
-        - "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+        - "templates/doctrine/ARCHITECTURE.md"
         - "global-config/global_manifest.yaml"
       on_missing:
         - "templates/prd/PRD_HUB.md"

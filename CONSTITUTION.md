@@ -141,7 +141,7 @@ AI employees MUST FAIL HARD if:
 
 IMO-Creator defines global invariants that all repositories must obey. Individual repositories define local policy for how they operate within those boundaries. Global invariants constrain structure; local policy determines usage.
 
-See **CANONICAL_ARCHITECTURE_DOCTRINE.md** for the full authority definition.
+See **ARCHITECTURE.md** for the full authority definition.
 
 ---
 

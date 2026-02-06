@@ -35,9 +35,10 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 
 | File | Purpose | Version |
 |------|---------|---------|
-| `CANONICAL_ARCHITECTURE_DOCTRINE.md` | Master doctrine | 1.3.0 |
-| `HUB_SPOKE_ARCHITECTURE.md` | Hub-spoke geometry | 1.2.0 |
-| `ALTITUDE_DESCENT_MODEL.md` | CC descent gates | 1.1.0 |
+| `ARCHITECTURE.md` | Primary architecture doctrine (CTB, CC, Hub-Spoke, IMO, Descent) | 2.0.0 |
+| `CANONICAL_ARCHITECTURE_DOCTRINE.md` | REDIRECT to ARCHITECTURE.md | N/A |
+| `HUB_SPOKE_ARCHITECTURE.md` | REDIRECT to ARCHITECTURE.md Part IV | N/A |
+| `ALTITUDE_DESCENT_MODEL.md` | REDIRECT to ARCHITECTURE.md Part VI | N/A |
 | `REPO_REFACTOR_PROTOCOL.md` | Repo structure law | 1.2.0 |
 
 ### Templates (templates/)
@@ -114,9 +115,7 @@ CONSTITUTION.md (Law)
     │
     └── templates/doctrine/ (Executable Doctrine)
             │
-            ├── CANONICAL_ARCHITECTURE_DOCTRINE.md (Master)
-            ├── HUB_SPOKE_ARCHITECTURE.md (Subordinate)
-            ├── ALTITUDE_DESCENT_MODEL.md (Subordinate)
+            ├── ARCHITECTURE.md (Primary architecture doctrine v2.0.0)
             └── REPO_REFACTOR_PROTOCOL.md (Subordinate)
 ```
 

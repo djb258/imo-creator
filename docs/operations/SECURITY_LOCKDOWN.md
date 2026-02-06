@@ -1,6 +1,6 @@
 # Security & Secret Handling Lockdown
 
-**Authority**: Operational runbook (subordinate to CANONICAL_ARCHITECTURE_DOCTRINE.md)
+**Authority**: Operational runbook (subordinate to ARCHITECTURE.md)
 **Status**: ACTIVE
 **Last Updated**: 2026-01-11
 

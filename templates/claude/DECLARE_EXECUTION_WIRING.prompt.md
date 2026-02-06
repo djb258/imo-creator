@@ -53,7 +53,7 @@ Read in order:
 
 1. `CONSTITUTION.md`
 2. `IMO_CONTROL.json`
-3. `CANONICAL_ARCHITECTURE_DOCTRINE.md`
+3. `doctrine/ARCHITECTURE.md`
 4. All `REGISTRY.yaml` files (sovereign, hub, sub-hub)
 5. Process definitions (`process_id` lists)
 

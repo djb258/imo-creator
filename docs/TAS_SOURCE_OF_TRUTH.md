@@ -32,12 +32,12 @@ RANK 3: IMO_SYSTEM_SPEC.md
    ├── Wins over: Individual doctrine files, configs, diagrams
    └── Loses to: CONSTITUTION.md, IMO_CONTROL.json
 
-RANK 4: CANONICAL_ARCHITECTURE_DOCTRINE.md
+RANK 4: ARCHITECTURE.md
    │
    ├── Wins over: All other doctrine, all configs, all diagrams, all ERDs
    └── Loses to: CONSTITUTION.md, IMO_CONTROL.json, IMO_SYSTEM_SPEC.md
 
-RANK 5: Other Doctrine Files (ALTITUDE_DESCENT_MODEL.md, etc.)
+RANK 5: Other Doctrine Files (REPO_REFACTOR_PROTOCOL.md, etc.)
    │
    ├── Wins over: Configs, diagrams, ERDs, code comments
    └── Loses to: Ranks 1-4
@@ -66,7 +66,7 @@ RANK 8: Code Comments / Inline Documentation
 |------------|------------|--------|--------|
 | CONSTITUTION.md | Anything | CONSTITUTION.md | Supreme authority |
 | IMO_CONTROL.json | Doctrine file | IMO_CONTROL.json | Control plane authority |
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | ERD diagram | Doctrine | Doctrine defines structure |
+| ARCHITECTURE.md | ERD diagram | Doctrine | Doctrine defines structure |
 | TAS_CANONICAL_DIAGRAM.md | Random ERD | TAS diagram | TAS is authoritative |
 | Doctrine file | Code comment | Doctrine file | Documentation > comments |
 | ERD diagram | Code comment | ERD diagram | Visual > inline |
@@ -149,7 +149,7 @@ Step 6: ADR becomes precedent for future conflicts
 │       ↓                                                 │
 │  IMO_SYSTEM_SPEC.md       ← System index                │
 │       ↓                                                 │
-│  CANONICAL_ARCHITECTURE   ← Root doctrine               │
+│  ARCHITECTURE.md          ← Root doctrine               │
 │       ↓                                                 │
 │  Other doctrine/*.md      ← Specialized rules           │
 │       ↓                                                 │

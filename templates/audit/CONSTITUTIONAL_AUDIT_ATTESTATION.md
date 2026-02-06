@@ -32,7 +32,7 @@ It references existing checklists — it does not duplicate them.
 | Doctrine | Version | Compliant |
 |----------|---------|-----------|
 | CONSTITUTION.md | | [ ] YES / [ ] NO |
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | | [ ] YES / [ ] NO |
+| ARCHITECTURE.md | | [ ] YES / [ ] NO |
 | PRD_CONSTITUTION.md | | [ ] YES / [ ] NO |
 | ERD_CONSTITUTION.md | | [ ] YES / [ ] NO |
 | PROCESS_DOCTRINE.md | | [ ] YES / [ ] NO |

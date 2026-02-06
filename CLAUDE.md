@@ -17,10 +17,10 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|---------|
-| `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` | Operating physics - CC layers, hub-spoke, constants vs variables |
-| `templates/doctrine/HUB_SPOKE_ARCHITECTURE.md` | Geometry law - hub owns logic, spokes are interfaces |
-| `templates/doctrine/ALTITUDE_DESCENT_MODEL.md` | Descent law - CC-01→02→03→04 sequence |
+| `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.0.0) |
 | `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
+
+**Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 
 ### PRD Template
 
@@ -161,12 +161,10 @@ Every repo that derives from imo-creator MUST:
 1. **Declare conformance** in its CLAUDE.md:
    ```markdown
    ## CANONICAL REFERENCE
-   
+
    | Template | imo-creator Path | Version |
    |----------|------------------|---------|
-   | Doctrine | templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.1.0 |
-   | Hub-Spoke | templates/doctrine/HUB_SPOKE_ARCHITECTURE.md | 1.1.0 |
-   | Descent | templates/doctrine/ALTITUDE_DESCENT_MODEL.md | 1.1.0 |
+   | Architecture | templates/doctrine/ARCHITECTURE.md | 2.0.0 |
    | Tools | templates/integrations/TOOLS.md | 1.1.0 |
    | OSAM | templates/semantic/OSAM.md | 1.0.0 |
    | PRD | templates/prd/PRD_HUB.md | 1.0.0 |
@@ -204,9 +202,10 @@ Any change to a LOCKED FILE requires:
 imo-creator (THIS REPO) ← SOVEREIGN
 │
 ├── templates/doctrine/     ← CONSTITUTIONAL LAW (locked)
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md
-│   ├── HUB_SPOKE_ARCHITECTURE.md
-│   └── ALTITUDE_DESCENT_MODEL.md
+│   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.0.0)
+│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  ← REDIRECT
+│   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
+│   └── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
 │
 ├── templates/integrations/TOOLS.md ← CONSTITUTIONAL LAW (locked)
 │

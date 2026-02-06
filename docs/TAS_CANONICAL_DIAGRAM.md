@@ -18,8 +18,7 @@ graph TD
     end
 
     subgraph DOCTRINE["DOCTRINE LAYER"]
-        CAN[CANONICAL_ARCHITECTURE_DOCTRINE.md<br/>v1.5.0]
-        ALT[ALTITUDE_DESCENT_MODEL.md<br/>v1.2.0]
+        CAN[ARCHITECTURE.md<br/>v2.0.0]
         REPO[REPO_REFACTOR_PROTOCOL.md<br/>v1.2.0]
         DBA[DBA_ENFORCEMENT_DOCTRINE.md<br/>v1.0.0]
         DOC[DOCUMENTATION_ERD_DOCTRINE.md<br/>v1.0.0]
@@ -37,7 +36,6 @@ graph TD
     SPEC --> CAN
     CONTRACT --> CAN
 
-    CAN --> ALT
     CAN --> REPO
     CAN --> DBA
     CAN --> DOC

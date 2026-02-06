@@ -77,7 +77,7 @@ body:
       label: Propagation Checklist
       description: Steps to propagate this update
       options:
-        - label: Doctrine version updated in CANONICAL_ARCHITECTURE_DOCTRINE.md
+        - label: Doctrine version updated in ARCHITECTURE.md
         - label: All affected templates updated
         - label: CC layer boundaries verified
         - label: No upward writes in CC hierarchy

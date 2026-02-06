@@ -304,8 +304,8 @@ _When can a human bypass automation? Who approves? (Trigger authority must be CC
 
 | Artifact | Reference |
 |----------|-----------|
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub/Spoke Geometry | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
+| Architecture Doctrine | ARCHITECTURE.md |
+| Hub/Spoke Geometry | ARCHITECTURE.md Part IV |
 | **Governing OSAM** | _(path to OSAM that defines query routing)_ |
 | **OSAM Version** | _(version or hash of OSAM)_ |
 | **Governing ERD** | _(path to ERD that implements this PRD)_ |

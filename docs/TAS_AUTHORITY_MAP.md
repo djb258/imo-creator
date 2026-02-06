@@ -26,10 +26,9 @@ This document formalizes the Technical Authority System (TAS) for IMO-Creator, m
 ├─────────────────────────────────────────────────────────────────────┤
 │                    DOCTRINE LAYER                                   │
 │  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  CANONICAL_ARCHITECTURE_DOCTRINE.md (v1.5.0) — ROOT         │    │
-│  │    ├── ALTITUDE_DESCENT_MODEL.md (v1.2.0)                   │    │
+│  │  ARCHITECTURE.md (v2.0.0) — ROOT                            │    │
 │  │    ├── REPO_REFACTOR_PROTOCOL.md (v1.2.0)                   │    │
-│  │    └── HUB_SPOKE_ARCHITECTURE.md (REDIRECT)                 │    │
+│  │    └── (Old files are now redirects to ARCHITECTURE.md)     │    │
 │  │                                                              │    │
 │  │  DBA_ENFORCEMENT_DOCTRINE.md (v1.0.0)                       │    │
 │  │  DOCUMENTATION_ERD_DOCTRINE.md (v1.0.0)                     │    │
@@ -67,13 +66,14 @@ This document formalizes the Technical Authority System (TAS) for IMO-Creator, m
 
 | File | Version | Authority | Status | Derives From |
 |------|---------|-----------|--------|--------------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.5.0 | IMO-Creator | LOCKED | ROOT |
-| HUB_SPOKE_ARCHITECTURE.md | N/A | REDIRECT | REDIRECT | CANONICAL §3 |
-| ALTITUDE_DESCENT_MODEL.md | 1.2.0 | CANONICAL | LOCKED | CANONICAL §2 |
-| REPO_REFACTOR_PROTOCOL.md | 1.2.0 | CANONICAL | LOCKED | CANONICAL §1.3 |
-| DBA_ENFORCEMENT_DOCTRINE.md | 1.0.0 | CONSTITUTIONAL | LOCKED | CANONICAL |
-| DOCUMENTATION_ERD_DOCTRINE.md | 1.0.0 | CONSTITUTIONAL | LOCKED | CANONICAL |
-| TEMPLATE_IMMUTABILITY.md | 1.0.0 | CONSTITUTIONAL | LOCKED | CANONICAL |
+| ARCHITECTURE.md | 2.0.0 | IMO-Creator | LOCKED | ROOT |
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | N/A | REDIRECT | REDIRECT | ARCHITECTURE.md |
+| HUB_SPOKE_ARCHITECTURE.md | N/A | REDIRECT | REDIRECT | ARCHITECTURE.md Part IV |
+| ALTITUDE_DESCENT_MODEL.md | N/A | REDIRECT | REDIRECT | ARCHITECTURE.md Part VI |
+| REPO_REFACTOR_PROTOCOL.md | 1.2.0 | ARCHITECTURE | LOCKED | ARCHITECTURE.md |
+| DBA_ENFORCEMENT_DOCTRINE.md | 1.0.0 | CONSTITUTIONAL | LOCKED | ARCHITECTURE.md |
+| DOCUMENTATION_ERD_DOCTRINE.md | 1.0.0 | CONSTITUTIONAL | LOCKED | ARCHITECTURE.md |
+| TEMPLATE_IMMUTABILITY.md | 1.0.0 | CONSTITUTIONAL | LOCKED | ARCHITECTURE.md |
 
 ---
 
@@ -81,9 +81,10 @@ This document formalizes the Technical Authority System (TAS) for IMO-Creator, m
 
 | Doctrine File | IMO_CONTROL Version | Actual Version | Status |
 |---------------|---------------------|----------------|--------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.5.0 | 1.5.0 | ✓ ALIGNED |
-| HUB_SPOKE_ARCHITECTURE.md | 1.2.0 | REDIRECT | ⚠ NOTE: Redirect file |
-| ALTITUDE_DESCENT_MODEL.md | 1.2.0 | 1.2.0 | ✓ ALIGNED |
+| ARCHITECTURE.md | 2.0.0 | 2.0.0 | ✓ ALIGNED |
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md |
+| HUB_SPOKE_ARCHITECTURE.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md Part IV |
+| ALTITUDE_DESCENT_MODEL.md | N/A | REDIRECT | ⚠ REDIRECT to ARCHITECTURE.md Part VI |
 | REPO_REFACTOR_PROTOCOL.md | 1.2.0 | 1.2.0 | ✓ ALIGNED |
 | DBA_ENFORCEMENT_DOCTRINE.md | 1.0.0 | 1.0.0 | ✓ ALIGNED |
 | TEMPLATE_IMMUTABILITY.md | 1.0.0 | 1.0.0 | ✓ ALIGNED |
@@ -97,28 +98,28 @@ This document formalizes the Technical Authority System (TAS) for IMO-Creator, m
 
 | Layer | Name | Artifacts | Gate Condition | Source |
 |-------|------|-----------|----------------|--------|
-| CC-01 | Sovereign | Boundary declaration | Sovereignty declared | CANONICAL §2.1 |
-| CC-02 | Hub | PRD, REGISTRY.yaml, Hub identity | PRD approved | CANONICAL §2.2 |
-| CC-03 | Context | ADR, Process flows, Spoke definitions | ADR approved | CANONICAL §2.3 |
-| CC-04 | Process | Code, Tests, Config, UI | Implementation complete | CANONICAL §2.4 |
+| CC-01 | Sovereign | Boundary declaration | Sovereignty declared | ARCHITECTURE.md Part III |
+| CC-02 | Hub | PRD, REGISTRY.yaml, Hub identity | PRD approved | ARCHITECTURE.md Part III |
+| CC-03 | Context | ADR, Process flows, Spoke definitions | ADR approved | ARCHITECTURE.md Part III |
+| CC-04 | Process | Code, Tests, Config, UI | Implementation complete | ARCHITECTURE.md Part III |
 
 ### 4.2 CTB Branches
 
 | Branch | Purpose | Contains | Source |
 |--------|---------|----------|--------|
-| sys/ | System infrastructure | Env loaders, bootstraps, config | CANONICAL §1.3 |
-| data/ | Data layer | Schemas, queries, migrations | CANONICAL §1.3 |
-| app/ | Application logic | Modules, services, workflows | CANONICAL §1.3 |
-| ai/ | AI components | Agents, routers, prompts | CANONICAL §1.3 |
-| ui/ | User interface | Pages, components, layouts | CANONICAL §1.3 |
+| sys/ | System infrastructure | Env loaders, bootstraps, config | ARCHITECTURE.md Part II |
+| data/ | Data layer | Schemas, queries, migrations | ARCHITECTURE.md Part II |
+| app/ | Application logic | Modules, services, workflows | ARCHITECTURE.md Part II |
+| ai/ | AI components | Agents, routers, prompts | ARCHITECTURE.md Part II |
+| ui/ | User interface | Pages, components, layouts | ARCHITECTURE.md Part II |
 
 ### 4.3 IMO Model (Hub-Internal)
 
 | Layer | Role | Source |
 |-------|------|--------|
-| Ingress | Data entry point (Spoke-I) | CANONICAL §3.2 |
-| Middle | Logic/state/decisions (Hub-owned) | CANONICAL §3.2 |
-| Egress | Data exit point (Spoke-O) | CANONICAL §3.2 |
+| Ingress | Data entry point (Spoke-I) | ARCHITECTURE.md Part V |
+| Middle | Logic/state/decisions (Hub-owned) | ARCHITECTURE.md Part V |
+| Egress | Data exit point (Spoke-O) | ARCHITECTURE.md Part V |
 
 ---
 

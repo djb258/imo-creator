@@ -63,18 +63,18 @@
     "location": "templates/doctrine/",
     "required": [
       {
-        "file": "CANONICAL_ARCHITECTURE_DOCTRINE.md",
-        "purpose": "Operating physics - CC layers, hub-spoke, CTB branches, global vs local authority, AI-ready data, lanes",
-        "version": "1.5.0"
+        "file": "ARCHITECTURE.md",
+        "purpose": "Primary architecture doctrine - CTB, CC layers, Hub-Spoke, IMO, Descent, PID, ownership",
+        "version": "2.0.0"
       },
       {
         "file": "HUB_SPOKE_ARCHITECTURE.md",
-        "purpose": "Geometry law - hub owns logic, spokes are interfaces",
+        "purpose": "REDIRECT to ARCHITECTURE.md Part IV",
         "version": "1.2.0"
       },
       {
         "file": "ALTITUDE_DESCENT_MODEL.md",
-        "purpose": "Descent law - CC-01→02→03→04 sequence",
+        "purpose": "REDIRECT to ARCHITECTURE.md Part VI",
         "version": "1.2.0"
       },
       {
