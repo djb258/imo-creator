@@ -30,6 +30,7 @@ To update any repository with the latest CTB structure:
 |----------|----------|---------|
 | **ARCHITECTURE.md** | templates/doctrine/ | CTB Constitutional Law (v2.0.0) - CTB structure, CC layers, hub-spoke geometry, descent gates |
 | **REPO_REFACTOR_PROTOCOL.md** | templates/doctrine/ | Repo structure requirements |
+| **CTB_GOVERNANCE.md** | templates/config/ | CTB governance template - leaf types, frozen tables, drift detection |
 
 **Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 

@@ -254,6 +254,11 @@ templates/
 ├── semantic/                           # LOCKED — AI CANNOT MODIFY
 │   └── OSAM.md                         # Operational Semantic Access Map
 │
+├── config/                             # TEMPLATE — Copy to derived repos
+│   ├── CTB_DOCTRINE.md                 # CTB quick reference (pointer doc)
+│   ├── CTB_GOVERNANCE.md               # CTB governance template
+│   └── QUICK_REFERENCE.md              # Quick reference guide
+│
 ├── integrations/                       # GUIDANCE — Reference only
 │   ├── COMPOSIO.md
 │   ├── DOPPLER.md

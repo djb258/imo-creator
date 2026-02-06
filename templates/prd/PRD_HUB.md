@@ -93,6 +93,7 @@ Statements such as "see declaration above" are forbidden.
 | **Doctrine Version** | |
 | **CTB Version** | |
 | **CC Layer** | CC-02 |
+| **CTB Governance** | `docs/CTB_GOVERNANCE.md` |
 
 ---
 

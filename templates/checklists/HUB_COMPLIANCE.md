@@ -369,6 +369,7 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 | CRITICAL | [ ] CTB path defined (Trunk / Branch / Leaf) |
 | CRITICAL | [ ] No forbidden folders (utils, helpers, common, shared, lib, misc) |
 | HIGH | [ ] Branch level specified (sys / ui / ai / data / app) |
+| HIGH | [ ] CTB Governance document exists (`docs/CTB_GOVERNANCE.md`) |
 | MEDIUM | [ ] Parent hub identified (if nested hub) |
 
 ---
