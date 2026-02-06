@@ -22,9 +22,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "1.7.0"
-  last_updated: "2026-02-05"
-  total_file_count: 95
+  version: "2.0.0"
+  last_updated: "2026-02-06"
+  total_file_count: 96
+  ctb_hardening_version: "2.0.0"
+  note: "CTB Hardening refactor - ARCHITECTURE.md consolidates architecture doctrine"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -100,20 +102,32 @@ files:
   # DOCTRINE (LOCKED - AI CANNOT MODIFY)
   # ═══════════════════════════════════════════════════════════════════════════
   doctrine:
-    - path: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
-      purpose: "Root doctrine - CC layers, CTB structure"
+    # PRIMARY ARCHITECTURE DOCTRINE (READ FIRST)
+    - path: "templates/doctrine/ARCHITECTURE.md"
+      purpose: "CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID, ownership"
       required: true
       locked: true
+      version: "2.0.0"
+      note: "Primary architecture doctrine. Consolidates CANONICAL, HUB_SPOKE, and ALTITUDE."
+
+    # REDIRECT FILES (backward compatibility)
+    - path: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+      purpose: "REDIRECT → ARCHITECTURE.md"
+      required: true
+      locked: true
+      status: "REDIRECT"
 
     - path: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
-      purpose: "Hub/Spoke geometry, IMO model"
+      purpose: "REDIRECT → ARCHITECTURE.md Part IV"
       required: true
       locked: true
+      status: "REDIRECT"
 
     - path: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
-      purpose: "Descent gates, altitude levels"
+      purpose: "REDIRECT → ARCHITECTURE.md Part VI"
       required: true
       locked: true
+      status: "REDIRECT"
 
     - path: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
       purpose: "Refactor sequence, structure requirements"

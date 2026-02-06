@@ -21,12 +21,13 @@ This repository conforms to the following doctrine files from IMO-Creator:
 
 | Document | Purpose | Location |
 |----------|---------|----------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | Operating physics | imo-creator/templates/doctrine/ |
-| ALTITUDE_DESCENT_MODEL.md | CC descent sequence | imo-creator/templates/doctrine/ |
+| **ARCHITECTURE.md** | CTB Constitutional Law (CTB, CC, Hub-Spoke, IMO, Descent) | imo-creator/templates/doctrine/ |
 | TEMPLATE_IMMUTABILITY.md | AI modification prohibition | imo-creator/templates/doctrine/ |
 | SNAP_ON_TOOLBOX.yaml | Tool registry | imo-creator/templates/ |
 | IMO_SYSTEM_SPEC.md | System index | imo-creator/templates/ |
 | AI_EMPLOYEE_OPERATING_CONTRACT.md | Agent constraints | imo-creator/templates/ |
+
+**Note**: ARCHITECTURE.md (v2.0.0) consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md.
 
 ---
 

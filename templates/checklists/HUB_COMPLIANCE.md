@@ -728,15 +728,50 @@ If CRITICAL > 0 or HIGH > 0 and I selected COMPLIANT, this audit is INVALID.
 
 ---
 
+## CTB Hardening Migration Verification (v2.0.0) {#section-migration}
+<!-- §MIGRATION -->
+
+**Added 2026-02-06**: This section verifies compliance with CTB Hardening v2.0.0
+
+| Priority | Check |
+|----------|-------|
+| HIGH | [ ] DOCTRINE.md references ARCHITECTURE.md (not old files) |
+| HIGH | [ ] CLAUDE.md locked files table references ARCHITECTURE.md |
+| HIGH | [ ] No MD files reference old section numbers (e.g., "CANONICAL §3") |
+| MEDIUM | [ ] Reading order documentation references ARCHITECTURE.md |
+| MEDIUM | [ ] Any PRD/ADR traceability sections updated |
+
+**Section Reference Mapping:**
+
+| Old Reference | New Reference |
+|---------------|---------------|
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | ARCHITECTURE.md |
+| CANONICAL §1 (CTB) | ARCHITECTURE.md Part II |
+| CANONICAL §2 (CC) | ARCHITECTURE.md Part III |
+| CANONICAL §3 (Hub-Spoke) | ARCHITECTURE.md Part IV |
+| CANONICAL §3.5 (IMO) | ARCHITECTURE.md Part V |
+| HUB_SPOKE_ARCHITECTURE.md | ARCHITECTURE.md Part IV |
+| ALTITUDE_DESCENT_MODEL.md | ARCHITECTURE.md Part VI |
+
+**Note**: Old files exist as REDIRECTs for backward compatibility. Migration recommended within 30 days.
+
+---
+
 ## Traceability Reference
 
 | Artifact | Reference |
 |----------|-----------|
 | Constitution | CONSTITUTION.md |
+| **Architecture Doctrine** | templates/doctrine/ARCHITECTURE.md |
+| CTB Topology | ARCHITECTURE.md Part II |
+| CC Hierarchy | ARCHITECTURE.md Part III |
+| Hub/Spoke Geometry | ARCHITECTURE.md Part IV |
+| IMO Flow | ARCHITECTURE.md Part V |
+| Descent Gates | ARCHITECTURE.md Part VI |
 | PRD Constitution | templates/doctrine/PRD_CONSTITUTION.md |
 | ERD Constitution | templates/doctrine/ERD_CONSTITUTION.md |
 | Process Doctrine | templates/doctrine/PROCESS_DOCTRINE.md |
 | ERD Doctrine | templates/doctrine/ERD_DOCTRINE.md |
 | **OSAM (Semantic Access Map)** | templates/semantic/OSAM.md |
-| Canonical Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub/Spoke Doctrine | CANONICAL_ARCHITECTURE_DOCTRINE.md §3 |
+
+**Note**: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are now redirects to ARCHITECTURE.md.

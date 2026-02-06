@@ -67,6 +67,7 @@ In `DOCTRINE.md`:
 
 - [ ] Read `CONSTITUTION.md` from imo-creator
 - [ ] Read `IMO_CONTROL.json` (your copy)
+- [ ] Read `doctrine/ARCHITECTURE.md` (CTB Constitutional Law)
 - [ ] Execute `APPLY_DOCTRINE.prompt.md`
 - [ ] Verify no violations
 
@@ -99,6 +100,7 @@ Adopt governance and enforcement.
 
 - Read `CONSTITUTION.md`
 - Read `IMO_CONTROL.json`
+- Read `doctrine/ARCHITECTURE.md` (CTB Constitutional Law v2.0.0)
 - Execute `APPLY_DOCTRINE.prompt.md`
 
 **Result:** Repo is legally governed.

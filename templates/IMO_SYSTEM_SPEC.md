@@ -81,21 +81,21 @@ These terms have fixed meanings. They may not be redefined.
 
 | Term | Definition | Source |
 |------|------------|--------|
-| **Sovereign (CC-01)** | Authority anchor. Root of all identity and permission. External to any single bounded context. | CANONICAL_ARCHITECTURE_DOCTRINE.md §2.1 |
-| **Hub (CC-02)** | An application. Owns logic, state, decisions, CTB placement, full IMO flow. One hub per repository. | CANONICAL_ARCHITECTURE_DOCTRINE.md §3.1, README.md |
-| **Context (CC-03)** | Scoped operational slice. Bounded execution context within a hub. Sub-hubs operate here. | CANONICAL_ARCHITECTURE_DOCTRINE.md §2.1 |
-| **Process (CC-04)** | Execution instance. Runtime operations within a context. PID minted here. | CANONICAL_ARCHITECTURE_DOCTRINE.md §2.1 |
-| **Spoke** | An interface (I or O only). Owns no logic, no state, no tools. | CANONICAL_ARCHITECTURE_DOCTRINE.md §3.2 |
-| **CTB** | Christmas Tree Backbone. Static structural spine defining where components are placed. | CANONICAL_ARCHITECTURE_DOCTRINE.md §1 |
-| **IMO** | Ingress / Middle / Egress. Data flow model inside hubs only. | CANONICAL_ARCHITECTURE_DOCTRINE.md §3.5 |
-| **PID** | Process ID. Unique identifier for a single execution instance at CC-04. | CANONICAL_ARCHITECTURE_DOCTRINE.md §5 |
-| **ADR** | Architecture Decision Record. Documents WHY, not WHAT. Legal at CC-03. | ALTITUDE_DESCENT_MODEL.md |
-| **PRD** | Product Requirements Document. Defines hub structure. Legal at CC-02. | ALTITUDE_DESCENT_MODEL.md |
-| **Constant** | Defines meaning and structure. ADR-gated to change. Immutable at runtime. | CANONICAL_ARCHITECTURE_DOCTRINE.md §4.1 |
-| **Variable** | Tunes behavior. Changed via configuration. Mutable at runtime. | CANONICAL_ARCHITECTURE_DOCTRINE.md §4.2 |
+| **Sovereign (CC-01)** | Authority anchor. Root of all identity and permission. External to any single bounded context. | ARCHITECTURE.md Part III §1 |
+| **Hub (CC-02)** | An application. Owns logic, state, decisions, CTB placement, full IMO flow. One hub per repository. | ARCHITECTURE.md Part IV §1, README.md |
+| **Context (CC-03)** | Scoped operational slice. Bounded execution context within a hub. Sub-hubs operate here. | ARCHITECTURE.md Part III §1 |
+| **Process (CC-04)** | Execution instance. Runtime operations within a context. PID minted here. | ARCHITECTURE.md Part III §1 |
+| **Spoke** | An interface (I or O only). Owns no logic, no state, no tools. | ARCHITECTURE.md Part IV §2 |
+| **CTB** | Christmas Tree Backbone. Static structural spine defining where components are placed. | ARCHITECTURE.md Part II |
+| **IMO** | Ingress / Middle / Egress. Data flow model inside hubs only. | ARCHITECTURE.md Part V |
+| **PID** | Process ID. Unique identifier for a single execution instance at CC-04. | ARCHITECTURE.md Part VIII |
+| **ADR** | Architecture Decision Record. Documents WHY, not WHAT. Legal at CC-03. | ARCHITECTURE.md Part VI §1 |
+| **PRD** | Product Requirements Document. Defines hub structure. Legal at CC-02. | ARCHITECTURE.md Part VI §1 |
+| **Constant** | Defines meaning and structure. ADR-gated to change. Immutable at runtime. | ARCHITECTURE.md Part VII §1 |
+| **Variable** | Tunes behavior. Changed via configuration. Mutable at runtime. | ARCHITECTURE.md Part VII §1 |
 | **Doctrine** | Executable law. Apply as written. Do not interpret. | README.md |
 | **Tool** | Scoped to hub M layer only. Registered with ADR. Determinism first. | TOOLS.md |
-| **Lane** | Named boundary grouping related data tables. Exists at CC-03. Isolates data flows. | CANONICAL_ARCHITECTURE_DOCTRINE.md §13 |
+| **Lane** | Named boundary grouping related data tables. Exists at CC-03. Isolates data flows. | ARCHITECTURE.md Part X §3 |
 
 ---
 
@@ -110,7 +110,7 @@ These terms have fixed meanings. They may not be redefined.
 | CC-03 | Context | Bounded execution context | ADR, process flows, state diagrams, spoke definitions |
 | CC-04 | Process | Runtime execution | PIDs, code, tests, configuration |
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §2, ALTITUDE_DESCENT_MODEL.md
+**Source**: ARCHITECTURE.md Part III, Part VI
 
 ### 2.2 CTB Branches — Physical Placement
 
@@ -126,7 +126,7 @@ These terms have fixed meanings. They may not be redefined.
 
 **Not CTB Branches**: `docs/`, `config/`, `scripts/`, `ops/` (support folders at repo root)
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §1.3
+**Source**: ARCHITECTURE.md Part II §2
 
 ### 2.3 IMO Layers — Data Flow Inside Hubs
 
@@ -138,7 +138,7 @@ These terms have fixed meanings. They may not be redefined.
 
 **Golden Rule**: Logic lives only in M. Spokes are external. Spokes only carry data.
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §3.5
+**Source**: ARCHITECTURE.md Part V
 
 ### 2.4 Folder Authority
 
@@ -165,7 +165,7 @@ These terms have fixed meanings. They may not be redefined.
 - Data may flow upward for reads; writes require explicit authorization
 - Debugging traces upward through CC
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §2.2, §2.3
+**Source**: ARCHITECTURE.md Part III §2
 
 ### 3.2 Hub-Spoke Isolation
 
@@ -175,7 +175,7 @@ These terms have fixed meanings. They may not be redefined.
 - All spoke communication routes through owning hub
 - No spoke contains logic, state, or tools
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §3.1, §3.2, §3.3
+**Source**: ARCHITECTURE.md Part IV
 
 ### 3.3 Cross-Hub Isolation
 
@@ -184,7 +184,7 @@ These terms have fixed meanings. They may not be redefined.
 - No shared mutable state between hubs
 - Tools do not span hubs
 
-**Source**: HUB_COMPLIANCE.md, CANONICAL_ARCHITECTURE_DOCTRINE.md §3.3
+**Source**: HUB_COMPLIANCE.md, ARCHITECTURE.md Part IV §3
 
 ### 3.4 IMO Isolation
 
@@ -192,7 +192,7 @@ These terms have fixed meanings. They may not be redefined.
 - M layer: all logic, all decisions, all tools
 - O layer: no logic, no decisions
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §3.5
+**Source**: ARCHITECTURE.md Part V
 
 ---
 
@@ -298,7 +298,7 @@ ERD (WHAT tables implement OSAM)
 | Spoke → Spoke | Any | No spoke-to-spoke |
 | Hub → Hub | Direct | No cross-hub logic |
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §6.1
+**Source**: ARCHITECTURE.md Part III §3
 
 ---
 
@@ -308,9 +308,13 @@ ERD (WHAT tables implement OSAM)
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` | Operating physics — CC layers, CTB, hub-spoke, constants vs variables | LOCKED |
-| `doctrine/ALTITUDE_DESCENT_MODEL.md` | Descent law — CC-01→02→03→04 sequence and gates | LOCKED |
+| `doctrine/ARCHITECTURE.md` | CTB Constitutional Law — CTB topology, CC hierarchy, Hub-Spoke, IMO, Descent, PID, ownership | LOCKED |
 | `doctrine/TEMPLATE_IMMUTABILITY.md` | Immutability rules — AI prohibition clause | LOCKED |
+
+**Redirected files (backward compatibility):**
+- `doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` → REDIRECT to ARCHITECTURE.md
+- `doctrine/HUB_SPOKE_ARCHITECTURE.md` → REDIRECT to ARCHITECTURE.md Part IV
+- `doctrine/ALTITUDE_DESCENT_MODEL.md` → REDIRECT to ARCHITECTURE.md Part VI
 
 ### 7.2 Tool Law
 
@@ -348,16 +352,16 @@ ERD (WHAT tables implement OSAM)
 
 | Category | Definition | Source |
 |----------|------------|--------|
-| CC_VIOLATION | Unauthorized CC layer interaction | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| CTB_VIOLATION | Invalid CTB placement or movement | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| HUB_SPOKE_VIOLATION | Logic in spoke or spoke-to-spoke communication | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| PID_VIOLATION | PID reuse or invalid PID operation | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| AUTH_VIOLATION | Unauthorized write attempt | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| STATE_VIOLATION | Invalid lifecycle state transition | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| CONSTANT_VIOLATION | Variable attempted to redefine constant | CANONICAL_ARCHITECTURE_DOCTRINE.md §9.3 |
-| DATA_VIOLATION | Missing AI-ready metadata | CANONICAL_ARCHITECTURE_DOCTRINE.md §12.6 |
+| CC_VIOLATION | Unauthorized CC layer interaction | ARCHITECTURE.md Part IX §1 |
+| CTB_VIOLATION | Invalid CTB placement or movement | ARCHITECTURE.md Part IX §1 |
+| HUB_SPOKE_VIOLATION | Logic in spoke or spoke-to-spoke communication | ARCHITECTURE.md Part IX §1 |
+| PID_VIOLATION | PID reuse or invalid PID operation | ARCHITECTURE.md Part IX §1 |
+| AUTH_VIOLATION | Unauthorized write attempt | ARCHITECTURE.md Part IX §1 |
+| STATE_VIOLATION | Invalid lifecycle state transition | ARCHITECTURE.md Part IX §1 |
+| CONSTANT_VIOLATION | Variable attempted to redefine constant | ARCHITECTURE.md Part IX §1 |
+| DATA_VIOLATION | Missing AI-ready metadata | ARCHITECTURE.md Part X §3 |
 | DOCTRINE_MODIFICATION | Doctrine file changed without approval | TEMPLATE_IMMUTABILITY.md |
-| DESCENT_VIOLATION | Artifact created out of CC sequence | ALTITUDE_DESCENT_MODEL.md |
+| DESCENT_VIOLATION | Artifact created out of CC sequence | ARCHITECTURE.md Part VI §3 |
 | INHERITANCE_VIOLATION | Domain meaning leaked to parent OR parent altered by child | AI_EMPLOYEE_OPERATING_CONTRACT.md §3 |
 | BINDING_MISSING | CHILD repo without REPO_DOMAIN_SPEC.md | AI_EMPLOYEE_OPERATING_CONTRACT.md §3 |
 | OSAM_MISSING | CHILD repo without OSAM | GUARDSPEC.md §5 |
@@ -441,7 +445,7 @@ Every hub MUST have:
 | Hub ID | CC-02 | Unique, immutable hub identifier |
 | Process ID (PID) | CC-04 | Execution/trace ID (minted per run) |
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §3.6
+**Source**: ARCHITECTURE.md Part IV §1, Part VIII
 
 ---
 
@@ -460,7 +464,7 @@ Every hub MUST have:
 - SUSPENDED → ACTIVE, TERMINATED
 - TERMINATED → (none)
 
-**Source**: CANONICAL_ARCHITECTURE_DOCTRINE.md §8
+**Source**: ARCHITECTURE.md Part IX
 
 ---
 
@@ -476,7 +480,7 @@ When rules conflict, higher levels win. No exceptions.
 ├─────────────────────────────────────────┤
 │  3. IMO_SYSTEM_SPEC.md (this file)      │  ← Compiled system index
 ├─────────────────────────────────────────┤
-│  4. CANONICAL_ARCHITECTURE_DOCTRINE.md  │  ← Root doctrine (all others derive)
+│  4. ARCHITECTURE.md                     │  ← CTB Constitutional Law (root doctrine)
 ├─────────────────────────────────────────┤
 │  5. Other doctrine/ files               │  ← Specialized rules
 ├─────────────────────────────────────────┤
