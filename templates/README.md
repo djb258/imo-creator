@@ -16,19 +16,17 @@ Projects must conform to them.
 
 If you are an AI agent operating in any repository governed by IMO-Creator:
 
-### Reading Order (Mandatory)
+### Reading Order (3-Tier CC Loading System)
 
-```
-1. IMO_SYSTEM_SPEC.md — compiled system index (FIRST READ)
-2. AI_EMPLOYEE_OPERATING_CONTRACT.md — agent constraints and permissions
-3. SNAP_ON_TOOLBOX.yaml — tool registry
-4. doctrine/ARCHITECTURE.md — CTB constitutional law (root doctrine)
-5. doctrine/TEMPLATE_IMMUTABILITY.md — what you cannot do
-6. semantic/OSAM.md — query-routing contract (REQUIRED for any data work)
-7. The specific prompt for your current task (in claude/)
-```
+Loading is governed by `TEMPLATES_MANIFEST.yaml` § `reading_order`.
 
-> **WARNING**: No prompt in `claude/` is valid unless IMO_SYSTEM_SPEC.md has been loaded first.
+| Tier | Files | When |
+|------|-------|------|
+| **TIER 1** (Mandatory) | `CC_OPERATIONAL_DIGEST.md` → `STARTUP_PROTOCOL.md` → `DOCTRINE.md` | Every session start |
+| **TIER 2** (On-Demand) | Domain-specific doctrine, prompts, integrations | When task requires |
+| **TIER 3** (Audit/Archive) | Hygiene, attestation, ERD metrics | Audit cycles only |
+
+> **NOTE**: Full loading order with file paths is defined in `TEMPLATES_MANIFEST.yaml`. Consult the manifest, not this summary.
 
 ### Authority Pyramid
 
@@ -120,7 +118,7 @@ Stop immediately and report if:
 
 > [`doctrine/ARCHITECTURE.md`](doctrine/ARCHITECTURE.md)
 
-CTB Constitutional Law (v2.0.0). Consolidates all architectural doctrine:
+CTB Constitutional Law (v2.1.0). Consolidates all architectural doctrine:
 - CTB topology, CC hierarchy, Hub-Spoke geometry, IMO flow
 - Descent gates, Constants vs Variables, PID doctrine
 - Authorization matrix, violation enforcement, ownership constraints
@@ -208,67 +206,159 @@ A **Spoke is an interface**.
 ## Directory Structure
 
 ```
-templates/
-├── IMO_SYSTEM_SPEC.md                  # FIRST READ — Compiled system index
-├── AI_EMPLOYEE_OPERATING_CONTRACT.md   # Agent constraints and permissions
-├── README.md                           # This file — Directory guide
-├── SNAP_ON_TOOLBOX.yaml                # Tool registry (approved tools only)
+templates/                                         # 114 files total
+├── AI_EMPLOYEE_OPERATING_CONTRACT.md              # Agent constraints and permissions
+├── GUARDSPEC.md                                   # Guard specification
+├── IMO_SYSTEM_SPEC.md                             # Compiled system index
+├── README.md                                      # This file
+├── SNAP_ON_TOOLBOX.yaml                           # Tool registry (approved tools only)
+├── TEMPLATE_STAMP_PROTOCOL.md                     # Template stamp protocol
+├── TEMPLATES_MANIFEST.yaml                        # Machine-readable manifest (CONSTITUTIONAL)
 │
-├── doctrine/                           # LOCKED — AI CANNOT MODIFY
-│   ├── ARCHITECTURE.md                 # CTB Constitutional Law — READ FIRST
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  # REDIRECT → ARCHITECTURE.md
-│   ├── HUB_SPOKE_ARCHITECTURE.md       # REDIRECT → ARCHITECTURE.md Part IV
-│   ├── ALTITUDE_DESCENT_MODEL.md       # REDIRECT → ARCHITECTURE.md Part VI
-│   ├── REPO_REFACTOR_PROTOCOL.md       # Structure requirements
-│   ├── PRD_CONSTITUTION.md             # PRD governance rules
-│   ├── ERD_CONSTITUTION.md             # ERD governance rules
-│   ├── DBA_ENFORCEMENT_DOCTRINE.md     # DBA rules
-│   ├── TEMPLATE_IMMUTABILITY.md        # Immutability rules
-│   └── DOCUMENTATION_ERD_DOCTRINE.md   # ERD standard
+├── adr/                                           # TEMPLATE — Copy to derived repos
+│   ├── ADR.md                                     # ADR template
+│   └── ADR-001-subhub-table-cardinality.md        # Reference ADR (OWN-10a/b/c)
 │
-├── claude/                             # LOCKED — AI CANNOT MODIFY
-│   ├── APPLY_DOCTRINE.prompt.md        # Doctrine execution
-│   ├── DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md
-│   ├── DECLARE_DATA_AND_RENDER_ERD.prompt.md
-│   ├── DECLARE_EXECUTION_WIRING.prompt.md
-│   ├── DBA_ENFORCEMENT.prompt.md       # DBA enforcement
-│   └── DOCUMENTATION_ERD_ENFORCEMENT.prompt.md
+├── ai-employee/                                   # AI employee protocol
+│   ├── AI_EMPLOYEE_PROTOCOL.md
+│   └── AI_EMPLOYEE_TASK.yaml
 │
-├── prd/                                # TEMPLATE — Copy to derived repos
-│   └── PRD_HUB.md
+├── audit/                                         # TEMPLATE — Copy to derived repos
+│   └── CONSTITUTIONAL_AUDIT_ATTESTATION.md
 │
-├── adr/                                # TEMPLATE — Copy to derived repos
-│   └── ADR.md
-│
-├── pr/                                 # TEMPLATE — Copy to derived repos
-│   ├── PULL_REQUEST_TEMPLATE_HUB.md
-│   └── PULL_REQUEST_TEMPLATE_SPOKE.md
-│
-├── checklists/                         # TEMPLATE — Copy to derived repos
+├── checklists/                                    # TEMPLATE — Copy to derived repos
 │   ├── HUB_COMPLIANCE.md
 │   └── QUARTERLY_HYGIENE_AUDIT.md
 │
-├── audit/                              # TEMPLATE — Copy to derived repos
-│   └── CONSTITUTIONAL_AUDIT_ATTESTATION.md
+├── child/                                         # Child repo bootstrap templates
+│   ├── CC_OPERATIONAL_DIGEST.md                   # Tier 1 mandatory (operational rules)
+│   ├── column_registry.yml.template               # Registry-first spine
+│   ├── DOCTRINE.md.template                       # Doctrine version lock
+│   ├── DOCTRINE_CHECKPOINT.yaml.template          # Checkpoint state
+│   ├── HUB_DESIGN_DECLARATION.yaml.template       # Hub design intake
+│   ├── IMO_CONTROL.json.template                  # Governance contract
+│   ├── REGISTRY.yaml.template                     # Hub identity
+│   ├── REPO_DOMAIN_SPEC.md.template               # Domain bindings
+│   └── STARTUP_PROTOCOL.md                        # Session startup procedure
 │
-├── semantic/                           # LOCKED — AI CANNOT MODIFY
-│   └── OSAM.md                         # Operational Semantic Access Map
+├── claude/                                        # LOCKED — AI CANNOT MODIFY
+│   ├── APPLY_DOCTRINE.prompt.md
+│   ├── CLEANUP_EXECUTOR.prompt.md
+│   ├── DBA_ENFORCEMENT.prompt.md
+│   ├── DECLARE_DATA_AND_RENDER_ERD.prompt.md
+│   ├── DECLARE_EXECUTION_WIRING.prompt.md
+│   ├── DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md
+│   ├── DOCUMENTATION_ERD_ENFORCEMENT.prompt.md
+│   ├── HUB_DESIGN_DECLARATION_INTAKE.prompt.md
+│   ├── HYGIENE_AUDITOR.prompt.md
+│   ├── PRD_MIGRATION.prompt.md
+│   ├── PRD_TO_ERD_WORKFLOW.prompt.md
+│   ├── SYSTEM_FLOW_PROJECTION.prompt.md
+│   ├── SYSTEM_MODEL_REGENERATOR.prompt.md
+│   ├── UI_DOCTRINE_GENERATOR.prompt.md
+│   └── UI_DOCTRINE_REGENERATOR.prompt.md
 │
-├── config/                             # TEMPLATE — Copy to derived repos
-│   ├── CTB_DOCTRINE.md                 # CTB quick reference (pointer doc)
-│   ├── CTB_GOVERNANCE.md               # CTB governance template
-│   └── QUICK_REFERENCE.md              # Quick reference guide
+├── config/                                        # Configuration templates
+│   ├── branch_protection_config.json
+│   ├── ctb.branchmap.yaml
+│   ├── CTB_DOCTRINE.md
+│   ├── CTB_GOVERNANCE.md
+│   ├── ctb_version.json
+│   ├── global_manifest.yaml
+│   ├── imo_global_config.yaml
+│   ├── imo-ra-schema.json
+│   ├── QUICK_REFERENCE.md
+│   ├── repo_organization_standard.yaml
+│   ├── repo_taxonomy.yaml
+│   └── required_tools.yaml
 │
-├── integrations/                       # GUIDANCE — Reference only
+├── docs/                                          # Documentation templates
+│   └── architecture/
+│       ├── HUBS_AND_SPOKES.md
+│       └── SYSTEM_FUNNEL_OVERVIEW.md
+│
+├── doctrine/                                      # LOCKED — AI CANNOT MODIFY
+│   ├── ALTITUDE_DESCENT_MODEL.md                  # REDIRECT → ARCHITECTURE.md Part VI
+│   ├── ARCHITECTURE.md                            # CTB Constitutional Law (v2.1.0)
+│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md         # REDIRECT → ARCHITECTURE.md
+│   ├── DBA_ENFORCEMENT_DOCTRINE.md
+│   ├── DOCUMENTATION_ERD_DOCTRINE.md
+│   ├── ERD_CONSTITUTION.md
+│   ├── ERD_DOCTRINE.md
+│   ├── HUB_SPOKE_ARCHITECTURE.md                  # REDIRECT → ARCHITECTURE.md Part IV
+│   ├── PRD_CONSTITUTION.md
+│   ├── PROCESS_DOCTRINE.md
+│   ├── REPO_REFACTOR_PROTOCOL.md
+│   ├── ROLLBACK_PROTOCOL.md                       # Doctrine sync rollback (locked)
+│   └── TEMPLATE_IMMUTABILITY.md
+│
+├── erd/                                           # ERD templates
+│   └── ERD_METRICS.yaml.template
+│
+├── gpt/                                           # GPT intake guides
+│   └── PRD_INTAKE_GUIDE.md
+│
+├── integrations/                                  # GUIDANCE — Reference only
+│   ├── abacus-ai/
+│   │   ├── integrations.yaml
+│   │   └── README.md
 │   ├── COMPOSIO.md
 │   ├── DOPPLER.md
-│   ├── HEIR.md
-│   ├── OBSIDIAN.md
-│   ├── TOOLS.md
 │   ├── doppler.yaml.template
-│   └── heir.doctrine.yaml.template
+│   ├── doppler/
+│   │   ├── doppler.bash
+│   │   ├── doppler.fish
+│   │   └── doppler.zsh
+│   ├── heir.doctrine.yaml.template
+│   ├── HEIR.md
+│   ├── hostinger/
+│   │   ├── integrations.yaml
+│   │   └── README.md
+│   ├── OBSIDIAN.md
+│   └── TOOLS.md
 │
-└── validators/                         # GUIDANCE — Per-repo implementation
+├── pr/                                            # TEMPLATE — Copy to derived repos
+│   ├── PULL_REQUEST_TEMPLATE_HUB.md
+│   └── PULL_REQUEST_TEMPLATE_SPOKE.md
+│
+├── prd/                                           # TEMPLATE — Copy to derived repos
+│   └── PRD_HUB.md
+│
+├── scripts/                                       # Child repo operational scripts
+│   ├── apply_ctb_plan.py
+│   ├── apply_doctrine_audit.sh
+│   ├── codegen-generate.sh
+│   ├── codegen-verify.sh
+│   ├── ctb_check_version.sh
+│   ├── ctb_enforce.sh
+│   ├── ctb_init.sh
+│   ├── ctb_scaffold_new_repo.sh
+│   ├── ctb_verify.sh
+│   ├── detect-staleness.ps1
+│   ├── detect-staleness.sh
+│   ├── dev_setup.sh
+│   ├── generate-data-dictionary.sh
+│   ├── hooks/
+│   │   └── pre-commit
+│   ├── install_required_tools.sh
+│   ├── install-hooks.ps1
+│   ├── install-hooks.sh
+│   ├── push-doctrine-update.ps1
+│   ├── push-doctrine-update.sh
+│   ├── README.md
+│   ├── security_lockdown.sh
+│   ├── update_from_imo_creator.ps1
+│   ├── update_from_imo_creator.sh
+│   ├── validate-schema-completeness.ps1
+│   ├── validate-schema-completeness.sh
+│   ├── verify_manifest.ps1
+│   ├── verify_manifest.sh
+│   └── verify_required_tools.sh
+│
+├── semantic/                                      # LOCKED — AI CANNOT MODIFY
+│   └── OSAM.md                                    # Operational Semantic Access Map
+│
+└── validators/                                    # GUIDANCE — Per-repo implementation
     └── README.md
 ```
 

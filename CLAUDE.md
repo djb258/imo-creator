@@ -203,7 +203,7 @@ Any change to a LOCKED FILE requires:
 imo-creator (THIS REPO) ← SOVEREIGN
 │
 ├── templates/doctrine/     ← CONSTITUTIONAL LAW (locked)
-│   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.0.0)
+│   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.1.0)
 │   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  ← REDIRECT
 │   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
 │   └── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
