@@ -15,19 +15,59 @@ This repository is governed by **IMO-Creator**.
 
 ---
 
+## Loading Tiers
+
+This repository uses a **3-tier loading system** to minimize context window usage.
+
+### TIER 1 — MANDATORY (load before ANY work)
+
+| File | Location | Purpose |
+|------|----------|---------|
+| `IMO_CONTROL.json` | repo root | Structural governance contract — hub ID, doctrine version |
+| `DOCTRINE.md` | repo root | This file — pointer to parent doctrine, binding documents |
+| `CC_OPERATIONAL_DIGEST.md` | repo root | ALL operational rules in one file (~500 lines) |
+
+**Rule**: These 3 files MUST be loaded before any code, any query, any decision.
+
+### TIER 2 — ON-DEMAND (load when working in that domain)
+
+| File | Domain | Load When |
+|------|--------|-----------|
+| `CLAUDE.md` | AI permissions | AI permission question or repo-specific constraint |
+| `REGISTRY.yaml` | Hub identity | Structural or identity question |
+| `column_registry.yml` | Data schema | Data schema or codegen task |
+| `docs/prd/PRD.md` | Requirements | PRD question or validation |
+| `OSAM` (local copy) | Query routing | Data query or join question |
+| `SNAP_ON_TOOLBOX.yaml` | Tool selection | Tool suggestion or evaluation |
+
+**Rule**: Load ONE file at a time, only when the task requires it. Never pre-load all.
+
+### TIER 3 — AUDIT / ARCHIVE (never auto-loaded)
+
+| File | Load When |
+|------|-----------|
+| Parent `ARCHITECTURE.md` (full) | Constitutional audit, or ambiguity in Digest |
+| `CONSTITUTIONAL_AUDIT_ATTESTATION.md` | Scheduled audit |
+| Parent doctrine files (individual) | Specific domain audit (DBA, ERD, PRD, Process) |
+| Parent claude prompts (individual) | Executing a specific ceremony |
+
+**Rule**: Only loaded on explicit human request or scheduled audit trigger.
+
+---
+
 ## Binding Documents
 
-This repository conforms to the following doctrine files from IMO-Creator:
+This repository conforms to the following doctrine from IMO-Creator:
 
-| Document | Purpose | Location |
-|----------|---------|----------|
-| **ARCHITECTURE.md** | CTB Constitutional Law (CTB, CC, Hub-Spoke, IMO, Descent) | imo-creator/templates/doctrine/ |
-| TEMPLATE_IMMUTABILITY.md | AI modification prohibition | imo-creator/templates/doctrine/ |
-| SNAP_ON_TOOLBOX.yaml | Tool registry | imo-creator/templates/ |
-| IMO_SYSTEM_SPEC.md | System index | imo-creator/templates/ |
-| AI_EMPLOYEE_OPERATING_CONTRACT.md | Agent constraints | imo-creator/templates/ |
+| Document | Purpose | Version |
+|----------|---------|---------|
+| **ARCHITECTURE.md** | CTB Constitutional Law (CTB, CC, Hub-Spoke, IMO, Descent, PID) | [VERSION] |
+| **TOOLS.md** | Tool doctrine — determinism first, LLM as tail | [VERSION] |
+| **OSAM.md** | Query routing contract — table ownership, joins, HALT conditions | [VERSION] |
+| **SNAP_ON_TOOLBOX.yaml** | Master tool registry — approved tools, banned list | [VERSION] |
+| **CC_OPERATIONAL_DIGEST.md** | Extracted operational rules (TIER 1 loading) | [VERSION] |
 
-**Note**: ARCHITECTURE.md (v2.0.0) consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md.
+**Note**: ARCHITECTURE.md (v2.1.0) consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md.
 
 ---
 
@@ -48,6 +88,7 @@ This file maps generic roles to domain-specific tables and concepts.
 > Parent doctrine is READ-ONLY.
 > Domain specifics live in REPO_DOMAIN_SPEC.md.
 > If rules conflict, parent wins.
+> CC_OPERATIONAL_DIGEST.md is a projection — if it conflicts with full parent doctrine, parent wins.
 
 ---
 

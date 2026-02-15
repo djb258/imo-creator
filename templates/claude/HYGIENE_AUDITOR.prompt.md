@@ -73,6 +73,31 @@ You are performing a periodic hygiene audit for:
 4. **Explicitly DO NOT delete anything.**
    This is a reporting-only phase.
 
+5. **Run staleness detection** to identify governance artifacts that have drifted behind code changes:
+
+   ```bash
+   ./scripts/detect-staleness.sh --verbose
+   ```
+
+   The staleness script checks 7 artifact types:
+
+   | Artifact | Compared Against | Threshold | Severity |
+   |----------|-----------------|-----------|----------|
+   | PRD | src/ changes | 30 days | HIGH |
+   | ERD / SCHEMA.md | column_registry.yml changes | 14 days | HIGH |
+   | OSAM | src/data/ changes | 30 days | HIGH |
+   | Column Registry | SQL file changes | 7 days | CRITICAL |
+   | Data Dictionary | column_registry.yml date | Immediate | MEDIUM |
+   | Doctrine Checkpoint | src/ changes + age | 7 days | MEDIUM |
+   | Doctrine Version | Parent imo-creator version | Behind = stale | HIGH |
+
+   **Key rules:**
+   - MISSING artifacts are NOT staleness (caught by structure checks above)
+   - CRITICAL/HIGH staleness blocks the audit — same as other violations
+   - MEDIUM staleness is documented but does not block
+
+   Report each stale artifact in the findings table with severity and recommended action.
+
 ---
 
 ## PART 2 — NEON HYGIENE AUDIT (READ-ONLY)

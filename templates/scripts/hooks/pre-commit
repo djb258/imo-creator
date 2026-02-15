@@ -126,6 +126,177 @@ if [ -d "src" ]; then
 fi
 
 # ───────────────────────────────────────────────────────────────────
+# CHECK 8: Generated folder protection (Registry-First)
+# ───────────────────────────────────────────────────────────────────
+# If generated files are staged but column_registry.yml is NOT staged,
+# someone hand-edited generated output — VIOLATION.
+GENERATED_STAGED=$(echo "$STAGED_FILES" | grep -E "src/data/(spokes|hub)/.*/generated/" || true)
+REGISTRY_STAGED=$(echo "$STAGED_FILES" | grep -E "column_registry\.yml$" || true)
+
+if [ -n "$GENERATED_STAGED" ] && [ -z "$REGISTRY_STAGED" ]; then
+    echo -e "${RED}[VIOLATION]${NC} CODEGEN_VIOLATION: Generated files modified without registry update"
+    echo "            Files:"
+    echo "$GENERATED_STAGED" | while read -r f; do echo "              - $f"; done
+    echo "            Generated files are PROJECTIONS of column_registry.yml"
+    echo "            Action: Update column_registry.yml, then run codegen-generate.sh"
+    ((VIOLATIONS++))
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 9: Codegen drift detection (Registry-First)
+# ───────────────────────────────────────────────────────────────────
+# If column_registry.yml is staged, verify generated files are in sync.
+if [ -n "$REGISTRY_STAGED" ]; then
+    CODEGEN_VERIFY=""
+    if [ -f "scripts/codegen-verify.sh" ]; then
+        CODEGEN_VERIFY="scripts/codegen-verify.sh"
+    elif [ -f "./codegen-verify.sh" ]; then
+        CODEGEN_VERIFY="./codegen-verify.sh"
+    fi
+
+    if [ -n "$CODEGEN_VERIFY" ]; then
+        if ! bash "$CODEGEN_VERIFY" > /dev/null 2>&1; then
+            echo -e "${RED}[VIOLATION]${NC} CODEGEN_DRIFT: Registry updated but generated files are out of sync"
+            echo "            column_registry.yml was changed but generated output does not match"
+            echo "            Action: Run codegen-generate.sh and stage the generated files"
+            ((VIOLATIONS++))
+        else
+            echo -e "${GREEN}[PASS]${NC} Codegen sync verified — generated files match registry"
+        fi
+    else
+        echo -e "${YELLOW}[WARNING]${NC} codegen-verify.sh not found — cannot verify registry sync"
+        echo "          Install: Copy from imo-creator templates/scripts/"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 10: Manifest sync (templates/ changes)
+# ───────────────────────────────────────────────────────────────────
+# If any staged files are inside templates/, verify manifest is in sync.
+TEMPLATE_STAGED=$(echo "$STAGED_FILES" | grep -E "^templates/" || true)
+
+if [ -n "$TEMPLATE_STAGED" ]; then
+    MANIFEST_VERIFY=""
+    if [ -f "scripts/verify_manifest.sh" ]; then
+        MANIFEST_VERIFY="scripts/verify_manifest.sh"
+    elif [ -f "templates/scripts/verify_manifest.sh" ]; then
+        MANIFEST_VERIFY="templates/scripts/verify_manifest.sh"
+    fi
+
+    if [ -n "$MANIFEST_VERIFY" ]; then
+        if ! bash "$MANIFEST_VERIFY" > /dev/null 2>&1; then
+            echo -e "${RED}[VIOLATION]${NC} MANIFEST_DRIFT: templates/ changed but manifest is out of sync"
+            echo "            Staged template files do not match TEMPLATES_MANIFEST.yaml"
+            echo "            Action: Run verify_manifest.sh and update TEMPLATES_MANIFEST.yaml"
+            ((VIOLATIONS++))
+        else
+            echo -e "${GREEN}[PASS]${NC} Manifest sync verified — disk matches manifest"
+        fi
+    else
+        echo -e "${YELLOW}[WARNING]${NC} verify_manifest.sh not found — cannot verify manifest sync"
+        echo "          Install: Copy from imo-creator templates/scripts/"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 11: Doctrine checkpoint enforcement
+# ───────────────────────────────────────────────────────────────────
+# Only applies when staged files touch src/ (code changes).
+# Docs-only or config-only changes skip this check silently.
+SRC_STAGED=$(echo "$STAGED_FILES" | grep -E "^src/" | head -1 || true)
+
+if [ -n "$SRC_STAGED" ]; then
+    CHECKPOINT_FILE="DOCTRINE_CHECKPOINT.yaml"
+
+    # 11a: Checkpoint file must exist
+    if [ ! -f "$CHECKPOINT_FILE" ]; then
+        echo -e "${RED}[VIOLATION]${NC} CHECKPOINT_MISSING: DOCTRINE_CHECKPOINT.yaml not found"
+        echo "            Doctrine checkpoint required before coding."
+        echo "            Action: Read CC_OPERATIONAL_DIGEST.md, fill out DOCTRINE_CHECKPOINT.yaml, then commit."
+        ((VIOLATIONS++))
+    else
+        # 11b: Staleness check (24 hours)
+        FILE_MOD=$(stat -c %Y "$CHECKPOINT_FILE" 2>/dev/null || stat -f %m "$CHECKPOINT_FILE" 2>/dev/null || echo "0")
+        CURRENT=$(date +%s)
+        AGE=$(( CURRENT - FILE_MOD ))
+        MAX_AGE=86400  # 24 hours
+
+        if [ "$AGE" -gt "$MAX_AGE" ]; then
+            STALE_DATE=$(date -d "@$FILE_MOD" 2>/dev/null || date -r "$FILE_MOD" 2>/dev/null || echo "unknown")
+            echo -e "${RED}[VIOLATION]${NC} CHECKPOINT_STALE: DOCTRINE_CHECKPOINT.yaml is older than 24 hours"
+            echo "            Last modified: $STALE_DATE"
+            echo "            Action: Re-read CC_OPERATIONAL_DIGEST.md and refresh the checkpoint"
+            ((VIOLATIONS++))
+        fi
+
+        # 11c: All required fields must be filled (not empty, not bracket placeholders)
+        CHECKPOINT_FIELDS=("last_verified" "verified_by" "digest_version" "ctb_branch_target" "hub_or_spoke" "logic_placement" "requires_adr" "registry_impact" "error_table_identified" "transformation")
+        UNFILLED=""
+
+        for field in "${CHECKPOINT_FIELDS[@]}"; do
+            VALUE=$(grep -m1 "^[[:space:]]*${field}:" "$CHECKPOINT_FILE" | sed 's/^[^:]*:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+            if [ -z "$VALUE" ] || echo "$VALUE" | grep -qE '^\[.*\]$'; then
+                UNFILLED="$UNFILLED $field"
+            fi
+        done
+
+        if [ -n "$UNFILLED" ]; then
+            echo -e "${RED}[VIOLATION]${NC} CHECKPOINT_INCOMPLETE: Unfilled fields in DOCTRINE_CHECKPOINT.yaml"
+            echo "            Missing/placeholder fields:$UNFILLED"
+            echo "            Action: Fill ALL fields before committing code"
+            ((VIOLATIONS++))
+        fi
+
+        # 11d: Spoke logic validation — spokes carry data only, no logic
+        HUB_OR_SPOKE=$(grep -m1 "^[[:space:]]*hub_or_spoke:" "$CHECKPOINT_FILE" | sed 's/^[^:]*:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+        LOGIC_PLACE=$(grep -m1 "^[[:space:]]*logic_placement:" "$CHECKPOINT_FILE" | sed 's/^[^:]*:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+
+        if [ "$HUB_OR_SPOKE" = "spoke" ]; then
+            if [ -n "$LOGIC_PLACE" ] && [ "$LOGIC_PLACE" != "n/a" ] && ! echo "$LOGIC_PLACE" | grep -qE '^\[.*\]$'; then
+                echo -e "${RED}[VIOLATION]${NC} HUB_SPOKE_VIOLATION: Spoke declared but logic_placement is not 'n/a'"
+                echo "            Spokes carry data only — logic lives in hubs"
+                echo "            logic_placement: '$LOGIC_PLACE'"
+                echo "            Action: Set logic_placement to 'n/a' or change hub_or_spoke to 'hub'"
+                ((VIOLATIONS++))
+            fi
+        fi
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 12: Schema completeness enforcement (DBA Gate B)
+# ───────────────────────────────────────────────────────────────────
+# If column_registry.yml is staged, run validate-schema-completeness.sh
+# to ensure all table and column metadata is complete (no placeholders).
+if [ -n "$REGISTRY_STAGED" ]; then
+    SCHEMA_VALIDATE=""
+    if [ -f "scripts/validate-schema-completeness.sh" ]; then
+        SCHEMA_VALIDATE="scripts/validate-schema-completeness.sh"
+    elif [ -f "./validate-schema-completeness.sh" ]; then
+        SCHEMA_VALIDATE="./validate-schema-completeness.sh"
+    fi
+
+    if [ -n "$SCHEMA_VALIDATE" ]; then
+        if ! bash "$SCHEMA_VALIDATE" > /dev/null 2>&1; then
+            echo -e "${RED}[VIOLATION]${NC} SCHEMA_INCOMPLETE: column_registry.yml has missing or placeholder metadata"
+            echo "            DBA_ENFORCEMENT_DOCTRINE.md Gate B requires complete metadata"
+            echo "            Every table: description + leaf_type + source_of_truth + row_identity_strategy"
+            echo "            Every column: description + type + nullable + semantic_role + format"
+            echo "            Action: Run validate-schema-completeness.sh, fix all violations, then commit"
+            ((VIOLATIONS++))
+        else
+            echo -e "${GREEN}[PASS]${NC} Schema completeness verified — all metadata fields populated"
+        fi
+    else
+        echo -e "${YELLOW}[WARNING]${NC} validate-schema-completeness.sh not found — cannot verify schema metadata"
+        echo "          Install: Copy from imo-creator templates/scripts/"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
 # SUMMARY
 # ───────────────────────────────────────────────────────────────────
 echo ""

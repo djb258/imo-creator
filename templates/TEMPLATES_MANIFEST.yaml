@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "2.0.0"
-  last_updated: "2026-02-06"
-  total_file_count: 96
+  version: "2.8.0"
+  last_updated: "2026-02-15"
+  total_file_count: 114  # Run: find templates -type f | wc -l to verify
   ctb_hardening_version: "2.0.0"
   note: "CTB Hardening refactor - ARCHITECTURE.md consolidates architecture doctrine"
   authority: "CONSTITUTIONAL"
@@ -107,7 +107,7 @@ files:
       purpose: "CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID, ownership"
       required: true
       locked: true
-      version: "2.0.0"
+      version: "2.1.0"
       note: "Primary architecture doctrine. Consolidates CANONICAL, HUB_SPOKE, and ALTITUDE."
 
     # REDIRECT FILES (backward compatibility)
@@ -168,6 +168,12 @@ files:
       purpose: "Documentation ERD standards"
       required: true
       locked: true
+
+    - path: "templates/doctrine/ROLLBACK_PROTOCOL.md"
+      purpose: "Doctrine sync rollback procedure — when to use, 6-step revert, version pinning"
+      required: true
+      locked: true
+      version: "1.0.0"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # SEMANTIC (OSAM - QUERY ROUTING CONTRACT)
@@ -301,6 +307,12 @@ files:
       required: true
       action: "Copy and fill in"
 
+    - path: "templates/adr/ADR-001-subhub-table-cardinality.md"
+      purpose: "ADR-001: Sub-hub table cardinality constraint (OWN-10a/10b/10c)"
+      required: true
+      status: "Accepted"
+      note: "Constitutional amendment — adds table cardinality to ARCHITECTURE.md v2.1.0"
+
   pr:
     - path: "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
       purpose: "Hub PR template"
@@ -381,6 +393,30 @@ files:
       action: "Generate stub, human fills domain-specific bindings"
       note: "Child repos HALT without this file"
 
+    - path: "templates/child/column_registry.yml.template"
+      purpose: "Column registry spine - canonical schema declaration for all hub tables"
+      required: true
+      action: "Copy to child repo, fill in table/column definitions"
+      note: "Registry-first: all generated types derive from this file"
+
+    - path: "templates/child/CC_OPERATIONAL_DIGEST.md"
+      purpose: "CC Operational Digest - ALL operational rules in one file for TIER 1 loading"
+      required: true
+      action: "Copy to child repo root as CC_OPERATIONAL_DIGEST.md"
+      note: "TIER 1 mandatory file. Projection of parent doctrine — regenerate from parent on version bump."
+
+    - path: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+      purpose: "Doctrine checkpoint - CC fills before each coding session, enforced by pre-commit CHECK 11"
+      required: true
+      action: "Copy to child repo root as DOCTRINE_CHECKPOINT.yaml"
+      note: "Expires after 24 hours. Pre-commit blocks commits with missing/stale/incomplete checkpoints."
+
+    - path: "templates/child/STARTUP_PROTOCOL.md"
+      purpose: "CC Startup Protocol - mandatory session startup sequence (version check, Tier 1 load, checkpoint verify)"
+      required: true
+      action: "Copy to child repo root as STARTUP_PROTOCOL.md"
+      note: "Always overwrite on sync — this is operational law, not customizable."
+
   # ═══════════════════════════════════════════════════════════════════════════
   # CONFIG
   # ═══════════════════════════════════════════════════════════════════════════
@@ -427,6 +463,10 @@ files:
 
     - path: "templates/config/branch_protection_config.json"
       purpose: "Branch protection settings"
+      required: true
+
+    - path: "templates/config/CTB_GOVERNANCE.md"
+      purpose: "CTB governance document template — table classification, frozen tables, drift detection"
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -557,8 +597,52 @@ files:
       purpose: "Verify required tools"
       required: true
 
+    - path: "templates/scripts/codegen-generate.sh"
+      purpose: "Registry-first codegen - generates TypeScript types and Zod schemas from column_registry.yml"
+      required: true
+
+    - path: "templates/scripts/codegen-verify.sh"
+      purpose: "Registry-first drift detection - verifies generated files match column_registry.yml"
+      required: true
+
+    - path: "templates/scripts/verify_manifest.sh"
+      purpose: "Manifest sync verification (Unix) — diffs disk vs manifest, exits non-zero on mismatch"
+      required: true
+
+    - path: "templates/scripts/verify_manifest.ps1"
+      purpose: "Manifest sync verification (Windows) — diffs disk vs manifest, exits non-zero on mismatch"
+      required: true
+
+    - path: "templates/scripts/README.md"
+      purpose: "Scripts directory documentation — purpose and inventory of all template scripts"
+      required: false
+
+    - path: "templates/scripts/validate-schema-completeness.sh"
+      purpose: "Schema completeness validator (Unix) — enforces DBA Gate B metadata requirements on column_registry.yml"
+      required: true
+
+    - path: "templates/scripts/validate-schema-completeness.ps1"
+      purpose: "Schema completeness validator (Windows) — enforces DBA Gate B metadata requirements on column_registry.yml"
+      required: true
+
+    - path: "templates/scripts/generate-data-dictionary.sh"
+      purpose: "Data dictionary generator — produces docs/data/COLUMN_DATA_DICTIONARY.md from column_registry.yml"
+      required: true
+
+    - path: "templates/scripts/update_from_imo_creator.ps1"
+      purpose: "Manifest-driven doctrine sync from imo-creator (Windows) — reads manifest rules dynamically"
+      required: true
+
+    - path: "templates/scripts/detect-staleness.sh"
+      purpose: "Staleness detection audit (Unix) — checks governance artifacts for freshness relative to code changes"
+      required: true
+
+    - path: "templates/scripts/detect-staleness.ps1"
+      purpose: "Staleness detection audit (Windows) — checks governance artifacts for freshness relative to code changes"
+      required: true
+
     - path: "templates/scripts/hooks/pre-commit"
-      purpose: "Pre-commit hook"
+      purpose: "Pre-commit hook (includes registry-first, manifest sync, doctrine checkpoint, and schema completeness enforcement gates)"
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -574,7 +658,31 @@ files:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 reading_order:
-  description: "Reading order depends on repository type. Detect first, then follow appropriate sequence."
+  description: |
+    Reading order uses a 3-TIER system. Agents MUST load TIER 1 before any work.
+    TIER 2 is loaded on-demand when working in that domain.
+    TIER 3 is never auto-loaded — governance/audit reference only.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # TIER SYSTEM NOTES
+  # ═══════════════════════════════════════════════════════════════════════════
+  tier_system:
+    description: "3-tier loading strategy to minimize context window usage"
+    tiers:
+      - tier: 1
+        name: "MANDATORY"
+        rule: "Load ALL before any work. Max 3 files. Target ~2000 tokens."
+        auto_load: true
+      - tier: 2
+        name: "DOMAIN REFERENCE"
+        rule: "Load on-demand when working in that domain. Never pre-load all."
+        auto_load: false
+        trigger: "Agent encounters question/task in this domain"
+      - tier: 3
+        name: "AUDIT / ARCHIVE"
+        rule: "Never auto-loaded. Human-requested or audit-triggered only."
+        auto_load: false
+        trigger: "Explicit human request or scheduled audit"
 
   # ═══════════════════════════════════════════════════════════════════════════
   # DETECTION FIRST (MANDATORY)
@@ -584,122 +692,151 @@ reading_order:
     method: "Structural markers (not content parsing)"
     steps:
       - "Check: Does IMO_CONTROL.json exist at repo root?"
-      - "If YES → CHILD repo → Follow in_child_repo sequence"
+      - "If YES → CHILD repo → Follow in_child_repo tiers"
       - "If NO → Check: Does templates/doctrine/ directory exist?"
-      - "If YES → PARENT repo (imo-creator) → Follow in_parent_repo sequence"
+      - "If YES → PARENT repo (imo-creator) → Follow in_parent_repo tiers"
       - "If NO → UNGOVERNED → HALT"
-    reference: "templates/ai-employee/AI_EMPLOYEE_PROTOCOL.md §Repository Detection Protocol"
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # PARENT REPO (imo-creator) READING ORDER
+  # PARENT REPO (imo-creator) — TIERED READING ORDER
   # ═══════════════════════════════════════════════════════════════════════════
   in_parent_repo:
     description: "When AI is operating in imo-creator itself"
     authority: "READ-ONLY"
     note: "You may read but NOT modify doctrine or templates"
 
-    sequence:
-      - order: 1
-        file: "CONSTITUTION.md"
-        location: "repo root"
-        purpose: "Constitutional orientation - what is governed"
-        required: true
-        prerequisites: []
+    tier_1_mandatory:
+      description: "Load these 3 files BEFORE any work. Non-negotiable."
+      files:
+        - file: "CLAUDE.md"
+          location: "repo root"
+          purpose: "AI permissions, locked file registry, operational rules"
 
-      - order: 2
-        file: "templates/TEMPLATES_MANIFEST.yaml"
-        location: "templates/"
-        purpose: "This file - machine-readable index"
-        required: true
-        prerequisites: ["CONSTITUTION.md"]
+        - file: "CONSTITUTION.md"
+          location: "repo root"
+          purpose: "Constitutional orientation — what is governed, invariants"
 
-      - order: 3
-        file: "templates/IMO_SYSTEM_SPEC.md"
-        location: "templates/"
-        purpose: "Compiled system index"
-        required: true
-        prerequisites: ["TEMPLATES_MANIFEST.yaml"]
+        - file: "templates/TEMPLATES_MANIFEST.yaml"
+          location: "templates/"
+          purpose: "This file — machine-readable index, tier system, file registry"
 
-      - order: 4
-        file: "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
-        location: "templates/"
-        purpose: "Agent constraints and permissions"
-        required: true
-        prerequisites: ["IMO_SYSTEM_SPEC.md"]
+    tier_2_domain:
+      description: "Load on-demand when working in that domain"
+      files:
+        - file: "templates/doctrine/ARCHITECTURE.md"
+          domain: "structure, placement, CC layers, hub-spoke, IMO, descent"
+          trigger: "Any structural or architectural question"
 
-      - order: 5
-        file: "templates/doctrine/ARCHITECTURE.md"
-        location: "templates/doctrine/"
-        purpose: "Primary architecture doctrine - CC layers, CTB structure, Hub-Spoke, IMO, Descent"
-        required: true
-        prerequisites: ["AI_EMPLOYEE_OPERATING_CONTRACT.md"]
+        - file: "templates/SNAP_ON_TOOLBOX.yaml"
+          domain: "tool selection, vendor evaluation"
+          trigger: "Any tool suggestion or evaluation"
 
-      - order: 6
-        file: "templates/SNAP_ON_TOOLBOX.yaml"
-        location: "templates/"
-        purpose: "Tool registry - check before using any tool"
-        required: true
-        prerequisites: ["ARCHITECTURE.md"]
+        - file: "templates/semantic/OSAM.md"
+          domain: "query routing, data schema, joins, table ownership"
+          trigger: "Any data or query question"
 
-      - order: 7
-        file: "templates/claude/APPLY_DOCTRINE.prompt.md"
-        location: "templates/claude/"
-        purpose: "Main execution prompt"
-        required: true
-        prerequisites: ["SNAP_ON_TOOLBOX.yaml"]
+        - file: "templates/integrations/TOOLS.md"
+          domain: "tool admission, LLM containment, tool ledger"
+          trigger: "Tool doctrine or LLM usage question"
+
+        - file: "templates/claude/APPLY_DOCTRINE.prompt.md"
+          domain: "doctrine application to child repos"
+          trigger: "Applying doctrine to a downstream repo"
+
+    tier_3_audit:
+      description: "Never auto-loaded. Human-requested or audit-triggered only."
+      files:
+        - file: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+          trigger: "Database change governance audit"
+        - file: "templates/doctrine/ERD_CONSTITUTION.md"
+          trigger: "ERD validation audit"
+        - file: "templates/doctrine/ERD_DOCTRINE.md"
+          trigger: "ERD format standards audit"
+        - file: "templates/doctrine/PRD_CONSTITUTION.md"
+          trigger: "PRD validity audit"
+        - file: "templates/doctrine/PROCESS_DOCTRINE.md"
+          trigger: "Process declaration audit"
+        - file: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+          trigger: "Documentation ERD standards audit"
+        - file: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+          trigger: "Refactor sequence audit"
+        - file: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+          trigger: "Template modification audit"
+        - file: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+          trigger: "Never — redirect stub"
+        - file: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+          trigger: "Never — redirect stub"
+        - file: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+          trigger: "Never — redirect stub"
+        - file: "templates/IMO_SYSTEM_SPEC.md"
+          trigger: "System index reference"
+        - file: "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
+          trigger: "AI employee governance reference"
+        - note: "All 15 claude prompt files — loaded individually when executing that specific ceremony"
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # CHILD REPO READING ORDER
+  # CHILD REPO — TIERED READING ORDER
   # ═══════════════════════════════════════════════════════════════════════════
   in_child_repo:
     description: "When AI is operating in a child repo governed by imo-creator"
     authority: "OPERATIONAL"
     note: "You may modify child artifacts within gates, but NOT parent doctrine"
 
-    sequence:
-      - order: 1
-        file: "IMO_CONTROL.json"
-        location: "repo root"
-        purpose: "Structural governance contract for this repo"
-        required: true
-        prerequisites: []
+    tier_1_mandatory:
+      description: "Load these 3 files BEFORE any work. Non-negotiable."
+      files:
+        - file: "IMO_CONTROL.json"
+          location: "repo root"
+          purpose: "Structural governance contract — hub ID, doctrine version"
 
-      - order: 2
-        file: "DOCTRINE.md"
-        location: "repo root"
-        purpose: "Pointer to parent doctrine version"
-        required: true
-        prerequisites: ["IMO_CONTROL.json"]
+        - file: "DOCTRINE.md"
+          location: "repo root"
+          purpose: "Pointer to parent doctrine version, binding documents"
 
-      - order: 3
-        file: "REGISTRY.yaml"
-        location: "repo root"
-        purpose: "Hub identity and structure"
-        required: true
-        prerequisites: ["DOCTRINE.md"]
+        - file: "CC_OPERATIONAL_DIGEST.md"
+          location: "repo root"
+          purpose: "ALL operational rules in one file — replaces loading full parent doctrine"
 
-      - order: 4
-        file: "CLAUDE.md"
-        location: "repo root"
-        purpose: "Repo-specific AI instructions"
-        required: false
-        prerequisites: ["REGISTRY.yaml"]
+    tier_2_domain:
+      description: "Load on-demand when working in that domain"
+      files:
+        - file: "CLAUDE.md"
+          domain: "AI agent permissions, repo-specific rules"
+          trigger: "Any AI permission question or repo-specific constraint"
 
-      - order: 5
-        file: "docs/prd/PRD.md"
-        location: "docs/prd/"
-        purpose: "Product requirements for this hub"
-        required: false
-        prerequisites: ["REGISTRY.yaml"]
-        note: "Path may vary - check REGISTRY.yaml for actual location"
+        - file: "REGISTRY.yaml"
+          domain: "hub identity, sub-hub structure, table registry"
+          trigger: "Structural or identity question"
 
-      - order: 6
-        file: "Parent doctrine (as referenced)"
-        location: "Pull from imo-creator or local cache"
-        purpose: "Constitutional law from parent"
-        required: true
-        prerequisites: ["DOCTRINE.md"]
-        note: "DOCTRINE.md specifies which version to reference"
+        - file: "column_registry.yml"
+          domain: "data schema, table columns, codegen"
+          trigger: "Data schema or codegen task"
+
+        - file: "docs/prd/PRD.md"
+          domain: "product requirements, transformation proof"
+          trigger: "PRD question or validation"
+          note: "Path may vary — check REGISTRY.yaml for actual location"
+
+        - file: "OSAM (local copy)"
+          domain: "query routing, joins, table ownership"
+          trigger: "Data query or join question"
+
+        - file: "SNAP_ON_TOOLBOX.yaml (parent copy)"
+          domain: "tool evaluation"
+          trigger: "Tool selection or suggestion"
+
+    tier_3_audit:
+      description: "Never auto-loaded. Human-requested or audit-triggered only."
+      files:
+        - file: "Parent ARCHITECTURE.md (full)"
+          trigger: "Constitutional audit or ambiguity in CC_OPERATIONAL_DIGEST.md"
+          note: "CC_OPERATIONAL_DIGEST.md covers 95% of operational rules; load full only if needed"
+        - file: "CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+          trigger: "Scheduled audit"
+        - file: "Parent doctrine files (individual)"
+          trigger: "Specific domain audit (DBA, ERD, PRD, Process)"
+        - file: "Parent claude prompts (individual)"
+          trigger: "Executing a specific ceremony (e.g., DECLARE_STRUCTURE, HYGIENE_AUDITOR)"
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # CATEGORIES (AI MODIFICATION PERMISSIONS)
@@ -820,6 +957,15 @@ bootstrap:
         - source: "templates/child/REGISTRY.yaml.template"
           destination: "REGISTRY.yaml"
           then: "Fill in hub identity"
+        - source: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+          destination: "DOCTRINE_CHECKPOINT.yaml"
+          then: "CC fills before each coding session"
+        - source: "templates/child/CC_OPERATIONAL_DIGEST.md"
+          destination: "CC_OPERATIONAL_DIGEST.md"
+          then: "TIER 1 mandatory — read before any work"
+        - source: "templates/child/STARTUP_PROTOCOL.md"
+          destination: "STARTUP_PROTOCOL.md"
+          then: "CC executes this sequence every session"
 
     - step: 3
       action: "create_structure"
@@ -862,8 +1008,10 @@ bootstrap:
 
         | Template | imo-creator Path | Version |
         |----------|------------------|---------|
-        | Doctrine | templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md | 1.x.x |
-        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 1.1.0 |
+        | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
+        | Tools | templates/integrations/TOOLS.md | 1.1.0 |
+        | OSAM | templates/semantic/OSAM.md | 1.1.0 |
+        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 2.8.0 |
 
         ## This Hub
 
@@ -873,9 +1021,34 @@ bootstrap:
         | Hub Name | [NAME] |
         | Purpose | [DESCRIPTION] |
 
-        ## Reading Order
+        ## MANDATORY: Doctrine Checkpoint Protocol
 
-        See templates/TEMPLATES_MANIFEST.yaml reading_order section.
+        Before writing ANY code in this repo:
+
+        1. Read CC_OPERATIONAL_DIGEST.md (TIER 1 — the field manual)
+        2. Fill out DOCTRINE_CHECKPOINT.yaml with your plan
+        3. Only then write code and commit
+
+        The pre-commit hook rejects commits with missing or stale checkpoints.
+        This is not optional. Plan before you build.
+
+        ## Session Startup (MANDATORY)
+
+        Every session, before any work:
+        1. Run doctrine version check (see STARTUP_PROTOCOL.md)
+        2. Load Tier 1 files: IMO_CONTROL.json, CC_OPERATIONAL_DIGEST.md, this file
+        3. Verify DOCTRINE_CHECKPOINT.yaml is current
+        4. Begin work
+
+        If doctrine is stale, update first. If checkpoint is stale, fill it first.
+        Do not skip startup. Do not start coding without completing this sequence.
+
+        ## Loading Tiers
+
+        See DOCTRINE.md for the 3-tier loading system:
+        - TIER 1 MANDATORY: IMO_CONTROL.json, DOCTRINE.md, CC_OPERATIONAL_DIGEST.md
+        - TIER 2 ON-DEMAND: CLAUDE.md, REGISTRY.yaml, column_registry.yml, PRD, OSAM
+        - TIER 3 AUDIT: Full parent doctrine (only on explicit request)
 
   validation:
     - check: "IMO_CONTROL.json exists at repo root"
@@ -883,6 +1056,12 @@ bootstrap:
     - check: "DOCTRINE.md exists at repo root"
       required: true
     - check: "REGISTRY.yaml exists at repo root"
+      required: true
+    - check: "DOCTRINE_CHECKPOINT.yaml exists at repo root"
+      required: true
+    - check: "CC_OPERATIONAL_DIGEST.md exists at repo root"
+      required: true
+    - check: "STARTUP_PROTOCOL.md exists at repo root"
       required: true
     - check: "src/ folder structure matches CTB"
       required: true
@@ -904,6 +1083,7 @@ bootstrap:
     1. Fill in IMO_CONTROL.json
     2. Create PRD in docs/prd/
     3. Run compliance checklist
+    4. REMINDER: Add this repo to imo-creator's FLEET_REGISTRY.yaml
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # UPDATE MANIFEST (FOR SYNC SCRIPTS)
@@ -911,31 +1091,91 @@ bootstrap:
 
 update_manifest:
   description: "What to sync when updating child repos from imo-creator"
+  note: "update_from_imo_creator.sh reads these lists dynamically via yq — do not hardcode"
 
   always_sync:
-    description: "These files are ALWAYS synced on update"
+    description: "These files are ALWAYS synced on update — overwrite in child repo"
     files:
-      - "templates/doctrine/ARCHITECTURE.md"
-      - "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
-      - "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
-      - "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
-      - "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
-      - "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
-      - "templates/TEMPLATES_MANIFEST.yaml"
-      - "templates/IMO_SYSTEM_SPEC.md"
-      - "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
-      - "templates/SNAP_ON_TOOLBOX.yaml"
-      - "templates/claude/APPLY_DOCTRINE.prompt.md"
-      - "templates/checklists/HUB_COMPLIANCE.md"
+      # Doctrine (constitutional law — all 12 files)
+      - source: "templates/doctrine/ARCHITECTURE.md"
+        destination: "doctrine/ARCHITECTURE.md"
+      - source: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+        destination: "doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+      - source: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+        destination: "doctrine/HUB_SPOKE_ARCHITECTURE.md"
+      - source: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+        destination: "doctrine/ALTITUDE_DESCENT_MODEL.md"
+      - source: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+        destination: "doctrine/REPO_REFACTOR_PROTOCOL.md"
+      - source: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+        destination: "doctrine/TEMPLATE_IMMUTABILITY.md"
+      - source: "templates/doctrine/PRD_CONSTITUTION.md"
+        destination: "doctrine/PRD_CONSTITUTION.md"
+      - source: "templates/doctrine/ERD_CONSTITUTION.md"
+        destination: "doctrine/ERD_CONSTITUTION.md"
+      - source: "templates/doctrine/ERD_DOCTRINE.md"
+        destination: "doctrine/ERD_DOCTRINE.md"
+      - source: "templates/doctrine/PROCESS_DOCTRINE.md"
+        destination: "doctrine/PROCESS_DOCTRINE.md"
+      - source: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+        destination: "doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+      - source: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+        destination: "doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+      - source: "templates/doctrine/ROLLBACK_PROTOCOL.md"
+        destination: "doctrine/ROLLBACK_PROTOCOL.md"
+      # Semantic + Constitutional
+      - source: "templates/semantic/OSAM.md"
+        destination: "doctrine/OSAM.md"
+      - source: "templates/integrations/TOOLS.md"
+        destination: "doctrine/TOOLS.md"
+      - source: "templates/SNAP_ON_TOOLBOX.yaml"
+        destination: "SNAP_ON_TOOLBOX.yaml"
+      # Operational (TIER 1)
+      - source: "templates/child/CC_OPERATIONAL_DIGEST.md"
+        destination: "CC_OPERATIONAL_DIGEST.md"
+      - source: "templates/child/STARTUP_PROTOCOL.md"
+        destination: "STARTUP_PROTOCOL.md"
+      # Compliance
+      - source: "templates/checklists/HUB_COMPLIANCE.md"
+        destination: "docs/checklists/HUB_COMPLIANCE.md"
+      # Git hooks
+      - source: "templates/scripts/hooks/pre-commit"
+        destination: ".git/hooks/pre-commit"
+      # Scripts (always overwrite — these are tooling, not customized)
+      - source: "templates/scripts/codegen-generate.sh"
+        destination: "scripts/codegen-generate.sh"
+      - source: "templates/scripts/codegen-verify.sh"
+        destination: "scripts/codegen-verify.sh"
+      - source: "templates/scripts/validate-schema-completeness.sh"
+        destination: "scripts/validate-schema-completeness.sh"
+      - source: "templates/scripts/generate-data-dictionary.sh"
+        destination: "scripts/generate-data-dictionary.sh"
+      - source: "templates/scripts/install-hooks.sh"
+        destination: "scripts/install-hooks.sh"
+      - source: "templates/scripts/update_from_imo_creator.sh"
+        destination: "scripts/update_from_imo_creator.sh"
+      - source: "templates/scripts/detect-staleness.sh"
+        destination: "scripts/detect-staleness.sh"
 
   sync_if_missing:
-    description: "These files are synced only if they don't exist in child"
+    description: "These files are synced only if they don't exist in child (templates that get customized)"
     files:
-      - "templates/prd/PRD_HUB.md"
-      - "templates/adr/ADR.md"
-      - "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
-      - "templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
-      - "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+      - source: "templates/prd/PRD_HUB.md"
+        destination: "docs/prd/PRD_HUB.md"
+      - source: "templates/adr/ADR.md"
+        destination: "docs/adr/ADR_TEMPLATE.md"
+      - source: "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+        destination: ".github/PULL_REQUEST_TEMPLATE_HUB.md"
+      - source: "templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+        destination: ".github/PULL_REQUEST_TEMPLATE_SPOKE.md"
+      - source: "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+        destination: "docs/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+      - source: "templates/child/column_registry.yml.template"
+        destination: "column_registry.yml"
+      - source: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+        destination: "DOCTRINE_CHECKPOINT.yaml"
+      - source: "templates/checklists/QUARTERLY_HYGIENE_AUDIT.md"
+        destination: "docs/checklists/QUARTERLY_HYGIENE_AUDIT.md"
 
   never_sync:
     description: "These are child-repo specific, never overwrite"
@@ -943,21 +1183,121 @@ update_manifest:
       - "IMO_CONTROL.json"
       - "REGISTRY.yaml"
       - "CLAUDE.md"
+      - "DOCTRINE.md"
       - "docs/prd/*.md"
       - "docs/adr/*.md"
 
   post_sync:
-    description: "Run these after syncing"
+    description: "Automatic — the sync script handles verification"
     commands:
-      - "./scripts/verify_templates_manifest.sh"
-      - "Verify doctrine version matches"
-      - "Review CHANGELOG for breaking changes"
+      - "Version comparison (automatic)"
+      - "Review changes with 'git status'"
+      - "Commit sync changes"
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # CHANGELOG
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "2.8.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/doctrine/ROLLBACK_PROTOCOL.md (locked — doctrine sync rollback procedure)"
+      - "Added FLEET_REGISTRY.yaml at repo root (hand-maintained child repo inventory)"
+      - "Added ADR_INDEX.md at repo root (fleet-wide ADR lookup table)"
+      - "Added scripts/fleet-status.sh and .ps1 (fleet health check — reads FLEET_REGISTRY.yaml)"
+      - "Added scripts/adr-check.sh and .ps1 (ADR index audit — compares index vs repo files)"
+      - "Updated CLAUDE.md: added Fleet Management Files section, ROLLBACK_PROTOCOL.md to locked files"
+      - "Updated bootstrap output: reminder to add new repo to FLEET_REGISTRY.yaml"
+      - "Updated scripts/README.md: documented fleet-status and adr-check scripts"
+      - "total_file_count: 113 → 114 (ROLLBACK_PROTOCOL.md in templates/; fleet files are root-level, not tracked in manifest)"
+    migration: "Child repos get ROLLBACK_PROTOCOL.md via always_sync. Root files (FLEET_REGISTRY.yaml, ADR_INDEX.md, fleet scripts) are imo-creator operational — not synced to children."
+
+  - version: "2.7.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/scripts/detect-staleness.sh (governance artifact freshness audit — 7 checks with configurable thresholds)"
+      - "Added templates/scripts/detect-staleness.ps1 (Windows equivalent)"
+      - "Updated QUARTERLY_HYGIENE_AUDIT.md: added section 2 (Staleness Check), renumbered sections 2-6 to 3-7"
+      - "Updated HYGIENE_AUDITOR.prompt.md: added staleness detection step 5 to PART 1 audit steps"
+      - "total_file_count: 111 → 113"
+    migration: "Child repos should copy detect-staleness.sh to scripts/. Run as part of quarterly hygiene audit."
+
+  - version: "2.6.0"
+    date: "2026-02-15"
+    breaking: true
+    changes:
+      - "REWRITE: templates/scripts/update_from_imo_creator.sh — manifest-driven sync replacing stale v1.3.2 script"
+      - "Added templates/scripts/update_from_imo_creator.ps1 (Windows equivalent)"
+      - "Added templates/child/STARTUP_PROTOCOL.md (CC session startup sequence)"
+      - "RESTRUCTURE: update_manifest section now uses source/destination pairs (breaking change for old sync scripts)"
+      - "Updated bootstrap CLAUDE.md template: added Session Startup section"
+      - "Updated bootstrap step 2: added STARTUP_PROTOCOL.md copy"
+      - "total_file_count: 109 → 111"
+    migration: "Child repos must re-copy update_from_imo_creator.sh (complete rewrite). Copy STARTUP_PROTOCOL.md to repo root. Old sync scripts will not work with new manifest format."
+
+  - version: "2.5.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/scripts/validate-schema-completeness.sh (DBA Gate B metadata enforcement)"
+      - "Added templates/scripts/validate-schema-completeness.ps1 (Windows equivalent)"
+      - "Added templates/scripts/generate-data-dictionary.sh (auto-generate Column Data Dictionary from registry)"
+      - "Added pre-commit CHECK 12: schema completeness enforcement when column_registry.yml is staged"
+      - "Updated CC_OPERATIONAL_DIGEST.md §13: added Schema Completeness Rule and CHECK 12 to enforcement table"
+      - "Updated DOCTRINE_CHECKPOINT.yaml.template: added schema_completeness_verified field"
+      - "Updated column_registry.yml.template: added data_dictionary path to generated_output"
+      - "total_file_count: 106 → 109"
+    migration: "Child repos must copy validate-schema-completeness.sh, generate-data-dictionary.sh, and update pre-commit hook"
+
+  - version: "2.4.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/child/DOCTRINE_CHECKPOINT.yaml.template (plan-before-you-build gate)"
+      - "Added pre-commit CHECK 11: doctrine checkpoint enforcement (existence, 24hr staleness, field completeness, spoke logic validation)"
+      - "Updated bootstrap: DOCTRINE_CHECKPOINT.yaml + CC_OPERATIONAL_DIGEST.md in step 2, validation checks"
+      - "Updated bootstrap CLAUDE.md template: current versions, checkpoint protocol, tier system reference"
+      - "total_file_count: 105 → 106"
+    migration: "Child repos must copy DOCTRINE_CHECKPOINT.yaml.template and update pre-commit hook"
+
+  - version: "2.3.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/child/CC_OPERATIONAL_DIGEST.md (TIER 1 operational rules digest, 497 lines)"
+      - "Replaced flat reading_order with 3-tier loading system (MANDATORY / DOMAIN / AUDIT)"
+      - "Updated DOCTRINE.md.template with tier system, fixed stale version refs, added TOOLS.md and OSAM.md bindings"
+      - "total_file_count: 104 → 105"
+    migration: "Child repos should copy CC_OPERATIONAL_DIGEST.md to repo root and update DOCTRINE.md to reference tier system"
+
+  - version: "2.2.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added templates/scripts/README.md (scripts directory documentation)"
+      - "Housekeeping: archived 21 dead/broken GitHub workflows"
+      - "Housekeeping: synced copilot-instructions.md with current state"
+      - "Housekeeping: added README.md to scripts/, archive/, .github/workflows/"
+      - "Housekeeping: added CONSTITUTION.md ↔ CLAUDE.md cross-reference"
+      - "total_file_count: 103 → 104"
+    migration: "No child repo migration needed — housekeeping only"
+
+  - version: "2.1.0"
+    date: "2026-02-15"
+    breaking: false
+    changes:
+      - "Added column_registry.yml.template (registry-first schema spine)"
+      - "Added codegen-generate.sh (TypeScript/Zod generator from registry)"
+      - "Added codegen-verify.sh (drift detection for generated files)"
+      - "Updated pre-commit hook with CHECK 8 (generated folder protection) and CHECK 9 (codegen drift)"
+      - "Updated OSAM.md v1.0.0 → v1.1.0 with Registry-First Enforcement section"
+      - "Updated ARCHITECTURE.md v2.0.0 → v2.1.0 with OWN-10a/10b/10c (sub-hub table cardinality)"
+      - "total_file_count: 96 → 99"
+    migration: "Child repos must copy column_registry.yml.template, codegen scripts, and update pre-commit hook"
+
   - version: "1.2.0"
     date: "2026-01-30"
     breaking: false
@@ -997,7 +1337,7 @@ verification:
     After pulling templates, verify:
 
     [ ] All files in this manifest exist locally
-    [ ] File count matches total_file_count (81 files)
+    [ ] File count matches total_file_count (114 files)
     [ ] No files were skipped or missed
     [ ] Doctrine files are present and locked
     [ ] Claude prompts are present and locked
@@ -1011,9 +1351,9 @@ verification:
 
 document_control:
   created: "2026-01-30"
-  last_modified: "2026-01-30"
-  version: "1.2.0"
-  doctrine_version: "1.3.0"
+  last_modified: "2026-02-15"
+  version: "2.8.0"
+  doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"

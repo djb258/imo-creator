@@ -17,7 +17,8 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|---------|
-| `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.0.0) |
+| `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
+| `templates/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
 | `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
 
 **Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
@@ -166,7 +167,7 @@ Every repo that derives from imo-creator MUST:
    |----------|------------------|---------|
    | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
    | Tools | templates/integrations/TOOLS.md | 1.1.0 |
-   | OSAM | templates/semantic/OSAM.md | 1.0.0 |
+   | OSAM | templates/semantic/OSAM.md | 1.1.0 |
    | PRD | templates/prd/PRD_HUB.md | 1.0.0 |
    | ADR | templates/adr/ADR.md | 1.0.0 |
    | Checklist | templates/checklists/HUB_COMPLIANCE.md | 1.0.0 |
@@ -278,11 +279,41 @@ Drift is a child repo problem, not a template problem.
 
 ---
 
+## Fleet Management Files (Repo Root)
+
+These files live at the imo-creator repo root (NOT in templates/). They are operational files for managing the fleet of child repos.
+
+| File | Purpose | Maintained By |
+|------|---------|---------------|
+| `FLEET_REGISTRY.yaml` | All child repos, versions, sync status | Human |
+| `ADR_INDEX.md` | Fleet-wide ADR lookup table | Human + AI (after ADR creation) |
+| `scripts/fleet-status.sh` | Fleet health check (reads FLEET_REGISTRY.yaml) | Automated |
+| `scripts/fleet-status.ps1` | Fleet health check (Windows) | Automated |
+| `scripts/adr-check.sh` | ADR index audit (compares index vs repo files) | Automated |
+| `scripts/adr-check.ps1` | ADR index audit (Windows) | Automated |
+
+**Note**: These are NOT templates. They are not tracked in TEMPLATES_MANIFEST.yaml. They operate on imo-creator itself.
+
+---
+
+## RELATIONSHIP TO CONSTITUTION.MD
+
+`CONSTITUTION.md` and `CLAUDE.md` serve different audiences:
+
+| File | Audience | Purpose |
+|------|----------|---------|
+| `CONSTITUTION.md` | Humans, downstream repos | What is governed, invariants, transformation law, enforcement mechanisms |
+| `CLAUDE.md` | AI agents (Claude Code, Copilot) | Locked file registry, permissions, operational rules |
+
+**Do not duplicate content between them.** CONSTITUTION.md defines the law. CLAUDE.md defines what AI can and cannot do under that law. If a rule appears in both, CONSTITUTION.md is authoritative.
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-06 |
-| Last Modified | 2026-01-06 |
-| Status | LOCKED |
+| Last Modified | 2026-02-15 |
+| Status | ACTIVE |
 | Authority | Human only |

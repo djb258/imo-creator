@@ -1,0 +1,65 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCTRINE CHECKPOINT
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Lightweight plan-before-you-build gate for CC (Claude Code / AI agents)
+# Enforcement: Pre-commit hook CHECK 11 — blocks commits with missing/stale checkpoints
+#
+# WHEN TO FILL THIS:
+#   Before EVERY coding session. The pre-commit hook rejects commits if this
+#   file is missing, stale (>24 hours), or has unfilled fields.
+#
+# HOW TO FILL THIS:
+#   1. Read CC_OPERATIONAL_DIGEST.md (TIER 1 — the field manual)
+#   2. Answer each field below based on what you're about to build
+#   3. Save this file, then write code and commit
+#   Takes ~10 seconds. Not 10 minutes.
+#
+# STALENESS RULE:
+#   This checkpoint expires after 24 hours. If you start a new session,
+#   refresh it. This prevents "fill once and coast forever."
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# When was this checkpoint last filled?
+last_verified: "[ISO_DATE]"
+
+# Who verified it?
+verified_by: "[human | claude-code | agent-name]"
+
+# Must match CC_OPERATIONAL_DIGEST.md header version
+digest_version: "[must match CC_OPERATIONAL_DIGEST.md header version]"
+
+checkpoint:
+  # What CTB branch does this change touch?
+  # Valid: sys | data | app | ai | ui
+  ctb_branch_target: "[sys | data | app | ai | ui]"
+
+  # Is the change in a hub or spoke?
+  # Valid: hub | spoke
+  hub_or_spoke: "[hub | spoke]"
+
+  # Where does processing logic live? (MUST be hub, never spoke)
+  # If spoke: set to "n/a" — spokes carry data only
+  # If hub: e.g. "src/data/hub/" or "src/app/services/"
+  logic_placement: "[hub path — e.g. src/data/hub/ | n/a if spoke]"
+
+  # Does this require an ADR? (yes if: new tool, new integration, architecture change)
+  # Valid: yes | no
+  requires_adr: "[yes | no]"
+
+  # Does this change database schema? (yes = update column_registry.yml first)
+  # Valid: yes | no
+  registry_impact: "[yes | no]"
+
+  # Which error table catches failures? (each sub-hub has its own)
+  # If no data processing: set to "n/a"
+  error_table_identified: "[table name | n/a if no data processing]"
+
+  # CONST -> VAR: What constant is being transformed into what variable?
+  # If not a new feature: set to "n/a"
+  transformation: "[brief description | n/a if not a new feature]"
+
+  # Does validate-schema-completeness.sh pass?
+  # If registry_impact is "yes", this MUST be "yes" before commit.
+  # If registry_impact is "no": set to "n/a"
+  schema_completeness_verified: "[yes | no | n/a — yes means validate-schema-completeness.sh passes]"

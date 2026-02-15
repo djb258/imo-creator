@@ -2,7 +2,7 @@
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 
 ---
@@ -285,10 +285,67 @@ Agent is HALTED. Awaiting resolution.
 
 ---
 
+## Registry-First Enforcement
+
+### Canonical Entry Point
+
+`column_registry.yml` is the **canonical entry point** for all data schema in a hub. It is the single source of truth from which all typed artifacts are derived.
+
+| Principle | Rule |
+|-----------|------|
+| Registry is spine | All table definitions originate in `column_registry.yml` |
+| Generated files are projections | TypeScript types and Zod schemas are OUTPUT of the registry, never hand-edited |
+| Registry drives OSAM | OSAM query surfaces must correspond to tables declared in the registry |
+| Registry drives ERDs | ERD structural proof must reflect registry-declared tables |
+
+### Enforcement Gates
+
+Two enforcement mechanisms ensure the registry stays in sync with generated output:
+
+| Gate | Mechanism | Trigger |
+|------|-----------|---------|
+| **Codegen Verify** | `codegen-verify.sh` — diffs registry against generated output | CI pipeline, manual |
+| **Pre-Commit Protection** | Pre-commit hook CHECK 8 + CHECK 9 | Every commit |
+
+#### Pre-Commit CHECK 8: Generated Folder Protection
+
+If staged files include paths matching `src/data/spokes/**/generated/` or `src/data/hub/**/generated/` **AND** the commit does NOT include a change to `column_registry.yml` → **VIOLATION**.
+
+> Generated files modified without registry update. Run codegen-generate.sh after updating column_registry.yml
+
+#### Pre-Commit CHECK 9: Codegen Drift Detection
+
+If `column_registry.yml` is in the staged files, `codegen-verify.sh` runs automatically. If it fails → **VIOLATION**.
+
+> Registry updated but generated files are out of sync. Run codegen-generate.sh
+
+### Reading Order for New Developers and AI Agents
+
+```
+OSAM (this document)
+    │
+    ▼ declares query surfaces and table ownership
+    │
+column_registry.yml
+    │
+    ▼ declares all table schemas (canonical spine)
+    │
+Generated files (src/data/hub/generated/, src/data/spokes/generated/)
+    │
+    ▼ projections — never hand-edited
+    │
+Application code (imports generated types)
+```
+
+**Agents MUST read OSAM first, then column_registry.yml, then generated files. Never the reverse.**
+
+---
+
 ## Version History
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
+| 1.1.0 | 2026-02-15 | imo-creator | Added Registry-First Enforcement section |
 | 1.0.0 | `<DATE>` | `<AUTHOR>` | Initial OSAM declaration |
 
 ---
@@ -327,7 +384,7 @@ Before OSAM is considered valid:
 |-------|-------|
 | Created | `<DATE>` |
 | Last Modified | `<DATE>` |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | LOCKED |
 | Authority | CONSTITUTIONAL |
 | Derives From | CONSTITUTION.md (Transformation Law) |

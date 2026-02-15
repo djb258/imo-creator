@@ -1,0 +1,80 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLEET REGISTRY — Child Repo Inventory
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: Human-maintained (Sovereign)
+# Purpose: Single view of all child repos, doctrine versions, sync status
+# Location: imo-creator repo root (NOT in templates/ — this is operational)
+# Usage: Hand-maintained by human. Audited by scripts/fleet-status.sh
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# HOW TO USE:
+#   - Add a new entry when bootstrapping a child repo
+#   - Update child_version after running update_from_imo_creator.sh in child
+#   - Run scripts/fleet-status.sh to audit fleet health
+#
+# RULES:
+#   - Only the human adds/removes repos from this file
+#   - AI may READ this file but not modify it without explicit permission
+#   - Paths must be accessible from imo-creator's location
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+fleet:
+  parent:
+    name: "imo-creator"
+    current_doctrine_version: "2.8.0"
+    manifest_path: "templates/TEMPLATES_MANIFEST.yaml"
+
+  repos:
+    - name: "barton-outreach-core"
+      path: "../barton-outreach-core"
+      purpose: "Outreach operations hub"
+      child_version: "1.7.0"
+      last_synced: "[UPDATE AFTER SYNC]"
+      status: "ACTIVE"
+
+    - name: "client"
+      path: "../client"
+      purpose: "Client management hub"
+      child_version: "2.0.0"
+      last_synced: "[UPDATE AFTER SYNC]"
+      status: "ACTIVE"
+
+    - name: "company-lifecycle"
+      path: "../company-lifecycle"
+      purpose: "Company lifecycle management hub"
+      child_version: "[NOT FOUND]"
+      last_synced: "[NEVER]"
+      status: "PLANNED"
+
+    - name: "enrichment-hub"
+      path: "../enrichment-hub"
+      purpose: "Data enrichment hub"
+      child_version: "[NOT FOUND]"
+      last_synced: "[NEVER]"
+      status: "PLANNED"
+
+    - name: "sales"
+      path: "../sales"
+      purpose: "Sales operations hub"
+      child_version: "[NOT FOUND]"
+      last_synced: "[NEVER]"
+      status: "PLANNED"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FIELD REFERENCE
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# name:           Short repo name (must match directory name)
+# path:           Relative path from imo-creator root (or absolute)
+# purpose:        One-line description
+# child_version:  Doctrine version from child's DOCTRINE.md (update after sync)
+# last_synced:    ISO date of last update_from_imo_creator.sh run
+# status:         ACTIVE | ARCHIVED | PLANNED
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+document_control:
+  created: "2026-02-15"
+  last_modified: "2026-02-15"
+  maintained_by: "Human only"

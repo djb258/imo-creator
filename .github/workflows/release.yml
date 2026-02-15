@@ -1,3 +1,11 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELEASE AUTOMATION
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Create GitHub release on version tag push
+# Trigger: Tag push matching v*.*.*
+# ═══════════════════════════════════════════════════════════════════════════════
+
 name: Release
 
 on:

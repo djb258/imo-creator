@@ -100,7 +100,41 @@ This checklist MUST be completed for every quarterly hygiene audit.
 
 ---
 
-## 2. IMO Compliance Check
+## 2. Staleness Check
+
+Run the staleness detection script to identify governance artifacts that have drifted behind code changes.
+
+```bash
+# Bash
+./scripts/detect-staleness.sh --verbose
+
+# PowerShell
+.\scripts\detect-staleness.ps1 -Verbose
+```
+
+| Artifact | Threshold | Status | Days Stale | Notes |
+|----------|-----------|--------|------------|-------|
+| [ ] PRD | 30 days after src/ change | | | |
+| [ ] ERD / SCHEMA.md | 14 days after registry change | | | |
+| [ ] OSAM | 30 days after data layer change | | | |
+| [ ] Column Registry | 7 days after SQL change | | | |
+| [ ] Data Dictionary | Immediate (projection of registry) | | | |
+| [ ] Doctrine Checkpoint | 7 days + src/ modified since | | | |
+| [ ] Doctrine Version | Behind parent imo-creator | | | |
+
+**Severity Guide**:
+
+| Severity | Meaning | Gate Impact |
+|----------|---------|-------------|
+| CRITICAL | Column registry behind SQL schema | Blocks compliance |
+| HIGH | PRD, ERD, OSAM, or doctrine version stale | Blocks compliance |
+| MEDIUM | Data dictionary or checkpoint stale | Document, does not block |
+
+**Staleness Finding**: [ ] None / [ ] CRITICAL/HIGH found (see notes) / [ ] MEDIUM only
+
+---
+
+## 3. IMO Compliance Check
 
 For each hub, verify:
 
@@ -112,7 +146,7 @@ For each hub, verify:
 
 ---
 
-## 3. CTB Compliance Check
+## 4. CTB Compliance Check
 
 | Check | Status |
 |-------|--------|
@@ -122,7 +156,7 @@ For each hub, verify:
 
 ---
 
-## 4. ERD Format Check
+## 5. ERD Format Check
 
 | Check | Status |
 |-------|--------|
@@ -133,7 +167,7 @@ For each hub, verify:
 
 ---
 
-## 5. ADR Review
+## 6. ADR Review
 
 | ADR | Date | Summary | Impact |
 |-----|------|---------|--------|
@@ -142,7 +176,7 @@ For each hub, verify:
 
 ---
 
-## 6. Version Assessment
+## 7. Version Assessment
 
 | Check | Status |
 |-------|--------|

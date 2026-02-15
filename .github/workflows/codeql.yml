@@ -1,3 +1,11 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# CODEQL SECURITY ANALYSIS
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Automated security vulnerability scanning via GitHub CodeQL
+# Schedule: Weekly (Monday 01:30 UTC) + on push/PR to master
+# ═══════════════════════════════════════════════════════════════════════════════
+
 name: CodeQL
 
 on:

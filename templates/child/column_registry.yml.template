@@ -1,0 +1,164 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# COLUMN REGISTRY — Canonical Schema Spine
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Inherited)
+# Status: REQUIRED — Every hub with data/ branch MUST have a column_registry.yml
+# Version: 1.0.0
+# Purpose: Single source of truth for all table schemas in this hub
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# RULES:
+#   1. This file is the CANONICAL entry point for all data schema
+#   2. Generated files (TypeScript types, Zod schemas) are PROJECTIONS of this file
+#   3. Generated files are NEVER hand-edited
+#   4. After updating this file, run: ./scripts/codegen-generate.sh
+#   5. Pre-commit hook enforces sync between this file and generated output
+#   6. Each table declares owning_subhub per ARCHITECTURE.md OWN-10
+#   7. Each sub-hub has exactly 1 CANONICAL + 1 ERROR table (OWN-10a, OWN-10b)
+#   8. Additional table types require ADR justification (OWN-10c)
+#
+# READING ORDER:
+#   OSAM → column_registry.yml → generated files
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "1.0.0"
+last_updated: "[YYYY-MM-DD]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HUB IDENTITY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+hub:
+  hub_id: "[HUB_ID]"
+  hub_name: "[HUB_NAME]"
+  universal_join_key: "[UNIVERSAL_JOIN_KEY]"
+  universal_join_key_type: "[DATA_TYPE]"  # e.g., UUID, INTEGER, STRING
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SPINE TABLE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+spine_table:
+  schema: "[SCHEMA_NAME]"
+  name: "[SPINE_TABLE_NAME]"
+  description: "[Authoritative source of entity identity]"
+  owning_subhub: null  # Spine is hub-level, not sub-hub-level
+  leaf_type: "CANONICAL"
+  source_of_truth: true
+  row_identity_strategy: "[UUID | SERIAL | COMPOSITE]"
+  columns:
+    - name: "[UNIVERSAL_JOIN_KEY]"
+      type: "[DATA_TYPE]"
+      nullable: false
+      description: "[Universal join key — minted here, propagated to all sub-hub tables]"
+      semantic_role: "identifier"
+      format: "[UUID | INTEGER | STRING]"
+    # - name: "[COLUMN_NAME]"
+    #   type: "[DATA_TYPE]"
+    #   nullable: "[true | false]"
+    #   description: "[Plain English description]"
+    #   semantic_role: "[identifier | foreign_key | attribute | metric]"
+    #   format: "[UUID | ISO-8601 | USD_CENTS | EMAIL | ENUM | JSON | BOOLEAN]"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SUB-HUB TABLES
+# ═══════════════════════════════════════════════════════════════════════════════
+# Each sub-hub declares exactly:
+#   - 1 CANONICAL table (OWN-10a)
+#   - 1 ERROR table (OWN-10b)
+#   - Additional types require ADR (OWN-10c)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+subhubs: []
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Example sub-hub (delete this block and replace with actual sub-hubs)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # - subhub_id: "[SUBHUB_ID]"
+  #   name: "[SUBHUB_NAME]"
+  #   tables:
+  #
+  #     # CANONICAL table (OWN-10a) — Primary data for this sub-hub
+  #     - schema: "[SCHEMA_NAME]"
+  #       name: "[SUBHUB_CANONICAL_TABLE]"
+  #       description: "[What this table stores]"
+  #       leaf_type: "CANONICAL"
+  #       source_of_truth: true
+  #       row_identity_strategy: "[UUID | SERIAL | COMPOSITE]"
+  #       columns:
+  #         - name: "[UNIVERSAL_JOIN_KEY]"
+  #           type: "[DATA_TYPE]"
+  #           nullable: false
+  #           description: "[FK to spine table]"
+  #           semantic_role: "foreign_key"
+  #           format: "[UUID | INTEGER | STRING]"
+  #         - name: "[COLUMN_NAME]"
+  #           type: "[DATA_TYPE]"
+  #           nullable: "[true | false]"
+  #           description: "[Plain English description]"
+  #           semantic_role: "[identifier | foreign_key | attribute | metric]"
+  #           format: "[FORMAT]"
+  #
+  #     # ERROR table (OWN-10b) — Error tracking for this sub-hub
+  #     - schema: "[SCHEMA_NAME]"
+  #       name: "[SUBHUB_ERRORS_TABLE]"
+  #       description: "[Error/rejection tracking for SUBHUB_NAME]"
+  #       leaf_type: "ERROR"
+  #       source_of_truth: true
+  #       row_identity_strategy: "UUID"
+  #       columns:
+  #         - name: "error_id"
+  #           type: "UUID"
+  #           nullable: false
+  #           description: "Primary key for error record"
+  #           semantic_role: "identifier"
+  #           format: "UUID"
+  #         - name: "[UNIVERSAL_JOIN_KEY]"
+  #           type: "[DATA_TYPE]"
+  #           nullable: true
+  #           description: "FK to spine (nullable — error may occur before entity exists)"
+  #           semantic_role: "foreign_key"
+  #           format: "[UUID | INTEGER | STRING]"
+  #         - name: "error_type"
+  #           type: "TEXT"
+  #           nullable: false
+  #           description: "Discriminator column — classifies the error"
+  #           semantic_role: "attribute"
+  #           format: "ENUM"
+  #         - name: "error_message"
+  #           type: "TEXT"
+  #           nullable: false
+  #           description: "Human-readable error description"
+  #           semantic_role: "attribute"
+  #           format: "STRING"
+  #         - name: "created_at"
+  #           type: "TIMESTAMPTZ"
+  #           nullable: false
+  #           description: "When the error was recorded"
+  #           semantic_role: "attribute"
+  #           format: "ISO-8601"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# GENERATED OUTPUT PATHS
+# ═══════════════════════════════════════════════════════════════════════════════
+# These paths are where codegen-generate.sh writes output.
+# Files in these paths are PROJECTIONS — never hand-edit.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+generated_output:
+  hub_types: "src/data/hub/generated/"
+  spoke_types: "src/data/spokes/generated/"
+  data_dictionary: "docs/data/COLUMN_DATA_DICTIONARY.md"
+  marker: "// AUTO-GENERATED FROM column_registry.yml — DO NOT EDIT"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCUMENT CONTROL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+document_control:
+  created: "[YYYY-MM-DD]"
+  last_modified: "[YYYY-MM-DD]"
+  status: "DRAFT"
+  authority: "imo-creator (Inherited)"
+  change_protocol: "Update registry → run codegen-generate.sh → commit both"

@@ -1,3 +1,11 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# REUSABLE CTB ENFORCEMENT
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Reusable workflow for CTB doctrine enforcement (called by other workflows)
+# Trigger: workflow_call only
+# ═══════════════════════════════════════════════════════════════════════════════
+
 name: Reusable CTB Enforcement
 
 on:
