@@ -164,7 +164,7 @@ Every repo that derives from imo-creator MUST:
 
    | Template | imo-creator Path | Version |
    |----------|------------------|---------|
-   | Architecture | templates/doctrine/ARCHITECTURE.md | 2.0.0 |
+   | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
    | Tools | templates/integrations/TOOLS.md | 1.1.0 |
    | OSAM | templates/semantic/OSAM.md | 1.0.0 |
    | PRD | templates/prd/PRD_HUB.md | 1.0.0 |

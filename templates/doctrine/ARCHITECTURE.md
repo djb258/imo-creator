@@ -1,6 +1,6 @@
 # ARCHITECTURE — CTB Constitutional Law
 
-**Doctrine Version**: 2.0.0
+**Doctrine Version**: 2.1.0
 **Status**: LOCKED (CONSTITUTIONAL)
 **Authority**: IMO-Creator Sovereign
 **Change Protocol**: ADR + Human Approval ONLY
@@ -353,6 +353,9 @@ Every PID must carry:
 |----|------------|
 | OWN-09 | Tables owned by exactly one hub |
 | OWN-10 | Tables owned by exactly one sub-hub (CC-03) |
+| OWN-10a | Each sub-hub has exactly one CANONICAL table |
+| OWN-10b | Each sub-hub has exactly one ERROR table |
+| OWN-10c | Additional table types (STAGING, MV, REGISTRY) require ADR justification |
 | OWN-11 | Cross-lane joins forbidden unless declared |
 | OWN-12 | Metadata lives in data/schema/ |
 
@@ -382,8 +385,8 @@ These invariants apply to ALL derived systems. They may NOT be overridden.
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-06 |
-| Last Modified | 2026-02-06 |
-| Doctrine Version | 2.0.0 |
+| Last Modified | 2026-02-15 |
+| Doctrine Version | 2.1.0 |
 | CTB Version | 2.0.0 |
 | Status | LOCKED (CONSTITUTIONAL) |
 | Change Protocol | ADR + Human Approval ONLY |

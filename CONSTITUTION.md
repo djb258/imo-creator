@@ -132,6 +132,7 @@ AI employees MUST FAIL HARD if:
 - **CTB branches**: `sys` / `data` / `app` / `ai` / `ui`
 - **CC descent gates**: PRD before code, ADR before code
 - **Hub owns logic**: Spokes carry data only, no logic
+- **Sub-hub table cardinality**: Exactly 1 CANONICAL + 1 ERROR table per sub-hub (ADR-001)
 - **Forbidden folders**: `utils`, `helpers`, `common`, `shared`, `lib`, `misc`
 - **Doctrine-first**: Structure before code, gates before artifacts
 
