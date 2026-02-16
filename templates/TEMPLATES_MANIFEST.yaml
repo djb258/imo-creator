@@ -3,7 +3,7 @@
 # Authority: CONSTITUTIONAL
 # Scope: PARENT (imo-creator - repo of repos)
 # Purpose: Machine-readable index for AI agents - file list, reading order, bootstrap
-# Version: 2.8.0
+# Version: 2.9.0
 # Last Updated: 2026-01-30
 # ═══════════════════════════════════════════════════════════════════════════════
 #
@@ -22,9 +22,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "2.8.0"
-  last_updated: "2026-02-15"
-  total_file_count: 114  # Run: find templates -type f | wc -l to verify
+  version: "2.9.0"
+  last_updated: "2026-02-16"
+  total_file_count: 115  # Run: find templates -type f | wc -l to verify
   ctb_hardening_version: "2.0.0"
   note: "CTB Hardening refactor - ARCHITECTURE.md consolidates architecture doctrine"
   authority: "CONSTITUTIONAL"
@@ -334,6 +334,12 @@ files:
       purpose: "Quarterly audit checklist"
       required: true
       action: "Execute quarterly"
+
+    - path: "templates/checklists/REPO_HOUSEKEEPING.md"
+      purpose: "Structural housekeeping audit — repo file/folder hygiene, debris, references, secrets"
+      required: true
+      action: "Execute quarterly or post-refactor"
+      note: "Complement to QUARTERLY_HYGIENE_AUDIT.md (governance) and HUB_COMPLIANCE.md (hub readiness)"
 
   audit:
     - path: "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
@@ -1011,7 +1017,7 @@ bootstrap:
         | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
         | Tools | templates/integrations/TOOLS.md | 1.1.0 |
         | OSAM | templates/semantic/OSAM.md | 1.1.0 |
-        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 2.8.0 |
+        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 2.9.0 |
 
         ## This Hub
 
@@ -1176,6 +1182,8 @@ update_manifest:
         destination: "DOCTRINE_CHECKPOINT.yaml"
       - source: "templates/checklists/QUARTERLY_HYGIENE_AUDIT.md"
         destination: "docs/checklists/QUARTERLY_HYGIENE_AUDIT.md"
+      - source: "templates/checklists/REPO_HOUSEKEEPING.md"
+        destination: "docs/checklists/REPO_HOUSEKEEPING.md"
 
   never_sync:
     description: "These are child-repo specific, never overwrite"
@@ -1199,6 +1207,16 @@ update_manifest:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "2.9.0"
+    date: "2026-02-16"
+    breaking: false
+    changes:
+      - "Added templates/checklists/REPO_HOUSEKEEPING.md (structural housekeeping audit — 19 checks across 3 phases)"
+      - "Companion to QUARTERLY_HYGIENE_AUDIT.md (governance) and HUB_COMPLIANCE.md (hub readiness)"
+      - "Audit-first, fix-never design: Phase 1 read-only scan, Phase 2 report, Phase 3 human-approved fix"
+      - "total_file_count: 114 → 115"
+    migration: "Child repos should copy REPO_HOUSEKEEPING.md to docs/checklists/. Execute quarterly or post-refactor."
+
   - version: "2.8.0"
     date: "2026-02-15"
     breaking: false
@@ -1337,7 +1355,7 @@ verification:
     After pulling templates, verify:
 
     [ ] All files in this manifest exist locally
-    [ ] File count matches total_file_count (114 files)
+    [ ] File count matches total_file_count (115 files)
     [ ] No files were skipped or missed
     [ ] Doctrine files are present and locked
     [ ] Claude prompts are present and locked
@@ -1351,8 +1369,8 @@ verification:
 
 document_control:
   created: "2026-01-30"
-  last_modified: "2026-02-15"
-  version: "2.8.0"
+  last_modified: "2026-02-16"
+  version: "2.9.0"
   doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"
