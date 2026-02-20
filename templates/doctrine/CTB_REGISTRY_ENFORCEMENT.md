@@ -185,7 +185,22 @@ Only `ROGUE_TABLE` is a violation (fail-closed: unregistered tables in the live 
 | `.ctb-drift-audit-report.json` | JSON | Machine-readable: surfaces, counts, status |
 | `.ctb-drift-audit-report.md` | Markdown | Human-readable: tables, results, doctrine reference |
 
-### 6.6 Relationship to Fail-Closed Model
+### 6.6 Enforcement Modes
+
+| Mode | Flag | Failure Condition | Use Case |
+|------|------|-------------------|----------|
+| **strict** | `--mode=strict` (default) | ANY rogue table is a VIOLATION | Greenfield repos, post-migration repos |
+| **baseline** | `--mode=baseline` | Only NEW rogue tables (not in baseline) and NEW undocumented columns on CANONICAL tables are VIOLATIONS. Known legacy drift from baseline is a WARNING. | Repos with existing legacy tables being migrated |
+
+#### Baseline Storage
+
+- **File**: `docs/CTB_DRIFT_BASELINE.json` (repo-level, NOT a template)
+- **Create**: `DATABASE_URL=... scripts/ctb-drift-audit.sh --write-baseline`
+- **Contents**: Snapshot of known rogue tables and CANONICAL column state at capture time
+- **Rule**: Baseline captures the current state. New entropy after baseline = VIOLATION. Legacy entropy in baseline = WARNING.
+- **Expiry**: Baselines should be refreshed after each migration cycle. Stale baselines mask new drift.
+
+### 6.7 Relationship to Fail-Closed Model
 
 The drift audit is the **runtime verification layer** of the fail-closed model:
 
@@ -233,6 +248,6 @@ The drift audit does not replace the other gates — it catches what they cannot
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
 | Status | LOCKED |
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Change Protocol | ADR + Human Approval Required |
 | Related | ADR-001, ARCHITECTURE.md Part X, DBA_ENFORCEMENT_DOCTRINE.md |

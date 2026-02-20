@@ -6,7 +6,14 @@
 # Purpose: Detect drift between live database state, ctb.table_registry,
 #          and column_registry.yml
 # Doctrine: CTB_REGISTRY_ENFORCEMENT.md §6
-# Usage: DATABASE_URL="postgres://..." ./scripts/ctb-drift-audit.sh
+# Usage:
+#   DATABASE_URL="postgres://..." ./scripts/ctb-drift-audit.sh [OPTIONS]
+#
+# Options:
+#   --mode=strict     Fail on ANY rogue table (default)
+#   --mode=baseline   Fail only on NEW rogue tables since last baseline
+#   --write-baseline  Capture current state to docs/CTB_DRIFT_BASELINE.json
+#
 # Exit: 0 = no drift, 1 = drift detected, 2 = dependency/connection error
 # ═══════════════════════════════════════════════════════════════════════════════
 #
@@ -23,6 +30,12 @@
 #   COLUMN_DRIFT   — column mismatch between DB and column_registry.yml
 #   REGISTRY_DESYNC — ctb.table_registry disagrees with column_registry.yml
 #
+# MODES:
+#   strict   — ROGUE_TABLE = VIOLATION (fail on any rogue table)
+#   baseline — Only NEW rogue tables (not in baseline) are VIOLATIONS.
+#              Known rogue tables from baseline are WARNINGS.
+#              New undocumented columns on CANONICAL tables are VIOLATIONS.
+#
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -euo pipefail
@@ -36,12 +49,46 @@ NC='\033[0m'
 VIOLATIONS=0
 WARNINGS=0
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null || date)
+BASELINE_FILE="docs/CTB_DRIFT_BASELINE.json"
+
+# ───────────────────────────────────────────────────────────────────
+# ARGUMENT PARSING
+# ───────────────────────────────────────────────────────────────────
+MODE="strict"
+WRITE_BASELINE=false
+
+for arg in "$@"; do
+    case "$arg" in
+        --mode=strict)   MODE="strict" ;;
+        --mode=baseline) MODE="baseline" ;;
+        --write-baseline) WRITE_BASELINE=true ;;
+        --help|-h)
+            echo "Usage: DATABASE_URL=\"postgres://...\" $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --mode=strict      Fail on ANY rogue table (default)"
+            echo "  --mode=baseline    Fail only on NEW rogue tables since last baseline"
+            echo "  --write-baseline   Capture current state to $BASELINE_FILE"
+            echo ""
+            exit 0
+            ;;
+        *)
+            echo "Unknown argument: $arg"
+            echo "Use --help for usage"
+            exit 2
+            ;;
+    esac
+done
 
 echo ""
 echo "═══════════════════════════════════════════════════════════════"
 echo "  CTB DRIFT AUDIT"
 echo "═══════════════════════════════════════════════════════════════"
 echo "  Date: $TIMESTAMP"
+echo "  Mode: $MODE"
+if [ "$WRITE_BASELINE" = true ]; then
+    echo "  Action: WRITE BASELINE"
+fi
 echo ""
 
 # ───────────────────────────────────────────────────────────────────
@@ -57,6 +104,14 @@ if [ -z "${DATABASE_URL:-}" ]; then
     echo -e "${RED}[ERROR]${NC} DATABASE_URL environment variable is required"
     echo "        Usage: DATABASE_URL=\"postgres://...\" ./scripts/ctb-drift-audit.sh"
     exit 2
+fi
+
+if ! command -v jq &> /dev/null; then
+    echo -e "${YELLOW}[WARNING]${NC} jq not installed — baseline mode unavailable"
+    if [ "$MODE" = "baseline" ]; then
+        echo -e "${RED}[ERROR]${NC} jq is required for baseline mode"
+        exit 2
+    fi
 fi
 
 # ───────────────────────────────────────────────────────────────────
@@ -77,7 +132,41 @@ fi
 echo "  Database:  [connected via DATABASE_URL]"
 echo "  Registry:  ${REGISTRY_FILE:-<not found>}"
 echo "  yq:        $HAS_YQ"
+echo "  Baseline:  ${BASELINE_FILE}"
 echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# LOAD BASELINE (if baseline mode)
+# ───────────────────────────────────────────────────────────────────
+BASELINE_ROGUE_TABLES=()
+BASELINE_COLUMNS=()
+BASELINE_LOADED=false
+
+if [ "$MODE" = "baseline" ]; then
+    if [ -f "$BASELINE_FILE" ]; then
+        echo "─── Loading Baseline ───────────────────────────────────────"
+        # Extract known rogue tables from baseline
+        while IFS= read -r table; do
+            [ -z "$table" ] && continue
+            BASELINE_ROGUE_TABLES+=("$table")
+        done < <(jq -r '.known_rogue_tables[]? // empty' "$BASELINE_FILE" 2>/dev/null)
+
+        # Extract known column state from baseline
+        while IFS= read -r entry; do
+            [ -z "$entry" ] && continue
+            BASELINE_COLUMNS+=("$entry")
+        done < <(jq -r '.canonical_columns[]? // empty' "$BASELINE_FILE" 2>/dev/null)
+
+        BASELINE_LOADED=true
+        echo -e "  ${GREEN}[OK]${NC} Baseline loaded: ${#BASELINE_ROGUE_TABLES[@]} known rogue table(s), ${#BASELINE_COLUMNS[@]} canonical column(s)"
+        echo ""
+    else
+        echo -e "${YELLOW}[WARNING]${NC} Baseline file not found: $BASELINE_FILE"
+        echo "          Run with --write-baseline to create it"
+        echo "          Falling back to strict mode behavior"
+        echo ""
+    fi
+fi
 
 # ───────────────────────────────────────────────────────────────────
 # HELPERS
@@ -94,6 +183,28 @@ warning() {
 
 run_sql() {
     psql "$DATABASE_URL" -t -A -c "$1" 2>/dev/null
+}
+
+# Check if a table is in the baseline rogue list
+is_baseline_rogue() {
+    local table="$1"
+    for bt in "${BASELINE_ROGUE_TABLES[@]}"; do
+        if [ "$bt" = "$table" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Check if a column is in the baseline canonical columns list
+is_baseline_column() {
+    local entry="$1"
+    for bc in "${BASELINE_COLUMNS[@]}"; do
+        if [ "$bc" = "$entry" ]; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 # ───────────────────────────────────────────────────────────────────
@@ -158,6 +269,7 @@ echo ""
 echo "─── Surface C: column_registry.yml ───────────────────────────"
 
 YAML_TABLES=()
+CANONICAL_TABLES=()
 if [ -n "$REGISTRY_FILE" ] && [ "$HAS_YQ" = true ]; then
     # Spine table
     SPINE_SCHEMA=$(yq '.spine_table.schema' "$REGISTRY_FILE" 2>/dev/null || echo "null")
@@ -180,11 +292,18 @@ if [ -n "$REGISTRY_FILE" ] && [ "$HAS_YQ" = true ]; then
                 for (( t=0; t<TABLE_COUNT; t++ )); do
                     T_NAME=$(yq ".subhubs[$s].tables[$t].name" "$REGISTRY_FILE" 2>/dev/null || echo "null")
                     T_SCHEMA=$(yq ".subhubs[$s].tables[$t].schema" "$REGISTRY_FILE" 2>/dev/null || echo "null")
+                    T_LEAF=$(yq ".subhubs[$s].tables[$t].leaf_type" "$REGISTRY_FILE" 2>/dev/null || echo "null")
                     if [ "$T_NAME" != "null" ] && [ -n "$T_NAME" ] && ! echo "$T_NAME" | grep -qE '^\['; then
+                        FULL_NAME=""
                         if [ "$T_SCHEMA" != "null" ] && [ -n "$T_SCHEMA" ] && ! echo "$T_SCHEMA" | grep -qE '^\['; then
-                            YAML_TABLES+=("${T_SCHEMA}.${T_NAME}")
+                            FULL_NAME="${T_SCHEMA}.${T_NAME}"
                         else
-                            YAML_TABLES+=("public.${T_NAME}")
+                            FULL_NAME="public.${T_NAME}"
+                        fi
+                        YAML_TABLES+=("$FULL_NAME")
+                        # Track CANONICAL tables for baseline mode column checks
+                        if [ "$T_LEAF" = "CANONICAL" ]; then
+                            CANONICAL_TABLES+=("$FULL_NAME")
                         fi
                     fi
                 done
@@ -193,6 +312,7 @@ if [ -n "$REGISTRY_FILE" ] && [ "$HAS_YQ" = true ]; then
     fi
 
     echo "  Found ${#YAML_TABLES[@]} table(s) in column_registry.yml"
+    echo "  CANONICAL tables: ${#CANONICAL_TABLES[@]}"
 elif [ -z "$REGISTRY_FILE" ]; then
     echo -e "  ${YELLOW}[SKIP]${NC} column_registry.yml not found"
 else
@@ -205,12 +325,22 @@ echo ""
 # ───────────────────────────────────────────────────────────────────
 echo "─── Drift Check 1: Rogue Tables (DB vs ctb.table_registry) ──"
 
+ROGUE_LIST=()
 if [ "$CTB_REGISTRY_EXISTS" = "t" ] && [ -n "$DB_TABLES" ]; then
     ROGUE_COUNT=0
     while IFS= read -r db_table; do
         [ -z "$db_table" ] && continue
         if ! echo "$REGISTRY_TABLES" | grep -qx "$db_table"; then
-            violation "ROGUE_TABLE: $db_table exists in DB but NOT in ctb.table_registry"
+            ROGUE_LIST+=("$db_table")
+            if [ "$MODE" = "baseline" ] && [ "$BASELINE_LOADED" = true ]; then
+                if is_baseline_rogue "$db_table"; then
+                    warning "ROGUE_TABLE (KNOWN): $db_table — in baseline, not new entropy"
+                else
+                    violation "ROGUE_TABLE (NEW): $db_table — NOT in baseline, new unregistered table"
+                fi
+            else
+                violation "ROGUE_TABLE: $db_table exists in DB but NOT in ctb.table_registry"
+            fi
             ((ROGUE_COUNT++))
         fi
     done <<< "$DB_TABLES"
@@ -261,7 +391,6 @@ if [ ${#YAML_TABLES[@]} -gt 0 ] && [ -n "$DB_TABLES" ]; then
                 FOUND=true
                 break
             fi
-            # Compare bare table names (without schema)
             db_bare="${db_table##*.}"
             yaml_bare="${yaml_table##*.}"
             if [ "$db_bare" = "$yaml_bare" ]; then
@@ -328,7 +457,6 @@ echo "─── Drift Check 5: Registry Desync ───────────
 if [ "$CTB_REGISTRY_EXISTS" = "t" ] && [ ${#YAML_TABLES[@]} -gt 0 ]; then
     DESYNC_COUNT=0
 
-    # Tables in ctb.table_registry but not in YAML
     while IFS= read -r reg_table; do
         [ -z "$reg_table" ] && continue
         FOUND=false
@@ -348,7 +476,6 @@ if [ "$CTB_REGISTRY_EXISTS" = "t" ] && [ ${#YAML_TABLES[@]} -gt 0 ]; then
         fi
     done <<< "$REGISTRY_TABLES"
 
-    # Tables in YAML but not in ctb.table_registry
     for yaml_table in "${YAML_TABLES[@]}"; do
         FOUND=false
         while IFS= read -r reg_table; do
@@ -383,10 +510,20 @@ echo ""
 echo "─── Drift Check 6: Column Drift ─────────────────────────────"
 
 COLUMN_DRIFT_COUNT=0
+CANONICAL_COLUMN_STATE=()
 if [ ${#YAML_TABLES[@]} -gt 0 ] && [ "$HAS_YQ" = true ] && [ -n "$REGISTRY_FILE" ]; then
     for yaml_table in "${YAML_TABLES[@]}"; do
         yaml_schema="${yaml_table%%.*}"
         yaml_name="${yaml_table##*.}"
+
+        # Determine if this is a CANONICAL table
+        IS_CANONICAL=false
+        for ct in "${CANONICAL_TABLES[@]}"; do
+            if [ "$ct" = "$yaml_table" ]; then
+                IS_CANONICAL=true
+                break
+            fi
+        done
 
         # Get DB columns for this table
         DB_COLS=$(run_sql "
@@ -397,10 +534,18 @@ if [ ${#YAML_TABLES[@]} -gt 0 ] && [ "$HAS_YQ" = true ] && [ -n "$REGISTRY_FILE"
         " 2>/dev/null || echo "")
 
         if [ -z "$DB_COLS" ]; then
-            continue  # Table doesn't exist in DB — already caught in check 4
+            continue
         fi
 
-        # Get YAML columns for this table (search all table paths)
+        # Record CANONICAL column state for baseline
+        if [ "$IS_CANONICAL" = true ]; then
+            while IFS= read -r col; do
+                [ -z "$col" ] && continue
+                CANONICAL_COLUMN_STATE+=("${yaml_table}.${col}")
+            done <<< "$DB_COLS"
+        fi
+
+        # Get YAML columns for this table
         YAML_COLS=""
 
         # Check spine
@@ -447,7 +592,16 @@ $COL_NAME"
             if [ -n "$EXTRA_COLS" ]; then
                 while IFS= read -r col; do
                     [ -z "$col" ] && continue
-                    warning "COLUMN_DRIFT: $yaml_table.$col exists in DB but NOT in column_registry.yml"
+                    ENTRY="${yaml_table}.${col}"
+                    if [ "$MODE" = "baseline" ] && [ "$IS_CANONICAL" = true ] && [ "$BASELINE_LOADED" = true ]; then
+                        if ! is_baseline_column "$ENTRY"; then
+                            violation "COLUMN_DRIFT (NEW on CANONICAL): $ENTRY exists in DB but NOT in column_registry.yml"
+                        else
+                            warning "COLUMN_DRIFT (KNOWN): $ENTRY — in baseline"
+                        fi
+                    else
+                        warning "COLUMN_DRIFT: $ENTRY exists in DB but NOT in column_registry.yml"
+                    fi
                     ((COLUMN_DRIFT_COUNT++))
                 done <<< "$EXTRA_COLS"
             fi
@@ -473,6 +627,62 @@ fi
 echo ""
 
 # ───────────────────────────────────────────────────────────────────
+# WRITE BASELINE (if --write-baseline)
+# ───────────────────────────────────────────────────────────────────
+if [ "$WRITE_BASELINE" = true ]; then
+    echo "─── Writing Baseline ─────────────────────────────────────────"
+
+    # Ensure docs/ directory exists
+    mkdir -p "$(dirname "$BASELINE_FILE")"
+
+    # Build JSON arrays for jq
+    ROGUE_JSON="[]"
+    if [ ${#ROGUE_LIST[@]} -gt 0 ]; then
+        ROGUE_JSON=$(printf '%s\n' "${ROGUE_LIST[@]}" | jq -R . | jq -s .)
+    fi
+
+    CANONICAL_COL_JSON="[]"
+    if [ ${#CANONICAL_COLUMN_STATE[@]} -gt 0 ]; then
+        CANONICAL_COL_JSON=$(printf '%s\n' "${CANONICAL_COLUMN_STATE[@]}" | jq -R . | jq -s .)
+    fi
+
+    DB_TABLES_JSON="[]"
+    if [ -n "$DB_TABLES" ]; then
+        DB_TABLES_JSON=$(echo "$DB_TABLES" | sed '/^$/d' | jq -R . | jq -s .)
+    fi
+
+    jq -n \
+        --arg timestamp "$TIMESTAMP" \
+        --arg mode "$MODE" \
+        --argjson db_table_count "$DB_TABLE_COUNT" \
+        --argjson registry_table_count "$REGISTRY_TABLE_COUNT" \
+        --argjson yaml_table_count "${#YAML_TABLES[@]}" \
+        --argjson known_rogue_tables "$ROGUE_JSON" \
+        --argjson canonical_columns "$CANONICAL_COL_JSON" \
+        --argjson all_db_tables "$DB_TABLES_JSON" \
+        '{
+            "baseline_version": "1.0.0",
+            "created": $timestamp,
+            "mode_at_capture": $mode,
+            "surfaces": {
+                "db_tables": $db_table_count,
+                "ctb_registry_tables": $registry_table_count,
+                "yaml_tables": $yaml_table_count
+            },
+            "known_rogue_tables": $known_rogue_tables,
+            "canonical_columns": $canonical_columns,
+            "all_db_tables": $all_db_tables,
+            "note": "Baseline captured by ctb-drift-audit.sh --write-baseline. Tables listed here are known legacy drift — not new entropy."
+        }' > "$BASELINE_FILE"
+
+    echo -e "  ${GREEN}[OK]${NC} Baseline written to $BASELINE_FILE"
+    echo "  Known rogue tables: ${#ROGUE_LIST[@]}"
+    echo "  Canonical columns:  ${#CANONICAL_COLUMN_STATE[@]}"
+    echo "  All DB tables:      $DB_TABLE_COUNT"
+    echo ""
+fi
+
+# ───────────────────────────────────────────────────────────────────
 # GENERATE REPORTS
 # ───────────────────────────────────────────────────────────────────
 STATUS=$([ "$VIOLATIONS" -gt 0 ] && echo "FAIL" || echo "PASS")
@@ -482,6 +692,8 @@ REPORT_MD=".ctb-drift-audit-report.md"
 cat > "$REPORT_JSON" << ENDJSON
 {
   "timestamp": "$TIMESTAMP",
+  "mode": "$MODE",
+  "baseline_loaded": $BASELINE_LOADED,
   "database": "connected",
   "registry_file": "${REGISTRY_FILE:-null}",
   "ctb_table_registry_exists": $([ "$CTB_REGISTRY_EXISTS" = "t" ] && echo "true" || echo "false"),
@@ -500,6 +712,8 @@ cat > "$REPORT_MD" << ENDMD
 # CTB Drift Audit Report
 
 **Date**: $TIMESTAMP
+**Mode**: $MODE
+**Baseline Loaded**: $BASELINE_LOADED
 **Status**: **$STATUS**
 
 ## Surfaces Compared
@@ -514,9 +728,18 @@ cat > "$REPORT_MD" << ENDMD
 
 | Metric | Count |
 |--------|-------|
-| Violations (ROGUE) | $VIOLATIONS |
-| Warnings (PHANTOM/ORPHAN/GHOST/DESYNC/DRIFT) | $WARNINGS |
+| Violations | $VIOLATIONS |
+| Warnings | $WARNINGS |
 | **Overall** | **$STATUS** |
+
+## Mode: $MODE
+
+$(if [ "$MODE" = "baseline" ]; then
+    echo "Baseline mode: only NEW rogue tables and NEW undocumented columns on CANONICAL tables are violations."
+    echo "Known legacy drift from baseline is reported as warnings."
+else
+    echo "Strict mode: ALL rogue tables are violations."
+fi)
 
 ## Doctrine
 
@@ -533,19 +756,24 @@ echo ""
 echo "═══════════════════════════════════════════════════════════════"
 
 if [ "$VIOLATIONS" -gt 0 ]; then
-    echo -e "${RED}FAILED${NC}: $VIOLATIONS violation(s), $WARNINGS warning(s)"
+    echo -e "${RED}FAILED${NC}: $VIOLATIONS violation(s), $WARNINGS warning(s) [mode=$MODE]"
     echo ""
-    echo "ROGUE tables (in DB, not registered) are VIOLATIONS."
-    echo "All other drift classes are WARNINGS."
+    if [ "$MODE" = "baseline" ]; then
+        echo "NEW rogue tables or NEW undocumented CANONICAL columns detected."
+        echo "These are not in the baseline — they represent new entropy."
+    else
+        echo "ROGUE tables (in DB, not registered) are VIOLATIONS."
+        echo "All other drift classes are WARNINGS."
+    fi
     echo "Doctrine: CTB_REGISTRY_ENFORCEMENT.md §6"
     echo ""
     exit 1
 elif [ "$WARNINGS" -gt 0 ]; then
-    echo -e "${YELLOW}PASSED WITH WARNINGS${NC}: $WARNINGS warning(s)"
+    echo -e "${YELLOW}PASSED WITH WARNINGS${NC}: $WARNINGS warning(s) [mode=$MODE]"
     echo ""
     exit 0
 else
-    echo -e "${GREEN}PASSED${NC}: No drift detected"
+    echo -e "${GREEN}PASSED${NC}: No drift detected [mode=$MODE]"
     echo ""
     exit 0
 fi

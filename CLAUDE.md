@@ -20,7 +20,7 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 | `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
 | `templates/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
 | `templates/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
-| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement (v1.0.0) |
+| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement (v1.2.0) |
 | `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract (v1.0.0) |
 | `templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
 | `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
@@ -136,6 +136,17 @@ FORBIDDEN:
 | INTERPRET | ❌ Prohibited. Apply as written. |
 
 **Violation of any LOCKED file is a doctrine violation. Stop immediately.**
+
+### Phase Two Lockdown (v3.0.2)
+
+The CTB drift audit is now **mandatory** and **tamper-resistant**:
+
+| Component | Purpose |
+|-----------|---------|
+| `ctb-governance-required.yml` | Mandatory CI workflow — runs fail-closed gate + drift audit on every PR/push |
+| `ctb-drift-audit.sh` | **LOCKED** — modification requires ADR-REF trailer (CHECK 15) |
+| `--mode=baseline\|strict` | Baseline mode allows legacy tables while blocking new entropy |
+| `docs/CTB_DRIFT_BASELINE.json` | Captures known legacy drift state (repo-level, not template) |
 
 ---
 

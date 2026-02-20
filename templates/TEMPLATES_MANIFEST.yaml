@@ -22,11 +22,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "3.0.1"
+  version: "3.0.2"
   last_updated: "2026-02-20"
   total_file_count: 132  # Run: find templates -type f | wc -l to verify
-  ctb_hardening_version: "3.0.1"
-  note: "Fail-closed governance — 4-gate CI, DB enforcement, Gatekeeper module, registry-first enforcement, live drift audit"
+  ctb_hardening_version: "3.0.2"
+  note: "Phase Two Lockdown — mandatory governance pipeline, baseline/strict drift modes, tamper-resistant auditor"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -185,7 +185,7 @@ files:
       purpose: "Registry-first enforcement — build-time, database, application gates, and live drift audit"
       required: true
       locked: true
-      version: "1.1.0"
+      version: "1.2.0"
 
     - path: "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
       purpose: "Fail-closed CI contract — default deny, 4-gate enforcement, no continue-on-error"
@@ -684,8 +684,9 @@ files:
       required: true
 
     - path: "templates/scripts/ctb-drift-audit.sh"
-      purpose: "CTB drift audit — live database vs ctb.table_registry vs column_registry.yml drift detection"
+      purpose: "CTB drift audit — live database vs ctb.table_registry vs column_registry.yml drift detection (baseline/strict modes)"
       required: true
+      locked: true
 
     - path: "templates/scripts/hooks/pre-commit"
       purpose: "Pre-commit hook (includes registry-first, manifest sync, doctrine checkpoint, and schema completeness enforcement gates)"
@@ -1335,6 +1336,21 @@ update_manifest:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "3.0.2"
+    date: "2026-02-20"
+    breaking: false
+    changes:
+      - "PHASE TWO LOCKDOWN: Drift audit is now mandatory, fail-closed, and tamper-resistant"
+      - "Added ctb-governance-required.yml — mandatory governance pipeline running both reusable gates on PR/push/dispatch"
+      - "Updated ctb-drift-audit.sh with --mode=baseline|strict and --write-baseline support"
+      - "Baseline mode: only NEW rogue tables and NEW undocumented CANONICAL columns fail; known legacy = warning"
+      - "Baseline storage: docs/CTB_DRIFT_BASELINE.json (repo-level, not template)"
+      - "Marked ctb-drift-audit.sh as locked in manifest (tamper-protected)"
+      - "Added pre-commit CHECK 15: ADR-REF trailer required when modifying ctb-drift-audit.sh"
+      - "Updated CTB_REGISTRY_ENFORCEMENT.md §6.6 with enforcement modes documentation (v1.2.0)"
+      - "total_file_count: 132 (unchanged — no new template files)"
+    migration: "Child repos should: (1) Update ctb-drift-audit.sh from always_sync, (2) Update pre-commit hook, (3) Add ctb-governance-required.yml to CI or wire own pipeline to call reusable workflows, (4) Optionally run --write-baseline to capture legacy state."
+
   - version: "3.0.1"
     date: "2026-02-20"
     breaking: false
@@ -1524,7 +1540,7 @@ verification:
 document_control:
   created: "2026-01-30"
   last_modified: "2026-02-20"
-  version: "3.0.1"
+  version: "3.0.2"
   doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"

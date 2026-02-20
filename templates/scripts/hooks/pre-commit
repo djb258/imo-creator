@@ -360,6 +360,47 @@ if [ -n "$SRC_CODE_STAGED" ]; then
 fi
 
 # ───────────────────────────────────────────────────────────────────
+# CHECK 15: Tamper protection for ctb-drift-audit.sh (locked script)
+# ───────────────────────────────────────────────────────────────────
+# If ctb-drift-audit.sh is staged, the commit message must contain
+# an ADR reference trailer: "ADR-REF: ADR-XXX"
+# This prevents unauthorized modification of the drift auditor.
+DRIFT_AUDIT_STAGED=$(echo "$STAGED_FILES" | grep -E "ctb-drift-audit\.sh$" || true)
+
+if [ -n "$DRIFT_AUDIT_STAGED" ]; then
+    # Read the commit message from the file (if available via prepare-commit-msg)
+    # In a pre-commit hook, the commit message file is not yet written.
+    # We check for the ADR-REF in the most recent commit message template
+    # or require the user to use: git commit -m "... ADR-REF: ADR-XXX"
+    #
+    # Since pre-commit fires BEFORE the message is finalized, we check
+    # if there's a COMMIT_EDITMSG from a previous attempt or if the user
+    # set the GIT_ADR_REF environment variable.
+    COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
+    ADR_FOUND=false
+
+    if [ -n "${GIT_ADR_REF:-}" ]; then
+        # Allow override via environment variable
+        ADR_FOUND=true
+    elif [ -f "$COMMIT_MSG_FILE" ]; then
+        if grep -qE "^ADR-REF:\s*ADR-[0-9]+" "$COMMIT_MSG_FILE" 2>/dev/null; then
+            ADR_FOUND=true
+        fi
+    fi
+
+    if [ "$ADR_FOUND" = false ]; then
+        echo -e "${RED}[VIOLATION]${NC} TAMPER_PROTECTION: ctb-drift-audit.sh is a locked script"
+        echo "            Modifying this file requires an ADR reference."
+        echo "            Add trailer to commit message: ADR-REF: ADR-XXX"
+        echo "            Or set: GIT_ADR_REF=ADR-XXX git commit ..."
+        echo "            Doctrine: CTB_REGISTRY_ENFORCEMENT.md §6"
+        ((VIOLATIONS++))
+    else
+        echo -e "${GREEN}[PASS]${NC} ADR reference found for locked script modification"
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
 # SUMMARY
 # ───────────────────────────────────────────────────────────────────
 echo ""

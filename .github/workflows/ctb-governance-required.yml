@@ -1,0 +1,91 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# CTB GOVERNANCE REQUIRED — Mandatory Enforcement Pipeline
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Run ALL reusable governance gates on every PR, push, and manual trigger.
+#          Both gates must pass. No continue-on-error. Fail-closed.
+# Doctrine: FAIL_CLOSED_CI_CONTRACT.md §1, §2, §3
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: CTB Governance Required
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────
+  # GATE 1: Fail-Closed Gate (structural enforcement)
+  # ─────────────────────────────────────────────────────────────────
+  fail-closed-gate:
+    name: "Gate 1: Fail-Closed Enforcement"
+    uses: ./.github/workflows/reusable-fail-closed-gate.yml
+    with:
+      enforcement_mode: strict
+      allowed_execution_dirs: "scripts,templates/scripts"
+
+  # ─────────────────────────────────────────────────────────────────
+  # GATE 2: Drift Audit (runtime registry enforcement)
+  # ─────────────────────────────────────────────────────────────────
+  drift-audit:
+    name: "Gate 2: CTB Drift Audit"
+    uses: ./.github/workflows/reusable-ctb-drift-audit.yml
+    with:
+      enforcement_mode: strict
+    secrets:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  # ─────────────────────────────────────────────────────────────────
+  # COMBINED RESULT — both gates must pass
+  # ─────────────────────────────────────────────────────────────────
+  governance-result:
+    name: "Governance Result"
+    runs-on: ubuntu-latest
+    needs: [fail-closed-gate, drift-audit]
+    if: always()
+
+    steps:
+      - name: Evaluate governance gates
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  CTB GOVERNANCE REQUIRED — COMBINED RESULT"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+          echo "  Gate 1 (Fail-Closed):  ${{ needs.fail-closed-gate.result }}"
+          echo "  Gate 2 (Drift Audit):  ${{ needs.drift-audit.result }}"
+          echo ""
+
+          FAILED=0
+
+          if [ "${{ needs.fail-closed-gate.result }}" != "success" ]; then
+            echo "::error::Gate 1 (Fail-Closed Enforcement) did not pass: ${{ needs.fail-closed-gate.result }}"
+            FAILED=1
+          fi
+
+          if [ "${{ needs.drift-audit.result }}" != "success" ]; then
+            echo "::error::Gate 2 (CTB Drift Audit) did not pass: ${{ needs.drift-audit.result }}"
+            FAILED=1
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo ""
+            echo "═══════════════════════════════════════════════════════════════"
+            echo "  GOVERNANCE FAILED — one or more gates did not pass"
+            echo "═══════════════════════════════════════════════════════════════"
+            echo ""
+            echo "Doctrine: FAIL_CLOSED_CI_CONTRACT.md"
+            echo "Both gates must pass for governance compliance."
+            exit 1
+          fi
+
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  GOVERNANCE PASSED — all gates passed"
+          echo "═══════════════════════════════════════════════════════════════"
+
