@@ -36,6 +36,7 @@
 #   JSON_IN_DOWNSTREAM   — SUPPORTING or CANONICAL table contains JSON columns (§9.4)
 #   BRIDGE_NO_VERSION    — Bridge function missing BRIDGE_VERSION constant (§9.2)
 #   VENDOR_REF_VIOLATION — SUPPORTING/CANONICAL references vendor table (§9.4)
+#   SUPERUSER_CONNECTION — Application connected as superuser, governance inert (§10)
 #
 # MODES:
 #   strict   — ROGUE_TABLE = VIOLATION (fail on any rogue table)
@@ -1033,6 +1034,61 @@ fi
 echo ""
 
 # ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 14: Application role validation (§10)
+# Application must NOT be connected as superuser.
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §10
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 14: Application Role (Non-Superuser) ──────────"
+
+SUPERUSER_CONNECTION_COUNT=0
+
+# Check if validate_application_role() exists
+HAS_VALIDATE_FN=$(run_sql "
+    SELECT EXISTS(
+        SELECT 1 FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'ctb'
+          AND p.proname = 'validate_application_role'
+    );
+" 2>/dev/null || echo "f")
+
+if [ "$HAS_VALIDATE_FN" = "t" ]; then
+    # Run validation and check for failures
+    ROLE_CHECKS=$(run_sql "
+        SELECT check_name || '|' || passed || '|' || detail
+        FROM ctb.validate_application_role();
+    " 2>/dev/null || echo "")
+
+    if [ -n "$ROLE_CHECKS" ]; then
+        while IFS= read -r check_line; do
+            [ -z "$check_line" ] && continue
+            CHECK_NAME="${check_line%%|*}"
+            REST="${check_line#*|}"
+            CHECK_PASSED="${REST%%|*}"
+            CHECK_DETAIL="${REST#*|}"
+
+            if [ "$CHECK_PASSED" = "f" ]; then
+                if [ "$MODE" = "baseline" ]; then
+                    warning "SUPERUSER_CONNECTION: $CHECK_NAME — $CHECK_DETAIL (§10)"
+                else
+                    violation "SUPERUSER_CONNECTION: $CHECK_NAME — $CHECK_DETAIL (§10)"
+                fi
+                ((SUPERUSER_CONNECTION_COUNT++))
+            fi
+        done <<< "$ROLE_CHECKS"
+
+        if [ "$SUPERUSER_CONNECTION_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} Application role validation passed — not superuser"
+        fi
+    else
+        echo -e "  ${YELLOW}[WARNING]${NC} Could not execute ctb.validate_application_role()"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.validate_application_role() not found (migration 011 not applied)"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
 # WRITE BASELINE (if --write-baseline)
 # ───────────────────────────────────────────────────────────────────
 if [ "$WRITE_BASELINE" = true ]; then
@@ -1149,7 +1205,7 @@ fi)
 
 ## Doctrine
 
-Enforcement: CTB_REGISTRY_ENFORCEMENT.md §6, §8, §9
+Enforcement: CTB_REGISTRY_ENFORCEMENT.md §6, §8, §9, §10
 Model: Fail-closed — rogue tables, immutability gaps, and JSON containment violations are failures.
 ENDMD
 

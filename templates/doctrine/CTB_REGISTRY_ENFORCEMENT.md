@@ -2,7 +2,7 @@
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
 **Status**: LOCKED
-**Version**: 1.4.0
+**Version**: 1.5.0
 **Scope**: All child repositories
 
 ---
@@ -242,6 +242,13 @@ The drift audit does not replace the other gates — it catches what they cannot
 │                 │ ROGUE = violation, others = warning         │
 │                 │ Immutability drift (§8 violations)         │
 │                 │ JSON containment (§9 violations)           │
+│                 │ Application role check (§10)               │
+├─────────────────┼───────────────────────────────────────────┤
+│ BOOTSTRAP       │ bootstrap-audit.sh                         │
+│                 │ Day 0 structural validation                │
+│                 │ Non-superuser enforcement (§10.1)          │
+│                 │ Governance CI verification (§10.2)         │
+│                 │ Attestation: BOOTSTRAP_AUDIT.md            │
 └─────────────────┴───────────────────────────────────────────┘
 ```
 
@@ -471,6 +478,83 @@ SUPPORTING and CANONICAL tables operate under the same rules as §8, with additi
 
 ---
 
+## 10. Bootstrap Enforcement Layer
+
+**Added**: v1.5.0
+**Scope**: All child repositories at creation and ongoing
+**Principle**: No repo is structurally valid until governance is proven active at every layer
+
+This section defines the requirements for a child repo to be considered structurally valid. All prior sections (§1-§9) define enforcement mechanisms. This section defines the **verification** that those mechanisms are actually working.
+
+### 10.1 Non-Superuser Requirement
+
+Application code MUST connect to the database as a non-superuser role. The recommended role is `ctb_app_role` (created by migration 011).
+
+**Why**: PostgreSQL event triggers (`CREATE TABLE` gate, §4.2), write guards (§4.3), immutability triggers (§8.2), and promotion enforcement (§4.4) **do not fire for superusers**. If the application connects as `postgres`, all database-level governance is silently inert — tables can be created without registration, rows can be updated on INSERT-only tables, and promotion paths can be bypassed.
+
+**Migration**: `011_enforce_application_role.sql`
+
+| Role | Permissions |
+|------|-------------|
+| `ctb_app_role` | NOSUPERUSER, NOCREATEDB, NOCREATEROLE, NOBYPASSRLS |
+| Grants | EXECUTE on bridge functions, SELECT on `_active` views, INSERT on `vendor_claude_*` tables |
+| Revokes | INSERT/UPDATE/DELETE on RAW tables, UPDATE/DELETE on SUPPORTING, UPDATE/DELETE on CANONICAL |
+
+**Validation**: `ctb.validate_application_role()` returns 7 checks:
+
+| Check | Validates |
+|-------|-----------|
+| `app_role_exists` | `ctb_app_role` role exists |
+| `not_postgres_user` | Current connection is not `postgres` |
+| `not_superuser` | Current user has no superuser privileges |
+| `app_role_not_superuser` | `ctb_app_role` is NOSUPERUSER |
+| `app_role_no_createdb` | `ctb_app_role` is NOCREATEDB |
+| `app_role_no_createrole` | `ctb_app_role` is NOCREATEROLE |
+| `app_role_no_bypassrls` | `ctb_app_role` is NOBYPASSRLS |
+
+**Drift check**: Check 14 (`SUPERUSER_CONNECTION`) in `ctb-drift-audit.sh`.
+
+### 10.2 Governance CI Requirement
+
+Every child repo MUST wire governance CI before it is considered valid.
+
+**Script**: `verify-governance-ci.sh`
+
+| Check | Validates |
+|-------|-----------|
+| Workflow directory exists | `.github/workflows/` present |
+| Required workflow references | At least one workflow calls `reusable-fail-closed-gate.yml` |
+| No continue-on-error | No `continue-on-error: true` on active workflows |
+| Enforcement workflow exists | Workflow file that calls the fail-closed gate exists |
+| Required scripts present | `ctb-drift-audit.sh`, `ctb-registry-gate.sh`, `detect-banned-db-clients.sh` present |
+| Pre-commit hook | `.git/hooks/pre-commit` installed and executable |
+
+**CI Gate**: Gate E in `reusable-fail-closed-gate.yml`.
+
+### 10.3 Bootstrap Audit Requirement
+
+After initial setup, every child repo MUST run `bootstrap-audit.sh`. This produces `docs/BOOTSTRAP_AUDIT.md` — a machine-generated attestation proving Day 0 structural integrity.
+
+**Script**: `bootstrap-audit.sh`
+
+| Check | Validates |
+|-------|-----------|
+| Required governance files | IMO_CONTROL.json, DOCTRINE.md, CC_OPERATIONAL_DIGEST.md, STARTUP_PROTOCOL.md, column_registry.yml |
+| CTB folder structure | src/sys/, src/data/, src/app/, src/ai/, src/ui/ |
+| Governance CI | verify-governance-ci.sh passes |
+| Governance scripts | All required scripts present |
+| Migrations | migrations/ has at least 11 SQL files |
+| Pre-commit hook | Installed and executable |
+| Application role | `ctb.validate_application_role()` passes (requires DATABASE_URL) |
+| Drift audit | `ctb-drift-audit.sh --mode=strict` passes (requires DATABASE_URL) |
+| No continue-on-error | No `continue-on-error: true` in active workflows |
+
+**Output**: `docs/BOOTSTRAP_AUDIT.md` with PASS/FAIL status and full check results.
+
+**Rule**: A repo without a passing `BOOTSTRAP_AUDIT.md` is NOT structurally valid. It may contain code, but governance cannot guarantee its integrity.
+
+---
+
 ## Document Control
 
 | Field | Value |
@@ -478,6 +562,6 @@ SUPPORTING and CANONICAL tables operate under the same rules as §8, with additi
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
 | Status | LOCKED |
-| Version | 1.4.0 |
+| Version | 1.5.0 |
 | Change Protocol | ADR + Human Approval Required |
 | Related | ADR-001, ARCHITECTURE.md Part X, DBA_ENFORCEMENT_DOCTRINE.md |

@@ -2,7 +2,7 @@
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
 **Status**: LOCKED
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Scope**: All child repositories
 
 ---
@@ -111,6 +111,42 @@ There is no permanent exception. Waivers expire and must be renewed.
 
 ---
 
+## 7. Bootstrap Guarantees
+
+**Added**: v1.1.0
+**Scope**: All child repositories at creation time
+**Principle**: No repo is structurally valid until governance is proven active
+
+A child repo is NOT valid until ALL of the following are true:
+
+| Requirement | Verification | Script |
+|-------------|-------------|--------|
+| Application role configured (non-superuser) | `ctb.validate_application_role()` returns no failures | `bootstrap-audit.sh` CHECK 7 |
+| Governance CI wired | `verify-governance-ci.sh` exits 0 | `bootstrap-audit.sh` CHECK 3 |
+| Drift audit strict mode passes | `ctb-drift-audit.sh --mode=strict` exits 0 | `bootstrap-audit.sh` CHECK 8 |
+| Bootstrap audit attestation generated | `docs/BOOTSTRAP_AUDIT.md` exists with PASS status | `bootstrap-audit.sh` output |
+
+### 7.1 Non-Superuser Requirement
+
+Application code MUST connect as `ctb_app_role` or equivalent non-superuser role. PostgreSQL event triggers, write guards, and immutability triggers **do not fire for superusers**. Connecting as `postgres` renders ALL database-level governance silently inert.
+
+**Migration**: `011_enforce_application_role.sql`
+**Validation**: `ctb.validate_application_role()`
+**Drift check**: Check 14 (`SUPERUSER_CONNECTION`)
+
+### 7.2 Governance CI Requirement
+
+Every child repo MUST reference the fail-closed gate workflow in its CI pipeline. Missing governance workflows = FAIL, not SKIP.
+
+**Script**: `verify-governance-ci.sh`
+**Gate**: Gate E in `reusable-fail-closed-gate.yml`
+
+### 7.3 Bootstrap Audit Requirement
+
+After initial setup, every child repo MUST run `bootstrap-audit.sh` and produce a passing `docs/BOOTSTRAP_AUDIT.md`. This attestation proves Day 0 structural integrity.
+
+---
+
 ## Document Control
 
 | Field | Value |
@@ -118,6 +154,6 @@ There is no permanent exception. Waivers expire and must be renewed.
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
 | Status | LOCKED |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Change Protocol | ADR + Human Approval Required |
 | Related | EXECUTION_SURFACE_LAW.md, CTB_REGISTRY_ENFORCEMENT.md |

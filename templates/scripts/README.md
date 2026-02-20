@@ -66,7 +66,9 @@ These scripts are distributed to downstream repos. They enforce doctrine complia
 | `ctb-registry-gate.sh` | CTB registry gate — validates migrations vs `column_registry.yml` + sub-hub cardinality (Unix) |
 | `ctb-registry-gate.ps1` | CTB registry gate (Windows) |
 | `detect-banned-db-clients.sh` | Banned DB client detection — scans `src/` for direct database access bypassing Gatekeeper |
-| `ctb-drift-audit.sh` | CTB drift audit — live database vs `ctb.table_registry` vs `column_registry.yml` with `--mode=baseline\|strict` and `--write-baseline`. Includes immutability checks (§8) and JSON containment checks (§9): trigger presence, RAW columns, _active views, JSON in RAW/downstream, bridge versions, vendor references. (requires `DATABASE_URL`, `psql`, `yq`, `jq`) **LOCKED** |
+| `verify-governance-ci.sh` | Governance CI adoption verification — validates required workflow references, no continue-on-error, enforcement scripts present |
+| `bootstrap-audit.sh` | Bootstrap audit — Day 0 structural validation, outputs `docs/BOOTSTRAP_AUDIT.md` attestation (requires `DATABASE_URL` for full checks) |
+| `ctb-drift-audit.sh` | CTB drift audit — live database vs `ctb.table_registry` vs `column_registry.yml` with `--mode=baseline\|strict` and `--write-baseline`. Includes immutability checks (§8), JSON containment checks (§9), and application role check (§10): trigger presence, RAW columns, _active views, JSON in RAW/downstream, bridge versions, vendor references, superuser detection. (requires `DATABASE_URL`, `psql`, `yq`, `jq`) **LOCKED** |
 
 ### Validation
 

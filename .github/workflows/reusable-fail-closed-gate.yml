@@ -212,6 +212,34 @@ jobs:
           echo "gate_d=$GATE_D_STATUS" >> $GITHUB_OUTPUT
 
       # ─────────────────────────────────────────────────────────────────
+      # GATE E: Governance CI adoption verification
+      # Doctrine: FAIL_CLOSED_CI_CONTRACT.md §7, CTB_REGISTRY_ENFORCEMENT.md §10
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Gate E: Governance CI verification"
+        id: gate_e
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  GATE E: Governance CI adoption verification"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_E_STATUS="PASS"
+
+          # Check if verify-governance-ci.sh exists
+          if [ -f "scripts/verify-governance-ci.sh" ]; then
+            chmod +x scripts/verify-governance-ci.sh
+            if ! ./scripts/verify-governance-ci.sh; then
+              GATE_E_STATUS="FAIL"
+            fi
+          else
+            echo "::error::MISSING_GOVERNANCE_SCRIPT: scripts/verify-governance-ci.sh not found"
+            echo "  Governance CI verification script is required."
+            echo "  Copy from imo-creator: templates/scripts/verify-governance-ci.sh"
+            GATE_E_STATUS="FAIL"
+          fi
+
+          echo "gate_e=$GATE_E_STATUS" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────────
       # RESULT: Hard-fail on ANY gate failure
       # ─────────────────────────────────────────────────────────────────
       - name: "Fail-Closed Result"
@@ -226,14 +254,16 @@ jobs:
           GATE_B="${{ steps.gate_b.outputs.gate_b }}"
           GATE_C="${{ steps.gate_c.outputs.gate_c }}"
           GATE_D="${{ steps.gate_d.outputs.gate_d }}"
+          GATE_E="${{ steps.gate_e.outputs.gate_e }}"
 
-          echo "  Gate A (Side-door detection):    $GATE_A"
-          echo "  Gate B (Executable containment): $GATE_B"
-          echo "  Gate C (DDL containment):        $GATE_C"
-          echo "  Gate D (Fail-open detection):     $GATE_D"
+          echo "  Gate A (Side-door detection):      $GATE_A"
+          echo "  Gate B (Executable containment):   $GATE_B"
+          echo "  Gate C (DDL containment):          $GATE_C"
+          echo "  Gate D (Fail-open detection):      $GATE_D"
+          echo "  Gate E (Governance CI adoption):   $GATE_E"
           echo "═══════════════════════════════════════════════════════"
 
-          if [ "$GATE_A" = "FAIL" ] || [ "$GATE_B" = "FAIL" ] || [ "$GATE_C" = "FAIL" ] || [ "$GATE_D" = "FAIL" ]; then
+          if [ "$GATE_A" = "FAIL" ] || [ "$GATE_B" = "FAIL" ] || [ "$GATE_C" = "FAIL" ] || [ "$GATE_D" = "FAIL" ] || [ "$GATE_E" = "FAIL" ]; then
             echo ""
             echo "RESULT: FAILED — one or more gates failed"
             echo "Doctrine: FAIL_CLOSED_CI_CONTRACT.md"

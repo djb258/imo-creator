@@ -20,8 +20,8 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 | `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
 | `templates/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
 | `templates/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
-| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment (v1.4.0) |
-| `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract (v1.0.0) |
+| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment + bootstrap enforcement (v1.5.0) |
+| `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract + bootstrap guarantees (v1.1.0) |
 | `templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
 | `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
 
@@ -174,6 +174,27 @@ JSON containment and versioned bridge enforcement:
 
 **Vendor JSON Law**: All external tool output MUST land in `vendor_claude_*` tables. All JSON mapping MUST occur in versioned bridge functions. No JSON is permitted beyond the vendor layer. RAW, SUPPORTING, and CANONICAL tables contain structured columns only.
 
+### Phase 3 Bootstrap Guarantees (v3.3.0)
+
+No child repo is structurally valid without ALL of the following:
+
+| Requirement | Verification |
+|-------------|-------------|
+| Non-superuser DB role | `ctb.validate_application_role()` — migration 011 |
+| Governance CI wired | `verify-governance-ci.sh` — Gate E in fail-closed gate |
+| Drift audit strict passing | `ctb-drift-audit.sh --mode=strict` — check 14 (SUPERUSER_CONNECTION) |
+| Bootstrap attestation | `bootstrap-audit.sh` → `docs/BOOTSTRAP_AUDIT.md` present with PASS |
+
+| Component | Purpose |
+|-----------|---------|
+| `CTB_REGISTRY_ENFORCEMENT.md §10` | Doctrine: non-superuser requirement, governance CI, bootstrap audit |
+| `FAIL_CLOSED_CI_CONTRACT.md §7` | Doctrine: bootstrap guarantees definition |
+| `011_enforce_application_role.sql` | DB: `ctb_app_role` (NOSUPERUSER), `validate_application_role()` |
+| `verify-governance-ci.sh` | CI: validates required workflows, no continue-on-error, scripts present |
+| `bootstrap-audit.sh` | Audit: one-command Day 0 validation, produces attestation |
+| Gate E | CI: runs verify-governance-ci.sh in fail-closed gate |
+| Drift check 14 | Audit: SUPERUSER_CONNECTION detection |
+
 ---
 
 ## TEMPLATE RULES
@@ -249,8 +270,8 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
 │   ├── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
 │   ├── EXECUTION_SURFACE_LAW.md     ← Execution containment (v1.0.0)
-│   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown + vendor JSON (v1.4.0)
-│   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI (v1.0.0)
+│   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown + vendor JSON + bootstrap (v1.5.0)
+│   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI + bootstrap guarantees (v1.1.0)
 │   └── LEGACY_COLLAPSE_PLAYBOOK.md  ← Legacy migration (v1.0.0)
 │
 ├── templates/integrations/TOOLS.md ← CONSTITUTIONAL LAW (locked)
