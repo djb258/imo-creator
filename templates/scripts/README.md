@@ -12,7 +12,7 @@ These scripts are distributed to downstream repos. They enforce doctrine complia
 
 | Script | Purpose |
 |--------|---------|
-| `hooks/pre-commit` | Pre-commit doctrine compliance gate (10 checks) |
+| `hooks/pre-commit` | Pre-commit doctrine compliance gate (14 checks) |
 
 ### Doctrine & CTB
 
@@ -57,6 +57,24 @@ These scripts are distributed to downstream repos. They enforce doctrine complia
 | `update_from_imo_creator.sh` | Pull updates from imo-creator |
 | `push-doctrine-update.sh` | Push doctrine updates (Unix) |
 | `push-doctrine-update.ps1` | Push doctrine updates (Windows) |
+
+### Enforcement (Fail-Closed)
+
+| Script | Purpose |
+|--------|---------|
+| `ctb-registry-gate.sh` | CTB registry gate — validates migrations vs `column_registry.yml` + sub-hub cardinality (Unix) |
+| `ctb-registry-gate.ps1` | CTB registry gate (Windows) |
+| `detect-banned-db-clients.sh` | Banned DB client detection — scans `src/` for direct database access bypassing Gatekeeper |
+
+### Validation
+
+| Script | Purpose |
+|--------|---------|
+| `validate-schema-completeness.sh` | Schema completeness validator (DBA Gate B metadata) |
+| `validate-schema-completeness.ps1` | Schema completeness validator (Windows) |
+| `generate-data-dictionary.sh` | Data dictionary generator from `column_registry.yml` |
+| `detect-staleness.sh` | Governance artifact freshness audit (Unix) |
+| `detect-staleness.ps1` | Governance artifact freshness audit (Windows) |
 
 ### Security
 

@@ -297,6 +297,69 @@ if [ -n "$REGISTRY_STAGED" ]; then
 fi
 
 # ───────────────────────────────────────────────────────────────────
+# CHECK 13: CTB registry gate (registry-first enforcement)
+# ───────────────────────────────────────────────────────────────────
+# If column_registry.yml or migrations/*.sql are staged, run ctb-registry-gate.sh
+# to validate migrations vs registry and sub-hub cardinality.
+MIGRATION_STAGED=$(git diff --cached --name-only | grep -E '^migrations/.*\.sql$' || true)
+
+if [ -n "$REGISTRY_STAGED" ] || [ -n "$MIGRATION_STAGED" ]; then
+    CTB_GATE=""
+    if [ -f "scripts/ctb-registry-gate.sh" ]; then
+        CTB_GATE="scripts/ctb-registry-gate.sh"
+    elif [ -f "./ctb-registry-gate.sh" ]; then
+        CTB_GATE="./ctb-registry-gate.sh"
+    fi
+
+    if [ -n "$CTB_GATE" ]; then
+        if ! bash "$CTB_GATE" > /dev/null 2>&1; then
+            echo -e "${RED}[VIOLATION]${NC} CTB_REGISTRY_GATE: Registry-first enforcement failed"
+            echo "            CTB_REGISTRY_ENFORCEMENT.md §3 requires:"
+            echo "            - All migration tables registered in column_registry.yml"
+            echo "            - Sub-hub cardinality: 1 CANONICAL + 1 ERROR + 0-2 SUPPORTING"
+            echo "            Action: Run ctb-registry-gate.sh, fix violations, then commit"
+            ((VIOLATIONS++))
+        else
+            echo -e "${GREEN}[PASS]${NC} CTB registry gate — migrations and registry in sync"
+        fi
+    else
+        echo -e "${YELLOW}[WARNING]${NC} ctb-registry-gate.sh not found — cannot verify registry"
+        echo "          Install: Copy from imo-creator templates/scripts/"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
+# CHECK 14: Banned DB client detection (Gatekeeper enforcement)
+# ───────────────────────────────────────────────────────────────────
+# If any .ts/.js/.py files in src/ are staged, scan for direct DB access.
+SRC_CODE_STAGED=$(git diff --cached --name-only | grep -E '^src/.*\.(ts|tsx|js|jsx|py|mjs|cjs)$' || true)
+
+if [ -n "$SRC_CODE_STAGED" ]; then
+    BANNED_DETECT=""
+    if [ -f "scripts/detect-banned-db-clients.sh" ]; then
+        BANNED_DETECT="scripts/detect-banned-db-clients.sh"
+    elif [ -f "./detect-banned-db-clients.sh" ]; then
+        BANNED_DETECT="./detect-banned-db-clients.sh"
+    fi
+
+    if [ -n "$BANNED_DETECT" ]; then
+        if ! bash "$BANNED_DETECT" > /dev/null 2>&1; then
+            echo -e "${RED}[VIOLATION]${NC} BANNED_DB_CLIENT: Direct database access detected in src/"
+            echo "            CTB_REGISTRY_ENFORCEMENT.md §5.3: All writes must use Gatekeeper"
+            echo "            Action: Replace direct DB imports with Gatekeeper module"
+            ((VIOLATIONS++))
+        else
+            echo -e "${GREEN}[PASS]${NC} No banned database client patterns in staged files"
+        fi
+    else
+        echo -e "${YELLOW}[WARNING]${NC} detect-banned-db-clients.sh not found — cannot check for banned DB clients"
+        echo "          Install: Copy from imo-creator templates/scripts/"
+        ((WARNINGS++))
+    fi
+fi
+
+# ───────────────────────────────────────────────────────────────────
 # SUMMARY
 # ───────────────────────────────────────────────────────────────────
 echo ""

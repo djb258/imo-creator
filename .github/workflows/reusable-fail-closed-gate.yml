@@ -1,0 +1,248 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# REUSABLE FAIL-CLOSED GATE
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Fail-closed governance enforcement for child repos
+# Trigger: workflow_call only
+# Doctrine: FAIL_CLOSED_CI_CONTRACT.md, EXECUTION_SURFACE_LAW.md
+# CRITICAL: This workflow MUST NOT use continue-on-error anywhere
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Reusable Fail-Closed Gate
+
+on:
+  workflow_call:
+    inputs:
+      enforcement_mode:
+        description: 'Enforcement mode (standard or strict)'
+        required: false
+        type: string
+        default: 'strict'
+      allowed_execution_dirs:
+        description: 'Comma-separated list of additional allowed execution dirs at repo root (e.g. "scripts" for legacy repos)'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      status:
+        description: 'Gate status (PASSED or FAILED)'
+        value: ${{ jobs.fail-closed-gate.outputs.status }}
+
+jobs:
+  fail-closed-gate:
+    name: Fail-Closed Governance Gate
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.result.outputs.status }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ─────────────────────────────────────────────────────────────────
+      # GATE A: Root-level side-door execution directory detection
+      # Doctrine: EXECUTION_SURFACE_LAW.md §3
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Gate A: Root-level execution side-doors"
+        id: gate_a
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  GATE A: Side-door execution directory detection"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_A_STATUS="PASS"
+          ROGUE_DIRS=""
+
+          PROHIBITED_DIRS="bin tools lambda functions workers jobs cron"
+
+          for dir in $PROHIBITED_DIRS; do
+            if [ -d "$dir" ]; then
+              echo "::error::SIDE_DOOR_VIOLATION: Prohibited directory found at repo root: $dir/"
+              ROGUE_DIRS="$ROGUE_DIRS $dir"
+              GATE_A_STATUS="FAIL"
+            fi
+          done
+
+          # Check scripts/ — only allowed if explicitly whitelisted
+          if [ -d "scripts" ]; then
+            ALLOWED="${{ inputs.allowed_execution_dirs }}"
+            if ! echo ",$ALLOWED," | grep -q ",scripts,"; then
+              echo "::error::SIDE_DOOR_VIOLATION: scripts/ at repo root requires whitelisting via allowed_execution_dirs input"
+              ROGUE_DIRS="$ROGUE_DIRS scripts"
+              GATE_A_STATUS="FAIL"
+            else
+              echo "scripts/ is whitelisted via allowed_execution_dirs"
+            fi
+          fi
+
+          if [ "$GATE_A_STATUS" = "PASS" ]; then
+            echo "Gate A: PASS — no prohibited directories found"
+          else
+            echo "Gate A: FAIL — prohibited directories:$ROGUE_DIRS"
+          fi
+
+          echo "gate_a=$GATE_A_STATUS" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────────
+      # GATE B: Executable file containment
+      # Doctrine: EXECUTION_SURFACE_LAW.md §1, §2
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Gate B: Executable containment"
+        id: gate_b
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  GATE B: Executable file containment"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_B_STATUS="PASS"
+
+          # Build allowed path exclusions
+          ALLOWED_PATHS=(
+            "./src/sys/*"
+            "./src/data/*"
+            "./src/app/*"
+            "./src/ai/*"
+            "./src/ui/*"
+            "./.github/*"
+            "./.git/*"
+            "./node_modules/*"
+            "./migrations/*"
+          )
+
+          # Add whitelisted dirs
+          IFS=',' read -ra EXTRA_DIRS <<< "${{ inputs.allowed_execution_dirs }}"
+          for dir in "${EXTRA_DIRS[@]}"; do
+            dir=$(echo "$dir" | xargs)  # trim whitespace
+            if [ -n "$dir" ]; then
+              ALLOWED_PATHS+=("./$dir/*")
+            fi
+          done
+
+          # Build find exclusion args
+          EXCLUDE_ARGS=""
+          for path in "${ALLOWED_PATHS[@]}"; do
+            EXCLUDE_ARGS="$EXCLUDE_ARGS -not -path \"$path\""
+          done
+
+          # Find executable files outside allowed paths
+          VIOLATIONS=$(eval "find . -type f \( -name '*.sh' -o -name '*.ps1' -o -name '*.py' -o -perm -u+x \) $EXCLUDE_ARGS" 2>/dev/null | grep -v "^$" || true)
+
+          if [ -n "$VIOLATIONS" ]; then
+            echo "::error::EXECUTABLE_CONTAINMENT: Executable files found outside CTB branches"
+            echo "$VIOLATIONS" | while read -r f; do
+              echo "  VIOLATION: $f"
+            done
+            GATE_B_STATUS="FAIL"
+          else
+            echo "Gate B: PASS — all executables within CTB branches"
+          fi
+
+          echo "gate_b=$GATE_B_STATUS" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────────
+      # GATE C: SQL DDL containment
+      # Doctrine: CTB_REGISTRY_ENFORCEMENT.md §3
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Gate C: SQL DDL containment"
+        id: gate_c
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  GATE C: SQL DDL containment"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_C_STATUS="PASS"
+
+          DDL_OUTSIDE=$(grep -rlE "(CREATE|ALTER|DROP)\s+(TABLE|SCHEMA|FUNCTION|TRIGGER)" \
+            --include="*.sql" --include="*.ts" --include="*.js" --include="*.py" \
+            . 2>/dev/null \
+            | grep -v "./migrations/" \
+            | grep -v "./node_modules/" \
+            | grep -v "./.git/" \
+            | grep -v "./templates/" \
+            | grep -v "./archive/" || true)
+
+          if [ -n "$DDL_OUTSIDE" ]; then
+            echo "::error::DDL_CONTAINMENT: SQL DDL statements found outside migrations/ directory"
+            echo "$DDL_OUTSIDE" | while read -r f; do
+              echo "  VIOLATION: $f"
+            done
+            GATE_C_STATUS="FAIL"
+          else
+            echo "Gate C: PASS — all DDL contained in migrations/"
+          fi
+
+          echo "gate_c=$GATE_C_STATUS" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────────
+      # GATE D: continue-on-error detection on enforcement jobs
+      # Doctrine: FAIL_CLOSED_CI_CONTRACT.md §4
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Gate D: continue-on-error detection"
+        id: gate_d
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  GATE D: continue-on-error detection"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_D_STATUS="PASS"
+
+          # Scan active workflow files (skip archive/)
+          if [ -d ".github/workflows" ]; then
+            COE_FILES=$(grep -rl "continue-on-error:" .github/workflows/ 2>/dev/null \
+              | grep -v "archive/" \
+              | grep "\.yml$\|\.yaml$" || true)
+
+            if [ -n "$COE_FILES" ]; then
+              # Check if continue-on-error is set to true (not false)
+              for f in $COE_FILES; do
+                if grep -qE "continue-on-error:\s*true" "$f" 2>/dev/null; then
+                  echo "::error::FAIL_OPEN_VIOLATION: continue-on-error: true found in $f"
+                  GATE_D_STATUS="FAIL"
+                fi
+              done
+            fi
+          fi
+
+          if [ "$GATE_D_STATUS" = "PASS" ]; then
+            echo "Gate D: PASS — no continue-on-error: true in active workflows"
+          fi
+
+          echo "gate_d=$GATE_D_STATUS" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────────
+      # RESULT: Hard-fail on ANY gate failure
+      # ─────────────────────────────────────────────────────────────────
+      - name: "Fail-Closed Result"
+        id: result
+        run: |
+          echo ""
+          echo "═══════════════════════════════════════════════════════"
+          echo "  FAIL-CLOSED GATE SUMMARY"
+          echo "═══════════════════════════════════════════════════════"
+
+          GATE_A="${{ steps.gate_a.outputs.gate_a }}"
+          GATE_B="${{ steps.gate_b.outputs.gate_b }}"
+          GATE_C="${{ steps.gate_c.outputs.gate_c }}"
+          GATE_D="${{ steps.gate_d.outputs.gate_d }}"
+
+          echo "  Gate A (Side-door detection):    $GATE_A"
+          echo "  Gate B (Executable containment): $GATE_B"
+          echo "  Gate C (DDL containment):        $GATE_C"
+          echo "  Gate D (Fail-open detection):     $GATE_D"
+          echo "═══════════════════════════════════════════════════════"
+
+          if [ "$GATE_A" = "FAIL" ] || [ "$GATE_B" = "FAIL" ] || [ "$GATE_C" = "FAIL" ] || [ "$GATE_D" = "FAIL" ]; then
+            echo ""
+            echo "RESULT: FAILED — one or more gates failed"
+            echo "Doctrine: FAIL_CLOSED_CI_CONTRACT.md"
+            echo ""
+            echo "status=FAILED" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo ""
+            echo "RESULT: PASSED — all gates passed"
+            echo ""
+            echo "status=PASSED" >> $GITHUB_OUTPUT
+          fi
