@@ -34,7 +34,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Make audit script executable
-        run: chmod +x scripts/apply_doctrine_audit.sh
+        run: |
+          if [ -f "templates/scripts/apply_doctrine_audit.sh" ]; then
+            chmod +x templates/scripts/apply_doctrine_audit.sh
+          else
+            echo "::error::templates/scripts/apply_doctrine_audit.sh not found — cannot audit"
+            exit 1
+          fi
 
       # ─────────────────────────────────────────────────────────────
       # GOVERNANCE CHECK
@@ -64,7 +70,7 @@ jobs:
           echo ""
 
           # Run audit script
-          ./scripts/apply_doctrine_audit.sh . || AUDIT_EXIT=$?
+          ./templates/scripts/apply_doctrine_audit.sh . || AUDIT_EXIT=$?
 
           # Capture exit code
           if [ -z "$AUDIT_EXIT" ]; then
@@ -84,8 +90,9 @@ jobs:
             echo "status=$STATUS" >> $GITHUB_OUTPUT
           fi
 
-          exit $AUDIT_EXIT
-        continue-on-error: true
+          if [ "$AUDIT_EXIT" -ne 0 ]; then
+            echo "::error::Doctrine audit failed with exit code $AUDIT_EXIT"
+          fi
 
       # ─────────────────────────────────────────────────────────────
       # RESULTS SUMMARY

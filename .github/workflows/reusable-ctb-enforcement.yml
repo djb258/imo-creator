@@ -49,13 +49,18 @@ jobs:
         id: enforcement
         run: |
           if [ -f "templates/scripts/ctb_enforce.sh" ]; then
-            bash templates/scripts/ctb_enforce.sh
-            echo "status=PASSED" >> $GITHUB_OUTPUT
+            if bash templates/scripts/ctb_enforce.sh; then
+              echo "status=PASSED" >> $GITHUB_OUTPUT
+            else
+              echo "::error::CTB enforcement script failed (exit $?)"
+              echo "status=FAILED" >> $GITHUB_OUTPUT
+              exit 1
+            fi
           else
-            echo "::warning::CTB enforcement script not found - skipping"
-            echo "status=SKIPPED" >> $GITHUB_OUTPUT
+            echo "::error::CTB enforcement script not found — FAIL (not skip). Doctrine: FAIL_CLOSED_CI_CONTRACT.md §2"
+            echo "status=FAILED" >> $GITHUB_OUTPUT
+            exit 1
           fi
-        continue-on-error: true
 
       - name: Upload enforcement log
         if: always()
