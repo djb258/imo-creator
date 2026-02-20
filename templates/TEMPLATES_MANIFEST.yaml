@@ -22,11 +22,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "3.0.0"
+  version: "3.0.1"
   last_updated: "2026-02-20"
-  total_file_count: 131  # Run: find templates -type f | wc -l to verify
-  ctb_hardening_version: "3.0.0"
-  note: "Fail-closed governance — 4-gate CI, DB enforcement, Gatekeeper module, registry-first enforcement"
+  total_file_count: 132  # Run: find templates -type f | wc -l to verify
+  ctb_hardening_version: "3.0.1"
+  note: "Fail-closed governance — 4-gate CI, DB enforcement, Gatekeeper module, registry-first enforcement, live drift audit"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -182,10 +182,10 @@ files:
       version: "1.0.0"
 
     - path: "templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
-      purpose: "Registry-first enforcement — build-time, database, and application gates"
+      purpose: "Registry-first enforcement — build-time, database, application gates, and live drift audit"
       required: true
       locked: true
-      version: "1.0.0"
+      version: "1.1.0"
 
     - path: "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
       purpose: "Fail-closed CI contract — default deny, 4-gate enforcement, no continue-on-error"
@@ -681,6 +681,10 @@ files:
 
     - path: "templates/scripts/detect-banned-db-clients.sh"
       purpose: "Banned DB client detection — scans src/ for direct database access bypassing Gatekeeper module"
+      required: true
+
+    - path: "templates/scripts/ctb-drift-audit.sh"
+      purpose: "CTB drift audit — live database vs ctb.table_registry vs column_registry.yml drift detection"
       required: true
 
     - path: "templates/scripts/hooks/pre-commit"
@@ -1268,6 +1272,8 @@ update_manifest:
         destination: "scripts/ctb-registry-gate.sh"
       - source: "templates/scripts/detect-banned-db-clients.sh"
         destination: "scripts/detect-banned-db-clients.sh"
+      - source: "templates/scripts/ctb-drift-audit.sh"
+        destination: "scripts/ctb-drift-audit.sh"
 
   sync_if_missing:
     description: "These files are synced only if they don't exist in child (templates that get customized)"
@@ -1329,6 +1335,17 @@ update_manifest:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "3.0.1"
+    date: "2026-02-20"
+    breaking: false
+    changes:
+      - "Added ctb-drift-audit.sh (live database vs ctb.table_registry vs column_registry.yml drift detection)"
+      - "Added reusable-ctb-drift-audit.yml (reusable CI workflow for drift audit — workflow_call, no continue-on-error)"
+      - "Added CTB_REGISTRY_ENFORCEMENT.md §6 'Live Drift Audit Enforcement Layer' (6 drift classes, 3 trigger conditions)"
+      - "Updated CTB_REGISTRY_ENFORCEMENT.md version 1.0.0 → 1.1.0, renumbered Enforcement Summary to §7"
+      - "total_file_count: 131 → 132"
+    migration: "Child repos should copy ctb-drift-audit.sh to scripts/. Add reusable-ctb-drift-audit.yml to CI pipeline with DATABASE_URL secret."
+
   - version: "3.0.0"
     date: "2026-02-20"
     breaking: true
@@ -1492,7 +1509,7 @@ verification:
     After pulling templates, verify:
 
     [ ] All files in this manifest exist locally
-    [ ] File count matches total_file_count (131 files)
+    [ ] File count matches total_file_count (132 files)
     [ ] No files were skipped or missed
     [ ] Doctrine files are present and locked
     [ ] Claude prompts are present and locked
@@ -1507,7 +1524,7 @@ verification:
 document_control:
   created: "2026-01-30"
   last_modified: "2026-02-20"
-  version: "3.0.0"
+  version: "3.0.1"
   doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"

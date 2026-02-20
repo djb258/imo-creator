@@ -136,7 +136,69 @@ Scans `src/` for direct database client imports that bypass the Gatekeeper. Bann
 
 ---
 
-## 6. Enforcement Summary
+## 6. Live Drift Audit Enforcement Layer
+
+**Script**: `scripts/ctb-drift-audit.sh`
+**Workflow**: `reusable-ctb-drift-audit.yml`
+
+### 6.1 Purpose
+
+Detect drift between three surfaces that must agree:
+
+| Surface | Source | Authority |
+|---------|--------|-----------|
+| A | Live database (`information_schema.tables` + `columns`) | Runtime truth |
+| B | `ctb.table_registry` (runtime registry in DB) | Database gate |
+| C | `column_registry.yml` (build-time YAML registry) | Build-time gate |
+
+### 6.2 Drift Classes
+
+| Class | Comparison | Severity | Meaning |
+|-------|-----------|----------|---------|
+| `ROGUE_TABLE` | A vs B | **VIOLATION** | Table exists in DB but NOT in `ctb.table_registry` |
+| `PHANTOM_TABLE` | B vs A | WARNING | Registered in `ctb.table_registry` but NOT in DB |
+| `ORPHAN_TABLE` | A vs C | WARNING | In DB but NOT in `column_registry.yml` |
+| `GHOST_TABLE` | C vs A | WARNING | In `column_registry.yml` but NOT in DB |
+| `COLUMN_DRIFT` | A vs C (columns) | WARNING | Column mismatch between DB and `column_registry.yml` |
+| `REGISTRY_DESYNC` | B vs C | WARNING | `ctb.table_registry` disagrees with `column_registry.yml` |
+
+Only `ROGUE_TABLE` is a violation (fail-closed: unregistered tables in the live database are never acceptable). All other classes are warnings — they indicate configuration lag, not security holes.
+
+### 6.3 Trigger Conditions
+
+| Trigger | When | How |
+|---------|------|-----|
+| **PR gate** | Pull request to `master` | `reusable-ctb-drift-audit.yml` via `workflow_call` |
+| **Nightly** | Scheduled (cron) | Child repo calls reusable workflow on schedule |
+| **Manual** | On demand | `workflow_dispatch` or local `DATABASE_URL=... scripts/ctb-drift-audit.sh` |
+
+### 6.4 Failure Conditions
+
+- **ROGUE tables detected** (exit 1): Build is BLOCKED. Tables must be registered in `ctb.table_registry` or dropped.
+- **Warnings only** (exit 0): Build passes. Warnings should be addressed but do not block.
+- **Connection failure** (exit 2): Script cannot connect to database. Does NOT block build (dependency unavailable ≠ violation).
+
+### 6.5 Artifact Outputs
+
+| Artifact | Format | Contents |
+|----------|--------|----------|
+| `.ctb-drift-audit-report.json` | JSON | Machine-readable: surfaces, counts, status |
+| `.ctb-drift-audit-report.md` | Markdown | Human-readable: tables, results, doctrine reference |
+
+### 6.6 Relationship to Fail-Closed Model
+
+The drift audit is the **runtime verification layer** of the fail-closed model:
+
+- **Build-time gate** (§3) prevents new tables from being created without registry entries
+- **Database gate** (§4) prevents DDL/DML on unregistered tables at runtime
+- **Application gate** (§5) prevents application code from bypassing the Gatekeeper
+- **Drift audit** (§6) detects tables that entered the database through other means (manual SQL, migrations applied without registry update, superuser bypass)
+
+The drift audit does not replace the other gates — it catches what they cannot. Together they form the complete defense-in-depth chain.
+
+---
+
+## 7. Enforcement Summary
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -155,6 +217,10 @@ Scans `src/` for direct database client imports that bypass the Gatekeeper. Bann
 ├─────────────────┼───────────────────────────────────────────┤
 │ CI              │ reusable-fail-closed-gate.yml Gate C       │
 │                 │ (DDL outside /migrations/)                 │
+├─────────────────┼───────────────────────────────────────────┤
+│ DRIFT AUDIT     │ ctb-drift-audit.sh                         │
+│                 │ DB vs ctb.table_registry vs YAML           │
+│                 │ ROGUE = violation, others = warning         │
 └─────────────────┴───────────────────────────────────────────┘
 ```
 
@@ -167,6 +233,6 @@ Scans `src/` for direct database client imports that bypass the Gatekeeper. Bann
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
 | Status | LOCKED |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Change Protocol | ADR + Human Approval Required |
 | Related | ADR-001, ARCHITECTURE.md Part X, DBA_ENFORCEMENT_DOCTRINE.md |

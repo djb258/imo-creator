@@ -14,6 +14,7 @@
 | Release | `release.yml` | tag push `v*.*.*` | GitHub release creation |
 | Reusable CTB Enforcement | `reusable-ctb-enforcement.yml` | workflow_call | Reusable CTB enforcement (called by other workflows) |
 | Reusable Fail-Closed Gate | `reusable-fail-closed-gate.yml` | workflow_call | Fail-closed governance gate (4 gates: side-door, executable, DDL, fail-open detection) |
+| Reusable CTB Drift Audit | `reusable-ctb-drift-audit.yml` | workflow_call | Live DB vs registry drift detection (6 drift classes, requires DATABASE_URL) |
 
 ---
 

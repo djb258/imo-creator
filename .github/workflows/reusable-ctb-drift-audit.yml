@@ -1,0 +1,187 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# REUSABLE CTB DRIFT AUDIT
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Purpose: Reusable workflow for live database-vs-registry drift detection
+# Trigger: workflow_call only
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §6
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Reusable CTB Drift Audit
+
+on:
+  workflow_call:
+    inputs:
+      enforcement_mode:
+        description: 'Enforcement mode (standard or strict)'
+        required: false
+        type: string
+        default: 'standard'
+    secrets:
+      DATABASE_URL:
+        description: 'PostgreSQL connection string for live database'
+        required: true
+    outputs:
+      status:
+        description: 'Drift audit status (PASSED or FAILED)'
+        value: ${{ jobs.drift-audit.outputs.status }}
+      violations:
+        description: 'Number of violations (ROGUE tables)'
+        value: ${{ jobs.drift-audit.outputs.violations }}
+      warnings:
+        description: 'Number of warnings (PHANTOM/ORPHAN/GHOST/DESYNC/DRIFT)'
+        value: ${{ jobs.drift-audit.outputs.warnings }}
+
+jobs:
+  drift-audit:
+    name: CTB Drift Audit
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.audit.outputs.status }}
+      violations: ${{ steps.audit.outputs.violations }}
+      warnings: ${{ steps.audit.outputs.warnings }}
+
+    steps:
+      # ─────────────────────────────────────────────────────────────
+      # SETUP
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client jq
+          # Install yq for YAML parsing
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Verify drift audit script exists
+        run: |
+          if [ ! -f "templates/scripts/ctb-drift-audit.sh" ]; then
+            echo "::error::templates/scripts/ctb-drift-audit.sh not found — FAIL (not skip). Doctrine: FAIL_CLOSED_CI_CONTRACT.md §2"
+            exit 1
+          fi
+          chmod +x templates/scripts/ctb-drift-audit.sh
+
+      # ─────────────────────────────────────────────────────────────
+      # DRIFT AUDIT
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Run CTB Drift Audit
+        id: audit
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  CTB DRIFT AUDIT CI"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+
+          # Run drift audit script — capture exit code without failing the step
+          bash templates/scripts/ctb-drift-audit.sh || AUDIT_EXIT=$?
+
+          if [ -z "$AUDIT_EXIT" ]; then
+            AUDIT_EXIT=0
+          fi
+
+          echo "audit_exit_code=$AUDIT_EXIT" >> $GITHUB_OUTPUT
+
+          # Parse results from JSON report
+          if [ -f ".ctb-drift-audit-report.json" ]; then
+            VIOLATIONS=$(jq -r '.violations' .ctb-drift-audit-report.json 2>/dev/null || echo "0")
+            WARNINGS=$(jq -r '.warnings' .ctb-drift-audit-report.json 2>/dev/null || echo "0")
+            STATUS=$(jq -r '.status' .ctb-drift-audit-report.json 2>/dev/null || echo "UNKNOWN")
+
+            echo "violations=$VIOLATIONS" >> $GITHUB_OUTPUT
+            echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Drift audit report not generated"
+            echo "violations=0" >> $GITHUB_OUTPUT
+            echo "warnings=0" >> $GITHUB_OUTPUT
+            echo "status=UNKNOWN" >> $GITHUB_OUTPUT
+          fi
+
+      # ─────────────────────────────────────────────────────────────
+      # RESULTS
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Display Drift Audit Report
+        if: always()
+        run: |
+          echo ""
+          echo "───────────────────────────────────────────────────────────────"
+          echo "  DRIFT AUDIT RESULTS"
+          echo "───────────────────────────────────────────────────────────────"
+          echo ""
+
+          if [ -f ".ctb-drift-audit-report.md" ]; then
+            cat .ctb-drift-audit-report.md
+          else
+            echo "No drift audit report generated"
+          fi
+
+      - name: Print Warnings
+        if: steps.audit.outputs.warnings != '0' && steps.audit.outputs.warnings != ''
+        run: |
+          echo ""
+          echo "::warning::Drift audit found ${{ steps.audit.outputs.warnings }} warning(s)"
+          echo ""
+          echo "Warnings (PHANTOM/ORPHAN/GHOST/DESYNC/DRIFT) do not block the build."
+          echo "ROGUE tables are violations and DO block the build."
+
+      # ─────────────────────────────────────────────────────────────
+      # UPLOAD ARTIFACTS
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Upload Drift Audit Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ctb-drift-audit-report
+          path: |
+            .ctb-drift-audit-report.json
+            .ctb-drift-audit-report.md
+          retention-days: 30
+          if-no-files-found: warn
+
+      # ─────────────────────────────────────────────────────────────
+      # ENFORCEMENT GATE
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Enforce Drift Compliance
+        if: steps.audit.outputs.audit_exit_code != '0'
+        run: |
+          echo ""
+          echo "::error::CTB DRIFT VIOLATION DETECTED"
+          echo ""
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  BUILD BLOCKED — ROGUE TABLES DETECTED"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+          echo "Violations: ${{ steps.audit.outputs.violations }}"
+          echo "Warnings:   ${{ steps.audit.outputs.warnings }}"
+          echo ""
+          echo "ROGUE tables exist in the database but are NOT registered"
+          echo "in ctb.table_registry. Register them or drop them."
+          echo ""
+          echo "Doctrine: CTB_REGISTRY_ENFORCEMENT.md §6"
+          echo "See drift audit artifacts for details."
+          echo ""
+          exit 1
+
+      - name: Drift Audit Passed
+        if: steps.audit.outputs.audit_exit_code == '0'
+        run: |
+          echo ""
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  CTB DRIFT AUDIT PASSED"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+          echo "Status:   ${{ steps.audit.outputs.status }}"
+          echo "Warnings: ${{ steps.audit.outputs.warnings }}"
+          echo ""
