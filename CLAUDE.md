@@ -20,7 +20,7 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 | `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
 | `templates/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
 | `templates/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
-| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement (v1.2.0) |
+| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment (v1.4.0) |
 | `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract (v1.0.0) |
 | `templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
 | `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
@@ -148,6 +148,32 @@ The CTB drift audit is now **mandatory** and **tamper-resistant**:
 | `--mode=baseline\|strict` | Baseline mode allows legacy tables while blocking new entropy |
 | `docs/CTB_DRIFT_BASELINE.json` | Captures known legacy drift state (repo-level, not template) |
 
+### Batch-Level RAW Lockdown (v3.1.0)
+
+INSERT-only enforcement across the entire data pipeline:
+
+| Component | Purpose |
+|-----------|---------|
+| `CTB_REGISTRY_ENFORCEMENT.md §8` | Doctrine: vendor bridges, RAW immutability, batch registry, _active views |
+| `005_raw_immutability.sql` | DB trigger: blocks UPDATE/DELETE on STAGING, SUPPORTING, CANONICAL tables |
+| `006_raw_batch_registry.sql` | Batch lifecycle: `ctb.raw_batch_registry` with supersede chain |
+| `007_raw_active_view_template.sql` | View helper: creates `_active` views filtering to current batches |
+| Drift checks 7-9 | Detects missing immutability triggers, RAW columns, and _active views |
+
+### Vendor JSON + Frozen Bridge Enforcement (v3.2.0)
+
+JSON containment and versioned bridge enforcement:
+
+| Component | Purpose |
+|-----------|---------|
+| `CTB_REGISTRY_ENFORCEMENT.md §9` | Doctrine: vendor JSON sandbox, frozen bridge law, RAW discipline, downstream access law |
+| `008_vendor_json_template.sql` | Template for `vendor_claude_<subhub>` tables — JSON allowed ONLY here |
+| `009_bridge_template.sql` | Template for versioned bridge functions — explicit JSON extraction, strict validation |
+| `010_vendor_write_permissions.sql` | Role separation: `ctb_vendor_writer`, `ctb_data_reader`, `ctb_bridge_executor` |
+| Drift checks 10-13 | JSON in RAW/downstream, bridge version constants, vendor reference violations |
+
+**Vendor JSON Law**: All external tool output MUST land in `vendor_claude_*` tables. All JSON mapping MUST occur in versioned bridge functions. No JSON is permitted beyond the vendor layer. RAW, SUPPORTING, and CANONICAL tables contain structured columns only.
+
 ---
 
 ## TEMPLATE RULES
@@ -223,7 +249,7 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
 │   ├── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
 │   ├── EXECUTION_SURFACE_LAW.md     ← Execution containment (v1.0.0)
-│   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first enforcement (v1.0.0)
+│   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown + vendor JSON (v1.4.0)
 │   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI (v1.0.0)
 │   └── LEGACY_COLLAPSE_PLAYBOOK.md  ← Legacy migration (v1.0.0)
 │

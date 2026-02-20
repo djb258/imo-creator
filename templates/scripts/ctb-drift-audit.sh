@@ -23,12 +23,19 @@
 #   Surface C: column_registry.yml (build-time YAML registry)
 #
 # DRIFT CLASSES:
-#   ROGUE_TABLE    — exists in DB but NOT in ctb.table_registry
-#   PHANTOM_TABLE  — registered in ctb.table_registry but NOT in DB
-#   ORPHAN_TABLE   — in DB but NOT in column_registry.yml
-#   GHOST_TABLE    — in column_registry.yml but NOT in DB
-#   COLUMN_DRIFT   — column mismatch between DB and column_registry.yml
-#   REGISTRY_DESYNC — ctb.table_registry disagrees with column_registry.yml
+#   ROGUE_TABLE          — exists in DB but NOT in ctb.table_registry
+#   PHANTOM_TABLE        — registered in ctb.table_registry but NOT in DB
+#   ORPHAN_TABLE         — in DB but NOT in column_registry.yml
+#   GHOST_TABLE          — in column_registry.yml but NOT in DB
+#   COLUMN_DRIFT         — column mismatch between DB and column_registry.yml
+#   REGISTRY_DESYNC      — ctb.table_registry disagrees with column_registry.yml
+#   IMMUTABILITY_MISSING — governed table lacks immutability trigger (§8)
+#   RAW_COLUMNS_MISSING  — STAGING table missing required RAW columns (§8.2)
+#   RAW_VIEW_MISSING     — STAGING table missing _active companion view (§8.4)
+#   JSON_IN_RAW          — RAW table contains JSONB/JSON columns (§9.3)
+#   JSON_IN_DOWNSTREAM   — SUPPORTING or CANONICAL table contains JSON columns (§9.4)
+#   BRIDGE_NO_VERSION    — Bridge function missing BRIDGE_VERSION constant (§9.2)
+#   VENDOR_REF_VIOLATION — SUPPORTING/CANONICAL references vendor table (§9.4)
 #
 # MODES:
 #   strict   — ROGUE_TABLE = VIOLATION (fail on any rogue table)
@@ -627,6 +634,405 @@ fi
 echo ""
 
 # ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 7: IMMUTABILITY MISSING (governed tables without triggers)
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §8
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 7: Immutability Enforcement ───────────────────"
+
+IMMUTABILITY_MISSING_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Get all non-ERROR registered tables that exist in the DB
+    GOVERNED_TABLES=$(run_sql "
+        SELECT tr.table_schema || '.' || tr.table_name
+        FROM ctb.table_registry tr
+        WHERE tr.leaf_type != 'ERROR'
+          AND EXISTS (
+              SELECT 1 FROM information_schema.tables t
+              WHERE t.table_schema = tr.table_schema
+                AND t.table_name = tr.table_name
+          )
+        ORDER BY tr.table_schema, tr.table_name;
+    " 2>/dev/null || echo "")
+
+    if [ -n "$GOVERNED_TABLES" ]; then
+        while IFS= read -r gov_table; do
+            [ -z "$gov_table" ] && continue
+            GOV_SCHEMA="${gov_table%%.*}"
+            GOV_NAME="${gov_table##*.}"
+
+            # Check if immutability trigger exists
+            HAS_TRIGGER=$(run_sql "
+                SELECT EXISTS(
+                    SELECT 1 FROM information_schema.triggers
+                    WHERE trigger_schema = '$GOV_SCHEMA'
+                      AND event_object_table = '$GOV_NAME'
+                      AND trigger_name LIKE 'trg_ctb_immutability_%'
+                );
+            " 2>/dev/null || echo "f")
+
+            if [ "$HAS_TRIGGER" != "t" ]; then
+                violation "IMMUTABILITY_MISSING: $gov_table has no immutability trigger (§8)"
+                ((IMMUTABILITY_MISSING_COUNT++))
+            fi
+        done <<< "$GOVERNED_TABLES"
+
+        if [ "$IMMUTABILITY_MISSING_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} All governed tables have immutability triggers"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No governed tables found"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 8: RAW COLUMNS MISSING (STAGING tables without required columns)
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §8.2
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 8: RAW Required Columns ───────────────────────"
+
+RAW_COLUMNS_MISSING_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Get all STAGING tables that exist in the DB
+    STAGING_TABLES=$(run_sql "
+        SELECT tr.table_schema || '.' || tr.table_name
+        FROM ctb.table_registry tr
+        WHERE tr.leaf_type = 'STAGING'
+          AND EXISTS (
+              SELECT 1 FROM information_schema.tables t
+              WHERE t.table_schema = tr.table_schema
+                AND t.table_name = tr.table_name
+          )
+        ORDER BY tr.table_schema, tr.table_name;
+    " 2>/dev/null || echo "")
+
+    REQUIRED_RAW_COLS=("ingestion_batch_id" "vendor_source" "bridge_version" "supersedes_batch_id" "created_at")
+
+    if [ -n "$STAGING_TABLES" ]; then
+        while IFS= read -r stg_table; do
+            [ -z "$stg_table" ] && continue
+            STG_SCHEMA="${stg_table%%.*}"
+            STG_NAME="${stg_table##*.}"
+
+            for req_col in "${REQUIRED_RAW_COLS[@]}"; do
+                HAS_COL=$(run_sql "
+                    SELECT EXISTS(
+                        SELECT 1 FROM information_schema.columns
+                        WHERE table_schema = '$STG_SCHEMA'
+                          AND table_name = '$STG_NAME'
+                          AND column_name = '$req_col'
+                    );
+                " 2>/dev/null || echo "f")
+
+                if [ "$HAS_COL" != "t" ]; then
+                    violation "RAW_COLUMNS_MISSING: $stg_table missing required column '$req_col' (§8.2)"
+                    ((RAW_COLUMNS_MISSING_COUNT++))
+                fi
+            done
+        done <<< "$STAGING_TABLES"
+
+        if [ "$RAW_COLUMNS_MISSING_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} All STAGING tables have required RAW columns"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No STAGING tables found"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 9: RAW VIEW MISSING (STAGING tables without _active views)
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §8.4
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 9: RAW Active Views ───────────────────────────"
+
+RAW_VIEW_MISSING_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Reuse STAGING_TABLES from check 8 if available, or re-query
+    if [ -z "${STAGING_TABLES:-}" ]; then
+        STAGING_TABLES=$(run_sql "
+            SELECT tr.table_schema || '.' || tr.table_name
+            FROM ctb.table_registry tr
+            WHERE tr.leaf_type = 'STAGING'
+              AND EXISTS (
+                  SELECT 1 FROM information_schema.tables t
+                  WHERE t.table_schema = tr.table_schema
+                    AND t.table_name = tr.table_name
+              )
+            ORDER BY tr.table_schema, tr.table_name;
+        " 2>/dev/null || echo "")
+    fi
+
+    if [ -n "$STAGING_TABLES" ]; then
+        while IFS= read -r stg_table; do
+            [ -z "$stg_table" ] && continue
+            STG_SCHEMA="${stg_table%%.*}"
+            STG_NAME="${stg_table##*.}"
+            EXPECTED_VIEW="${STG_NAME}_active"
+
+            HAS_VIEW=$(run_sql "
+                SELECT EXISTS(
+                    SELECT 1 FROM information_schema.views
+                    WHERE table_schema = '$STG_SCHEMA'
+                      AND table_name = '$EXPECTED_VIEW'
+                );
+            " 2>/dev/null || echo "f")
+
+            if [ "$HAS_VIEW" != "t" ]; then
+                warning "RAW_VIEW_MISSING: $stg_table has no companion view ${STG_SCHEMA}.${EXPECTED_VIEW} (§8.4)"
+                ((RAW_VIEW_MISSING_COUNT++))
+            fi
+        done <<< "$STAGING_TABLES"
+
+        if [ "$RAW_VIEW_MISSING_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} All STAGING tables have _active companion views"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No STAGING tables found"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 10: JSON in RAW tables (§9.3)
+# RAW tables must contain structured columns only — no JSONB/JSON.
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §9.3
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 10: JSON Containment (RAW) ────────────────────"
+
+JSON_IN_RAW_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Get all STAGING tables that are NOT vendor tables
+    RAW_NON_VENDOR=$(run_sql "
+        SELECT tr.table_schema || '.' || tr.table_name
+        FROM ctb.table_registry tr
+        WHERE tr.leaf_type = 'STAGING'
+          AND tr.table_name NOT LIKE 'vendor_claude_%'
+          AND EXISTS (
+              SELECT 1 FROM information_schema.tables t
+              WHERE t.table_schema = tr.table_schema
+                AND t.table_name = tr.table_name
+          )
+        ORDER BY tr.table_schema, tr.table_name;
+    " 2>/dev/null || echo "")
+
+    if [ -n "$RAW_NON_VENDOR" ]; then
+        while IFS= read -r raw_table; do
+            [ -z "$raw_table" ] && continue
+            RAW_SCHEMA="${raw_table%%.*}"
+            RAW_NAME="${raw_table##*.}"
+
+            JSON_COLS=$(run_sql "
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_schema = '$RAW_SCHEMA'
+                  AND table_name = '$RAW_NAME'
+                  AND data_type IN ('jsonb', 'json')
+                ORDER BY column_name;
+            " 2>/dev/null || echo "")
+
+            if [ -n "$JSON_COLS" ]; then
+                while IFS= read -r jcol; do
+                    [ -z "$jcol" ] && continue
+                    if [ "$MODE" = "baseline" ]; then
+                        warning "JSON_IN_RAW: $raw_table.$jcol — JSON column in RAW table (§9.3)"
+                    else
+                        violation "JSON_IN_RAW: $raw_table.$jcol — JSON column in RAW table. JSON allowed only in vendor_claude_* tables (§9.3)"
+                    fi
+                    ((JSON_IN_RAW_COUNT++))
+                done <<< "$JSON_COLS"
+            fi
+        done <<< "$RAW_NON_VENDOR"
+
+        if [ "$JSON_IN_RAW_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} No JSON columns in RAW tables"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No non-vendor STAGING tables found"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 11: JSON in SUPPORTING/CANONICAL tables (§9.4)
+# No JSON columns allowed downstream of the vendor layer.
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §9.4
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 11: JSON Containment (Downstream) ─────────────"
+
+JSON_IN_DOWNSTREAM_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    DOWNSTREAM_TABLES=$(run_sql "
+        SELECT tr.table_schema || '.' || tr.table_name || '|' || tr.leaf_type
+        FROM ctb.table_registry tr
+        WHERE tr.leaf_type IN ('CANONICAL', 'MV', 'REGISTRY', 'ERROR')
+          AND EXISTS (
+              SELECT 1 FROM information_schema.tables t
+              WHERE t.table_schema = tr.table_schema
+                AND t.table_name = tr.table_name
+          )
+        ORDER BY tr.table_schema, tr.table_name;
+    " 2>/dev/null || echo "")
+
+    if [ -n "$DOWNSTREAM_TABLES" ]; then
+        while IFS= read -r ds_entry; do
+            [ -z "$ds_entry" ] && continue
+            DS_TABLE="${ds_entry%%|*}"
+            DS_TYPE="${ds_entry##*|}"
+            DS_SCHEMA="${DS_TABLE%%.*}"
+            DS_NAME="${DS_TABLE##*.}"
+
+            JSON_COLS=$(run_sql "
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_schema = '$DS_SCHEMA'
+                  AND table_name = '$DS_NAME'
+                  AND data_type IN ('jsonb', 'json')
+                ORDER BY column_name;
+            " 2>/dev/null || echo "")
+
+            if [ -n "$JSON_COLS" ]; then
+                while IFS= read -r jcol; do
+                    [ -z "$jcol" ] && continue
+                    if [ "$MODE" = "baseline" ]; then
+                        warning "JSON_IN_DOWNSTREAM: $DS_TABLE.$jcol ($DS_TYPE) — JSON column not allowed downstream (§9.4)"
+                    else
+                        violation "JSON_IN_DOWNSTREAM: $DS_TABLE.$jcol ($DS_TYPE) — JSON column not allowed in $DS_TYPE tables (§9.4)"
+                    fi
+                    ((JSON_IN_DOWNSTREAM_COUNT++))
+                done <<< "$JSON_COLS"
+            fi
+        done <<< "$DOWNSTREAM_TABLES"
+
+        if [ "$JSON_IN_DOWNSTREAM_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} No JSON columns in SUPPORTING/CANONICAL/ERROR tables"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No downstream tables found"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 12: Bridge version constants (§9.2)
+# All bridge functions in ctb schema must have BRIDGE_VERSION constant.
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §9.2
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 12: Bridge Version Constants ──────────────────"
+
+BRIDGE_NO_VERSION_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Find functions in ctb schema that look like bridges (name contains 'bridge')
+    BRIDGE_FUNCTIONS=$(run_sql "
+        SELECT p.proname
+        FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE n.nspname = 'ctb'
+          AND p.proname LIKE '%bridge%'
+          AND p.proname NOT LIKE 'validate_%'
+        ORDER BY p.proname;
+    " 2>/dev/null || echo "")
+
+    if [ -n "$BRIDGE_FUNCTIONS" ]; then
+        while IFS= read -r bridge_fn; do
+            [ -z "$bridge_fn" ] && continue
+
+            # Check if function source contains BRIDGE_VERSION constant
+            HAS_VERSION=$(run_sql "
+                SELECT EXISTS(
+                    SELECT 1 FROM pg_proc p
+                    JOIN pg_namespace n ON p.pronamespace = n.oid
+                    WHERE n.nspname = 'ctb'
+                      AND p.proname = '$bridge_fn'
+                      AND p.prosrc LIKE '%BRIDGE_VERSION CONSTANT TEXT%'
+                );
+            " 2>/dev/null || echo "f")
+
+            if [ "$HAS_VERSION" != "t" ]; then
+                if [ "$MODE" = "baseline" ]; then
+                    warning "BRIDGE_NO_VERSION: ctb.$bridge_fn missing BRIDGE_VERSION constant (§9.2)"
+                else
+                    violation "BRIDGE_NO_VERSION: ctb.$bridge_fn missing BRIDGE_VERSION constant (§9.2)"
+                fi
+                ((BRIDGE_NO_VERSION_COUNT++))
+            fi
+        done <<< "$BRIDGE_FUNCTIONS"
+
+        if [ "$BRIDGE_NO_VERSION_COUNT" -eq 0 ]; then
+            echo -e "  ${GREEN}[PASS]${NC} All bridge functions have BRIDGE_VERSION constant"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} No bridge functions found in ctb schema"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
+# DRIFT CHECK 13: Vendor table references in promotion paths (§9.4)
+# SUPPORTING/CANONICAL must not reference vendor tables via promotion.
+# Doctrine: CTB_REGISTRY_ENFORCEMENT.md §9.4
+# ───────────────────────────────────────────────────────────────────
+echo "─── Drift Check 13: Vendor Reference Violations ───────────────"
+
+VENDOR_REF_COUNT=0
+if [ "$CTB_REGISTRY_EXISTS" = "t" ]; then
+    # Check if promotion_paths table exists
+    HAS_PROMO=$(run_sql "
+        SELECT EXISTS(
+            SELECT 1 FROM information_schema.tables
+            WHERE table_schema = 'ctb' AND table_name = 'promotion_paths'
+        );
+    " 2>/dev/null || echo "f")
+
+    if [ "$HAS_PROMO" = "t" ]; then
+        # Find promotion paths where source is a vendor table
+        VENDOR_PROMOS=$(run_sql "
+            SELECT pp.source_schema || '.' || pp.source_table || ' → ' ||
+                   pp.target_schema || '.' || pp.target_table
+            FROM ctb.promotion_paths pp
+            WHERE pp.source_table LIKE 'vendor_claude_%'
+              AND pp.is_active = true
+            ORDER BY pp.source_table;
+        " 2>/dev/null || echo "")
+
+        if [ -n "$VENDOR_PROMOS" ]; then
+            while IFS= read -r promo; do
+                [ -z "$promo" ] && continue
+                if [ "$MODE" = "baseline" ]; then
+                    warning "VENDOR_REF_VIOLATION: Promotion path $promo — downstream must not reference vendor tables directly (§9.4)"
+                else
+                    violation "VENDOR_REF_VIOLATION: Promotion path $promo — data must flow through bridge → RAW → _active (§9.4)"
+                fi
+                ((VENDOR_REF_COUNT++))
+            done <<< "$VENDOR_PROMOS"
+
+            if [ "$VENDOR_REF_COUNT" -eq 0 ]; then
+                echo -e "  ${GREEN}[PASS]${NC} No vendor table references in promotion paths"
+            fi
+        else
+            echo -e "  ${GREEN}[PASS]${NC} No vendor table references in promotion paths"
+        fi
+    else
+        echo -e "  ${CYAN}[SKIP]${NC} ctb.promotion_paths not available"
+    fi
+else
+    echo -e "  ${CYAN}[SKIP]${NC} ctb.table_registry not available"
+fi
+echo ""
+
+# ───────────────────────────────────────────────────────────────────
 # WRITE BASELINE (if --write-baseline)
 # ───────────────────────────────────────────────────────────────────
 if [ "$WRITE_BASELINE" = true ]; then
@@ -743,8 +1149,8 @@ fi)
 
 ## Doctrine
 
-Enforcement: CTB_REGISTRY_ENFORCEMENT.md §6
-Model: Fail-closed — rogue tables are violations, all others are warnings.
+Enforcement: CTB_REGISTRY_ENFORCEMENT.md §6, §8, §9
+Model: Fail-closed — rogue tables, immutability gaps, and JSON containment violations are failures.
 ENDMD
 
 echo "  Reports: $REPORT_JSON, $REPORT_MD"

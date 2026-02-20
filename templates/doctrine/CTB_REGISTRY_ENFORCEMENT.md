@@ -2,7 +2,7 @@
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
 **Status**: LOCKED
-**Version**: 1.0.0
+**Version**: 1.4.0
 **Scope**: All child repositories
 
 ---
@@ -226,6 +226,10 @@ The drift audit does not replace the other gates — it catches what they cannot
 │ DATABASE        │ Event trigger (DDL gate)                   │
 │                 │ Write guards (DML gate)                    │
 │                 │ Promotion enforcement                      │
+│                 │ RAW immutability triggers (§8)             │
+│                 │ Batch registry (§8.3)                      │
+│                 │ Frozen bridge functions (§9.2)             │
+│                 │ Role separation (§9, migration 010)        │
 ├─────────────────┼───────────────────────────────────────────┤
 │ APPLICATION     │ Gatekeeper module (write wrapper)          │
 │                 │ Banned client detection                    │
@@ -236,8 +240,234 @@ The drift audit does not replace the other gates — it catches what they cannot
 │ DRIFT AUDIT     │ ctb-drift-audit.sh                         │
 │                 │ DB vs ctb.table_registry vs YAML           │
 │                 │ ROGUE = violation, others = warning         │
+│                 │ Immutability drift (§8 violations)         │
+│                 │ JSON containment (§9 violations)           │
 └─────────────────┴───────────────────────────────────────────┘
 ```
+
+---
+
+## 8. Batch-Level RAW Lockdown
+
+**Added**: v1.3.0
+**Scope**: All STAGING (RAW), SUPPORTING, and CANONICAL tables
+**Principle**: Append-only data flow — no UPDATE, no DELETE, corrections via batch supersede
+
+This section defines immutability enforcement for the data pipeline. Once a row lands in any governed table, it is permanent. Corrections are made by inserting a new batch that supersedes the old one.
+
+### 8.1 Vendor Layer (Bridge Registration)
+
+External data enters the CTB through **registered vendor bridges**. A bridge is a declared integration point between a vendor system and a RAW table.
+
+Every vendor bridge MUST be registered in `ctb.vendor_bridges` before it can write to any RAW table:
+
+| Field | Required | Purpose |
+|-------|----------|---------|
+| `bridge_id` | YES | Unique identifier for the bridge (e.g., `stripe-invoices-v2`) |
+| `vendor_source` | YES | External system name (e.g., `stripe`, `hubspot`, `manual_csv`) |
+| `bridge_version` | YES | Semantic version of the bridge logic |
+| `target_schema` | YES | Schema of the RAW table this bridge writes to |
+| `target_table` | YES | RAW table name |
+| `hub_id` | YES | Owning hub (CC-02) |
+| `subhub_id` | YES | Owning sub-hub (CC-03) |
+| `is_active` | YES | Whether the bridge is currently allowed to write |
+| `registered_at` | AUTO | Timestamp of registration |
+| `registered_by` | AUTO | User who registered the bridge |
+
+**Rule**: Writes to RAW tables from unregistered bridges are **REJECTED**.
+
+### 8.2 RAW Intake Layer (INSERT-Only Immutability)
+
+All tables with leaf_type `STAGING` (RAW tables), plus all SUPPORTING and CANONICAL tables, are **INSERT-only**. UPDATE and DELETE are rejected at the database trigger level.
+
+**Required columns on every RAW table**:
+
+| Column | Type | Purpose |
+|--------|------|---------|
+| `ingestion_batch_id` | UUID | Unique identifier for this ingestion batch |
+| `vendor_source` | TEXT | Must match a registered `ctb.vendor_bridges.vendor_source` |
+| `bridge_version` | TEXT | Version of the bridge that produced this batch |
+| `supersedes_batch_id` | UUID NULL | If this batch corrects a previous batch, reference it here |
+| `created_at` | TIMESTAMPTZ | Immutable insertion timestamp (DEFAULT now()) |
+
+**Immutability rules**:
+
+| Table Type | INSERT | UPDATE | DELETE |
+|------------|--------|--------|--------|
+| STAGING (RAW) | ALLOWED (via registered bridge) | **REJECTED** | **REJECTED** |
+| SUPPORTING (MV, REGISTRY) | ALLOWED (via Gatekeeper) | **REJECTED** | **REJECTED** |
+| CANONICAL | ALLOWED (via promotion path) | **REJECTED** | **REJECTED** |
+| ERROR | ALLOWED | ALLOWED | **REJECTED** |
+
+**Exception**: ERROR tables allow UPDATE (to mark errors as resolved) but not DELETE. All other table types are strictly append-only.
+
+**Correction model**: To correct data in a RAW table, insert a new batch with `supersedes_batch_id` referencing the old batch. The `raw_active` view (§8.4) resolves which batch is current.
+
+### 8.3 RAW Batch Registry
+
+Every ingestion batch is tracked in `ctb.raw_batch_registry`:
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `batch_id` | UUID PK | Matches `ingestion_batch_id` on the RAW rows |
+| `bridge_id` | TEXT FK | References `ctb.vendor_bridges.bridge_id` |
+| `vendor_source` | TEXT | Vendor system that produced this batch |
+| `bridge_version` | TEXT | Bridge version at ingestion time |
+| `target_schema` | TEXT | Schema of the target RAW table |
+| `target_table` | TEXT | Name of the target RAW table |
+| `row_count` | INTEGER | Number of rows in this batch |
+| `supersedes_batch_id` | UUID NULL | Previous batch this one replaces |
+| `status` | TEXT | `ACTIVE`, `SUPERSEDED`, or `FAILED` |
+| `ingested_at` | TIMESTAMPTZ | When the batch landed |
+| `ingested_by` | TEXT | Process or user that ran the ingestion |
+
+**Status transitions**: `ACTIVE` → `SUPERSEDED` (when a newer batch references it via `supersedes_batch_id`). Status updates on the batch registry itself are the **only** allowed UPDATE in the RAW pipeline — and only to mark a batch as `SUPERSEDED`.
+
+**Rule**: The batch registry is itself INSERT-only for new batches. The only UPDATE allowed is `status` changing from `ACTIVE` to `SUPERSEDED`.
+
+### 8.4 RAW_ACTIVE View Requirement
+
+Every RAW table MUST have a companion view named `{table_name}_active` (e.g., `raw_companies_active`). This view:
+
+1. Joins on `ctb.raw_batch_registry` to filter only `status = 'ACTIVE'` batches
+2. Excludes rows from superseded batches
+3. Is the **only** surface downstream processes should query
+
+**Template**:
+```sql
+CREATE OR REPLACE VIEW {schema}.{table_name}_active AS
+SELECT r.*
+FROM {schema}.{table_name} r
+INNER JOIN ctb.raw_batch_registry b
+    ON b.batch_id = r.ingestion_batch_id
+WHERE b.status = 'ACTIVE';
+```
+
+**Rule**: Downstream SUPPORTING or CANONICAL tables MUST read from `_active` views, never from raw tables directly. The Gatekeeper module enforces this at the application layer.
+
+### 8.5 Promotion Enforcement (INSERT-Only Chain)
+
+The full data flow is INSERT-only at every stage:
+
+```
+Vendor → Bridge → RAW (INSERT only)
+                    ↓
+              _active view (filters superseded)
+                    ↓
+            SUPPORTING (INSERT only, via promotion path)
+                    ↓
+            CANONICAL (INSERT only, via promotion path)
+```
+
+**Enforcement**:
+
+| Stage | Gate | Mechanism |
+|-------|------|-----------|
+| Vendor → RAW | Bridge registration | `ctb.vendor_bridges` + immutability trigger |
+| RAW → SUPPORTING | Promotion path | `ctb.promotion_paths` + immutability trigger |
+| SUPPORTING → CANONICAL | Promotion path | `ctb.promotion_paths` + immutability trigger |
+| Any → ERROR | Direct write | Immutability trigger (INSERT + UPDATE only) |
+
+**Session variable**: All writes through the promotion chain must set `ctb.promotion_source` (as defined in §4.4). The immutability triggers (§8.2) run **in addition to** the promotion triggers (§4.4) — both must pass.
+
+**Non-negotiable**: No UPDATE or DELETE on STAGING, MV, REGISTRY, or CANONICAL tables. Period. Corrections flow through batch supersede only.
+
+---
+
+## 9. Vendor JSON Intake Model (Frozen Bridge Architecture)
+
+**Added**: v1.4.0
+**Scope**: All sub-hubs with external data sources
+**Principle**: JSON is contained at the vendor layer. Bridges are frozen, versioned, migration-controlled SQL functions. RAW and all downstream tables contain structured columns only.
+
+This section defines how external tool output enters the CTB. JSON is a transport format, not a storage format. It is permitted at exactly one layer (vendor) and must be fully decomposed before reaching RAW.
+
+### 9.1 Vendor Layer (JSON Sandbox)
+
+Each sub-hub that receives external data MAY have a **vendor table** named `vendor_claude_<subhub>` (e.g., `vendor_claude_companies`). This table is the JSON landing zone.
+
+**Required structure**:
+
+| Column | Type | Purpose |
+|--------|------|---------|
+| `id` | UUID PK | Row identifier (DEFAULT gen_random_uuid()) |
+| `ingestion_batch_id` | UUID | Links to `ctb.raw_batch_registry` |
+| `tool_name` | TEXT | Name of the tool that produced this payload (e.g., `composio-hubspot`, `manual-csv-import`) |
+| `payload_json` | JSONB | Raw JSON payload from the external tool |
+| `created_at` | TIMESTAMPTZ | Immutable insertion timestamp (DEFAULT now()) |
+
+**Rules**:
+
+| Rule | Enforcement |
+|------|-------------|
+| INSERT only — no UPDATE, no DELETE | Immutability trigger (§8.2) |
+| JSON columns (`JSONB`) allowed ONLY in vendor tables | Drift audit check (§9, strict mode) |
+| No promotion without bridge | Bridge enforcement trigger |
+| No direct RAW insert by `claude_role` | Role separation (migration 010) |
+| Vendor tables use leaf_type `STAGING` | Standard CTB registration |
+| Vendor table counts toward 0-2 SUPPORTING limit | ADR-001 cardinality unchanged |
+
+**Naming convention**: Vendor tables MUST be prefixed with `vendor_claude_`. This prefix is used by the drift audit to identify the JSON sandbox boundary.
+
+### 9.2 Bridge Enforcement Law
+
+A **bridge** is a versioned, migration-controlled SQL function that transforms vendor JSON into structured RAW columns. Bridges are the **only** path from vendor tables to RAW tables.
+
+**Bridge requirements**:
+
+| Requirement | Detail |
+|-------------|--------|
+| Versioned | Every bridge function declares a `bridge_version` constant |
+| Migration-controlled | Bridge functions live in `migrations/` as SQL files |
+| Explicit extraction | Each JSON key is extracted with explicit `payload_json->>'key'` |
+| Explicit casting | Every extracted value is cast to the target column type |
+| Strict validation | Missing required keys → `RAISE EXCEPTION` |
+| Type mismatch → reject | Invalid casts → `RAISE EXCEPTION` |
+| Unmapped fields → log or reject | Fields not in the bridge mapping are either ignored or rejected (per bridge config) |
+| Audit trail | Bridge logs: `ingestion_batch_id`, `bridge_version`, `vendor_source` |
+
+**Bridge prohibitions**:
+
+| Prohibition | Reason |
+|-------------|--------|
+| Dynamic JSON key iteration (`jsonb_each`, `jsonb_object_keys` in mapping) | Prevents schema drift — every field must be explicitly mapped |
+| Silent NULL coercion (using `->>'key'` without validation) | Missing keys must fail, not silently become NULL |
+| Mutating RAW rows (UPDATE/DELETE) | RAW is INSERT-only (§8.2) |
+| Updating previous batches | Corrections flow through batch supersede only (§8.3) |
+
+**Version discipline**: Any change to a bridge function requires a version bump. The old version function remains in the migration history. The new version is a new migration file.
+
+**Template**: See migration `009_bridge_template.sql` for the reference implementation.
+
+### 9.3 RAW Layer Discipline
+
+RAW tables (named `raw_<entity>`, leaf_type `STAGING`) sit downstream of the bridge function. They contain the **structured** output of JSON decomposition.
+
+**RAW column rules**:
+
+| Rule | Enforcement |
+|------|-------------|
+| No `JSONB` columns | Drift audit strict mode → VIOLATION |
+| No `JSON` columns | Drift audit strict mode → VIOLATION |
+| All columns must be typed (`TEXT`, `INTEGER`, `TIMESTAMPTZ`, `UUID`, `BOOLEAN`, `NUMERIC`) | Build-time gate + drift audit |
+| INSERT only | Immutability trigger (§8.2) |
+| Batch-level supersede only | Batch registry (§8.3) |
+| Must have `_active` companion view | View requirement (§8.4) |
+
+**The JSON boundary**: JSON enters at the vendor table. The bridge decomposes it. RAW stores the structured result. From this point forward, JSON does not exist in the data pipeline.
+
+### 9.4 Downstream Access Law
+
+SUPPORTING and CANONICAL tables operate under the same rules as §8, with additional JSON containment:
+
+| Rule | Scope | Enforcement |
+|------|-------|-------------|
+| No `JSONB` or `JSON` columns | SUPPORTING + CANONICAL | Drift audit strict mode → VIOLATION |
+| Must not reference vendor tables directly | SUPPORTING + CANONICAL | Drift audit → VIOLATION |
+| Must read from `_active` views only | SUPPORTING (from RAW) | Application gate (Gatekeeper) |
+| INSERT only | SUPPORTING + CANONICAL | Immutability trigger (§8.2) |
+
+**Referencing vendor tables**: If a SUPPORTING or CANONICAL table's promotion path references a vendor table (instead of a RAW `_active` view), the drift audit reports a VIOLATION in strict mode and a WARNING in baseline mode. Data must flow: Vendor → Bridge → RAW → `_active` → SUPPORTING → CANONICAL.
 
 ---
 
@@ -248,6 +478,6 @@ The drift audit does not replace the other gates — it catches what they cannot
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
 | Status | LOCKED |
-| Version | 1.2.0 |
+| Version | 1.4.0 |
 | Change Protocol | ADR + Human Approval Required |
 | Related | ADR-001, ARCHITECTURE.md Part X, DBA_ENFORCEMENT_DOCTRINE.md |

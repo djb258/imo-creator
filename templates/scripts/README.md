@@ -65,7 +65,7 @@ These scripts are distributed to downstream repos. They enforce doctrine complia
 | `ctb-registry-gate.sh` | CTB registry gate — validates migrations vs `column_registry.yml` + sub-hub cardinality (Unix) |
 | `ctb-registry-gate.ps1` | CTB registry gate (Windows) |
 | `detect-banned-db-clients.sh` | Banned DB client detection — scans `src/` for direct database access bypassing Gatekeeper |
-| `ctb-drift-audit.sh` | CTB drift audit — live database vs `ctb.table_registry` vs `column_registry.yml` with `--mode=baseline\|strict` and `--write-baseline` (requires `DATABASE_URL`, `psql`, `yq`, `jq`) **LOCKED** |
+| `ctb-drift-audit.sh` | CTB drift audit — live database vs `ctb.table_registry` vs `column_registry.yml` with `--mode=baseline\|strict` and `--write-baseline`. Includes immutability checks (§8) and JSON containment checks (§9): trigger presence, RAW columns, _active views, JSON in RAW/downstream, bridge versions, vendor references. (requires `DATABASE_URL`, `psql`, `yq`, `jq`) **LOCKED** |
 
 ### Validation
 

@@ -22,11 +22,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "3.0.2"
+  version: "3.2.0"
   last_updated: "2026-02-20"
-  total_file_count: 132  # Run: find templates -type f | wc -l to verify
-  ctb_hardening_version: "3.0.2"
-  note: "Phase Two Lockdown — mandatory governance pipeline, baseline/strict drift modes, tamper-resistant auditor"
+  total_file_count: 138  # Run: find templates -type f | wc -l to verify
+  ctb_hardening_version: "3.2.0"
+  note: "Vendor JSON + Frozen Bridge Enforcement — JSON containment, versioned bridges, role separation"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -182,10 +182,10 @@ files:
       version: "1.0.0"
 
     - path: "templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
-      purpose: "Registry-first enforcement — build-time, database, application gates, and live drift audit"
+      purpose: "Registry-first enforcement — build-time, database, application gates, live drift audit, batch-level RAW lockdown, and vendor JSON containment"
       required: true
       locked: true
-      version: "1.2.0"
+      version: "1.4.0"
 
     - path: "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
       purpose: "Fail-closed CI contract — default deny, 4-gate enforcement, no continue-on-error"
@@ -714,6 +714,30 @@ files:
 
     - path: "templates/migrations/004_ctb_promotion_enforcement.sql"
       purpose: "Promotion enforcement — controls SUPPORTING → CANONICAL data flow via declared paths"
+      required: true
+
+    - path: "templates/migrations/005_raw_immutability.sql"
+      purpose: "RAW immutability — INSERT-only enforcement on STAGING/SUPPORTING/CANONICAL, vendor bridge registration"
+      required: true
+
+    - path: "templates/migrations/006_raw_batch_registry.sql"
+      purpose: "Batch registry — tracks every ingestion batch with supersede chain and status lifecycle"
+      required: true
+
+    - path: "templates/migrations/007_raw_active_view_template.sql"
+      purpose: "RAW active view — helper to create _active views filtering to current batches, validation functions"
+      required: true
+
+    - path: "templates/migrations/008_vendor_json_template.sql"
+      purpose: "Vendor JSON table template — per-sub-hub JSON sandbox with validation helper"
+      required: true
+
+    - path: "templates/migrations/009_bridge_template.sql"
+      purpose: "Frozen bridge function template — versioned JSON→RAW transformation with strict validation"
+      required: true
+
+    - path: "templates/migrations/010_vendor_write_permissions.sql"
+      purpose: "Role separation template — ctb_vendor_writer, ctb_data_reader, ctb_bridge_executor roles"
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -1306,6 +1330,18 @@ update_manifest:
         destination: "migrations/003_ctb_write_guards.sql"
       - source: "templates/migrations/004_ctb_promotion_enforcement.sql"
         destination: "migrations/004_ctb_promotion_enforcement.sql"
+      - source: "templates/migrations/005_raw_immutability.sql"
+        destination: "migrations/005_raw_immutability.sql"
+      - source: "templates/migrations/006_raw_batch_registry.sql"
+        destination: "migrations/006_raw_batch_registry.sql"
+      - source: "templates/migrations/007_raw_active_view_template.sql"
+        destination: "migrations/007_raw_active_view_template.sql"
+      - source: "templates/migrations/008_vendor_json_template.sql"
+        destination: "migrations/008_vendor_json_template.sql"
+      - source: "templates/migrations/009_bridge_template.sql"
+        destination: "migrations/009_bridge_template.sql"
+      - source: "templates/migrations/010_vendor_write_permissions.sql"
+        destination: "migrations/010_vendor_write_permissions.sql"
       # Gatekeeper module (application-level enforcement)
       - source: "templates/modules/gatekeeper/index.ts"
         destination: "src/data/modules/gatekeeper/index.ts"
@@ -1336,6 +1372,35 @@ update_manifest:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "3.2.0"
+    date: "2026-02-20"
+    breaking: false
+    changes:
+      - "VENDOR JSON + FROZEN BRIDGE ENFORCEMENT: JSON containment at vendor layer only"
+      - "Added CTB_REGISTRY_ENFORCEMENT.md §9 — Vendor JSON Intake Model (Frozen Bridge Architecture)"
+      - "Added 008_vendor_json_template.sql — per-sub-hub vendor JSON table template with validation"
+      - "Added 009_bridge_template.sql — versioned frozen bridge function template with strict JSON extraction"
+      - "Added 010_vendor_write_permissions.sql — role separation (ctb_vendor_writer, ctb_data_reader, ctb_bridge_executor)"
+      - "Extended ctb-drift-audit.sh with 4 new drift classes: JSON_IN_RAW (§9.3), JSON_IN_DOWNSTREAM (§9.4), BRIDGE_NO_VERSION (§9.2), VENDOR_REF_VIOLATION (§9.4)"
+      - "Updated CTB_REGISTRY_ENFORCEMENT.md version 1.3.0 → 1.4.0"
+      - "total_file_count: 135 → 138"
+    migration: "Child repos must: (1) Copy 008-010 migrations to migrations/, (2) Update ctb-drift-audit.sh from always_sync, (3) Create vendor_claude_<subhub> tables per sub-hub, (4) Implement bridge functions per sub-hub, (5) Configure role separation."
+
+  - version: "3.1.0"
+    date: "2026-02-20"
+    breaking: false
+    changes:
+      - "BATCH-LEVEL RAW LOCKDOWN: INSERT-only immutability enforcement across the data pipeline"
+      - "Added CTB_REGISTRY_ENFORCEMENT.md §8 — vendor bridges, RAW immutability, batch registry, _active views, promotion chain"
+      - "Added 005_raw_immutability.sql — enforce_immutability() trigger blocks UPDATE/DELETE on STAGING/SUPPORTING/CANONICAL tables"
+      - "Added 006_raw_batch_registry.sql — ctb.raw_batch_registry with supersede chain, status lifecycle, auto-supersede trigger"
+      - "Added 007_raw_active_view_template.sql — helper to create _active views, validation functions for RAW column requirements"
+      - "Added ctb.vendor_bridges table — bridge registration for vendor integrations writing to RAW tables"
+      - "Extended ctb-drift-audit.sh with 3 new drift classes: IMMUTABILITY_MISSING (§8), RAW_COLUMNS_MISSING (§8.2), RAW_VIEW_MISSING (§8.4)"
+      - "Updated CTB_REGISTRY_ENFORCEMENT.md version 1.2.0 → 1.3.0"
+      - "total_file_count: 132 → 135"
+    migration: "Child repos must: (1) Copy 005-007 migrations to migrations/ and apply in order, (2) Update ctb-drift-audit.sh from always_sync, (3) Run ctb.create_immutability_guard() on all governed tables, (4) Register vendor bridges in ctb.vendor_bridges, (5) Create _active views for STAGING tables."
+
   - version: "3.0.2"
     date: "2026-02-20"
     breaking: false
@@ -1525,7 +1590,7 @@ verification:
     After pulling templates, verify:
 
     [ ] All files in this manifest exist locally
-    [ ] File count matches total_file_count (132 files)
+    [ ] File count matches total_file_count (138 files)
     [ ] No files were skipped or missed
     [ ] Doctrine files are present and locked
     [ ] Claude prompts are present and locked
@@ -1540,7 +1605,7 @@ verification:
 document_control:
   created: "2026-01-30"
   last_modified: "2026-02-20"
-  version: "3.0.2"
+  version: "3.2.0"
   doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"
