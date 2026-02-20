@@ -3,8 +3,8 @@
 # Authority: CONSTITUTIONAL
 # Scope: PARENT (imo-creator - repo of repos)
 # Purpose: Machine-readable index for AI agents - file list, reading order, bootstrap
-# Version: 2.9.0
-# Last Updated: 2026-01-30
+# Version: 3.2.0
+# Last Updated: 2026-02-20
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # AI AGENTS: READ THIS FIRST WHEN PULLING TEMPLATES
@@ -1140,7 +1140,7 @@ bootstrap:
         | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
         | Tools | templates/integrations/TOOLS.md | 1.1.0 |
         | OSAM | templates/semantic/OSAM.md | 1.1.0 |
-        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 2.9.0 |
+        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 3.2.0 |
 
         ## This Hub
 

@@ -54,7 +54,8 @@ These scripts are distributed to downstream repos. They enforce doctrine complia
 
 | Script | Purpose |
 |--------|---------|
-| `update_from_imo_creator.sh` | Pull updates from imo-creator |
+| `update_from_imo_creator.sh` | Pull updates from imo-creator (Unix) |
+| `update_from_imo_creator.ps1` | Pull updates from imo-creator (Windows) |
 | `push-doctrine-update.sh` | Push doctrine updates (Unix) |
 | `push-doctrine-update.ps1` | Push doctrine updates (Windows) |
 

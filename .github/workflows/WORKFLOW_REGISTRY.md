@@ -10,7 +10,7 @@
 | Workflow | File | Trigger | Purpose |
 |----------|------|---------|---------|
 | CodeQL | `codeql.yml` | push/PR to master + weekly | Security vulnerability scanning |
-| Doctrine Enforcement | `doctrine-enforcement.yml` | push/PR to master/main | Doctrine compliance CI gate |
+| Doctrine Enforcement | `doctrine-enforcement.yml` | push to master/main/feature/fix + PR to master/main | Doctrine compliance CI gate |
 | Release | `release.yml` | tag push `v*.*.*` | GitHub release creation |
 | Reusable CTB Enforcement | `reusable-ctb-enforcement.yml` | workflow_call | Reusable CTB enforcement (called by other workflows) |
 | Reusable Fail-Closed Gate | `reusable-fail-closed-gate.yml` | workflow_call | Fail-closed governance gate (4 gates: side-door, executable, DDL, fail-open detection) |
