@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "audit_report.schema.json",
+  "title": "AUDIT_REPORT",
+  "description": "Governance envelope for audit classification. Envelope is locked. No payload.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "work_packet_id",
+    "changeset_id",
+    "classification",
+    "summary",
+    "doctrine_version",
+    "timestamp"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changeset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["PASS", "FAIL_EXECUTION", "FAIL_SCOPE"]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

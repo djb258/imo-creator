@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "changeset.schema.json",
+  "title": "CHANGESET",
+  "description": "Governance envelope for completed changes. Envelope is locked. Payload is open.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "work_packet_id",
+    "change_type",
+    "architectural_flag",
+    "modified_paths",
+    "summary",
+    "doctrine_version",
+    "timestamp",
+    "payload"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "change_type": {
+      "type": "string",
+      "enum": ["feature", "architectural", "refactor", "fix"]
+    },
+    "architectural_flag": {
+      "type": "boolean"
+    },
+    "modified_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
