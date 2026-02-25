@@ -182,6 +182,167 @@ jobs:
           echo ""
 
   # ─────────────────────────────────────────────────────────────────
+  # PRESSURE TEST GATE (Architectural changes only)
+  # ─────────────────────────────────────────────────────────────────
+
+  pressure-test-gate:
+    name: Structural + Flow Pressure Test Gate
+    runs-on: ubuntu-latest
+    needs: doctrine-audit
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────────────────────
+      # DETECT ARCHITECTURAL FLAG
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Scan for pressure test requirement
+        id: detect
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  PRESSURE TEST GATE"
+          echo "═══════════════════════════════════════════════════════════════"
+          echo ""
+
+          REQUIRES_PRESSURE="false"
+
+          # Check work_packets inbox for any packet with requires_pressure_test: true
+          if [ -d "work_packets/inbox" ]; then
+            for f in work_packets/inbox/*.json; do
+              [ -f "$f" ] || continue
+              FLAG=$(python3 -c "import json,sys; d=json.load(open('$f')); print(d.get('requires_pressure_test','false'))" 2>/dev/null || echo "false")
+              if [ "$FLAG" = "True" ] || [ "$FLAG" = "true" ]; then
+                REQUIRES_PRESSURE="true"
+                echo "Pressure test required by: $f"
+              fi
+            done
+          fi
+
+          # Also check changesets inbox
+          if [ -d "changesets/inbox" ]; then
+            for f in changesets/inbox/*.json; do
+              [ -f "$f" ] || continue
+              FLAG=$(python3 -c "import json,sys; d=json.load(open('$f')); print(d.get('requires_pressure_test','false'))" 2>/dev/null || echo "false")
+              if [ "$FLAG" = "True" ] || [ "$FLAG" = "true" ]; then
+                REQUIRES_PRESSURE="true"
+                echo "Pressure test required by: $f"
+              fi
+            done
+          fi
+
+          echo "requires_pressure=$REQUIRES_PRESSURE" >> $GITHUB_OUTPUT
+
+          if [ "$REQUIRES_PRESSURE" = "false" ]; then
+            echo "No pressure test required — gate skipped."
+          fi
+
+      # ─────────────────────────────────────────────────────────────
+      # VERIFY PRESSURE ARTIFACTS EXIST
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Verify pressure test artifacts exist
+        id: artifacts
+        if: steps.detect.outputs.requires_pressure == 'true'
+        run: |
+          ARCH_EXISTS="false"
+          FLOW_EXISTS="false"
+
+          if [ -f "audit/ARCH_PRESSURE_REPORT.json" ]; then
+            ARCH_EXISTS="true"
+            echo "ARCH_PRESSURE_REPORT.json found"
+          else
+            echo "::error::ARCH_PRESSURE_REPORT.json NOT FOUND — pressure test requires this artifact"
+          fi
+
+          if [ -f "audit/FLOW_PRESSURE_REPORT.json" ]; then
+            FLOW_EXISTS="true"
+            echo "FLOW_PRESSURE_REPORT.json found"
+          else
+            echo "::error::FLOW_PRESSURE_REPORT.json NOT FOUND — pressure test requires this artifact"
+          fi
+
+          echo "arch_exists=$ARCH_EXISTS" >> $GITHUB_OUTPUT
+          echo "flow_exists=$FLOW_EXISTS" >> $GITHUB_OUTPUT
+
+          if [ "$ARCH_EXISTS" = "false" ] || [ "$FLOW_EXISTS" = "false" ]; then
+            echo ""
+            echo "::error::PRESSURE TEST FAILED — missing required artifacts"
+            exit 1
+          fi
+
+      # ─────────────────────────────────────────────────────────────
+      # PARSE AND VALIDATE ALL FIELDS = PASS
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Validate pressure test results (mechanical gate)
+        if: steps.detect.outputs.requires_pressure == 'true' && steps.artifacts.outputs.arch_exists == 'true' && steps.artifacts.outputs.flow_exists == 'true'
+        run: |
+          GATE_PASS="true"
+
+          echo "───────────────────────────────────────────────────────────────"
+          echo "  ARCH_PRESSURE_REPORT — Field Validation"
+          echo "───────────────────────────────────────────────────────────────"
+
+          # Validate ARCH fields
+          ARCH_FIELDS="cantonal_cardinality registry_first id_authority no_sideways_calls contracts_declared"
+          for FIELD in $ARCH_FIELDS; do
+            VALUE=$(python3 -c "import json; d=json.load(open('audit/ARCH_PRESSURE_REPORT.json')); print(d.get('$FIELD','MISSING'))")
+            if [ "$VALUE" != "PASS" ]; then
+              echo "::error::ARCH_PRESSURE_REPORT.$FIELD = $VALUE (expected PASS)"
+              GATE_PASS="false"
+            else
+              echo "  $FIELD = PASS"
+            fi
+          done
+
+          echo ""
+          echo "───────────────────────────────────────────────────────────────"
+          echo "  FLOW_PRESSURE_REPORT — Field Validation"
+          echo "───────────────────────────────────────────────────────────────"
+
+          # Validate FLOW fields
+          FLOW_FIELDS="ingress_contract_exists egress_contract_exists no_orphan_tables no_unconsumed_events id_propagation_intact"
+          for FIELD in $FLOW_FIELDS; do
+            VALUE=$(python3 -c "import json; d=json.load(open('audit/FLOW_PRESSURE_REPORT.json')); print(d.get('$FIELD','MISSING'))")
+            if [ "$VALUE" != "PASS" ]; then
+              echo "::error::FLOW_PRESSURE_REPORT.$FIELD = $VALUE (expected PASS)"
+              GATE_PASS="false"
+            else
+              echo "  $FIELD = PASS"
+            fi
+          done
+
+          echo ""
+
+          if [ "$GATE_PASS" = "false" ]; then
+            echo "═══════════════════════════════════════════════════════════════"
+            echo "  BUILD BLOCKED — PRESSURE TEST FAILED"
+            echo "═══════════════════════════════════════════════════════════════"
+            echo ""
+            echo "One or more pressure test fields did not pass."
+            echo "This is a mechanical gate. No manual override permitted."
+            echo "Fix failing invariants and re-run."
+            exit 1
+          fi
+
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  PRESSURE TEST GATE PASSED"
+          echo "═══════════════════════════════════════════════════════════════"
+
+      - name: Upload Pressure Test Artifacts
+        uses: actions/upload-artifact@v4
+        if: always() && steps.detect.outputs.requires_pressure == 'true'
+        with:
+          name: pressure-test-reports
+          path: |
+            audit/ARCH_PRESSURE_REPORT.json
+            audit/FLOW_PRESSURE_REPORT.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  # ─────────────────────────────────────────────────────────────────
   # UI BUILDER GATE (UI builds only)
   # ─────────────────────────────────────────────────────────────────
 

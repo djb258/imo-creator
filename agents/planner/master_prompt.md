@@ -58,6 +58,8 @@ Every WORK_PACKET must satisfy:
 |-------|-------------|
 | `change_type` | Must be set. Must be one of: `feature`, `architectural`, `refactor`, `fix` |
 | `architectural_flag` | Must be set correctly per `backbone.md §5` classification |
+| `requires_pressure_test` | Must be set explicitly. Must be `true` when `architectural_flag = true`. Must be `true` when structural objects or event flows change. No defaults. No silent inference. |
+| `flow_contract` | Required when structural objects or event flows change. Declares ingress, middle, egress surfaces affected. |
 | `allowed_paths` | Must be defined precisely. No wildcards unless structurally justified |
 | `doctrine_version` | Must be included. Must reference current parent doctrine version |
 | `summary` | Must be non-empty. Must describe the transformation |
@@ -65,6 +67,21 @@ Every WORK_PACKET must satisfy:
 | `payload` | Must be present. Domain-specific content goes here |
 
 No extra top-level fields may be introduced. The envelope is locked by `additionalProperties: false`.
+
+### Pressure Test Classification Rule
+
+The Planner MUST set `requires_pressure_test = true` when ANY of the following apply:
+
+| Condition | Implication |
+|-----------|-------------|
+| `architectural_flag = true` | Pressure test is mandatory (schema-enforced) |
+| New tables introduced | Structural change — cantonal proof required |
+| Existing table schema modified | Structural change — registry proof required |
+| New event flows introduced | Flow change — flow proof required |
+| Existing event flows modified | Flow change — flow proof required |
+| Cross-boundary routing added or changed | Both structural and flow proof required |
+
+When `requires_pressure_test = true`, the Planner MUST also include `flow_contract` declaring the affected ingress, middle, and egress surfaces. If the Planner cannot determine the flow contract, it must HALT and record the reason — not omit it silently.
 
 ---
 

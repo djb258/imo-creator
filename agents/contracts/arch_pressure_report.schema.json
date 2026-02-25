@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "arch_pressure_report.schema.json",
+  "title": "ARCH_PRESSURE_REPORT",
+  "description": "Structural pressure test output. All fields must be PASS for the changeset to proceed. Any FAIL field blocks routing. No advisory classification permitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "work_packet_id",
+    "changeset_id",
+    "timestamp",
+    "cantonal_cardinality",
+    "registry_first",
+    "id_authority",
+    "no_sideways_calls",
+    "contracts_declared"
+  ],
+  "properties": {
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the WORK_PACKET that triggered this pressure test."
+    },
+    "changeset_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the CHANGESET being pressure tested."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cantonal_cardinality": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Each sub-hub owns exactly 1 CANONICAL + 1 ERROR table. No exceptions."
+    },
+    "registry_first": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "All tables exist in ctb.table_registry before creation. No unregistered tables."
+    },
+    "id_authority": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Identity minting occurs at hub level only, governed by registry. No rogue ID generation."
+    },
+    "no_sideways_calls": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "No direct hub-to-hub or sub-hub-to-sub-hub data flow. All cross-boundary routing through spokes."
+    },
+    "contracts_declared": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "All structural contracts (schema, interface, spoke) are explicitly declared before implementation."
+    }
+  }
+}

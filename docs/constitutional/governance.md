@@ -89,6 +89,25 @@ Planner → WORK_PACKET → Builder → CHANGESET → Auditor → AUDIT_REPORT �
 
 Agents communicate through artifacts. There is no backchannel.
 
+### Pressure Test Bus Enforcement
+
+When `WORK_PACKET.requires_pressure_test = true`, the artifact flow gains additional routing constraints:
+
+```
+Planner → WORK_PACKET (requires_pressure_test=true)
+    → Builder → CHANGESET + ARCH_PRESSURE_REPORT + FLOW_PRESSURE_REPORT
+        → Auditor → validates pressure reports → AUDIT_REPORT → Human
+```
+
+| Condition | Routing Rule |
+|-----------|-------------|
+| `requires_pressure_test = true` and both reports present with all fields PASS | Route to Auditor for standard verification |
+| `requires_pressure_test = true` and either report missing | BLOCK — do not route to Auditor. Return to Builder with `FAIL_EXECUTION`. |
+| `requires_pressure_test = true` and any field = FAIL | BLOCK — do not route past Auditor. Auditor must classify as `FAIL_EXECUTION`. |
+| `requires_pressure_test = true` but field is not set in WORK_PACKET | BLOCK — Planner must re-emit WORK_PACKET with explicit value. |
+
+No override path exists except ADR submission to parent + architectural elevation + human approval.
+
 ---
 
 ## Human Sovereign Authority

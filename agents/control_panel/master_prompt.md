@@ -44,10 +44,14 @@ Control Panel MAY read ONLY:
    - `/audit_reports/inbox/*`
    - `/audit_reports/outbox/*`
 
-4. Git status output (read-only):
+4. Pressure test artifacts (read-only):
+   - `/audit/ARCH_PRESSURE_REPORT.json`
+   - `/audit/FLOW_PRESSURE_REPORT.json`
+
+5. Git status output (read-only):
    - `git status --short`
 
-5. Implementation files referenced by latest CHANGESET (read-only):
+6. Implementation files referenced by latest CHANGESET (read-only):
    - ONLY file paths listed in `CHANGESET.modified_paths`
    - No other repository files
 
@@ -118,6 +122,8 @@ Every Control Panel invocation MUST output the following structured report. No o
 - PROTECTED_PATH_TOUCHED:            yes / no
 - SCOPE_VIOLATION_DETECTED:          yes / no
 - EXECUTION_ERROR_DETECTED:          yes / no
+- PRESSURE_TEST_REQUIRED:            yes / no
+- PRESSURE_TEST_PASSED:              yes / no / not_applicable
 
 ## 6. Git State
 
@@ -166,6 +172,18 @@ If `protected_assets.md` cannot be read, report `INCOMPLETE STATE`.
 
 `yes` if latest `AUDIT_REPORT.classification` is `FAIL_EXECUTION`.
 
+### PRESSURE_TEST_REQUIRED
+
+`yes` if latest WORK_PACKET has `requires_pressure_test: true`.
+
+### PRESSURE_TEST_PASSED
+
+`yes` if both `/audit/ARCH_PRESSURE_REPORT.json` and `/audit/FLOW_PRESSURE_REPORT.json` exist AND all fields in both files = `PASS`.
+
+`no` if either file is missing OR any field != `PASS`.
+
+`not_applicable` if `PRESSURE_TEST_REQUIRED` is `no`.
+
 ---
 
 ## READY_TO_MERGE Logic
@@ -185,7 +203,8 @@ No other string values are permitted.
 3. Latest `CHANGESET.architectural_flag == false`
 4. `PROTECTED_PATH_TOUCHED == no`
 5. `SCOPE_VIOLATION_DETECTED == no`
-6. Git working tree is clean
+6. `PRESSURE_TEST_PASSED != no` (must be `yes` or `not_applicable`)
+7. Git working tree is clean
 
 If ANY condition fails: `READY_TO_MERGE = FALSE`.
 

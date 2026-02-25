@@ -9,6 +9,7 @@
     "id",
     "change_type",
     "architectural_flag",
+    "requires_pressure_test",
     "allowed_paths",
     "summary",
     "doctrine_version",
@@ -26,6 +27,36 @@
     },
     "architectural_flag": {
       "type": "boolean"
+    },
+    "requires_pressure_test": {
+      "type": "boolean",
+      "description": "If true, Builder must produce ARCH_PRESSURE_REPORT.json and FLOW_PRESSURE_REPORT.json. Must be true when architectural_flag is true."
+    },
+    "flow_contract": {
+      "type": "object",
+      "description": "Required when structural objects or event flows change. Declares the IMO contract for the change.",
+      "additionalProperties": false,
+      "required": ["ingress", "middle", "egress"],
+      "properties": {
+        "ingress": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Ingress surface identifiers affected by this change."
+        },
+        "middle": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Middle layer transformation identifiers affected by this change."
+        },
+        "egress": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Egress surface identifiers affected by this change."
+        }
+      }
     },
     "allowed_paths": {
       "type": "array",
@@ -49,6 +80,16 @@
     "payload": {
       "type": "object",
       "additionalProperties": true
+    }
+  },
+  "if": {
+    "properties": {
+      "architectural_flag": { "const": true }
+    }
+  },
+  "then": {
+    "properties": {
+      "requires_pressure_test": { "const": true }
     }
   }
 }

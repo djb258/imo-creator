@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flow_pressure_report.schema.json",
+  "title": "FLOW_PRESSURE_REPORT",
+  "description": "Flow pressure test output. All fields must be PASS for the changeset to proceed. Any FAIL field blocks routing. No advisory classification permitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "work_packet_id",
+    "changeset_id",
+    "timestamp",
+    "ingress_contract_exists",
+    "egress_contract_exists",
+    "no_orphan_tables",
+    "no_unconsumed_events",
+    "id_propagation_intact"
+  ],
+  "properties": {
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the WORK_PACKET that triggered this pressure test."
+    },
+    "changeset_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the CHANGESET being pressure tested."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ingress_contract_exists": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Every declared ingress surface has an explicit contract. No implicit ingress."
+    },
+    "egress_contract_exists": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Every declared egress surface has an explicit contract. No implicit egress."
+    },
+    "no_orphan_tables": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "No table exists without a consuming process or declared egress. No dead-end data."
+    },
+    "no_unconsumed_events": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Every event produced by a process has at least one declared consumer. No fire-and-forget."
+    },
+    "id_propagation_intact": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Sovereign IDs propagate through ingress → middle → egress without mutation or loss."
+    }
+  }
+}

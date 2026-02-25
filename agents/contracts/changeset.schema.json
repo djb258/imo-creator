@@ -10,6 +10,7 @@
     "work_packet_id",
     "change_type",
     "architectural_flag",
+    "requires_pressure_test",
     "modified_paths",
     "summary",
     "doctrine_version",
@@ -31,6 +32,10 @@
     },
     "architectural_flag": {
       "type": "boolean"
+    },
+    "requires_pressure_test": {
+      "type": "boolean",
+      "description": "Must match the WORK_PACKET value. When true, ARCH_PRESSURE_REPORT.json and FLOW_PRESSURE_REPORT.json must exist in /audit/."
     },
     "modified_paths": {
       "type": "array",
