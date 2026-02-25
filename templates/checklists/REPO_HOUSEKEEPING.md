@@ -2,7 +2,7 @@
 
 **Status**: TEMPLATE
 **Authority**: OPERATIONAL
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Companion Checklists**: QUARTERLY_HYGIENE_AUDIT.md (governance), HUB_COMPLIANCE.md (hub readiness)
 
 ---
@@ -127,6 +127,17 @@ find . -type d -not -path "./.git/*" -not -path "./node_modules/*" | while read 
 done
 ```
 
+**Bus directory check** (if repo adopts V1 Control Plane):
+
+```bash
+# Verify inbox/outbox subdirs exist for each bus directory
+for bus in work_packets changesets audit_reports; do
+  for sub in inbox outbox; do
+    [ -d "$bus/$sub" ] && echo "OK: $bus/$sub" || echo "MISSING: $bus/$sub"
+  done
+done
+```
+
 | Directory | Status | Severity | Action |
 |-----------|--------|----------|--------|
 | | Empty / Near-Empty / Deprecated / Duplicate | | |
@@ -141,8 +152,8 @@ Check for the same logical content living in multiple locations (e.g., three mig
 # Migration directories
 find . -type d -name "migrations" -not -path "./archive/*" -not -path "./.git/*"
 
-# Config directories
-find . -type d \( -name "config" -o -name "configs" -o -name "global-config" \) -not -path "./archive/*"
+# Config directories (note: global-config/ was consolidated to templates/config/)
+find . -type d \( -name "config" -o -name "configs" \) -not -path "./archive/*"
 ```
 
 | Logical Content | Locations Found | Should Be | Severity |
@@ -185,7 +196,7 @@ Verify .gitignore covers standard exclusions.
 
 ```bash
 # Check for common patterns
-for pattern in __pycache__ node_modules .env "*.pyc" ".DS_Store" Thumbs.db "*.key" "*.pem"; do
+for pattern in __pycache__ node_modules .env "*.pyc" ".DS_Store" Thumbs.db "*.key" "*.pem" ".claude/settings.local.json"; do
   grep -q "$pattern" .gitignore 2>/dev/null && echo "COVERED: $pattern" || echo "MISSING: $pattern"
 done
 ```
@@ -202,18 +213,45 @@ Check that every file path referenced in governance documents actually exists.
 
 ```bash
 # CLAUDE.md references
-grep -oP '(?:docs|scripts|hubs|ops|spokes|src|contracts|doctrine|templates|migrations|archive|tests)/[^\s\)\"'\''`,>]+' CLAUDE.md | sort -u | while read path; do
+grep -oP '(?:docs|scripts|hubs|ops|spokes|src|contracts|doctrine|templates|migrations|archive|tests|agents)/[^\s\)\"'\''`,>|]+' CLAUDE.md | sort -u | while read path; do
   [ ! -e "$path" ] && echo "BROKEN: $path"
 done
 
 # DOCTRINE.md references
-grep -oP '(?:docs|scripts|hubs|ops|spokes|src|contracts|doctrine|templates|migrations|archive|tests)/[^\s\)\"'\''`,>]+' DOCTRINE.md 2>/dev/null | sort -u | while read path; do
+grep -oP '(?:docs|scripts|hubs|ops|spokes|src|contracts|doctrine|templates|migrations|archive|tests|agents)/[^\s\)\"'\''`,>|]+' DOCTRINE.md 2>/dev/null | sort -u | while read path; do
   [ ! -e "$path" ] && echo "BROKEN: $path"
 done
 
 # REGISTRY.yaml references
 grep -oP '(?:contracts|hubs|spokes|src)/[^\s"]+' REGISTRY.yaml 2>/dev/null | while read path; do
   [ ! -e "$path" ] && echo "BROKEN: $path"
+done
+
+# IMO_CONTROL.json doctrine file references
+python3 -c "
+import json, os
+d = json.load(open('IMO_CONTROL.json'))
+loc = d.get('doctrine_files',{}).get('location','templates/doctrine/')
+for f in d.get('doctrine_files',{}).get('required',[]):
+    path = os.path.join(loc, f['file'])
+    status = 'OK' if os.path.exists(path) else 'BROKEN'
+    print(f'{status}: {path} (v{f.get(\"version\",\"?\")})')
+" 2>/dev/null
+
+# Agent contract references (if V1 Control Plane adopted)
+for f in templates/agents/contracts/*.json; do
+  [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
+done
+
+# Agent prompt references
+for role in planner builder auditor control_panel; do
+  f="templates/agents/$role/master_prompt.md"
+  [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
+done
+
+# Constitutional docs
+for f in docs/constitutional/backbone.md docs/constitutional/governance.md docs/constitutional/protected_assets.md; do
+  [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
 done
 ```
 
@@ -228,10 +266,15 @@ done
 Search all markdown, yaml, and json files for references to directories that no longer exist. Customize the grep pattern to include any directories removed in recent cleanup.
 
 ```bash
-# Template — add/remove directory patterns as needed for this repo
-grep -rn "PATTERN1\|PATTERN2\|PATTERN3" \
+# Common dead paths — customize per repo. These are known historical debt patterns.
+grep -rn "global-config/\|docs/blueprints/\|/agents/contracts/" \
   --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
   . | grep -v archive/ | grep -v .git/ | grep -v node_modules/
+
+# Check for root-level agents/ references (should be templates/agents/ since v3.4.0)
+grep -rn "[^/]agents/contracts\|[^/]agents/planner\|[^/]agents/builder\|[^/]agents/auditor\|[^/]agents/control_panel" \
+  --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
+  . | grep -v "templates/agents/" | grep -v archive/ | grep -v .git/
 ```
 
 | File | Line | Stale Reference | Severity | Action |
@@ -347,7 +390,9 @@ Verify config files reflect the actual tech stack.
 | .devcontainer/ | | Does it match the current stack? | |
 | .editorconfig | | Still relevant? | |
 | .python-version | | Matches requirements and CI? | |
-| doppler.yaml | | Still in use? | |
+| doppler.yaml | | Still in use? (Template repos: check `templates/integrations/doppler.yaml.template`) | |
+| IMO_CONTROL.json | | Version matches doctrine files? `doctrine_files.required[].version` matches actual files? | |
+| TEMPLATES_MANIFEST.yaml | | Version matches repo tag? File counts match reality? | |
 
 ---
 
@@ -382,11 +427,27 @@ done
 
 ### 17. GitHub Actions Triage (if .github/workflows/ exists)
 
-Classify each workflow as ACTIVE or DEAD.
+Classify each workflow as ACTIVE or DEAD. Cross-reference with `.github/workflows/WORKFLOW_REGISTRY.md` if it exists.
 
 ```bash
 ls .github/workflows/*.yml 2>/dev/null
+
+# If WORKFLOW_REGISTRY.md exists, verify it lists all workflows
+if [ -f .github/workflows/WORKFLOW_REGISTRY.md ]; then
+  echo "--- Registry exists. Cross-check:"
+  for wf in .github/workflows/*.yml; do
+    name=$(basename "$wf")
+    grep -q "$name" .github/workflows/WORKFLOW_REGISTRY.md && echo "REGISTERED: $name" || echo "UNREGISTERED: $name"
+  done
+fi
 ```
+
+**Key workflows to verify** (if V1 Control Plane adopted):
+
+| Workflow | Expected Job(s) | Notes |
+|----------|-----------------|-------|
+| doctrine-enforcement.yml | doctrine-audit, pressure-test-gate, ui-builder-gate | Pressure test gate must run between audit and UI gate |
+| ctb-governance-required.yml | fail-closed gate + drift audit | Mandatory CI — blocks merge without passing |
 
 | Workflow | Status | Reason |
 |----------|--------|--------|
@@ -422,6 +483,89 @@ bash scripts/validate-schema-completeness.sh 2>/dev/null
 | Validator passes? | YES / NO |
 | All leaf_types recognized by validator? | YES / NO |
 | Generated types match registry? | YES / NO / N/A |
+
+---
+
+### 20. File Count Verification (if TEMPLATES_MANIFEST.yaml exists)
+
+Compare the declared `total_file_count` in the manifest against reality. Drift here means files were added or removed without updating the manifest.
+
+```bash
+# Read declared count from manifest
+declared=$(grep "total_file_count:" templates/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '\d+')
+actual=$(find templates -type f | wc -l)
+echo "Declared: $declared | Actual: $actual"
+[ "$declared" = "$actual" ] && echo "MATCH" || echo "MISMATCH — manifest is stale"
+```
+
+| Check | Status |
+|-------|--------|
+| Declared count matches actual? | MATCH / MISMATCH |
+| If mismatch, delta | +N / -N files |
+
+---
+
+### 21. Version Tag Alignment
+
+Verify the latest git tag matches the manifest version and no orphan tags are floating.
+
+```bash
+# Latest tag vs manifest version
+latest_tag=$(git describe --tags --abbrev=0 2>/dev/null)
+manifest_version=$(grep "^  version:" templates/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '[\d.]+')
+echo "Latest tag: $latest_tag | Manifest version: $manifest_version"
+[ "$latest_tag" = "v$manifest_version" ] && echo "ALIGNED" || echo "MISALIGNED"
+
+# Tags not on any branch (orphans)
+git tag | while read tag; do
+  branches=$(git branch --contains "$tag" 2>/dev/null | wc -l)
+  [ "$branches" -eq 0 ] && echo "ORPHAN TAG: $tag"
+done
+```
+
+| Check | Status |
+|-------|--------|
+| Latest tag matches manifest version? | YES / NO |
+| Orphan tags found? | NONE / list them |
+
+---
+
+### 22. Merge Conflict Markers
+
+Scan for accidentally committed merge conflict markers.
+
+```bash
+# Conflict markers in tracked files
+git ls-files | xargs grep -l "^<<<<<<<\|^=======\|^>>>>>>>" 2>/dev/null
+```
+
+| File | Severity | Action |
+|------|----------|--------|
+| | HIGH (if found) | Resolve and recommit |
+
+---
+
+### 23. TODO / FIXME / HACK Scan
+
+Inventory technical debt markers in tracked files. Not every marker is a problem — but you should know what's there.
+
+```bash
+# Count by category
+for marker in TODO FIXME HACK XXX; do
+  count=$(git ls-files | xargs grep -c "$marker" 2>/dev/null | grep -v ":0$" | awk -F: '{s+=$2} END {print s+0}')
+  echo "$marker: $count"
+done
+
+# Show locations
+git ls-files | xargs grep -n "TODO\|FIXME\|HACK\|XXX" 2>/dev/null | grep -v node_modules | grep -v archive/
+```
+
+| Marker | Count | Action |
+|--------|-------|--------|
+| TODO | | Resolve or acknowledge |
+| FIXME | | Resolve — these indicate known bugs |
+| HACK | | Resolve — these indicate shortcuts |
+| XXX | | Resolve or acknowledge |
 
 ---
 
@@ -504,6 +648,13 @@ Re-run all Phase 1 scans that had findings. Confirm:
 | Doctrine Architecture | `templates/doctrine/ARCHITECTURE.md` |
 | Template Immutability | `templates/doctrine/TEMPLATE_IMMUTABILITY.md` |
 | Rollback Protocol | `templates/doctrine/ROLLBACK_PROTOCOL.md` |
+| Registry Enforcement | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` |
+| Fail-Closed CI Contract | `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` |
+| Agent Contracts | `templates/agents/contracts/` |
+| Governance Docs | `docs/constitutional/governance.md` |
+| Authority Map | `docs/AUTHORITY_MAP.md` |
+| Templates Manifest | `templates/TEMPLATES_MANIFEST.yaml` |
+| Workflow Registry | `.github/workflows/WORKFLOW_REGISTRY.md` |
 
 ---
 
@@ -511,9 +662,9 @@ Re-run all Phase 1 scans that had findings. Confirm:
 
 | Field | Value |
 |-------|-------|
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Created | 2026-02-16 |
-| Last Modified | 2026-02-16 |
+| Last Modified | 2026-02-25 |
 | Authority | OPERATIONAL |
 | Status | TEMPLATE |
 | Maintained By | Human + AI (copy and execute) |
