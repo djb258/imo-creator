@@ -10,7 +10,7 @@
       "allowed_branches": ["main", "master", "develop"],
       "auth_method": "https_token",
       "workspace_slug": "client",
-      "enabled": false
+      "enabled": true
     },
     {
       "repo_alias": "universal-client-template",
