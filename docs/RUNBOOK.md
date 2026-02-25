@@ -1,6 +1,6 @@
 # RUNBOOK
 
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Authority**: imo-creator (CC-01 Sovereign)
 **Type**: Operational guidance
 
@@ -73,6 +73,52 @@ If any condition is false, merge is blocked.
 5. Abort if repair attempts exceed `max_repair_attempts_per_operational_id` (currently: 2).
 
 **A_MASTER rule:** If severity is `A_MASTER`, certification is aborted unconditionally. No repair loop. Human intervention required.
+
+---
+
+---
+
+## D) Inbox Protocol (v1)
+
+### 1. Single Writer Rule
+
+Each agent writes only to its own outbox directory under `sys/runtime/outbox/<agent>/`. No agent writes to another agent's outbox.
+
+### 2. Atomic Move Rule
+
+Handoff between agents is performed using atomic rename (not copy). The source file is removed from the previous inbox once the move completes successfully.
+
+### 3. Deterministic Flow
+
+```
+Orchestrator writes:
+  sys/runtime/inbox/planner/planner_intake.json
+
+Planner writes:
+  sys/runtime/inbox/worker/work_packet.json
+
+Worker writes:
+  sys/runtime/inbox/auditor/execution_bundle.json
+
+Auditor writes:
+  sys/runtime/outbox/auditor/audit_report.json
+  (Runner handles sanitation + certification)
+```
+
+### 4. No Direct Invocation Rule
+
+Planner, Worker, and Auditor must not be invoked manually with pasted JSON. When inbox mode is active, they must read from their designated inbox directory.
+
+### 5. Failure Handling
+
+On FAIL:
+- Auditor emits `orbt_error.json` to `sys/runtime/outbox/auditor/`
+- No automatic repair unless dispatched by Orchestrator
+- Failed artifacts remain in outbox for post-mortem
+
+### 6. Execution Trace
+
+For each `operational_id`, archival copies of all pipeline artifacts are stored in `sys/runtime/executions/<operational_id>/`.
 
 ---
 

@@ -2,8 +2,25 @@
 
 **Authority**: imo-creator (CC-01 Sovereign)
 **Role**: Generate WORK_PACKET and route execution lanes
-**Contract Version**: 2.3.0
+**Contract Version**: 2.4.0
 **Status**: CONSTITUTIONAL
+
+---
+
+## Inbox Mode
+
+When instructed to "grab inbox":
+
+1. Read the first JSON file in `sys/runtime/inbox/planner/`.
+2. Validate schema before processing.
+3. Process deterministically.
+4. Write output to `sys/runtime/outbox/planner/`.
+5. Atomically move output to `sys/runtime/inbox/worker/`.
+6. Delete original input file after successful move.
+7. Halt on any schema validation error.
+
+Do not allow manual JSON pasting when inbox mode is active.
+Do not infer missing fields.
 
 ---
 
@@ -258,8 +275,8 @@ If any validation fails, do not write the work packet. Report the validation err
 
 | Field | Value |
 |-------|-------|
-| Version | 2.3.0 |
+| Version | 2.4.0 |
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | ADR | ADR-021 |
-| Supersedes | Planner v2.2.0 (Alias resolution) |
+| Supersedes | Planner v2.3.0 (Inbox mode) |

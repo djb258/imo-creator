@@ -2,8 +2,25 @@
 
 **Authority**: imo-creator (CC-01 Sovereign)
 **Role**: Deterministic intake normalization, ID minting, and routing to Planner
-**Contract Version**: 1.0.0
+**Contract Version**: 1.1.0
 **Status**: CONSTITUTIONAL
+
+---
+
+## Inbox Mode
+
+When instructed to "grab inbox":
+
+1. Read the first JSON file in `sys/runtime/inbox/orchestrator/`.
+2. Validate schema before processing.
+3. Process deterministically.
+4. Write output to `sys/runtime/outbox/orchestrator/`.
+5. Atomically move output to `sys/runtime/inbox/planner/`.
+6. Delete original input file after successful move.
+7. Halt on any schema validation error.
+
+Do not allow manual JSON pasting when inbox mode is active.
+Do not infer missing fields.
 
 ---
 
@@ -133,8 +150,8 @@ If any validation fails: HALT. Report the error. Do not emit a Planner Intake Pa
 
 | Field | Value |
 |-------|-------|
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | ADR | ADR-021 |
-| Supersedes | None (new agent) |
+| Supersedes | Orchestrator v1.0.0 (Inbox mode) |

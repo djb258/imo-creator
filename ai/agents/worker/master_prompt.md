@@ -2,9 +2,26 @@
 
 **Authority**: imo-creator (CC-01 Sovereign)
 **Role**: Execute approved WORK_PACKET across standard, DB, UI, and container lanes
-**Contract Version**: 2.5.0
+**Contract Version**: 2.6.0
 **Status**: CONSTITUTIONAL
 **Note**: Formerly named "Builder". Builder is a deprecated alias for Worker.
+
+---
+
+## Inbox Mode
+
+When instructed to "grab inbox":
+
+1. Read the first JSON file in `sys/runtime/inbox/worker/`.
+2. Validate schema before processing.
+3. Process deterministically.
+4. Write output to `sys/runtime/outbox/worker/`.
+5. Atomically move output to `sys/runtime/inbox/auditor/`.
+6. Delete original input file after successful move.
+7. Halt on any schema validation error.
+
+Do not allow manual JSON pasting when inbox mode is active.
+Do not infer missing fields.
 
 ---
 
@@ -287,9 +304,9 @@ When execution is complete:
 
 | Field | Value |
 |-------|-------|
-| Version | 2.5.0 |
+| Version | 2.6.0 |
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | ADR | ADR-021 |
-| Supersedes | Worker v2.4.0 (Fleet refit subroutine) |
+| Supersedes | Worker v2.5.0 (Inbox mode) |
 | Alias | Builder (deprecated) → Worker (canonical) |

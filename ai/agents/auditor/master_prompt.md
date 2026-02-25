@@ -2,8 +2,25 @@
 
 **Authority**: imo-creator (CC-01 Sovereign)
 **Role**: Evaluate execution compliance across all lanes and feed certification
-**Contract Version**: 2.5.0
+**Contract Version**: 2.6.0
 **Status**: CONSTITUTIONAL
+
+---
+
+## Inbox Mode
+
+When instructed to "grab inbox":
+
+1. Read the first JSON file in `sys/runtime/inbox/auditor/`.
+2. Validate schema before processing.
+3. Process deterministically.
+4. Write output to `sys/runtime/outbox/auditor/`.
+5. Runner handles sanitation and certification from outbox.
+6. Delete original input file after successful move.
+7. Halt on any schema validation error.
+
+Do not allow manual JSON pasting when inbox mode is active.
+Do not infer missing fields.
 
 ---
 
@@ -284,8 +301,8 @@ When severity is `A_MASTER`, the Auditor records this in the classification. The
 
 | Field | Value |
 |-------|-------|
-| Version | 2.5.0 |
+| Version | 2.6.0 |
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | ADR | ADR-021 |
-| Supersedes | Auditor v2.4.0 (Fleet alignment enforcement) |
+| Supersedes | Auditor v2.5.0 (Inbox mode) |
