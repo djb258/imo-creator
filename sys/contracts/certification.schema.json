@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "certification.v1.schema.json",
+  "title": "Garage Certification Artifact",
+  "description": "Signed wrapper over audit classification and artifact hashes. Merge-blocking. Must be cryptographically signed. Signature must be validated before merge is permitted.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "work_packet_id",
+    "target_repo",
+    "doctrine_version",
+    "audit_status",
+    "sanitation_passed",
+    "heir_valid",
+    "timestamp",
+    "auditor_signature",
+    "artifact_hash",
+    "failure_reasons"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "work_packet_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "References the WORK_PACKET this certification covers."
+    },
+    "target_repo": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Child repository this certification applies to."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Doctrine version at time of certification. Must match WORK_PACKET.doctrine_version."
+    },
+    "audit_status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Derived from auditor classification. PASS only when audit classification is PASS. Any FAIL_EXECUTION or FAIL_SCOPE maps to FAIL."
+    },
+    "sanitation_passed": {
+      "type": "boolean",
+      "description": "True only when SANITATE phase produced sanitation_status === PASS. False if sanitation failed or was not run. Certification requires sanitation_passed === true. Fail closed if missing."
+    },
+    "heir_valid": {
+      "type": "boolean",
+      "description": "True only when mount_receipt.heir_valid === true. False if HEIR validation failed or heir.doctrine.yaml was absent. Certification requires heir_valid === true. Fail closed if missing or false."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of certification issuance."
+    },
+    "auditor_signature": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Cryptographic signature produced by signature_engine. Format: hmac-sha256:<base64-encoded-signature>."
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "SHA-256 hash of all artifacts listed in WORK_PACKET.required_artifacts, sorted alphabetically, concatenated as bytes."
+    },
+    "failure_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Empty array when audit_status is PASS. Populated with specific failure reasons when FAIL."
+    }
+  }
+}

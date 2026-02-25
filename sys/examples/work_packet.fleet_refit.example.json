@@ -1,0 +1,27 @@
+{
+  "id": "wp-20260225-fleet-refit-example",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "fleet_refit",
+  "target_repo_alias": "client",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    ".github/",
+    "changesets/",
+    "audit_reports/",
+    ".garage/",
+    "heir.doctrine.yaml"
+  ],
+  "summary": "Fleet refit execution. Apply Garage alignment bundle to client repo.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-02-25T00:00:00Z",
+  "payload": {
+    "process_id": "00000000-0000-0000-0000-000000000001",
+    "operational_id": "00000000-0000-0000-0000-000000000002"
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

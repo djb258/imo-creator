@@ -1,0 +1,75 @@
+{
+  "registry_version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Classification taxonomy for the garage control plane. All enums used in contracts and audit rules are defined here. Single source of truth for valid values.",
+  "execution_types": {
+    "values": ["audit", "refactor", "build", "migrate"],
+    "descriptions": {
+      "audit": "Read-only evaluation of repo state against doctrine. No file modifications permitted.",
+      "refactor": "Structural reorganization within existing boundaries. No new capabilities added.",
+      "build": "New capability construction within declared scope. May create new files.",
+      "migrate": "Schema or data migration. Requires schema_impact=true. Triggers CTB validation gates."
+    }
+  },
+  "audit_classifications": {
+    "values": ["PASS", "FAIL_EXECUTION", "FAIL_SCOPE"],
+    "descriptions": {
+      "PASS": "Work packet executed within scope, all acceptance criteria met, doctrine compliant.",
+      "FAIL_EXECUTION": "Work packet scoped correctly but implementation is incorrect or incomplete.",
+      "FAIL_SCOPE": "Work packet execution violated scope boundaries, modified protected assets, or breached envelope constraints."
+    },
+    "certification_mapping": {
+      "PASS": "PASS",
+      "FAIL_EXECUTION": "FAIL",
+      "FAIL_SCOPE": "FAIL"
+    }
+  },
+  "certification_statuses": {
+    "values": ["PASS", "FAIL"],
+    "descriptions": {
+      "PASS": "All gates passed. Certification artifact is merge-eligible.",
+      "FAIL": "One or more gates failed. Merge blocked."
+    }
+  },
+  "repo_classifications": {
+    "values": ["sovereign", "hub", "spoke"],
+    "descriptions": {
+      "sovereign": "imo-creator. Defines doctrine. Garage owner. All governance originates here.",
+      "hub": "Domain-owning child repo. Conforms to imo-creator doctrine. Receives certification.",
+      "spoke": "Interface-only boundary. No logic, no state, no tools. Data carrier only."
+    }
+  },
+  "agent_roles": {
+    "values": ["planner", "worker", "auditor", "db_agent"],
+    "descriptions": {
+      "planner": "Generates WORK_PACKET from user intent. No code execution. No scope expansion.",
+      "worker": "Executes approved WORK_PACKET against mounted repo. Produces artifacts. Formerly named Builder.",
+      "auditor": "Evaluates execution against doctrine registry and audit rules. Issues classification. Feeds certification.",
+      "db_agent": "Database governance specialist. CTB validation, schema verification, migration audit, drift detection."
+    },
+    "deprecated_aliases": {
+      "builder": "worker"
+    }
+  },
+  "severity_levels": {
+    "values": ["BLOCKING", "HIGH", "MEDIUM", "LOW"],
+    "descriptions": {
+      "BLOCKING": "Halts certification. Must be resolved before any forward progress.",
+      "HIGH": "Fails certification but does not halt pipeline. Must be resolved before merge.",
+      "MEDIUM": "Warning. Documented in certification. Does not block merge.",
+      "LOW": "Informational. Logged for audit trail only."
+    }
+  },
+  "garage_exclusive_artifacts": {
+    "description": "Artifacts that must reside in the Garage (imo-creator) only. Child repos must not contain these.",
+    "artifacts": [
+      "Agent definitions (ai/agents/)",
+      "WORK_PACKET schema (sys/contracts/work_packet.schema.json)",
+      "Certification schema (sys/contracts/certification.schema.json)",
+      "Audit taxonomy (sys/registry/taxonomy_registry.json)",
+      "Doctrine registry (sys/registry/doctrine_registry.json)",
+      "Audit rules (sys/registry/audit_rules.json)",
+      "Execution contracts (sys/runtime/)"
+    ]
+  }
+}

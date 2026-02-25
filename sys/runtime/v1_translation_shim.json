@@ -1,0 +1,86 @@
+{
+  "shim_version": "1.0.0",
+  "description": "Translation mapping from WORK_PACKET V1 to WORK_PACKET V2. Enables backwards-compatible reading of V1 packets during phase-out period. V1 write support is discontinued.",
+  "direction": "v1_to_v2",
+  "field_mapping": {
+    "id": {
+      "target": "work_packet_id",
+      "transform": "direct_copy",
+      "notes": "V1 id becomes V2 work_packet_id. If V1 id is not UUID format, generate new UUID and log original id."
+    },
+    "change_type": {
+      "target": "execution_type",
+      "transform": "enum_remap",
+      "mapping": {
+        "feature": "build",
+        "architectural": "build",
+        "refactor": "refactor",
+        "fix": "refactor"
+      },
+      "notes": "V1 had 4 types; V2 has 4 different types. Feature and architectural both map to build. Fix maps to refactor."
+    },
+    "allowed_paths": {
+      "target": "file_targets",
+      "transform": "direct_copy",
+      "notes": "V1 allowed_paths becomes V2 file_targets. Semantics identical: scope containment."
+    },
+    "summary": {
+      "target": "scope",
+      "transform": "direct_copy",
+      "notes": "V1 summary becomes V2 scope. V2 scope is a declarative boundary statement."
+    },
+    "doctrine_version": {
+      "target": "doctrine_version",
+      "transform": "direct_copy",
+      "notes": "Carried forward unchanged."
+    },
+    "timestamp": {
+      "target": null,
+      "transform": "dropped",
+      "notes": "V2 work packets receive new timestamps at translation time."
+    }
+  },
+  "fields_auto_defaulted": {
+    "orbt_mode": {
+      "default": "operate",
+      "notes": "V1 packets have no orbt_mode. Default to operate for translation only. New packets MUST declare mode explicitly."
+    },
+    "execution_type": {
+      "default": "standard",
+      "notes": "V1 packets have no execution_type. Default to standard for translation only."
+    }
+  },
+  "fields_requiring_manual_input": {
+    "target_repo": {
+      "required": true,
+      "notes": "V1 did not include target_repo. Must be provided by operator. Infer from execution context if available."
+    },
+    "target_branch": {
+      "required": true,
+      "notes": "V1 did not include target_branch. Must be provided by operator."
+    },
+    "acceptance_criteria": {
+      "required": true,
+      "notes": "Must be derived from V1 summary or provided manually. Each criterion must be mechanically verifiable."
+    },
+    "schema_impact": {
+      "required": true,
+      "default_derivation": "V1 architectural_flag value",
+      "notes": "If V1 architectural_flag=true, set schema_impact=true. Otherwise requires manual determination."
+    },
+    "required_artifacts": {
+      "required": true,
+      "notes": "V1 did not declare required artifacts explicitly. Must be provided by operator."
+    }
+  },
+  "fields_dropped_from_v1": {
+    "architectural_flag": "Superseded by schema_impact + file_targets analysis. Architectural elevation now detected by audit_rules.json RULE-008.",
+    "requires_pressure_test": "Superseded by certification layer. All work packets go through certification regardless.",
+    "flow_contract": "Superseded by WORK_PACKET V2 scope + file_targets. Flow validation moved to audit_rules.json.",
+    "payload": "Removed. No opaque payload. All governance fields are explicit and required."
+  },
+  "deprecation_timeline": {
+    "v1_read_support": "Active until next major doctrine version bump (4.0.0).",
+    "v1_write_support": "Discontinued immediately. All new work packets must use V2 schema."
+  }
+}

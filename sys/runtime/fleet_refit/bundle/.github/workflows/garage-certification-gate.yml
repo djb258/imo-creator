@@ -1,0 +1,41 @@
+name: Garage Certification Gate
+
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  certification-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify certification artifact exists
+        run: |
+          if [ ! -f ".garage/certification.json" ]; then
+            echo "FAIL: .garage/certification.json not found."
+            echo "This repo requires Garage certification before merge."
+            exit 1
+          fi
+
+      - name: Validate sanitation_passed
+        run: |
+          SANITATION=$(jq -r '.sanitation_passed' .garage/certification.json)
+          if [ "$SANITATION" != "true" ]; then
+            echo "FAIL: sanitation_passed is not true."
+            echo "Value: $SANITATION"
+            exit 1
+          fi
+
+      - name: Validate audit_status
+        run: |
+          AUDIT=$(jq -r '.audit_status' .garage/certification.json)
+          if [ "$AUDIT" != "PASS" ]; then
+            echo "FAIL: audit_status is not PASS."
+            echo "Value: $AUDIT"
+            exit 1
+          fi
+
+      - name: Certification gate passed
+        run: echo "Garage certification gate PASSED."

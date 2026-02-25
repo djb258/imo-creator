@@ -22,17 +22,36 @@ All child repos that adopt the control plane must enforce strict agent role isol
 
 The Planner produces structural intent. It does not execute.
 
-### Builder
+### Worker (formerly Builder)
 
 | Permission | Status |
 |------------|--------|
 | Implement approved WORK_PACKET | ALLOWED |
+| Apply DB_CHANGESET migrations as defined by DB Agent | ALLOWED |
+| Produce UI_CHANGESET in UI adapter mode | ALLOWED |
+| Produce CONTAINER_RUN via container_runner | ALLOWED |
 | Expand scope beyond WORK_PACKET | PROHIBITED |
 | Modify protected assets | PROHIBITED |
 | Modify doctrine | PROHIBITED |
 | Create unapproved artifacts | PROHIBITED |
+| Invent schema policy (DB Agent owns this) | PROHIBITED |
 
-The Builder executes approved intent. It does not decide.
+The Worker executes approved intent across all routed lanes. It does not decide.
+
+### DB Agent
+
+| Permission | Status |
+|------------|--------|
+| Generate DB_CHANGESET artifact | ALLOWED |
+| Define migrations and rollback plans | ALLOWED |
+| Validate schema against CTB registry | ALLOWED |
+| Run drift detection | ALLOWED |
+| Apply migrations directly | PROHIBITED |
+| Modify column_registry.yml | PROHIBITED |
+| Write application code | PROHIBITED |
+| Modify doctrine | PROHIBITED |
+
+The DB Agent defines database policy. It does not execute.
 
 ### Auditor
 
@@ -67,15 +86,63 @@ All repos adopting the control plane must route agent work through the following
 
 | Artifact | Producer | Consumer | Purpose |
 |----------|----------|----------|---------|
-| WORK_PACKET | Planner | Builder | Defines approved scope of work |
-| CHANGESET | Builder | Auditor | Describes what was changed and why |
+| WORK_PACKET (V2) | Planner | Worker, DB Agent | Defines approved scope + routing flags |
+| DB_CHANGESET | DB Agent | Worker, Auditor | Database migrations, rollback plan, validation steps |
+| UI_CHANGESET | Worker (UI adapter) | Auditor | UI changes, preview artifacts, acceptance checks |
+| CONTAINER_RUN | Worker (container lane) | Auditor | Build log, test results, exit code, image digest |
+| CHANGESET | Worker | Auditor | Describes what was changed and why |
+| CERTIFICATION | Signature Engine | Child repo CI | Signed attestation of audit PASS |
 | AUDIT_REPORT | Auditor | Human | Classifies outcome as PASS / FAIL_EXECUTION / FAIL_SCOPE |
 
-### Flow Sequence
+### Standard Flow (no lanes)
 
 ```
-Planner → WORK_PACKET → Builder → CHANGESET → Auditor → AUDIT_REPORT → Human
+Planner → WORK_PACKET(V2) → Worker → CHANGESET → Auditor → AUDIT_REPORT → Human
 ```
+
+### DB Lane Flow (db_required=true)
+
+```
+Planner → WORK_PACKET(V2, db_required=true)
+    → DB Agent → DB_CHANGESET
+    → Worker (applies DB_CHANGESET) → CHANGESET
+    → Auditor (validates DB_CHANGESET + CHANGESET) → AUDIT_REPORT → Human
+```
+
+### UI Lane Flow (ui_required=true)
+
+```
+Planner → WORK_PACKET(V2, ui_required=true)
+    → Worker (UI adapter) → UI_CHANGESET + CHANGESET
+    → Auditor (validates UI_CHANGESET + CHANGESET) → AUDIT_REPORT → Human
+```
+
+### Container Lane Flow (container_required=true)
+
+```
+Planner → WORK_PACKET(V2, container_required=true)
+    → Worker → CONTAINER_RUN + CHANGESET
+    → Auditor (validates CONTAINER_RUN + CHANGESET) → AUDIT_REPORT → Human
+```
+
+### Combined Flow (multiple lanes)
+
+```
+Planner → WORK_PACKET(V2, db_required=true, ui_required=true, container_required=true)
+    → DB Agent → DB_CHANGESET
+    → Worker (applies DB_CHANGESET + UI adapter + container runner)
+        → DB_CHANGESET (applied) + UI_CHANGESET + CONTAINER_RUN + CHANGESET
+    → Auditor (validates all lane artifacts) → AUDIT_REPORT → Human
+```
+
+### Lane Artifact Paths
+
+| Artifact | Path |
+|----------|------|
+| DB_CHANGESET | `changesets/outbox/<work_packet_id>/db/db_changeset.json` |
+| UI_CHANGESET | `changesets/outbox/<work_packet_id>/ui/ui_changeset.json` |
+| CONTAINER_RUN | `changesets/outbox/<work_packet_id>/container/container_run.json` |
+| CHANGESET | `changesets/outbox/<work_packet_id>/changeset.json` |
 
 ### Communication Rules
 
@@ -89,20 +156,33 @@ Planner → WORK_PACKET → Builder → CHANGESET → Auditor → AUDIT_REPORT �
 
 Agents communicate through artifacts. There is no backchannel.
 
+### Fail-Closed Lane Rules (ADR-021)
+
+| Condition | Classification |
+|-----------|---------------|
+| `db_required=true` and no DB_CHANGESET | FAIL_EXECUTION |
+| `ui_required=true` and no UI_CHANGESET | FAIL_EXECUTION |
+| `container_required=true` and no CONTAINER_RUN | FAIL_EXECUTION |
+| V1 packet attempts DB work | FAIL_SCOPE |
+| V1 packet attempts UI work | FAIL_SCOPE |
+| DB_CHANGESET missing rollback_plan | FAIL_EXECUTION |
+| UI_CHANGESET acceptance_checks not all PASS | FAIL_EXECUTION |
+| CONTAINER_RUN exit_code non-zero | FAIL_EXECUTION |
+
 ### Pressure Test Bus Enforcement
 
 When `WORK_PACKET.requires_pressure_test = true`, the artifact flow gains additional routing constraints:
 
 ```
 Planner → WORK_PACKET (requires_pressure_test=true)
-    → Builder → CHANGESET + ARCH_PRESSURE_REPORT + FLOW_PRESSURE_REPORT
+    → Worker → CHANGESET + ARCH_PRESSURE_REPORT + FLOW_PRESSURE_REPORT
         → Auditor → validates pressure reports → AUDIT_REPORT → Human
 ```
 
 | Condition | Routing Rule |
 |-----------|-------------|
 | `requires_pressure_test = true` and both reports present with all fields PASS | Route to Auditor for standard verification |
-| `requires_pressure_test = true` and either report missing | BLOCK — do not route to Auditor. Return to Builder with `FAIL_EXECUTION`. |
+| `requires_pressure_test = true` and either report missing | BLOCK — do not route to Auditor. Return to Worker with `FAIL_EXECUTION`. |
 | `requires_pressure_test = true` and any field = FAIL | BLOCK — do not route past Auditor. Auditor must classify as `FAIL_EXECUTION`. |
 | `requires_pressure_test = true` but field is not set in WORK_PACKET | BLOCK — Planner must re-emit WORK_PACKET with explicit value. |
 
@@ -156,4 +236,4 @@ All boundary violations must be recorded within the existing artifact structure.
 | Last Modified | 2026-02-25 |
 | Authority | IMO-Creator (Sovereign) |
 | Status | CONSTITUTIONAL |
-| Phase | V1 Control Plane — Phase 2 Pressure Test Enforcement (v3.4.0) |
+| Phase | V2 Control Plane — DB Lane + UI Lane + Container Surface (v3.5.0, ADR-021) |

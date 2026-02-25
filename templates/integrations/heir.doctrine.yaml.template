@@ -1,4 +1,9 @@
-# HEIR Doctrine Template
+# DEPRECATED FORMAT (nested).
+# Garage mount validation requires flat 8-field heir.doctrine.yaml.
+# Use sys/runtime/fleet_refit/bundle/heir.doctrine.yaml.template instead.
+# This file is retained for historical reference only. Do not use for new repos.
+#
+# HEIR Doctrine Template (Legacy)
 # Copy to hub root as: heir.doctrine.yaml
 # Replace all <placeholders> with actual values
 # Reference: ARCHITECTURE.md (CTB Constitutional Law v2.0.0)

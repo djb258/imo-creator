@@ -1,0 +1,37 @@
+{
+  "changeset_id": "db-cs-20260225-001",
+  "work_packet_id": "wp-20260225-migrate-contacts",
+  "db_system": "neon",
+  "db_targets": [
+    "outreach.contacts_canonical",
+    "outreach.contacts_error"
+  ],
+  "migrations": [
+    {
+      "file": "migrations/012_add_contacts_email_verified.sql",
+      "direction": "forward",
+      "description": "Add email_verified boolean column to contacts_canonical with default false."
+    }
+  ],
+  "schema_diff_artifact": "changesets/outbox/wp-20260225-migrate-contacts/db/schema_diff.json",
+  "rollback_plan": {
+    "strategy": "migration_reverse",
+    "migrations": [
+      "migrations/012_add_contacts_email_verified_rollback.sql"
+    ],
+    "verification": "SELECT column_name FROM information_schema.columns WHERE table_name = 'contacts_canonical' AND column_name = 'email_verified' — should return 0 rows after rollback."
+  },
+  "validation_steps": [
+    {
+      "step": "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'contacts_canonical' AND column_name = 'email_verified'",
+      "expected": "Returns 1 row: email_verified, boolean"
+    },
+    {
+      "step": "SELECT count(*) FROM outreach.contacts_canonical WHERE email_verified IS NULL",
+      "expected": "Returns 0 (all rows have default false)"
+    }
+  ],
+  "risk_class": "LOW",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-02-25T14:30:00Z"
+}

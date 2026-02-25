@@ -1,0 +1,17 @@
+{
+  "current_version": "3.5.0",
+  "schema_contract_version": "2.0.0",
+  "last_updated": "2026-02-25",
+  "authority": "imo-creator",
+  "locked": true,
+  "minimum_compatible": "3.0.0",
+  "changelog": {
+    "3.5.0": "Garage control plane V2 — centralized agents, certification layer, CTB-compliant placement, archived agents_v0",
+    "3.4.1": "Audit sweep + checklist hardening",
+    "3.4.0": "Structural + flow pressure testing — 10 mechanical gates",
+    "3.3.0": "Phase 3 bootstrap guarantees — non-superuser enforcement",
+    "3.2.0": "Vendor JSON + frozen bridge enforcement",
+    "3.0.2": "Phase 2 lockdown — tamper-resistant drift audit",
+    "3.0.0": "Fail-closed governance — Option C"
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "contract_version": "1.1.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Garage orchestration contract. Defines the end-to-end flow from user intent to certified merge. This is the central coordination layer that binds agents, runtime, and certification into a single deterministic pipeline.",
+  "pipeline": {
+    "stage_1_intent": {
+      "name": "User declares intent",
+      "actor": "Human",
+      "output": "Natural language request",
+      "handoff_to": "Planner"
+    },
+    "stage_2_plan": {
+      "name": "Planner generates WORK_PACKET",
+      "actor": "ai/agents/planner/",
+      "inputs": [
+        "User request",
+        "sys/contracts/doctrine_version.json",
+        "sys/registry/doctrine_registry.json",
+        "sys/registry/taxonomy_registry.json",
+        "FLEET_REGISTRY.yaml"
+      ],
+      "output": "work_packets/outbox/{work_packet_id}.json",
+      "validation": "WORK_PACKET must validate against sys/contracts/work_packet.schema.json",
+      "handoff_to": "Execution Runner"
+    },
+    "stage_3_mount": {
+      "name": "Execution runner mounts target repo",
+      "actor": "sys/runtime/execution_runner/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "sys/runtime/repo_mount/mount_contract.json"
+      ],
+      "output": "Isolated repository clone with scope lock",
+      "validation": "Mount contract 5-step protocol",
+      "handoff_to": "DB Agent (if schema_impact) or Worker"
+    },
+    "stage_4_db_validation": {
+      "name": "DB Agent validates schema impact",
+      "actor": "ai/agents/db_agent/",
+      "condition": "WORK_PACKET.schema_impact=true OR execution_type=migrate",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Mounted repository with database access"
+      ],
+      "output": "DB agent validation report",
+      "on_failure": "Execution blocked. WORK_PACKET returned to Planner with failure details.",
+      "handoff_to": "Worker (if validation passes)"
+    },
+    "stage_5_execute": {
+      "name": "Worker executes against mounted repo",
+      "actor": "ai/agents/worker/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Mounted repository (scope-locked to file_targets)"
+      ],
+      "output": "Modified files + required artifacts + execution log",
+      "constraints": "File modifications limited to file_targets. Timeout per execution_type.",
+      "handoff_to": "Artifact Writer"
+    },
+    "stage_6_collect": {
+      "name": "Artifact writer collects and hashes outputs",
+      "actor": "sys/runtime/artifact_writer/",
+      "inputs": [
+        "Modified files from Worker execution",
+        "Generated artifacts",
+        "Execution log"
+      ],
+      "output": "Hashed artifact bundle ready for audit",
+      "handoff_to": "Auditor"
+    },
+    "stage_7_audit": {
+      "name": "Auditor evaluates execution against doctrine",
+      "actor": "ai/agents/auditor/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Artifact bundle from Writer",
+        "sys/registry/audit_rules.json",
+        "sys/registry/doctrine_registry.json",
+        "Constitutional documents"
+      ],
+      "output": "Classification: PASS | FAIL_EXECUTION | FAIL_SCOPE",
+      "handoff_to": "Signature Engine (if PASS) or Human (if FAIL)"
+    },
+    "stage_7b_sanitation": {
+      "name": "Sanitation pass validates workspace cleanliness",
+      "actor": "sys/runtime/sanitation/",
+      "condition": "Audit classification is PASS. Sanitation runs ONLY after Auditor PASS.",
+      "inputs": [
+        "Mounted workspace state",
+        "WORK_PACKET (for allowed_paths reference)",
+        "sys/runtime/sanitation/sanitation_contract.json"
+      ],
+      "output": "changesets/outbox/<work_packet_id>/sanitation_report.json with status: CLEAN | PASS_WITH_WARNINGS | FAIL",
+      "on_failure": "sanitation_status === FAIL blocks certification. New WORK_PACKET required to remediate.",
+      "handoff_to": "Signature Engine (if CLEAN or PASS_WITH_WARNINGS) or Human (if FAIL)"
+    },
+    "stage_8_certify": {
+      "name": "Signature engine issues certification",
+      "actor": "sys/certification/signature_engine/",
+      "condition": "Audit classification is PASS AND sanitation_status is CLEAN or PASS_WITH_WARNINGS",
+      "inputs": [
+        "Audit classification",
+        "Sanitation report",
+        "Artifact hash from artifact_writer",
+        "GARAGE_SIGNING_KEY from Doppler"
+      ],
+      "output": ".garage/certification.json written to PR branch",
+      "handoff_to": "Child repo CI"
+    },
+    "stage_9_validate": {
+      "name": "Child repo CI validates certification",
+      "actor": "sys/certification/validator/ (runs in child repo CI)",
+      "inputs": [
+        ".garage/certification.json from PR branch",
+        "GARAGE_SIGNING_KEY"
+      ],
+      "output": "VALID (merge permitted) or INVALID (merge blocked)",
+      "handoff_to": "Human (merge decision)"
+    },
+    "stage_10_merge": {
+      "name": "Human merges certified PR",
+      "actor": "Human",
+      "condition": "Certification VALID + code review approved",
+      "output": "Code merged to target branch"
+    }
+  },
+  "failure_paths": {
+    "planner_halt": {
+      "trigger": "Ambiguous intent, missing target_repo, protected asset touched",
+      "resolution": "Human provides clarification. Planner generates new WORK_PACKET."
+    },
+    "mount_failure": {
+      "trigger": "Target repo fails structural validation",
+      "resolution": "Target repo must be brought into doctrine compliance before execution."
+    },
+    "db_validation_failure": {
+      "trigger": "Schema changes violate CTB registry, cardinality, or immutability rules",
+      "resolution": "Worker must not execute. Planner revises scope or human approves exception via ADR."
+    },
+    "scope_violation": {
+      "trigger": "Worker attempts to modify files outside file_targets",
+      "resolution": "Worker halts. New WORK_PACKET required with corrected scope."
+    },
+    "audit_fail_execution": {
+      "trigger": "Implementation incorrect or incomplete",
+      "resolution": "New WORK_PACKET. Worker re-executes with corrections."
+    },
+    "audit_fail_scope": {
+      "trigger": "Scope boundary violated, protected assets modified",
+      "resolution": "New WORK_PACKET. Planner must narrow or correct scope."
+    },
+    "sanitation_fail": {
+      "trigger": "Workspace has untracked files, temp files, scope leak, missing artifacts, or uncommitted generated files",
+      "resolution": "New WORK_PACKET required. Worker re-executes with cleanup. Sanitation re-runs after next Auditor PASS."
+    },
+    "certification_fail": {
+      "trigger": "Signature invalid, hash mismatch, doctrine version stale",
+      "resolution": "Re-run pipeline from appropriate stage. Stale doctrine requires doctrine update first."
+    }
+  },
+  "invariants": [
+    "One WORK_PACKET per pipeline run. No batching.",
+    "Artifacts are the only handoff mechanism between stages. No peer-to-peer agent communication.",
+    "Every stage is deterministic. Same inputs produce same outputs.",
+    "Human is sovereign at every decision point. Agents execute within declared boundaries.",
+    "No stage may be skipped. Pipeline is sequential from intent to merge.",
+    "Certification is the only path to merge. No uncertified merges."
+  ]
+}

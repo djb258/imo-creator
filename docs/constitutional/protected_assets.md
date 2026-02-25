@@ -91,6 +91,24 @@ Execution MUST halt when a protected asset modification is detected. There is no
 
 ---
 
+## Garage Governance — Frozen Surfaces (v1)
+
+The following Garage control plane files are LOCKED. Modification requires architectural elevation and human-approved ADR.
+
+| File | Purpose | Protection Level |
+|------|---------|-----------------|
+| `docs/constitutional/imo_creator_charter.md` | Sovereign charter (10 sections) | CONSTITUTIONAL |
+| `docs/DOCTRINE_INDEX.md` | Canonical doctrine reference index | CONSTITUTIONAL |
+| `sys/contracts/heir.schema.json` | HEIR identity record schema (flat 8-field) | CONSTITUTIONAL |
+| `sys/contracts/work_packet.schema.json` | WORK_PACKET V2 governance envelope | CONSTITUTIONAL |
+| `sys/contracts/orbt_error.schema.json` | ORBT telemetry artifact schema | CONSTITUTIONAL |
+| `sys/contracts/sanitation_report.schema.json` | Post-audit sanitation report schema | CONSTITUTIONAL |
+| `sys/contracts/certification.schema.json` | Signed certification artifact schema | CONSTITUTIONAL |
+| `sys/runtime/execution_runner/runner_contract.json` | 9-phase execution pipeline | CONSTITUTIONAL |
+| `sys/runtime/repo_mount/mount_contract.json` | Repository mount protocol + HEIR validation | CONSTITUTIONAL |
+
+---
+
 ## Document Control
 
 | Field | Value |

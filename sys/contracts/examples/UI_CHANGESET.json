@@ -1,0 +1,42 @@
+{
+  "changeset_id": "ui-cs-20260225-001",
+  "work_packet_id": "wp-20260225-contact-form",
+  "ui_surface": "local",
+  "ui_target": "src/ui/pages/contacts/ContactForm.tsx",
+  "changes": [
+    {
+      "file": "src/ui/pages/contacts/ContactForm.tsx",
+      "action": "modify",
+      "description": "Add email verification badge component to contact form header."
+    },
+    {
+      "file": "src/ui/components/VerificationBadge.tsx",
+      "action": "create",
+      "description": "New component displaying email verification status with green/gray indicator."
+    }
+  ],
+  "preview_artifacts": [
+    "changesets/outbox/wp-20260225-contact-form/ui/preview_contact_form.png",
+    "changesets/outbox/wp-20260225-contact-form/ui/preview_badge_states.png"
+  ],
+  "acceptance_checks": [
+    {
+      "check": "VerificationBadge renders green when email_verified=true",
+      "status": "PASS"
+    },
+    {
+      "check": "VerificationBadge renders gray when email_verified=false",
+      "status": "PASS"
+    },
+    {
+      "check": "ContactForm displays badge in header area",
+      "status": "PASS"
+    },
+    {
+      "check": "No CTB forbidden folder violations in new component path",
+      "status": "PASS"
+    }
+  ],
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-02-25T15:00:00Z"
+}

@@ -1,0 +1,96 @@
+{
+  "registry_version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Machine-readable registry of all doctrine files. Auditor and certification validator read this registry to verify doctrine compliance. Single source of truth for doctrine file inventory.",
+  "doctrine_files": [
+    {
+      "id": "ARCHITECTURE",
+      "path": "templates/doctrine/ARCHITECTURE.md",
+      "version": "2.1.0",
+      "status": "LOCKED",
+      "scope": "CTB topology, CC hierarchy, hub-spoke geometry, IMO flow, descent gates, PID doctrine, ownership constraints"
+    },
+    {
+      "id": "CTB_REGISTRY_ENFORCEMENT",
+      "path": "templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md",
+      "version": "1.5.0",
+      "status": "LOCKED",
+      "scope": "Registry-first enforcement, cardinality rules, defense-in-depth, batch-level RAW lockdown, vendor JSON containment, bootstrap enforcement"
+    },
+    {
+      "id": "FAIL_CLOSED_CI_CONTRACT",
+      "path": "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md",
+      "version": "1.1.0",
+      "status": "LOCKED",
+      "scope": "Fail-closed CI contract, Gates A-E, bootstrap guarantees, no continue-on-error"
+    },
+    {
+      "id": "EXECUTION_SURFACE_LAW",
+      "path": "templates/doctrine/EXECUTION_SURFACE_LAW.md",
+      "version": "1.0.0",
+      "status": "LOCKED",
+      "scope": "Valid execution surfaces, prohibited directories, forbidden folders, enforcement detection"
+    },
+    {
+      "id": "ROLLBACK_PROTOCOL",
+      "path": "templates/doctrine/ROLLBACK_PROTOCOL.md",
+      "version": "1.0.0",
+      "status": "LOCKED",
+      "scope": "6-step rollback procedure for doctrine sync failures, version pinning, ADR escalation"
+    },
+    {
+      "id": "LEGACY_COLLAPSE_PLAYBOOK",
+      "path": "templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md",
+      "version": "1.0.0",
+      "status": "LOCKED",
+      "scope": "5-phase legacy migration protocol from ungoverned to CTB-governed"
+    },
+    {
+      "id": "TOOLS",
+      "path": "templates/integrations/TOOLS.md",
+      "version": "1.1.0",
+      "status": "LOCKED",
+      "scope": "Tool registration doctrine, hub-scoped ownership, determinism-first, LLM-as-tail"
+    },
+    {
+      "id": "OSAM",
+      "path": "templates/semantic/OSAM.md",
+      "version": "1.1.0",
+      "status": "LOCKED",
+      "scope": "Operational semantic access map, query routing, stop conditions, registry-first enforcement"
+    },
+    {
+      "id": "GARAGE_CONSTITUTION",
+      "path": "docs/constitutional/garage.md",
+      "version": "1.0.0",
+      "status": "ACTIVE",
+      "scope": "Garage control plane boundaries, car exclusion rules, governance centralization, agent ownership"
+    }
+  ],
+  "constitutional_surfaces": [
+    {
+      "id": "CONSTITUTION",
+      "path": "CONSTITUTION.md",
+      "status": "SUPREME",
+      "scope": "Transformation law, design declaration requirement, governance direction, violation enforcement"
+    },
+    {
+      "id": "BACKBONE",
+      "path": "docs/constitutional/backbone.md",
+      "status": "CONSTITUTIONAL",
+      "scope": "CTB backbone primitives, altitude hierarchy, architectural elevation triggers"
+    },
+    {
+      "id": "GOVERNANCE",
+      "path": "docs/constitutional/governance.md",
+      "status": "CONSTITUTIONAL",
+      "scope": "Agent role isolation, artifact flow model, pressure test bus enforcement, human sovereign authority"
+    },
+    {
+      "id": "PROTECTED_ASSETS",
+      "path": "docs/constitutional/protected_assets.md",
+      "status": "CONSTITUTIONAL",
+      "scope": "Protected models, protected folders, child repo inherited protection, elevation rules"
+    }
+  ]
+}

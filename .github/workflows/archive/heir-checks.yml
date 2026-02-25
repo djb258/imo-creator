@@ -1,3 +1,8 @@
+# DEPRECATED — HEIR validation centralized in Garage mount protocol (Phase 1 migration)
+# This workflow is archived. Do not re-enable. All HEIR validation now occurs
+# during mount_contract step_2b_heir_validation against sys/contracts/heir.schema.json.
+# See: sys/runtime/repo_mount/mount_contract.json v2.2.0
+
 name: HEIR Validation
 
 on:

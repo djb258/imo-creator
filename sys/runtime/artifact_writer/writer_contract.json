@@ -1,0 +1,56 @@
+{
+  "contract_version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Artifact writer contract. Defines how execution artifacts are collected, hashed, and written into the PR branch of the target repository. Last stage before certification.",
+  "write_protocol": {
+    "step_1_collect": {
+      "action": "Gather all artifacts from completed execution.",
+      "sources": [
+        "Modified files from mounted repo (diff against base branch).",
+        "Generated artifacts declared in WORK_PACKET.required_artifacts.",
+        "Audit report from auditor classification.",
+        "Certification artifact from signature_engine."
+      ]
+    },
+    "step_2_hash": {
+      "action": "Compute SHA-256 hash of all required artifacts.",
+      "algorithm": "SHA-256",
+      "method": "Sort WORK_PACKET.required_artifacts alphabetically. Read each file content as raw bytes. Concatenate in sorted order. Compute SHA-256 hash.",
+      "output_format": "sha256:<64-character-lowercase-hex>"
+    },
+    "step_3_write_certification": {
+      "action": "Write certification.json into PR branch.",
+      "location": ".garage/certification.json at root of target repository.",
+      "integrity": "certification.json is the final artifact written. Modification after write invalidates signature."
+    },
+    "step_4_write_work_packet": {
+      "action": "Write copy of WORK_PACKET into PR branch for traceability.",
+      "location": ".garage/work_packet.json at root of target repository."
+    },
+    "step_5_write_audit_report": {
+      "action": "Write audit report into PR branch for traceability.",
+      "location": ".garage/audit_report.json at root of target repository."
+    },
+    "step_6_commit": {
+      "action": "Create commit on PR branch with all artifacts and code changes.",
+      "message_format": "garage: certify {work_packet_id} [{audit_status}]",
+      "co_author": "Garage Control Plane <garage@imo-creator>"
+    }
+  },
+  "artifact_manifest": {
+    "required_in_every_certification": [
+      ".garage/certification.json",
+      ".garage/work_packet.json",
+      ".garage/audit_report.json"
+    ],
+    "directory": ".garage/ at root of target repository.",
+    "cleanup": "Previous .garage/ contents are replaced on each certification run. No accumulation across runs."
+  },
+  "integrity_invariants": [
+    "artifact_hash in certification.json must match recomputed hash of required_artifacts.",
+    "auditor_signature must validate against garage signing key.",
+    "No artifact may be modified after certification.json is written.",
+    "certification.json is always the last file written in the commit.",
+    ".garage/ directory is owned by the Garage. Child repos must not modify it."
+  ]
+}

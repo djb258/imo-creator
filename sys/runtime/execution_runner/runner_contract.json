@@ -1,0 +1,109 @@
+{
+  "contract_version": "1.1.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Execution runner contract. Governs how WORK_PACKETs are executed against mounted repositories. Enforces scope containment, timeout discipline, and deterministic artifact collection.",
+  "execution_sequence": [
+    {
+      "phase": "INTAKE",
+      "action": "Validate WORK_PACKET against sys/contracts/work_packet.schema.json.",
+      "on_failure": "Reject execution. Return schema validation errors. No mount created."
+    },
+    {
+      "phase": "MOUNT",
+      "action": "Invoke repo_mount protocol for target_repo at target_branch.",
+      "on_failure": "Reject execution. Return mount validation errors. No agent dispatched."
+    },
+    {
+      "phase": "DISPATCH",
+      "action": "Route to appropriate agent based on execution_type.",
+      "routing": {
+        "audit": "auditor — read-only evaluation against doctrine. No worker involved.",
+        "refactor": "worker — structural changes within existing boundaries.",
+        "build": "worker — new capability construction within declared scope.",
+        "migrate": "db_agent + worker — schema migration with CTB validation. db_agent validates schema changes, worker executes."
+      }
+    },
+    {
+      "phase": "EXECUTE",
+      "action": "Agent operates within mounted repo scope.",
+      "constraints": [
+        "File modifications limited to WORK_PACKET.file_targets.",
+        "No modification of doctrine, constitutional, or locked files.",
+        "No creation of files in forbidden folders (utils/, helpers/, common/, shared/, lib/, misc/).",
+        "Timeout enforced per execution_type.",
+        "All operations logged for audit trail."
+      ]
+    },
+    {
+      "phase": "COLLECT",
+      "action": "Artifact writer collects all outputs from execution.",
+      "outputs": [
+        "Modified files as diffs against base branch.",
+        "Generated artifacts as declared in WORK_PACKET.required_artifacts.",
+        "Structured execution log (JSON format)."
+      ]
+    },
+    {
+      "phase": "AUDIT",
+      "action": "Auditor evaluates execution against doctrine_registry and audit_rules.",
+      "classification": "PASS | FAIL_EXECUTION | FAIL_SCOPE",
+      "on_failure": "Execution log and failure reasons preserved for human review."
+    },
+    {
+      "phase": "ORBT_CAPTURE",
+      "action": "If audit classification is FAIL_EXECUTION, FAIL_SCOPE, or A_MASTER, confirm ORBT telemetry artifact exists.",
+      "sequence": [
+        "1. Check for ORBT error artifact at changesets/outbox/<work_packet_id>/orbt_error_<operational_id>.json.",
+        "2. If artifact exists: validate against sys/contracts/orbt_error.schema.json.",
+        "3. If valid: record reference in execution log. Proceed.",
+        "4. If artifact missing or invalid: log warning. Proceed to certification with audit classification.",
+        "5. If severity === A_MASTER: abort certification automatically. No certification artifact produced. Record A_MASTER abort in execution log."
+      ],
+      "a_master_rule": "A_MASTER severity aborts certification unconditionally. No override. No manual fallback. The execution is terminal."
+    },
+    {
+      "phase": "SANITATE",
+      "action": "Run post-audit workspace sanitation checks. Validate workspace cleanliness before certification is permitted.",
+      "sequence": [
+        "1. Execute all sanitation checks defined in sys/runtime/sanitation/sanitation_contract.json against mounted workspace.",
+        "2. Produce sanitation_report artifact validated against sys/contracts/sanitation_report.schema.json.",
+        "3. Write sanitation_report to changesets/outbox/<work_packet_id>/sanitation_report.json.",
+        "4. If sanitation_status === FAIL: abort certification. Emit ORBT event with error_code SANITATION_FAIL. No certification artifact produced.",
+        "5. If sanitation_status === PASS: proceed to CERTIFY."
+      ],
+      "on_failure": "Certification blocked. sanitation_passed set to false. Execution log records specific sanitation failures."
+    },
+    {
+      "phase": "CERTIFY",
+      "action": "If ALL certification preconditions are met, generate certification artifact via signature_engine.",
+      "preconditions": [
+        "audit_status === PASS",
+        "sanitation_passed === true",
+        "mount_receipt.heir_valid === true"
+      ],
+      "heir_gate": {
+        "check": "mount_receipt.heir_valid === true",
+        "on_failure": "Abort certification. Emit ORBT error with error_code CERT_HEIR_INVALID, severity A_MASTER, failure_surface certification_phase. No certification artifact produced. No auto-repair."
+      },
+      "on_pass": "Certification artifact written to PR branch by artifact_writer.",
+      "on_failure": "FAIL certification generated with failure_reasons. Merge blocked."
+    }
+  ],
+  "timeout_policy": {
+    "audit": 300,
+    "refactor": 600,
+    "build": 900,
+    "migrate": 1200,
+    "unit": "seconds",
+    "on_timeout": "Execution terminated. Classification set to FAIL_EXECUTION with reason: TIMEOUT."
+  },
+  "retry_policy": {
+    "max_retries": 0,
+    "rationale": "Each execution is a new WORK_PACKET. No implicit retries. Failures require human review and new intent declaration."
+  },
+  "repair_policy": {
+    "max_repair_attempts_per_operational_id": 2,
+    "auto_repair_enabled": false,
+    "rationale": "Inert constant. Reserved for future deterministic repair blueprint system. Does NOT alter pipeline behavior. Do NOT implement repair logic until repair blueprint contract is defined."
+  }
+}

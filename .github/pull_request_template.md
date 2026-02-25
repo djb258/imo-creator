@@ -87,4 +87,12 @@
 
 ---
 
+## Garage Certification Checklist (Required)
+- [ ] Sanitation PASS
+- [ ] Audit PASS
+- [ ] Certification emitted
+- [ ] No modification of protected assets
+
+---
+
 **Reviewer Notes**: Please verify CC layer compliance and CTB placement before merging.

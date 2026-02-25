@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "repo_registry.v1.schema.json",
+  "title": "Repo Registry",
+  "description": "Canonical registry of child repositories accessible by alias. Fail closed if alias is unknown or not whitelisted. No freehand cloning — only via registry.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": ["doctrine_version", "updated_at", "repos"],
+  "additionalProperties": false,
+  "properties": {
+    "doctrine_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Doctrine version this registry conforms to."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last registry update."
+    },
+    "repos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "repo_alias",
+          "display_name",
+          "github_url",
+          "default_branch",
+          "allowed_branches",
+          "auth_method",
+          "workspace_slug",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "repo_alias": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{2,32}$",
+            "description": "Short alias for phone/CLI use. Lowercase, 2-32 chars, alphanumeric + hyphens + underscores."
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable display name."
+          },
+          "github_url": {
+            "type": "string",
+            "pattern": "^(https://github\\.com/|git@github\\.com:).+\\.git$",
+            "description": "GitHub HTTPS or SSH clone URL. Must end in .git."
+          },
+          "default_branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Default branch for this repo. Used when WORK_PACKET does not specify target_branch."
+          },
+          "allowed_branches": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Branches the Garage is permitted to clone and mount. Fail closed if requested branch not in this list."
+          },
+          "auth_method": {
+            "type": "string",
+            "enum": ["ssh", "https_token"],
+            "description": "Authentication method for cloning."
+          },
+          "workspace_slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{2,32}$",
+            "description": "Workspace directory slug for mount isolation. One workspace per repo."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Repo must be enabled=true to be mounted. Disabled repos fail closed."
+          }
+        }
+      }
+    }
+  }
+}

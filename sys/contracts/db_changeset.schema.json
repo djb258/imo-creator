@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "db_changeset.v1.schema.json",
+  "title": "DB_CHANGESET",
+  "description": "Database lane artifact. Produced by DB Agent. Consumed by Worker (applies migrations) and Auditor (validates). ADR-021.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "changeset_id",
+    "work_packet_id",
+    "db_system",
+    "db_targets",
+    "migrations",
+    "schema_diff_artifact",
+    "rollback_plan",
+    "validation_steps",
+    "risk_class",
+    "doctrine_version",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "changeset_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this DB changeset."
+    },
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the WORK_PACKET that initiated this DB lane."
+    },
+    "db_system": {
+      "type": "string",
+      "enum": ["neon", "firebase", "bigquery"],
+      "description": "Target database system. Must match WORK_PACKET.db_system."
+    },
+    "db_targets": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Database objects affected. Must be subset of WORK_PACKET.db_targets."
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "direction", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Migration file path relative to migrations/ directory."
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["forward", "rollback"],
+            "description": "Migration direction. Forward applies changes. Rollback reverses them."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable description of what this migration does."
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "Ordered list of migration files to apply. Must be sequential. No gaps."
+    },
+    "schema_diff_artifact": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to schema diff artifact showing before/after state of affected tables."
+    },
+    "rollback_plan": {
+      "type": "object",
+      "required": ["strategy", "migrations", "verification"],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["migration_reverse", "snapshot_restore", "manual"],
+          "description": "Rollback strategy. migration_reverse preferred."
+        },
+        "migrations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Rollback migration files in reverse order."
+        },
+        "verification": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How to verify rollback succeeded."
+        }
+      },
+      "description": "Mandatory rollback plan. Auditor fails if missing."
+    },
+    "validation_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "expected"],
+        "additionalProperties": false,
+        "properties": {
+          "step": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Validation step description or SQL query."
+          },
+          "expected": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Expected result. Must be deterministically verifiable."
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "Post-migration validation steps. Each must be mechanically verifiable."
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": ["LOW", "MED", "HIGH"],
+      "description": "Risk classification. HIGH requires human approval before Worker applies. MED requires rollback plan review. LOW proceeds automatically."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must match WORK_PACKET.doctrine_version."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of DB changeset creation."
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "inventory_version": "1.1.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Fleet-wide structural inventory. Tracks each child repo's alignment to Garage Control Plane V2. Populated from repo_registry.json entries. Updated by Auditor after each fleet alignment check.",
+  "updated_at": "2026-02-25T00:00:00Z",
+  "state_transitions": {
+    "independent": {
+      "definition": "Missing all required surfaces. No Garage integration.",
+      "required_missing": ["heir.doctrine.yaml", ".github/workflows/garage-certification-gate.yml", "changesets/outbox/", "audit_reports/"],
+      "next": "partial"
+    },
+    "partial": {
+      "definition": "Has heir.doctrine.yaml and directories but missing CI gate or other required surfaces.",
+      "required_present": ["heir.doctrine.yaml"],
+      "required_missing": [".github/workflows/garage-certification-gate.yml"],
+      "next": "aligned"
+    },
+    "aligned": {
+      "definition": "All required surfaces present and valid. Garage certification gate operational.",
+      "required_present": ["heir.doctrine.yaml", ".github/workflows/garage-certification-gate.yml", "changesets/outbox/", "audit_reports/"],
+      "next": null
+    }
+  },
+  "transition_rules": [
+    "Transitions are deterministic. Auditor evaluates surfaces after each run.",
+    "No manual status override. Status is derived from surface presence.",
+    "independent -> partial: heir.doctrine.yaml exists + at least one directory surface exists.",
+    "partial -> aligned: all required surfaces present including CI gate.",
+    "aligned -> partial: CI gate removed or invalidated (continue-on-error detected).",
+    "aligned -> independent: heir.doctrine.yaml removed. Full regression.",
+    "Auditor writes updated status. No other agent modifies fleet_inventory."
+  ],
+  "repos": [
+    {
+      "repo_alias": "client",
+      "current_structure_type": "independent",
+      "has_heir": false,
+      "has_ci_gate": false,
+      "has_changeset_outbox": false,
+      "has_audit_reports": false,
+      "status": "pending"
+    },
+    {
+      "repo_alias": "universal-client-template",
+      "current_structure_type": "independent",
+      "has_heir": false,
+      "has_ci_gate": false,
+      "has_changeset_outbox": false,
+      "has_audit_reports": false,
+      "status": "pending"
+    }
+  ]
+}

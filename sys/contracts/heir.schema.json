@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "heir.v1.schema.json",
+  "title": "HEIR — Hub Environment Identity Record",
+  "description": "Strict flat schema for heir.doctrine.yaml validation. Garage validates this during mount protocol step_2b_heir_validation. Child repos declare identity only — all validation is centralized in the Garage.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "doctrine_version",
+    "sovereign_id",
+    "hub_id",
+    "ctb_placement",
+    "imo_topology",
+    "services",
+    "secrets_provider",
+    "acceptance_criteria"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "doctrine_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Doctrine version this HEIR record conforms to. Must be compatible with Garage doctrine_version.json."
+    },
+    "sovereign_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CC-01 sovereign identity reference. Immutable after creation."
+    },
+    "hub_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "CC-02 hub unique identifier. Immutable. Must match repo_registry entry if available."
+    },
+    "ctb_placement": {
+      "type": "string",
+      "enum": ["trunk", "branch", "leaf"],
+      "description": "CTB hierarchy position for this hub."
+    },
+    "imo_topology": {
+      "type": "string",
+      "enum": ["ingress", "middle", "egress"],
+      "description": "IMO layer this hub primarily operates at."
+    },
+    "services": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of service names declared by this hub."
+    },
+    "secrets_provider": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Secrets management provider (e.g., doppler). All secrets must be sourced from this provider."
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Acceptance criteria for this hub. At least one required."
+    }
+  }
+}

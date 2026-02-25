@@ -1,0 +1,8 @@
+{
+  "policy_version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Controls whether raw URLs (not in repo_registry.json) are permitted for mounting. Default: false (fail closed).",
+  "allow_raw_url": false,
+  "rationale": "All repos must be registered in repo_registry.json with alias, allowed branches, and auth method. Raw URL pulls bypass alias resolution, branch allowlists, and workspace isolation. Set to true only for emergency one-off operations with ADR justification.",
+  "override_requires": "ADR at sovereign level + human approval. Temporary only."
+}

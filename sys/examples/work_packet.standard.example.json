@@ -1,0 +1,23 @@
+{
+  "id": "wp-20260225-standard-example",
+  "change_type": "feature",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "client",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "src/app/services/example_service.ts"
+  ],
+  "summary": "Standard execution example. Add example_service to client repo app layer.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-02-25T00:00:00Z",
+  "payload": {
+    "process_id": "00000000-0000-0000-0000-000000000001",
+    "operational_id": "00000000-0000-0000-0000-000000000002"
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

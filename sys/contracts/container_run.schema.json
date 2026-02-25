@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "container_run.v1.schema.json",
+  "title": "CONTAINER_RUN",
+  "description": "Container execution artifact. Produced by Worker via container_runner when container_required=true. Consumed by Auditor. ADR-021.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "run_id",
+    "work_packet_id",
+    "container_profile",
+    "container_target",
+    "image_digest",
+    "build_log",
+    "test_results",
+    "exit_code",
+    "doctrine_version",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this container run."
+    },
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the WORK_PACKET that initiated this container run."
+    },
+    "container_profile": {
+      "type": "string",
+      "enum": ["node", "python", "mixed"],
+      "description": "Container runtime profile. Must match WORK_PACKET.container_profile."
+    },
+    "container_target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Repo path or service name. Must match WORK_PACKET.container_target."
+    },
+    "image_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Docker image digest used for execution. Ensures reproducibility."
+    },
+    "build_log": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to build log artifact or inline build output summary."
+    },
+    "test_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["suite", "passed", "failed", "skipped"],
+        "additionalProperties": false,
+        "properties": {
+          "suite": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Test suite name."
+          },
+          "passed": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of tests passed."
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of tests failed."
+          },
+          "skipped": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of tests skipped."
+          }
+        }
+      },
+      "description": "Test results from container execution. Empty array if no tests."
+    },
+    "exit_code": {
+      "type": "integer",
+      "description": "Container process exit code. 0 = success. Non-zero = failure."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must match WORK_PACKET.doctrine_version."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of container run completion."
+    }
+  }
+}

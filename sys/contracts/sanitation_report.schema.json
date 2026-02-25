@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sanitation_report.v1.schema.json",
+  "title": "Garage Sanitation Report",
+  "description": "Post-audit workspace sanitation report. Validates workspace cleanliness before certification. Emitted by SANITATE phase in execution runner. Any FAIL blocks certification unconditionally.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "process_id",
+    "operational_id",
+    "sanitation_status",
+    "checks_run",
+    "stale_artifacts_detected",
+    "orphaned_files_detected",
+    "schema_drift_detected",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "process_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "References the execution process this sanitation report belongs to."
+    },
+    "operational_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "References the WORK_PACKET operational ID."
+    },
+    "sanitation_status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "PASS only when all BLOCKING sanitation checks pass. Any BLOCKING failure sets FAIL. FAIL blocks certification unconditionally."
+    },
+    "checks_run": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of sanitation check IDs that were executed (e.g., SAN-001, SAN-002). At least one check must run."
+    },
+    "stale_artifacts_detected": {
+      "type": "boolean",
+      "description": "True if stale artifacts from previous executions were found in the workspace. Maps to SAN-001."
+    },
+    "orphaned_files_detected": {
+      "type": "boolean",
+      "description": "True if orphaned files (not in file_targets and not in base branch) were found. Maps to SAN-002."
+    },
+    "schema_drift_detected": {
+      "type": "boolean",
+      "description": "True if generated artifacts fail schema validation against their declared schemas. Maps to SAN-003."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of sanitation report generation."
+    }
+  }
+}

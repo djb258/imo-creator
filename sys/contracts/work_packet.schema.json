@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "work_packet.v2.schema.json",
+  "title": "WORK_PACKET V2",
+  "description": "Unified V2 governance envelope. Preserves all V1 fields. Adds DB, UI, and container routing flags. Strict validation. No optional governance fields. ADR-021.",
+  "version": "2.1.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "id",
+    "change_type",
+    "orbt_mode",
+    "architectural_flag",
+    "requires_pressure_test",
+    "allowed_paths",
+    "summary",
+    "doctrine_version",
+    "timestamp",
+    "payload",
+    "db_required",
+    "ui_required",
+    "container_required"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this work packet."
+    },
+    "change_type": {
+      "type": "string",
+      "enum": ["feature", "architectural", "refactor", "fix"],
+      "description": "Classification of change type."
+    },
+    "orbt_mode": {
+      "type": "string",
+      "enum": ["operate", "repair", "build", "troubleshoot", "train"],
+      "description": "Operational intent classification. Required. Set by Orchestrator, carried by Planner, validated by Auditor. Charter §6."
+    },
+    "execution_type": {
+      "type": "string",
+      "enum": ["standard", "fleet_refit"],
+      "description": "Execution lane type. Optional. Defaults to standard if absent. fleet_refit triggers Worker refit subroutine."
+    },
+    "target_repo_alias": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]{2,32}$",
+      "description": "Short alias from repo_registry.json. Mutually exclusive with target_repo_url. Exactly one must be present."
+    },
+    "target_repo_url": {
+      "type": "string",
+      "pattern": "^(https://github\\.com/|git@github\\.com:).+\\.git$",
+      "description": "Direct GitHub clone URL. Only permitted when repo_pull_policy.allow_raw_url=true. Mutually exclusive with target_repo_alias."
+    },
+    "target_branch": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Branch to clone. Must be in repo_registry entry's allowed_branches. Defaults to default_branch if omitted."
+    },
+    "architectural_flag": {
+      "type": "boolean",
+      "description": "True if change touches protected assets or backbone primitives."
+    },
+    "requires_pressure_test": {
+      "type": "boolean",
+      "description": "Must be true when architectural_flag is true. Triggers pressure test artifact requirements."
+    },
+    "flow_contract": {
+      "type": "object",
+      "description": "Required when structural objects or event flows change.",
+      "additionalProperties": false,
+      "required": ["ingress", "middle", "egress"],
+      "properties": {
+        "ingress": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "middle": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "egress": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Explicit file paths within scope. Worker must not modify files outside this list."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Declarative scope boundary and intent statement."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must match sys/contracts/doctrine_version.json current_version."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of work packet creation."
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Domain-specific content. Governance envelope is strict; payload is open."
+    },
+    "db_required": {
+      "type": "boolean",
+      "description": "True if work packet includes database scope. Routes to DB Agent lane."
+    },
+    "db_targets": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Database objects targeted (tables, migrations, views). Required if db_required=true."
+    },
+    "db_system": {
+      "type": "string",
+      "enum": ["neon", "firebase", "bigquery"],
+      "description": "Target database system. Required if db_required=true."
+    },
+    "ui_required": {
+      "type": "boolean",
+      "description": "True if work packet includes UI scope. Routes to Worker UI adapter lane."
+    },
+    "ui_surface": {
+      "type": "string",
+      "enum": ["local", "lovable", "figma"],
+      "description": "UI execution surface. Required if ui_required=true."
+    },
+    "ui_target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Target UI component, page, or artifact path. Required if ui_required=true."
+    },
+    "container_required": {
+      "type": "boolean",
+      "description": "True if work packet requires containerized execution (tests, builds). Routes to container_runner."
+    },
+    "container_profile": {
+      "type": "string",
+      "enum": ["node", "python", "mixed"],
+      "description": "Container runtime profile. Required if container_required=true."
+    },
+    "container_target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Repo path or service name for container execution. Required if container_required=true."
+    }
+  },
+  "if": {
+    "properties": {
+      "architectural_flag": { "const": true }
+    }
+  },
+  "then": {
+    "properties": {
+      "requires_pressure_test": { "const": true }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "db_required": { "const": true } },
+        "required": ["db_required"]
+      },
+      "then": {
+        "required": ["db_targets", "db_system"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "ui_required": { "const": true } },
+        "required": ["ui_required"]
+      },
+      "then": {
+        "required": ["ui_surface", "ui_target"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "container_required": { "const": true } },
+        "required": ["container_required"]
+      },
+      "then": {
+        "required": ["container_profile", "container_target"]
+      }
+    }
+  ]
+}

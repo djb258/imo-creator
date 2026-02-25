@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orbt_error.v1.schema.json",
+  "title": "ORBT Error Artifact",
+  "description": "Strict schema for ORBT telemetry error artifacts. Emitted by the Auditor for every FAIL or A_MASTER classification. Captures operational context for centralized error tracking.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "process_id",
+    "operational_id",
+    "orbt_mode",
+    "altitude_level",
+    "error_code",
+    "severity",
+    "failure_surface",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "process_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Process identifier from WORK_PACKET. Format: PRC-<SYSTEM>-<EPOCH>."
+    },
+    "operational_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Operational identifier. Typically the work_packet_id."
+    },
+    "orbt_mode": {
+      "type": "string",
+      "enum": ["operate", "repair", "build", "troubleshoot", "train"],
+      "description": "ORBT execution mode at time of failure."
+    },
+    "altitude_level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60000,
+      "description": "CTB altitude level where failure occurred (e.g., 5000, 10000, 20000, 30000, 40000, 60000)."
+    },
+    "error_code": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Machine-readable error code (e.g., FAIL_EXECUTION, FAIL_SCOPE, MOUNT_INTEGRITY_FAIL)."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["INFO", "WARN", "FAIL", "A_MASTER"],
+      "description": "Severity level. A_MASTER triggers automatic certification abort."
+    },
+    "failure_surface": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The surface where failure was detected (e.g., auditor_phase_1, mount_integrity, sanitation_san003)."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of error emission."
+    }
+  }
+}

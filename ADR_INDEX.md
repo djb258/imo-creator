@@ -29,6 +29,7 @@
 | ADR-018 | barton-outreach-core | — | FREE extraction pipeline progress | ACCEPTED | FREE extraction pipeline progress report |
 | ADR-019 | barton-outreach-core | 2026-01-30 | FREE extraction pipeline complete | ACCEPTED | FREE extraction pipeline completed |
 | ADR-020 | barton-outreach-core | — | People sub-hub dual canonical exception | ACCEPTED | SUPPORTING leaf type + people master reclassification |
+| ADR-021 | imo-creator | 2026-02-25 | DB Lane + UI Lane + Container Surface (V2 Control Plane) | ACCEPTED | DB_CHANGESET, UI_CHANGESET, CONTAINER_RUN artifacts; WORK_PACKET V2 routing flags; adapter model for UI and container |
 
 ---
 

@@ -1,0 +1,26 @@
+{
+  "doctrine_version": "3.5.0",
+  "updated_at": "2026-02-25T00:00:00Z",
+  "repos": [
+    {
+      "repo_alias": "client",
+      "display_name": "Client Management Hub",
+      "github_url": "https://github.com/OWNER/client.git",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "https_token",
+      "workspace_slug": "client",
+      "enabled": false
+    },
+    {
+      "repo_alias": "universal-client-template",
+      "display_name": "Universal Client Template",
+      "github_url": "https://github.com/OWNER/universal-client-template.git",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master"],
+      "auth_method": "https_token",
+      "workspace_slug": "universal-client-template",
+      "enabled": false
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "contract_version": "2.3.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Repository mount contract. Defines how child repositories are mounted for worker execution. Worker operates against an isolated clone, never against live branches directly. Supports alias-based resolution via repo_registry.json.",
+  "intake_fields": {
+    "target_repo_alias": {
+      "type": "string",
+      "description": "Short alias from repo_registry.json. Resolves to github_url, default_branch, auth_method, and workspace_slug. Exactly one of target_repo_alias or target_repo_url must be provided.",
+      "pattern": "^[a-z0-9_-]{2,32}$",
+      "required_if": "target_repo_url is absent"
+    },
+    "target_repo_url": {
+      "type": "string",
+      "description": "Direct GitHub clone URL. Only permitted when repo_pull_policy.allow_raw_url=true. Blocked by default.",
+      "pattern": "^(https://github\\.com/|git@github\\.com:).+\\.git$",
+      "required_if": "target_repo_alias is absent AND repo_pull_policy.allow_raw_url=true"
+    },
+    "target_branch": {
+      "type": "string",
+      "description": "Branch to clone. Must be in repo_registry entry's allowed_branches. Falls back to default_branch if omitted."
+    },
+    "exactly_one_rule": "Exactly one of target_repo_alias or target_repo_url must be provided. Both present = FAIL. Neither present = FAIL."
+  },
+  "alias_resolution": {
+    "step_0_resolve": {
+      "action": "Resolve target_repo_alias to a repo_registry.json entry.",
+      "sequence": [
+        "1. Load sys/registry/repo_registry.json.",
+        "2. Find entry where repo_alias === target_repo_alias.",
+        "3. If no match: FAIL — unknown alias. Do not proceed.",
+        "4. If entry.enabled === false: FAIL — repo disabled. Do not proceed.",
+        "5. Resolve github_url, default_branch, auth_method, workspace_slug from entry.",
+        "6. If target_branch provided: verify target_branch ∈ entry.allowed_branches. If not: FAIL — branch not allowed.",
+        "7. If target_branch absent: use entry.default_branch.",
+        "8. Emit mount_receipt with resolved fields."
+      ],
+      "raw_url_gate": "If target_repo_url is provided instead of alias: load sys/registry/repo_pull_policy.json. If allow_raw_url=false: FAIL — raw URLs blocked. If allow_raw_url=true: proceed but log warning."
+    }
+  },
+  "mount_path_derivation": {
+    "formula": "/workspaces/<workspace_slug>/<branch>/",
+    "description": "Mount path is deterministically derived from the resolved workspace_slug and branch. No manual path construction permitted.",
+    "example": "/workspaces/client/main/"
+  },
+  "mount_receipt": {
+    "description": "Artifact emitted after clone completes. Captures resolved values plus commit-level integrity fields for audit trail. Written per job under outbox path.",
+    "fields": {
+      "resolved_alias": "The alias that was resolved (or null if raw URL).",
+      "resolved_repo_url": "The github_url resolved from registry (or the raw URL).",
+      "resolved_branch": "The branch that was cloned.",
+      "resolved_workspace_path": "The derived mount path: /workspaces/<workspace_slug>/<branch>/.",
+      "auth_method": "The auth method from registry.",
+      "resolved_commit_sha": "HEAD SHA of the cloned workspace after clone completes. Captured via `git rev-parse HEAD`.",
+      "remote_head_sha": "SHA of origin/<resolved_branch> after clone completes. Captured via `git rev-parse origin/<branch>`.",
+      "detached_head": "Boolean. True if the cloned workspace is in detached HEAD state. Captured via `git symbolic-ref HEAD` (failure = detached).",
+      "heir_present": "Boolean. True only if heir.doctrine.yaml exists in mounted repo root.",
+      "heir_valid": "Boolean. True only if heir.doctrine.yaml passes schema validation against sys/contracts/heir.schema.json.",
+      "heir_hash": "String. SHA-256 hash of heir.doctrine.yaml file contents. Format: sha256:<hex64>.",
+      "heir_doctrine_version": "String. The doctrine_version value extracted from heir.doctrine.yaml.",
+      "doctrine_version": "Current Garage doctrine version at resolution time.",
+      "timestamp": "ISO 8601 timestamp after clone and integrity capture."
+    }
+  },
+  "mount_protocol": {
+    "step_1_clone": {
+      "action": "Clone resolved_repo_url at resolved_branch into resolved_workspace_path (/workspaces/<workspace_slug>/<branch>/).",
+      "isolation": "Worker receives a fresh clone. No shared state with other executions. No access to other branches.",
+      "authentication": "Auth method from mount_receipt (ssh or https_token). Garage service credentials. Child repos grant read/write access to garage service account."
+    },
+    "step_1b_integrity_capture": {
+      "action": "Capture commit-level integrity fields immediately after clone, before any other operation.",
+      "sequence": [
+        "1. resolved_commit_sha = `git rev-parse HEAD` in cloned workspace.",
+        "2. remote_head_sha = `git rev-parse origin/<resolved_branch>` in cloned workspace.",
+        "3. detached_head = true if `git symbolic-ref HEAD` fails; false otherwise.",
+        "4. Write all three fields into mount_receipt."
+      ],
+      "fail_conditions": [
+        {
+          "condition": "detached_head === true",
+          "action": "FAIL mount. Do not proceed to step_2_validate. Record in mount_receipt and execution log."
+        },
+        {
+          "condition": "resolved_commit_sha !== remote_head_sha",
+          "action": "FAIL mount. Clone is not at remote HEAD. Do not proceed. Record SHA mismatch in mount_receipt and execution log."
+        }
+      ],
+      "rationale": "A fresh clone should always be on the branch tip. Detached HEAD or SHA mismatch indicates a corrupted clone, shallow fetch error, or race condition. Fail closed."
+    },
+    "step_2_validate": {
+      "action": "Validate mounted repo structure against doctrine.",
+      "checks": [
+        "IMO_CONTROL.json exists and is valid JSON",
+        "DOCTRINE.md exists and declares conformance to imo-creator",
+        "CTB branch structure present (src/sys/, src/data/, src/app/, src/ai/, src/ui/)",
+        "doctrine_version in IMO_CONTROL.json matches or exceeds minimum_compatible from doctrine_version.json"
+      ],
+      "on_failure": "Mount rejected. WORK_PACKET marked FAIL with mount validation errors. No execution proceeds."
+    },
+    "step_2b_heir_validation": {
+      "action": "Validate child repo HEIR identity record against Garage contract. Populate deterministic HEIR fields in mount_receipt.",
+      "sequence": [
+        "1. Check if heir.doctrine.yaml exists in mounted repo root.",
+        "2. Set mount_receipt.heir_present = true if file exists, false otherwise.",
+        "3. If heir_present === false: FAIL mount. Set heir_valid=false, heir_hash=null, heir_doctrine_version=null.",
+        "4. Compute SHA-256 hash of heir.doctrine.yaml file contents. Set mount_receipt.heir_hash = sha256:<hex64>.",
+        "5. Parse YAML into JSON object. If parse fails: FAIL mount. Set heir_valid=false.",
+        "6. Extract doctrine_version field. Set mount_receipt.heir_doctrine_version = extracted value.",
+        "7. Validate parsed object against sys/contracts/heir.schema.json.",
+        "8. If schema validation fails: FAIL mount. Set heir_valid=false. Record specific validation errors.",
+        "9. If schema validation passes: set mount_receipt.heir_valid = true.",
+        "10. Verify heir_doctrine_version is compatible with current doctrine_version.json. If stale: FAIL mount."
+      ],
+      "fail_conditions": [
+        {
+          "condition": "heir_present === false",
+          "action": "FAIL mount. Child repo has no identity record. Do not proceed."
+        },
+        {
+          "condition": "heir_valid === false",
+          "action": "FAIL mount. Identity record is malformed or does not conform to Garage HEIR contract. Do not proceed."
+        }
+      ],
+      "rationale": "HEIR validation is centralized in the Garage. Child repos declare identity only. The Garage validates. Mount_receipt captures deterministic boolean + hash fields instead of ambiguous status strings."
+    },
+    "step_3_scope_lock": {
+      "action": "Restrict file system writes to WORK_PACKET.file_targets only.",
+      "enforcement": "File writes outside file_targets are intercepted and rejected by execution_runner. Read access remains unrestricted for context.",
+      "monitoring": "All file operations logged for auditor review."
+    },
+    "step_4_execute": {
+      "action": "Hand control to worker agent within scoped mount.",
+      "timeout": "Execution timeout defined per execution_type in execution_runner contract.",
+      "artifact_collection": "All modified files and generated artifacts collected by artifact_writer on completion."
+    },
+    "step_5_unmount": {
+      "action": "Freeze mount state. No further modifications permitted.",
+      "handoff": "Mount snapshot passed to auditor for evaluation. Worker loses access."
+    }
+  },
+  "mount_invariants": [
+    "One mount per WORK_PACKET. No mount reuse across work packets.",
+    "Mount is destroyed after certification is issued.",
+    "Worker cannot modify mount infrastructure or mount contract.",
+    "Mount does not persist between executions.",
+    "Failed mounts are logged and cleaned up. No zombie mounts.",
+    "Mount workspace is ephemeral. No persistent storage between runs."
+  ]
+}
