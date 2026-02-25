@@ -1,8 +1,8 @@
 # Authority Map — IMO-Creator Governance Topology
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
-**Version**: 1.0.0
-**Last Updated**: 2026-02-20
+**Version**: 1.1.0
+**Last Updated**: 2026-02-25
 **Status**: ACTIVE
 
 ---
@@ -36,10 +36,11 @@ Read in this order. Higher level wins on conflict.
 
 | Layer | File | Trigger | Purpose |
 |-------|------|---------|---------|
-| CI | `.github/workflows/doctrine-enforcement.yml` | push/PR to master | Doctrine audit + UI builder gate |
+| CI | `.github/workflows/doctrine-enforcement.yml` | push/PR to master | Doctrine audit + pressure test gate + UI builder gate |
 | CI | `.github/workflows/reusable-ctb-enforcement.yml` | workflow_call | Reusable CTB structure enforcement |
 | CI | `.github/workflows/reusable-fail-closed-gate.yml` | workflow_call | Fail-closed governance (4 gates) |
 | CI | `.github/workflows/codeql.yml` | push/PR + weekly | Security scanning |
+| CI | `.github/workflows/doctrine-enforcement.yml` (pressure-test-gate) | push/PR to master | Mechanical pressure test — artifact existence + field-level PASS validation |
 | Pre-commit | `templates/scripts/hooks/pre-commit` | git commit | 14 doctrine compliance checks |
 | Claude Code | `templates/claude/APPLY_DOCTRINE.prompt.md` | Agent session | Structural audit via AI |
 | UI Builder | `UI_CONTROL_CONTRACT.json` | UI build | Component discovery gate |
@@ -82,7 +83,27 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 
 ---
 
-## 6. Enforcement Surface Inventory
+## 6. Agent Contract Locations
+
+| Artifact | Path | Purpose |
+|----------|------|---------|
+| WORK_PACKET schema | `agents/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
+| CHANGESET schema | `agents/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
+| AUDIT_REPORT schema | `agents/contracts/audit_report.schema.json` | Governance envelope for audit classification |
+| ARCH_PRESSURE_REPORT schema | `agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
+| FLOW_PRESSURE_REPORT schema | `agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
+| Example artifacts | `agents/contracts/examples/` | Valid example pressure report artifacts |
+| Planner prompt | `agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
+| Builder prompt | `agents/builder/master_prompt.md` | Implementation + pressure test artifact production |
+| Auditor prompt | `agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
+| Control Panel prompt | `agents/control_panel/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
+| Constitutional backbone | `docs/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
+| Constitutional governance | `docs/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
+| Protected assets | `docs/constitutional/protected_assets.md` | Protected models and folders |
+
+---
+
+## 7. Enforcement Surface Inventory
 
 | Layer | Mechanism | Scope | Fail Mode |
 |-------|-----------|-------|-----------|
@@ -95,6 +116,9 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 | **DB (DDL)** | Event trigger (`ctb.enforce_table_registration`) | PostgreSQL DDL | Blocks DDL |
 | **DB (DML)** | Write guards (`ctb.write_guard_check`) | PostgreSQL DML | Blocks writes |
 | **Application** | Gatekeeper module | Runtime writes | Blocks + logs |
+| **Pressure Test (structural)** | `ARCH_PRESSURE_REPORT.json` (5 fields) | Architectural changes | Blocks merge if any field != PASS |
+| **Pressure Test (flow)** | `FLOW_PRESSURE_REPORT.json` (5 fields) | Flow/event changes | Blocks merge if any field != PASS |
+| **Bus routing** | `governance.md` §Pressure Test Bus Enforcement | Artifact routing | Blocks routing when reports missing or any FAIL |
 
 ---
 
@@ -103,6 +127,7 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-20 |
+| Last Modified | 2026-02-25 |
 | Authority | IMO-Creator (CC-01) |
 | Status | ACTIVE |
 | Note | This is a repo-root doc, NOT a template. Not tracked in TEMPLATES_MANIFEST.yaml. |

@@ -153,6 +153,7 @@ All boundary violations must be recorded within the existing artifact structure.
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-23 |
+| Last Modified | 2026-02-25 |
 | Authority | IMO-Creator (Sovereign) |
 | Status | CONSTITUTIONAL |
-| Phase | V1 Control Plane — Phase 1 Constitutional Freeze |
+| Phase | V1 Control Plane — Phase 2 Pressure Test Enforcement (v3.4.0) |

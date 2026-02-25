@@ -2,7 +2,7 @@
 
 **Type**: Template Sovereign Repository
 **Status**: CONSTITUTIONAL
-**Last Updated**: 2026-01-11
+**Last Updated**: 2026-02-25
 
 ---
 
@@ -35,7 +35,7 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 
 | File | Purpose | Version |
 |------|---------|---------|
-| `ARCHITECTURE.md` | Primary architecture doctrine (CTB, CC, Hub-Spoke, IMO, Descent) | 2.0.0 |
+| `ARCHITECTURE.md` | Primary architecture doctrine (CTB, CC, Hub-Spoke, IMO, Descent) | 2.1.0 |
 | `CANONICAL_ARCHITECTURE_DOCTRINE.md` | REDIRECT to ARCHITECTURE.md | N/A |
 | `HUB_SPOKE_ARCHITECTURE.md` | REDIRECT to ARCHITECTURE.md Part IV | N/A |
 | `ALTITUDE_DESCENT_MODEL.md` | REDIRECT to ARCHITECTURE.md Part VI | N/A |
@@ -52,7 +52,29 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `templates/integrations/` | Tool integration guides |
 | `templates/claude/` | Claude Code lifecycle prompts |
 
-### Global Configuration (global-config/)
+### Agent Contracts (agents/)
+
+| Directory/File | Purpose |
+|----------------|---------|
+| `agents/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
+| `agents/contracts/changeset.schema.json` | CHANGESET governance envelope |
+| `agents/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope |
+| `agents/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) |
+| `agents/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) |
+| `agents/planner/master_prompt.md` | Planner role prompt |
+| `agents/builder/master_prompt.md` | Builder role prompt |
+| `agents/auditor/master_prompt.md` | Auditor role prompt |
+| `agents/control_panel/master_prompt.md` | Control Panel role prompt |
+
+### Constitutional Documents (docs/constitutional/)
+
+| File | Purpose |
+|------|---------|
+| `backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
+| `governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
+| `protected_assets.md` | Protected models and folders |
+
+### Global Configuration (templates/config/)
 
 | File | Purpose |
 |------|---------|
@@ -61,20 +83,12 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `imo-ra-schema.json` | Fractal hub-spoke schema |
 | `CTB_DOCTRINE.md` | Pointer to canonical (thin doc) |
 
-### Operations (docs/operations/)
-
-| File | Purpose |
-|------|---------|
-| `SECURITY_LOCKDOWN.md` | MCP vault, secret handling |
-| `CTB_ENFORCEMENT.md` | Enforcement checks |
-| `GIT_BRANCH_STRATEGY.md` | Git branch structure |
-
 ### Automation (scripts/)
 
 | Directory | Purpose |
 |-----------|---------|
-| `scripts/hooks/` | Pre-commit hooks |
-| `scripts/*.sh` | Doctrine enforcement scripts |
+| `scripts/fleet-status.sh` | Fleet health check |
+| `scripts/adr-check.sh` | ADR index audit |
 
 ---
 
@@ -113,10 +127,22 @@ CONSTITUTION.md (Law)
     │
     ├── IMO_CONTROL.json (Control Plane)
     │
-    └── templates/doctrine/ (Executable Doctrine)
-            │
-            ├── ARCHITECTURE.md (Primary architecture doctrine v2.0.0)
-            └── REPO_REFACTOR_PROTOCOL.md (Subordinate)
+    ├── templates/doctrine/ (Executable Doctrine)
+    │       │
+    │       ├── ARCHITECTURE.md (Primary architecture doctrine v2.1.0)
+    │       └── REPO_REFACTOR_PROTOCOL.md (Subordinate)
+    │
+    ├── docs/constitutional/ (Agent Governance)
+    │       ├── backbone.md
+    │       ├── governance.md
+    │       └── protected_assets.md
+    │
+    └── agents/contracts/ (Schema Contracts)
+            ├── work_packet.schema.json
+            ├── changeset.schema.json
+            ├── audit_report.schema.json
+            ├── arch_pressure_report.schema.json
+            └── flow_pressure_report.schema.json
 ```
 
 All other documents are operational and subordinate to doctrine.
@@ -127,10 +153,12 @@ All other documents are operational and subordinate to doctrine.
 
 | Check | Script |
 |-------|--------|
-| CTB Structure | `global-config/scripts/ctb_verify.sh` |
-| Doctrine Sync | `.github/workflows/doctrine_sync.yml` |
-| Enforcement | `.github/workflows/doctrine-enforcement.yml` |
-| Security | `global-config/scripts/security_lockdown.sh` |
+| Doctrine Enforcement | `.github/workflows/doctrine-enforcement.yml` |
+| Pressure Test Gate | `.github/workflows/doctrine-enforcement.yml` (pressure-test-gate job) |
+| CTB Governance | `.github/workflows/ctb-governance-required.yml` |
+| Fail-Closed Gate | `.github/workflows/reusable-fail-closed-gate.yml` |
+| Fleet Status | `scripts/fleet-status.sh` |
+| ADR Index Audit | `scripts/adr-check.sh` |
 
 ---
 
@@ -140,8 +168,9 @@ All other documents are operational and subordinate to doctrine.
 |----------|----------|---------|
 | IMO_CONTROL.json | Root | Claude Code behavior binding |
 | UI_CONTROL_CONTRACT.json | Root | UI build control |
-| global_manifest.yaml | global-config/ | Ecosystem configuration |
-| imo-ra-schema.json | global-config/ | Fractal architecture template |
+| FLEET_REGISTRY.yaml | Root | Fleet child repo inventory |
+| TEMPLATES_MANIFEST.yaml | templates/ | Machine-readable file index (v3.4.0) |
+| AUTHORITY_MAP.md | docs/ | Governance topology |
 | REGISTRY.yaml | N/A (in child repos) | Child repo component registry |
 
 ---
@@ -153,4 +182,5 @@ All other documents are operational and subordinate to doctrine.
 | Type | System Manifest |
 | Authority | Describes sovereign |
 | Created | 2026-01-11 |
+| Last Modified | 2026-02-25 |
 | Change Protocol | ADR-triggered only |

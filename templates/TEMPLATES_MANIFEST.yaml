@@ -3,8 +3,8 @@
 # Authority: CONSTITUTIONAL
 # Scope: PARENT (imo-creator - repo of repos)
 # Purpose: Machine-readable index for AI agents - file list, reading order, bootstrap
-# Version: 3.3.0
-# Last Updated: 2026-02-20
+# Version: 3.4.0
+# Last Updated: 2026-02-25
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # AI AGENTS: READ THIS FIRST WHEN PULLING TEMPLATES
@@ -22,11 +22,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 manifest:
-  version: "3.3.0"
-  last_updated: "2026-02-20"
+  version: "3.4.0"
+  last_updated: "2026-02-25"
   total_file_count: 141  # Run: find templates -type f | wc -l to verify
-  ctb_hardening_version: "3.3.0"
-  note: "Phase 3 Bootstrap Guarantees — non-superuser enforcement, governance CI verification, Day 0 audit"
+  ctb_hardening_version: "3.4.0"
+  note: "Structural + Flow Pressure Testing — 10 mechanical gates, zero advisory override, deterministic artifact enforcement"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
   repository: "imo-creator"
@@ -1390,6 +1390,25 @@ update_manifest:
 # ─────────────────────────────────────────────────────────────────────────────────
 
 changelog:
+  - version: "3.4.0"
+    date: "2026-02-25"
+    breaking: false
+    changes:
+      - "STRUCTURAL + FLOW PRESSURE TESTING: 10 mechanical gates, zero advisory override"
+      - "Added requires_pressure_test (required boolean) to work_packet.schema.json — if architectural_flag=true, requires_pressure_test must be true (schema-enforced via if/then)"
+      - "Added flow_contract (optional object with ingress/middle/egress arrays) to work_packet.schema.json — required when structural objects or event flows change"
+      - "Added requires_pressure_test (required boolean) to changeset.schema.json — carries forward from WORK_PACKET"
+      - "Added agents/contracts/arch_pressure_report.schema.json — 5 PASS/FAIL structural invariant fields (cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared)"
+      - "Added agents/contracts/flow_pressure_report.schema.json — 5 PASS/FAIL flow invariant fields (ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact)"
+      - "Added agents/contracts/examples/ — valid example artifacts for both pressure reports"
+      - "Hardened agents/auditor/master_prompt.md — Constitutional Pressure Test section runs before standard verification, HALT on any FAIL, explicit prohibition on advisory downgrade"
+      - "Updated agents/builder/master_prompt.md — conditional pressure test artifact production duty"
+      - "Updated agents/planner/master_prompt.md — pressure test classification rule, flow_contract enforcement"
+      - "Updated agents/control_panel/master_prompt.md — PRESSURE_TEST_REQUIRED and PRESSURE_TEST_PASSED signals, condition 7 in READY_TO_MERGE"
+      - "Added pressure-test-gate job to doctrine-enforcement.yml — mechanical CI gate: detect flag, verify artifacts, parse JSON, fail on any field != PASS"
+      - "Updated docs/constitutional/governance.md — Pressure Test Bus Enforcement routing rules"
+    migration: "Control plane change only. No child repo migration required. Child repos adopting the V1 control plane will automatically inherit pressure test enforcement when they pull updated agent contracts."
+
   - version: "3.3.0"
     date: "2026-02-20"
     breaking: false
@@ -1639,8 +1658,8 @@ verification:
 
 document_control:
   created: "2026-01-30"
-  last_modified: "2026-02-20"
-  version: "3.3.0"
+  last_modified: "2026-02-25"
+  version: "3.4.0"
   doctrine_version: "2.1.0"
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"

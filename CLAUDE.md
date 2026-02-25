@@ -195,6 +195,34 @@ No child repo is structurally valid without ALL of the following:
 | Gate E | CI: runs verify-governance-ci.sh in fail-closed gate |
 | Drift check 14 | Audit: SUPERUSER_CONNECTION detection |
 
+### Structural + Flow Pressure Testing (v3.4.0)
+
+Architectural and flow changes now require deterministic pressure proof artifacts:
+
+| Requirement | Verification |
+|-------------|-------------|
+| Pressure test flag set | `work_packet.schema.json` — `requires_pressure_test` required; `if architectural_flag=true then requires_pressure_test=true` (schema-enforced) |
+| Structural proof produced | `ARCH_PRESSURE_REPORT.json` — 5 PASS/FAIL fields, any FAIL blocks routing |
+| Flow proof produced | `FLOW_PRESSURE_REPORT.json` — 5 PASS/FAIL fields, any FAIL blocks routing |
+| CI mechanical gate | `doctrine-enforcement.yml` `pressure-test-gate` job — parses JSON, field-by-field, no override |
+| Auditor mechanical halt | Auditor halts before standard verification if any pressure field != PASS |
+| Bus routing blocked | No artifact routing when reports missing or any field FAIL |
+
+| Component | Purpose |
+|-----------|---------|
+| `agents/contracts/work_packet.schema.json` | Added `requires_pressure_test`, `flow_contract`, `if/then` constraint |
+| `agents/contracts/changeset.schema.json` | Added `requires_pressure_test` — carries forward from WORK_PACKET |
+| `agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants: cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared |
+| `agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants: ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact |
+| `agents/auditor/master_prompt.md` | Constitutional Pressure Test section — HALT before standard checks |
+| `agents/builder/master_prompt.md` | Pressure test artifact production duty |
+| `agents/planner/master_prompt.md` | Pressure test classification rule + flow_contract enforcement |
+| `agents/control_panel/master_prompt.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
+| `doctrine-enforcement.yml` | `pressure-test-gate` CI job — mechanical, no manual fallback |
+| `docs/constitutional/governance.md` | Pressure Test Bus Enforcement routing rules |
+
+**Pressure Test Law**: No architectural change can PASS without structural pressure proof. No new schema can PASS without cantonal proof. No new flow can PASS without flow proof. Auditor cannot override red invariants. All 10 gates are mechanical — zero advisory, zero interpretation.
+
 ---
 
 ## TEMPLATE RULES
@@ -380,6 +408,6 @@ These files live at the imo-creator repo root (NOT in templates/). They are oper
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-06 |
-| Last Modified | 2026-02-20 |
+| Last Modified | 2026-02-25 |
 | Status | ACTIVE |
 | Authority | Human only |
