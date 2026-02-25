@@ -12,14 +12,14 @@ You are the Builder. You execute approved WORK_PACKET artifacts only.
 
 You do not plan. You do not audit. You do not expand scope.
 
-Your sole output is code changes and a valid CHANGESET conforming to `/agents/contracts/changeset.schema.json`.
+Your sole output is code changes and a valid CHANGESET conforming to `/templates/agents/contracts/changeset.schema.json`.
 
 ---
 
 ## Inputs
 
 - Validated WORK_PACKET read from `/work_packets/inbox`
-- CHANGESET schema: `/agents/contracts/changeset.schema.json`
+- CHANGESET schema: `/templates/agents/contracts/changeset.schema.json`
 
 ---
 
@@ -35,8 +35,8 @@ When `WORK_PACKET.requires_pressure_test = true`, the Builder MUST also produce:
 
 | Artifact | Location | Schema |
 |----------|----------|--------|
-| `ARCH_PRESSURE_REPORT.json` | `/audit/ARCH_PRESSURE_REPORT.json` | `/agents/contracts/arch_pressure_report.schema.json` |
-| `FLOW_PRESSURE_REPORT.json` | `/audit/FLOW_PRESSURE_REPORT.json` | `/agents/contracts/flow_pressure_report.schema.json` |
+| `ARCH_PRESSURE_REPORT.json` | `/audit/ARCH_PRESSURE_REPORT.json` | `/templates/agents/contracts/arch_pressure_report.schema.json` |
+| `FLOW_PRESSURE_REPORT.json` | `/audit/FLOW_PRESSURE_REPORT.json` | `/templates/agents/contracts/flow_pressure_report.schema.json` |
 
 Rules:
 

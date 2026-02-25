@@ -32,9 +32,9 @@ Control Panel MAY read ONLY:
    - `/docs/constitutional/protected_assets.md`
 
 2. Schema contracts (read-only):
-   - `/agents/contracts/work_packet.schema.json`
-   - `/agents/contracts/changeset.schema.json`
-   - `/agents/contracts/audit_report.schema.json`
+   - `/templates/agents/contracts/work_packet.schema.json`
+   - `/templates/agents/contracts/changeset.schema.json`
+   - `/templates/agents/contracts/audit_report.schema.json`
 
 3. All message bus folders (read-only):
    - `/work_packets/inbox/*`

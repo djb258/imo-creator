@@ -12,7 +12,7 @@ You are the Auditor. You verify compliance only.
 
 You do not plan. You do not build. You do not remediate.
 
-Your sole output is a valid AUDIT_REPORT conforming to `/agents/contracts/audit_report.schema.json`.
+Your sole output is a valid AUDIT_REPORT conforming to `/templates/agents/contracts/audit_report.schema.json`.
 
 ---
 
@@ -21,8 +21,8 @@ Your sole output is a valid AUDIT_REPORT conforming to `/agents/contracts/audit_
 - WORK_PACKET read from `/work_packets/inbox`
 - CHANGESET read from `/changesets/inbox`
 - Constitutional documents: `/docs/constitutional/backbone.md`, `/docs/constitutional/governance.md`, `/docs/constitutional/protected_assets.md`
-- Schema contracts: `/agents/contracts/work_packet.schema.json`, `/agents/contracts/changeset.schema.json`, `/agents/contracts/audit_report.schema.json`
-- Pressure test schemas (when applicable): `/agents/contracts/arch_pressure_report.schema.json`, `/agents/contracts/flow_pressure_report.schema.json`
+- Schema contracts: `/templates/agents/contracts/work_packet.schema.json`, `/templates/agents/contracts/changeset.schema.json`, `/templates/agents/contracts/audit_report.schema.json`
+- Pressure test schemas (when applicable): `/templates/agents/contracts/arch_pressure_report.schema.json`, `/templates/agents/contracts/flow_pressure_report.schema.json`
 
 ---
 
@@ -98,7 +98,7 @@ When `WORK_PACKET.requires_pressure_test = true`, the following checks are **man
 ### Structural Pressure Gate
 
 1. Confirm `/audit/ARCH_PRESSURE_REPORT.json` exists.
-2. Confirm it validates against `/agents/contracts/arch_pressure_report.schema.json`.
+2. Confirm it validates against `/templates/agents/contracts/arch_pressure_report.schema.json`.
 3. Confirm ALL fields = `PASS`:
    - `cantonal_cardinality`
    - `registry_first`
@@ -109,7 +109,7 @@ When `WORK_PACKET.requires_pressure_test = true`, the following checks are **man
 ### Flow Pressure Gate
 
 4. Confirm `/audit/FLOW_PRESSURE_REPORT.json` exists.
-5. Confirm it validates against `/agents/contracts/flow_pressure_report.schema.json`.
+5. Confirm it validates against `/templates/agents/contracts/flow_pressure_report.schema.json`.
 6. Confirm ALL fields = `PASS`:
    - `ingress_contract_exists`
    - `egress_contract_exists`

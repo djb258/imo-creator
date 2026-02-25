@@ -210,14 +210,14 @@ Architectural and flow changes now require deterministic pressure proof artifact
 
 | Component | Purpose |
 |-----------|---------|
-| `agents/contracts/work_packet.schema.json` | Added `requires_pressure_test`, `flow_contract`, `if/then` constraint |
-| `agents/contracts/changeset.schema.json` | Added `requires_pressure_test` — carries forward from WORK_PACKET |
-| `agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants: cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared |
-| `agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants: ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact |
-| `agents/auditor/master_prompt.md` | Constitutional Pressure Test section — HALT before standard checks |
-| `agents/builder/master_prompt.md` | Pressure test artifact production duty |
-| `agents/planner/master_prompt.md` | Pressure test classification rule + flow_contract enforcement |
-| `agents/control_panel/master_prompt.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
+| `templates/agents/contracts/work_packet.schema.json` | Added `requires_pressure_test`, `flow_contract`, `if/then` constraint |
+| `templates/agents/contracts/changeset.schema.json` | Added `requires_pressure_test` — carries forward from WORK_PACKET |
+| `templates/agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants: cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared |
+| `templates/agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants: ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact |
+| `templates/agents/auditor/master_prompt.md` | Constitutional Pressure Test section — HALT before standard checks |
+| `templates/agents/builder/master_prompt.md` | Pressure test artifact production duty |
+| `templates/agents/planner/master_prompt.md` | Pressure test classification rule + flow_contract enforcement |
+| `templates/agents/control_panel/master_prompt.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
 | `doctrine-enforcement.yml` | `pressure-test-gate` CI job — mechanical, no manual fallback |
 | `docs/constitutional/governance.md` | Pressure Test Bus Enforcement routing rules |
 

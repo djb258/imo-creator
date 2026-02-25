@@ -52,19 +52,19 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `templates/integrations/` | Tool integration guides |
 | `templates/claude/` | Claude Code lifecycle prompts |
 
-### Agent Contracts (agents/)
+### Agent Contracts (templates/agents/)
 
 | Directory/File | Purpose |
 |----------------|---------|
-| `agents/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
-| `agents/contracts/changeset.schema.json` | CHANGESET governance envelope |
-| `agents/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope |
-| `agents/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) |
-| `agents/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) |
-| `agents/planner/master_prompt.md` | Planner role prompt |
-| `agents/builder/master_prompt.md` | Builder role prompt |
-| `agents/auditor/master_prompt.md` | Auditor role prompt |
-| `agents/control_panel/master_prompt.md` | Control Panel role prompt |
+| `templates/agents/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
+| `templates/agents/contracts/changeset.schema.json` | CHANGESET governance envelope |
+| `templates/agents/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope |
+| `templates/agents/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) |
+| `templates/agents/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) |
+| `templates/agents/planner/master_prompt.md` | Planner role prompt |
+| `templates/agents/builder/master_prompt.md` | Builder role prompt |
+| `templates/agents/auditor/master_prompt.md` | Auditor role prompt |
+| `templates/agents/control_panel/master_prompt.md` | Control Panel role prompt |
 
 ### Constitutional Documents (docs/constitutional/)
 
@@ -137,7 +137,7 @@ CONSTITUTION.md (Law)
     │       ├── governance.md
     │       └── protected_assets.md
     │
-    └── agents/contracts/ (Schema Contracts)
+    └── templates/agents/contracts/ (Schema Contracts)
             ├── work_packet.schema.json
             ├── changeset.schema.json
             ├── audit_report.schema.json

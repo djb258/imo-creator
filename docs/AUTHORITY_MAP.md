@@ -87,16 +87,16 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 
 | Artifact | Path | Purpose |
 |----------|------|---------|
-| WORK_PACKET schema | `agents/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
-| CHANGESET schema | `agents/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
-| AUDIT_REPORT schema | `agents/contracts/audit_report.schema.json` | Governance envelope for audit classification |
-| ARCH_PRESSURE_REPORT schema | `agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
-| FLOW_PRESSURE_REPORT schema | `agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
-| Example artifacts | `agents/contracts/examples/` | Valid example pressure report artifacts |
-| Planner prompt | `agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
-| Builder prompt | `agents/builder/master_prompt.md` | Implementation + pressure test artifact production |
-| Auditor prompt | `agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
-| Control Panel prompt | `agents/control_panel/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
+| WORK_PACKET schema | `templates/agents/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
+| CHANGESET schema | `templates/agents/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
+| AUDIT_REPORT schema | `templates/agents/contracts/audit_report.schema.json` | Governance envelope for audit classification |
+| ARCH_PRESSURE_REPORT schema | `templates/agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
+| FLOW_PRESSURE_REPORT schema | `templates/agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
+| Example artifacts | `templates/agents/contracts/examples/` | Valid example pressure report artifacts |
+| Planner prompt | `templates/agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
+| Builder prompt | `templates/agents/builder/master_prompt.md` | Implementation + pressure test artifact production |
+| Auditor prompt | `templates/agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
+| Control Panel prompt | `templates/agents/control_panel/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
 | Constitutional backbone | `docs/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
 | Constitutional governance | `docs/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
 | Protected assets | `docs/constitutional/protected_assets.md` | Protected models and folders |

@@ -24,7 +24,7 @@
 manifest:
   version: "3.4.0"
   last_updated: "2026-02-25"
-  total_file_count: 141  # Run: find templates -type f | wc -l to verify
+  total_file_count: 152  # Run: find templates -type f | wc -l to verify
   ctb_hardening_version: "3.4.0"
   note: "Structural + Flow Pressure Testing — 10 mechanical gates, zero advisory override, deterministic artifact enforcement"
   authority: "CONSTITUTIONAL"
@@ -214,6 +214,65 @@ files:
         - "Must be updated when PRDs or ERDs change"
         - "Drives ERD validity - ERD joins must exist in OSAM"
         - "SOURCE/ENRICHMENT tables are NEVER query surfaces"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # AGENT CONTRACTS + ROLE PROMPTS (CONSTITUTIONAL)
+  # ═══════════════════════════════════════════════════════════════════════════
+  agents:
+    - path: "templates/agents/contracts/work_packet.schema.json"
+      purpose: "WORK_PACKET governance envelope — includes requires_pressure_test, flow_contract"
+      required: true
+      locked: true
+
+    - path: "templates/agents/contracts/changeset.schema.json"
+      purpose: "CHANGESET governance envelope — includes requires_pressure_test"
+      required: true
+      locked: true
+
+    - path: "templates/agents/contracts/audit_report.schema.json"
+      purpose: "AUDIT_REPORT governance envelope — classification: PASS, FAIL_EXECUTION, FAIL_SCOPE"
+      required: true
+      locked: true
+
+    - path: "templates/agents/contracts/arch_pressure_report.schema.json"
+      purpose: "Structural pressure test — 5 PASS/FAIL invariant fields"
+      required: true
+      locked: true
+
+    - path: "templates/agents/contracts/flow_pressure_report.schema.json"
+      purpose: "Flow pressure test — 5 PASS/FAIL invariant fields"
+      required: true
+      locked: true
+
+    - path: "templates/agents/contracts/examples/ARCH_PRESSURE_REPORT.json"
+      purpose: "Example valid structural pressure report (all PASS)"
+      required: false
+      locked: false
+
+    - path: "templates/agents/contracts/examples/FLOW_PRESSURE_REPORT.json"
+      purpose: "Example valid flow pressure report (all PASS)"
+      required: false
+      locked: false
+
+    - path: "templates/agents/planner/master_prompt.md"
+      purpose: "Planner role — generates WORK_PACKET artifacts, pressure test classification"
+      required: true
+      locked: true
+
+    - path: "templates/agents/builder/master_prompt.md"
+      purpose: "Builder role — executes WORK_PACKET, produces CHANGESET + pressure test artifacts"
+      required: true
+      locked: true
+
+    - path: "templates/agents/auditor/master_prompt.md"
+      purpose: "Auditor role — verifies compliance, constitutional pressure test gate"
+      required: true
+      locked: true
+
+    - path: "templates/agents/control_panel/master_prompt.md"
+      purpose: "Control Panel role — read-only governance inspector, pressure test signal detection"
+      required: true
+      locked: true
 
   # ═══════════════════════════════════════════════════════════════════════════
   # CLAUDE PROMPTS (LOCKED - AI CANNOT MODIFY)
@@ -1398,13 +1457,14 @@ changelog:
       - "Added requires_pressure_test (required boolean) to work_packet.schema.json — if architectural_flag=true, requires_pressure_test must be true (schema-enforced via if/then)"
       - "Added flow_contract (optional object with ingress/middle/egress arrays) to work_packet.schema.json — required when structural objects or event flows change"
       - "Added requires_pressure_test (required boolean) to changeset.schema.json — carries forward from WORK_PACKET"
-      - "Added agents/contracts/arch_pressure_report.schema.json — 5 PASS/FAIL structural invariant fields (cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared)"
-      - "Added agents/contracts/flow_pressure_report.schema.json — 5 PASS/FAIL flow invariant fields (ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact)"
-      - "Added agents/contracts/examples/ — valid example artifacts for both pressure reports"
-      - "Hardened agents/auditor/master_prompt.md — Constitutional Pressure Test section runs before standard verification, HALT on any FAIL, explicit prohibition on advisory downgrade"
-      - "Updated agents/builder/master_prompt.md — conditional pressure test artifact production duty"
-      - "Updated agents/planner/master_prompt.md — pressure test classification rule, flow_contract enforcement"
-      - "Updated agents/control_panel/master_prompt.md — PRESSURE_TEST_REQUIRED and PRESSURE_TEST_PASSED signals, condition 7 in READY_TO_MERGE"
+      - "Added templates/agents/contracts/arch_pressure_report.schema.json — 5 PASS/FAIL structural invariant fields (cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared)"
+      - "Added templates/agents/contracts/flow_pressure_report.schema.json — 5 PASS/FAIL flow invariant fields (ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact)"
+      - "Added templates/agents/contracts/examples/ — valid example artifacts for both pressure reports"
+      - "Moved agents/ into templates/agents/ — agent contracts are now inheritable templates, tracked in manifest"
+      - "Hardened templates/agents/auditor/master_prompt.md — Constitutional Pressure Test section runs before standard verification, HALT on any FAIL, explicit prohibition on advisory downgrade"
+      - "Updated templates/agents/builder/master_prompt.md — conditional pressure test artifact production duty"
+      - "Updated templates/agents/planner/master_prompt.md — pressure test classification rule, flow_contract enforcement"
+      - "Updated templates/agents/control_panel/master_prompt.md — PRESSURE_TEST_REQUIRED and PRESSURE_TEST_PASSED signals, condition 7 in READY_TO_MERGE"
       - "Added pressure-test-gate job to doctrine-enforcement.yml — mechanical CI gate: detect flag, verify artifacts, parse JSON, fail on any field != PASS"
       - "Updated docs/constitutional/governance.md — Pressure Test Bus Enforcement routing rules"
     migration: "Control plane change only. No child repo migration required. Child repos adopting the V1 control plane will automatically inherit pressure test enforcement when they pull updated agent contracts."
