@@ -192,10 +192,10 @@ See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
 | Layer | Mechanism |
 |-------|-----------|
 | Claude Code | `APPLY_DOCTRINE.prompt.md` — reads doctrine, audits structure, blocks violations |
-| Pre-commit | `scripts/hooks/pre-commit` — validates on every commit |
+| Pre-commit | `templates/scripts/hooks/pre-commit` — validates on every commit |
 | CI | `.github/workflows/doctrine-enforcement.yml` — fails PR on violations |
 | UI Builder | `UI_CONTROL_CONTRACT.json` — gates UI builds on structure compliance |
-| Audit | `scripts/apply_doctrine_audit.sh` — generates compliance reports |
+| Audit | `templates/scripts/apply_doctrine_audit.sh` — generates compliance reports |
 
 ### Audit Output Requirement (MANDATORY)
 
@@ -280,7 +280,7 @@ This repository CANNOT proceed until violations are resolved.
 
 1. Copy `IMO_CONTROL.json` to repository root
 2. Copy `UI_CONTROL_CONTRACT.json` if UI exists
-3. Run `scripts/install-hooks.sh` to install pre-commit
+3. Run `templates/scripts/install-hooks.sh` to install pre-commit
 4. Create `DOCTRINE.md` pointing to imo-creator
 5. Follow CTB structure exactly
 6. Define local policy within invariant boundaries

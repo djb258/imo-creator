@@ -116,6 +116,31 @@
         "file": "ERD_DOCTRINE.md",
         "purpose": "ERD doctrine principles - Structural proof definition, validation phases, pass-to-table mapping",
         "version": "1.0.0"
+      },
+      {
+        "file": "EXECUTION_SURFACE_LAW.md",
+        "purpose": "Execution surface containment - where code can run, boundary enforcement",
+        "version": "1.0.0"
+      },
+      {
+        "file": "CTB_REGISTRY_ENFORCEMENT.md",
+        "purpose": "Registry-first enforcement, batch-level RAW lockdown, vendor JSON containment, bootstrap enforcement",
+        "version": "1.5.0"
+      },
+      {
+        "file": "FAIL_CLOSED_CI_CONTRACT.md",
+        "purpose": "Fail-closed CI contract, bootstrap guarantees, governance pipeline requirements",
+        "version": "1.1.0"
+      },
+      {
+        "file": "LEGACY_COLLAPSE_PLAYBOOK.md",
+        "purpose": "Legacy collapse protocol - migration sequence for non-conforming structures",
+        "version": "1.0.0"
+      },
+      {
+        "file": "ROLLBACK_PROTOCOL.md",
+        "purpose": "Doctrine sync rollback procedure - when to use, 6-step revert, version pinning",
+        "version": "1.0.0"
       }
     ],
     "treatment": "EXECUTABLE_LAW",

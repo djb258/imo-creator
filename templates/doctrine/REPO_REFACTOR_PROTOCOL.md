@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Doctrine Version** | 1.2.0 |
+| **Doctrine Version** | 1.3.0 |
 | **Authority** | Architecture Doctrine |
 | **Status** | LOCKED |
 | **CTB Definition** | ARCHITECTURE.md Part II |

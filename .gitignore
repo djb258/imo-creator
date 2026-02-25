@@ -30,6 +30,10 @@ public/
 Thumbs.db
 nul
 
+# Secrets / Keys
+*.key
+*.pem
+
 # Dependencies
 node_modules/
 render-cli-source/

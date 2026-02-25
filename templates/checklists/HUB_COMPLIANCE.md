@@ -8,6 +8,10 @@ No exceptions. No partial compliance.
 **This checklist MUST be referenced by an attestation document.**
 See: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
 
+## Applicability
+
+This checklist is designed for **CC-02 (Hub)** entities — child repos that implement hubs with PRDs, ERDs, databases, spokes, and IMO layers. If the target is a sovereign template repo (CC-01), most Part A and many Part B checks will be N/A. Mark N/A checks as such and note the reason.
+
 ## Conformance
 
 | Field | Value |
@@ -116,7 +120,7 @@ This hub CANNOT ship until violations are resolved.
 These sections verify the hub satisfies the Transformation Law.
 Failure in Part A invalidates the hub regardless of Part B status.
 
-**Section Anchors**: §A.1 through §A.6
+**Section Anchors**: §A.1 through §A.7
 
 ---
 
@@ -331,7 +335,7 @@ Part B assumes Part A passes.
 **Part B governs ship-readiness, not existence legitimacy.**
 Items marked CRITICAL define minimum operational safety, not architectural purity.
 
-**Section Anchors**: §B.1 through §B.12
+**Section Anchors**: §B.1 through §B.16
 
 ---
 
@@ -487,7 +491,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Failure Modes
+## Failure Modes {#section-b14}
+<!-- §B.14 -->
 
 | Priority | Check |
 |----------|-------|
@@ -497,7 +502,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Human Override
+## Human Override {#section-b15}
+<!-- §B.15 -->
 
 | Priority | Check |
 |----------|-------|
@@ -506,7 +512,8 @@ Items marked CRITICAL define minimum operational safety, not architectural purit
 
 ---
 
-## Traceability
+## Traceability {#section-b16}
+<!-- §B.16 -->
 
 | Priority | Check |
 |----------|-------|

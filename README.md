@@ -51,6 +51,7 @@ imo-creator/
 ├── work_packets/                 # Message bus — WORK_PACKET artifacts
 ├── changesets/                   # Message bus — CHANGESET artifacts
 ├── audit_reports/                # Message bus — AUDIT_REPORT artifacts
+├── archive/                      # Superseded doctrine files (redirects preserved)
 ├── .github/                      # GitHub templates and workflows
 └── LICENSE
 ```

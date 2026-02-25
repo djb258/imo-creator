@@ -2,7 +2,7 @@
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Change Protocol**: HUMAN APPROVAL REQUIRED — NO EXCEPTIONS
 
 ---

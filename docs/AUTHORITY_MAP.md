@@ -54,8 +54,8 @@ Read in this order. Higher level wins on conflict.
 | `ARCHITECTURE.md` | 2.1.0 | LOCKED | CTB, CC, Hub-Spoke, IMO, Descent, PID, Ownership |
 | `ROLLBACK_PROTOCOL.md` | 1.0.0 | LOCKED | Doctrine sync rollback procedure |
 | `EXECUTION_SURFACE_LAW.md` | 1.0.0 | LOCKED | Where code can run |
-| `CTB_REGISTRY_ENFORCEMENT.md` | 1.0.0 | LOCKED | Registry-first enforcement |
-| `FAIL_CLOSED_CI_CONTRACT.md` | 1.0.0 | LOCKED | Fail-closed CI contract |
+| `CTB_REGISTRY_ENFORCEMENT.md` | 1.5.0 | LOCKED | Registry-first enforcement |
+| `FAIL_CLOSED_CI_CONTRACT.md` | 1.1.0 | LOCKED | Fail-closed CI contract |
 | `LEGACY_COLLAPSE_PLAYBOOK.md` | 1.0.0 | LOCKED | Legacy migration protocol |
 | `DBA_ENFORCEMENT_DOCTRINE.md` | — | LOCKED | Database change governance |
 | `DOCUMENTATION_ERD_DOCTRINE.md` | — | LOCKED | ERD standards |

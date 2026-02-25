@@ -44,7 +44,7 @@ The CTB enforcement system performs the following checks on every repo creation,
 
 ### 4. Configuration Validation
 
-- Verifies `global-config/ctb.branchmap.yaml` includes all branches
+- Verifies `templates/config/ctb.branchmap.yaml` includes all branches
 - Checks CTB_DOCTRINE.md is present and current
 
 ---
@@ -137,4 +137,4 @@ If a repository cannot support these integrations due to technical constraints, 
 |-------|-------|
 | Type | Operational Runbook |
 | Authority | Subordinate to Canonical Doctrine |
-| Extracted From | templates/config/CTB_DOCTRINE.md |
+| Extracted From | `templates/config/CTB_DOCTRINE.md` |

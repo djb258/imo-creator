@@ -154,4 +154,4 @@ Both apply. Neither replaces the other.
 |-------|-------|
 | Type | Operational Runbook |
 | Authority | Subordinate to Canonical Doctrine |
-| Extracted From | global-config/CTB_DOCTRINE.md |
+| Extracted From | `templates/config/CTB_DOCTRINE.md` |
