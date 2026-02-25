@@ -65,7 +65,7 @@
       {
         "file": "ARCHITECTURE.md",
         "purpose": "Primary architecture doctrine - CTB, CC layers, Hub-Spoke, IMO, Descent, PID, ownership",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       {
         "file": "HUB_SPOKE_ARCHITECTURE.md",

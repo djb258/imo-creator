@@ -225,12 +225,10 @@ file_organization:
     - "libs/imo_tools/**"
 
   imo/output:
-    - "docs/blueprints/**"
     - "index.html"
     - "libs/imo_tools/**"
 
   ui/figma-bolt:
-    - "docs/blueprints/ui/**"
     - "*.html"
     - "*.css"
 
