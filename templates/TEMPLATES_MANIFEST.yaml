@@ -1468,6 +1468,8 @@ changelog:
       - "Added pressure-test-gate job to doctrine-enforcement.yml — mechanical CI gate: detect flag, verify artifacts, parse JSON, fail on any field != PASS"
       - "Updated docs/constitutional/governance.md — Pressure Test Bus Enforcement routing rules"
       - "Updated templates/checklists/REPO_HOUSEKEEPING.md v1.0.0 → v1.1.0 — 19 → 23 checks: bus directory check, agent contract refs, pressure test CI check, expanded traceability, file count verification, version tag alignment, merge conflict markers, TODO/FIXME/HACK scan"
+      - "Updated templates/checklists/QUARTERLY_HYGIENE_AUDIT.md v1.0.0 → v1.1.0 — fixed broken detect-staleness.sh references (scripts don't exist), added manual staleness commands, expanded traceability, added document control"
+      - "Updated templates/checklists/HUB_COMPLIANCE.md v1.0.0 → v1.1.0 — added §B.13 Pressure Test Verification (conditional on architectural changes, 10 gates, structural + flow invariants), added pressure report schemas to traceability, added document control"
     migration: "Control plane change only. No child repo migration required. Child repos adopting the V1 control plane will automatically inherit pressure test enforcement when they pull updated agent contracts."
 
   - version: "3.3.0"

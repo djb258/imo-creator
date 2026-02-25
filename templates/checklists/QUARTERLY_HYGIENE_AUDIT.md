@@ -2,7 +2,7 @@
 
 **Status**: TEMPLATE
 **Authority**: CONSTITUTIONAL
-**Version**: 1.0.0
+**Version**: 1.1.0
 
 ---
 
@@ -102,14 +102,18 @@ This checklist MUST be completed for every quarterly hygiene audit.
 
 ## 2. Staleness Check
 
-Run the staleness detection script to identify governance artifacts that have drifted behind code changes.
+Identify governance artifacts that have drifted behind code changes.
 
 ```bash
-# Bash
-./scripts/detect-staleness.sh --verbose
+# Manual staleness check — compare last-modified dates of governance files vs source files
+# PRD staleness: PRD should be updated within 30 days of any src/ change
+find src/ -name "*.py" -o -name "*.ts" -newer docs/PRD.md 2>/dev/null | head -5
 
-# PowerShell
-.\scripts\detect-staleness.ps1 -Verbose
+# ERD staleness: SCHEMA.md should be updated within 14 days of any registry/migration change
+find migrations/ -newer docs/SCHEMA.md 2>/dev/null | head -5
+
+# Doctrine version: compare local doctrine version to imo-creator upstream
+grep "version:" DOCTRINE.md 2>/dev/null
 ```
 
 | Artifact | Threshold | Status | Days Stale | Notes |
@@ -272,7 +276,10 @@ For each hub, verify:
 |----------|-----------|
 | Constitutional Attestation | templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md |
 | Hub Compliance | templates/checklists/HUB_COMPLIANCE.md |
+| Repo Housekeeping | templates/checklists/REPO_HOUSEKEEPING.md |
 | Hygiene Auditor | templates/claude/HYGIENE_AUDITOR.prompt.md |
+| Architecture Doctrine | templates/doctrine/ARCHITECTURE.md |
+| Registry Enforcement | templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
 
 ---
 
@@ -280,6 +287,10 @@ For each hub, verify:
 
 | Field | Value |
 |-------|-------|
-| Template Version | 1.0.0 |
+| Version | 1.1.0 |
+| Created | 2026-02-06 |
+| Last Modified | 2026-02-25 |
 | Authority | CONSTITUTIONAL |
+| Status | TEMPLATE |
 | Change Protocol | ADR + HUMAN APPROVAL REQUIRED |
+| Maintained By | Human + AI (copy and execute) |
