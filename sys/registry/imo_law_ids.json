@@ -1,0 +1,55 @@
+{
+  "registry_version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "IMO Law IDs — the 6 data flow laws enforced at every altitude. Violation of any IMO law is type IMO_VIOLATION (CRITICAL). Source: ARCHITECTURE.md Part V, PSB-CONST-001 Part III.",
+  "laws": [
+    {
+      "id": "IMO-01",
+      "law": "Ingress MUST NOT make decisions",
+      "layer": "Ingress",
+      "violation_type": "IMO_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "Ingress performs schema validation only. No business logic, no routing decisions, no conditional branching based on data values."
+    },
+    {
+      "id": "IMO-02",
+      "law": "Ingress MUST NOT mutate business state",
+      "layer": "Ingress",
+      "violation_type": "IMO_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "Ingress may not write to STATE or SPINE tables. It validates and passes through. No side effects."
+    },
+    {
+      "id": "IMO-03",
+      "law": "Middle owns ALL logic",
+      "layer": "Middle",
+      "violation_type": "IMO_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "All decisions, all state mutations, all transformations, all business rules live exclusively in the Middle layer. Nothing else may own logic."
+    },
+    {
+      "id": "IMO-04",
+      "law": "Middle owns ALL tool invocations",
+      "layer": "Middle",
+      "violation_type": "TOOL_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "All tool calls, API invocations, and external service interactions are scoped to the Middle layer only. Ingress and Egress may not invoke tools."
+    },
+    {
+      "id": "IMO-05",
+      "law": "Egress MUST NOT contain logic",
+      "layer": "Egress",
+      "violation_type": "IMO_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "Egress produces read-only views and exports only. No conditional logic, no transformations, no filtering based on business rules."
+    },
+    {
+      "id": "IMO-06",
+      "law": "Egress is read-only",
+      "layer": "Egress",
+      "violation_type": "IMO_VIOLATION",
+      "severity": "CRITICAL",
+      "description": "Egress may not write to any table. It reads and exports. No INSERT, UPDATE, or DELETE operations."
+    }
+  ]
+}

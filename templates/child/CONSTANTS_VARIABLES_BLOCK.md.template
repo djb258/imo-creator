@@ -1,0 +1,71 @@
+# Constants and Variables Block
+
+**Hub**: [HUB_NAME]
+**Hub ID**: [HUB_ID]
+**Version**: 1.0.0
+**Last Updated**: [YYYY-MM-DD]
+
+> Per PSB-CONST-001 Part I: Nothing may exist unless it transforms declared constants into declared variables.
+
+---
+
+## Transformation Statement
+
+This hub transforms **[CONSTANTS_SUMMARY]** into **[VARIABLES_SUMMARY]**.
+
+---
+
+## CONSTANTS BLOCK
+
+Everything that does NOT change at runtime. These are the declared inputs, rules, and boundaries that are fixed before execution begins.
+
+| Constant ID | Name | Type | Value / Source | Description |
+|-------------|------|------|----------------|-------------|
+| CONST-001 | [NAME] | sovereign_ref | [VALUE] | CC-01 sovereign reference |
+| CONST-002 | [NAME] | hub_id | [VALUE] | Hub identity anchor |
+| CONST-003 | [NAME] | cc_layer | [CC-01/CC-02/CC-03/CC-04] | Authority layer |
+| CONST-004 | [NAME] | orbt_mode | [operate/repair/build/troubleshoot/train] | Operational intent |
+| CONST-005 | [NAME] | domain_context | [VALUE] | Domain this hub serves |
+| CONST-006 | [NAME] | authority_scope | [VALUE] | What this hub is authorized to govern |
+| [CONST-NNN] | [NAME] | [TYPE] | [VALUE] | [DESCRIPTION] |
+
+**Validation**: Every constant MUST have a non-placeholder value before the hub definition passes audit. No brackets in final values.
+
+---
+
+## VARIABLES BLOCK
+
+Everything that is instantiated at deployment time. These are the runtime slots that get filled when the hub executes.
+
+| Variable ID | Name | Type | Populated By | Description |
+|-------------|------|------|--------------|-------------|
+| VAR-001 | [NAME] | heir_record | Garage mount | Complete 8-field HEIR |
+| VAR-002 | [NAME] | ctb_placement | Hub definition | Branch under src/ |
+| VAR-003 | [NAME] | prd_artifact | Planner | PRD with HSS worksheet |
+| VAR-004 | [NAME] | osam_contract | Hub definition | Query routing contract (if data branch) |
+| VAR-005 | [NAME] | audit_certification | Auditor | PASS or FAIL with doctrine references |
+| [VAR-NNN] | [NAME] | [TYPE] | [POPULATED_BY] | [DESCRIPTION] |
+
+**Validation**: Every variable MUST declare how it gets populated. No orphan variables (populated by nothing). No shadow variables (populated but never consumed).
+
+---
+
+## Transformation Verification
+
+| Check | Status |
+|-------|--------|
+| Every constant has a fixed value | [ ] |
+| Every variable has a declared source | [ ] |
+| The transformation statement is reducible to CONST → VAR | [ ] |
+| No constant is actually variable (changes at runtime) | [ ] |
+| No variable is actually constant (never changes) | [ ] |
+
+---
+
+## Document Control
+
+| Field | Value |
+|-------|-------|
+| Template Source | `templates/child/CONSTANTS_VARIABLES_BLOCK.md.template` |
+| Doctrine Reference | PSB-CONST-001 Part I, Part XV Change 2 |
+| Authority | imo-creator (CC-01 Sovereign) |

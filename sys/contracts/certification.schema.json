@@ -3,7 +3,7 @@
   "$id": "certification.v1.schema.json",
   "title": "Garage Certification Artifact",
   "description": "Signed wrapper over audit classification and artifact hashes. Merge-blocking. Must be cryptographically signed. Signature must be validated before merge is permitted.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authority": "imo-creator (CC-01 Sovereign)",
   "type": "object",
   "required": [
@@ -69,6 +69,10 @@
         "type": "string"
       },
       "description": "Empty array when audit_status is PASS. Populated with specific failure reasons when FAIL."
+    },
+    "capa_required": {
+      "type": "boolean",
+      "description": "True when audit findings of HIGH or CRITICAL severity require a Corrective Action / Preventive Action record. Per PSB-CONST-001 Part VI."
     }
   }
 }

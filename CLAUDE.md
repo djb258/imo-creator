@@ -75,6 +75,12 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 | `templates/integrations/doppler.yaml.template` | Doppler config template |
 | `templates/integrations/heir.doctrine.yaml.template` | HEIR config template |
 
+### Prompt and Skills Bay (CONSTITUTIONAL)
+
+| File | Purpose |
+|------|---------|
+| `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | Prompt and Skills Bay governance — Transformation Law, PSB artifacts, audit requirements, Garage relationship (v1.0.0) |
+
 ---
 
 ## TOOL DOCTRINE (CONSTITUTIONAL)
@@ -403,11 +409,60 @@ These files live at the imo-creator repo root (NOT in templates/). They are oper
 
 ---
 
+## PROMPT AND SKILLS BAY — CONSTITUTIONAL SUMMARY
+
+The Prompt and Skills Bay is a specialized bay inside the Garage. It is NOT a standalone prompt tool.
+It is the human-facing hub definition engine that produces doctrine-compliant hub definition artifacts
+for entry into the Garage pipeline.
+
+**SUPREME PRINCIPLE — THE TRANSFORMATION LAW:**
+Nothing may exist unless it transforms declared constants into declared variables.
+The factory intake MUST begin with: "What constants does this hub transform, and what variables does it produce?"
+
+**CRITICAL CORRECTIONS (do not revert these):**
+- IMO = Ingress-Middle-Egress (NOT Input-Method-Output, NOT Input-Middle-Output)
+- Ingress = schema validation ONLY, no decisions
+- Middle = ALL logic, ALL decisions, ALL state
+- Egress = read-only views ONLY, no logic
+
+**THE TWO FRAMES (both required at every altitude):**
+- ACE (constitutional): Authority, Charter, Accountability — the instructions layer, written once
+- IMO (operational): Ingress, Middle, Egress — the data flow layer, runs on every execution
+
+**WHAT THE FACTORY MUST PRODUCE (complete hub definition package):**
+1. HEIR record — all 8 fields (sovereign_ref, hub_id, ctb_placement, imo_topology, cc_layer, services, secrets_provider, acceptance_criteria)
+2. CTB placement declaration — correct branch under src/
+3. ORBT mode — declared as Phase 0 before any other artifact
+4. PRD with HSS worksheet — summarizable as CONST → VAR
+5. OSAM contract — if hub has a data branch
+6. Constants block — all constitutional constants declared explicitly
+7. Variables block — all runtime variables as explicit slots
+8. Audit certification — PASS or FAIL with doctrine references
+
+**THE AUDIT ENGINE PHASE 0 CHECKS (in this order):**
+1. ORBT mode present and valid — reject immediately if missing
+2. Transformation Law satisfied — can this be stated as CONST → VAR?
+3. HEIR complete — all 8 fields present
+4. CTB placement valid — no forbidden folders
+5. Then all 14 audit rules
+
+**THE COMPLIANCE GATE IS ABSOLUTE:**
+Any CRITICAL or HIGH violation blocks compliance. No exceptions. No "fix later."
+
+**SELF-HEALING LOOP:**
+HEIR validates identity at mount → ORBT classifies operational mode → ERROR table records faults →
+repair agent reads fault code → Garage certifies repair → system returns to operational state
+
+Full constitutional document: `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md`
+Doctrine version: 1.0.0 | Effective: 2026-02-28 | Index: PSB-CONST-001
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-06 |
-| Last Modified | 2026-02-25 |
+| Last Modified | 2026-02-28 |
 | Status | ACTIVE |
 | Authority | Human only |

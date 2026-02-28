@@ -60,6 +60,24 @@
       "LOW": "Informational. Logged for audit trail only."
     }
   },
+  "table_classifications": {
+    "values": ["SPINE", "STATE", "EVENT", "CONFIG", "CACHE"],
+    "descriptions": {
+      "SPINE": "Constitutional identity tables — sovereign IDs, hub IDs, entity anchors. INSERT-only after creation. Never UPDATE or DELETE.",
+      "STATE": "Current operational state — what is true right now. UPDATE permitted. Represents present reality.",
+      "EVENT": "Immutable audit log — what happened and when. INSERT-only. Never UPDATE or DELETE. The system's memory.",
+      "CONFIG": "System configuration — rules, thresholds, parameters. UPDATE permitted with ADR.",
+      "CACHE": "Derived or computed data — can be rebuilt from source. Truncate and rebuild permitted."
+    },
+    "mutability_rules": {
+      "SPINE": "INSERT_ONLY",
+      "STATE": "UPDATE_PERMITTED",
+      "EVENT": "INSERT_ONLY",
+      "CONFIG": "UPDATE_WITH_ADR",
+      "CACHE": "TRUNCATE_REBUILD"
+    },
+    "note": "The master ERROR table is classified as EVENT. Every fault record is INSERT-only. Unclassified tables are a CRITICAL violation (PSB-CONST-001 Part IV)."
+  },
   "garage_exclusive_artifacts": {
     "description": "Artifacts that must reside in the Garage (imo-creator) only. Child repos must not contain these.",
     "artifacts": [

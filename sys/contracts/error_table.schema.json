@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error_table.v1.schema.json",
+  "title": "Master ERROR Table Record",
+  "description": "Schema for the master ERROR table — the system's immutable fault registry. Classified as EVENT. INSERT-only. Never UPDATE or DELETE. Per PSB-CONST-001 Parts IV, XVI, and XX.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "table_classification": "EVENT",
+  "mutability": "INSERT_ONLY",
+  "type": "object",
+  "required": [
+    "error_id",
+    "error_code",
+    "subhub_origin",
+    "orbt_mode",
+    "doctrine_version",
+    "timestamp",
+    "severity",
+    "artifact_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "error_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this fault record."
+    },
+    "error_code": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Structured error code identifying the fault type. Format: {CATEGORY}_{SPECIFIC} (e.g., IMO_VIOLATION, CTB_PLACEMENT_INVALID, HEIR_INCOMPLETE)."
+    },
+    "subhub_origin": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The sub-hub that produced or detected this fault."
+    },
+    "orbt_mode": {
+      "type": "string",
+      "enum": ["operate", "repair", "build", "troubleshoot", "train"],
+      "description": "ORBT mode active at the time of fault."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Doctrine version in effect when the fault occurred."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of fault occurrence."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+      "description": "Fault severity. CRITICAL and HIGH require CAPA records."
+    },
+    "artifact_hash": {
+      "type": ["string", "null"],
+      "description": "SHA-256 hash of the artifact that triggered the fault, if applicable. Null if no artifact involved."
+    },
+    "pid": {
+      "type": "string",
+      "description": "Process Instance Document ID of the session that produced this fault. Format: AI-{HUB_ID}-{TIMESTAMP}-{RANDOM}."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the fault."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "The audit rule ID (RULE-xxx or AUD-xxx) that was violated, if applicable."
+    }
+  }
+}

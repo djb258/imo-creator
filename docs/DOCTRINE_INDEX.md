@@ -1,8 +1,8 @@
 # DOCTRINE INDEX
 
-**Version**: 1.2.0
+**Version**: 1.3.0
 **Authority**: imo-creator (CC-01 Sovereign)
-**Last Updated**: 2026-02-25T00:00:00Z
+**Last Updated**: 2026-02-28T00:00:00Z
 
 Single source of truth listing all authoritative doctrine documents. Reference only — no content duplication.
 
@@ -17,6 +17,7 @@ Single source of truth listing all authoritative doctrine documents. Reference o
 | Governance | `docs/constitutional/governance.md` | Governance model and enforcement mechanisms |
 | Protected Assets | `docs/constitutional/protected_assets.md` | Immutable asset registry |
 | IMO-Creator Charter | `docs/constitutional/imo_creator_charter.md` | Sovereign charter — 10 sections, LOCKED (v1.0.0) |
+| Prompt and Skills Bay | `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | PSB governance — Transformation Law, artifacts, audit requirements, Garage relationship (v1.0.0) — PSB-CONST-001 |
 
 ---
 
@@ -42,6 +43,8 @@ Single source of truth listing all authoritative doctrine documents. Reference o
 | HEIR Template | `templates/integrations/heir.doctrine.yaml.template` | Legacy HEIR template (nested format — Garage validates against flat schema) |
 | HEIR Integration Spec | `templates/integrations/HEIR.md` | HEIR integration specification |
 | ORBT Error Schema | `sys/contracts/orbt_error.schema.json` | Operate/Repair/Build/Train telemetry artifact schema (v1.0.0) |
+| IMO Law IDs | `sys/registry/imo_law_ids.json` | IMO-01 through IMO-06 data flow law definitions (v1.0.0) |
+| Master ERROR Table Schema | `sys/contracts/error_table.schema.json` | Immutable fault registry — EVENT classification, INSERT-only (v1.0.0) |
 
 ---
 
@@ -71,7 +74,7 @@ Single source of truth listing all authoritative doctrine documents. Reference o
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| Certification Schema | `sys/contracts/certification.schema.json` | Signed certification artifact (v1.0.0) |
+| Certification Schema | `sys/contracts/certification.schema.json` | Signed certification artifact + capa_required field (v1.1.0) |
 | Sanitation Report Schema | `sys/contracts/sanitation_report.schema.json` | Post-audit sanitation report (v1.0.0) |
 | Signature Engine | `sys/certification/signature_engine/engine_contract.json` | Cryptographic signing contract (v1.1.0) |
 
@@ -93,6 +96,6 @@ They must not be reinterpreted across agents or repos.
 
 | Field | Value |
 |-------|-------|
-| doctrine_index_version | 1.2.0 |
-| last_updated | 2026-02-25T00:00:00Z |
+| doctrine_index_version | 1.3.0 |
+| last_updated | 2026-02-28T00:00:00Z |
 | Authority | imo-creator (CC-01 Sovereign) |

@@ -1,7 +1,9 @@
 {
-  "registry_version": "1.0.0",
+  "registry_version": "2.0.0",
   "authority": "imo-creator (CC-01 Sovereign)",
-  "description": "Deterministic audit rules evaluated by the auditor agent. Each rule has a unique ID, evaluation criteria, and severity. Rules are evaluated in order. Any BLOCKING failure halts certification.",
+  "description": "Deterministic audit rules evaluated by the auditor agent. Pipeline rules (RULE-xxx) are mechanical certification gates. Compliance rules (AUD-xxx) are artifact-level checks from the PSB Constitution (PSB-CONST-001). Both series are authoritative at their respective scopes.",
+  "pipeline_rules_scope": "Mechanical certification pipeline — evaluated during Garage stages 1-10. BLOCKING severity halts certification.",
+  "compliance_rules_scope": "Artifact compliance — evaluated by the Auditor agent (stage 8) against hub definition artifacts. CRITICAL/HIGH violations block compliance.",
   "rules": [
     {
       "id": "RULE-001",
@@ -114,6 +116,106 @@
       "severity": "BLOCKING",
       "applies_to": ["audit", "refactor", "build", "migrate"],
       "evaluation": "mount_receipt.detached_head === false AND mount_receipt.resolved_commit_sha === mount_receipt.remote_head_sha"
+    }
+  ],
+  "compliance_rules": [
+    {
+      "id": "AUD-001",
+      "name": "HEIR_COMPLETENESS",
+      "description": "All 8 HEIR fields must be present and valid: sovereign_ref, hub_id, ctb_placement, imo_topology, cc_layer, services, secrets_provider, acceptance_criteria.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (HEIR), Part VI"
+    },
+    {
+      "id": "AUD-002",
+      "name": "ORBT_MODE_DECLARED",
+      "description": "ORBT mode must be present and valid (Operate, Repair, Build, Troubleshoot, Train). Checked as Phase 0 before any other validation. No inference permitted.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (ORBT), Part VI"
+    },
+    {
+      "id": "AUD-003",
+      "name": "CTB_PLACEMENT_VALID",
+      "description": "All files must reside in valid CTB branches (sys/, data/, app/, ai/, ui/) or approved support surfaces.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-004",
+      "name": "TRANSFORMATION_LAW_SATISFIED",
+      "description": "Every artifact must be reducible to: 'This transforms X constants into Y variables.' If it cannot be stated in those terms, it may not exist.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part I, Part VI"
+    },
+    {
+      "id": "AUD-005",
+      "name": "IMO_VIOLATION",
+      "description": "No logic in Ingress (schema validation only). No logic in Egress (read-only views only). All logic in Middle only. Covers IMO-01 through IMO-06.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (IMO), Part VI"
+    },
+    {
+      "id": "AUD-006",
+      "name": "FORBIDDEN_FOLDER_PRESENT",
+      "description": "Forbidden folder names detected anywhere in repo: utils/, helpers/, common/, shared/, lib/, misc/.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-007",
+      "name": "PROHIBITED_EXECUTION_SURFACE",
+      "description": "Prohibited execution surfaces at repo root: bin/, tools/, lambda/, functions/, workers/, jobs/, cron/.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-008",
+      "name": "SCOPE_EXCEEDED",
+      "description": "Artifact execution modified files outside declared allowed_paths or scope boundaries.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI"
+    },
+    {
+      "id": "AUD-009",
+      "name": "PRD_STALE",
+      "description": "PRD or OSAM not updated within 30 days of src/ change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-010",
+      "name": "ERD_STALE",
+      "description": "ERD or SCHEMA.md not updated within 14 days of schema registry change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-011",
+      "name": "OSAM_STALE",
+      "description": "OSAM not updated within 30 days of data layer change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-012",
+      "name": "COLUMN_REGISTRY_STALE",
+      "description": "column_registry not updated within 7 days of SQL change.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-013",
+      "name": "DBA_GATE_BYPASSED",
+      "description": "Schema change merged without passing DBA Gate A (non-structural) and/or Gate B (structural) checks.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (DBA), Part VI"
+    },
+    {
+      "id": "AUD-014",
+      "name": "TEMPLATE_IMMUTABILITY_VIOLATED",
+      "description": "Locked template file was modified by an AI agent or without ADR approval.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part VI"
     }
   ]
 }
