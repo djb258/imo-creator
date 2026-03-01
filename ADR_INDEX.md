@@ -30,6 +30,7 @@
 | ADR-019 | barton-outreach-core | 2026-01-30 | FREE extraction pipeline complete | ACCEPTED | FREE extraction pipeline completed |
 | ADR-020 | barton-outreach-core | — | People sub-hub dual canonical exception | ACCEPTED | SUPPORTING leaf type + people master reclassification |
 | ADR-021 | imo-creator | 2026-02-25 | DB Lane + UI Lane + Container Surface (V2 Control Plane) | ACCEPTED | DB_CHANGESET, UI_CHANGESET, CONTAINER_RUN artifacts; WORK_PACKET V2 routing flags; adapter model for UI and container |
+| ADR-022 | imo-creator | 2026-03-01 | Agent Teams Integration for Garage Pipeline | PROPOSED | Native Claude Code Agent Teams + worktree isolation for parallel execution within Worker, Auditor, and fleet refit stages |
 
 ---
 
