@@ -1,0 +1,693 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# COLUMN REGISTRY — PSB Libraries (Prompt, Reverse Prompt, Skills)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Status: REQUIRED — Accompanies migrations 012-015
+# Version: 1.0.0
+# Purpose: Single source of truth for all PSB library table schemas
+# ADR: ADR-023
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# READING ORDER:
+#   OSAM → psb_column_registry.yml → egress views (migration 015)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "1.0.0"
+last_updated: "2026-03-01"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HUB IDENTITY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+hub:
+  hub_id: "psb"
+  hub_name: "Prompt and Skills Bay"
+  universal_join_key: "prompt_id"
+  universal_join_key_type: "UUID"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TABLE: psb.prompt_registry (CONFIG)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+tables:
+  - schema: "psb"
+    name: "prompt_registry"
+    description: "Master prompt registry — versioned, searchable, Transformation Law compliant"
+    classification: "CONFIG"
+    migration: "012_psb_prompt_registry.sql"
+    columns:
+      - name: "prompt_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique prompt identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "psb.reverse_prompt_index, psb.prompt_skill_binding"
+      - name: "slug"
+        type: "TEXT"
+        nullable: false
+        description: "URL-safe unique identifier for human reference"
+        semantic_role: "identifier"
+        format: "kebab-case"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "egress views, API"
+      - name: "title"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable prompt title"
+        semantic_role: "label"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "description"
+        type: "TEXT"
+        nullable: false
+        description: "Prompt purpose and scope description"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, search"
+      - name: "version"
+        type: "TEXT"
+        nullable: false
+        description: "Semantic version of this prompt"
+        semantic_role: "version"
+        format: "semver (X.Y.Z)"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "psb.prompt_versions"
+      - name: "transformation_statement"
+        type: "TEXT"
+        nullable: false
+        description: "Transformation Law statement: This transforms X constants into Y variables"
+        semantic_role: "metadata"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "audit, compliance"
+      - name: "constants_declared"
+        type: "TEXT[]"
+        nullable: false
+        description: "Array of declared constants this prompt operates on"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search, reverse lookup"
+      - name: "variables_produced"
+        type: "TEXT[]"
+        nullable: false
+        description: "Array of declared variables this prompt produces"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search, reverse lookup"
+      - name: "cc_layer"
+        type: "TEXT"
+        nullable: false
+        description: "Canonical Chain layer: CC-01 through CC-04"
+        semantic_role: "classification"
+        format: "enum: CC-01, CC-02, CC-03, CC-04"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "search, filter"
+        constraints: "CHECK (cc_layer IN ('CC-01','CC-02','CC-03','CC-04'))"
+      - name: "orbt_modes"
+        type: "TEXT[]"
+        nullable: false
+        description: "Applicable ORBT modes"
+        semantic_role: "classification"
+        format: "text array, subset of: operate, repair, build, troubleshoot, train"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search, filter"
+      - name: "category"
+        type: "TEXT"
+        nullable: false
+        description: "Prompt category"
+        semantic_role: "classification"
+        format: "enum: intake, enforcement, regeneration, migration, declaration, projection, auxiliary"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "search, filter"
+      - name: "template_text"
+        type: "TEXT"
+        nullable: false
+        description: "The full prompt template text"
+        semantic_role: "content"
+        format: "markdown"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, execution"
+      - name: "template_text_hash"
+        type: "TEXT"
+        nullable: false
+        description: "SHA-256 hash of template_text for integrity verification"
+        semantic_role: "integrity"
+        format: "SHA-256 hex string"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "psb.prompt_versions, audit"
+      - name: "source_file"
+        type: "TEXT"
+        nullable: true
+        description: "Source file path if migrated from markdown"
+        semantic_role: "provenance"
+        format: "file path"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "traceability"
+      - name: "doctrine_version"
+        type: "TEXT"
+        nullable: false
+        description: "Doctrine version at time of registration"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "compliance, audit"
+      - name: "tags"
+        type: "TEXT[]"
+        nullable: false
+        description: "Searchable tags for categorization"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search"
+      - name: "status"
+        type: "TEXT"
+        nullable: false
+        description: "Lifecycle status: DRAFT, ACTIVE, DEPRECATED"
+        semantic_role: "lifecycle"
+        format: "enum: DRAFT, ACTIVE, DEPRECATED"
+        source_of_truth: true
+        volatility: "mutable (forward-only)"
+        consumer: "egress views, filter"
+        constraints: "CHECK (status IN ('DRAFT','ACTIVE','DEPRECATED'))"
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp of initial creation"
+        semantic_role: "audit"
+        format: "ISO 8601"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp of last modification"
+        semantic_role: "audit"
+        format: "ISO 8601"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "audit trail"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: psb.prompt_versions (EVENT)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "psb"
+    name: "prompt_versions"
+    description: "Immutable version history for prompts — INSERT-only EVENT table"
+    classification: "EVENT"
+    migration: "012_psb_prompt_registry.sql"
+    columns:
+      - name: "version_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique version record identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "prompt_id"
+        type: "UUID"
+        nullable: false
+        description: "FK to psb.prompt_registry"
+        semantic_role: "foreign_key"
+        format: "UUID"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join"
+      - name: "version_number"
+        type: "TEXT"
+        nullable: false
+        description: "Semantic version at this point in history"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "template_text_hash"
+        type: "TEXT"
+        nullable: false
+        description: "SHA-256 hash of template_text at this version"
+        semantic_role: "integrity"
+        format: "SHA-256 hex string"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "integrity verification"
+      - name: "change_description"
+        type: "TEXT"
+        nullable: false
+        description: "What changed in this version"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "adr_reference"
+        type: "TEXT"
+        nullable: true
+        description: "ADR ID if this was a structural change"
+        semantic_role: "traceability"
+        format: "ADR-NNN"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "traceability"
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp of version creation"
+        semantic_role: "audit"
+        format: "ISO 8601"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: psb.reverse_prompt_index (CONFIG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "psb"
+    name: "reverse_prompt_index"
+    description: "Reverse prompt lookup — given a desired output, find the prompt that produces it"
+    classification: "CONFIG"
+    migration: "013_psb_reverse_prompt_index.sql"
+    columns:
+      - name: "reverse_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique reverse index entry identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "egress views"
+      - name: "desired_output_description"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable description of the desired output"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search, egress views"
+      - name: "transformation_target"
+        type: "TEXT"
+        nullable: false
+        description: "The specific variable type this entry helps produce"
+        semantic_role: "classification"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search"
+      - name: "output_category"
+        type: "TEXT"
+        nullable: false
+        description: "Category of the desired output artifact"
+        semantic_role: "classification"
+        format: "enum: heir_record, prd, osam, erd, execution_wiring, etc."
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "search, filter"
+      - name: "matching_prompt_id"
+        type: "UUID"
+        nullable: false
+        description: "FK to the prompt that produces this output"
+        semantic_role: "foreign_key"
+        format: "UUID"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join"
+      - name: "matching_prompt_version"
+        type: "TEXT"
+        nullable: false
+        description: "Version of the matching prompt this entry was validated against"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "validation"
+      - name: "usage_notes"
+        type: "TEXT"
+        nullable: true
+        description: "Guidance on how to use the matching prompt for this specific output"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "prerequisites"
+        type: "TEXT[]"
+        nullable: false
+        description: "What must exist before this prompt can be used"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "produces_artifacts"
+        type: "TEXT[]"
+        nullable: false
+        description: "What artifacts this prompt produces when used for this output"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, search"
+      - name: "tags"
+        type: "TEXT[]"
+        nullable: false
+        description: "Searchable tags"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search"
+      - name: "search_keywords"
+        type: "TEXT[]"
+        nullable: false
+        description: "Additional keywords for search matching"
+        semantic_role: "metadata"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "search"
+      - name: "status"
+        type: "TEXT"
+        nullable: false
+        description: "Lifecycle status: ACTIVE, DEPRECATED"
+        semantic_role: "lifecycle"
+        format: "enum: ACTIVE, DEPRECATED"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, filter"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: psb.skill_registry (CONFIG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "psb"
+    name: "skill_registry"
+    description: "Master skill registry — versioned skills with input/output contracts"
+    classification: "CONFIG"
+    migration: "014_psb_skill_registry.sql"
+    columns:
+      - name: "skill_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique skill identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "psb.prompt_skill_binding, psb.skill_versions"
+      - name: "slug"
+        type: "TEXT"
+        nullable: false
+        description: "URL-safe unique identifier"
+        semantic_role: "identifier"
+        format: "kebab-case"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "egress views, API"
+      - name: "name"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable skill name"
+        semantic_role: "label"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "description"
+        type: "TEXT"
+        nullable: false
+        description: "Skill purpose and scope description"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, search"
+      - name: "version"
+        type: "TEXT"
+        nullable: false
+        description: "Semantic version of this skill"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "psb.skill_versions"
+      - name: "transformation_statement"
+        type: "TEXT"
+        nullable: false
+        description: "Transformation Law statement"
+        semantic_role: "metadata"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "audit, compliance"
+      - name: "agent_type"
+        type: "TEXT"
+        nullable: false
+        description: "Which agent type this skill is designed for"
+        semantic_role: "classification"
+        format: "enum: orchestrator, planner, worker, db_agent, auditor, refit_coordinator, general_purpose"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "search, filter"
+      - name: "cc_layer"
+        type: "TEXT"
+        nullable: false
+        description: "Canonical Chain layer"
+        semantic_role: "classification"
+        format: "enum: CC-01, CC-02, CC-03, CC-04"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "search, filter"
+      - name: "input_contract_fields"
+        type: "TEXT[]"
+        nullable: false
+        description: "Declared input fields this skill expects"
+        semantic_role: "contract"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, validation"
+      - name: "output_contract_fields"
+        type: "TEXT[]"
+        nullable: false
+        description: "Declared output fields this skill produces"
+        semantic_role: "contract"
+        format: "text array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, validation"
+      - name: "input_description"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable description of expected input"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "output_description"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable description of produced output"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+      - name: "depends_on_skills"
+        type: "UUID[]"
+        nullable: false
+        description: "Array of skill_ids this skill depends on"
+        semantic_role: "dependency"
+        format: "UUID array"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "dependency resolution"
+      - name: "source_file"
+        type: "TEXT"
+        nullable: true
+        description: "Source file path for the skill definition"
+        semantic_role: "provenance"
+        format: "file path"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "traceability"
+      - name: "source_hash"
+        type: "TEXT"
+        nullable: false
+        description: "SHA-256 hash of the source file"
+        semantic_role: "integrity"
+        format: "SHA-256 hex string"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "psb.skill_versions, audit"
+      - name: "doctrine_compliance"
+        type: "TEXT"
+        nullable: false
+        description: "Audit compliance status"
+        semantic_role: "compliance"
+        format: "enum: COMPLIANT, NON_COMPLIANT, PENDING_AUDIT"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views, audit"
+      - name: "status"
+        type: "TEXT"
+        nullable: false
+        description: "Lifecycle status: DRAFT, ACTIVE, DEPRECATED"
+        semantic_role: "lifecycle"
+        format: "enum: DRAFT, ACTIVE, DEPRECATED"
+        source_of_truth: true
+        volatility: "mutable (forward-only)"
+        consumer: "egress views, filter"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: psb.skill_versions (EVENT)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "psb"
+    name: "skill_versions"
+    description: "Immutable version history for skills — INSERT-only EVENT table"
+    classification: "EVENT"
+    migration: "014_psb_skill_registry.sql"
+    columns:
+      - name: "version_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique version record identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "skill_id"
+        type: "UUID"
+        nullable: false
+        description: "FK to psb.skill_registry"
+        semantic_role: "foreign_key"
+        format: "UUID"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join"
+      - name: "version_number"
+        type: "TEXT"
+        nullable: false
+        description: "Semantic version at this point in history"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+      - name: "source_hash"
+        type: "TEXT"
+        nullable: false
+        description: "SHA-256 hash of skill source at this version"
+        semantic_role: "integrity"
+        format: "SHA-256 hex string"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "integrity verification"
+      - name: "change_description"
+        type: "TEXT"
+        nullable: false
+        description: "What changed in this version"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: psb.prompt_skill_binding (CONFIG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "psb"
+    name: "prompt_skill_binding"
+    description: "Cross-reference: which skills use which prompts and how"
+    classification: "CONFIG"
+    migration: "014_psb_skill_registry.sql"
+    columns:
+      - name: "binding_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique binding identifier"
+        semantic_role: "identifier"
+        format: "UUID"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "egress views"
+      - name: "prompt_id"
+        type: "UUID"
+        nullable: false
+        description: "FK to psb.prompt_registry"
+        semantic_role: "foreign_key"
+        format: "UUID"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join"
+      - name: "skill_id"
+        type: "UUID"
+        nullable: false
+        description: "FK to psb.skill_registry"
+        semantic_role: "foreign_key"
+        format: "UUID"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join"
+      - name: "binding_type"
+        type: "TEXT"
+        nullable: false
+        description: "Relationship type: REQUIRES, PRODUCES, CONSUMES"
+        semantic_role: "classification"
+        format: "enum: REQUIRES, PRODUCES, CONSUMES"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "egress views, dependency resolution"
+      - name: "binding_description"
+        type: "TEXT"
+        nullable: true
+        description: "Human-readable description of this binding"
+        semantic_role: "description"
+        format: "free text"
+        source_of_truth: true
+        volatility: "mutable"
+        consumer: "egress views"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EGRESS VIEWS (Migration 015)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# psb.prompts_active      — Active prompts only
+# psb.reverse_lookup      — Reverse index joined with prompt details
+# psb.skills_active       — Active skills with binding counts
+# psb.skill_dependency_tree — Skill dependencies (one level)
+# psb.prompt_skill_map    — Full prompt ↔ skill cross-reference
+#
+# ═══════════════════════════════════════════════════════════════════════════════
