@@ -1,0 +1,7 @@
+# Doppler Configuration — imo-creator (Sovereign CC-01)
+# Project: imo-creator
+# Role: Sovereign vault for all fleet secrets
+
+setup:
+  project: imo-creator
+  config: dev
