@@ -293,7 +293,72 @@ Every PID must carry:
 
 ---
 
-## PART IX — VIOLATION ENFORCEMENT
+## PART IX — CANONICAL IDENTITY LAW
+
+Canonical Identity defines the immutable chain of ownership and reference from the sovereign level down to the execution instance. It is the backbone of traceability and authority.
+
+### §1 The Identity Chain
+
+All identity flows downward from the sovereign. Each layer is assigned an ID by the layer above it. This chain is never broken.
+
+| Layer | ID Name | Minted By | Scope |
+|-------|---------|-----------|-------|
+| CC-01 | `sovereign_company_id` | CL Authority | One per company, forever |
+| CC-02 | `program_id` (e.g., `outreach_id`, `sales_id`) | Program Hub (e.g., Outreach) | One per program engagement |
+| CC-03 | `sub_hub_id` (e.g., `dol_filing_id`, `movement_id`) | Sub-Hub | One per sub-hub record |
+| CC-04 | `lifecycle_id` (e.g., `communication_id`) | Lifecycle System (e.g., LCS) | One per lifecycle event |
+
+**Rules:**
+- `sovereign_company_id` is the ultimate anchor. All other IDs must trace back to it.
+- `program_id` is minted by the main hub of a program (Outreach, Sales, Client) and registered back to `cl.company_identity`.
+- `sub_hub_id` is internal to the sub-hub and used for traceability within that domain.
+
+### §2 The Compiler Pattern
+
+The main program hub (CC-02) is responsible for compiling signals from its sub-hubs into a single, coherent record before handing off to a lifecycle system.
+
+**Compiler Laws:**
+| ID | Law | Violation |
+|----|-----|-----------|
+| ID-C01 | Compiler lives at the main hub level (CC-02) | HUB_SPOKE_VIOLATION |
+| ID-C02 | Compiler aggregates all sub-hub signals for a given `program_id` | COMPILER_VIOLATION |
+| ID-C03 | Compiler produces one compiled record per entity per execution window | COMPILER_VIOLATION |
+| ID-C04 | The compiled record format is a contract, shared across all phases | DOCTRINE_VIOLATION |
+| ID-C05 | Sub-hubs are blind to the compiler and downstream systems | HUB_SPOKE_VIOLATION |
+
+### §3 The Lifecycle ID Pattern (CID/SID/MID)
+
+Lifecycle systems (like LCS) use a three-part ID model to separate the compiled signal, the message construction, and the delivery attempt.
+
+| ID | Name | Represents | Minted By |
+|----|------|------------|-----------|
+| CID | `communication_id` | The compiled signal (the WHY) | Compiler Worker |
+| SID | `message_construction_id` | The constructed message (the WHAT) | SID Sub-Hub (construction layer) |
+| MID | `message_run_id` | The delivery attempt (the HOW) | MID Sub-Hub (delivery layer) |
+
+**Flow:**
+1.  **Compiler** mints **CID**.
+2.  **LCS** ingests CID, SID sub-hub constructs message and mints **SID**.
+3.  **MID** sub-hub delivers message and mints **MID**.
+
+### §4 The Lifecycle Phase Flag
+
+The `cl.company_identity` table holds a single `lifecycle_phase` enum to govern which program is active for a company.
+
+| Phase | Trigger to Activate |
+|---------|---------------------|
+| OUTREACH | Default state |
+| SALES | Meeting booked via Outreach |
+| CLIENT | Client ID minted |
+
+**Rules:**
+- Only one phase can be active at a time.
+- The compiler worker reads this flag to determine which program's signals to compile.
+- This flag is the single source of truth for a company's lifecycle state.
+
+---
+
+## PART X — VIOLATION ENFORCEMENT
 
 ### §1 Violation Categories
 
@@ -327,7 +392,7 @@ Every PID must carry:
 
 ---
 
-## PART X — OWNERSHIP CONSTRAINTS
+## PART XI — OWNERSHIP CONSTRAINTS
 
 ### §1 Sovereign Ownership
 
@@ -361,7 +426,7 @@ Every PID must carry:
 
 ---
 
-## PART XI — GLOBAL INVARIANTS
+## PART XII — GLOBAL INVARIANTS
 
 These invariants apply to ALL derived systems. They may NOT be overridden.
 
@@ -380,7 +445,7 @@ These invariants apply to ALL derived systems. They may NOT be overridden.
 
 ---
 
-## PART XII — DOCUMENT CONTROL
+## PART XIII — DOCUMENT CONTROL
 
 | Field | Value |
 |-------|-------|
