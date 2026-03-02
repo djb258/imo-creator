@@ -1,0 +1,448 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# COLUMN REGISTRY — Garage Event Tables (Error, Execution, Certification)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: imo-creator (Constitutional)
+# Status: REQUIRED — Accompanies migration 016
+# Version: 1.0.0
+# Purpose: Single source of truth for all Garage event table schemas
+# ADR: (Sovereign — no ADR required for CC-01 operational tables)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# CLASSIFICATION: All 3 tables are EVENT (INSERT-only, immutable)
+#   Per taxonomy_registry.json: "Immutable audit log — what happened and when.
+#   INSERT-only. Never UPDATE or DELETE. The system's memory."
+#
+# READING ORDER:
+#   taxonomy_registry.json → garage_column_registry.yml → migration 016
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "1.0.0"
+last_updated: "2026-03-02"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SCHEMA IDENTITY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+schema:
+  schema_name: "garage"
+  schema_purpose: "Sovereign control plane event history — pipeline faults, execution records, certification outcomes"
+  cc_layer: "CC-01"
+  classification_system: "taxonomy_registry.json (SPINE/STATE/EVENT/CONFIG/CACHE)"
+  note: "CTB leaf_types (CANONICAL/ERROR/STAGING) do NOT apply — those are child-repo (CC-02/CC-03) classifications"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TABLE: garage.error_log (EVENT)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Pipeline fault record. One row per fault occurrence.
+# Source: orchestration_contract.json failure_paths + audit_rules.json
+# ═══════════════════════════════════════════════════════════════════════════════
+
+tables:
+  - schema: "garage"
+    name: "error_log"
+    description: "Pipeline fault record — one row per error, INSERT-only, never updated"
+    classification: "EVENT"
+    migration: "016_garage_event_tables.sql"
+    columns:
+      - name: "error_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique error event identifier"
+        semantic_role: "identifier"
+        format: "UUID (gen_random_uuid())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, error queries"
+      - name: "work_packet_id"
+        type: "TEXT"
+        nullable: true
+        description: "Work packet ID if error occurred during pipeline execution (NULL if pre-planning)"
+        semantic_role: "foreign_reference"
+        format: "work_packet.id string"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join to execution_log"
+      - name: "target_repo"
+        type: "TEXT"
+        nullable: true
+        description: "Child repo name if known at time of error (NULL if pre-mount)"
+        semantic_role: "context"
+        format: "repo alias from repo_registry"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+      - name: "pipeline_stage"
+        type: "TEXT"
+        nullable: false
+        description: "Which pipeline stage the error occurred in"
+        semantic_role: "classification"
+        format: "enum: intent, plan, mount, db_validation, execute, collect, audit, sanitation, certify, validate"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+        constraints: "CHECK (pipeline_stage IN ('intent','plan','mount','db_validation','execute','collect','audit','sanitation','certify','validate'))"
+      - name: "failure_type"
+        type: "TEXT"
+        nullable: false
+        description: "Failure classification from orchestration_contract.json failure_paths"
+        semantic_role: "classification"
+        format: "enum: planner_halt, mount_failure, db_validation_failure, scope_violation, audit_fail_execution, audit_fail_scope, sanitation_fail, certification_fail"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation, dashboards"
+        constraints: "CHECK (failure_type IN ('planner_halt','mount_failure','db_validation_failure','scope_violation','audit_fail_execution','audit_fail_scope','sanitation_fail','certification_fail'))"
+      - name: "error_message"
+        type: "TEXT"
+        nullable: false
+        description: "Human-readable error description"
+        semantic_role: "content"
+        format: "free text"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "debugging, display"
+      - name: "error_details"
+        type: "TEXT"
+        nullable: true
+        description: "Extended context — stack trace, rule evaluation details, scope diff"
+        semantic_role: "content"
+        format: "free text"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "debugging"
+      - name: "rule_id"
+        type: "TEXT"
+        nullable: true
+        description: "Specific rule that triggered the failure (RULE-xxx or AUD-xxx from audit_rules.json)"
+        semantic_role: "traceability"
+        format: "RULE-NNN or AUD-NNN"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "audit trail, compliance"
+      - name: "severity"
+        type: "TEXT"
+        nullable: false
+        description: "Severity from taxonomy_registry.json severity_levels"
+        semantic_role: "classification"
+        format: "enum: BLOCKING, HIGH, MEDIUM, LOW"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, dashboards"
+        constraints: "CHECK (severity IN ('BLOCKING','HIGH','MEDIUM','LOW'))"
+      - name: "doctrine_version"
+        type: "TEXT"
+        nullable: false
+        description: "Doctrine version at time of error"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "compliance, audit trail"
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp of error occurrence"
+        semantic_role: "audit"
+        format: "ISO 8601 (DEFAULT now())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, time queries"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: garage.execution_log (EVENT)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # Pipeline execution record. One row per completed pipeline run.
+  # Source: work_packet.schema.json + orchestration_contract.json pipeline stages
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "garage"
+    name: "execution_log"
+    description: "Pipeline execution record — one row per completed pipeline run, INSERT-only"
+    classification: "EVENT"
+    migration: "016_garage_event_tables.sql"
+    columns:
+      - name: "execution_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique execution event identifier"
+        semantic_role: "identifier"
+        format: "UUID (gen_random_uuid())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, execution queries"
+      - name: "work_packet_id"
+        type: "TEXT"
+        nullable: false
+        description: "Work packet ID from work_packet.schema.json"
+        semantic_role: "foreign_reference"
+        format: "work_packet.id string"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join to error_log, certification_log"
+      - name: "target_repo"
+        type: "TEXT"
+        nullable: false
+        description: "Child repo targeted by this execution"
+        semantic_role: "context"
+        format: "repo alias from repo_registry"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+      - name: "execution_type"
+        type: "TEXT"
+        nullable: false
+        description: "Execution type from taxonomy_registry.json"
+        semantic_role: "classification"
+        format: "enum: audit, refactor, build, migrate"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+        constraints: "CHECK (execution_type IN ('audit','refactor','build','migrate'))"
+      - name: "change_type"
+        type: "TEXT"
+        nullable: false
+        description: "Change type from work_packet.schema.json"
+        semantic_role: "classification"
+        format: "enum: feature, architectural, refactor, fix"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+        constraints: "CHECK (change_type IN ('feature','architectural','refactor','fix'))"
+      - name: "orbt_mode"
+        type: "TEXT"
+        nullable: false
+        description: "ORBT mode from work_packet.schema.json"
+        semantic_role: "classification"
+        format: "enum: operate, repair, build, troubleshoot, train"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+        constraints: "CHECK (orbt_mode IN ('operate','repair','build','troubleshoot','train'))"
+      - name: "summary"
+        type: "TEXT"
+        nullable: false
+        description: "Work packet summary — declarative scope and intent"
+        semantic_role: "content"
+        format: "free text"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "display, search"
+      - name: "pipeline_stage_reached"
+        type: "TEXT"
+        nullable: false
+        description: "Furthest pipeline stage reached before completion or failure"
+        semantic_role: "classification"
+        format: "enum: intent, plan, mount, db_validation, execute, collect, audit, sanitation, certify, validate, merge"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, dashboards"
+        constraints: "CHECK (pipeline_stage_reached IN ('intent','plan','mount','db_validation','execute','collect','audit','sanitation','certify','validate','merge'))"
+      - name: "audit_classification"
+        type: "TEXT"
+        nullable: true
+        description: "Auditor classification (NULL if pipeline did not reach audit stage)"
+        semantic_role: "outcome"
+        format: "enum: PASS, FAIL_EXECUTION, FAIL_SCOPE"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, dashboards"
+        constraints: "CHECK (audit_classification IS NULL OR audit_classification IN ('PASS','FAIL_EXECUTION','FAIL_SCOPE'))"
+      - name: "certification_status"
+        type: "TEXT"
+        nullable: true
+        description: "Certification outcome (NULL if pipeline did not reach certification)"
+        semantic_role: "outcome"
+        format: "enum: PASS, FAIL"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, dashboards"
+        constraints: "CHECK (certification_status IS NULL OR certification_status IN ('PASS','FAIL'))"
+      - name: "architectural_flag"
+        type: "BOOLEAN"
+        nullable: false
+        description: "Whether this execution involved protected assets or backbone primitives"
+        semantic_role: "flag"
+        format: "boolean"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter"
+      - name: "db_required"
+        type: "BOOLEAN"
+        nullable: false
+        description: "Whether this execution included database scope"
+        semantic_role: "flag"
+        format: "boolean"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter"
+      - name: "ui_required"
+        type: "BOOLEAN"
+        nullable: false
+        description: "Whether this execution included UI scope"
+        semantic_role: "flag"
+        format: "boolean"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter"
+      - name: "doctrine_version"
+        type: "TEXT"
+        nullable: false
+        description: "Doctrine version at time of execution"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "compliance, audit trail"
+      - name: "started_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp when pipeline execution began"
+        semantic_role: "audit"
+        format: "ISO 8601"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, duration calculation"
+      - name: "completed_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp when pipeline execution completed (success or failure)"
+        semantic_role: "audit"
+        format: "ISO 8601 (DEFAULT now())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, duration calculation"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # TABLE: garage.certification_log (EVENT)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # Certification issuance record. One row per certification issued.
+  # Source: certification.schema.json
+  # Only populated when pipeline reaches stage 8 (certify).
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - schema: "garage"
+    name: "certification_log"
+    description: "Certification issuance record — one row per certification, INSERT-only"
+    classification: "EVENT"
+    migration: "016_garage_event_tables.sql"
+    columns:
+      - name: "certification_id"
+        type: "UUID"
+        nullable: false
+        description: "Unique certification event identifier"
+        semantic_role: "identifier"
+        format: "UUID (gen_random_uuid())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, certification queries"
+      - name: "work_packet_id"
+        type: "TEXT"
+        nullable: false
+        description: "Work packet ID this certification covers"
+        semantic_role: "foreign_reference"
+        format: "work_packet.id string (matches certification.schema.json)"
+        source_of_truth: false
+        volatility: "immutable"
+        consumer: "join to execution_log, error_log"
+      - name: "target_repo"
+        type: "TEXT"
+        nullable: false
+        description: "Child repo this certification applies to"
+        semantic_role: "context"
+        format: "repo alias"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, aggregation"
+      - name: "doctrine_version"
+        type: "TEXT"
+        nullable: false
+        description: "Doctrine version at time of certification"
+        semantic_role: "version"
+        format: "semver"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "compliance, audit trail"
+      - name: "audit_status"
+        type: "TEXT"
+        nullable: false
+        description: "Derived audit status: PASS or FAIL"
+        semantic_role: "outcome"
+        format: "enum: PASS, FAIL"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter, dashboards"
+        constraints: "CHECK (audit_status IN ('PASS','FAIL'))"
+      - name: "sanitation_passed"
+        type: "BOOLEAN"
+        nullable: false
+        description: "Whether sanitation phase passed"
+        semantic_role: "outcome"
+        format: "boolean"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter"
+      - name: "heir_valid"
+        type: "BOOLEAN"
+        nullable: false
+        description: "Whether HEIR validation passed at mount time"
+        semantic_role: "outcome"
+        format: "boolean"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "filter"
+      - name: "auditor_signature"
+        type: "TEXT"
+        nullable: false
+        description: "Cryptographic signature from signature_engine (hmac-sha256:...)"
+        semantic_role: "integrity"
+        format: "hmac-sha256:<base64>"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "verification"
+      - name: "artifact_hash"
+        type: "TEXT"
+        nullable: false
+        description: "SHA-256 hash of all certified artifacts"
+        semantic_role: "integrity"
+        format: "sha256:<hex64>"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "verification"
+      - name: "failure_reasons"
+        type: "TEXT[]"
+        nullable: false
+        description: "Empty array when PASS, populated with failure reasons when FAIL"
+        semantic_role: "content"
+        format: "text array"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "debugging, display"
+      - name: "capa_required"
+        type: "BOOLEAN"
+        nullable: true
+        description: "Whether a Corrective Action / Preventive Action record is required"
+        semantic_role: "flag"
+        format: "boolean (NULL if not evaluated)"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "compliance"
+      - name: "certified_at"
+        type: "TIMESTAMPTZ"
+        nullable: false
+        description: "Timestamp of certification issuance"
+        semantic_role: "audit"
+        format: "ISO 8601 (DEFAULT now())"
+        source_of_truth: true
+        volatility: "immutable"
+        consumer: "audit trail, time queries"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EGRESS VIEWS (Migration 016)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# garage.errors_recent        — Errors from last 30 days, ordered by recency
+# garage.executions_summary   — Execution log with duration and outcome
+# garage.certifications_valid — Certifications where audit_status = PASS
+# garage.pipeline_health      — Aggregated pass/fail rates per repo
+#
+# ═══════════════════════════════════════════════════════════════════════════════

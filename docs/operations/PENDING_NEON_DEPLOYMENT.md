@@ -1,4 +1,4 @@
-# COMPLETE: Neon Database Deployment — PSB Libraries
+# COMPLETE: Neon Database Deployment — PSB Libraries + Garage Event Tables
 
 | Field | Value |
 |-------|-------|
@@ -74,3 +74,49 @@ psql "$DATABASE_URL" -c "SELECT trigger_name, event_object_table FROM informatio
 - Verification: 1 schema, 6 tables, 5 views, 7 trigger functions, 8 functions — all confirmed
 - Seed: 15 prompts inserted (all DRAFT status), 8 skills inserted (5 core agents + 3 parallel agents, all DRAFT status)
 - Auto-versioning triggers fired: 23 version records created in prompt_versions and skill_versions
+
+## Garage Event Tables Deployment (2026-03-02)
+
+### What Was Built
+
+Migration 016 creates the `garage` schema for sovereign control plane event history.
+
+**CTB Doctrine Analysis**: imo-creator operates at CC-01 (Sovereign). CTB Registry Enforcement (§1-§10) scopes to "All child repositories" — the sovereign uses `taxonomy_registry.json` classifications (SPINE/STATE/EVENT/CONFIG/CACHE), not CTB leaf_types (CANONICAL/ERROR/STAGING/MV/REGISTRY).
+
+**From 5 proposed tables → 3 survived + 2 eliminated**:
+- `doctrine_registry` table — ELIMINATED (redundant with `sys/registry/doctrine_registry.json`)
+- `fleet_registry` table — ELIMINATED (redundant with `FLEET_REGISTRY.yaml` + `sys/registry/fleet_inventory.json`)
+- `error_log` — SURVIVED (renamed from `error_registry`; EVENT, not CONFIG)
+- `execution_log` — SURVIVED (renamed from `work_packet_history`)
+- `certification_log` — SURVIVED (renamed from `certification_history`)
+
+| Migration | Schema | Tables/Views Created |
+|-----------|--------|---------------------|
+| 016 | `garage` (new schema) | `garage.error_log` (EVENT), `garage.execution_log` (EVENT), `garage.certification_log` (EVENT) |
+| 016 | `garage` | Views: `errors_recent`, `executions_summary`, `certifications_valid`, `pipeline_health` |
+
+### Column Registry
+
+`templates/child/garage_column_registry.yml` v1.0.0
+
+### Triggers Installed
+
+- All 3 tables: UPDATE blocked, DELETE blocked (shared `garage.reject_event_mutation()` function)
+- Immutability trigger test: INSERT succeeded, UPDATE blocked, DELETE blocked — VERIFIED
+
+### Deployment Verification
+
+- Schema `garage` exists: YES
+- Tables: 3 (certification_log, error_log, execution_log)
+- Views: 4 (certifications_valid, errors_recent, executions_summary, pipeline_health)
+- Triggers: 6 (2 per table — no_update + no_delete)
+- Functions: 1 (reject_event_mutation)
+- Columns: error_log=11, execution_log=16, certification_log=12
+
+### Full Sovereign Database State
+
+| Schema | Tables | Views | Triggers | Functions |
+|--------|--------|-------|----------|-----------|
+| `psb` | 6 | 5 | ~12 | ~8 |
+| `garage` | 3 | 4 | 6 | 1 |
+| **Total** | **9** | **9** | **~18** | **~9** |
