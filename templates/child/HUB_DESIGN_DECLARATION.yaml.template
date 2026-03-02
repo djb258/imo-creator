@@ -69,6 +69,20 @@ hub_design_declaration:
       #   licensed_capability: "<WHAT CAPABILITY DOES THE HUB OWN for this spoke>"
 
   # ─────────────────────────────────────────────────────────────────────────────
+  # IDENTITY CHAIN DECLARATION
+  # ─────────────────────────────────────────────────────────────────────────────
+  # This section declares the hub's place in the canonical identity chain.
+  # It is governed by ARCHITECTURE.md Part IX.
+  # It defines how this hub receives, processes, and hands off identity.
+
+  identity_chain_declaration:
+    sovereign_identity_anchor: "<WHAT IS THE SOVEREIGN ID ANCHOR for this hub's entities? (e.g., cl.company_identity.sovereign_company_id)>"
+    program_id_minting: "<WHAT IS THE PROGRAM-LEVEL ID for this hub? (e.g., outreach_id) WHO MINTS IT? (e.g., This hub)>"
+    sub_hub_id_model: "<WHAT ARE THE SUB-HUB IDs this hub consumes or produces? (e.g., dol_filing_id, movement_id)>"
+    lifecycle_phase_model: "<WHAT IS THE LIFECYCLE PHASE MODEL for entities in this hub? (e.g., OUTREACH -> SALES -> CLIENT) WHAT TRIGGERS TRANSITIONS?>"
+    id_handoff_contract: "<WHAT IS THE ID HANDOFF CONTRACT? How does the compiled record from this hub get passed to the next system? (e.g., Writes to lcs.intake_table)>"
+
+  # ─────────────────────────────────────────────────────────────────────────────
   # CANDIDATE CONSTANTS (INPUTS)
   # ─────────────────────────────────────────────────────────────────────────────
   # What immutable inputs does this hub receive?
@@ -147,6 +161,11 @@ hub_design_declaration:
 #   - Any field contains placeholder text (< or >)
 #   - hub_justification does not mention transformation
 #   - hub_spoke_decision.implemented is not explicit true/false
+#   - identity_chain_declaration.sovereign_identity_anchor is empty or placeholder
+#   - identity_chain_declaration.program_id_minting is empty or placeholder
+#   - identity_chain_declaration.sub_hub_id_model is empty or placeholder
+#   - identity_chain_declaration.lifecycle_phase_model is empty or placeholder
+#   - identity_chain_declaration.id_handoff_contract is empty or placeholder
 #   - candidate_constants is empty
 #   - candidate_variables is empty
 #
