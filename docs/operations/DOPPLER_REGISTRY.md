@@ -58,6 +58,7 @@ All fleet secrets are centralized in the **imo-creator** Doppler project (sovere
 |------------|-------------|--------|
 | `DATABASE_URL` | Sovereign Neon DB (Garage command database) | ACTIVE |
 | `GARAGE_SIGNING_KEY` | Garage artifact signing key | PENDING |
+| `SUPADATA_API_KEY` | Supadata API key (transcript/social data) | ACTIVE |
 
 ### GLOBAL (shared, pushed to children that need them)
 
