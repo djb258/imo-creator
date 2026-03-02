@@ -1,11 +1,13 @@
-# PENDING: Neon Database Deployment — PSB Libraries
+# COMPLETE: Neon Database Deployment — PSB Libraries
 
 | Field | Value |
 |-------|-------|
 | **Date Created** | 2026-03-01 |
-| **Status** | PENDING — Waiting for desktop session with Doppler access |
+| **Date Completed** | 2026-03-02 |
+| **Status** | COMPLETE |
 | **ADR** | ADR-023 |
-| **Priority** | Next desktop session |
+| **Doppler Project** | imo-creator (config: dev) |
+| **Neon Instance** | ep-round-bird-a4a7s49a-pooler.us-east-1.aws.neon.tech |
 
 ---
 
@@ -59,8 +61,16 @@ psql "$DATABASE_URL" -c "SELECT trigger_name, event_object_table FROM informatio
 
 ## After Deployment
 
-1. Seed the 15 existing prompts from `templates/claude/*.prompt.md` into `psb.prompt_registry`
-2. Seed the 5 agent definitions from `ai/agents/` into `psb.skill_registry`
-3. Create reverse prompt index entries for each prompt
-4. Create prompt-skill bindings
-5. Mark this file status as COMPLETE
+1. ~~Seed the 15 existing prompts from `templates/claude/*.prompt.md` into `psb.prompt_registry`~~ DONE (2026-03-02)
+2. ~~Seed the 5 agent definitions from `ai/agents/` into `psb.skill_registry`~~ DONE (2026-03-02, 5 core + 3 claude agents = 8 total)
+3. Create reverse prompt index entries for each prompt — PENDING (requires manual classification of output categories per prompt)
+4. Create prompt-skill bindings — PENDING (requires manual mapping of which skills use which prompts)
+5. ~~Mark this file status as COMPLETE~~ DONE
+
+## Deployment Log (2026-03-02)
+
+- Doppler project `imo-creator` created with DATABASE_URL for sovereign Neon instance
+- Migrations 012-015 executed via Node.js pg driver (psql not installed on deployment machine)
+- Verification: 1 schema, 6 tables, 5 views, 7 trigger functions, 8 functions — all confirmed
+- Seed: 15 prompts inserted (all DRAFT status), 8 skills inserted (5 core agents + 3 parallel agents, all DRAFT status)
+- Auto-versioning triggers fired: 23 version records created in prompt_versions and skill_versions
