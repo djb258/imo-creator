@@ -32,6 +32,7 @@
 | ADR-021 | imo-creator | 2026-02-25 | DB Lane + UI Lane + Container Surface (V2 Control Plane) | ACCEPTED | DB_CHANGESET, UI_CHANGESET, CONTAINER_RUN artifacts; WORK_PACKET V2 routing flags; adapter model for UI and container |
 | ADR-022 | imo-creator | 2026-03-01 | Agent Teams Integration for Garage Pipeline | PROPOSED | Native Claude Code Agent Teams + worktree isolation for parallel execution within Worker, Auditor, and fleet refit stages |
 | ADR-023 | imo-creator | 2026-03-01 | PSB Libraries (Prompt, Reverse Prompt, Skills) | PROPOSED | Database-backed Prompt Library, Reverse Prompt Library, and Skills Library in psb schema — migrations 012-015, column registry |
+| ADR-024 | imo-creator | 2026-03-02 | CLAUDE.md Path Corrections | PROPOSED | Fix 10 broken agent/contract file references after Garage V2 restructure |
 
 ---
 
@@ -73,6 +74,6 @@ ADR numbers are **global across the fleet**, not per-repo. When creating a new A
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-15 |
-| Last Modified | 2026-02-15 |
+| Last Modified | 2026-03-02 |
 | Maintained By | Human + AI (after ADR creation) |
 | Audit Script | scripts/adr-check.sh |

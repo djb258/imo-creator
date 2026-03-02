@@ -6,6 +6,7 @@
     "created": "2026-01-08",
     "authority": "imo-creator",
     "status": "CONSTITUTIONAL",
+    "doctrine_version": "3.4.1",
     "description": "Binding contract between repo structure, doctrine, Claude Code behavior, and UI ingestion",
     "constitution_file": "CONSTITUTION.md"
   },
