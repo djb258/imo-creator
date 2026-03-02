@@ -12,7 +12,7 @@ IMO-Creator is a **template repository only**. It contains:
 
 - **Doctrine** — Canonical definitions for Hub/Spoke/IMO architecture
 - **Templates** — PRD, ADR, PR, and compliance templates
-- **Agent Contracts** — V1 Control Plane (Planner, Builder, Auditor, Control Panel)
+- **Agent Contracts** — V2 Agent Team (Planner, Worker, Auditor, Orchestrator, DB Agent)
 - **Integrations** — Standard tool configurations (Doppler, Composio, HEIR, Obsidian)
 - **Configuration** — Shared configuration patterns for all projects
 - **Pressure Testing** — 10 mechanical gates for structural + flow enforcement
@@ -27,12 +27,6 @@ This repo does **not** contain implementation code.
 imo-creator/
 ├── templates/                    # All authoritative templates
 │   ├── doctrine/                 # Master doctrine (READ FIRST)
-│   ├── agents/                   # V1 Control Plane — agent contracts + role prompts
-│   │   ├── contracts/            # JSON schemas (WORK_PACKET, CHANGESET, AUDIT_REPORT, pressure reports)
-│   │   ├── planner/              # Planner role prompt
-│   │   ├── builder/              # Builder role prompt
-│   │   ├── auditor/              # Auditor role prompt
-│   │   └── control_panel/        # Control Panel role prompt
 │   ├── integrations/             # Tool integration templates
 │   ├── migrations/               # SQL migration templates (CTB registry, RAW lockdown, vendor JSON)
 │   ├── scripts/                  # Enforcement scripts for child repos
@@ -43,6 +37,19 @@ imo-creator/
 │   ├── checklists/               # Compliance checklists
 │   ├── semantic/                 # OSAM semantic access map
 │   └── claude/                   # Claude Code lifecycle prompts
+├── ai/                           # V2 Agent Team
+│   └── agents/                   # Agent role prompts
+│       ├── planner/              # Planner — WORK_PACKET generation
+│       ├── worker/               # Worker — implementation (was Builder)
+│       ├── auditor/              # Auditor — compliance verification
+│       ├── orchestrator/         # Orchestrator — governance inspector (was Control Panel)
+│       └── db_agent/             # DB Agent — database change governance
+├── sys/                          # System contracts and runtime
+│   ├── contracts/                # Active JSON schemas (WORK_PACKET, etc.)
+│   ├── certification/            # Certification artifacts
+│   ├── registry/                 # Registry definitions
+│   └── runtime/                  # Runtime support
+├── app/                          # Application layer
 ├── docs/                         # Governance documentation
 │   ├── constitutional/           # Backbone, governance, protected assets
 │   ├── audit/                    # Audit reports and findings
@@ -51,7 +58,7 @@ imo-creator/
 ├── work_packets/                 # Message bus — WORK_PACKET artifacts
 ├── changesets/                   # Message bus — CHANGESET artifacts
 ├── audit_reports/                # Message bus — AUDIT_REPORT artifacts
-├── archive/                      # Superseded doctrine files (redirects preserved)
+├── archive/                      # Superseded agents (agents_v0) and templates
 ├── .github/                      # GitHub templates and workflows
 └── LICENSE
 ```
@@ -92,16 +99,17 @@ Every hub needs:
 
 ---
 
-## Control Plane (v3.4.0)
+## Agent Team (v3.4.0)
 
-IMO-Creator includes a V1 Control Plane with four agent roles:
+IMO-Creator includes a V2 Agent Team with five agent roles:
 
 | Role | Prompt | Purpose |
 |------|--------|---------|
-| Planner | `templates/agents/planner/master_prompt.md` | Generates WORK_PACKET artifacts |
-| Builder | `templates/agents/builder/master_prompt.md` | Executes approved WORK_PACKETs |
-| Auditor | `templates/agents/auditor/master_prompt.md` | Verifies compliance, pressure test gate |
-| Control Panel | `templates/agents/control_panel/master_prompt.md` | Read-only governance inspector |
+| Planner | `ai/agents/planner/master_prompt.md` | Generates WORK_PACKET artifacts |
+| Worker | `ai/agents/worker/master_prompt.md` | Executes approved WORK_PACKETs |
+| Auditor | `ai/agents/auditor/master_prompt.md` | Verifies compliance, pressure test gate |
+| Orchestrator | `ai/agents/orchestrator/master_prompt.md` | Read-only governance inspector |
+| DB Agent | `ai/agents/db_agent/master_prompt.md` | Database change governance |
 
 ### Pressure Testing
 
@@ -119,7 +127,7 @@ All 10 gates are mechanical. No advisory classification. No override without ADR
 - **Hub** = Application (owns logic, state, IMO, CTB placement)
 - **Spoke** = Interface only (typed as I or O, no logic)
 - **IMO** = Ingress → Middle → Egress (inside hubs only)
-- **CTB** = sys/, ui/, ai/, data/, ops/, docs/
+- **CTB** = sys/, data/, app/, ai/, ui/
 - **Altitude** = 50k (identity) → 5k (execution)
 - **CONST → VAR** = Nothing exists unless it transforms declared constants into declared variables
 

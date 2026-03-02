@@ -818,8 +818,8 @@ If CRITICAL > 0 or HIGH > 0 and I selected COMPLIANT, this audit is INVALID.
 | Process Doctrine | templates/doctrine/PROCESS_DOCTRINE.md |
 | ERD Doctrine | templates/doctrine/ERD_DOCTRINE.md |
 | **OSAM (Semantic Access Map)** | templates/semantic/OSAM.md |
-| ARCH Pressure Report Schema | templates/agents/contracts/arch_pressure_report.schema.json |
-| FLOW Pressure Report Schema | templates/agents/contracts/flow_pressure_report.schema.json |
+| ARCH Pressure Report Schema | archive/agents_v0/contracts/arch_pressure_report.schema.json |
+| FLOW Pressure Report Schema | archive/agents_v0/contracts/flow_pressure_report.schema.json |
 | Registry Enforcement | templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
 
 **Note**: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are now redirects to ARCHITECTURE.md.
@@ -830,9 +830,9 @@ If CRITICAL > 0 or HIGH > 0 and I selected COMPLIANT, this audit is INVALID.
 
 | Field | Value |
 |-------|-------|
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Created | 2026-01-30 |
-| Last Modified | 2026-02-25 |
+| Last Modified | 2026-03-02 |
 | Authority | CONSTITUTIONAL |
 | Status | TEMPLATE |
 | Change Protocol | ADR + HUMAN APPROVAL REQUIRED |

@@ -52,19 +52,20 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `templates/integrations/` | Tool integration guides |
 | `templates/claude/` | Claude Code lifecycle prompts |
 
-### Agent Contracts (templates/agents/)
+### Agent Contracts & Prompts (V2)
 
 | Directory/File | Purpose |
 |----------------|---------|
-| `templates/agents/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
-| `templates/agents/contracts/changeset.schema.json` | CHANGESET governance envelope |
-| `templates/agents/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope |
-| `templates/agents/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) |
-| `templates/agents/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) |
-| `templates/agents/planner/master_prompt.md` | Planner role prompt |
-| `templates/agents/builder/master_prompt.md` | Builder role prompt |
-| `templates/agents/auditor/master_prompt.md` | Auditor role prompt |
-| `templates/agents/control_panel/master_prompt.md` | Control Panel role prompt |
+| `sys/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
+| `archive/agents_v0/contracts/changeset.schema.json` | CHANGESET governance envelope (archived) |
+| `archive/agents_v0/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope (archived) |
+| `archive/agents_v0/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) (archived) |
+| `archive/agents_v0/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) (archived) |
+| `ai/agents/planner/master_prompt.md` | Planner role prompt |
+| `ai/agents/worker/master_prompt.md` | Worker role prompt (was Builder) |
+| `ai/agents/auditor/master_prompt.md` | Auditor role prompt |
+| `ai/agents/orchestrator/master_prompt.md` | Orchestrator role prompt (was Control Panel) |
+| `ai/agents/db_agent/master_prompt.md` | DB Agent role prompt |
 
 ### Constitutional Documents (docs/constitutional/)
 
@@ -137,8 +138,10 @@ CONSTITUTION.md (Law)
     │       ├── governance.md
     │       └── protected_assets.md
     │
-    └── templates/agents/contracts/ (Schema Contracts)
-            ├── work_packet.schema.json
+    ├── sys/contracts/ (Active Schema Contracts)
+    │       └── work_packet.schema.json
+    │
+    └── archive/agents_v0/contracts/ (Archived Schema Contracts)
             ├── changeset.schema.json
             ├── audit_report.schema.json
             ├── arch_pressure_report.schema.json
@@ -182,5 +185,5 @@ All other documents are operational and subordinate to doctrine.
 | Type | System Manifest |
 | Authority | Describes sovereign |
 | Created | 2026-01-11 |
-| Last Modified | 2026-02-25 |
+| Last Modified | 2026-03-02 |
 | Change Protocol | ADR-triggered only |

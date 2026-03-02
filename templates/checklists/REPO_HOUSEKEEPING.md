@@ -2,7 +2,7 @@
 
 **Status**: TEMPLATE
 **Authority**: OPERATIONAL
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Companion Checklists**: QUARTERLY_HYGIENE_AUDIT.md (governance), HUB_COMPLIANCE.md (hub readiness)
 
 ---
@@ -238,14 +238,14 @@ for f in d.get('doctrine_files',{}).get('required',[]):
     print(f'{status}: {path} (v{f.get(\"version\",\"?\")})')
 " 2>/dev/null
 
-# Agent contract references (if V1 Control Plane adopted)
-for f in templates/agents/contracts/*.json; do
+# Agent contract references (V2 — sys/contracts/ for active, archive/agents_v0/contracts/ for archived)
+for f in sys/contracts/*.schema.json; do
   [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
 done
 
-# Agent prompt references
-for role in planner builder auditor control_panel; do
-  f="templates/agents/$role/master_prompt.md"
+# Agent prompt references (V2 — ai/agents/)
+for role in planner worker auditor orchestrator db_agent; do
+  f="ai/agents/$role/master_prompt.md"
   [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
 done
 
@@ -271,10 +271,10 @@ grep -rn "global-config/\|docs/blueprints/\|/agents/contracts/" \
   --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
   . | grep -v archive/ | grep -v .git/ | grep -v node_modules/
 
-# Check for root-level agents/ references (should be templates/agents/ since v3.4.0)
-grep -rn "[^/]agents/contracts\|[^/]agents/planner\|[^/]agents/builder\|[^/]agents/auditor\|[^/]agents/control_panel" \
+# Check for stale templates/agents/ references (should be ai/agents/ or sys/contracts/ since V2)
+grep -rn "templates/agents/" \
   --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
-  . | grep -v "templates/agents/" | grep -v archive/ | grep -v .git/
+  . | grep -v archive/ | grep -v .git/ | grep -v "docs/adr/"
 ```
 
 | File | Line | Stale Reference | Severity | Action |
@@ -650,7 +650,7 @@ Re-run all Phase 1 scans that had findings. Confirm:
 | Rollback Protocol | `templates/doctrine/ROLLBACK_PROTOCOL.md` |
 | Registry Enforcement | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` |
 | Fail-Closed CI Contract | `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` |
-| Agent Contracts | `templates/agents/contracts/` |
+| Agent Contracts | `sys/contracts/` |
 | Governance Docs | `docs/constitutional/governance.md` |
 | Authority Map | `docs/AUTHORITY_MAP.md` |
 | Templates Manifest | `templates/TEMPLATES_MANIFEST.yaml` |
@@ -662,9 +662,9 @@ Re-run all Phase 1 scans that had findings. Confirm:
 
 | Field | Value |
 |-------|-------|
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Created | 2026-02-16 |
-| Last Modified | 2026-02-25 |
+| Last Modified | 2026-03-02 |
 | Authority | OPERATIONAL |
 | Status | TEMPLATE |
 | Maintained By | Human + AI (copy and execute) |

@@ -1,8 +1,8 @@
 # Authority Map — IMO-Creator Governance Topology
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
-**Version**: 1.1.0
-**Last Updated**: 2026-02-25
+**Version**: 1.2.0
+**Last Updated**: 2026-03-02
 **Status**: ACTIVE
 
 ---
@@ -87,16 +87,16 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 
 | Artifact | Path | Purpose |
 |----------|------|---------|
-| WORK_PACKET schema | `templates/agents/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
-| CHANGESET schema | `templates/agents/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
-| AUDIT_REPORT schema | `templates/agents/contracts/audit_report.schema.json` | Governance envelope for audit classification |
-| ARCH_PRESSURE_REPORT schema | `templates/agents/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
-| FLOW_PRESSURE_REPORT schema | `templates/agents/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
-| Example artifacts | `templates/agents/contracts/examples/` | Valid example pressure report artifacts |
-| Planner prompt | `templates/agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
-| Builder prompt | `templates/agents/builder/master_prompt.md` | Implementation + pressure test artifact production |
-| Auditor prompt | `templates/agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
-| Control Panel prompt | `templates/agents/control_panel/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
+| WORK_PACKET schema | `sys/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
+| CHANGESET schema (archived) | `archive/agents_v0/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
+| AUDIT_REPORT schema (archived) | `archive/agents_v0/contracts/audit_report.schema.json` | Governance envelope for audit classification |
+| ARCH_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
+| FLOW_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
+| Planner prompt | `ai/agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
+| Worker prompt | `ai/agents/worker/master_prompt.md` | Implementation + pressure test artifact production |
+| Auditor prompt | `ai/agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
+| Orchestrator prompt | `ai/agents/orchestrator/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
+| DB Agent prompt | `ai/agents/db_agent/master_prompt.md` | Database change governance — DDL/DML enforcement |
 | Constitutional backbone | `docs/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
 | Constitutional governance | `docs/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
 | Protected assets | `docs/constitutional/protected_assets.md` | Protected models and folders |
@@ -127,7 +127,7 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-20 |
-| Last Modified | 2026-02-25 |
+| Last Modified | 2026-03-02 |
 | Authority | IMO-Creator (CC-01) |
 | Status | ACTIVE |
 | Note | This is a repo-root doc, NOT a template. Not tracked in TEMPLATES_MANIFEST.yaml. |

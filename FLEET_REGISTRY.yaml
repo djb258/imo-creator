@@ -22,7 +22,7 @@
 fleet:
   parent:
     name: "imo-creator"
-    current_doctrine_version: "2.8.0"
+    current_doctrine_version: "3.4.1"
     manifest_path: "templates/TEMPLATES_MANIFEST.yaml"
 
   repos:
@@ -40,23 +40,30 @@ fleet:
       last_synced: "[UPDATE AFTER SYNC]"
       status: "ACTIVE"
 
-    - name: "company-lifecycle"
-      path: "../company-lifecycle"
+    - name: "company-lifecycle-cl"
+      path: "../Company Lifecycle CL"
       purpose: "Company lifecycle management hub"
-      child_version: "[NOT FOUND]"
-      last_synced: "[NEVER]"
-      status: "PLANNED"
-
-    - name: "enrichment-hub"
-      path: "../enrichment-hub"
-      purpose: "Data enrichment hub"
-      child_version: "[NOT FOUND]"
-      last_synced: "[NEVER]"
-      status: "PLANNED"
+      child_version: "[UPDATE AFTER SYNC]"
+      last_synced: "[UPDATE AFTER SYNC]"
+      status: "ACTIVE"
 
     - name: "sales"
-      path: "../sales"
+      path: "../Sales Process"
       purpose: "Sales operations hub"
+      child_version: "[UPDATE AFTER SYNC]"
+      last_synced: "[UPDATE AFTER SYNC]"
+      status: "ACTIVE"
+
+    - name: "barton-storage"
+      path: "../storage container go-nogo"
+      purpose: "Storage container hub"
+      child_version: "[UPDATE AFTER SYNC]"
+      last_synced: "[UPDATE AFTER SYNC]"
+      status: "ACTIVE"
+
+    - name: "research"
+      path: "[TBD — no local repo yet]"
+      purpose: "Research hub"
       child_version: "[NOT FOUND]"
       last_synced: "[NEVER]"
       status: "PLANNED"
@@ -76,5 +83,5 @@ fleet:
 
 document_control:
   created: "2026-02-15"
-  last_modified: "2026-02-15"
+  last_modified: "2026-03-02"
   maintained_by: "Human only"
