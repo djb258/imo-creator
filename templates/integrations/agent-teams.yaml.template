@@ -1,0 +1,77 @@
+# Agent Teams Configuration Template
+# Copy this file to your hub root as: agent-teams.yaml
+#
+# Replace <placeholders> with actual values
+# Reference: ADR-022, templates/integrations/AGENT_TEAMS.md
+
+# --- Hub Identity ---
+hub:
+  name: <hub-name>
+  id: <hub-id>
+
+# --- Agent Teams Configuration ---
+agent_teams:
+  enabled: true
+  version: "1.0.0"
+
+  # --- Subagent Parallel Mode (Worker Stage 5) ---
+  subagent_parallel:
+    enabled: true
+    max_subagents: 5
+    isolation: worktree
+
+    # Independence check thresholds
+    independence_check:
+      min_files_for_parallel: 3          # Don't parallelize fewer than 3 files
+      require_different_directories: true  # Files must be in different directories
+      require_no_cross_imports: true       # No file may import another target file
+      require_no_shared_state: true        # No two files may mutate same state
+      require_no_ordering_dependency: true  # No file depends on output of another
+
+    # Scope enforcement
+    scope:
+      inherit_parent_allowed_paths: true   # Subagents get subset of WORK_PACKET.allowed_paths
+      fail_on_scope_violation: true        # Subagent halts if it touches a non-target file
+
+    # PID scheme
+    pid:
+      pattern: "{work_packet_id}-sub-{N}"
+      N_start: 1
+
+    # Failure handling
+    failure:
+      halt_all_on_any_failure: true        # If one subagent fails, halt all
+      collect_errors: true                 # Gather all error reports for lead agent
+
+  # --- Fleet Refit Parallel Mode ---
+  fleet_refit_parallel:
+    enabled: true
+    max_teammates: 5
+
+    # Requires CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+    requires_env:
+      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+
+    # Each teammate handles one child repo
+    teammate_scope: one_repo_per_teammate
+
+    # Failure isolation
+    failure:
+      isolate_failures: true               # Teammate failure does not block others
+      require_all_pass_for_fleet_cert: false # Each repo certified independently
+
+  # --- Guard Rails ---
+  guardrails:
+    token_budget:
+      monitor: true
+      warn_threshold_multiplier: 4         # Warn at 4x single-agent token usage
+      halt_threshold_multiplier: 8         # Halt at 8x single-agent token usage
+
+    worktree_cleanup:
+      auto_cleanup: true                   # Claude Code handles this natively
+      verify_no_orphans: true              # Post-pipeline check for leftover worktrees
+
+# --- Environment Variables ---
+# Set these in your environment or Doppler
+environment:
+  CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"   # Required for fleet refit mode

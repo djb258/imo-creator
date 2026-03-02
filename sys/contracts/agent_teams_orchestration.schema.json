@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent Teams Orchestration Contract",
+  "description": "Defines parallel execution rules for Agent Teams within the Garage pipeline. This contract supplements orchestration_contract.json — it does NOT replace it.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "adr_reference": "ADR-022",
+
+  "parallel_modes": {
+    "subagent_parallel": {
+      "description": "Spawn isolated subagents within Worker Stage 5 for independent file changes",
+      "applies_to": "stage_5_execute",
+      "mechanism": "Agent tool with isolation: worktree",
+      "requires_env": {},
+
+      "dispatch_rules": {
+        "independence_check": {
+          "description": "MANDATORY check before any parallel dispatch. All four conditions must pass.",
+          "conditions": [
+            {
+              "id": "IC-1",
+              "name": "different_directories",
+              "check": "Target files must be in different directory paths",
+              "failure_action": "Group co-located files into same subagent"
+            },
+            {
+              "id": "IC-2",
+              "name": "no_cross_imports",
+              "check": "No target file imports or references another target file",
+              "failure_action": "Process dependent files sequentially in single subagent"
+            },
+            {
+              "id": "IC-3",
+              "name": "no_shared_state",
+              "check": "No two target files mutate the same configuration, state, or shared resource",
+              "failure_action": "Process conflicting files sequentially"
+            },
+            {
+              "id": "IC-4",
+              "name": "no_ordering_dependency",
+              "check": "No target file depends on the output of another target file",
+              "failure_action": "Process in dependency order"
+            }
+          ]
+        },
+
+        "min_files_for_parallel": 3,
+        "max_subagents": 5,
+        "subagent_scope": "Subset of parent WORK_PACKET.allowed_paths",
+        "pid_pattern": "{work_packet_id}-sub-{N}"
+      },
+
+      "lifecycle": {
+        "1_read_targets": "Lead agent reads WORK_PACKET.allowed_paths",
+        "2_check_independence": "Lead agent runs IC-1 through IC-4 on all target files",
+        "3_group_files": "Independent files grouped into subagent batches (max 5 batches)",
+        "4_spawn_subagents": "Each batch dispatched to subagent with worktree isolation",
+        "5_execute": "Subagents execute in parallel, each in isolated worktree",
+        "6_collect": "Lead agent collects subagent outputs (modified files + logs)",
+        "7_merge": "Worktree changes merged back to working branch",
+        "8_handoff": "Combined output handed to Stage 6 (Artifact Writer) as normal"
+      },
+
+      "failure_handling": {
+        "any_subagent_fails": "All subagents halted. Lead agent collects all error reports.",
+        "scope_violation": "Subagent halts immediately. Lead agent reports violation.",
+        "merge_conflict": "Should not occur if independence check passed. If it does, treat as IC failure — fall back to sequential."
+      }
+    },
+
+    "fleet_refit_parallel": {
+      "description": "Spawn independent Claude instances to apply same WORK_PACKET to multiple child repos simultaneously",
+      "applies_to": "stage_3_mount through stage_5_execute (per repo)",
+      "mechanism": "TeammateTool (Agent Teams)",
+      "requires_env": {
+        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+      },
+
+      "dispatch_rules": {
+        "trigger": "WORK_PACKET.execution_type === 'fleet_refit'",
+        "repo_resolution": "Each target repo resolved from FLEET_REGISTRY.yaml",
+        "max_teammates": 5,
+        "teammate_scope": "One child repo per teammate"
+      },
+
+      "lifecycle": {
+        "1_read_refit": "Refit Coordinator reads WORK_PACKET with execution_type=fleet_refit",
+        "2_resolve_repos": "Target repos resolved from FLEET_REGISTRY.yaml",
+        "3_spawn_teammates": "One teammate spawned per target repo (max 5)",
+        "4_execute_per_repo": "Each teammate runs Stages 3-5 independently (mount → validate → execute)",
+        "5_collect_bundles": "Coordinator collects artifact bundles from all teammates",
+        "6_independent_audit": "Each bundle enters Stages 6-10 independently"
+      },
+
+      "failure_handling": {
+        "teammate_fails": "Failure isolated to that repo. Other teammates continue.",
+        "partial_fleet_success": "Repos that pass are certified independently. Failed repos reported for manual review."
+      }
+    }
+  },
+
+  "invariants": [
+    "The sequential stage pipeline (1-10) is NOT modified. Parallelism occurs WITHIN stages only.",
+    "Independence check is MANDATORY before any parallel dispatch. No exceptions.",
+    "Subagents inherit parent WORK_PACKET scope — they cannot expand it.",
+    "Each subagent PID is scoped under the parent WORK_PACKET PID.",
+    "Worktree isolation is the ONLY permitted isolation mechanism for subagents.",
+    "Human remains sovereign at all decision points. Parallelism does not bypass human gates.",
+    "If independence cannot be proven, execution falls back to sequential. Sequential is always safe."
+  ]
+}
