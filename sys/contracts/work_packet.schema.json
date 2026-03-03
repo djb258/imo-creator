@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "work_packet.v2.schema.json",
   "title": "WORK_PACKET V2",
-  "description": "Unified V2 governance envelope. Preserves all V1 fields. Adds DB, UI, and container routing flags. Strict validation. No optional governance fields. ADR-021.",
-  "version": "2.1.0",
+  "description": "Unified V2 governance envelope. Preserves all V1 fields. Adds DB, UI, container, and documentation routing flags. Strict validation. No optional governance fields. ADR-021.",
+  "version": "2.2.0",
   "authority": "imo-creator (CC-01 Sovereign)",
   "type": "object",
   "required": [
@@ -19,7 +19,8 @@
     "payload",
     "db_required",
     "ui_required",
-    "container_required"
+    "container_required",
+    "doc_required"
   ],
   "additionalProperties": false,
   "properties": {
@@ -157,6 +158,21 @@
       "type": "string",
       "minLength": 1,
       "description": "Repo path or service name for container execution. Required if container_required=true."
+    },
+    "doc_required": {
+      "type": "boolean",
+      "description": "True if work packet includes documentation scope. Routes to documentation lane. Auto-set when orbt_mode=train."
+    },
+    "doc_targets": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Documentation artifacts targeted (PRD, OSAM, ERD, SCHEMA.md, column_registry). Required if doc_required=true."
+    },
+    "doc_surface": {
+      "type": "string",
+      "enum": ["prd", "osam", "erd", "schema", "column_registry", "mixed"],
+      "description": "Primary documentation surface. Required if doc_required=true."
     }
   },
   "if": {
@@ -195,6 +211,15 @@
       },
       "then": {
         "required": ["container_profile", "container_target"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "doc_required": { "const": true } },
+        "required": ["doc_required"]
+      },
+      "then": {
+        "required": ["doc_targets", "doc_surface"]
       }
     }
   ]

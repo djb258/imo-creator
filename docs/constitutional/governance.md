@@ -22,7 +22,7 @@ All child repos that adopt the control plane must enforce strict agent role isol
 
 The Planner produces structural intent. It does not execute.
 
-### Worker (formerly Builder)
+### Builder (formerly Worker)
 
 | Permission | Status |
 |------------|--------|
@@ -30,13 +30,14 @@ The Planner produces structural intent. It does not execute.
 | Apply DB_CHANGESET migrations as defined by DB Agent | ALLOWED |
 | Produce UI_CHANGESET in UI adapter mode | ALLOWED |
 | Produce CONTAINER_RUN via container_runner | ALLOWED |
+| Produce DOC_ARTIFACT in documentation lane | ALLOWED |
 | Expand scope beyond WORK_PACKET | PROHIBITED |
 | Modify protected assets | PROHIBITED |
 | Modify doctrine | PROHIBITED |
 | Create unapproved artifacts | PROHIBITED |
 | Invent schema policy (DB Agent owns this) | PROHIBITED |
 
-The Worker executes approved intent across all routed lanes. It does not decide.
+The Builder executes approved intent across all routed lanes. It does not decide.
 
 ### DB Agent
 
@@ -86,18 +87,20 @@ All repos adopting the control plane must route agent work through the following
 
 | Artifact | Producer | Consumer | Purpose |
 |----------|----------|----------|---------|
-| WORK_PACKET (V2) | Planner | Worker, DB Agent | Defines approved scope + routing flags |
-| DB_CHANGESET | DB Agent | Worker, Auditor | Database migrations, rollback plan, validation steps |
-| UI_CHANGESET | Worker (UI adapter) | Auditor | UI changes, preview artifacts, acceptance checks |
-| CONTAINER_RUN | Worker (container lane) | Auditor | Build log, test results, exit code, image digest |
-| CHANGESET | Worker | Auditor | Describes what was changed and why |
+| WORK_PACKET (V2) | Planner | Builder, DB Agent | Defines approved scope + routing flags |
+| DB_CHANGESET | DB Agent | Builder, Auditor | Database migrations, rollback plan, validation steps |
+| UI_CHANGESET | Builder (UI adapter) | Auditor | UI changes, preview artifacts, acceptance checks |
+| CONTAINER_RUN | Builder (container lane) | Auditor | Build log, test results, exit code, image digest |
+| DOC_ARTIFACT | Builder (doc lane) | Auditor | Documentation updates, staleness resolution |
+| DB_DOC_ARTIFACT | DB Agent | Builder, Auditor | Schema-to-documentation impact mapping |
+| CHANGESET | Builder | Auditor | Describes what was changed and why |
 | CERTIFICATION | Signature Engine | Child repo CI | Signed attestation of audit PASS |
 | AUDIT_REPORT | Auditor | Human | Classifies outcome as PASS / FAIL_EXECUTION / FAIL_SCOPE |
 
 ### Standard Flow (no lanes)
 
 ```
-Planner → WORK_PACKET(V2) → Worker → CHANGESET → Auditor → AUDIT_REPORT → Human
+Planner → WORK_PACKET(V2) → Builder → CHANGESET → Auditor → AUDIT_REPORT → Human
 ```
 
 ### DB Lane Flow (db_required=true)
@@ -105,7 +108,7 @@ Planner → WORK_PACKET(V2) → Worker → CHANGESET → Auditor → AUDIT_REPOR
 ```
 Planner → WORK_PACKET(V2, db_required=true)
     → DB Agent → DB_CHANGESET
-    → Worker (applies DB_CHANGESET) → CHANGESET
+    → Builder (applies DB_CHANGESET) → CHANGESET
     → Auditor (validates DB_CHANGESET + CHANGESET) → AUDIT_REPORT → Human
 ```
 
@@ -113,7 +116,7 @@ Planner → WORK_PACKET(V2, db_required=true)
 
 ```
 Planner → WORK_PACKET(V2, ui_required=true)
-    → Worker (UI adapter) → UI_CHANGESET + CHANGESET
+    → Builder (UI adapter) → UI_CHANGESET + CHANGESET
     → Auditor (validates UI_CHANGESET + CHANGESET) → AUDIT_REPORT → Human
 ```
 
@@ -121,17 +124,25 @@ Planner → WORK_PACKET(V2, ui_required=true)
 
 ```
 Planner → WORK_PACKET(V2, container_required=true)
-    → Worker → CONTAINER_RUN + CHANGESET
+    → Builder → CONTAINER_RUN + CHANGESET
     → Auditor (validates CONTAINER_RUN + CHANGESET) → AUDIT_REPORT → Human
+```
+
+### Documentation Lane Flow (doc_required=true)
+
+```
+Planner → WORK_PACKET(V2, doc_required=true)
+    → Builder (doc lane) → DOC_ARTIFACT + CHANGESET
+    → Auditor (validates DOC_ARTIFACT + staleness rules AUD-009–012) → AUDIT_REPORT → Human
 ```
 
 ### Combined Flow (multiple lanes)
 
 ```
-Planner → WORK_PACKET(V2, db_required=true, ui_required=true, container_required=true)
-    → DB Agent → DB_CHANGESET
-    → Worker (applies DB_CHANGESET + UI adapter + container runner)
-        → DB_CHANGESET (applied) + UI_CHANGESET + CONTAINER_RUN + CHANGESET
+Planner → WORK_PACKET(V2, db_required=true, ui_required=true, container_required=true, doc_required=true)
+    → DB Agent → DB_CHANGESET + DB_DOC_ARTIFACT
+    → Builder (applies DB_CHANGESET + UI adapter + container runner + doc lane)
+        → DB_CHANGESET (applied) + UI_CHANGESET + CONTAINER_RUN + DOC_ARTIFACT + CHANGESET
     → Auditor (validates all lane artifacts) → AUDIT_REPORT → Human
 ```
 
@@ -142,6 +153,8 @@ Planner → WORK_PACKET(V2, db_required=true, ui_required=true, container_requir
 | DB_CHANGESET | `changesets/outbox/<work_packet_id>/db/db_changeset.json` |
 | UI_CHANGESET | `changesets/outbox/<work_packet_id>/ui/ui_changeset.json` |
 | CONTAINER_RUN | `changesets/outbox/<work_packet_id>/container/container_run.json` |
+| DOC_ARTIFACT | `changesets/outbox/<work_packet_id>/doc/doc_artifact.json` |
+| DB_DOC_ARTIFACT | `changesets/outbox/<work_packet_id>/db/db_doc_artifact.json` |
 | CHANGESET | `changesets/outbox/<work_packet_id>/changeset.json` |
 
 ### Communication Rules
@@ -163,6 +176,7 @@ Agents communicate through artifacts. There is no backchannel.
 | `db_required=true` and no DB_CHANGESET | FAIL_EXECUTION |
 | `ui_required=true` and no UI_CHANGESET | FAIL_EXECUTION |
 | `container_required=true` and no CONTAINER_RUN | FAIL_EXECUTION |
+| `doc_required=true` and no DOC_ARTIFACT | FAIL_EXECUTION |
 | V1 packet attempts DB work | FAIL_SCOPE |
 | V1 packet attempts UI work | FAIL_SCOPE |
 | DB_CHANGESET missing rollback_plan | FAIL_EXECUTION |
@@ -175,14 +189,14 @@ When `WORK_PACKET.requires_pressure_test = true`, the artifact flow gains additi
 
 ```
 Planner → WORK_PACKET (requires_pressure_test=true)
-    → Worker → CHANGESET + ARCH_PRESSURE_REPORT + FLOW_PRESSURE_REPORT
+    → Builder → CHANGESET + ARCH_PRESSURE_REPORT + FLOW_PRESSURE_REPORT
         → Auditor → validates pressure reports → AUDIT_REPORT → Human
 ```
 
 | Condition | Routing Rule |
 |-----------|-------------|
 | `requires_pressure_test = true` and both reports present with all fields PASS | Route to Auditor for standard verification |
-| `requires_pressure_test = true` and either report missing | BLOCK — do not route to Auditor. Return to Worker with `FAIL_EXECUTION`. |
+| `requires_pressure_test = true` and either report missing | BLOCK — do not route to Auditor. Return to Builder with `FAIL_EXECUTION`. |
 | `requires_pressure_test = true` and any field = FAIL | BLOCK — do not route past Auditor. Auditor must classify as `FAIL_EXECUTION`. |
 | `requires_pressure_test = true` but field is not set in WORK_PACKET | BLOCK — Planner must re-emit WORK_PACKET with explicit value. |
 

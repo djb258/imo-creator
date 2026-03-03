@@ -1,0 +1,70 @@
+{
+  "id": "wp-20260303-lcs-cid-sid-mid-pipeline",
+  "change_type": "architectural",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "pipeline/adapters/*",
+      "pipeline/ingest.js",
+      "src/app/lcs/pipeline/steps/01-signal-intake.ts"
+    ],
+    "middle": [
+      "migrations/lcs/*",
+      "src/app/lcs/pipeline/orchestrator.ts",
+      "src/app/lcs/pipeline/steps/*",
+      "src/runtime/lcs/*"
+    ],
+    "egress": [
+      "src/app/lcs/adapters/*",
+      "src/runtime/lcs/signal-bridge.ts",
+      "pipeline/orchestrator.js"
+    ]
+  },
+  "allowed_paths": [
+    "migrations/lcs/",
+    "src/sys/lcs/contracts/",
+    "src/data/lcs/",
+    "src/app/lcs/pipeline/",
+    "src/app/lcs/adapters/",
+    "src/runtime/lcs/",
+    "pipeline/lifecycle_worker.js",
+    "pipeline/orchestrator.js",
+    "pipeline/README.md"
+  ],
+  "summary": "Build LCS CID-SID-MID pipeline in four phases: schema migration updates for CID/SID/MID tables and frame registry, CID compiler worker with cron, SID message construction worker with DB trigger, MID delivery engine with sequencing/gates/adapters/cron; then deprecate existing pipeline orchestrator without expanding scope.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T20:00:06Z",
+  "payload": {
+    "process_id": "d6cccd55-ec64-4caa-b380-1b7ee047a783",
+    "operational_id": "a1f3c8e7-4b29-4d6a-9e01-7f5c3d2b8a64",
+    "phase_plan": [
+      "Phase 1: Schema migrations for lcs.cid, lcs.sid_output, lcs.mid_sequence_state and alter lcs.frame_registry",
+      "Phase 2: CID compiler worker with cron",
+      "Phase 3: SID message construction worker with DB trigger",
+      "Phase 4: MID delivery engine with sequence logic, gate integration, adapter calls, and cron",
+      "Post-build: Deprecate existing pipeline orchestrator"
+    ],
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution"
+    ],
+    "db_scope": "lcs schema migration and runtime pipeline persistence",
+    "target_system": "company-lifecycle-cl"
+  },
+  "db_required": true,
+  "db_targets": [
+    "lcs.cid",
+    "lcs.sid_output",
+    "lcs.mid_sequence_state",
+    "lcs.frame_registry"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false
+}

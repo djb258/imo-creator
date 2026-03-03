@@ -1,0 +1,44 @@
+{
+  "id": "wp-20260303-cl-fleet-refit-cert-surfaces",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "fleet_refit",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    ".github/workflows/garage-certification-gate.yml",
+    "audit_reports/",
+    ".garage/",
+    "sys/registry/fleet_inventory.json"
+  ],
+  "summary": "Deploy Garage fleet refit certification surfaces to company-lifecycle-cl from IMO-Creator bundle (.github/workflows/garage-certification-gate.yml, audit_reports/.keep, .garage/README) and update fleet_inventory.json surface state only; do not modify CID-SID-MID pipeline work packets or artifacts.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:14:25Z",
+  "payload": {
+    "process_id": "8e3e42d5-dc39-4ba2-96be-d6de9b511c75",
+    "operational_id": "b4c91e56-3a78-4f2d-d5e1-7b06f8a23c49",
+    "source_intake_packet": "sys/runtime/inbox/planner/b4c91e56-3a78-4f2d-d5e1-7b06f8a23c49.json",
+    "supersedes_packet": "d9f17b63-2a45-4c8e-b3d7-6e08a4c52f91",
+    "bundle_source": "sys/runtime/fleet_refit/bundle/",
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "Deploy surfaces from IMO-Creator fleet refit bundle only",
+      "Do not modify any CID-SID-MID pipeline work packets or artifacts",
+      "Update fleet_inventory.json after deployment verification"
+    ],
+    "surface_updates": {
+      "heir": true,
+      "ci_gate": true,
+      "changeset_outbox": true,
+      "audit_reports": true,
+      "structure_type": "aligned"
+    }
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

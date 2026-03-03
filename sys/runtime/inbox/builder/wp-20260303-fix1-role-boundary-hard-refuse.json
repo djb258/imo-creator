@@ -1,0 +1,49 @@
+{
+  "id": "wp-20260303-fix1-role-boundary-hard-refuse",
+  "change_type": "architectural",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "ai/agents/orchestrator/master_prompt.md",
+      "ai/agents/planner/master_prompt.md"
+    ],
+    "middle": [
+      "ai/agents/worker/master_prompt.md",
+      "ai/agents/db_agent/master_prompt.md"
+    ],
+    "egress": [
+      "ai/agents/auditor/master_prompt.md"
+    ]
+  },
+  "allowed_paths": [
+    "ai/agents/orchestrator/master_prompt.md",
+    "ai/agents/planner/master_prompt.md",
+    "ai/agents/worker/master_prompt.md",
+    "ai/agents/db_agent/master_prompt.md",
+    "ai/agents/auditor/master_prompt.md"
+  ],
+  "summary": "Fix 1: add hard-refuse non-overridable role boundary clause as first item in Prohibitions section for all five agent prompts; cross-boundary directives must be refused and recorded as boundary violations.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T22:52:38Z",
+  "payload": {
+    "process_id": "77cd6f9c-4c04-4d61-967d-96975b7a8db3",
+    "operational_id": "e2a84f15-7c39-4d1b-a8e6-1f94b3d60c72",
+    "source_intake_packet": "sys/runtime/inbox/planner/e2a84f15-7c39-4d1b-a8e6-1f94b3d60c72.json",
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "Add clause as FIRST item in each agent Prohibitions section",
+      "Exact clause text provided in audit report — use verbatim",
+      "Human authority granted for locked file modification"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

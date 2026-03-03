@@ -1,0 +1,49 @@
+{
+  "id": "wp-20260303-fix2-5-doc-lane-pipeline",
+  "change_type": "architectural",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "sys/contracts/work_packet.schema.json"
+    ],
+    "middle": [
+      "ai/agents/planner/master_prompt.md",
+      "ai/agents/worker/master_prompt.md",
+      "ai/agents/db_agent/master_prompt.md"
+    ],
+    "egress": [
+      "ai/agents/auditor/master_prompt.md"
+    ]
+  },
+  "allowed_paths": [
+    "sys/contracts/work_packet.schema.json",
+    "ai/agents/planner/master_prompt.md",
+    "ai/agents/worker/master_prompt.md",
+    "ai/agents/db_agent/master_prompt.md",
+    "ai/agents/auditor/master_prompt.md"
+  ],
+  "summary": "Fixes 2-5: add documentation-lane fields in work_packet schema; wire planner routing and train-mode docs lane; add DOC_ARTIFACT in Builder prompt; add DB_DOC_ARTIFACT in DB Agent prompt; add AUD-009 through AUD-012 documentation validation phase in Auditor prompt.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T22:52:38Z",
+  "payload": {
+    "process_id": "9eb31867-9de0-42c3-9904-d69a372062e8",
+    "operational_id": "f5b29c83-1d67-4e0a-9a42-8c73d5e14b06",
+    "source_intake_packet": "sys/runtime/inbox/planner/f5b29c83-1d67-4e0a-9a42-8c73d5e14b06.json",
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "Fixes 2-5 are interdependent — schema first, then Planner, then Builder and DB Agent, then Auditor",
+      "All new fields in work_packet.schema.json must follow existing schema patterns",
+      "Human authority granted for locked file modification"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

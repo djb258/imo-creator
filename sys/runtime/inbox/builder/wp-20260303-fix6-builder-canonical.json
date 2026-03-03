@@ -1,0 +1,45 @@
+{
+  "id": "wp-20260303-fix6-builder-canonical",
+  "change_type": "architectural",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "ai/agents/*/master_prompt.md"
+    ],
+    "middle": [
+      "ai/agents/worker/",
+      "ai/agents/builder/"
+    ],
+    "egress": [
+      "docs/constitutional/governance.md"
+    ]
+  },
+  "allowed_paths": [
+    "ai/agents/",
+    "docs/constitutional/governance.md"
+  ],
+  "summary": "Fix 6: correct canonical naming to Builder across scoped repository surfaces; rename ai/agents/worker/ to ai/agents/builder/; update all five agent prompts and governance doc so Builder is canonical and Worker is deprecated alias.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T22:52:38Z",
+  "payload": {
+    "process_id": "293f0b59-94c1-42db-81f9-4da13b8d49ca",
+    "operational_id": "a83d4e72-5f16-4b09-c2d8-9e07f6a31b54",
+    "source_intake_packet": "sys/runtime/inbox/planner/a83d4e72-5f16-4b09-c2d8-9e07f6a31b54.json",
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "Builder is CANONICAL, Worker is DEPRECATED — not the reverse",
+      "Directory rename: ai/agents/worker/ -> ai/agents/builder/",
+      "Human authority granted for locked file modification"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}
