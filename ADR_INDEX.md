@@ -35,6 +35,7 @@
 | ADR-024 | imo-creator | 2026-03-02 | CLAUDE.md Path Corrections | PROPOSED | Fix 10 broken agent/contract file references after Garage V2 restructure |
 | ADR-025 | imo-creator | 2026-03-02 | V2 Path Corrections — Remaining Stale Refs | PROPOSED | Fix stale templates/agents/ refs in SYSTEM_MANIFEST.md, REPO_HOUSEKEEPING.md, HUB_COMPLIANCE.md; flag DOPPLER.md gap |
 | ADR-026 | imo-creator | 2026-03-05 | Register DeltaHound in SNAP_ON_TOOLBOX.yaml | ACCEPTED | Homebrew field-change detection engine (Cloudflare Workers + Neon) — Tier 0, TOOL-012, generic to all child repos |
+| ADR-027 | imo-creator | 2026-03-05 | DeltaHound Scheduler — GitHub Actions selected | ACCEPTED | GitHub Actions (cron) over Cloudflare Scheduled Workers for Sub-Hub 1 Scheduler. Stack simplicity, $0/month, bypass path preserved. |
 
 ---
 

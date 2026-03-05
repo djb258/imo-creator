@@ -6,7 +6,7 @@
 # Location: imo-creator/templates/SNAP_ON_TOOLBOX.yaml
 # ═══════════════════════════════════════════════════════════════════════════════
 
-version: "2.1.0"
+version: "2.2.0"
 last_updated: "2026-03-05"
 doctrine: "Snap-on - One tool, many jobs, config is the variable"
 
@@ -148,10 +148,17 @@ tools:
     tier: 0
     status: "active"
     software:
-      primary: "Cloudflare Workers + Neon"
+      primary: "Cloudflare Workers + Neon + GitHub Actions"
       dependencies: []
       vendor: null
       requires_api_key: false
+      sub_hubs:
+        scheduler: {runtime: "GitHub Actions (cron)", adr: "ADR-027", notes: "Optional — calling sub-hubs may bypass via direct POST to Orchestrator"}
+        fetcher: {runtime: "Cloudflare Workers"}
+        parser_registry: {runtime: "Cloudflare KV + Workers"}
+        proxy_router: {runtime: "Cloudflare Workers + KV"}
+        orchestrator: {runtime: "Cloudflare Workers"}
+        delta_state_store: {runtime: "Neon (PostgreSQL)"}
     purpose:
       summary: "Homebrew field-change detection engine — monitors structured fields on any web page, emits delta signals on change"
       what_it_does:
