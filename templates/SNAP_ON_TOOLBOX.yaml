@@ -6,8 +6,8 @@
 # Location: imo-creator/templates/SNAP_ON_TOOLBOX.yaml
 # ═══════════════════════════════════════════════════════════════════════════════
 
-version: "2.0.0"
-last_updated: "2026-01-28"
+version: "2.1.0"
+last_updated: "2026-03-05"
 doctrine: "Snap-on - One tool, many jobs, config is the variable"
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -142,6 +142,39 @@ tools:
       data_quality: {cache_ttl_hours: 168}
     accuracy: "90%"
     accuracy_notes: "URL exists != person still there"
+
+  DeltaHound:
+    tool_id: "TOOL-012"
+    tier: 0
+    status: "active"
+    software:
+      primary: "Cloudflare Workers + Neon"
+      dependencies: []
+      vendor: null
+      requires_api_key: false
+    purpose:
+      summary: "Homebrew field-change detection engine — monitors structured fields on any web page, emits delta signals on change"
+      what_it_does:
+        - "HTTP fetch of target URLs on schedule via url_registry"
+        - "Parser extraction of declared fields"
+        - "Delta comparison against last-known values"
+        - "Confirmation gate (re-fetch before signal)"
+        - "Signal emission to consuming repos"
+      what_it_does_NOT_do:
+        - "Scrape entire pages (targeted field extraction only)"
+        - "Recursive crawling (single-page, declared-field only)"
+        - "Real-time streaming (scheduled polling)"
+    throttle:
+      rate_limits:
+        - {scope: "per_minute", limit: 60}
+        - {scope: "per_day", limit: 10000}
+      cost: {model: "free", estimated_cost_per_call: 0.00, notes: "Cloudflare Workers free tier + Neon free tier"}
+      backoff: {strategy: "exponential", initial_delay_ms: 1000, max_retries: 3}
+    guardrails:
+      kill_switch: {trigger: "target_domain_blocks_or_rate_limits", action: "circuit_break_1h"}
+      data_quality: {confirmation_required: true, confirmation_delay_minutes: 5}
+    accuracy: "95%"
+    accuracy_notes: "Depends on parser selector stability; DOM changes may cause false deltas"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # TIER 1: GENERIC CHEAP TOOLS
