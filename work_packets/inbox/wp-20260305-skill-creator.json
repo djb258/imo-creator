@@ -1,0 +1,38 @@
+{
+  "id": "wp-20260305-skill-creator",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "skills/skill-creator/SKILL.md",
+    "skills/skill-creator/scripts/init_skill.py",
+    "skills/skill-creator/scripts/quick_validate.py",
+    "skills/skill-creator/references/workflows.md",
+    "skills/skill-creator/references/output-patterns.md",
+    "skills/skill-creator/references/progressive-disclosure-patterns.md"
+  ],
+  "summary": "Add skill-creator meta-skill to imo-creator. IMO-structured skill factory: SKILL.md (296 lines, 16 Go/No-Go gates), init_skill.py scaffold, quick_validate.py (17 checks), 3 reference files. Self-validates 17/17 PASS.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T00:00:00Z",
+  "payload": {
+    "skill_name": "skill-creator",
+    "artifacts_produced": [
+      "SKILL.md",
+      "scripts/init_skill.py",
+      "scripts/quick_validate.py",
+      "references/workflows.md",
+      "references/output-patterns.md",
+      "references/progressive-disclosure-patterns.md"
+    ],
+    "validation_result": "17/17 PASS",
+    "line_count": 296,
+    "go_nogo_gates": 16
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false,
+  "doc_required": false
+}
