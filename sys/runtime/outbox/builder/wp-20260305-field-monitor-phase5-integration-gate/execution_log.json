@@ -1,0 +1,57 @@
+{
+  "execution_id": "exec-20260305-field-monitor-phase5-integration-gate",
+  "work_packet_id": "wp-20260305-field-monitor-phase5-integration-gate",
+  "agent": "builder",
+  "agent_version": "2.7.0",
+  "timestamp": "2026-03-05T00:00:00.000Z",
+  "status": "COMPLETE",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Created tests/integration-gate.ts with 4 scenarios: happy path, rate limit, parser missing, CTB trigger",
+      "result": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "Executed Scenario 1 (Happy path) against live Neon — URL active, field_state updated $99/mo→$149/mo, check_log written",
+      "result": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "Executed Scenario 2 (Rate limit) — seeded 60/60 exhausted rate_state, verified 0 remaining",
+      "result": "PASS"
+    },
+    {
+      "step": 4,
+      "action": "Executed Scenario 3 (Parser missing) — field_state exists but no KV parser entry",
+      "result": "PASS"
+    },
+    {
+      "step": 5,
+      "action": "Executed Scenario 4 (CTB trigger) — promoted field, attempted demotion to DRAFT, trigger fired correctly",
+      "result": "PASS"
+    },
+    {
+      "step": 6,
+      "action": "Verified check_log UPDATE enforcement — blocked by append-only trigger",
+      "result": "PASS"
+    },
+    {
+      "step": 7,
+      "action": "Verified check_log DELETE enforcement — blocked by append-only trigger",
+      "result": "PASS"
+    },
+    {
+      "step": 8,
+      "action": "Verified error_log DELETE enforcement — blocked by no-delete trigger",
+      "result": "PASS"
+    },
+    {
+      "step": 9,
+      "action": "Cleaned test data (field_state, rate_state). url_registry row preserved as FK parent for append-only check_log.",
+      "result": "PASS"
+    }
+  ],
+  "verdict": "GO",
+  "notes": "All 4 scenarios PASS + 3 enforcement checks PASS. Integration gate is GO. Post-build prerequisites documented in changeset."
+}

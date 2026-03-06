@@ -22,7 +22,7 @@
 fleet:
   parent:
     name: "imo-creator"
-    current_doctrine_version: "3.4.1"
+    current_doctrine_version: "3.5.0"
     manifest_path: "templates/TEMPLATES_MANIFEST.yaml"
 
   repos:

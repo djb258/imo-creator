@@ -1,0 +1,69 @@
+name: Field Monitor Scheduler
+
+on:
+  schedule:
+    # Run every 15 minutes during business hours (Mon-Fri 9am-6pm ET)
+    - cron: '*/15 9-17 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode — query due tasks but do not dispatch'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      batch_size:
+        description: 'Max tasks to process per run'
+        required: false
+        default: '50'
+
+env:
+  ORCHESTRATOR_URL: ${{ secrets.FIELD_MONITOR_ORCHESTRATOR_URL }}
+
+jobs:
+  schedule-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: templates/snap-on/field-monitor
+        run: npm install
+
+      - name: Run scheduler
+        working-directory: templates/snap-on/field-monitor
+        env:
+          DATABASE_URL: ${{ secrets.FIELD_MONITOR_DATABASE_URL }}
+        run: |
+          DRY_RUN="${{ github.event.inputs.dry_run || 'true' }}"
+          BATCH_SIZE="${{ github.event.inputs.batch_size || '50' }}"
+
+          node -e "
+            const { runScheduler } = require('./packages/orchestrator/src/scheduler');
+            runScheduler({
+              database_url: process.env.DATABASE_URL,
+              orchestrator_url: process.env.ORCHESTRATOR_URL || 'http://localhost:8787',
+              dry_run: process.env.DRY_RUN === 'true',
+              batch_size: parseInt(process.env.BATCH_SIZE, 10),
+            }).then(result => {
+              console.log(JSON.stringify(result, null, 2));
+              if (result.errors.length > 0) {
+                console.error('Scheduler errors:', result.errors);
+                process.exit(1);
+              }
+            });
+          "
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Field Monitor Scheduler Run" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dry Run**: ${{ github.event.inputs.dry_run || 'true' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Batch Size**: ${{ github.event.inputs.batch_size || '50' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY

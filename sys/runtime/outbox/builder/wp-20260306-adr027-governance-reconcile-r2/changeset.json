@@ -1,0 +1,15 @@
+{
+  "changeset_id": "cs-20260306-adr027-governance-reconcile-r2",
+  "work_packet_id": "wp-20260306-adr027-governance-reconcile-r2",
+  "status": "VERIFIED_IDEMPOTENT",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "documentation",
+  "files_modified": [],
+  "files_created": [],
+  "summary": "R2 requeue of wp-20260306-adr027-governance-reconcile (same operational_id d7a28e96). Primary already verified idempotent — all go conditions met. No changes required.",
+  "verification": {
+    "primary_wp": "wp-20260306-adr027-governance-reconcile — VERIFIED_IDEMPOTENT",
+    "operational_id": "d7a28e96-0b39-4f4c-a1d5-4e70c9f63b18"
+  }
+}

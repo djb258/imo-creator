@@ -1,0 +1,64 @@
+{
+  "changeset_id": "cs-wp-20260305-field-monitor-phase1-bootstrap",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap",
+  "change_type": "feature",
+  "target_repo": "imo-creator",
+  "target_branch": "main",
+  "execution_agent": "builder",
+  "execution_status": "COMPLETED",
+  "timestamp": "2026-03-05T19:00:00Z",
+  "summary": "Field Monitor Phase 1 bootstrap: scaffolded Cloudflare Workers monorepo at templates/snap-on/field-monitor/ with 4 worker packages (orchestrator, fetcher, parser-registry, proxy-router), shared type contracts (db-types, fetcher/parser/proxy contracts, enums), migration SQL (001_initial_schema.sql + rollback) with 5 tables, CTB promotion trigger, append-only/no-delete enforcement, and GitHub Actions deploy workflow.",
+  "files_created": [
+    "templates/snap-on/field-monitor/package.json",
+    "templates/snap-on/field-monitor/tsconfig.json",
+    "templates/snap-on/field-monitor/shared/package.json",
+    "templates/snap-on/field-monitor/shared/src/index.ts",
+    "templates/snap-on/field-monitor/shared/src/enums.ts",
+    "templates/snap-on/field-monitor/shared/src/db-types.ts",
+    "templates/snap-on/field-monitor/shared/src/fetcher-contract.ts",
+    "templates/snap-on/field-monitor/shared/src/parser-contract.ts",
+    "templates/snap-on/field-monitor/shared/src/proxy-contract.ts",
+    "templates/snap-on/field-monitor/packages/orchestrator/wrangler.toml",
+    "templates/snap-on/field-monitor/packages/orchestrator/package.json",
+    "templates/snap-on/field-monitor/packages/orchestrator/src/index.ts",
+    "templates/snap-on/field-monitor/packages/fetcher/wrangler.toml",
+    "templates/snap-on/field-monitor/packages/fetcher/package.json",
+    "templates/snap-on/field-monitor/packages/fetcher/src/index.ts",
+    "templates/snap-on/field-monitor/packages/parser-registry/wrangler.toml",
+    "templates/snap-on/field-monitor/packages/parser-registry/package.json",
+    "templates/snap-on/field-monitor/packages/parser-registry/src/index.ts",
+    "templates/snap-on/field-monitor/packages/proxy-router/wrangler.toml",
+    "templates/snap-on/field-monitor/packages/proxy-router/package.json",
+    "templates/snap-on/field-monitor/packages/proxy-router/src/index.ts",
+    "templates/snap-on/field-monitor/migrations/001_initial_schema.sql",
+    "templates/snap-on/field-monitor/migrations/001_initial_schema_rollback.sql",
+    "templates/snap-on/field-monitor/.github/workflows/deploy.yml"
+  ],
+  "db_migration_produced": {
+    "file": "templates/snap-on/field-monitor/migrations/001_initial_schema.sql",
+    "tables": ["field_monitor.url_registry", "field_monitor.field_state", "field_monitor.check_log", "field_monitor.error_log", "field_monitor.rate_state"],
+    "triggers": ["trg_ctb_promotion_enforcement", "trg_check_log_no_update", "trg_check_log_no_delete", "trg_error_log_no_delete"],
+    "indexes": 10,
+    "status": "AWAITING_DB_AGENT_EXECUTION"
+  },
+  "scaffold_structure": {
+    "monorepo_type": "npm workspaces",
+    "workers": ["orchestrator", "fetcher", "parser-registry", "proxy-router"],
+    "shared_contracts": ["FetchRequest/Response", "ParseRequest/Response", "ProxyRequest/Response", "db-types", "enums"],
+    "ci": "GitHub Actions matrix deploy"
+  },
+  "go_condition_status": {
+    "neon_tables_created": "PENDING — awaiting DB Agent",
+    "ctb_trigger_active": "PENDING — awaiting DB Agent",
+    "all_indexes_created": "PENDING — awaiting DB Agent",
+    "wrangler_dev_readiness": "SCAFFOLD_READY — npm install + wrangler dev required"
+  },
+  "snap_on_toolbox_compliance": {
+    "cloudflare_workers": "Tier 0 — COMPLIANT",
+    "neon": "Infrastructure constant — COMPLIANT",
+    "github_actions": "Infrastructure constant — COMPLIANT",
+    "banned_check": "No banned libraries used"
+  },
+  "deviations": [],
+  "doctrine_version": "3.5.0"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "wp-20260305-field-monitor-phase1-bootstrap",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "templates/snap-on/field-monitor/",
+      "migrations/"
+    ],
+    "middle": [
+      "neon schema bootstrap",
+      "CTB trigger enforcement"
+    ],
+    "egress": [
+      "wrangler dev verification",
+      "audit verification artifacts"
+    ]
+  },
+  "allowed_paths": [
+    "templates/snap-on/field-monitor/",
+    "migrations/",
+    "changesets/outbox/",
+    ".github/workflows/"
+  ],
+  "summary": "Field Monitor Phase 1 bootstrap: create Neon field-monitor schema objects (url_registry, field_state, check_log, error_log, rate_state) with CTB promotion enforcement + indexes, and scaffold Cloudflare Workers monorepo with required packages and wrangler dev readiness.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T18:45:26Z",
+  "payload": {
+    "process_id": "05348479-9528-4520-a28f-7f4828cabfcf",
+    "operational_id": "d1a62e30-4b83-4f7c-a5d9-8e14c3b07f52",
+    "phase": 1,
+    "phase_label": "Bootstrap — Neon Schema + Workers Project Scaffold",
+    "source_intake_packet": "sys/runtime/inbox/planner/fm-build-01-d1a62e30-4b83-4f7c-a5d9-8e14c3b07f52.json",
+    "go_condition": "All Neon tables created. CTB trigger active. All indexes created. wrangler dev runs without errors.",
+    "constraints": [
+      "Do not expand scope beyond schema + scaffold",
+      "CTB trigger is constitutional law — do not simplify or omit",
+      "check_log append-only",
+      "error_log insert/update only, no delete"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "field_monitor.url_registry",
+    "field_monitor.field_state",
+    "field_monitor.check_log",
+    "field_monitor.error_log",
+    "field_monitor.rate_state"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

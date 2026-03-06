@@ -1,0 +1,44 @@
+{
+  "work_packet_id": "wp-20260306-field-monitor-subhub-integrations",
+  "execution_id": "exec-20260306-field-monitor-subhub-integrations",
+  "agent": "builder",
+  "agent_version": "2.7.0",
+  "started_at": "2026-03-06T15:27:00.000Z",
+  "completed_at": "2026-03-06T15:30:00.000Z",
+  "status": "COMPLETE",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Verified all 12 allowed_paths files exist",
+      "result": "All 12 files present. Code-side work (linkedin_monitor, signal_sweep, seed SQL, pipeline docs) completed in prior session."
+    },
+    {
+      "step": 2,
+      "action": "Identified parser seed format gap",
+      "result": "3 parser seed scripts use old fn_body format (raw JS for new Function()). Parser-registry was refactored to ParserConfig JSON in production deploy. These scripts need alignment."
+    },
+    {
+      "step": 3,
+      "action": "Updated seed_linkedin_parsers.py to ParserConfig JSON",
+      "result": "Replaced LINKEDIN_TITLE_PARSER fn_body string with config dict: {type: regex, pattern: '<title[^>]*>([^<]+)', flags: 'i', group: 1, transforms: [replace '| LinkedIn', trim]}. Validated via python3 exec."
+    },
+    {
+      "step": 4,
+      "action": "Updated parser_templates.py to ParserConfig JSON",
+      "result": "Replaced BLOG_CONTENT_HASH_PARSER fn_body with BLOG_CONTENT_HASH_CONFIG dict (regex <article> extraction with tag-strip transforms). Added BLOG_MAIN_HASH_CONFIG as fallback (<main> extraction). Validated via python3 import."
+    },
+    {
+      "step": 5,
+      "action": "Updated seed_blog_parsers.py to use config dicts",
+      "result": "Updated output to show config JSON instead of fn_body length. Import chain validated."
+    }
+  ],
+  "constraints_honored": [
+    "Parser seeds use ParserConfig JSON format (not fn_body)",
+    "field_monitor.* treated as vendor tier — bridge modules read only",
+    "Did not modify movement_engine/state_machine/movement_rules",
+    "Did not modify blog_node_spoke/ingest_article/classify_event/emit_bit_signal",
+    "Kill switches preserved in all files",
+    "Sample gates (LIMIT 100) preserved"
+  ]
+}

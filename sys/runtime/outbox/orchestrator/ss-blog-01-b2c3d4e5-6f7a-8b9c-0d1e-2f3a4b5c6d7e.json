@@ -1,0 +1,39 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "operational_id": "b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "work_packet_ref": "wp-20260306-signal-sweep-blog-monitor",
+  "intent_summary": "Integrate Field Monitor vendor tier into Blog sub-hub as Signal Sweep — continuous URL monitoring for company press/about pages. field_monitor.* tables are vendor staging layer. Seeds 100 URLs from vendor.blog (WHERE source_type IN press_page, about_page) into field_monitor.url_registry. Bridge module in hub Middle layer reads detected content changes from vendor tier and feeds into existing blog pipeline via ingest_article(). Sample-gated to 100 records.",
+  "named_system": "Signal Sweep",
+  "vendor_tier": "field_monitor.* (same tier as vendor.people, vendor.blog, vendor.ct)",
+  "sample_gate": 100,
+  "depends_on": "tf-linkedin-01 (build Talent Flow first, validate pattern, then replicate here)",
+  "go_condition": "Seed SQL runs clean (100 url_registry rows, 300 field_state rows). Parser KV entries created. change_bridge.py imports clean and feeds into ingest_article(). Kill switches halt execution. pipeline.md updated.",
+  "agent_routing": {
+    "db_agent": "Run seed_blog_urls.sql against Neon. Verify 100 url_registry rows, 300 field_state rows. Idempotent.",
+    "builder": "Create signal_sweep/ directory, url_seeder.py, change_bridge.py, parser_templates.py, seed scripts, update pipeline.md. All logic in Middle layer.",
+    "auditor": "Same audit pattern as Talent Flow — CTB, IMO, vendor tier, kill switches, no downstream modifications."
+  },
+  "allowed_paths": [
+    "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+    "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/scripts/seed_blog_parsers.py",
+    "hubs/blog-content/pipeline.md"
+  ],
+  "constraints": [
+    "Do not expand scope beyond allowed_paths",
+    "Do not modify existing blog_node_spoke.py, ingest_article.py, classify_event.py, or emit_bit_signal.py",
+    "field_monitor.* is vendor tier — bridge READS only, never writes",
+    "Seed source is vendor.blog (NOT dropped company.company_source_urls)",
+    "All logic in hub Middle layer",
+    "Kill switches KILL_SIGNAL_SWEEP and KILL_BLOG_URL_SEED enforced",
+    "Reuse existing KILL_FUNDING_DETECTION from blog_node_spoke.py",
+    "Sample gate: LIMIT 100 on seed"
+  ]
+}

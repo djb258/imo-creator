@@ -1,0 +1,32 @@
+{
+  "id": "wp-20260306-vendor-blog-ddl",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "db_changeset",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "summary": "Create vendor schema and vendor.blog table. Blocker for wp-20260306-signal-sweep-blog-monitor — vendor.blog does not exist. This DDL must run before the blog seed script.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "routed_by": "builder",
+  "routed_at": "2026-03-06T00:00:00.000Z",
+  "payload": {
+    "operational_id": "b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+    "ddl": "CREATE SCHEMA IF NOT EXISTS vendor;\n\nCREATE TABLE IF NOT EXISTS vendor.blog (\n  blog_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  domain TEXT NOT NULL,\n  path TEXT NOT NULL,\n  blog_name TEXT,\n  company_name TEXT,\n  source_type TEXT NOT NULL DEFAULT 'RSS',\n  is_active BOOLEAN NOT NULL DEFAULT true,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n  UNIQUE (domain, path)\n);",
+    "rollback": "DROP TABLE IF EXISTS vendor.blog;\nDROP SCHEMA IF EXISTS vendor;",
+    "constraints": [
+      "Idempotent — IF NOT EXISTS on both schema and table",
+      "No data modification — DDL only"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "vendor.blog"
+  ],
+  "db_system": "neon",
+  "blocks": [
+    "wp-20260306-signal-sweep-blog-monitor"
+  ]
+}

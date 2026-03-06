@@ -1,0 +1,16 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "operational_id": "b7e42d19-8f13-4a5c-b6d0-3c91e7a5f028",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Migrate Barton Doctrine database from doctrine schema to company_lifecycle schema in Neon. Zero-data-loss migration of 3 tables (doctrine_library 668 rows, doctrine_key 335 rows, doctrine_library_error 0 rows) with all vector embeddings, indexes, constraints, and CTB registry entries. 8-step sequence: create schema, recreate tables, copy data, recreate indexes, add column comments, update CTB registry, verify counts match exactly, then decommission old schema. Hard verification gate before DROP. Secrets via Doppler (NEON_DATABASE_URL, OPENAI_API_KEY).",
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Do not drop doctrine schema until verification gate passes",
+    "Do not hardcode, echo, or log any credential values"
+  ]
+}

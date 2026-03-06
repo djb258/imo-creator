@@ -1,0 +1,107 @@
+{
+  "plan_id": "plan-20260306-talent-flow-linkedin-monitor-v2",
+  "work_packet_id": "wp-20260306-talent-flow-linkedin-monitor",
+  "status": "PLANNED",
+  "orbt_mode": "build",
+  "planner_agent": "claude-desktop",
+  "timestamp": "2026-03-06T13:30:00Z",
+  "revision": "v2 — corrected to vendor-tier pattern per CTB doctrine",
+  "architecture_note": "field_monitor.* IS the vendor staging layer (same tier as vendor.people, vendor.blog, vendor.ct). Sub-hub Middle layer reads FROM field_monitor tables. No new vendor tables needed. The Cloudflare Workers write to field_monitor.*; the bridge module in hubs/ reads from it.",
+  "transformation_validated": true,
+  "transformation_statement": "LinkedIn profile field values stored in field_monitor.field_state (CONST from vendor tier) → Talent movement signals via EVENT_TALENTFLOW_MOVE routed through movement_engine (VAR in sub-hub canonical tables)",
+  "hss_validated": true,
+  "hss_check": {
+    "constants_declared": 5,
+    "variables_declared": 5,
+    "const_var_traceable": true,
+    "vendor_tier_identified": "field_monitor.* (same architectural tier as vendor.*)"
+  },
+  "ctb_compliance": {
+    "vendor_staging": "field_monitor.* — external tool writes here (Cloudflare Workers). Analogous to vendor.people, vendor.blog.",
+    "hub_middle_layer": "hubs/people-intelligence/imo/middle/movement_engine/ — bridge reads from vendor tier, fires events into existing movement engine. Business logic only.",
+    "hub_scripts": "hubs/people-intelligence/scripts/ — seed scripts (support surface, not CTB branch). Operational tooling.",
+    "no_logic_in_ingress": true,
+    "no_logic_in_egress": true,
+    "all_logic_in_middle": true,
+    "no_forbidden_folders": true,
+    "no_spoke_logic": true
+  },
+  "data_flow": {
+    "tier_1_vendor": "field_monitor.url_registry → field_monitor.field_state → field_monitor.check_log (Cloudflare Workers own this tier — they fetch, parse, detect changes, write results)",
+    "bridge": "linkedin_monitor.py in hubs/people-intelligence/imo/middle/movement_engine/ reads field_monitor.check_log WHERE changed=true AND domain='www.linkedin.com', converts to DetectedEvent, fires into MovementEngine.detect_event()",
+    "sub_hub_canonical": "Movement engine processes event → writes to people.person_movement_history (canonical output)"
+  },
+  "task_sequence": [
+    {
+      "task_id": "TF-001",
+      "title": "DB Agent — Seed field_monitor.url_registry with 100 LinkedIn URLs",
+      "route_to": "db_agent",
+      "description": "SQL script: SELECT 100 linkedin_url FROM people.people_master WHERE linkedin_url IS NOT NULL AND linkedin_url LIKE '%linkedin.com%' LIMIT 100. Normalize to domain='www.linkedin.com' + path='/in/{slug}'. INSERT INTO field_monitor.url_registry with check_interval_minutes=1440, is_active=true. Idempotent via ON CONFLICT (domain, path) DO NOTHING.",
+      "artifact": "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+      "depends_on": [],
+      "db_gate": "A",
+      "acceptance": "100 rows in url_registry with domain='www.linkedin.com'. SQL idempotent on re-run."
+    },
+    {
+      "task_id": "TF-002",
+      "title": "DB Agent — Seed field_monitor.field_state for title + company per URL",
+      "route_to": "db_agent",
+      "description": "For each url_id seeded in TF-001: INSERT 2 field_state rows (field_name='current_title', field_name='current_company'). Status='ACTIVE', promotion_status='DRAFT', current_value=NULL. Idempotent via ON CONFLICT (url_id, field_name) DO NOTHING.",
+      "artifact": "Appended to hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+      "depends_on": ["TF-001"],
+      "db_gate": "A",
+      "acceptance": "200 rows in field_state (2 per URL). All linked to linkedin.com url_registry entries."
+    },
+    {
+      "task_id": "TF-003",
+      "title": "Builder — Parser KV seed script for LinkedIn HTML extraction",
+      "route_to": "builder",
+      "description": "Python script to populate Cloudflare KV (PARSER_KV namespace) with parser function bodies for 'www.linkedin.com::current_title' and 'www.linkedin.com::current_company'. These are the regex/selector functions that the parser-registry Cloudflare Worker executes against fetched LinkedIn HTML. Script uses wrangler CLI to write KV entries.",
+      "artifact": "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+      "depends_on": [],
+      "acceptance": "KV entries created. Parser functions validated against sample LinkedIn public profile HTML."
+    },
+    {
+      "task_id": "TF-004",
+      "title": "Builder — linkedin_monitor.py (Middle layer bridge module)",
+      "route_to": "builder",
+      "description": "Bridge module at hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py. Reads FROM vendor tier (field_monitor.check_log) WHERE changed=true AND the url_id maps to a www.linkedin.com entry. For each detected change: (1) look up the person_unique_id by reverse-mapping the linkedin_url path back to people.people_master, (2) create a DetectedEvent with event_type=EVENT_TALENTFLOW_MOVE and metadata containing old_value, new_value, field_name, (3) call MovementEngine.detect_event(). Kill switch: KILL_TALENT_FLOW_MONITOR env var. Sample gate: only processes urls seeded (100 max from TF-001).",
+      "artifact": "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+      "depends_on": ["TF-001", "TF-002"],
+      "acceptance": "Module imports clean. Correctly reads from field_monitor.check_log (vendor tier). Correctly maps changes to EVENT_TALENTFLOW_MOVE. Kill switch halts execution. No logic in ingress or egress — all in Middle."
+    },
+    {
+      "task_id": "TF-005",
+      "title": "Builder — Update movement_engine __init__.py exports",
+      "route_to": "builder",
+      "description": "Add linkedin_monitor imports to __init__.py.",
+      "artifact": "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+      "depends_on": ["TF-004"],
+      "acceptance": "from movement_engine.linkedin_monitor import LinkedInMonitor works."
+    },
+    {
+      "task_id": "TF-006",
+      "title": "Doc — Update pipeline.md with Talent Flow Monitor section",
+      "route_to": "builder",
+      "description": "Add 'Talent Flow — LinkedIn Monitor' section to pipeline.md. Document: vendor tier (field_monitor.* tables), bridge flow (check_log → DetectedEvent → movement_engine), kill switches, sample gate, data flow diagram showing vendor tier → bridge → sub-hub canonical.",
+      "artifact": "hubs/people-intelligence/pipeline.md",
+      "depends_on": ["TF-004"],
+      "acceptance": "Pipeline doc shows vendor-tier pattern. No stale references."
+    },
+    {
+      "task_id": "TF-007",
+      "title": "Auditor — Compliance check",
+      "route_to": "auditor",
+      "description": "14-rule audit. Key checks: AUD-003 (CTB — all new files in declared hub Middle layer or scripts support surface), AUD-004 (Transformation Law — field_monitor vendor CONST → movement_engine VAR traceable), AUD-005 (IMO — bridge reads vendor in Middle, no logic in I or O), AUD-008 (scope — no files outside allowed_paths).",
+      "artifact": "audit_reports/wp-20260306-talent-flow-linkedin-monitor.json",
+      "depends_on": ["TF-001", "TF-002", "TF-003", "TF-004", "TF-005", "TF-006"],
+      "acceptance": "0 CRITICAL, 0 HIGH violations."
+    }
+  ],
+  "routing_summary": {
+    "db_agent_tasks": ["TF-001", "TF-002"],
+    "builder_tasks": ["TF-003", "TF-004", "TF-005", "TF-006"],
+    "auditor_tasks": ["TF-007"],
+    "execution_order": "TF-001 → TF-002 → (TF-003 parallel) → TF-004 → TF-005 → TF-006 → TF-007"
+  }
+}

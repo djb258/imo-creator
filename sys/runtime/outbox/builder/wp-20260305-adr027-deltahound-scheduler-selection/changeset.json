@@ -1,0 +1,18 @@
+{
+  "changeset_id": "cs-20260305-adr027-deltahound-scheduler-selection",
+  "work_packet_id": "wp-20260305-adr027-deltahound-scheduler-selection",
+  "status": "VERIFIED_IDEMPOTENT",
+  "timestamp": "2026-03-05T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "documentation",
+  "files_modified": [],
+  "files_created": [],
+  "summary": "ADR-027 already exists at docs/adr/ADR-027-deltahound-scheduler-selection.md with status ACCEPTED. ADR_INDEX.md already contains the entry at row 27. All deliverables complete — no changes required.",
+  "verification": {
+    "adr_document": "docs/adr/ADR-027-deltahound-scheduler-selection.md — present, ACCEPTED, conforms to templates/adr/ADR.md",
+    "adr_index": "ADR_INDEX.md — entry present at row 27, status ACCEPTED, one-line summary matches",
+    "template_conformance": "All required sections present: Conformance, ADR Identity, Owning Hub, CC Layer Scope, IMO Layer Scope, Constant vs Variable, Context, Decision, Alternatives Considered, Consequences, PID Impact, Guard Rails, Rollback, Traceability, Approval",
+    "decision": "GitHub Actions selected for DeltaHound Scheduler; Cloudflare Scheduled Workers rejected on stack simplicity grounds",
+    "related_adr": "ADR-026 (DeltaHound Tool Registration TOOL-012)"
+  }
+}

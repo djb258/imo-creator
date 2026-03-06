@@ -1,0 +1,21 @@
+{
+  "execution_id": "exec-20260306-adr027-governance-reconcile-r2",
+  "work_packet_id": "wp-20260306-adr027-governance-reconcile-r2",
+  "agent": "builder",
+  "agent_version": "2.7.0",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "status": "VERIFIED_IDEMPOTENT",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Identified R2 requeue — same operational_id d7a28e96 as primary wp-20260306-adr027-governance-reconcile",
+      "result": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "Primary already verified idempotent — no re-execution needed",
+      "result": "PASS"
+    }
+  ],
+  "notes": "Duplicate operational_id. Primary execution covers all go conditions."
+}

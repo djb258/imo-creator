@@ -1,0 +1,95 @@
+{
+  "id": "wp-20260304-mid-egress-lovable-rewire",
+  "change_type": "architectural",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "src/app/lcs/pipeline/sid-worker.ts",
+      "src/app/lcs/pipeline/mid-engine.ts"
+    ],
+    "middle": [
+      "src/app/lcs/adapters/types.ts",
+      "src/app/lcs/adapters/adapter-resolver.ts",
+      "src/app/lcs/adapters/lovable-delivery-adapter.ts"
+    ],
+    "egress": [
+      "supabase/functions/lcs-mailgun-webhook",
+      "supabase/functions/lcs-heyreach-webhook",
+      "supabase/functions/lcs-inbound-reply",
+      "src/runtime/lcs/cid-sid-mid-cron.ts"
+    ]
+  },
+  "allowed_paths": [
+    "src/app/lcs/adapters/adapter-resolver.ts",
+    "src/app/lcs/adapters/types.ts",
+    "src/app/lcs/adapters/lovable-delivery-adapter.ts",
+    "src/app/lcs/adapters/mailgun-adapter.ts",
+    "src/app/lcs/adapters/heyreach-adapter.ts",
+    "src/app/lcs/adapters/sales-handoff-adapter.ts",
+    "src/app/lcs/pipeline/mid-engine.ts",
+    "src/runtime/lcs/cid-sid-mid-cron.ts",
+    "src/runtime/lcs/",
+    "supabase/functions/",
+    "docs/",
+    "doppler.yaml"
+  ],
+  "summary": "Rewire MID egress to single Lovable delivery adapter using LOVABLE_DELIVERY_URL from Doppler, route all channels through adapter resolver, extend adapter payload context, verify webhook return path to CET/ERR0 without modifications when already correct, and add DRY_RUN mode that logs full CID->SID->MID handoff field completeness with PASS/FAIL output.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T14:39:13Z",
+  "payload": {
+    "process_id": "88103be8-9feb-4353-b55a-9200a65865ed",
+    "operational_id": "a2b67d85-4f29-4c0e-e5a7-9d32c4f16b50",
+    "source_intake_packet": "sys/runtime/inbox/planner/a2b67d85-4f29-4c0e-e5a7-9d32c4f16b50.json",
+    "lovable_contract": {
+      "request_fields": [
+        "communication_id",
+        "message_run_id",
+        "channel",
+        "recipient_email",
+        "recipient_linkedin_url",
+        "subject_line",
+        "body_plain",
+        "body_html",
+        "sender_identity",
+        "frame_id",
+        "lifecycle_phase",
+        "sovereign_company_id",
+        "company_name",
+        "agent_number",
+        "metadata"
+      ],
+      "response_fields": [
+        "success",
+        "delivery_status",
+        "adapter_message_id",
+        "error_message"
+      ],
+      "env_var": "LOVABLE_DELIVERY_URL"
+    },
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "Do not touch signal_bridge, signal_queue, or CID compiler core logic",
+      "Do not build template resolution — Lovable owns that",
+      "Scope limited to MID egress rewire and dry-run capability only",
+      "LOVABLE_DELIVERY_URL must come from Doppler — no hardcoded URLs",
+      "Existing webhook return path: verify only, do not modify if correct",
+      "Contract boundary: CL sends payload, Lovable resolves templates and delivers"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "docs/",
+    "src/runtime/lcs/"
+  ],
+  "doc_surface": "repo_markdown",
+  "container_required": false
+}

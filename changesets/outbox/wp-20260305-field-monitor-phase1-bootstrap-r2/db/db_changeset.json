@@ -1,0 +1,68 @@
+{
+  "changeset_id": "db-cs-20260305-field-monitor-phase1-001",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "db_system": "neon",
+  "db_targets": [
+    "field_monitor.url_registry",
+    "field_monitor.field_state",
+    "field_monitor.check_log",
+    "field_monitor.error_log",
+    "field_monitor.rate_state"
+  ],
+  "migrations": [
+    {
+      "file": "templates/snap-on/field-monitor/migrations/001_initial_schema.sql",
+      "direction": "forward",
+      "description": "Create field_monitor schema with 5 tables (url_registry, field_state, check_log, error_log, rate_state), CTB promotion enforcement trigger, append-only triggers on check_log, no-delete trigger on error_log, 10 indexes + 4 unique constraints."
+    }
+  ],
+  "rollback_plan": {
+    "strategy": "schema_drop",
+    "command": "DROP SCHEMA field_monitor CASCADE;",
+    "verification": "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'field_monitor'; — should return 0."
+  },
+  "validation_steps": [
+    {
+      "step": "SELECT table_name FROM information_schema.tables WHERE table_schema = 'field_monitor' ORDER BY table_name;",
+      "expected": "Returns 5 rows: check_log, error_log, field_state, rate_state, url_registry."
+    },
+    {
+      "step": "SELECT trigger_name, event_object_table FROM information_schema.triggers WHERE trigger_schema = 'field_monitor' ORDER BY trigger_name;",
+      "expected": "Returns 4 triggers: trg_check_log_no_delete, trg_check_log_no_update, trg_ctb_promotion_enforcement, trg_error_log_no_delete."
+    },
+    {
+      "step": "SELECT count(*) FROM pg_indexes WHERE schemaname = 'field_monitor';",
+      "expected": "Returns 20 (5 PKs + 4 unique + 11 btree)."
+    },
+    {
+      "step": "CTB promotion trigger test: INSERT url_registry + field_state with PROMOTED, then attempt UPDATE to DRAFT.",
+      "expected": "RAISE EXCEPTION 'CTB violation: cannot demote from PROMOTED to DRAFT'."
+    },
+    {
+      "step": "Append-only test: INSERT check_log row, then attempt UPDATE.",
+      "expected": "RAISE EXCEPTION 'check_log is append-only: UPDATE operations are prohibited'."
+    },
+    {
+      "step": "No-delete test: INSERT error_log row, then attempt DELETE.",
+      "expected": "RAISE EXCEPTION 'error_log does not allow DELETE operations'."
+    }
+  ],
+  "trigger_verification": {
+    "trg_ctb_promotion_enforcement": "PASS — demotion from PROMOTED to DRAFT raises CTB violation",
+    "trg_check_log_no_update": "PASS — UPDATE on check_log raises append-only exception",
+    "trg_check_log_no_delete": "PASS — implicit from same deny function",
+    "trg_error_log_no_delete": "PASS — DELETE on error_log raises no-delete exception"
+  },
+  "pre_generation_checks": {
+    "registry_first": "PASS — new schema, all tables created in single transaction",
+    "cardinality": "PASS — 5 tables, 4 triggers, 3 functions, 20 indexes",
+    "migration_ordering": "PASS — 001 (first migration for field_monitor schema)",
+    "raw_immutability": "PASS — check_log is append-only (INSERT only), error_log is no-delete (INSERT/UPDATE only)",
+    "vendor_json_containment": "N/A — no JSONB columns",
+    "bridge_versioning": "N/A",
+    "application_role": "N/A"
+  },
+  "risk_class": "MED",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T19:00:00Z"
+}

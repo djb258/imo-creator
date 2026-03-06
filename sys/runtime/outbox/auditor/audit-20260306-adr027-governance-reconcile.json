@@ -1,0 +1,58 @@
+{
+  "audit_request_id": "audit-20260306-adr027-governance-reconcile",
+  "work_packet_id": "wp-20260306-adr027-governance-reconcile",
+  "also_covers": "wp-20260306-adr027-governance-reconcile-r2",
+  "auditor": "claude-desktop",
+  "audited_at": "2026-03-06T14:00:00.000Z",
+  "status": "PASS",
+  "result": "IDEMPOTENT_VERIFIED",
+  "changeset_status": "VERIFIED_IDEMPOTENT — zero files touched, zero mutations",
+  "audit_checklist_results": [
+    {
+      "check": "ADR-027 exists at docs/adr/ADR-027-deltahound-scheduler-selection.md",
+      "result": "PASS",
+      "evidence": "Builder verified — file present"
+    },
+    {
+      "check": "ADR-027 template compliance — 15/15 sections match templates/adr/ADR.md",
+      "result": "PASS",
+      "evidence": "Builder verified — 15/15 sections present (Conformance, ADR Identity, Owning Hub, CC Layer Scope, IMO Layer Scope, Constant vs Variable, Context, Decision, Alternatives Considered, Consequences, PID Impact, Guard Rails, Rollback, Traceability, Approval)"
+    },
+    {
+      "check": "ADR Identity status is ACCEPTED with date 2026-03-05",
+      "result": "PASS",
+      "evidence": "Builder verified — status ACCEPTED, date 2026-03-05"
+    },
+    {
+      "check": "ADR_INDEX.md contains ADR-027 row with ACCEPTED status",
+      "result": "PASS",
+      "evidence": "Builder verified — row at line 38, status ACCEPTED"
+    },
+    {
+      "check": "ADR_INDEX.md Last Modified is 2026-03-05",
+      "result": "PASS",
+      "evidence": "Builder verified — Last Modified 2026-03-05"
+    },
+    {
+      "check": "No locked files modified",
+      "result": "PASS",
+      "evidence": "Zero files touched — idempotent verification only"
+    },
+    {
+      "check": "No scope expansion beyond allowed_paths",
+      "result": "PASS",
+      "evidence": "Zero files touched — no scope to expand"
+    }
+  ],
+  "14_rule_summary": {
+    "critical_violations": 0,
+    "high_violations": 0,
+    "notes": "Idempotent work packet — builder confirmed all go conditions already met. No artifacts produced, no mutations, no audit rules triggered. Clean pass."
+  },
+  "capa_required": false,
+  "certification": {
+    "artifact_hash": "N/A — zero artifacts produced",
+    "doctrine_version": "3.5.0",
+    "timestamp": "2026-03-06T14:00:00.000Z"
+  }
+}

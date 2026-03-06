@@ -1,0 +1,40 @@
+{
+  "work_packet_id": "wp-20260306-blog-content-seed-bridge-repair",
+  "also_resolves": "wp-20260306-signal-sweep-seed-bridge-audit-repair",
+  "execution_id": "exec-20260306-blog-content-seed-bridge-repair",
+  "agent": "builder",
+  "agent_version": "2.7.0",
+  "started_at": "2026-03-06T15:22:00.000Z",
+  "completed_at": "2026-03-06T15:25:00.000Z",
+  "status": "COMPLETE",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Verified vendor.blog actual schema on marketing DB",
+      "result": "29 columns confirmed. No 'path', 'is_active', or 'created_at' columns. Correct columns: domain (text), source_url (text), is_accessible (boolean), original_created_at (timestamptz)."
+    },
+    {
+      "step": 2,
+      "action": "Verified ArticleSource enum in ingest_article.py",
+      "result": "COMPANY_BLOG = 'company_blog' is valid. 'field_monitor' is NOT a valid enum value. ingest_article.py is a protected file — not modified."
+    },
+    {
+      "step": 3,
+      "action": "Applied SEED-001 fix to seed_blog_urls.sql",
+      "result": "Replaced vb.path → regexp_replace(vb.source_url, '^https?://[^/]+', ''), vb.is_active → vb.is_accessible, vb.created_at → vb.original_created_at. Also updated Step 2 JOIN to use regexp_replace for path matching."
+    },
+    {
+      "step": 4,
+      "action": "Applied BRIDGE-001 fix to change_bridge.py",
+      "result": "Changed source to 'company_blog', title to '[Signal Sweep] {domain}{path}', content to '[Pending fetch — content_hash changed from {old_hash[:8]} to {new_hash[:8]}]'. All non-None, non-empty — satisfies _validate_required_fields() and _validate_source()."
+    }
+  ],
+  "constraints_honored": [
+    "Did not modify ingest_article.py",
+    "Did not modify movement_engine files",
+    "Did not expand scope beyond allowed_paths",
+    "Kill switches preserved",
+    "Read-only semantics preserved in change_bridge.py",
+    "Seed SQL remains idempotent (ON CONFLICT DO NOTHING)"
+  ]
+}

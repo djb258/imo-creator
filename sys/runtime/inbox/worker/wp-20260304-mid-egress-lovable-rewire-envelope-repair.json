@@ -1,0 +1,63 @@
+{
+  "id": "wp-20260304-mid-egress-lovable-rewire-envelope-repair",
+  "change_type": "architectural",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json"
+    ],
+    "middle": [
+      "src/app/lcs/adapters/",
+      "src/app/lcs/pipeline/mid-engine.ts",
+      "src/runtime/lcs/"
+    ],
+    "egress": [
+      "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/ARCH_PRESSURE_REPORT.json",
+      "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/FLOW_PRESSURE_REPORT.json",
+      "docs/"
+    ]
+  },
+  "allowed_paths": [
+    "src/app/lcs/adapters/",
+    "src/app/lcs/pipeline/mid-engine.ts",
+    "src/runtime/lcs/",
+    "docs/",
+    "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json",
+    "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/"
+  ],
+  "summary": "Governance envelope repair only for completed MID egress Lovable rewire: materialize required work packet JSON and pressure-test artifacts (ARCH/FLOW reports) without code changes.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:01:48Z",
+  "payload": {
+    "process_id": "6c719cd4-31e7-41dc-ba65-9d771787dde8",
+    "operational_id": "b3c78e96-5a40-4d1f-f6b8-0e43d5a27c61",
+    "source_intake_packet": "sys/runtime/inbox/planner/b3c78e96-5a40-4d1f-f6b8-0e43d5a27c61.json",
+    "repairs_work_packet": "wp-20260304-mid-egress-lovable-rewire",
+    "governance_only": true,
+    "required_outputs": [
+      "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json",
+      "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/ARCH_PRESSURE_REPORT.json",
+      "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/FLOW_PRESSURE_REPORT.json"
+    ],
+    "constraints": [
+      "No code changes — governance artifacts only",
+      "allowed_paths must cover: src/app/lcs/adapters/, src/app/lcs/pipeline/mid-engine.ts, src/runtime/lcs/, docs/",
+      "Builder produces ARCH_PRESSURE_REPORT and FLOW_PRESSURE_REPORT in changeset outbox audit directory",
+      "Work is already complete — this is retroactive envelope production only"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "docs/",
+    "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json"
+  ],
+  "doc_surface": "repo_markdown",
+  "container_required": false
+}

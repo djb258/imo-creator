@@ -1,0 +1,24 @@
+{
+  "changeset_id": "cs-20260305-field-monitor-phase3-orchestrator-deploy",
+  "work_packet_id": "wp-20260305-field-monitor-phase3-orchestrator-deploy",
+  "status": "COMPLETE",
+  "timestamp": "2026-03-05T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "standard",
+  "files_modified": [
+    "templates/snap-on/field-monitor/packages/orchestrator/wrangler.toml",
+    "templates/snap-on/field-monitor/packages/orchestrator/src/index.ts",
+    "templates/snap-on/field-monitor/shared/src/orchestrator-contract.ts",
+    "templates/snap-on/field-monitor/shared/src/index.ts"
+  ],
+  "files_created": [
+    "templates/snap-on/field-monitor/shared/src/orchestrator-contract.ts"
+  ],
+  "summary": "Implemented seven-gate funnel orchestrator for Field Monitor. Gates: URL Validation → Rate Check → Fetch → Parse → Change Detection → State Update → Log. Added service bindings (FETCHER, PARSER, PROXY) to wrangler.toml. Created orchestrator-contract.ts with CheckTask, GateResult, CheckResult types. Updated shared barrel. Supports POST /check (single), POST /batch (multiple), and scheduled handler.",
+  "verification": {
+    "type_contracts": "CheckTask, GateResult, CheckResult exported from @field-monitor/shared",
+    "service_bindings": "FETCHER→field-monitor-fetcher, PARSER→field-monitor-parser-registry, PROXY→field-monitor-proxy-router",
+    "gate_flow": "Each gate must pass before next executes; failure records gate_reached and stops funnel",
+    "endpoints": "POST /check, POST /batch, GET / (health)"
+  }
+}

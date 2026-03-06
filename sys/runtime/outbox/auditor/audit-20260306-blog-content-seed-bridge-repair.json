@@ -1,0 +1,31 @@
+{
+  "audit_request_id": "audit-20260306-blog-content-seed-bridge-repair",
+  "work_packet_id": "wp-20260306-blog-content-seed-bridge-repair",
+  "also_resolves": "wp-20260306-signal-sweep-seed-bridge-audit-repair",
+  "audited_at": "2026-03-06T16:05:00.000Z",
+  "audited_by": "auditor",
+  "doctrine_version": "3.5.0",
+  "status": "AUDIT_COMPLETE",
+  "result": "PASS",
+  "qualification": "9/9 checks PASS. SEED-001 and BRIDGE-001 failures resolved.",
+  "checks": [
+    {"id": 1, "description": "seed_blog_urls.sql uses actual vendor.blog columns", "result": "PASS", "evidence": "Uses domain, source_url (via regexp_replace), is_accessible, original_created_at"},
+    {"id": 2, "description": "regexp_replace correctly extracts path", "result": "PASS", "evidence": "regexp_replace(vb.source_url, '^https?://[^/]+', '') — strips protocol+domain, leaves path"},
+    {"id": 3, "description": "Seed SQL remains idempotent", "result": "PASS", "evidence": "ON CONFLICT DO NOTHING present"},
+    {"id": 4, "description": "bridge_to_article_input() returns source='company_blog'", "result": "PASS", "evidence": "Matches ArticleSource.COMPANY_BLOG enum in ingest_article.py"},
+    {"id": 5, "description": "bridge_to_article_input() returns non-None title and content", "result": "PASS", "evidence": "f-string title='[Signal Sweep] {domain}{path}', content='[Pending fetch — content_hash changed...]'"},
+    {"id": 6, "description": "ingest_article.py NOT modified", "result": "PASS", "evidence": "Not in changeset files_touched. Protected file."},
+    {"id": 7, "description": "Kill switches preserved", "result": "PASS", "evidence": "KILL_SIGNAL_SWEEP and KILL_FUNDING_DETECTION both checked in change_bridge.py"},
+    {"id": 8, "description": "Read-only semantics preserved", "result": "PASS", "evidence": "SELECT-only query against field_monitor tables. No INSERT/UPDATE/DELETE. No direct ingest_article() call."},
+    {"id": 9, "description": "No scope expansion beyond allowed_paths", "result": "PASS", "evidence": "Only 2 files modified: seed_blog_urls.sql, change_bridge.py"}
+  ],
+  "resolved_failures": [
+    {"id": "SEED-001", "description": "vendor.blog column references corrected"},
+    {"id": "BRIDGE-001", "description": "source enum and non-None title/content placeholders added"}
+  ],
+  "certification": {
+    "doctrine_version": "3.5.0",
+    "locked_files_modified": false,
+    "scope_expansion": false
+  }
+}

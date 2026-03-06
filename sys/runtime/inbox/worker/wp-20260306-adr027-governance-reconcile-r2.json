@@ -1,0 +1,39 @@
+{
+  "id": "wp-20260306-adr027-governance-reconcile-r2",
+  "change_type": "fix",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "docs/adr/ADR-027-deltahound-scheduler-selection.md",
+    "ADR_INDEX.md",
+    "changesets/outbox/"
+  ],
+  "summary": "ADR-027 governance reconciliation rerun: verify template-conformant ADR file, ensure ADR_INDEX row with ACCEPTED status/date 2026-03-05, and update ADR_INDEX Last Modified to 2026-03-05.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T13:39:16Z",
+  "payload": {
+    "process_id": "04a593ca-5fb0-4aa3-a5da-a637afa24d65",
+    "operational_id": "d7a28e96-0b39-4f4c-a1d5-4e70c9f63b18",
+    "source_intake_packet": "sys/runtime/inbox/planner/adr027-d7a28e96-0b39-4f4c-a1d5-4e70c9f63b18.json",
+    "phase": "governance",
+    "constraints": [
+      "Do not expand scope",
+      "Do not modify locked files",
+      "ADR structure must match template exactly",
+      "Status is ACCEPTED"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "docs/adr/ADR-027-deltahound-scheduler-selection.md",
+    "ADR_INDEX.md"
+  ],
+  "doc_surface": "repo_markdown",
+  "container_required": false
+}

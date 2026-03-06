@@ -1,0 +1,46 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "operational_id": "d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor sub-hub integrations for Talent Flow (People) and Signal Sweep (Blog). Production deploy COMPLETE — 4 Workers live on svg-outreach.workers.dev, smoke test 7/7 PASS. CRITICAL: Parser format changed during deploy — new Function() blocked by Workers runtime, parser-registry refactored to regex-based ParserConfig JSON model. Seed scripts must use NEW format. Build sequence: (1) Talent Flow first — update seed_linkedin_parsers.py to ParserConfig JSON, build linkedin_monitor.py bridge, seed 100 LinkedIn URLs, verify bridge reads check_log and fires EVENT_TALENTFLOW_MOVE. (2) Signal Sweep second — same pattern for Blog sub-hub, seed 100 press/about URLs from vendor.blog, build change_bridge.py, verify bridge feeds into ingest_article(). Sample gate: 100 records each.",
+  "parser_config_format": {
+    "note": "NEW FORMAT — old fn_body format is dead",
+    "schema": {
+      "type": "regex",
+      "pattern": "regex pattern string",
+      "flags": "optional regex flags",
+      "group": "capture group number (default 1)",
+      "transforms": "optional post-extraction transforms array"
+    },
+    "kv_key_format": "domain::field_name",
+    "reference_file": "templates/snap-on/field-monitor/packages/parser-registry/src/index.ts"
+  },
+  "production_state": {
+    "workers_deployed": [
+      "field-monitor-fetcher.svg-outreach.workers.dev",
+      "field-monitor-parser-registry.svg-outreach.workers.dev",
+      "field-monitor-proxy-router.svg-outreach.workers.dev",
+      "field-monitor-orchestrator.svg-outreach.workers.dev"
+    ],
+    "kv_namespaces": {
+      "PARSER_KV": "fdb97182fc0845509053eb5925c70b1b",
+      "EGRESS_KV": "66e6c7bec8c1479ba708c0bcbb6a0e23"
+    },
+    "smoke_test": "7/7 gates PASS (505ms)",
+    "existing_parsers": ["linkedin.com::title (ParserConfig JSON, working)"]
+  },
+  "constraints": [
+    "Do not expand scope beyond sub-hub integration files",
+    "Parser seed scripts MUST use ParserConfig JSON format — NOT old fn_body format",
+    "Do not modify existing movement_engine.py, state_machine.py, movement_rules.py",
+    "Do not modify existing blog_node_spoke.py, ingest_article.py, classify_event.py, emit_bit_signal.py",
+    "field_monitor.* is vendor tier — bridge modules READ only, never write",
+    "Seed source for Signal Sweep is vendor.blog (NOT dropped company.company_source_urls)",
+    "Sample gate: 100 records each sub-hub",
+    "Build Talent Flow first, validate, then Signal Sweep",
+    "Kill switches: KILL_TALENT_FLOW_MONITOR, KILL_LINKEDIN_SEED, KILL_SIGNAL_SWEEP, KILL_BLOG_URL_SEED"
+  ]
+}

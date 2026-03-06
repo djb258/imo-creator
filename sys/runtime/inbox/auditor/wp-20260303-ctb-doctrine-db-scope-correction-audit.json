@@ -1,0 +1,47 @@
+{
+  "id": "wp-20260303-ctb-doctrine-db-scope-correction-audit",
+  "change_type": "audit",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "doc_required": false,
+  "allowed_paths": [
+    "audit_reports/",
+    "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/"
+  ],
+  "summary": "Audit the CTB/doctrine DB scope correction executed by Builder v2.7.0 under wp-20260303-ctb-doctrine-db-scope-correction. Evaluate envelope, compliance, DB lane (4 tables), pressure tests, and acceptance.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:15:00Z",
+  "payload": {
+    "process_id": "e328ee12-c379-4508-9c76-a2998008bb0a",
+    "operational_id": "wp-20260303-ctb-doctrine-db-scope-correction",
+    "audit_target": {
+      "work_packet_id": "wp-20260303-ctb-doctrine-db-scope-correction",
+      "execution_log_path": "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/execution_log.json",
+      "changeset_path": "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/changeset.json"
+    },
+    "lane_artifacts": {
+      "db_changeset_path": "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/db/db_changeset.json",
+      "pressure_reports": [
+        "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/audit/ARCH_PRESSURE_REPORT.json",
+        "changesets/outbox/wp-20260303-ctb-doctrine-db-scope-correction/audit/FLOW_PRESSURE_REPORT.json"
+      ]
+    },
+    "builder_agent": "Builder v2.7.0",
+    "lanes_executed": ["db"],
+    "correction_type": "retroactive_db_scope_authorization"
+  },
+  "db_required": true,
+  "db_targets": [
+    "ctb.table_registry",
+    "doctrine.doctrine_library",
+    "doctrine.doctrine_key",
+    "doctrine.doctrine_library_error"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false
+}

@@ -1,0 +1,30 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "e2b73f41-5c94-4a8d-b6e0-9f25d4c18a63",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor Snap-On Tool Phase 2 Spoke Deployment. Deploy three Cloudflare Workers: Fetcher (field-monitor-fetcher), Parser Registry (field-monitor-parser-registry), Proxy Router (field-monitor-proxy-router). All three are pure functions — no state, no Neon writes. Implement per Doc2 specs. Run contract tests against each deployed Worker to verify response shapes match locked interface contracts. Fetcher: plain+proxied fetch_mode, AbortController timeout, UTF-8 transcode, byte_limit. Parser Registry: KV lookup by domain::field_name, execute stored parser, FIELD_ABSENT vs EXTRACTION_FAILED distinction. Proxy Router: read rate_state from Neon, sliding window rate check, KV egress path lookup, compute rate_delta. Deploy via wrangler.",
+  "phase": 2,
+  "phase_label": "Spoke Deployment — Fetcher + Parser Registry + Proxy Router",
+  "prerequisite": "Phase 1 Go condition confirmed",
+  "go_condition": "All three Workers deployed. Contract tests pass for each: correct response shapes, Parser returns extracted_value + confidence_score, Proxy returns egress_path + rate_state_snapshot + rate_delta.",
+  "agent_routing": {
+    "builder": "Implement and deploy all three spoke Workers in parallel. Fetcher, Parser Registry, Proxy Router per Doc2 specs.",
+    "auditor": "Contract test each deployed Worker sequentially. Flag any response field missing or mistyped."
+  },
+  "snap_on_toolbox_compliance": {
+    "cloudflare_workers": "Tier 0",
+    "cloudflare_kv": "Tier 0",
+    "banned_check": "beautifulsoup4 BANNED, requests BANNED, lxml BANNED"
+  },
+  "parallelization_note": "Fetcher, Parser Registry, Proxy Router have no interdependency — Builder may deploy in parallel.",
+  "constraints": [
+    "Do not expand scope beyond three spoke Workers",
+    "Do not infer missing fields",
+    "Proxy Router does NOT write to Neon — read only",
+    "Service Bindings not wired in this phase — that is Phase 3",
+    "Parser function stored in KV as serialized fn_body string"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "wp-20260303-lcs-cid-sid-mid-pipeline-audit",
+  "change_type": "audit",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "doc_required": false,
+  "allowed_paths": [
+    "audit_reports/",
+    "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/"
+  ],
+  "summary": "Audit the CID-SID-MID pipeline build executed by Builder v2.7.0 under wp-20260303-lcs-cid-sid-mid-pipeline. Evaluate all phases: envelope validation, compliance, DB lane, mount integrity, fleet alignment, acceptance, and documentation staleness. Emit classification.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:58:00Z",
+  "payload": {
+    "process_id": "d6cccd55-ec64-4caa-b380-1b7ee047a783",
+    "operational_id": "wp-20260303-lcs-cid-sid-mid-pipeline",
+    "audit_target": {
+      "work_packet_id": "wp-20260303-lcs-cid-sid-mid-pipeline",
+      "work_packet_path": "work_packets/inbox/wp-20260303-lcs-cid-sid-mid-pipeline.json",
+      "execution_log_path": "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/execution_log.json",
+      "changeset_path": "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/changeset.json",
+      "mount_receipt_path": "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/mount_receipt.json"
+    },
+    "lane_artifacts": {
+      "db_changeset_path": "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/db/db_changeset.json",
+      "pressure_reports": [
+        "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/audit/ARCH_PRESSURE_REPORT.json",
+        "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/audit/FLOW_PRESSURE_REPORT.json"
+      ]
+    },
+    "repair_packets_applied": [
+      {
+        "id": "wp-20260303-lcs-cid-sid-mid-scope-repair-v2",
+        "description": "Added column_registry.yml, docs/schema/, src/sys/lcs/doctrine/ to allowed_paths"
+      },
+      {
+        "id": "wp-20260303-lcs-cid-sid-mid-mount-receipt-repair",
+        "description": "Produced mount_receipt.json with commit-level integrity proof and HEIR validation"
+      }
+    ],
+    "builder_agent": "Builder v2.7.0",
+    "lanes_executed": ["standard", "db"],
+    "constraints": [
+      "Evaluate all 5 phases in order",
+      "Stop at first BLOCKING failure",
+      "Emit ORBT artifact on any FAIL classification",
+      "Update fleet_inventory.json alignment status after Phase 3c"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "lcs.cid",
+    "lcs.sid_output",
+    "lcs.mid_sequence_state",
+    "lcs.frame_registry"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false
+}

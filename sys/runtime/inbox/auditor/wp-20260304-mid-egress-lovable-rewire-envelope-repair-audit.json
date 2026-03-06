@@ -1,0 +1,43 @@
+{
+  "id": "wp-20260304-mid-egress-lovable-rewire-envelope-repair-audit",
+  "change_type": "audit",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "doc_required": true,
+  "doc_targets": ["docs/", "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json"],
+  "doc_surface": "repo_markdown",
+  "allowed_paths": [
+    "audit_reports/",
+    "changesets/outbox/wp-20260304-mid-egress-lovable-rewire-envelope-repair/"
+  ],
+  "summary": "Audit the governance envelope repair for MID egress Lovable rewire. Verify materialized work packet, ARCH/FLOW pressure reports (5/5 each), and confirm no code changes were made.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:25:00Z",
+  "payload": {
+    "process_id": "6c719cd4-31e7-41dc-ba65-9d771787dde8",
+    "operational_id": "wp-20260304-mid-egress-lovable-rewire-envelope-repair",
+    "audit_target": {
+      "work_packet_id": "wp-20260304-mid-egress-lovable-rewire-envelope-repair",
+      "execution_log_path": "changesets/outbox/wp-20260304-mid-egress-lovable-rewire-envelope-repair/execution_log.json",
+      "changeset_path": "changesets/outbox/wp-20260304-mid-egress-lovable-rewire-envelope-repair/changeset.json"
+    },
+    "related_artifacts": {
+      "pressure_reports": [
+        "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/ARCH_PRESSURE_REPORT.json",
+        "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/audit/FLOW_PRESSURE_REPORT.json"
+      ],
+      "materialized_work_packet": "work_packets/inbox/wp-20260304-mid-egress-lovable-rewire.json"
+    },
+    "builder_agent": "Builder v2.7.0",
+    "lanes_executed": ["standard"],
+    "governance_only": true,
+    "repairs_work_packet": "wp-20260304-mid-egress-lovable-rewire"
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

@@ -1,0 +1,36 @@
+{
+  "work_packet_id": "wp-20260306-field-monitor-subhub-integrations",
+  "changeset_id": "cs-20260306-field-monitor-subhub-integrations",
+  "timestamp": "2026-03-06T15:30:00.000Z",
+  "target_repo": "barton-outreach-core",
+  "status": "INCREMENTAL_UPDATE",
+  "note": "Sub-hub integrations (linkedin_monitor, signal_sweep, seed SQL, pipelines) were built in prior session. This WP's delta: update parser seed scripts from fn_body format to ParserConfig JSON format to match refactored parser-registry.",
+  "files_touched": [
+    {
+      "path": "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+      "action": "modified",
+      "reason": "Replaced fn_body JavaScript string with ParserConfig JSON config dict. PARSERS[].fn_body → PARSERS[].config with type/pattern/flags/group/transforms."
+    },
+    {
+      "path": "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+      "action": "modified",
+      "reason": "Replaced BLOG_CONTENT_HASH_PARSER fn_body string with BLOG_CONTENT_HASH_CONFIG dict and BLOG_MAIN_HASH_CONFIG dict (ParserConfig JSON). BLOG_PARSERS[].fn_body → BLOG_PARSERS[].config."
+    },
+    {
+      "path": "hubs/blog-content/scripts/seed_blog_parsers.py",
+      "action": "modified",
+      "reason": "Updated to use config dict from parser_templates instead of fn_body. Output now shows config JSON instead of fn_body length."
+    }
+  ],
+  "files_verified_unchanged": [
+    "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+    "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+    "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+    "hubs/people-intelligence/pipeline.md",
+    "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+    "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/pipeline.md"
+  ]
+}

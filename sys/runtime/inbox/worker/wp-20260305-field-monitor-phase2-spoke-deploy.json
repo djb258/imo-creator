@@ -1,0 +1,39 @@
+{
+  "id": "wp-20260305-field-monitor-phase2-spoke-deploy",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "templates/snap-on/field-monitor/packages/fetcher/",
+    "templates/snap-on/field-monitor/packages/parser-registry/",
+    "templates/snap-on/field-monitor/packages/proxy-router/",
+    "templates/snap-on/field-monitor/shared/",
+    "changesets/outbox/"
+  ],
+  "summary": "Field Monitor Phase 2 spoke deployment: implement/deploy Fetcher, Parser Registry, and Proxy Router Cloudflare Workers per Doc2 contracts; run contract tests for strict response-shape validation.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T18:45:26Z",
+  "payload": {
+    "process_id": "3f87931d-197a-497e-941a-20ecd6c8d3e5",
+    "operational_id": "e2b73f41-5c94-4a8d-b6e0-9f25d4c18a63",
+    "phase": 2,
+    "phase_label": "Spoke Deployment — Fetcher + Parser Registry + Proxy Router",
+    "source_intake_packet": "sys/runtime/inbox/planner/fm-build-02-e2b73f41-5c94-4a8d-b6e0-9f25d4c18a63.json",
+    "prerequisite": "Phase 1 go condition confirmed",
+    "parallelization_note": "Fetcher, Parser Registry, Proxy Router may deploy in parallel",
+    "constraints": [
+      "Do not expand scope beyond three spoke workers",
+      "Proxy Router does NOT write to Neon — read only",
+      "Service Bindings not wired in this phase",
+      "Parser function stored in KV as serialized fn_body string"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

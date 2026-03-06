@@ -1,0 +1,31 @@
+name: Deploy Field Monitor Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'templates/snap-on/field-monitor/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        worker: [orchestrator, fetcher, parser-registry, proxy-router]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: templates/snap-on/field-monitor
+        run: npm install
+
+      - name: Deploy ${{ matrix.worker }}
+        working-directory: templates/snap-on/field-monitor/packages/${{ matrix.worker }}
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -1,0 +1,46 @@
+{
+  "report_type": "ARCH_PRESSURE_TEST",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "changeset_id": "db-cs-20260305-field-monitor-phase1-001",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T19:00:00Z",
+  "result": "PASS",
+  "score": "5/5",
+  "invariants": [
+    {
+      "id": "ARCH-1",
+      "name": "Schema Isolation",
+      "description": "All field_monitor objects reside in a dedicated schema, not polluting existing schemas.",
+      "result": "PASS",
+      "evidence": "CREATE SCHEMA field_monitor. All 5 tables, 3 functions, 4 triggers created within field_monitor namespace. No cross-schema DDL. No modifications to existing schemas (cl, lcs, outreach, ctb, doctrine)."
+    },
+    {
+      "id": "ARCH-2",
+      "name": "CTB Promotion Enforcement — Constitutional Law",
+      "description": "field_state.promotion_status is forward-only: DRAFT → PROMOTED. Demotion is prohibited.",
+      "result": "PASS",
+      "evidence": "Trigger trg_ctb_promotion_enforcement fires BEFORE UPDATE on field_state. Tested: INSERT with PROMOTED, UPDATE to DRAFT raises 'CTB violation: cannot demote from PROMOTED to DRAFT'. Forward promotion (DRAFT → PROMOTED) allowed."
+    },
+    {
+      "id": "ARCH-3",
+      "name": "Append-Only Enforcement — check_log",
+      "description": "check_log is immutable after INSERT. No UPDATE or DELETE allowed.",
+      "result": "PASS",
+      "evidence": "Two triggers: trg_check_log_no_update (BEFORE UPDATE), trg_check_log_no_delete (BEFORE DELETE). Both call deny_check_log_mutation() which raises exception. Tested: INSERT succeeds, UPDATE raises 'check_log is append-only: UPDATE operations are prohibited'."
+    },
+    {
+      "id": "ARCH-4",
+      "name": "No-Delete Enforcement — error_log",
+      "description": "error_log allows INSERT and UPDATE (for resolved_at) but DELETE is prohibited.",
+      "result": "PASS",
+      "evidence": "Trigger trg_error_log_no_delete (BEFORE DELETE) calls deny_error_log_delete(). INSERT and UPDATE permitted (UPDATE needed for setting resolved_at). DELETE prohibited."
+    },
+    {
+      "id": "ARCH-5",
+      "name": "Referential Integrity",
+      "description": "All child tables reference url_registry via foreign key.",
+      "result": "PASS",
+      "evidence": "field_state.url_id → url_registry(url_id), check_log.url_id → url_registry(url_id), error_log.url_id → url_registry(url_id). rate_state uses domain (TEXT) without FK — by design (rate limiting is per-domain, not per-URL)."
+    }
+  ]
+}

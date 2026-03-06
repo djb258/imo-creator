@@ -57,7 +57,7 @@ All fleet secrets are centralized in the **imo-creator** Doppler project (sovere
 | Vault Name | Description | Status |
 |------------|-------------|--------|
 | `DATABASE_URL` | Sovereign Neon DB (Garage command database) | ACTIVE |
-| `GARAGE_SIGNING_KEY` | Garage artifact signing key | PENDING |
+| `GARAGE_SIGNING_KEY` | Garage artifact signing key | ACTIVE |
 | `SUPADATA_API_KEY` | Supadata API key (transcript/social data) | ACTIVE |
 
 ### GLOBAL (shared, pushed to children that need them)
@@ -199,10 +199,10 @@ All 7 databases verified connected on 2026-03-02.
 
 | Field | Value |
 |-------|-------|
-| Status | PENDING |
+| Status | ACTIVE |
 | Vault Name | `GARAGE_SIGNING_KEY` |
 | Category | SOVEREIGN |
-| Current Value | `PENDING_HUMAN_GENERATES` |
+| Provisioned | 2026-03-03 |
 
 ### Generation Instructions
 
@@ -250,7 +250,7 @@ Per `templates/integrations/DOPPLER.md` and `engine_contract.json`:
 - [x] All child secrets ingested with correct prefix convention
 - [x] `FLEET_SECRETS_MANIFEST.yaml` maps every secret
 - [x] `fleet-secrets-sync.sh` and `.ps1` scripts operational
-- [ ] GARAGE_SIGNING_KEY generated (PENDING — human action)
+- [x] GARAGE_SIGNING_KEY generated (2026-03-03)
 - [ ] Rotation schedule activated (first rotation: Q2 2026)
 - [ ] CI/CD updated to use sovereign vault tokens
 
@@ -261,6 +261,6 @@ Per `templates/integrations/DOPPLER.md` and `engine_contract.json`:
 | Field | Value |
 |-------|-------|
 | Created | 2026-03-02 |
-| Last Modified | 2026-03-02 |
+| Last Modified | 2026-03-03 |
 | Authority | Operations (Human + AI) |
 | Related Files | `FLEET_SECRETS_MANIFEST.yaml`, `doppler.yaml`, `scripts/fleet-secrets-sync.sh` |

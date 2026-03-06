@@ -1,0 +1,40 @@
+{
+  "execution_log_id": "exec-wp-20260304-planner-barrel-allowed-paths-repair",
+  "work_packet_id": "wp-20260304-planner-barrel-allowed-paths-repair",
+  "changeset_id": "cs-wp-20260304-planner-barrel-allowed-paths-repair",
+  "agent": "Builder v2.7.0",
+  "execution_type": "standard",
+  "orbt_mode": "repair",
+  "target_repo": "imo-creator",
+  "doctrine_version": "3.5.0",
+  "timestamp_start": "2026-03-04T15:30:00Z",
+  "timestamp_end": "2026-03-04T15:30:00Z",
+  "actions": [
+    {
+      "step": 1,
+      "action": "WORK_PACKET validation",
+      "status": "COMPLETED",
+      "detail": "Validated wp-20260304-planner-barrel-allowed-paths-repair. orbt_mode=repair, target=imo-creator, human authority granted for locked file modification."
+    },
+    {
+      "step": 2,
+      "action": "Read Planner master_prompt.md",
+      "status": "COMPLETED",
+      "detail": "Read ai/agents/planner/master_prompt.md (v2.4.0, 302 lines). Found allowed_paths rule at line 94 in Field Generation Rules."
+    },
+    {
+      "step": 3,
+      "action": "Add barrel file rule",
+      "status": "COMPLETED",
+      "detail": "Added barrel rule to allowed_paths field: when individual files within a directory are listed instead of the directory itself, the barrel file (index.ts, index.js, index.mts, mod.ts) MUST be explicitly included if the Builder will modify it. When a directory path is listed, barrel files are implicitly in scope."
+    }
+  ],
+  "files_created": [],
+  "files_modified": [
+    "ai/agents/planner/master_prompt.md"
+  ],
+  "scope_violations": [],
+  "deviations": [],
+  "overall_status": "COMPLETED",
+  "ready_for_auditor": true
+}

@@ -1,0 +1,24 @@
+{
+  "audit_request_id": "audit-20260306-talent-flow-linkedin-monitor",
+  "work_packet_id": "wp-20260306-talent-flow-linkedin-monitor",
+  "audited_at": "2026-03-06T16:25:00.000Z",
+  "audited_by": "auditor",
+  "doctrine_version": "3.5.0",
+  "status": "AUDIT_COMPLETE",
+  "result": "PASS",
+  "qualification": "7/7 checks PASS. Talent Flow LinkedIn monitor fully compliant.",
+  "checks": [
+    {"id": 1, "description": "linkedin_monitor.py read-only against field_monitor", "result": "PASS", "evidence": "SELECT-only query joining field_state, url_registry, people_master. No writes. Explicit docstring."},
+    {"id": 2, "description": "Protected files untouched", "result": "PASS", "evidence": "movement_engine.py, state_machine.py, movement_rules.py all verified unchanged."},
+    {"id": 3, "description": "Kill switches enforced (2)", "result": "PASS", "evidence": "KILL_TALENT_FLOW_MONITOR + KILL_LINKEDIN_SEED checked with early exit in linkedin_monitor.py and seed_linkedin_parsers.py"},
+    {"id": 4, "description": "Sample gate LIMIT 100", "result": "PASS", "evidence": "seed_linkedin_urls.sql line 26, linkedin_monitor.py line 115"},
+    {"id": 5, "description": "bridge_to_movement_event correct for EVENT_TALENTFLOW_MOVE", "result": "PASS", "evidence": "Returns signal_type, signal_date, old_title, new_title, linkedin_url, source, field_id, url_id"},
+    {"id": 6, "description": "__init__.py barrel updated correctly", "result": "PASS", "evidence": "__all__ includes scan_linkedin_changes, bridge_to_movement_event, LinkedInChange, LinkedInMonitorResult"},
+    {"id": 7, "description": "No scope expansion beyond allowed_paths", "result": "PASS", "evidence": "5 files touched (3 new + 2 modified), all within hubs/people-intelligence/"}
+  ],
+  "certification": {
+    "doctrine_version": "3.5.0",
+    "locked_files_modified": false,
+    "scope_expansion": false
+  }
+}

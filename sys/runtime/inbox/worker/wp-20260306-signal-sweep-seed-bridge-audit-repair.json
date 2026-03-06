@@ -1,0 +1,40 @@
+{
+  "id": "wp-20260306-signal-sweep-seed-bridge-audit-repair",
+  "change_type": "repair",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py"
+  ],
+  "summary": "Repair Signal Sweep audit failures: SEED-001 (align seed SQL to actual vendor.blog schema with source_url parsing and valid filters/order) and BRIDGE-001 (produce ingest_article()-compatible non-null payload using valid ArticleSource enum without modifying ingest_article.py).",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T15:44:35Z",
+  "payload": {
+    "process_id": "aff17307-f667-4886-a81a-e276fb2ae2fe",
+    "operational_id": "f8a21c3d-7e45-4b09-a6d2-9c83e1f70b54",
+    "source_intake_packet": "sys/runtime/inbox/planner/ss-repair-01-f8a21c3d-7e45-4b09-a6d2-9c83e1f70b54.json",
+    "repairs_work_packet": "wp-20260306-blog-content-seed-bridge-repair",
+    "constraints": [
+      "Do not expand scope beyond seed_blog_urls.sql and change_bridge.py",
+      "Do not modify ingest_article.py",
+      "Use existing ArticleSource enum values only",
+      "Preserve kill switches and sample gates",
+      "Preserve read-only semantics in change_bridge.py",
+      "Seed SQL must remain idempotent (ON CONFLICT DO NOTHING)"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "vendor.blog",
+    "field_monitor.url_registry"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

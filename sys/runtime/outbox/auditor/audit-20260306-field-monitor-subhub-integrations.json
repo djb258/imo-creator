@@ -1,0 +1,27 @@
+{
+  "audit_request_id": "audit-20260306-field-monitor-subhub-integrations",
+  "work_packet_id": "wp-20260306-field-monitor-subhub-integrations",
+  "audited_at": "2026-03-06T16:10:00.000Z",
+  "audited_by": "auditor",
+  "doctrine_version": "3.5.0",
+  "status": "AUDIT_COMPLETE",
+  "result": "PASS",
+  "qualification": "10/10 checks PASS. Parser format migration from fn_body to ParserConfig JSON complete.",
+  "checks": [
+    {"id": 1, "description": "All allowed_paths files exist", "result": "PASS", "evidence": "seed_linkedin_parsers.py, parser_templates.py, seed_blog_parsers.py all present in barton-outreach-core"},
+    {"id": 2, "description": "seed_linkedin_parsers.py uses ParserConfig JSON", "result": "PASS", "evidence": "Config object with type='regex', pattern, flags, group, transforms. No fn_body."},
+    {"id": 3, "description": "parser_templates.py defines BLOG_PARSERS with config dicts", "result": "PASS", "evidence": "BLOG_CONTENT_HASH_CONFIG and BLOG_MAIN_HASH_CONFIG as dicts. BLOG_PARSERS array with key_pattern + config."},
+    {"id": 4, "description": "seed_blog_parsers.py imports and uses config dicts correctly", "result": "PASS", "evidence": "Imports BLOG_PARSERS from parser_templates, accesses parser['config'], serializes via json.dumps()"},
+    {"id": 5, "description": "ParserConfig format matches parser-registry expectations", "result": "PASS", "evidence": "All configs have type, pattern, flags, group, transforms — matches ParserConfig interface in parser-registry/src/index.ts"},
+    {"id": 6, "description": "Kill switches preserved in all seed scripts", "result": "PASS", "evidence": "KILL_LINKEDIN_SEED in seed_linkedin_parsers.py, KILL_BLOG_URL_SEED + KILL_SIGNAL_SWEEP in seed_blog_parsers.py"},
+    {"id": 7, "description": "Sample gates preserved in seed SQL", "result": "PASS", "evidence": "LIMIT 100 in both seed_linkedin_urls.sql and seed_blog_urls.sql"},
+    {"id": 8, "description": "Read-only semantics in bridge modules", "result": "PASS", "evidence": "Bridge modules untouched, vendor tier read-only enforcement maintained"},
+    {"id": 9, "description": "No protected files modified", "result": "PASS", "evidence": "movement_engine.py (796 lines) and ingest_article.py (368 lines) both verified unchanged"},
+    {"id": 10, "description": "No scope expansion beyond allowed_paths", "result": "PASS", "evidence": "Only 3 files modified: seed_linkedin_parsers.py, parser_templates.py, seed_blog_parsers.py"}
+  ],
+  "certification": {
+    "doctrine_version": "3.5.0",
+    "locked_files_modified": false,
+    "scope_expansion": false
+  }
+}

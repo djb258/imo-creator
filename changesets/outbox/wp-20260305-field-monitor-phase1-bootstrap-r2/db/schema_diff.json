@@ -1,0 +1,83 @@
+{
+  "changeset_id": "db-cs-20260305-field-monitor-phase1-001",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "diff_type": "schema_create",
+  "baseline": {
+    "schema_exists": false,
+    "schema_name": "field_monitor"
+  },
+  "target": {
+    "schema_exists": true,
+    "schema_name": "field_monitor",
+    "tables": [
+      {
+        "name": "url_registry",
+        "columns": 7,
+        "pk": "url_id (UUID)",
+        "unique": ["(domain, path)"],
+        "indexes": ["idx_url_registry_domain", "idx_url_registry_active (partial)"],
+        "fk": [],
+        "triggers": [],
+        "mutability": "READ/WRITE"
+      },
+      {
+        "name": "field_state",
+        "columns": 11,
+        "pk": "field_id (UUID)",
+        "unique": ["(url_id, field_name)"],
+        "indexes": ["idx_field_state_url", "idx_field_state_status", "idx_field_state_promotion"],
+        "fk": ["url_id → url_registry(url_id)"],
+        "triggers": ["trg_ctb_promotion_enforcement (BEFORE UPDATE)"],
+        "mutability": "READ/WRITE (promotion_status forward-only)",
+        "checks": ["status IN (ACTIVE, STALE, ERROR, DISABLED)", "promotion_status IN (DRAFT, PROMOTED)"]
+      },
+      {
+        "name": "check_log",
+        "columns": 9,
+        "pk": "log_id (UUID)",
+        "unique": [],
+        "indexes": ["idx_check_log_url_field", "idx_check_log_checked_at", "idx_check_log_changed (partial)"],
+        "fk": ["url_id → url_registry(url_id)"],
+        "triggers": ["trg_check_log_no_update (BEFORE UPDATE)", "trg_check_log_no_delete (BEFORE DELETE)"],
+        "mutability": "APPEND-ONLY (INSERT only)"
+      },
+      {
+        "name": "error_log",
+        "columns": 7,
+        "pk": "error_id (UUID)",
+        "unique": [],
+        "indexes": ["idx_error_log_url", "idx_error_log_unresolved (partial)"],
+        "fk": ["url_id → url_registry(url_id)"],
+        "triggers": ["trg_error_log_no_delete (BEFORE DELETE)"],
+        "mutability": "INSERT/UPDATE only (no DELETE)"
+      },
+      {
+        "name": "rate_state",
+        "columns": 8,
+        "pk": "rate_id (UUID)",
+        "unique": ["(domain, window_start)"],
+        "indexes": ["idx_rate_state_domain", "idx_rate_state_window"],
+        "fk": [],
+        "triggers": [],
+        "mutability": "READ/WRITE"
+      }
+    ],
+    "functions": [
+      "field_monitor.enforce_ctb_promotion()",
+      "field_monitor.deny_check_log_mutation()",
+      "field_monitor.deny_error_log_delete()"
+    ]
+  },
+  "structural_changes": [
+    {"operation": "CREATE SCHEMA", "name": "field_monitor"},
+    {"operation": "CREATE TABLE", "name": "field_monitor.url_registry"},
+    {"operation": "CREATE TABLE", "name": "field_monitor.field_state"},
+    {"operation": "CREATE TABLE", "name": "field_monitor.check_log"},
+    {"operation": "CREATE TABLE", "name": "field_monitor.error_log"},
+    {"operation": "CREATE TABLE", "name": "field_monitor.rate_state"},
+    {"operation": "CREATE FUNCTION", "name": "field_monitor.enforce_ctb_promotion()"},
+    {"operation": "CREATE FUNCTION", "name": "field_monitor.deny_check_log_mutation()"},
+    {"operation": "CREATE FUNCTION", "name": "field_monitor.deny_error_log_delete()"}
+  ],
+  "timestamp": "2026-03-05T19:00:00Z"
+}

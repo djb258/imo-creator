@@ -1,0 +1,30 @@
+{
+  "changeset_id": "cs-20260306-signal-sweep-blog-monitor",
+  "work_packet_id": "wp-20260306-signal-sweep-blog-monitor",
+  "status": "COMPLETE",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "standard",
+  "target_repo": "barton-outreach-core",
+  "files_created": [
+    "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+    "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/scripts/seed_blog_parsers.py"
+  ],
+  "files_modified": [
+    "hubs/blog-content/pipeline.md"
+  ],
+  "summary": "Signal Sweep Blog Monitor — field_monitor bridge. New signal_sweep package: url_seeder seeds vendor.blog URLs into field_monitor, change_bridge reads content_hash changes (read-only), parser_templates defines generic blog content hash parser. Kill switches KILL_SIGNAL_SWEEP, KILL_BLOG_URL_SEED, KILL_FUNDING_DETECTION enforced. Sample gate LIMIT 100.",
+  "verification": {
+    "read_only_bridge": "change_bridge.py reads field_monitor tables only — never writes",
+    "seed_module": "url_seeder.py writes to field_monitor (seed operation only, with dry_run support)",
+    "kill_switches": ["KILL_SIGNAL_SWEEP", "KILL_BLOG_URL_SEED", "KILL_FUNDING_DETECTION"],
+    "sample_gate": 100,
+    "existing_files_untouched": ["blog_node_spoke.py", "ingest_article.py", "classify_event.py", "emit_bit_signal.py"],
+    "db_agent_status": "DB_COMPLETE — vendor schema + vendor.blog created, seed ran 0 rows (table empty, data-dependent)",
+    "dependency": "wp-20260306-talent-flow-linkedin-monitor (completed)"
+  }
+}

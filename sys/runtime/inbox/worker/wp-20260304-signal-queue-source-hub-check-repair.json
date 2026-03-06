@@ -1,0 +1,37 @@
+{
+  "id": "wp-20260304-signal-queue-source-hub-check-repair",
+  "change_type": "fix",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "migrations/",
+    "src/sys/lcs/contracts/",
+    "changesets/outbox/"
+  ],
+  "summary": "Update lcs.signal_queue source_hub CHECK constraint to include OUTREACH and SYSTEM; determine actual constraint name first, then drop/recreate with exactly PEOPLE, DOL, BLOG, MANUAL, OUTREACH, SYSTEM and verify acceptance.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T20:09:41Z",
+  "payload": {
+    "process_id": "ea28ed4b-3213-414b-8ce8-4578cedf93ab",
+    "operational_id": "f7a12c30-9e84-4b5d-d0f2-4c87b9e61a05",
+    "source_intake_packet": "sys/runtime/inbox/planner/f7a12c30-9e84-4b5d-d0f2-4c87b9e61a05.json",
+    "constraints": [
+      "Find constraint name first if unnamed via pg_constraint",
+      "Drop and recreate; do not use ALTER CONSTRAINT",
+      "Final allowed set must be exactly PEOPLE, DOL, BLOG, MANUAL, OUTREACH, SYSTEM",
+      "Use Doppler/NEON_DATABASE_URL for DB execution"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "lcs.signal_queue"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

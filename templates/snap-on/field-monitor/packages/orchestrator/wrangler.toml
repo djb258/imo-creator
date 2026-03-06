@@ -1,0 +1,22 @@
+name = "field-monitor-orchestrator"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[vars]
+ENVIRONMENT = "development"
+
+# Neon database connection via hyperdrive or secret
+# DATABASE_URL is bound as a secret via `wrangler secret put DATABASE_URL`
+
+# Service bindings to spoke workers
+[[services]]
+binding = "FETCHER"
+service = "field-monitor-fetcher"
+
+[[services]]
+binding = "PARSER"
+service = "field-monitor-parser-registry"
+
+[[services]]
+binding = "PROXY"
+service = "field-monitor-proxy-router"

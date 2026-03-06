@@ -1,0 +1,31 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "d1a62e30-4b83-4f7c-a5d9-8e14c3b07f52",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor Snap-On Tool Phase 1 Bootstrap. Create Neon project field-monitor and run 001_initial_schema.sql. Schema: url_registry, field_state, check_log, error_log, rate_state tables. Apply CTB promotion enforcement trigger on field_state. Apply all indexes. Scaffold Cloudflare Workers monorepo at templates/snap-on/field-monitor/ with packages: orchestrator, fetcher, parser-registry, proxy-router, shared. Install @neondatabase/serverless and wrangler. Verify wrangler dev runs without errors.",
+  "phase": 1,
+  "phase_label": "Bootstrap — Neon Schema + Workers Project Scaffold",
+  "go_condition": "All Neon tables created. CTB trigger active. All indexes created. wrangler dev runs without errors.",
+  "agent_routing": {
+    "db_agent": "Run 001_initial_schema.sql against Neon. Verify CTB trigger fires on invalid insert, silent on valid insert.",
+    "builder": "Scaffold monorepo at templates/snap-on/field-monitor/. wrangler.toml, package stubs, shared/ stubs, .github/workflows stub.",
+    "auditor": "Verify all 5 Neon tables, CTB trigger, all indexes, wrangler.toml, shared/ stubs."
+  },
+  "snap_on_toolbox_compliance": {
+    "cloudflare_workers": "Tier 0",
+    "neon": "Infrastructure constant",
+    "github_actions": "Infrastructure constant",
+    "banned_check": "No banned libraries"
+  },
+  "constraints": [
+    "Do not expand scope beyond schema + scaffold",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "CTB trigger is constitutional law — do not simplify or omit",
+    "check_log is append-only — no UPDATE or DELETE",
+    "error_log is INSERT and UPDATE only — no DELETE"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "changeset_id": "cs-20260306-talent-flow-linkedin-monitor",
+  "work_packet_id": "wp-20260306-talent-flow-linkedin-monitor",
+  "status": "COMPLETE",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "standard",
+  "target_repo": "barton-outreach-core",
+  "files_created": [
+    "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+    "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+    "hubs/people-intelligence/scripts/seed_linkedin_parsers.py"
+  ],
+  "files_modified": [
+    "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+    "hubs/people-intelligence/pipeline.md"
+  ],
+  "summary": "Talent Flow LinkedIn Monitor — field_monitor bridge. Reads field_state title changes on LinkedIn URLs, joins against people.people_master, bridges into MovementEngine as EVENT_TALENTFLOW_MOVE. Kill switches KILL_TALENT_FLOW_MONITOR and KILL_LINKEDIN_SEED enforced. Sample gate LIMIT 100. Seed SQL and parser KV seeder included.",
+  "verification": {
+    "read_only_bridge": "linkedin_monitor.py reads field_monitor tables only — never writes",
+    "kill_switches": ["KILL_TALENT_FLOW_MONITOR", "KILL_LINKEDIN_SEED"],
+    "sample_gate": 100,
+    "existing_files_untouched": ["movement_engine.py", "state_machine.py", "movement_rules.py"],
+    "db_agent_status": "DB_COMPLETE — seed ran, 0 rows (data-dependent, re-run when people_master has LinkedIn URLs)"
+  }
+}

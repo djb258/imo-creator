@@ -1,0 +1,34 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "operational_id": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "work_packet_ref": "wp-20260306-talent-flow-linkedin-monitor",
+  "intent_summary": "Integrate Field Monitor vendor tier into Talent Flow for LinkedIn public profile change detection. field_monitor.* tables are vendor staging layer. Seeds 100 LinkedIn URLs from people.people_master into field_monitor.url_registry. Creates field_state entries for current_title and current_company. Bridge module in hub Middle layer reads detected changes from vendor tier and fires EVENT_TALENTFLOW_MOVE into existing movement engine. Sample-gated to 100 records.",
+  "named_system": "Talent Flow — LinkedIn Monitor",
+  "vendor_tier": "field_monitor.* (same tier as vendor.people, vendor.blog, vendor.ct)",
+  "sample_gate": 100,
+  "go_condition": "Seed SQL runs clean (100 url_registry rows, 200 field_state rows). Parser KV entries created. linkedin_monitor.py imports clean and bridge_changes() reads from vendor tier. Kill switches halt execution. pipeline.md updated.",
+  "agent_routing": {
+    "db_agent": "Run seed_linkedin_urls.sql against Neon. Verify 100 url_registry rows, 200 field_state rows. Idempotent.",
+    "builder": "Create linkedin_monitor.py, seed scripts, update __init__.py and pipeline.md. All logic in Middle layer.",
+    "auditor": "Verify CTB, IMO, vendor tier pattern, kill switches, no downstream modifications."
+  },
+  "allowed_paths": [
+    "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+    "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+    "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+    "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+    "hubs/people-intelligence/pipeline.md"
+  ],
+  "constraints": [
+    "Do not expand scope beyond allowed_paths",
+    "Do not modify existing movement_engine.py, state_machine.py, or movement_rules.py",
+    "field_monitor.* is vendor tier — bridge READS only, never writes",
+    "All logic in hub Middle layer",
+    "Kill switches KILL_TALENT_FLOW_MONITOR and KILL_LINKEDIN_SEED enforced",
+    "Sample gate: LIMIT 100 on seed"
+  ]
+}

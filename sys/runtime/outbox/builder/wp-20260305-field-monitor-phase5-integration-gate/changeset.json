@@ -1,0 +1,61 @@
+{
+  "changeset_id": "cs-20260305-field-monitor-phase5-integration-gate",
+  "work_packet_id": "wp-20260305-field-monitor-phase5-integration-gate",
+  "status": "COMPLETE",
+  "timestamp": "2026-03-05T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "standard",
+  "files_created": [
+    "templates/snap-on/field-monitor/tests/integration-gate.ts"
+  ],
+  "summary": "Created integration gate test suite and executed against live Neon. All 4 scenarios PASS plus 3 enforcement verifications PASS. Verdict: GO.",
+  "integration_gate_report": {
+    "verdict": "GO",
+    "scenarios": [
+      {
+        "scenario": 1,
+        "name": "Happy path — full pipeline",
+        "result": "PASS",
+        "gate_reached": 7,
+        "expected_gate": 7,
+        "detail": "URL active, field updated ($99/mo → $149/mo), check_log written, all 7 gates simulated"
+      },
+      {
+        "scenario": 2,
+        "name": "Rate limit — orchestrator stops at Gate 2",
+        "result": "PASS",
+        "gate_reached": 2,
+        "expected_gate": 2,
+        "detail": "Rate state shows 60/60 requests — orchestrator would block at Gate 2"
+      },
+      {
+        "scenario": 3,
+        "name": "Parser missing — FIELD_ABSENT at Gate 4",
+        "result": "PASS",
+        "gate_reached": 4,
+        "expected_gate": 4,
+        "detail": "No KV parser entry for example-test.com::price — parser would return FIELD_ABSENT"
+      },
+      {
+        "scenario": 4,
+        "name": "CTB trigger enforcement",
+        "result": "PASS",
+        "gate_reached": null,
+        "expected_gate": 0,
+        "detail": "CTB trigger correctly blocked PROMOTED→DRAFT demotion"
+      }
+    ],
+    "enforcement_checks": [
+      { "name": "check_log UPDATE", "result": "PASS", "detail": "Blocked by append-only trigger" },
+      { "name": "check_log DELETE", "result": "PASS", "detail": "Blocked by append-only trigger" },
+      { "name": "error_log DELETE", "result": "PASS", "detail": "Blocked by no-delete trigger" }
+    ],
+    "post_build_prerequisites": [
+      "ADR: Register Field Monitor in SNAP_ON_TOOLBOX.yaml as TOOL-FM-001 (Tier 0)",
+      "ADR: Document field_monitor schema ownership in REPO_DOMAIN_SPEC or equivalent",
+      "Doppler: Add FIELD_MONITOR_DATABASE_URL and FIELD_MONITOR_ORCHESTRATOR_URL secrets",
+      "Cloudflare: Create KV namespaces for PARSER_KV and EGRESS_KV",
+      "Cloudflare: Deploy all 4 workers via wrangler deploy"
+    ]
+  }
+}

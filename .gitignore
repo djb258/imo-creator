@@ -73,3 +73,5 @@ COMPOSIO_VERIFICATION_REPORT.md
 deepwiki/
 AutoDocs/
 chartdb/
+.claude/worktrees/
+.wrangler/

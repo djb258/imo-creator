@@ -1,0 +1,91 @@
+{
+  "id": "wp-20260306-field-monitor-marketing-db-migration",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "db_changeset",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "summary": "Apply field_monitor schema to the MARKETING Neon database (barton-outreach-core). The schema was previously applied to the CL database in error. Production field_monitor workers must connect to the marketing DB where people.people_master and vendor.blog already reside.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "routed_by": "builder",
+  "routed_at": "2026-03-06T00:00:00.000Z",
+  "payload": {
+    "operational_id": "c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+    "database_url_source": "Doppler project barton-outreach-core, config dev, secret DATABASE_URL",
+    "migration_file": "templates/snap-on/field-monitor/migrations/001_initial_schema.sql",
+    "migration_location": "imo-creator repo: templates/snap-on/field-monitor/migrations/001_initial_schema.sql",
+    "tasks": [
+      {
+        "step": 1,
+        "action": "Apply 001_initial_schema.sql to the marketing Neon database",
+        "database": "Marketing DB (barton-outreach-core Doppler DATABASE_URL)",
+        "details": "Creates field_monitor schema, 5 tables (url_registry, field_state, check_log, error_log, rate_state), CTB promotion trigger, append-only check_log triggers, no-delete error_log trigger, 10 indexes. All idempotent (CREATE SCHEMA IF NOT EXISTS, but tables use plain CREATE TABLE — will fail if already exists, which is correct since this is first apply)."
+      },
+      {
+        "step": 2,
+        "action": "Verify all 5 tables exist after migration",
+        "expected": "field_monitor.url_registry, field_monitor.field_state, field_monitor.check_log, field_monitor.error_log, field_monitor.rate_state"
+      },
+      {
+        "step": 3,
+        "action": "Verify all 4 triggers exist",
+        "expected": "trg_ctb_promotion_enforcement, trg_check_log_no_update, trg_check_log_no_delete, trg_error_log_no_delete"
+      },
+      {
+        "step": 4,
+        "action": "Verify vendor.blog already exists on marketing DB (confirmed by Builder — EXISTS)",
+        "expected": "vendor.blog table present"
+      },
+      {
+        "step": 5,
+        "action": "Verify people.people_master.linkedin_url exists on marketing DB (confirmed by Builder — EXISTS)",
+        "expected": "linkedin_url column present"
+      },
+      {
+        "step": 6,
+        "action": "Run the two seed scripts against marketing DB",
+        "scripts": [
+          "barton-outreach-core: hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+          "barton-outreach-core: hubs/blog-content/scripts/seed_blog_urls.sql"
+        ],
+        "notes": "Both are idempotent (ON CONFLICT DO NOTHING). May seed 0 rows if source tables are empty — that is acceptable."
+      }
+    ],
+    "constraints": [
+      "Use Doppler barton-outreach-core DATABASE_URL — NOT the CL database",
+      "Migration is idempotent at schema level (IF NOT EXISTS) but tables are first-apply",
+      "Do not modify the migration SQL — apply as-is from imo-creator",
+      "Verify triggers fire correctly after apply"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "field_monitor.url_registry",
+    "field_monitor.field_state",
+    "field_monitor.check_log",
+    "field_monitor.error_log",
+    "field_monitor.rate_state"
+  ],
+  "db_system": "neon",
+  "db_connection": {
+    "doppler_project": "barton-outreach-core",
+    "doppler_config": "dev",
+    "doppler_secret": "DATABASE_URL",
+    "database_name": "Marketing DB",
+    "neon_host": "ep-ancient-waterfall-a42vy0du-pooler.us-east-1.aws.neon.tech"
+  },
+  "pre_verification": {
+    "marketing_db_field_monitor": "NOT FOUND — migration required",
+    "marketing_db_vendor_schema": "EXISTS",
+    "marketing_db_vendor_blog": "EXISTS",
+    "marketing_db_people_schema": "EXISTS",
+    "marketing_db_people_master_linkedin_url": "EXISTS",
+    "cl_db_field_monitor": "EXISTS (applied in error — CL is wrong target)"
+  },
+  "blocks": [
+    "wp-20260306-field-monitor-production-deploy"
+  ]
+}

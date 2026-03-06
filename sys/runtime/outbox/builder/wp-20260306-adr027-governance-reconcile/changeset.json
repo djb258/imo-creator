@@ -1,0 +1,20 @@
+{
+  "changeset_id": "cs-20260306-adr027-governance-reconcile",
+  "work_packet_id": "wp-20260306-adr027-governance-reconcile",
+  "status": "VERIFIED_IDEMPOTENT",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "documentation",
+  "files_modified": [],
+  "files_created": [],
+  "summary": "Governance reconciliation for ADR-027: all go conditions already met. ADR-027 exists at docs/adr/ADR-027-deltahound-scheduler-selection.md with ACCEPTED status, date 2026-03-05, and full template compliance (15/15 sections). ADR_INDEX.md contains row 27 with correct title, status, and date. Last Modified is 2026-03-05. No changes required.",
+  "verification": {
+    "adr_path": "docs/adr/ADR-027-deltahound-scheduler-selection.md — present",
+    "adr_status": "ACCEPTED",
+    "adr_date": "2026-03-05",
+    "template_sections": "15/15 — Conformance, ADR Identity, Owning Hub, CC Layer Scope, IMO Layer Scope, Constant vs Variable, Context, Decision, Alternatives Considered, Consequences, PID Impact, Guard Rails, Rollback, Traceability, Approval",
+    "adr_index_row": "ADR-027 | imo-creator | 2026-03-05 | ACCEPTED — present at line 38",
+    "adr_index_last_modified": "2026-03-05",
+    "locked_files_touched": "none"
+  }
+}

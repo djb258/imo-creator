@@ -1,0 +1,25 @@
+{
+  "audit_request_id": "audit-20260305-field-monitor-phase4-scheduler-deploy",
+  "work_packet_id": "wp-20260305-field-monitor-phase4-scheduler-deploy",
+  "submitted_by": "builder",
+  "submitted_at": "2026-03-05T00:00:00.000Z",
+  "changeset_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase4-scheduler-deploy/changeset.json",
+  "execution_log_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase4-scheduler-deploy/execution_log.json",
+  "scope": {
+    "lane": "standard",
+    "files_touched": [
+      "templates/snap-on/field-monitor/packages/orchestrator/src/scheduler.ts",
+      "templates/snap-on/field-monitor/.github/workflows/field-monitor-scheduler.yml"
+    ],
+    "db_changes": false
+  },
+  "audit_checklist": [
+    "Verify dry_run=true guarantee — no dispatch when dry_run is true",
+    "Verify due-ness query joins url_registry + field_state correctly",
+    "Verify workflow defaults to dry_run=true for safety",
+    "Verify cron schedule matches spec (every 15 min, Mon-Fri, business hours ET)",
+    "Verify error collection per-task in dispatch loop",
+    "Verify no scope expansion beyond allowed_paths"
+  ],
+  "status": "PENDING_AUDIT"
+}

@@ -1,0 +1,19 @@
+{
+  "changeset_id": "cs-20260305-field-monitor-phase4-scheduler-deploy",
+  "work_packet_id": "wp-20260305-field-monitor-phase4-scheduler-deploy",
+  "status": "COMPLETE",
+  "timestamp": "2026-03-05T00:00:00.000Z",
+  "builder_version": "2.7.0",
+  "lane": "standard",
+  "files_created": [
+    "templates/snap-on/field-monitor/packages/orchestrator/src/scheduler.ts",
+    "templates/snap-on/field-monitor/.github/workflows/field-monitor-scheduler.yml"
+  ],
+  "summary": "Created scheduler module and GitHub Actions workflow. Scheduler queries Neon for due tasks (last_checked_at + check_interval_minutes elapsed), builds dispatch queue, and optionally dispatches to orchestrator /check endpoint. dry_run=true guarantee: queue is built but NOT dispatched. Workflow runs every 15 min Mon-Fri 9am-6pm ET with manual dispatch option.",
+  "verification": {
+    "dry_run_guarantee": "config.dry_run=true returns early with tasks_dispatched=0",
+    "due_ness_query": "Matches orchestrator queryDueTasks — JOIN url_registry + field_state, filter ACTIVE/STALE, check interval elapsed",
+    "workflow_trigger": "schedule (cron */15 9-17 * * 1-5) + workflow_dispatch with dry_run and batch_size inputs",
+    "default_safe": "workflow_dispatch defaults to dry_run=true"
+  }
+}

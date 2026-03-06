@@ -1,0 +1,59 @@
+{
+  "id": "wp-20260304-va-green-cid-sid-mid-smoke-test",
+  "change_type": "feature",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "changesets/outbox/",
+    "audit_reports/",
+    "work_packets/inbox/"
+  ],
+  "summary": "Execute staged end-to-end Virginia Green smoke test through CID->SID->MID with strict step gating and reporting, using direct signal_queue insert and stopping before any live Mailgun send.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T19:57:01Z",
+  "payload": {
+    "process_id": "3fb6ffa7-4ade-4f56-acc5-28746719a755",
+    "operational_id": "e6f01b29-8d73-4a4c-c9e1-3b76a8d50f94",
+    "source_intake_packet": "sys/runtime/inbox/planner/e6f01b29-8d73-4a4c-c9e1-3b76a8d50f94.json",
+    "test_subject": {
+      "company_domain": "virginiagreen.com",
+      "signal_type": "D-04 Renewal Proximity",
+      "magnitude": 80
+    },
+    "execution_requirements": [
+      "Sequential execution only with hard verification gates between steps",
+      "Stop on first failure and report exact failure reason",
+      "Do not use lcs.bridge_pressure_signals(); insert directly into lcs.signal_queue",
+      "Use Doppler-provided NEON_DATABASE_URL",
+      "Do NOT send real email; stop before live Mailgun trigger",
+      "Report per step: number, PASS/FAIL, data written, issues"
+    ],
+    "steps": [
+      "Insert signal into outreach.signal_output",
+      "Insert bridged signal into lcs.signal_queue directly",
+      "Run CID compiler logic and write lcs.cid COMPILED row",
+      "Run SID worker logic and write lcs.sid_output row",
+      "Run MID engine logic and write lcs.mid_sequence_state QUEUED row with LOVABLE adapter/channel MG",
+      "Verify Lovable pickup path via lcs.event delivery record without triggering live Mailgun"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "cl.company_identity",
+    "outreach.outreach",
+    "outreach.signal_output",
+    "lcs.signal_queue",
+    "lcs.frame_registry",
+    "lcs.cid",
+    "lcs.sid_output",
+    "lcs.mid_sequence_state",
+    "lcs.event"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false
+}

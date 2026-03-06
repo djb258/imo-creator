@@ -1,0 +1,57 @@
+{
+  "id": "wp-20260303-ctb-doctrine-db-scope-correction",
+  "change_type": "architectural",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "changesets/outbox/",
+      "audit_reports/"
+    ],
+    "middle": [
+      "ctb.table_registry",
+      "doctrine.doctrine_library",
+      "doctrine.doctrine_key",
+      "doctrine.doctrine_library_error"
+    ],
+    "egress": [
+      "docs/schema/CTB_DOCTRINE_TABLES.md"
+    ]
+  },
+  "allowed_paths": [
+    "migrations/",
+    "changesets/outbox/",
+    "docs/schema/CTB_DOCTRINE_TABLES.md"
+  ],
+  "summary": "Corrective scoping packet for unauthorized research DB migration: declare explicit ctb/doctrine table targets, constrain DB lane execution to those targets only, and require separate pressure-test artifacts independent of CID-SID-MID work.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:29:46Z",
+  "payload": {
+    "process_id": "e328ee12-c379-4508-9c76-a2998008bb0a",
+    "operational_id": "d8e34a52-1c96-4f7b-b2d4-6a59f1c83e27",
+    "source_intake_packet": "sys/runtime/inbox/planner/d8e34a52-1c96-4f7b-b2d4-6a59f1c83e27.json",
+    "correction_type": "retroactive_db_scope_authorization",
+    "constraints": [
+      "Do not expand scope",
+      "db_targets must explicitly list all 4 tables",
+      "allowed_paths must include docs/schema/CTB_DOCTRINE_TABLES.md",
+      "Do NOT merge into CID-SID-MID work packet",
+      "Pressure test required for ctb/doctrine schema touch",
+      "DB Agent must not modify tables outside declared db_targets"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "ctb.table_registry",
+    "doctrine.doctrine_library",
+    "doctrine.doctrine_key",
+    "doctrine.doctrine_library_error"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false
+}

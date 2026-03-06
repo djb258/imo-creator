@@ -1,0 +1,41 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "b5e06c74-8f27-4d1a-e9b3-2c58a7f41d96",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor Snap-On Tool Phase 5 Full Integration Test. Go/No-Go gate for entire Field Monitor build. Seed url_registry with 3 test URLs covering: (1) known stable field value — expect gate_reached:4, delta_flag:0, (2) field value changed since last check — expect gate_reached:5, confirmation_pending set, (3) second pass with confirmed delta — expect gate_reached:7, signal emitted. Trigger Scheduler in live mode (dry_run=false). Verify full pipeline: Scheduler → Orchestrator → spokes → Neon. Verify all check_log and field_state rows correct. Verify no unexpected error_log entries. CTB trigger must not fire on valid runs. Auditor produces integration test report: PASS/FAIL per scenario, overall PASS/FAIL. Overall FAIL on any single scenario failure. Post-build: ADR for SNAP_ON_TOOLBOX.yaml registration, register TOOL-FM-001 through TOOL-FM-005, document V1 scale limitations.",
+  "phase": 5,
+  "phase_label": "Full Integration Test — End-to-End Pipeline Verification",
+  "prerequisite": "Phase 4 Go condition confirmed",
+  "go_condition": "All 3 scenarios correct. Scenario 1: delta_flag=0, gate_reached=4. Scenario 2: confirmation_pending=true, recheck_due_at set, gate_reached=5. Scenario 3: gate_reached=7, delta_flag=1, confirmed_flag=true, signal_code assigned, emission_confirmation present. CTB trigger never fires on valid runs. error_log empty or expected entries only.",
+  "final_gate": {
+    "pass": "Field Monitor build-complete. Ready for ADR + SNAP_ON_TOOLBOX.yaml registration.",
+    "fail": "Return to failing phase. Diagnose via error_log + Worker logs. Re-run from that phase forward."
+  },
+  "agent_routing": {
+    "db_agent": "Seed url_registry with 3 test records per scenario specs. Verify seed before triggering Scheduler.",
+    "builder": "No code changes expected. If integration test reveals bug, patch failing gate only — no scope expansion.",
+    "auditor": "Pull check_log, field_state, error_log for all 3 test sovereign_ids. Verify per Go conditions. Produce integration test report."
+  },
+  "post_build_requirements": [
+    "ADR for Field Monitor addition to SNAP_ON_TOOLBOX.yaml",
+    "Register TOOL-FM-001 through TOOL-FM-005",
+    "Document V1 scale limitations in ADR",
+    "Register field-monitor in templates/snap-on/"
+  ],
+  "snap_on_toolbox_compliance": {
+    "all_workers": "Tier 0 — $0/month at V1 scale",
+    "neon": "Tier 0",
+    "github_actions": "Tier 0",
+    "v1_cost": "$0/month total"
+  },
+  "constraints": [
+    "Do not expand scope beyond integration test + bug fixes",
+    "Any patch must be scoped to failing gate only",
+    "Do not proceed to SNAP_ON_TOOLBOX.yaml registration without Auditor PASS",
+    "ADR required before tool registration",
+    "Integration test report is a required artifact"
+  ]
+}

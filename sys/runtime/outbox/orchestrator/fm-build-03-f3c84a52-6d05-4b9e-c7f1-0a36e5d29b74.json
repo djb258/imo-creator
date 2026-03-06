@@ -1,0 +1,40 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "f3c84a52-6d05-4b9e-c7f1-0a36e5d29b74",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor Snap-On Tool Phase 3 Orchestrator Worker Deployment. Implement and deploy field-monitor-orchestrator — the hub Worker. Only Worker that calls other Workers via Service Bindings and only Worker that writes to Neon. Wire Service Bindings: FETCHER, PARSER_REGISTRY, PROXY_ROUTER. Implement seven-gate funnel exactly as specified in Doc2 Sub-Hub 5. Gate sequence: (1) trigger validation, (2) proxy router call, (3) fetch+parse+confidence, (4) delta comparison, (5) confirmation logic, (6) signal classification, (7) signal emission. Implement helpers: validateTrigger, getDomain, writeRateState, readFieldState, setConfirmationPending, writeCheckResult, writeErrorLog, classifyDelta, emitSignal, gateExitResponse. gate_reached recorded on every exit path including errors. Run single-URL end-to-end test: seed url_registry, trigger Orchestrator, verify gate_reached:7, check_log written, field_state written via CTB promotion.",
+  "phase": 3,
+  "phase_label": "Orchestrator Worker Deployment — Hub + Seven-Gate Funnel",
+  "prerequisite": "Phase 2 Go condition confirmed",
+  "go_condition": "Orchestrator deployed. End-to-end test returns gate_reached:7. check_log row correct. field_state row written. CTB trigger does not fire on valid run. No error_log entries.",
+  "gate_constants": {
+    "gate_1": "Trigger payload validation",
+    "gate_2": "Proxy Router call",
+    "gate_3": "Fetch + Parse + confidence threshold",
+    "gate_4": "Delta comparison",
+    "gate_5": "Confirmation logic",
+    "gate_6": "Signal classification",
+    "gate_7": "Signal emission"
+  },
+  "agent_routing": {
+    "db_agent": "Seed url_registry with one test record. Verify before Builder runs end-to-end test.",
+    "builder": "Implement orchestrator per Doc2 Sub-Hub 5. Wire Service Bindings. Deploy via wrangler.",
+    "auditor": "Verify check_log, field_state, error_log, CTB trigger, and response body after end-to-end test."
+  },
+  "snap_on_toolbox_compliance": {
+    "cloudflare_workers": "Tier 0",
+    "neon": "Hub is ONLY writer",
+    "workers_service_bindings": "Internal network only"
+  },
+  "constraints": [
+    "Do not expand scope beyond Orchestrator Worker deployment",
+    "Service Bindings are the ONLY allowed inter-Worker transport — no public HTTP between Workers",
+    "Orchestrator is the ONLY Worker that writes to Neon",
+    "Seven-gate sequence is fixed — gates do not reorder",
+    "gate_reached must be recorded on EVERY exit path without exception",
+    "job_id is UUID v4 minted at run start, never reused"
+  ]
+}

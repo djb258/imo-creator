@@ -1,0 +1,24 @@
+{
+  "changeset_id": "cs-wp-20260304-planner-barrel-allowed-paths-repair",
+  "work_packet_id": "wp-20260304-planner-barrel-allowed-paths-repair",
+  "execution_type": "standard",
+  "orbt_mode": "repair",
+  "target_repo": "imo-creator",
+  "target_branch": "main",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:30:00Z",
+  "repair_description": "Added barrel file auto-inclusion rule to Planner allowed_paths generation logic. When individual files within a directory are listed, the barrel file (index.ts/js/mts, mod.ts) must be explicitly included if the Builder will modify it.",
+  "files": {
+    "created": [],
+    "modified": [
+      {
+        "path": "ai/agents/planner/master_prompt.md",
+        "change_type": "MODIFIED",
+        "description": "Added barrel rule to allowed_paths field generation: barrel/re-export files at directory root must be explicitly included when individual files are listed instead of the directory."
+      }
+    ]
+  },
+  "deviations": [],
+  "pre_deploy_blockers": [],
+  "pressure_test_required": true
+}

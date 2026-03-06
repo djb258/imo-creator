@@ -1,0 +1,21 @@
+{
+  "audit_request_id": "audit-20260305-adr027-deltahound-scheduler-selection",
+  "work_packet_id": "wp-20260305-adr027-deltahound-scheduler-selection",
+  "submitted_by": "builder",
+  "submitted_at": "2026-03-05T00:00:00.000Z",
+  "changeset_path": "sys/runtime/outbox/builder/wp-20260305-adr027-deltahound-scheduler-selection/changeset.json",
+  "execution_log_path": "sys/runtime/outbox/builder/wp-20260305-adr027-deltahound-scheduler-selection/execution_log.json",
+  "scope": {
+    "lane": "documentation",
+    "files_touched": [],
+    "db_changes": false
+  },
+  "audit_checklist": [
+    "Verify ADR-027 exists at docs/adr/ADR-027-deltahound-scheduler-selection.md",
+    "Verify ADR conforms to templates/adr/ADR.md template structure",
+    "Verify ADR_INDEX.md contains ADR-027 entry with ACCEPTED status",
+    "Verify no files were modified (VERIFIED_IDEMPOTENT)",
+    "Verify no scope expansion beyond allowed_paths (docs/adr/, ADR_INDEX.md, changesets/outbox/)"
+  ],
+  "status": "PENDING_AUDIT"
+}

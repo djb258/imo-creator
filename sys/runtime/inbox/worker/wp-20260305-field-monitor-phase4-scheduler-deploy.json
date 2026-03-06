@@ -1,0 +1,19 @@
+{
+  "id": "wp-20260305-field-monitor-phase4-scheduler-deploy",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [".github/workflows/field-monitor-scheduler.yml", "templates/snap-on/field-monitor/", "changesets/outbox/"],
+  "summary": "Field Monitor phase 4: deploy scheduler workflow with cron + dispatch, due-ness query, dry_run queue build, and no-dispatch guarantee when dry_run=true.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T18:51:07Z",
+  "payload": {"process_id": "ede98e3f-6c4b-4d5a-ab4b-d768adfd7798", "operational_id": "a4d95b63-7e16-4c0f-d8a2-1b47f6e30c85", "phase": 4},
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

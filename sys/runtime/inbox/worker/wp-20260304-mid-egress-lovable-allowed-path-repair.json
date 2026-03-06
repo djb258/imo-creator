@@ -1,0 +1,31 @@
+{
+  "id": "wp-20260304-mid-egress-lovable-allowed-path-repair",
+  "change_type": "repair",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "src/app/lcs/adapters/index.ts"
+  ],
+  "summary": "Scope-repair for wp-20260304-mid-egress-lovable-rewire: include src/app/lcs/adapters/index.ts in allowed_paths; no code changes.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:11:51Z",
+  "payload": {
+    "process_id": "e3fde36d-f978-4368-b52a-25386d99ad10",
+    "operational_id": "c4d89f07-6b51-4e2a-a7c9-1f54e6b38d72",
+    "source_intake_packet": "sys/runtime/inbox/planner/c4d89f07-6b51-4e2a-a7c9-1f54e6b38d72.json",
+    "repairs_work_packet": "wp-20260304-mid-egress-lovable-rewire",
+    "constraints": [
+      "Do not expand scope",
+      "Add ONLY src/app/lcs/adapters/index.ts to allowed_paths",
+      "No code changes — WORK_PACKET scope repair only"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

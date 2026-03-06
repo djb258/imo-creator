@@ -1,0 +1,26 @@
+{
+  "changeset_id": "cs-wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "change_type": "feature",
+  "target_repo": "imo-creator",
+  "target_branch": "main",
+  "execution_agent": "builder",
+  "execution_status": "VERIFIED_IDEMPOTENT",
+  "timestamp": "2026-03-05T19:10:00Z",
+  "summary": "Phase 1 R2 requeue — same operational_id d1a62e30. Builder scope already complete from original Phase 1 execution. Scaffold (24 files), migration (001_initial_schema.sql), CI workflow all in place. No changes needed.",
+  "files_modified": [],
+  "files_created": [],
+  "prior_execution": {
+    "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap",
+    "operational_id": "d1a62e30-4b83-4f7c-a5d9-8e14c3b07f52",
+    "status": "BUILDER_SCOPE_COMPLETE"
+  },
+  "go_condition_status": {
+    "neon_tables_created": "PENDING — awaiting DB Agent",
+    "ctb_trigger_active": "PENDING — awaiting DB Agent",
+    "all_indexes_created": "PENDING — awaiting DB Agent",
+    "wrangler_dev_readiness": "SCAFFOLD_READY"
+  },
+  "deviations": [],
+  "doctrine_version": "3.5.0"
+}

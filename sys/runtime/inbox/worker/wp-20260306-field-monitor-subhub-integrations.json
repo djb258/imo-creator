@@ -1,0 +1,74 @@
+{
+  "id": "wp-20260306-field-monitor-subhub-integrations",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+    "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+    "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+    "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+    "hubs/people-intelligence/pipeline.md",
+    "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+    "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/scripts/seed_blog_parsers.py",
+    "hubs/blog-content/pipeline.md"
+  ],
+  "summary": "Build Field Monitor sub-hub integrations in sequence: Talent Flow first then Signal Sweep, using ParserConfig JSON parser seed format (not fn_body), sample-gated to 100 records each, and vendor-tier read-only bridge semantics.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T15:56:43Z",
+  "payload": {
+    "process_id": "d6fe35e6-0834-49d1-9c4b-13b195a21023",
+    "operational_id": "d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+    "source_intake_packet": "sys/runtime/inbox/planner/fm-subhub-01-d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a.json",
+    "build_sequence": [
+      "Talent Flow integration first",
+      "Signal Sweep integration second"
+    ],
+    "parser_config_format": {
+      "type": "regex",
+      "kv_key_format": "domain::field_name",
+      "reference_file": "templates/snap-on/field-monitor/packages/parser-registry/src/index.ts"
+    },
+    "sample_gate": {
+      "talent_flow": 100,
+      "signal_sweep": 100
+    },
+    "production_state": {
+      "workers_live": true,
+      "smoke_test": "7/7 PASS"
+    },
+    "constraints": [
+      "Parser seed scripts must use ParserConfig JSON format, not fn_body",
+      "field_monitor.* is vendor tier; bridge modules read only",
+      "Seed source for Signal Sweep is vendor.blog",
+      "Do not modify existing movement_engine/state_machine/movement_rules",
+      "Do not modify existing blog_node_spoke/ingest_article/classify_event/emit_bit_signal",
+      "Kill switches enforced: KILL_TALENT_FLOW_MONITOR, KILL_LINKEDIN_SEED, KILL_SIGNAL_SWEEP, KILL_BLOG_URL_SEED"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "field_monitor.url_registry",
+    "field_monitor.field_state",
+    "field_monitor.check_log",
+    "vendor.blog",
+    "people.people_master"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "hubs/people-intelligence/pipeline.md",
+    "hubs/blog-content/pipeline.md"
+  ],
+  "doc_surface": "repo_markdown",
+  "container_required": false
+}

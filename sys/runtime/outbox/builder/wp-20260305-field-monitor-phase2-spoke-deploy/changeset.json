@@ -1,0 +1,47 @@
+{
+  "changeset_id": "cs-wp-20260305-field-monitor-phase2-spoke-deploy",
+  "work_packet_id": "wp-20260305-field-monitor-phase2-spoke-deploy",
+  "change_type": "feature",
+  "target_repo": "imo-creator",
+  "target_branch": "main",
+  "execution_agent": "builder",
+  "execution_status": "COMPLETED",
+  "timestamp": "2026-03-05T19:20:00Z",
+  "summary": "Field Monitor Phase 2 spoke deployment: implemented Fetcher (plain+proxied fetch, AbortController timeout, UTF-8 transcode, byte_limit), Parser Registry (KV lookup by domain::field_name, stored fn_body execution, FIELD_ABSENT vs EXTRACTION_FAILED), and Proxy Router (Neon read-only rate_state, sliding window rate check, KV egress path, rate_delta computation).",
+  "files_modified": [
+    "templates/snap-on/field-monitor/packages/fetcher/src/index.ts",
+    "templates/snap-on/field-monitor/packages/parser-registry/src/index.ts",
+    "templates/snap-on/field-monitor/packages/proxy-router/src/index.ts"
+  ],
+  "files_created": [],
+  "spoke_implementations": {
+    "fetcher": {
+      "features": ["plain + proxied fetch_mode", "AbortController timeout", "UTF-8 transcode with charset detection", "byte_limit enforcement via streaming reader"],
+      "contract": "FetchRequest → FetchResponse",
+      "neon_writes": false
+    },
+    "parser_registry": {
+      "features": ["KV lookup by domain::field_name key", "Stored parser fn_body execution via new Function()", "FIELD_ABSENT when no parser or null result", "EXTRACTION_FAILED on parser error", "confidence_score output"],
+      "contract": "ParseRequest → ParseResponse",
+      "neon_writes": false
+    },
+    "proxy_router": {
+      "features": ["Neon read-only rate_state query", "Sliding window rate check", "KV egress path lookup", "rate_delta computation (max - current)", "Fallback to 'direct' egress when no KV entry"],
+      "contract": "ProxyRequest → ProxyResponse",
+      "neon_writes": false
+    }
+  },
+  "constraints_verified": [
+    "Proxy Router does NOT write to Neon — read only: PASS",
+    "Service bindings not wired: PASS (Phase 3)",
+    "Parser function stored in KV as serialized fn_body string: PASS",
+    "No banned libraries: PASS (no beautifulsoup4, requests, lxml)"
+  ],
+  "go_condition_status": {
+    "all_three_workers_implemented": true,
+    "contract_tests": "PENDING — auditor scope",
+    "deployment": "PENDING — requires wrangler deploy with Cloudflare credentials"
+  },
+  "deviations": [],
+  "doctrine_version": "3.5.0"
+}

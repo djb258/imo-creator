@@ -1,0 +1,18 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "operational_id": "f8a21c3d-7e45-4b09-a6d2-9c83e1f70b54",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "work_packet_ref": "wp-20260306-blog-content-seed-bridge-repair",
+  "intent_summary": "Repair two audit failures in Signal Sweep blog monitor. SEED-001: seed_blog_urls.sql references columns (path, is_active, created_at) that do not exist on vendor.blog — rewrite to use source_url parsed into domain/path, is_accessible filter, original_created_at ordering. BRIDGE-001: change_bridge.py bridge_to_article_input() returns title=None, content=None, source='field_monitor' which fails ingest_article() validation — use source='company_blog' (valid ArticleSource enum), placeholder title/content that satisfy non-null validation. Do NOT modify ingest_article.py.",
+  "constraints": [
+    "Do not expand scope beyond seed_blog_urls.sql and change_bridge.py",
+    "Do not modify ingest_article.py — use existing ArticleSource enum values",
+    "Do not modify existing movement_engine files",
+    "Preserve all kill switches and sample gates",
+    "Preserve read-only semantics in change_bridge.py",
+    "Seed SQL must remain idempotent (ON CONFLICT DO NOTHING)"
+  ]
+}

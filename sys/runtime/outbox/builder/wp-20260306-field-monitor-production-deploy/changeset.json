@@ -1,0 +1,87 @@
+{
+  "work_packet_id": "wp-20260306-field-monitor-production-deploy",
+  "changeset_id": "cs-20260306-field-monitor-production-deploy",
+  "timestamp": "2026-03-06T15:20:00.000Z",
+  "target_repo": "imo-creator",
+  "files_touched": [
+    {
+      "path": "templates/snap-on/field-monitor/packages/orchestrator/wrangler.toml",
+      "action": "modified",
+      "reason": "Fixed service bindings syntax: [services] → [[services]] array format for wrangler v3/v4 compatibility"
+    },
+    {
+      "path": "templates/snap-on/field-monitor/packages/parser-registry/wrangler.toml",
+      "action": "modified",
+      "reason": "Updated PARSER_KV namespace ID to production (fdb97182fc0845509053eb5925c70b1b)"
+    },
+    {
+      "path": "templates/snap-on/field-monitor/packages/proxy-router/wrangler.toml",
+      "action": "modified",
+      "reason": "Updated EGRESS_KV namespace ID to production (66e6c7bec8c1479ba708c0bcbb6a0e23)"
+    },
+    {
+      "path": "templates/snap-on/field-monitor/packages/parser-registry/src/index.ts",
+      "action": "modified",
+      "reason": "Refactored parser execution from new Function() (blocked by Workers runtime) to regex-based config model. KV values now store JSON ParserConfig instead of raw JS function bodies."
+    }
+  ],
+  "cloudflare_resources_created": [
+    {
+      "type": "workers_dev_subdomain",
+      "value": "svg-outreach.workers.dev"
+    },
+    {
+      "type": "kv_namespace",
+      "name": "PARSER_KV",
+      "id": "fdb97182fc0845509053eb5925c70b1b"
+    },
+    {
+      "type": "kv_namespace",
+      "name": "EGRESS_KV",
+      "id": "66e6c7bec8c1479ba708c0bcbb6a0e23"
+    },
+    {
+      "type": "worker",
+      "name": "field-monitor-fetcher",
+      "url": "https://field-monitor-fetcher.svg-outreach.workers.dev",
+      "version": "519a6d52-e243-4472-ad1e-4702cd91a36d"
+    },
+    {
+      "type": "worker",
+      "name": "field-monitor-parser-registry",
+      "url": "https://field-monitor-parser-registry.svg-outreach.workers.dev",
+      "version": "45285cd5-a0bb-46df-b900-25b533593f71"
+    },
+    {
+      "type": "worker",
+      "name": "field-monitor-proxy-router",
+      "url": "https://field-monitor-proxy-router.svg-outreach.workers.dev",
+      "version": "204c0020-ae05-40d2-930e-1a30916f448f"
+    },
+    {
+      "type": "worker",
+      "name": "field-monitor-orchestrator",
+      "url": "https://field-monitor-orchestrator.svg-outreach.workers.dev",
+      "version": "8ecc3568-ab18-4995-95f6-e306163a17b7"
+    }
+  ],
+  "secrets_set": [
+    {
+      "worker": "field-monitor-orchestrator",
+      "secret": "DATABASE_URL",
+      "source": "Marketing DB (barton-outreach-core Doppler)"
+    },
+    {
+      "worker": "field-monitor-proxy-router",
+      "secret": "DATABASE_URL",
+      "source": "Marketing DB (barton-outreach-core Doppler)"
+    }
+  ],
+  "kv_entries_seeded": [
+    {
+      "namespace": "PARSER_KV",
+      "key": "linkedin.com::title",
+      "value_type": "ParserConfig JSON (regex-based)"
+    }
+  ]
+}

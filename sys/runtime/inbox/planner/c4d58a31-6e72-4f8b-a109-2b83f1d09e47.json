@@ -1,0 +1,16 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "operational_id": "c4d58a31-6e72-4f8b-a109-2b83f1d09e47",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "intent_summary": "Repair two audit failures from prior build execution. FAILURE 1 (RULE-002 file_target_containment): Planner must re-issue WORK_PACKET with column_registry.yml added to allowed_paths. FAILURE 4 (RULE-013 mount_integrity): Worker must produce mount_receipt artifact in changeset outbox on next execution showing commit-level integrity and HEIR validation.",
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Planner must add column_registry.yml to allowed_paths in re-issued WORK_PACKET",
+    "Worker must emit mount_receipt artifact to changeset outbox"
+  ]
+}

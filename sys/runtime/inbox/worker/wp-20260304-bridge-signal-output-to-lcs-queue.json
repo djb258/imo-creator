@@ -1,0 +1,59 @@
+{
+  "id": "wp-20260304-bridge-signal-output-to-lcs-queue",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": [
+      "outreach.signal_output"
+    ],
+    "middle": [
+      "lcs.bridge_signal_output()",
+      "lcs.signal_registry"
+    ],
+    "egress": [
+      "lcs.signal_queue"
+    ]
+  },
+  "allowed_paths": [
+    "migrations/",
+    "src/sys/lcs/contracts/",
+    "changesets/outbox/",
+    "docs/"
+  ],
+  "summary": "Create lcs.bridge_signal_output() to bridge outreach.signal_output into lcs.signal_queue with duplicate detection and signal_code->signal_set_hash mapping from lcs.signal_registry; include blocker handling if outreach.signal_output is absent in Neon.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T20:14:19Z",
+  "payload": {
+    "process_id": "bb6d0e0c-9d28-4866-aaf6-ac5b636358d4",
+    "operational_id": "b9c34e52-1a06-4d7f-f2b4-6e09d1a83c27",
+    "source_intake_packet": "sys/runtime/inbox/planner/b9c34e52-1a06-4d7f-f2b4-6e09d1a83c27.json",
+    "constraints": [
+      "Replace lcs.bridge_pressure_signals() — do not modify it",
+      "Duplicate detection: sovereign_company_id + source_signal_id OR signal_set_hash + run_month",
+      "Map signal_code using existing lcs.signal_registry hashes",
+      "If outreach.signal_output does not exist in Neon: report blocker referencing outreach migration source"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "lcs.signal_queue",
+    "lcs.signal_registry",
+    "lcs.bridge_signal_output",
+    "outreach.signal_output",
+    "outreach.outreach",
+    "cl.company_identity"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "docs/"
+  ],
+  "doc_surface": "schema_docs",
+  "container_required": false
+}

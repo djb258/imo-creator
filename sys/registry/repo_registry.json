@@ -21,6 +21,36 @@
       "auth_method": "https_token",
       "workspace_slug": "universal-client-template",
       "enabled": false
+    },
+    {
+      "repo_alias": "company-lifecycle-cl",
+      "display_name": "Company Lifecycle Management Hub",
+      "local_path": "../Company Lifecycle CL",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "local",
+      "workspace_slug": "company-lifecycle-cl",
+      "enabled": true
+    },
+    {
+      "repo_alias": "imo-creator",
+      "display_name": "IMO-Creator Sovereign Repository",
+      "local_path": ".",
+      "default_branch": "main",
+      "allowed_branches": ["main"],
+      "auth_method": "local",
+      "workspace_slug": "imo-creator",
+      "enabled": true
+    },
+    {
+      "repo_alias": "barton-outreach-core",
+      "display_name": "Outreach Operations Hub",
+      "local_path": "../barton-outreach-core",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "local",
+      "workspace_slug": "barton-outreach-core",
+      "enabled": true
     }
   ]
 }

@@ -91,7 +91,7 @@ The WORK_PACKET must validate against `sys/contracts/work_packet.schema.json`.
 | `change_type` | One of: `feature`, `architectural`, `refactor`, `fix`. |
 | `architectural_flag` | True if change touches protected assets or backbone primitives. |
 | `requires_pressure_test` | Must be true when `architectural_flag=true`. |
-| `allowed_paths` | Explicit file paths within scope. No wildcards unless structurally justified. |
+| `allowed_paths` | Explicit file paths within scope. No wildcards unless structurally justified. **Barrel rule**: when a directory path is listed (e.g., `src/app/lcs/adapters/`), the barrel/re-export file at that directory root (`index.ts`, `index.js`, `index.mts`, `mod.ts`) is implicitly in scope. When individual files within a directory are listed instead of the directory itself, the barrel file MUST be explicitly included if the Builder will modify it. |
 | `summary` | Declarative scope boundary derived from user intent. |
 | `doctrine_version` | Copy from `sys/contracts/doctrine_version.json` current_version. |
 | `timestamp` | ISO 8601 at generation time. |

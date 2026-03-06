@@ -1,0 +1,43 @@
+{
+  "id": "wp-20260303-lcs-cid-sid-mid-scope-repair-v2",
+  "change_type": "repair",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "migrations/lcs/",
+    "src/sys/lcs/contracts/",
+    "src/data/lcs/",
+    "src/app/lcs/pipeline/",
+    "src/app/lcs/adapters/",
+    "src/runtime/lcs/",
+    "pipeline/lifecycle_worker.js",
+    "pipeline/orchestrator.js",
+    "pipeline/README.md",
+    "column_registry.yml",
+    "docs/schema/",
+    "src/sys/lcs/doctrine/"
+  ],
+  "summary": "Repair scope envelope for wp-20260303-lcs-cid-sid-mid-pipeline by adding only missing legitimate build artifact paths: column_registry.yml, docs/schema/, src/sys/lcs/doctrine/. No new functional scope.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:24:54Z",
+  "payload": {
+    "process_id": "9fc22b01-d572-4ebe-8e9d-8c09e5e45eb4",
+    "operational_id": "c7d23f41-9b85-4e6a-a1c3-5f48e0b72d16",
+    "source_intake_packet": "sys/runtime/inbox/planner/c7d23f41-9b85-4e6a-a1c3-5f48e0b72d16.json",
+    "repairs_work_packet": "wp-20260303-lcs-cid-sid-mid-pipeline",
+    "supersedes_packet": "c4d58a31-6e72-4f8b-a109-2b83f1d09e47",
+    "constraints": [
+      "Do not expand scope",
+      "Add ONLY these paths to allowed_paths: column_registry.yml, docs/schema/, src/sys/lcs/doctrine/",
+      "Do NOT add ctb or doctrine schema tables to db_targets",
+      "Do NOT absorb research DB migration into this work packet"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

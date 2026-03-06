@@ -1,0 +1,23 @@
+{
+  "name": "field-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "shared"
+  ],
+  "scripts": {
+    "dev:orchestrator": "cd packages/orchestrator && wrangler dev",
+    "dev:fetcher": "cd packages/fetcher && wrangler dev",
+    "dev:parser-registry": "cd packages/parser-registry && wrangler dev",
+    "dev:proxy-router": "cd packages/proxy-router && wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "typescript": "^5.4.0",
+    "@cloudflare/workers-types": "^4.0.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  }
+}

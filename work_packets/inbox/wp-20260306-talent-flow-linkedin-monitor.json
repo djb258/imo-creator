@@ -1,0 +1,102 @@
+{
+  "id": "wp-20260306-talent-flow-linkedin-monitor",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "flow_contract": {
+    "ingress": [
+      "field_monitor.check_log (vendor tier — changed=true, field_name IN ['current_title','current_company'])",
+      "people.people_master (linkedin_url IS NOT NULL) — seed source for vendor tier"
+    ],
+    "middle": [
+      "linkedin_monitor.py — bridge reads vendor tier (field_monitor.check_log), maps changes to person_unique_id, fires EVENT_TALENTFLOW_MOVE into existing movement engine",
+      "movement_engine.py — existing state machine processes the event (NO MODIFICATIONS)"
+    ],
+    "egress": [
+      "people.person_movement_history — movement record written by existing movement engine",
+      "field_monitor.check_log — append-only audit trail (written by Cloudflare Workers, NOT by bridge)"
+    ]
+  },
+  "allowed_paths": [
+    "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+    "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+    "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+    "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+    "hubs/people-intelligence/pipeline.md"
+  ],
+  "summary": "Integrate Field Monitor vendor tier into Talent Flow for LinkedIn public profile change detection. field_monitor.* tables are the vendor staging layer (same architectural tier as vendor.people, vendor.blog, vendor.ct). Cloudflare Workers write to vendor tier. Bridge module in hub Middle layer reads FROM vendor tier and fires EVENT_TALENTFLOW_MOVE into the existing movement engine. Seeds 100 LinkedIn URLs from people.people_master into field_monitor.url_registry. Sample-gated to 100 records.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T13:00:00Z",
+  "payload": {
+    "parent_system": "field-monitor",
+    "sub_hub": "people-intelligence",
+    "sub_hub_id": "04.04.02",
+    "named_system": "Talent Flow",
+    "sample_size": 100,
+    "transformation_statement": "This transforms LinkedIn profile field values stored in field_monitor.field_state (constants from vendor tier) into talent movement signals via EVENT_TALENTFLOW_MOVE routed through the existing movement engine (variables in sub-hub canonical tables).",
+    "vendor_tier_note": "field_monitor.* IS the vendor layer for this tool — same architectural tier as vendor.people, vendor.blog, vendor.ct. Cloudflare Workers own the write side. Hub Middle layer owns the read/bridge side.",
+    "ctb_compliance": {
+      "vendor_staging": "field_monitor.* — Cloudflare Workers write here. Bridge module READS only.",
+      "hub_middle_layer": "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py — all logic here.",
+      "hub_scripts": "hubs/people-intelligence/scripts/ — seed scripts (support surface).",
+      "no_logic_in_ingress": true,
+      "no_logic_in_egress": true,
+      "all_logic_in_middle": true,
+      "no_forbidden_folders": true,
+      "no_spoke_logic": true
+    },
+    "constants": [
+      "linkedin_url from people.people_master",
+      "field_monitor.url_registry schema (vendor tier)",
+      "field_monitor.field_state schema (vendor tier)",
+      "field_monitor.check_log schema (vendor tier, append-only)",
+      "movement_engine EventType.EVENT_TALENTFLOW_MOVE contract (existing, no changes)",
+      "field_monitor 7-gate funnel pipeline (Cloudflare Workers, no changes)"
+    ],
+    "variables": [
+      "field_monitor.url_registry rows (seeded LinkedIn URLs — vendor tier)",
+      "field_monitor.field_state rows (current_title, current_company — vendor tier)",
+      "field_monitor.check_log rows (change detection audit trail — vendor tier, written by Workers)",
+      "DetectedEvent instances routed to MovementEngine.detect_event() (bridge output)",
+      "people.person_movement_history rows (if movement confirmed — canonical output)"
+    ],
+    "dependencies": {
+      "upstream": [
+        "field_monitor schema DEPLOYED (wp-20260305-field-monitor-phase1-bootstrap-r2)",
+        "people.people_master (linkedin_url column, ~78K records, sample 100)"
+      ],
+      "downstream": [
+        "movement_engine.py — existing, NO modifications",
+        "state_machine.py — existing, EVENT_TALENTFLOW_MOVE already defined",
+        "movement_rules.py — existing, TalentFlowSignalType already defined"
+      ]
+    },
+    "parser_kv_entries": {
+      "www.linkedin.com::current_title": "Extract current job title from public LinkedIn HTML (JSON-LD > meta > HTML fallback)",
+      "www.linkedin.com::current_company": "Extract current company from public LinkedIn HTML (JSON-LD > meta > HTML fallback)"
+    },
+    "kill_switches": {
+      "KILL_TALENT_FLOW_MONITOR": "Disables LinkedIn change bridging into movement engine",
+      "KILL_LINKEDIN_SEED": "Disables new URL registration only (existing monitors continue)"
+    }
+  },
+  "db_required": true,
+  "db_targets": [
+    "field_monitor.url_registry (INSERT — seed LinkedIn URLs into vendor tier)",
+    "field_monitor.field_state (INSERT — seed field tracking entries in vendor tier)",
+    "field_monitor.check_log (READ ONLY — bridge reads detected changes from vendor tier)"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "hubs/people-intelligence/pipeline.md (add Talent Flow Monitor section showing vendor-tier flow)",
+    "hubs/people-intelligence/SCHEMA.md (add field_monitor cross-reference as vendor tier)"
+  ],
+  "doc_surface": "mixed"
+}

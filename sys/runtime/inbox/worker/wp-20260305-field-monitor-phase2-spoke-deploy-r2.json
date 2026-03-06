@@ -1,0 +1,19 @@
+{
+  "id": "wp-20260305-field-monitor-phase2-spoke-deploy-r2",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": ["templates/snap-on/field-monitor/packages/fetcher/", "templates/snap-on/field-monitor/packages/parser-registry/", "templates/snap-on/field-monitor/packages/proxy-router/", "templates/snap-on/field-monitor/shared/", "changesets/outbox/"],
+  "summary": "Field Monitor phase 2 spoke deployment requeue: Fetcher, Parser Registry, Proxy Router + contract tests.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T18:51:07Z",
+  "payload": {"process_id": "79d45cda-e65b-443b-a95d-50f8c33fc124", "operational_id": "e2b73f41-5c94-4a8d-b6e0-9f25d4c18a63", "phase": 2},
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

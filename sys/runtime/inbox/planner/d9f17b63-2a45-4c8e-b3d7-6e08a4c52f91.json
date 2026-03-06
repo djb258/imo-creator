@@ -1,0 +1,16 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "operational_id": "d9f17b63-2a45-4c8e-b3d7-6e08a4c52f91",
+  "orbt_mode": "build",
+  "execution_type": "fleet_refit",
+  "intent_summary": "Fleet refit for company-lifecycle-cl to resolve two audit failures. FAILURE 2 (FLEET_NOT_ALIGNED): Create .github/workflows/garage-certification-gate.yml CI gate workflow in CL repo. FAILURE 3 (FLEET_NOT_ALIGNED): Create audit_reports/ directory in CL repo. Both are required fleet alignment surfaces per Phase 3c fleet alignment rules.",
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Create garage-certification-gate.yml per FAIL_CLOSED_CI_CONTRACT.md",
+    "Create audit_reports/ directory with .gitkeep"
+  ]
+}

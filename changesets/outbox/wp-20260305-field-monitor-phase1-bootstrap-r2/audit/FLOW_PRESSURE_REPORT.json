@@ -1,0 +1,46 @@
+{
+  "report_type": "FLOW_PRESSURE_TEST",
+  "work_packet_id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+  "changeset_id": "db-cs-20260305-field-monitor-phase1-001",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T19:00:00Z",
+  "result": "PASS",
+  "score": "5/5",
+  "invariants": [
+    {
+      "id": "FLOW-1",
+      "name": "URL Registration → Field Tracking Flow",
+      "description": "url_registry is the root entity. field_state tracks per-field state for each URL.",
+      "result": "PASS",
+      "evidence": "url_registry (domain, path) → field_state (url_id FK, field_name). UNIQUE(url_id, field_name) prevents duplicate field tracking per URL. UNIQUE(domain, path) prevents duplicate URL registration."
+    },
+    {
+      "id": "FLOW-2",
+      "name": "Check Cycle Audit Trail",
+      "description": "Every check cycle produces an append-only check_log entry recording old/new values and timing.",
+      "result": "PASS",
+      "evidence": "check_log captures: url_id, field_name, checked_at, old_value, new_value, changed (bool), fetch_duration_ms, parse_duration_ms. Append-only enforcement ensures complete audit trail. idx_check_log_changed partial index optimizes change queries."
+    },
+    {
+      "id": "FLOW-3",
+      "name": "Error Tracking with Resolution",
+      "description": "Errors are logged and can be marked resolved but never deleted.",
+      "result": "PASS",
+      "evidence": "error_log captures: url_id, field_name, error_type, error_message, occurred_at. resolved_at starts NULL, updated when resolved. DELETE prohibited by trigger. idx_error_log_unresolved partial index optimizes unresolved error queries."
+    },
+    {
+      "id": "FLOW-4",
+      "name": "Rate Limiting State Management",
+      "description": "rate_state tracks per-domain request counts within time windows.",
+      "result": "PASS",
+      "evidence": "rate_state: domain + window_start (unique), request_count vs max_requests. Enables proxy router to enforce rate limits before dispatching fetches. Window boundaries allow sliding window or fixed window patterns."
+    },
+    {
+      "id": "FLOW-5",
+      "name": "Index Coverage for Worker Query Patterns",
+      "description": "All expected worker query patterns are covered by indexes.",
+      "result": "PASS",
+      "evidence": "20 indexes total. Key patterns covered: active URLs (idx_url_registry_active partial), field status queries (idx_field_state_status), promotion filtering (idx_field_state_promotion), check history by URL+field (idx_check_log_url_field), changed-only queries (idx_check_log_changed partial), unresolved errors (idx_error_log_unresolved partial), rate windows by domain (idx_rate_state_domain + idx_rate_state_window)."
+    }
+  ]
+}

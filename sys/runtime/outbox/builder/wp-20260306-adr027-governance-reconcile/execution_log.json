@@ -1,0 +1,36 @@
+{
+  "execution_id": "exec-20260306-adr027-governance-reconcile",
+  "work_packet_id": "wp-20260306-adr027-governance-reconcile",
+  "agent": "builder",
+  "agent_version": "2.7.0",
+  "timestamp": "2026-03-06T00:00:00.000Z",
+  "status": "VERIFIED_IDEMPOTENT",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Read docs/adr/ADR-027-deltahound-scheduler-selection.md — 162 lines, status ACCEPTED, date 2026-03-05",
+      "result": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "Verified ADR-027 template compliance against templates/adr/ADR.md — 15/15 sections present",
+      "result": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "Read ADR_INDEX.md — ADR-027 row present at line 38 with ACCEPTED status and date 2026-03-05",
+      "result": "PASS"
+    },
+    {
+      "step": 4,
+      "action": "Verified ADR_INDEX.md Last Modified is 2026-03-05",
+      "result": "PASS"
+    },
+    {
+      "step": 5,
+      "action": "Confirmed no locked files touched",
+      "result": "PASS"
+    }
+  ],
+  "notes": "All go conditions met. No modifications required."
+}

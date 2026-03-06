@@ -1,0 +1,32 @@
+{
+  "id": "wp-20260304-planner-barrel-allowed-paths-repair-audit",
+  "change_type": "audit",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "doc_required": false,
+  "allowed_paths": [
+    "sys/runtime/outbox/builder/wp-20260304-planner-barrel-allowed-paths-repair/"
+  ],
+  "summary": "Audit Planner prompt repair: barrel file auto-inclusion rule added to allowed_paths generation logic. Verify rule text, no unintended scope expansion, human authority for locked file modification.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:30:00Z",
+  "payload": {
+    "process_id": "ec2f0792-771f-4cc9-bf66-67fc4a6c0728",
+    "operational_id": "wp-20260304-planner-barrel-allowed-paths-repair",
+    "audit_target": {
+      "work_packet_id": "wp-20260304-planner-barrel-allowed-paths-repair",
+      "execution_log_path": "sys/runtime/outbox/builder/wp-20260304-planner-barrel-allowed-paths-repair/execution_log.json",
+      "changeset_path": "sys/runtime/outbox/builder/wp-20260304-planner-barrel-allowed-paths-repair/changeset.json"
+    },
+    "builder_agent": "Builder v2.7.0",
+    "lanes_executed": ["standard"],
+    "human_authority_granted": true
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

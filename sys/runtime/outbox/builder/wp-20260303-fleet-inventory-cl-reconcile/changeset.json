@@ -1,0 +1,25 @@
+{
+  "changeset_id": "cs-wp-20260303-fleet-inventory-cl-reconcile",
+  "work_packet_id": "wp-20260303-fleet-inventory-cl-reconcile",
+  "execution_type": "standard",
+  "orbt_mode": "repair",
+  "target_repo": "imo-creator",
+  "target_branch": "main",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:55:00Z",
+  "reconcile_repo": "company-lifecycle-cl",
+  "repair_description": "Reconciled fleet_inventory.json for company-lifecycle-cl. Entry already showed aligned state with all Garage surface booleans true (set by prior fleet refit wp-20260303-cl-fleet-refit-cert-surfaces). Added reconcile provenance and updated timestamp.",
+  "files": {
+    "created": [],
+    "modified": [
+      {
+        "path": "sys/registry/fleet_inventory.json",
+        "change_type": "MODIFIED",
+        "description": "Added reconciled_by and reconciled_at fields to company-lifecycle-cl entry. Updated updated_at timestamp."
+      }
+    ]
+  },
+  "deviations": [],
+  "pre_deploy_blockers": [],
+  "pressure_test_required": false
+}

@@ -1,0 +1,29 @@
+{
+  "audit_request_id": "audit-20260305-field-monitor-phase5-integration-gate",
+  "work_packet_id": "wp-20260305-field-monitor-phase5-integration-gate",
+  "submitted_by": "builder",
+  "submitted_at": "2026-03-05T00:00:00.000Z",
+  "changeset_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase5-integration-gate/changeset.json",
+  "execution_log_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase5-integration-gate/execution_log.json",
+  "scope": {
+    "lane": "standard",
+    "files_touched": [
+      "templates/snap-on/field-monitor/tests/integration-gate.ts"
+    ],
+    "db_changes": false,
+    "live_neon_verification": true
+  },
+  "audit_checklist": [
+    "Verify integration gate test covers all 4 scenarios per spec",
+    "Verify live Neon results: 4/4 scenarios PASS + 3/3 enforcement checks PASS",
+    "Verify verdict is GO",
+    "Verify CTB trigger blocks PROMOTED→DRAFT demotion",
+    "Verify check_log append-only (UPDATE + DELETE blocked)",
+    "Verify error_log no-delete enforcement",
+    "Verify post_build_prerequisites are documented",
+    "Verify test data cleanup (best-effort given append-only constraints)",
+    "Verify no scope expansion beyond allowed_paths"
+  ],
+  "integration_gate_verdict": "GO",
+  "status": "PENDING_AUDIT"
+}

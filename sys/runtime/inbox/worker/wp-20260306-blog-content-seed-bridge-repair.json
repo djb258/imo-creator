@@ -1,0 +1,68 @@
+{
+  "id": "wp-20260306-blog-content-seed-bridge-repair",
+  "change_type": "fix",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/imo/input/ingest_article.py"
+  ],
+  "summary": "Repair two audit failures in signal-sweep blog monitor: (1) seed_blog_urls.sql references columns (path, is_active, created_at) that do not exist on the actual vendor.blog table — rewrite to use source_url parsed into domain/path, is_accessible, original_created_at; (2) change_bridge.py bridge_to_article_input() returns title=None, content=None, source='field_monitor' which fails ingest_article() validation — add 'field_monitor' to ArticleSource enum and change bridge to return source='company_blog' with placeholder title/content that triggers fetch-first ingestion path.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T15:30:00Z",
+  "payload": {
+    "process_id": "f8a21c3d-7e45-4b09-a6d2-9c83e1f70b54",
+    "operational_id": "b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+    "source_audit": "audit-20260306-signal-sweep-blog-monitor",
+    "fixes": [
+      {
+        "fix_id": "SEED-001",
+        "file": "hubs/blog-content/scripts/seed_blog_urls.sql",
+        "problem": "References vendor.blog columns that do not exist: path, is_active, created_at",
+        "actual_columns": {
+          "domain": "TEXT (exists, use directly)",
+          "source_url": "TEXT (exists, parse path from this via regexp_replace)",
+          "is_accessible": "BOOLEAN (exists, use instead of is_active)",
+          "original_created_at": "TIMESTAMPTZ (exists, use instead of created_at)"
+        },
+        "action": "Rewrite SELECT to: domain from vb.domain, path from regexp_replace(vb.source_url, '^https?://[^/]+', ''), filter on vb.is_accessible = true, order by vb.original_created_at DESC NULLS LAST"
+      },
+      {
+        "fix_id": "BRIDGE-001",
+        "file": "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+        "problem": "bridge_to_article_input() returns title=None, content=None, source='field_monitor'. ingest_article() rejects None for required fields title/content and 'field_monitor' is not a valid ArticleSource enum value.",
+        "action": "Change source to 'company_blog' (valid ArticleSource enum). Set title to '[Signal Sweep] {domain}{path}' as placeholder. Set content to '[Pending fetch — content_hash changed from {old_hash[:8]} to {new_hash[:8]}]' as placeholder. The ingest layer validates non-None and non-empty — these placeholders satisfy that while clearly marking the record as fetch-pending.",
+        "alternative_considered": "Adding 'field_monitor' to ArticleSource enum was rejected — that would modify an existing protected file (ingest_article.py) for a source type that isn't a true article source. 'company_blog' is semantically correct since these are company blog URLs."
+      },
+      {
+        "fix_id": "BRIDGE-002",
+        "file": "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+        "problem": "bridge_to_article_input() does not pass old_hash/new_hash into the returned dict's top level for downstream tracing",
+        "action": "No change needed — metadata block already carries field_id, url_id, old_hash, new_hash. This is informational only."
+      }
+    ],
+    "constraints": [
+      "Do not expand scope beyond the three allowed_paths",
+      "Do not modify ingest_article.py — use existing ArticleSource enum values",
+      "Do not modify existing movement_engine files",
+      "Preserve all kill switches and sample gates",
+      "Preserve read-only semantics in change_bridge.py",
+      "Seed SQL must remain idempotent (ON CONFLICT DO NOTHING)"
+    ],
+    "verification": [
+      "seed_blog_urls.sql executes without error against marketing DB",
+      "bridge_to_article_input() output passes _validate_required_fields()",
+      "bridge_to_article_input() output passes _validate_source()",
+      "No new dependencies introduced"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

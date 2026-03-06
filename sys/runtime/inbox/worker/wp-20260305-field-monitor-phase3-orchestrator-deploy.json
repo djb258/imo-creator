@@ -1,0 +1,26 @@
+{
+  "id": "wp-20260305-field-monitor-phase3-orchestrator-deploy",
+  "change_type": "architectural",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "flow_contract": {
+    "ingress": ["templates/snap-on/field-monitor/packages/"],
+    "middle": ["orchestrator seven-gate funnel"],
+    "egress": ["field_monitor.check_log", "field_monitor.field_state"]
+  },
+  "allowed_paths": ["templates/snap-on/field-monitor/packages/orchestrator/", "templates/snap-on/field-monitor/shared/", "changesets/outbox/"],
+  "summary": "Field Monitor phase 3: deploy orchestrator hub worker with seven-gate funnel, service bindings, helper functions, and end-to-end gate_reached=7 test.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T18:51:07Z",
+  "payload": {"process_id": "811f99b7-e87d-412e-a21b-1c6632138a82", "operational_id": "f3c84a52-6d05-4b9e-c7f1-0a36e5d29b74", "phase": 3},
+  "db_required": true,
+  "db_targets": ["field_monitor.url_registry", "field_monitor.field_state", "field_monitor.check_log", "field_monitor.error_log", "field_monitor.rate_state"],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

@@ -1,0 +1,29 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "a4d95b63-7e16-4c0f-d8a2-1b47f6e30c85",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Build Field Monitor Snap-On Tool Phase 4 Scheduler Deployment. Implement GitHub Actions scheduler workflow at .github/workflows/field-monitor-scheduler.yml. Supports cron (0 6 1 * * monthly) and workflow_dispatch triggers. Inputs: batch_limit (default 500), dry_run (default false). Implement Neon due-ness query: LEFT JOIN url_registry + field_state, WHERE next_due_at <= NOW() OR (confirmation_pending=true AND recheck_due_at <= NOW()), ORDER BY next_due_at ASC, LIMIT batch_limit. When dry_run=true, build queue and log count but do NOT POST to Orchestrator Worker. Secrets: NEON_CONNECTION_STRING, ORCHESTRATOR_WORKER_URL, ORCHESTRATOR_API_KEY. Scheduler is optional — bypassed when calling sub-hub has its own scheduler. Run dry run to verify workflow builds correct job queue without dispatching.",
+  "phase": 4,
+  "phase_label": "Scheduler Deployment — GitHub Actions Cron + Dispatch",
+  "prerequisite": "Phase 3 Go condition confirmed",
+  "go_condition": "Workflow YAML valid. Dry run executes: correct job queue built, jobs_emitted count in summary log, no dispatches when dry_run=true.",
+  "activation_state": "OPTIONAL — bypassed when calling sub-hub has own scheduler",
+  "agent_routing": {
+    "builder": "Implement .github/workflows/field-monitor-scheduler.yml per Doc2 Sub-Hub 1.",
+    "auditor": "Run workflow_dispatch with dry_run=true, batch_limit=500. Verify no HTTP POST, correct job count, Neon connection OK."
+  },
+  "snap_on_toolbox_compliance": {
+    "github_actions": "Infrastructure constant, free tier 2000 min/month",
+    "neon": "Read-only from Scheduler"
+  },
+  "constraints": [
+    "Do not expand scope beyond Scheduler workflow",
+    "Scheduler does NOT write to Neon under any condition",
+    "dry_run=true must suppress all dispatches — no partial dispatch",
+    "Secrets are environment variables only — never hardcoded",
+    "Must support workflow_dispatch for on-demand runs in addition to cron"
+  ]
+}

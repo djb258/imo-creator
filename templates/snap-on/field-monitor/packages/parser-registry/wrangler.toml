@@ -1,0 +1,12 @@
+name = "field-monitor-parser-registry"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[vars]
+ENVIRONMENT = "development"
+
+# KV namespace for parser function storage
+# Bind via: wrangler kv:namespace create PARSER_KV
+[[kv_namespaces]]
+binding = "PARSER_KV"
+id = "fdb97182fc0845509053eb5925c70b1b"

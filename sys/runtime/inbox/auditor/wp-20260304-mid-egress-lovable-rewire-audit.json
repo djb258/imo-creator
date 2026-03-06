@@ -1,0 +1,38 @@
+{
+  "id": "wp-20260304-mid-egress-lovable-rewire-audit",
+  "change_type": "audit",
+  "orbt_mode": "operate",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": true,
+  "requires_pressure_test": true,
+  "doc_required": true,
+  "doc_targets": ["docs/", "src/runtime/lcs/"],
+  "doc_surface": "repo_markdown",
+  "allowed_paths": [
+    "audit_reports/",
+    "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/"
+  ],
+  "summary": "Audit the MID egress Lovable rewire executed by Builder v2.7.0 under wp-20260304-mid-egress-lovable-rewire. Evaluate envelope, compliance, documentation lane, and acceptance. No DB lane.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-04T15:15:00Z",
+  "payload": {
+    "process_id": "88103be8-9feb-4353-b55a-9200a65865ed",
+    "operational_id": "wp-20260304-mid-egress-lovable-rewire",
+    "audit_target": {
+      "work_packet_id": "wp-20260304-mid-egress-lovable-rewire",
+      "execution_log_path": "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/execution_log.json",
+      "changeset_path": "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/changeset.json",
+      "doc_artifact_path": "changesets/outbox/wp-20260304-mid-egress-lovable-rewire/doc/doc_artifact.json"
+    },
+    "builder_agent": "Builder v2.7.0",
+    "lanes_executed": ["standard", "documentation"],
+    "deviations_noted": [
+      "doc_surface='repo_markdown' not in work_packet.schema.json enum"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

@@ -63,8 +63,8 @@ psql "$DATABASE_URL" -c "SELECT trigger_name, event_object_table FROM informatio
 
 1. ~~Seed the 15 existing prompts from `templates/claude/*.prompt.md` into `psb.prompt_registry`~~ DONE (2026-03-02)
 2. ~~Seed the 5 agent definitions from `ai/agents/` into `psb.skill_registry`~~ DONE (2026-03-02, 5 core + 3 claude agents = 8 total)
-3. Create reverse prompt index entries for each prompt — PENDING (requires manual classification of output categories per prompt)
-4. Create prompt-skill bindings — PENDING (requires manual mapping of which skills use which prompts)
+3. ~~Create reverse prompt index entries for each prompt~~ DONE (2026-03-03, 21 entries seeded via migration 017)
+4. ~~Create prompt-skill bindings~~ DONE (2026-03-03, 32 bindings seeded via migration 017)
 5. ~~Mark this file status as COMPLETE~~ DONE
 
 ## Deployment Log (2026-03-02)
@@ -120,3 +120,25 @@ Migration 016 creates the `garage` schema for sovereign control plane event hist
 | `psb` | 6 | 5 | ~12 | ~8 |
 | `garage` | 3 | 4 | 6 | 1 |
 | **Total** | **9** | **9** | **~18** | **~9** |
+
+## PSB Data Seeding (2026-03-03)
+
+### Migration 017: Reverse Prompt Index + Prompt-Skill Bindings
+
+| Component | Count | Status |
+|-----------|-------|--------|
+| `psb.reverse_prompt_index` entries | 21 | SEEDED |
+| `psb.prompt_skill_binding` entries | 32 | SEEDED |
+
+**Coverage verification**:
+- All 15 prompts have at least 1 reverse index entry (range: 1-2 entries per prompt)
+- All 8 skills have at least 1 binding (range: 2-10 bindings per skill)
+- Binding types: REQUIRES, PRODUCES, CONSUMES
+- Output categories: audit_certification (7), erd (2), prd (2), execution_wiring (2), hub_definition (4), changeset (1), other (3)
+
+### GARAGE_SIGNING_KEY
+
+- Generated: 2026-03-03
+- Algorithm: HMAC-SHA256, 256-bit
+- Vault: Doppler sovereign vault (`GARAGE_SIGNING_KEY`)
+- Status: ACTIVE

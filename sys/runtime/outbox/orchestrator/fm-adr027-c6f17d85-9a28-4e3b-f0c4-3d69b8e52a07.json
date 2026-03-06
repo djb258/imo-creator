@@ -1,0 +1,25 @@
+{
+  "packet_type": "planner_intake",
+  "target_repo_alias": "imo-creator",
+  "target_branch": "main",
+  "operational_id": "c6f17d85-9a28-4e3b-f0c4-3d69b8e52a07",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "ADR-027 DeltaHound Scheduler Tool Selection — documentation already written. Route for Auditor verification: confirm docs/adr/ADR-027-deltahound-scheduler-selection.md exists, structure matches templates/adr/ADR.md exactly, ADR_INDEX.md was not modified (row already present), no locked files touched, no other files modified. GitHub Actions accepted over Cloudflare Scheduled Workers for DeltaHound Sub-Hub 1 Scheduler. Work is complete — Auditor verification only.",
+  "phase": "adr",
+  "phase_label": "ADR-027 — DeltaHound Scheduler Tool Selection (Auditor Verification)",
+  "go_condition": "ADR-027 file exists at correct path. Structure matches template. ADR_INDEX.md unchanged. No locked files touched.",
+  "work_status": "COMPLETE — route for audit only",
+  "agent_routing": {
+    "builder": "No action — ADR already written.",
+    "auditor": "Verify ADR-027 structure matches templates/adr/ADR.md. Verify ADR_INDEX.md not modified. Verify no locked files touched. Verify no other files modified."
+  },
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Work is already complete — audit verification only",
+    "Do not modify ADR_INDEX.md — row already present",
+    "Do not modify any locked files"
+  ]
+}

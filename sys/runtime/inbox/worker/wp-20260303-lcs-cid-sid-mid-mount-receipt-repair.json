@@ -1,0 +1,39 @@
+{
+  "id": "wp-20260303-lcs-cid-sid-mid-mount-receipt-repair",
+  "change_type": "repair",
+  "orbt_mode": "repair",
+  "execution_type": "standard",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/",
+    "work_packets/inbox/"
+  ],
+  "summary": "Resolve RULE-013/014 blocker by requiring Worker to produce mount_receipt.json during re-execution of wp-20260303-lcs-cid-sid-mid-pipeline, including commit-at-mount, commit-at-completion, modified-file integrity hashes, and HEIR validation result.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-03T23:50:01Z",
+  "payload": {
+    "process_id": "3e4a1362-56a8-402c-931c-bba7a35b5092",
+    "operational_id": "f1a56c74-3e18-4b9d-d4f6-8c21b3e05a49",
+    "source_intake_packet": "sys/runtime/inbox/planner/f1a56c74-3e18-4b9d-d4f6-8c21b3e05a49.json",
+    "repairs_work_packet": "wp-20260303-lcs-cid-sid-mid-pipeline",
+    "required_artifact": "changesets/outbox/wp-20260303-lcs-cid-sid-mid-pipeline/mount_receipt.json",
+    "mount_receipt_requirements": [
+      "commit_sha_at_mount",
+      "commit_sha_at_completion",
+      "modified_files_with_integrity_hashes",
+      "heir_validation_result"
+    ],
+    "constraints": [
+      "Do not expand scope",
+      "mount_receipt must include commit-level integrity proof",
+      "mount_receipt must include HEIR validation result",
+      "Worker produces mount_receipt during re-execution — not retroactively"
+    ]
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false
+}

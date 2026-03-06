@@ -34,6 +34,8 @@
 | ADR-023 | imo-creator | 2026-03-01 | PSB Libraries (Prompt, Reverse Prompt, Skills) | PROPOSED | Database-backed Prompt Library, Reverse Prompt Library, and Skills Library in psb schema — migrations 012-015, column registry |
 | ADR-024 | imo-creator | 2026-03-02 | CLAUDE.md Path Corrections | PROPOSED | Fix 10 broken agent/contract file references after Garage V2 restructure |
 | ADR-025 | imo-creator | 2026-03-02 | V2 Path Corrections — Remaining Stale Refs | PROPOSED | Fix stale templates/agents/ refs in SYSTEM_MANIFEST.md, REPO_HOUSEKEEPING.md, HUB_COMPLIANCE.md; flag DOPPLER.md gap |
+| ADR-026 | imo-creator | 2026-03-05 | DeltaHound Tool Registration (TOOL-012) | ACCEPTED | Register DeltaHound homebrew field-monitoring tool in SNAP_ON_TOOLBOX.yaml as Tier 0 |
+| ADR-027 | imo-creator | 2026-03-05 | DeltaHound Sub-Hub 1 Scheduler — GitHub Actions vs Cloudflare Scheduled Workers | ACCEPTED | GitHub Actions selected for DeltaHound Scheduler; Cloudflare Scheduled Workers evaluated and rejected on stack simplicity grounds |
 
 ---
 
@@ -75,6 +77,6 @@ ADR numbers are **global across the fleet**, not per-repo. When creating a new A
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-15 |
-| Last Modified | 2026-03-02 |
+| Last Modified | 2026-03-05 |
 | Maintained By | Human + AI (after ADR creation) |
 | Audit Script | scripts/adr-check.sh |

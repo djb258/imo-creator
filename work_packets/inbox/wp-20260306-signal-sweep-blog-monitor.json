@@ -1,0 +1,108 @@
+{
+  "id": "wp-20260306-signal-sweep-blog-monitor",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "flow_contract": {
+    "ingress": [
+      "field_monitor.check_log (vendor tier — changed=true, field_name IN ['page_content_hash','news_headline','funding_mention'])",
+      "vendor.blog (source_type IN ['press_page','about_page']) — seed source for vendor tier"
+    ],
+    "middle": [
+      "signal_sweep/change_bridge.py — bridge reads vendor tier (field_monitor.check_log), converts detected changes into ArticlePayload, feeds into existing blog pipeline ingest_article()",
+      "blog_node_spoke.py — existing 7-stage pipeline processes the article (NO MODIFICATIONS)"
+    ],
+    "egress": [
+      "outreach.blog — blog signal record written by existing pipeline",
+      "field_monitor.check_log — append-only audit trail (written by Cloudflare Workers, NOT by bridge)"
+    ]
+  },
+  "allowed_paths": [
+    "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+    "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+    "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+    "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+    "hubs/blog-content/scripts/seed_blog_urls.sql",
+    "hubs/blog-content/scripts/seed_blog_parsers.py",
+    "hubs/blog-content/pipeline.md"
+  ],
+  "summary": "Integrate Field Monitor vendor tier into Blog sub-hub as 'Signal Sweep' — continuous URL monitoring for company press/about pages. field_monitor.* tables are the vendor staging layer (same architectural tier as vendor.people, vendor.blog, vendor.ct). Cloudflare Workers write to vendor tier. Bridge module in hub Middle layer reads FROM vendor tier and feeds detected content changes into the existing blog pipeline via ingest_article(). Seeds 100 URLs from vendor.blog into field_monitor.url_registry. Sample-gated to 100 records.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-06T13:00:00Z",
+  "payload": {
+    "parent_system": "field-monitor",
+    "sub_hub": "blog-content",
+    "sub_hub_id": "04.04.05",
+    "named_system": "Signal Sweep",
+    "sample_size": 100,
+    "transformation_statement": "This transforms company web page content stored in field_monitor.field_state (constants from vendor tier) into content change signals fed into the existing blog pipeline for entity extraction, event classification, and BIT signal emission (variables in sub-hub canonical tables).",
+    "vendor_tier_note": "field_monitor.* IS the vendor layer — same tier as vendor.blog. URL seed source is vendor.blog (289K rows, previously company.company_source_urls before Legacy Collapse). Cloudflare Workers own the write side. Hub Middle layer owns the read/bridge side.",
+    "ctb_compliance": {
+      "vendor_staging": "field_monitor.* — Cloudflare Workers write here. Bridge module READS only.",
+      "hub_middle_layer": "hubs/blog-content/imo/middle/signal_sweep/ — all logic here.",
+      "hub_scripts": "hubs/blog-content/scripts/ — seed scripts (support surface).",
+      "no_logic_in_ingress": true,
+      "no_logic_in_egress": true,
+      "all_logic_in_middle": true,
+      "no_forbidden_folders": true,
+      "no_spoke_logic": true
+    },
+    "constants": [
+      "vendor.blog rows (source_url, source_type, company_unique_id — seed source)",
+      "field_monitor.url_registry schema (vendor tier)",
+      "field_monitor.field_state schema (vendor tier)",
+      "field_monitor.check_log schema (vendor tier, append-only)",
+      "blog_node_spoke.py ingest_article() ArticlePayload contract (existing, no changes)",
+      "field_monitor 7-gate funnel pipeline (Cloudflare Workers, no changes)"
+    ],
+    "variables": [
+      "field_monitor.url_registry rows (seeded company URLs — vendor tier)",
+      "field_monitor.field_state rows (page_content_hash, news_headline, funding_mention — vendor tier)",
+      "field_monitor.check_log rows (change detection audit trail — vendor tier, written by Workers)",
+      "ArticlePayload instances routed to ingest_article() (bridge output)",
+      "outreach.blog rows (if signal validated and matched — canonical output)"
+    ],
+    "dependencies": {
+      "upstream": [
+        "field_monitor schema DEPLOYED (wp-20260305-field-monitor-phase1-bootstrap-r2)",
+        "vendor.blog (289K rows — seed source, WHERE source_type IN ('press_page','about_page'), sample 100)"
+      ],
+      "downstream": [
+        "blog_node_spoke.py — existing, NO modifications",
+        "ingest_article.py — existing, ArticlePayload contract already defined",
+        "classify_event.py — existing, EventType enums already defined",
+        "emit_bit_signal.py — existing, BIT signal emission already wired"
+      ]
+    },
+    "parser_kv_entries": {
+      "{domain}::page_content_hash": "SHA-256 hash of page body text (baseline change detection)",
+      "{domain}::news_headline": "Extract latest news/press headline from press pages",
+      "{domain}::funding_mention": "Detect funding/investment keywords in page content"
+    },
+    "kill_switches": {
+      "KILL_SIGNAL_SWEEP": "Disables all Signal Sweep URL seeding and change bridging",
+      "KILL_BLOG_URL_SEED": "Disables new URL registration only (existing monitors continue)",
+      "KILL_FUNDING_DETECTION": "Already exists in blog_node_spoke.py — reuse"
+    }
+  },
+  "db_required": true,
+  "db_targets": [
+    "field_monitor.url_registry (INSERT — seed company URLs into vendor tier)",
+    "field_monitor.field_state (INSERT — seed field tracking entries in vendor tier)",
+    "field_monitor.check_log (READ ONLY — bridge reads detected changes from vendor tier)",
+    "vendor.blog (READ ONLY — source URLs for seeding)"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "container_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "hubs/blog-content/pipeline.md (add Signal Sweep section showing vendor-tier flow)",
+    "hubs/blog-content/SCHEMA.md (add field_monitor cross-reference as vendor tier)"
+  ],
+  "doc_surface": "mixed"
+}

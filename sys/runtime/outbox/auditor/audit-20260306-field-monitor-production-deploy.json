@@ -1,0 +1,28 @@
+{
+  "audit_request_id": "audit-20260306-field-monitor-production-deploy",
+  "work_packet_id": "wp-20260306-field-monitor-production-deploy",
+  "audited_at": "2026-03-06T16:00:00.000Z",
+  "audited_by": "auditor",
+  "doctrine_version": "3.5.0",
+  "status": "AUDIT_COMPLETE",
+  "result": "PASS",
+  "qualification": "8/8 code-level PASS, 1/1 infra deferred (CANNOT_VERIFY_LOCALLY)",
+  "checks": [
+    {"id": 1, "description": "All 4 workers live on svg-outreach.workers.dev", "result": "CANNOT_VERIFY_LOCALLY", "notes": "Requires curl/HTTP testing against live endpoints. Builder reports deployment complete."},
+    {"id": 2, "description": "Service bindings wired correctly", "result": "PASS", "evidence": "orchestrator/wrangler.toml [[services]] array: FETCHER→field-monitor-fetcher, PARSER→field-monitor-parser-registry, PROXY→field-monitor-proxy-router"},
+    {"id": 3, "description": "DATABASE_URL points to Marketing DB", "result": "PASS", "evidence": "Changeset secrets_set source='Marketing DB (barton-outreach-core Doppler)'. Set on orchestrator and proxy-router."},
+    {"id": 4, "description": "No new Function() / eval()", "result": "PASS", "evidence": "parser-registry/src/index.ts uses deterministic regex via new RegExp(config.pattern). No eval/Function calls."},
+    {"id": 5, "description": "Parser KV uses JSON ParserConfig format", "result": "PASS", "evidence": "ParserConfig interface: {type:'regex', pattern, flags?, group?, transforms?}. KV parsed via JSON.parse()."},
+    {"id": 6, "description": "Smoke test 7/7 gates PASS", "result": "PASS", "evidence": "execution_log Step 9: gate_reached=7, all_gates_passed=true, total_duration_ms=505"},
+    {"id": 7, "description": "Deploy order honored (spokes before orchestrator)", "result": "PASS", "evidence": "Steps 6-7: 3 spoke workers deployed first, orchestrator deployed after"},
+    {"id": 8, "description": "KV namespace IDs match", "result": "PASS", "evidence": "PARSER_KV=fdb97182fc0845509053eb5925c70b1b, EGRESS_KV=66e6c7bec8c1479ba708c0bcbb6a0e23 — match changeset and wrangler.toml"},
+    {"id": 9, "description": "No scope expansion beyond allowed_paths", "result": "PASS", "evidence": "4 files touched, all within templates/snap-on/field-monitor/packages/. Each worker scoped to its functional requirements."}
+  ],
+  "certification": {
+    "doctrine_version": "3.5.0",
+    "locked_files_modified": false,
+    "scope_expansion": false,
+    "ready_for_production": true,
+    "pending_infra_verification": true
+  }
+}

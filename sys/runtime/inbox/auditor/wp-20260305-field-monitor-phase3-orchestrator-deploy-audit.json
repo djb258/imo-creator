@@ -1,0 +1,27 @@
+{
+  "audit_request_id": "audit-20260305-field-monitor-phase3-orchestrator-deploy",
+  "work_packet_id": "wp-20260305-field-monitor-phase3-orchestrator-deploy",
+  "submitted_by": "builder",
+  "submitted_at": "2026-03-05T00:00:00.000Z",
+  "changeset_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase3-orchestrator-deploy/changeset.json",
+  "execution_log_path": "sys/runtime/outbox/builder/wp-20260305-field-monitor-phase3-orchestrator-deploy/execution_log.json",
+  "scope": {
+    "lane": "standard",
+    "files_touched": [
+      "templates/snap-on/field-monitor/packages/orchestrator/wrangler.toml",
+      "templates/snap-on/field-monitor/packages/orchestrator/src/index.ts",
+      "templates/snap-on/field-monitor/shared/src/orchestrator-contract.ts",
+      "templates/snap-on/field-monitor/shared/src/index.ts"
+    ],
+    "db_changes": false
+  },
+  "audit_checklist": [
+    "Verify seven-gate funnel stops at correct gate on failure",
+    "Verify service binding configuration matches spoke worker names from Phase 2",
+    "Verify CheckTask/GateResult/CheckResult type contracts match shared definitions",
+    "Verify buildResult numbers gates sequentially",
+    "Verify queryDueTasks matches scheduler due-ness query pattern",
+    "Verify no scope expansion beyond allowed_paths"
+  ],
+  "status": "PENDING_AUDIT"
+}

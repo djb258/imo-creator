@@ -1,0 +1,21 @@
+{
+  "work_packet_id": "wp-20260306-blog-content-seed-bridge-repair",
+  "also_resolves": "wp-20260306-signal-sweep-seed-bridge-audit-repair",
+  "changeset_id": "cs-20260306-blog-content-seed-bridge-repair",
+  "timestamp": "2026-03-06T15:25:00.000Z",
+  "target_repo": "barton-outreach-core",
+  "files_touched": [
+    {
+      "path": "hubs/blog-content/scripts/seed_blog_urls.sql",
+      "action": "modified",
+      "fix_id": "SEED-001",
+      "reason": "Replaced references to non-existent vendor.blog columns (path, is_active, created_at) with actual columns: domain (direct), source_url (parsed via regexp_replace for path), is_accessible, original_created_at. Step 2 JOIN also updated to use regexp_replace for path matching."
+    },
+    {
+      "path": "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+      "action": "modified",
+      "fix_id": "BRIDGE-001",
+      "reason": "Changed bridge_to_article_input() source from 'field_monitor' to 'company_blog' (valid ArticleSource enum). Set title to '[Signal Sweep] {domain}{path}' and content to '[Pending fetch — content_hash changed from {old_hash} to {new_hash}]' as non-None placeholders that satisfy ingest_article() validation."
+    }
+  ]
+}
