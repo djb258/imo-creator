@@ -1,0 +1,47 @@
+{
+  "contract_version": "1.0.0",
+  "hub_id": "ut",
+  "hub_name": "Ultimate Tool",
+  "cc_layer": "CC-02",
+  "parent": "imo-creator",
+  "ctb_placement": "app/garage/ut/",
+  "imo_topology": {
+    "ingress": "Schema validation only. No decisions. No logic.",
+    "middle": "All logic, all decisions, all state, all tools.",
+    "egress": "Read-only views only. No logic. No mutations."
+  },
+  "rim": {
+    "type": "Cloudflare Worker REST API",
+    "framework": "Hono",
+    "endpoints": [
+      { "method": "POST", "path": "/query", "purpose": "Query knowledge base" },
+      { "method": "POST", "path": "/ingest", "purpose": "Ingest new content" },
+      { "method": "GET", "path": "/domains", "purpose": "List tracked domains" }
+    ]
+  },
+  "sub_hubs": {
+    "total": 19,
+    "categories": {
+      "external": {
+        "range": "01-05",
+        "description": "Browser layer. Cannot run inside Cloudflare."
+      },
+      "cf_native": {
+        "range": "06-15",
+        "description": "Native Cloudflare services. Zero external dependencies."
+      },
+      "field_monitor": {
+        "range": "16-19",
+        "description": "Field Monitor workflow. 7-gate funnel owned by 19-orchestrator."
+      }
+    }
+  },
+  "invariants": [
+    "No logic in spokes",
+    "No sideways calls between sub-hubs",
+    "Each sub-hub is sovereign — knows nothing about the others",
+    "External sub-hubs cannot run inside Cloudflare",
+    "CF sub-hubs have zero external dependencies",
+    "LLM is tail, not spine"
+  ]
+}
