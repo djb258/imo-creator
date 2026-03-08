@@ -2,7 +2,7 @@
 
 ## Overview
 
-UT is a sovereign Cloudflare-native platform organized as 19 sub-hubs under imo-creator (CC-01). It provides browser automation, knowledge ingestion, and data processing capabilities through a strict Hub-Spoke geometry with IMO data flow.
+UT is a sovereign Cloudflare-native platform organized as 25 sub-hubs under imo-creator (CC-01). It provides browser automation, knowledge ingestion, and data processing capabilities through a strict Hub-Spoke geometry with IMO data flow.
 
 - **Authority**: CC-02 (Hub) under imo-creator (CC-01 Sovereign)
 - **CTB Placement**: `app/garage/ut/`
@@ -37,9 +37,9 @@ All UT source lives under `app/garage/ut/`. Sub-hubs are organized as numbered d
 
 Browser layer. These sub-hubs require a browser runtime or external service and **cannot run inside Cloudflare**.
 
-### Tier 2 — CF Native (06-19)
+### Tier 2 — CF Native (06-25)
 
-Native Cloudflare services. These sub-hubs run entirely within the Cloudflare platform. Sub-hubs 16-19 implement the **7-gate funnel** owned by sub-hub 19-orchestrator, handling fetch, parse, proxy, and orchestration for field data collection.
+Native Cloudflare services. These sub-hubs run entirely within the Cloudflare platform. Sub-hubs 16-19 implement the **7-gate funnel** owned by sub-hub 19-orchestrator, handling fetch, parse, proxy, and orchestration for monitoring workflows.
 
 ---
 
@@ -78,6 +78,12 @@ The Hono REST API exposes three endpoints:
 | 17 | parser-registry | Parser selection | CF Native | Select and apply the correct parser for each content type |
 | 18 | proxy-router | Proxy rotation | CF Native | Rotate proxy endpoints to avoid rate limiting |
 | 19 | orchestrator | Funnel orchestrator | CF Native | Own the 7-gate funnel and coordinate UT monitoring workflow |
+| 20 | cache-layer | Workers KV | CF Native | Hot-path caching between consumers and storage |
+| 21 | dedup-engine | D1 + Workers | CF Native | Content-level deduplication via fingerprinting |
+| 22 | webhook-gateway | Workers + Hono | CF Native | Outbound notifications on content changes and alerts |
+| 23 | rate-limiter | Workers KV + Durable Objects | CF Native | Centralized per-domain and global rate limiting |
+| 24 | content-transformer | Workers | CF Native | Content normalization — HTML cleanup, markdown conversion, boilerplate removal |
+| 25 | access-control | Workers + D1 | CF Native | API key management, tenant isolation, and auth gate |
 
 ---
 

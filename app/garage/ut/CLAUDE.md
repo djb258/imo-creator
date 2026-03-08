@@ -9,7 +9,7 @@
 | Authority | CC-02 (Hub) |
 | Parent | imo-creator (CC-01 Sovereign) |
 | CTB Placement | `app/garage/ut/` |
-| Purpose | Sovereign Cloudflare platform with 19 sub-hubs for browser automation, knowledge ingestion, and data processing |
+| Purpose | Sovereign Cloudflare platform with 25 sub-hubs for browser automation, knowledge ingestion, and data processing |
 
 ---
 
@@ -46,7 +46,7 @@ External sub-hubs cannot run inside Cloudflare. They require a browser or extern
 | 04 | auth-management | Session / cookie manager | External |
 | 05 | fallback-scraping | Raw HTTP fallback | External |
 
-### CF Native (06-19) — Cloudflare Services
+### CF Native (06-25) — Cloudflare Services
 
 CF Native sub-hubs have zero external dependencies. They run entirely within Cloudflare. Sub-hubs 16-19 implement the 7-gate funnel workflow, owned by 19-orchestrator.
 
@@ -66,6 +66,12 @@ CF Native sub-hubs have zero external dependencies. They run entirely within Clo
 | 17 | parser-registry | Parser selection | CF Native |
 | 18 | proxy-router | Proxy rotation | CF Native |
 | 19 | orchestrator | Funnel orchestrator | CF Native |
+| 20 | cache-layer | Workers KV | CF Native |
+| 21 | dedup-engine | D1 + Workers | CF Native |
+| 22 | webhook-gateway | Workers + Hono | CF Native |
+| 23 | rate-limiter | Workers KV + Durable Objects | CF Native |
+| 24 | content-transformer | Workers | CF Native |
+| 25 | access-control | Workers + D1 | CF Native |
 
 ---
 
@@ -77,7 +83,7 @@ CF Native sub-hubs have zero external dependencies. They run entirely within Clo
 | No sideways calls between sub-hubs | Doctrine violation |
 | Each sub-hub is sovereign — knows nothing about the others | Doctrine violation |
 | External sub-hubs (01-05) cannot run inside Cloudflare | Doctrine violation |
-| CF Native sub-hubs (06-19) have zero external dependencies | Doctrine violation |
+| CF Native sub-hubs (06-25) have zero external dependencies | Doctrine violation |
 | LLM is tail, not spine | Doctrine violation |
 | Deterministic solution evaluated first | Doctrine violation |
 | ADR required for every tool | PR rejected |
@@ -124,7 +130,7 @@ Sub-hub contract files (when created) are also locked:
 | Create new sub-hub implementation files (with human approval) | YES |
 | Create ADR drafts (for human review) | YES |
 | Modify locked files | NO |
-| Add sub-hubs beyond the declared 19 | NO |
+| Add sub-hubs beyond the declared 25 | NO |
 | Allow sideways calls between sub-hubs | NO |
 | Place logic in Ingress or Egress | NO |
 | Use LLM as primary decision maker | NO |
