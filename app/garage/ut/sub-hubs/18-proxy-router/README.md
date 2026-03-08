@@ -6,13 +6,13 @@
 |-------|-------|
 | Sub-Hub ID | 18-proxy-router |
 | Driver | Workers + Hono |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | CC Layer | CC-03 |
 | Parent Hub | UT |
 
 ## Responsibility
 
-Field Monitor proxy routing. Selects optimal proxy chain for each fetch target based on domain difficulty, geo requirements, and rate limits. Routes through ScraperAPI tiers.
+UT proxy routing. Selects optimal proxy chain for each fetch target based on domain difficulty, geo requirements, and rate limits. Routes through ScraperAPI tiers.
 
 ## Interface Contract
 

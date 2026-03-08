@@ -40,7 +40,7 @@
 
 ## Context
 
-Sub-hub 16 (fetcher) is the Field Monitor fetch layer. It executes targeted HTTP fetches against monitored domains, checking for content changes, new pages, and structural shifts. It serves as the first gate in the 7-gate funnel owned by sub-hub 19-orchestrator. The solution must support reliable fetching with proxy fallback for protected sites.
+Sub-hub 16 (fetcher) is the UT fetch layer. It executes targeted HTTP fetches against monitored domains, checking for content changes, new pages, and structural shifts. It serves as the first gate in the 7-gate funnel owned by sub-hub 19-orchestrator. The solution must support reliable fetching with proxy fallback for protected sites.
 
 ## Decision
 
@@ -85,7 +85,7 @@ Revert to pure Workers fetch if ScraperAPI proves unreliable or cost-prohibitive
 |-------|-------|
 | Sub-Hub | 16-fetcher |
 | Driver | Workers + ScraperAPI |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | Doctrine Ref | ARCHITECTURE.md v2.1.0 |
 
 ## Approval

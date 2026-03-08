@@ -40,7 +40,7 @@
 
 ## Context
 
-Sub-hub 17 (parser-registry) stores per-domain parser rules including CSS selectors, extraction patterns, and field mappings. The Field Monitor workflow requires fast parser config lookup on the hot path (every fetch triggers a parser lookup) while also supporting versioned registry management for admin updates. The solution must be CF Native.
+Sub-hub 17 (parser-registry) stores per-domain parser rules including CSS selectors, extraction patterns, and field mappings. The UT monitoring workflow requires fast parser config lookup on the hot path (every fetch triggers a parser lookup) while also supporting versioned registry management for admin updates. The solution must be CF Native.
 
 ## Decision
 
@@ -86,7 +86,7 @@ Revert to D1-only if KV cache consistency proves problematic. Remove KV lookup l
 |-------|-------|
 | Sub-Hub | 17-parser-registry |
 | Driver | D1 + KV |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | Doctrine Ref | ARCHITECTURE.md v2.1.0 |
 
 ## Approval

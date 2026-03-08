@@ -6,19 +6,19 @@
 |-------|-------|
 | Sub-Hub ID | 19-orchestrator |
 | Driver | Workers Runtime |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | CC Layer | CC-03 |
 | Parent Hub | UT |
 
 ## Responsibility
 
-Field Monitor orchestrator. Owns the 7-gate funnel governing the entire Field Monitor workflow.
+UT orchestrator. Owns the 7-gate funnel governing the UT monitoring workflow.
 
 ## Interface Contract
 
 ### Triggers
 
-Scheduled Field Monitor cycle from 15-scheduling, or on-demand trigger.
+Scheduled UT monitoring cycle from 15-scheduling, or on-demand trigger.
 
 ### Data Arrival
 

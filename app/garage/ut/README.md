@@ -37,13 +37,9 @@ All UT source lives under `app/garage/ut/`. Sub-hubs are organized as numbered d
 
 Browser layer. These sub-hubs require a browser runtime or external service and **cannot run inside Cloudflare**.
 
-### Tier 2 — CF Native (06-15)
+### Tier 2 — CF Native (06-19)
 
-Native Cloudflare services. These sub-hubs run entirely within the Cloudflare platform with **zero external dependencies**.
-
-### Tier 3 — Field Monitor (16-19)
-
-Field Monitor workflow. Implements a **7-gate funnel** owned by 19-orchestrator. Handles fetch, parse, proxy, and orchestration for field data collection.
+Native Cloudflare services. These sub-hubs run entirely within the Cloudflare platform. Sub-hubs 16-19 implement the **7-gate funnel** owned by sub-hub 19-orchestrator, handling fetch, parse, proxy, and orchestration for field data collection.
 
 ---
 
@@ -78,10 +74,10 @@ The Hono REST API exposes three endpoints:
 | 13 | error-queue | Queues | CF Native | Queue failed operations for retry and dead-letter handling |
 | 14 | observability | Logpush / Analytics | CF Native | Collect logs, metrics, and operational telemetry |
 | 15 | scheduling | Cron Triggers | CF Native | Trigger scheduled crawls and maintenance tasks |
-| 16 | fetcher | HTTP fetch | Field Monitor | Fetch field data from target URLs |
-| 17 | parser-registry | Parser selection | Field Monitor | Select and apply the correct parser for each content type |
-| 18 | proxy-router | Proxy rotation | Field Monitor | Rotate proxy endpoints to avoid rate limiting |
-| 19 | orchestrator | Funnel orchestrator | Field Monitor | Own the 7-gate funnel and coordinate field monitor workflow |
+| 16 | fetcher | HTTP fetch | CF Native | Fetch field data from target URLs |
+| 17 | parser-registry | Parser selection | CF Native | Select and apply the correct parser for each content type |
+| 18 | proxy-router | Proxy rotation | CF Native | Rotate proxy endpoints to avoid rate limiting |
+| 19 | orchestrator | Funnel orchestrator | CF Native | Own the 7-gate funnel and coordinate UT monitoring workflow |
 
 ---
 

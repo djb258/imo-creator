@@ -6,13 +6,13 @@
 |-------|-------|
 | Sub-Hub ID | 16-fetcher |
 | Driver | Workers + ScraperAPI |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | CC Layer | CC-03 |
 | Parent Hub | UT |
 
 ## Responsibility
 
-Field Monitor fetch layer. Executes targeted HTTP fetches against monitored domains. Checks for content changes, new pages, structural shifts. First gate in the 7-gate funnel.
+UT fetch layer. Executes targeted HTTP fetches against monitored domains. Checks for content changes, new pages, structural shifts. First gate in the 7-gate funnel.
 
 ## Interface Contract
 

@@ -46,9 +46,9 @@ External sub-hubs cannot run inside Cloudflare. They require a browser or extern
 | 04 | auth-management | Session / cookie manager | External |
 | 05 | fallback-scraping | Raw HTTP fallback | External |
 
-### CF Native (06-15) — Cloudflare Services
+### CF Native (06-19) — Cloudflare Services
 
-CF Native sub-hubs have zero external dependencies. They run entirely within Cloudflare.
+CF Native sub-hubs have zero external dependencies. They run entirely within Cloudflare. Sub-hubs 16-19 implement the 7-gate funnel workflow, owned by 19-orchestrator.
 
 | Number | Name | Driver | Category |
 |--------|------|--------|----------|
@@ -62,17 +62,10 @@ CF Native sub-hubs have zero external dependencies. They run entirely within Clo
 | 13 | error-queue | Queues | CF Native |
 | 14 | observability | Logpush / Analytics | CF Native |
 | 15 | scheduling | Cron Triggers | CF Native |
-
-### Field Monitor (16-19) — 7-Gate Funnel
-
-Field Monitor sub-hubs implement the 7-gate funnel workflow, owned by 19-orchestrator.
-
-| Number | Name | Driver | Category |
-|--------|------|--------|----------|
-| 16 | fetcher | HTTP fetch | Field Monitor |
-| 17 | parser-registry | Parser selection | Field Monitor |
-| 18 | proxy-router | Proxy rotation | Field Monitor |
-| 19 | orchestrator | Funnel orchestrator | Field Monitor |
+| 16 | fetcher | HTTP fetch | CF Native |
+| 17 | parser-registry | Parser selection | CF Native |
+| 18 | proxy-router | Proxy rotation | CF Native |
+| 19 | orchestrator | Funnel orchestrator | CF Native |
 
 ---
 
@@ -84,7 +77,7 @@ Field Monitor sub-hubs implement the 7-gate funnel workflow, owned by 19-orchest
 | No sideways calls between sub-hubs | Doctrine violation |
 | Each sub-hub is sovereign — knows nothing about the others | Doctrine violation |
 | External sub-hubs (01-05) cannot run inside Cloudflare | Doctrine violation |
-| CF Native sub-hubs (06-15) have zero external dependencies | Doctrine violation |
+| CF Native sub-hubs (06-19) have zero external dependencies | Doctrine violation |
 | LLM is tail, not spine | Doctrine violation |
 | Deterministic solution evaluated first | Doctrine violation |
 | ADR required for every tool | PR rejected |

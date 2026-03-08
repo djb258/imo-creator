@@ -52,7 +52,7 @@
 
 ## Context
 
-Sub-hub 19 (orchestrator) owns the 7-gate funnel that governs the entire Field Monitor workflow. Gates: (1) Fetch, (2) Parse, (3) Validate, (4) Diff, (5) Classify, (6) Route, (7) Store. Each gate is pass/fail — failure at any gate halts the pipeline for that item. The orchestrator must coordinate service bindings across Field Monitor sub-hubs within the CF Native execution surface.
+Sub-hub 19 (orchestrator) owns the 7-gate funnel that governs the UT monitoring workflow. Gates: (1) Fetch, (2) Parse, (3) Validate, (4) Diff, (5) Classify, (6) Route, (7) Store. Each gate is pass/fail — failure at any gate halts the pipeline for that item. The orchestrator must coordinate service bindings across UT sub-hubs 16-19 within the CF Native execution surface.
 
 ---
 
@@ -75,7 +75,7 @@ Workers Runtime chosen for native CF orchestration. Temporal rejected — extern
 ## Consequences
 
 **Enables:**
-- Native CF orchestration with direct service bindings to all Field Monitor sub-hubs
+- Native CF orchestration with direct service bindings to UT sub-hubs 16-19
 - Sequential 7-gate funnel with clear pass/fail semantics per gate
 - Per-domain gate result tracking for cycle completion reports
 - Error event emission for failed gates with gate-specific context
@@ -110,7 +110,7 @@ No direct alternative exists for CF-native orchestration. If Workers Runtime pro
 |-------|-------|
 | Sub-Hub | 19-orchestrator |
 | Driver | Workers Runtime |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | Doctrine Ref | ARCHITECTURE.md v2.1.0 |
 
 ---

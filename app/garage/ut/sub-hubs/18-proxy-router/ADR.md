@@ -85,7 +85,7 @@ Revert to static proxy configuration if dynamic routing proves unreliable. Repla
 |-------|-------|
 | Sub-Hub | 18-proxy-router |
 | Driver | Workers + Hono |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | Doctrine Ref | ARCHITECTURE.md v2.1.0 |
 
 ## Approval

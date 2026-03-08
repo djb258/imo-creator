@@ -6,13 +6,13 @@
 |-------|-------|
 | Sub-Hub ID | 17-parser-registry |
 | Driver | D1 + KV |
-| Category | CF Native (Field Monitor) |
+| Category | CF Native |
 | CC Layer | CC-03 |
 | Parent Hub | UT |
 
 ## Responsibility
 
-Field Monitor parser configuration. Stores per-domain parser rules (CSS selectors, extraction patterns, field mappings). KV for fast lookup, D1 for versioned registry.
+UT parser configuration. Stores per-domain parser rules (CSS selectors, extraction patterns, field mappings). KV for fast lookup, D1 for versioned registry.
 
 ## Interface Contract
 
