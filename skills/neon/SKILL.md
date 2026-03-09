@@ -141,6 +141,28 @@ Post-Databricks acquisition pricing (Aug 2025):
 
 For full pricing breakdown and cost examples, read `references/pricing.md`.
 
+## Fleet Reference — Ultimate Tool (UT)
+
+The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) uses Neon as the source-of-truth
+data layer for child repos that call UT. While UT's own metadata lives in Cloudflare D1
+(edge SQLite for speed), the relational data that child repos own — company records, contacts,
+pipeline state, enrichment results — lives in Neon.
+
+**How UT and Neon interact:**
+- Child repos store their CTB-governed data in Neon (each repo has its own Neon project)
+- UT's Cloudflare Workers connect to child repo Neon instances via Hyperdrive (recommended)
+  or the Neon serverless driver for one-shot queries
+- UT's movement detection pipeline (SH-16 through SH-19) writes change events that child
+  repos consume from their Neon message queue tables
+- UT does NOT own any Neon database — it connects to child repo databases as a service consumer
+
+**Connection pattern for UT → Neon:**
+- UT Workers use Hyperdrive with `node-postgres` (pg) — never the Neon serverless driver
+  through Hyperdrive (see "Connecting to Neon from Workers" above)
+- Each child repo provides a dedicated Neon role for UT access (non-superuser, scoped permissions)
+
+UT's full spec: `templates/snap-on/ultimate-tool/README.md`
+
 ## Dave's Operational Notes
 <!-- Feed raw notes here: message queue table design, query cost patterns,
      branching workflow for deployments, cold-start incidents -->

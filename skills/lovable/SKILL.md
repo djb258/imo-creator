@@ -145,6 +145,29 @@ projects that don't yet exist. It is never a middle step. It is never used on ex
 repos. The moment you need ongoing development, maintenance, complex features, or
 production reliability — you're in Cursor/Claude Code territory.
 
+## Fleet Reference — Ultimate Tool (UT)
+
+The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) intersects with Lovable at the
+pipeline boundary. Lovable generates the initial UI for child repo frontends, which are
+then exported to GitHub and developed further with Claude Code.
+
+**How UT and Lovable relate:**
+- Lovable builds the frontend scaffolding for child repos that need a UI
+- Those frontends call UT via HTTP through the Cloudflare Worker rim (SH-06)
+- Lovable itself is never part of UT's runtime — it's Step 1 only
+- After export, the frontend code lives in the child repo and is maintained by Claude Code
+
+**Pipeline position:**
+```
+Lovable (generate UI) → GitHub (export) → Claude Code (develop) → UT (call via HTTP)
+```
+
+The UT dashboard (fleet control panel) in `dashboard/` was NOT built with Lovable — it was
+built directly with Claude Code. Lovable is reserved for net-new child repo UIs where rapid
+prototyping justifies the credit cost.
+
+UT's full spec: `templates/snap-on/ultimate-tool/README.md`
+
 ## Dave's Operational Notes
 <!-- Feed raw notes: which projects used Lovable, credit burn rate reality,
      export quality assessment, Supabase integration pain points -->

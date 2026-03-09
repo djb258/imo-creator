@@ -120,6 +120,35 @@ Two documented paths:
 
 See the Neon skill for Neon-side configuration details.
 
+## Fleet Reference — Ultimate Tool (UT)
+
+The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) is the fleet's heaviest Cloudflare
+consumer. UT is a sovereign AI platform (TOOL-012, pending ADR-026) built entirely on Cloudflare,
+with 14 of its 20 sub-hubs running as Cloudflare-native services:
+
+| Sub-Hub | CF Service | Role |
+|---------|-----------|------|
+| SH-06 (API Layer / Rim) | Workers + Hono | The single entry point — all child repos call UT through this Worker |
+| SH-07 (Vector Brain) | Vectorize | Semantic search across ingested documents |
+| SH-08 (Doc Storage) | R2 | Zero-egress object storage for crawled/ingested content |
+| SH-09 (LLM Router) | AI Gateway | Routes to multiple LLM providers with cost tracking |
+| SH-10 (Runtime) | Workers Runtime | General compute for sub-hub orchestration |
+| SH-11 (Structured Data) | D1 | Edge SQLite for metadata, parser configs, URL registry |
+| SH-12 (Embedding) | Workers AI | Generates embeddings for vector storage |
+| SH-13 (Error Queue) | Queues | Dead-letter and retry queue for failed operations |
+| SH-14 (Observability) | Workers Analytics | Telemetry and cost tracking per sub-hub |
+| SH-15 (Scheduling) | Workers Cron | Periodic tasks (movement detection sweeps, cache refresh) |
+| SH-16 (Fetcher) | Workers + ScraperAPI | URL retrieval with proxy fallback |
+| SH-17 (Parser Registry) | D1 + KV | Field extraction rules per domain |
+| SH-18 (Proxy Router) | Workers + Hono | Mode selection for fetch strategy |
+| SH-19 (Orchestrator) | Workers Runtime | Movement detection pipeline coordination |
+
+**When building or debugging any Cloudflare component**, check whether it's part of UT.
+UT's full spec lives at `templates/snap-on/ultimate-tool/README.md`. The field-monitor
+implementation lives at `templates/snap-on/ultimate-tool/field-monitor/`.
+
+Child repos never import UT code — they call UT via HTTP through SH-06 (the Rim).
+
 ## Dave's Operational Notes
 <!-- Feed raw notes here: patterns that work, things that broke, cost surprises -->
 
