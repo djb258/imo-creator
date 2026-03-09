@@ -1,8 +1,8 @@
 {
-  "inventory_version": "1.1.0",
+  "inventory_version": "1.2.0",
   "authority": "imo-creator (CC-01 Sovereign)",
   "description": "Fleet-wide structural inventory. Tracks each child repo's alignment to Garage Control Plane V2. Populated from repo_registry.json entries. Updated by Auditor after each fleet alignment check.",
-  "updated_at": "2026-03-03T23:55:00Z",
+  "updated_at": "2026-03-09T00:00:00Z",
   "state_transitions": {
     "independent": {
       "definition": "Missing all required surfaces. No Garage integration.",
@@ -32,22 +32,36 @@
   ],
   "repos": [
     {
-      "repo_alias": "client",
-      "current_structure_type": "independent",
-      "has_heir": false,
-      "has_ci_gate": false,
-      "has_changeset_outbox": false,
-      "has_audit_reports": false,
-      "status": "pending"
+      "repo_alias": "imo-creator",
+      "current_structure_type": "sovereign",
+      "has_heir": true,
+      "has_ci_gate": true,
+      "has_changeset_outbox": true,
+      "has_audit_reports": true,
+      "status": "aligned",
+      "note": "Sovereign repository. Always aligned by definition."
     },
     {
-      "repo_alias": "universal-client-template",
-      "current_structure_type": "independent",
-      "has_heir": false,
-      "has_ci_gate": false,
-      "has_changeset_outbox": false,
-      "has_audit_reports": false,
-      "status": "pending"
+      "repo_alias": "barton-outreach-core",
+      "current_structure_type": "aligned",
+      "has_heir": true,
+      "has_ci_gate": true,
+      "has_changeset_outbox": true,
+      "has_audit_reports": true,
+      "status": "aligned",
+      "refit_applied_by": "fleet-standardization-2026-03-09",
+      "refit_timestamp": "2026-03-09T00:00:00Z"
+    },
+    {
+      "repo_alias": "client",
+      "current_structure_type": "aligned",
+      "has_heir": true,
+      "has_ci_gate": true,
+      "has_changeset_outbox": true,
+      "has_audit_reports": true,
+      "status": "aligned",
+      "refit_applied_by": "fleet-standardization-2026-03-09",
+      "refit_timestamp": "2026-03-09T00:00:00Z"
     },
     {
       "repo_alias": "company-lifecycle-cl",
@@ -61,6 +75,37 @@
       "refit_timestamp": "2026-03-03T23:30:00Z",
       "reconciled_by": "wp-20260303-fleet-inventory-cl-reconcile",
       "reconciled_at": "2026-03-03T23:55:00Z"
+    },
+    {
+      "repo_alias": "sales",
+      "current_structure_type": "aligned",
+      "has_heir": true,
+      "has_ci_gate": true,
+      "has_changeset_outbox": true,
+      "has_audit_reports": true,
+      "status": "aligned",
+      "refit_applied_by": "fleet-standardization-2026-03-09",
+      "refit_timestamp": "2026-03-09T00:00:00Z"
+    },
+    {
+      "repo_alias": "barton-storage",
+      "current_structure_type": "aligned",
+      "has_heir": true,
+      "has_ci_gate": true,
+      "has_changeset_outbox": true,
+      "has_audit_reports": true,
+      "status": "aligned",
+      "refit_applied_by": "fleet-standardization-2026-03-09",
+      "refit_timestamp": "2026-03-09T00:00:00Z"
+    },
+    {
+      "repo_alias": "universal-client-template",
+      "current_structure_type": "independent",
+      "has_heir": false,
+      "has_ci_gate": false,
+      "has_changeset_outbox": false,
+      "has_audit_reports": false,
+      "status": "pending"
     }
   ]
 }

@@ -54,10 +54,11 @@ export function docsPlugin(): Plugin {
           return;
         }
 
-        // Security: only serve .md and .yaml files
-        if (!filePath.endsWith('.md') && !filePath.endsWith('.yaml')) {
+        // Security: only serve .md, .yaml, and .json files
+        const allowed = ['.md', '.yaml', '.json'];
+        if (!allowed.some(ext => filePath.endsWith(ext))) {
           res.statusCode = 403;
-          res.end(JSON.stringify({ error: 'Only .md and .yaml files allowed' }));
+          res.end(JSON.stringify({ error: 'Only .md, .yaml, and .json files allowed' }));
           return;
         }
 

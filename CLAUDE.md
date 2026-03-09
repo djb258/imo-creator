@@ -220,10 +220,10 @@ Architectural and flow changes now require deterministic pressure proof artifact
 | `archive/agents_v0/contracts/changeset.schema.json` | Added `requires_pressure_test` — carries forward from WORK_PACKET (archived) |
 | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | 5 structural invariants: cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared (archived) |
 | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | 5 flow invariants: ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact (archived) |
-| `ai/agents/auditor/master_prompt.md` | Constitutional Pressure Test section — HALT before standard checks |
-| `ai/agents/worker/master_prompt.md` | Pressure test artifact production duty (formerly builder) |
-| `ai/agents/planner/master_prompt.md` | Pressure test classification rule + flow_contract enforcement |
-| `ai/agents/orchestrator/master_prompt.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals (formerly control_panel) |
+| `skills/agent-auditor/SKILL.md` | Constitutional Pressure Test section — HALT before standard checks |
+| `skills/agent-builder/SKILL.md` | Pressure test artifact production duty |
+| `skills/agent-planner/SKILL.md` | Pressure test classification rule + flow_contract enforcement |
+| `skills/agent-orchestrator/SKILL.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
 | `doctrine-enforcement.yml` | `pressure-test-gate` CI job — mechanical, no manual fallback |
 | `docs/constitutional/governance.md` | Pressure Test Bus Enforcement routing rules |
 
@@ -319,17 +319,23 @@ imo-creator (THIS REPO) ← SOVEREIGN
 ├── templates/pr/           ← TEMPLATE LAW (locked)
 ├── templates/integrations/ ← SPEC LAW (locked)
 │
-├── company-lifecycle (child repo)
+├── barton-outreach-core (child repo)
 │   └── Conforms to imo-creator
 │
-├── outreach (child repo)
+├── client (child repo)
+│   └── Conforms to imo-creator
+│
+├── company-lifecycle-cl (child repo)
 │   └── Conforms to imo-creator
 │
 ├── sales (child repo)
 │   └── Conforms to imo-creator
 │
-└── client (child repo)
-    └── Conforms to imo-creator
+├── barton-storage (child repo)
+│   └── Conforms to imo-creator
+│
+└── research (child repo — PLANNED)
+    └── Not yet bootstrapped
 ```
 
 **Parent defines. Children conform. Never the reverse.**

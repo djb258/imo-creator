@@ -92,11 +92,11 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 | AUDIT_REPORT schema (archived) | `archive/agents_v0/contracts/audit_report.schema.json` | Governance envelope for audit classification |
 | ARCH_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
 | FLOW_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
-| Planner prompt | `ai/agents/planner/master_prompt.md` | WORK_PACKET generation — pressure test classification |
-| Worker prompt | `ai/agents/worker/master_prompt.md` | Implementation + pressure test artifact production |
-| Auditor prompt | `ai/agents/auditor/master_prompt.md` | Compliance verification — constitutional pressure test gate |
-| Orchestrator prompt | `ai/agents/orchestrator/master_prompt.md` | Read-only governance inspector — pressure test signal detection |
-| DB Agent prompt | `ai/agents/db_agent/master_prompt.md` | Database change governance — DDL/DML enforcement |
+| Planner prompt | `skills/agent-planner/SKILL.md` | WORK_PACKET generation — pressure test classification |
+| Builder prompt | `skills/agent-builder/SKILL.md` | Implementation + pressure test artifact production (formerly Worker) |
+| Auditor prompt | `skills/agent-auditor/SKILL.md` | Compliance verification — constitutional pressure test gate |
+| Orchestrator prompt | `skills/agent-orchestrator/SKILL.md` | Read-only governance inspector — pressure test signal detection |
+| DB Agent prompt | `skills/agent-db/SKILL.md` | Database change governance — DDL/DML enforcement |
 | Constitutional backbone | `docs/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
 | Constitutional governance | `docs/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
 | Protected assets | `docs/constitutional/protected_assets.md` | Protected models and folders |

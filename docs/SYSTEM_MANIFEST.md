@@ -61,11 +61,11 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `archive/agents_v0/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope (archived) |
 | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) (archived) |
 | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) (archived) |
-| `ai/agents/planner/master_prompt.md` | Planner role prompt |
-| `ai/agents/worker/master_prompt.md` | Worker role prompt (was Builder) |
-| `ai/agents/auditor/master_prompt.md` | Auditor role prompt |
-| `ai/agents/orchestrator/master_prompt.md` | Orchestrator role prompt (was Control Panel) |
-| `ai/agents/db_agent/master_prompt.md` | DB Agent role prompt |
+| `skills/agent-planner/SKILL.md` | Planner role prompt |
+| `skills/agent-builder/SKILL.md` | Builder role prompt (formerly Worker) |
+| `skills/agent-auditor/SKILL.md` | Auditor role prompt |
+| `skills/agent-orchestrator/SKILL.md` | Orchestrator role prompt (formerly Control Panel) |
+| `skills/agent-db/SKILL.md` | DB Agent role prompt |
 
 ### Constitutional Documents (docs/constitutional/)
 

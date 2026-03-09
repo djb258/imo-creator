@@ -17,6 +17,13 @@
 #   - AI may READ this file but not modify it without explicit permission
 #   - Paths must be accessible from imo-creator's location
 #
+# CANONICAL SOURCE: sys/registry/repo_registry.json
+#   This file is the human-readable view. repo_registry.json is the
+#   machine-readable source used by agents and the dashboard.
+#   When in conflict, repo_registry.json is authoritative for paths,
+#   branches, and enabled status. This file is authoritative for
+#   child_version and last_synced (human-observed values).
+#
 # ═══════════════════════════════════════════════════════════════════════════════
 
 fleet:
@@ -28,37 +35,42 @@ fleet:
   repos:
     - name: "barton-outreach-core"
       path: "../barton-outreach-core"
+      github: "djb258/barton-outreach-core"
       purpose: "Outreach operations hub"
-      child_version: "1.7.0"
-      last_synced: "[UPDATE AFTER SYNC]"
+      child_version: "3.5.0"
+      last_synced: "2026-03-09"
       status: "ACTIVE"
 
     - name: "client"
       path: "../client"
+      github: "djb258/client"
       purpose: "Client management hub"
-      child_version: "2.0.0"
-      last_synced: "[UPDATE AFTER SYNC]"
+      child_version: "3.5.0"
+      last_synced: "2026-03-09"
       status: "ACTIVE"
 
     - name: "company-lifecycle-cl"
-      path: "../Company Lifecycle CL"
+      path: "../CL/company-lifecycle-cl"
+      github: "djb258/company-lifecycle-cl"
       purpose: "Company lifecycle management hub"
-      child_version: "[UPDATE AFTER SYNC]"
-      last_synced: "[UPDATE AFTER SYNC]"
+      child_version: "3.5.0"
+      last_synced: "2026-03-09"
       status: "ACTIVE"
 
     - name: "sales"
       path: "../Sales Process"
+      github: "djb258/ctb-sales-navigator"
       purpose: "Sales operations hub"
-      child_version: "[UPDATE AFTER SYNC]"
-      last_synced: "[UPDATE AFTER SYNC]"
+      child_version: "3.5.0"
+      last_synced: "2026-03-09"
       status: "ACTIVE"
 
     - name: "barton-storage"
       path: "../storage container go-nogo"
+      github: "djb258/site-scout-pro"
       purpose: "Storage container hub"
-      child_version: "[UPDATE AFTER SYNC]"
-      last_synced: "[UPDATE AFTER SYNC]"
+      child_version: "3.5.0"
+      last_synced: "2026-03-09"
       status: "ACTIVE"
 
     - name: "research"
@@ -74,6 +86,7 @@ fleet:
 #
 # name:           Short repo name (must match directory name)
 # path:           Relative path from imo-creator root (or absolute)
+# github:         GitHub slug (owner/repo)
 # purpose:        One-line description
 # child_version:  Doctrine version from child's DOCTRINE.md (update after sync)
 # last_synced:    ISO date of last update_from_imo_creator.sh run
@@ -83,5 +96,5 @@ fleet:
 
 document_control:
   created: "2026-02-15"
-  last_modified: "2026-03-02"
+  last_modified: "2026-03-09"
   maintained_by: "Human only"

@@ -1,14 +1,12 @@
 {
-  "registry_version": "1.0.0",
+  "registry_version": "1.1.0",
   "authority": "imo-creator (CC-01 Sovereign)",
   "description": "Classification taxonomy for the garage control plane. All enums used in contracts and audit rules are defined here. Single source of truth for valid values.",
   "execution_types": {
-    "values": ["audit", "refactor", "build", "migrate"],
+    "values": ["standard", "fleet_refit"],
     "descriptions": {
-      "audit": "Read-only evaluation of repo state against doctrine. No file modifications permitted.",
-      "refactor": "Structural reorganization within existing boundaries. No new capabilities added.",
-      "build": "New capability construction within declared scope. May create new files.",
-      "migrate": "Schema or data migration. Requires schema_impact=true. Triggers CTB validation gates."
+      "standard": "Normal execution flow. Builder operates in standard, DB, UI, container, or documentation lanes as routed by Planner.",
+      "fleet_refit": "Fleet alignment execution. Builder runs apply_refit_bundle() only. No standard lanes. Emits refit_report artifact."
     }
   },
   "audit_classifications": {
@@ -40,15 +38,16 @@
     }
   },
   "agent_roles": {
-    "values": ["planner", "worker", "auditor", "db_agent"],
+    "values": ["orchestrator", "planner", "builder", "auditor", "db_agent"],
     "descriptions": {
+      "orchestrator": "Deterministic intake normalization, ID minting, and routing to Planner. No code execution. No scope expansion.",
       "planner": "Generates WORK_PACKET from user intent. No code execution. No scope expansion.",
-      "worker": "Executes approved WORK_PACKET against mounted repo. Produces artifacts. Formerly named Builder.",
+      "builder": "Executes approved WORK_PACKET against mounted repo. Produces artifacts. Canonical name (formerly Worker).",
       "auditor": "Evaluates execution against doctrine registry and audit rules. Issues classification. Feeds certification.",
       "db_agent": "Database governance specialist. CTB validation, schema verification, migration audit, drift detection."
     },
     "deprecated_aliases": {
-      "builder": "worker"
+      "worker": "builder"
     }
   },
   "severity_levels": {
@@ -81,7 +80,7 @@
   "garage_exclusive_artifacts": {
     "description": "Artifacts that must reside in the Garage (imo-creator) only. Child repos must not contain these.",
     "artifacts": [
-      "Agent definitions (ai/agents/)",
+      "Agent skills (skills/agent-*/)",
       "WORK_PACKET schema (sys/contracts/work_packet.schema.json)",
       "Certification schema (sys/contracts/certification.schema.json)",
       "Audit taxonomy (sys/registry/taxonomy_registry.json)",

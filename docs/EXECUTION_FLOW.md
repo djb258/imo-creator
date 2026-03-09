@@ -23,7 +23,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 2: Planner generates WORK_PACKET     │
-│  Actor: ai/agents/planner/                  │
+│  Actor: skills/agent-planner/                │
 │  Input: User request + doctrine + registry  │
 │  Output: work_packets/outbox/{id}.json      │
 │  Gate: Schema validation                    │
@@ -41,7 +41,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 4: DB Agent validates (conditional)  │
-│  Actor: ai/agents/db_agent/                 │
+│  Actor: skills/agent-db/                    │
 │  Condition: schema_impact=true OR migrate   │
 │  Input: WORK_PACKET + mounted repo + DB     │
 │  Output: DB validation report               │
@@ -51,8 +51,8 @@ USER INTENT
                    │
                    ▼
 ┌─────────────────────────────────────────────┐
-│  STAGE 5: Worker executes                   │
-│  Actor: ai/agents/worker/                   │
+│  STAGE 5: Builder executes                  │
+│  Actor: skills/agent-builder/               │
 │  Input: WORK_PACKET + mounted repo          │
 │  Output: Modified files + artifacts + log   │
 │  Gate: Scope containment (file_targets)     │
@@ -63,7 +63,7 @@ USER INTENT
 ┌─────────────────────────────────────────────┐
 │  STAGE 6: Artifact writer collects + hashes │
 │  Actor: sys/runtime/artifact_writer/        │
-│  Input: Worker outputs                      │
+│  Input: Builder outputs                     │
 │  Output: Hashed artifact bundle             │
 │  Gate: All required_artifacts present       │
 └──────────────────┬──────────────────────────┘
@@ -71,7 +71,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 7: Auditor evaluates                 │
-│  Actor: ai/agents/auditor/                  │
+│  Actor: skills/agent-auditor/               │
 │  Input: WORK_PACKET + artifacts + rules     │
 │  Output: PASS | FAIL_EXECUTION | FAIL_SCOPE │
 │  Gate: 12 audit rules, sequential eval      │
@@ -160,11 +160,11 @@ The DB Agent checks:
 - Bridge versioning (version constants in bridge functions)
 - Application role (NOSUPERUSER)
 
-**Halt conditions**: Any validation failure blocks Worker execution.
+**Halt conditions**: Any validation failure blocks Builder execution.
 
-### Stage 5: Worker Executes
+### Stage 5: Builder Executes
 
-The Worker operates within the mounted repo:
+The Builder operates within the mounted repo:
 - Modifies files within `file_targets` only
 - Produces all artifacts listed in `required_artifacts`
 - Follows CTB topology, forbidden folder rules, protected asset boundaries
@@ -233,10 +233,10 @@ Human makes final merge decision. Agents execute. Humans decide.
 |---------------|---------------|
 | Planner halts | Human clarifies intent. New WORK_PACKET generated. |
 | Mount fails | Target repo must be brought into structural compliance. |
-| DB validation fails | Planner revises scope. Worker does not execute. |
-| Worker scope violation | Worker halts. New WORK_PACKET with corrected file_targets. |
-| Worker timeout | Execution terminated. New WORK_PACKET required. |
-| Audit FAIL_EXECUTION | Implementation incorrect. New WORK_PACKET, Worker re-executes. |
+| DB validation fails | Planner revises scope. Builder does not execute. |
+| Builder scope violation | Builder halts. New WORK_PACKET with corrected file_targets. |
+| Builder timeout | Execution terminated. New WORK_PACKET required. |
+| Audit FAIL_EXECUTION | Implementation incorrect. New WORK_PACKET, Builder re-executes. |
 | Audit FAIL_SCOPE | Scope violated. Planner must narrow scope. |
 | Stale certification | Doctrine updated. Re-certify with current version. |
 | Invalid signature | Key rotated or tampering. Re-certify. |

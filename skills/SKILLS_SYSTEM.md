@@ -6,18 +6,24 @@ Every skill — master or car-specific — is a skill-creator-compliant SKILL.md
 frontmatter. Same trigger description. Same progressive disclosure via references/. The
 skill-creator reads them identically. There is ONE skill format.
 
-## Two Tiers, Same Format
+## Three Tiers, Same Format
 
-1. **Master Skills** (`IMO-Creator/skills/`) — Platform-level knowledge. What each
+1. **Agent Skills** (`IMO-Creator/skills/agent-*/`) — Garage Control Plane agents
+   converted to skill format. Orchestrator, Planner, Builder, Auditor, DB Agent.
+   These define the execution pipeline. They never change per-project. They are
+   Garage-exclusive — child repos must not contain agent skills.
+
+2. **Master Skills** (`IMO-Creator/skills/`) — Platform-level knowledge. What each
    platform CAN do: capabilities, limits, pricing gates, integration patterns. These
    are the Snap-On chest. They never change per-project.
 
-2. **Car-Specific Skills** (`<child-repo>/skills/`) — Repo-specific configuration.
+3. **Car-Specific Skills** (`<child-repo>/skills/`) — Repo-specific configuration.
    For THIS repo: which tools, what config, which tables, which endpoints. These are
    the work order for this specific car.
 
-Both are proper skills with YAML frontmatter and trigger descriptions. The skill-creator
-built the masters. The skill-creator (or its template) builds the car skills. Same animal.
+All three tiers are proper skills with YAML frontmatter and trigger descriptions. The
+skill-creator built the masters and agents. The skill-creator (or its template) builds
+the car skills. Same animal.
 
 ## How Claude Code Uses Them
 
@@ -34,6 +40,21 @@ When Claude Code opens a child repo:
 ```
 IMO-Creator/skills/              ← MASTER TOOLBOX
 ├── SKILLS_SYSTEM.md             ← This file (governance)
+├── agent-orchestrator/          ← Garage agent: intake + ID mint + ORBT classify
+│   ├── SKILL.md
+│   └── references/
+├── agent-planner/               ← Garage agent: WORK_PACKET generation + lane routing
+│   ├── SKILL.md
+│   └── references/
+├── agent-builder/               ← Garage agent: execution across all lanes
+│   ├── SKILL.md
+│   └── references/
+├── agent-auditor/               ← Garage agent: compliance evaluation + certification
+│   ├── SKILL.md
+│   └── references/
+├── agent-db/                    ← Garage agent: DB governance + DB_CHANGESET production
+│   ├── SKILL.md
+│   └── references/
 ├── cloudflare/
 │   ├── SKILL.md                 ← Platform capabilities & constraints
 │   └── references/
@@ -69,10 +90,11 @@ For master skills: use the skill-creator skill directly (`skills/skill-creator/S
 
 ## Rules
 
-1. One format. Master and car skills are the same format. Skill-creator reads both.
-2. Master skills describe PLATFORMS. Car skills describe USAGE.
-3. Master skills live only in IMO-Creator. Car skills live only in child repos.
-4. Car skills reference masters by name at the top. Never duplicate master content.
-5. If a platform constraint affects a build decision, the master skill is authoritative.
-6. Skills are NOT doctrine. They do not override CLAUDE.md, CONSTITUTION.md, or any
+1. One format. Agent, master, and car skills are the same format. Skill-creator reads all.
+2. Agent skills describe PIPELINE AGENTS. Master skills describe PLATFORMS. Car skills describe USAGE.
+3. Agent skills and master skills live only in IMO-Creator. Car skills live only in child repos.
+4. Agent skills are Garage-exclusive — child repos must not contain them.
+5. Car skills reference masters by name at the top. Never duplicate master content.
+6. If a platform constraint affects a build decision, the master skill is authoritative.
+7. Skills are NOT doctrine. They do not override CLAUDE.md, CONSTITUTION.md, or any
    locked file. Skills inform build decisions within doctrine's boundaries.

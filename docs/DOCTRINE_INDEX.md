@@ -52,10 +52,10 @@ Single source of truth listing all authoritative doctrine documents. Reference o
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| Orchestrator | `ai/agents/orchestrator/master_prompt.md` | Orchestrator agent contract — deterministic intake + ID minting (v1.0.0) |
-| Planner | `ai/agents/planner/master_prompt.md` | Planner agent contract (v2.3.0) |
-| Worker | `ai/agents/worker/master_prompt.md` | Worker agent contract (v2.5.0) |
-| Auditor | `ai/agents/auditor/master_prompt.md` | Auditor agent contract (v2.5.0) |
+| Orchestrator | `skills/agent-orchestrator/SKILL.md` | Orchestrator agent contract — deterministic intake + ID minting (v1.0.0) |
+| Planner | `skills/agent-planner/SKILL.md` | Planner agent contract (v2.3.0) |
+| Builder | `skills/agent-builder/SKILL.md` | Builder agent contract (v2.5.0) (formerly Worker) |
+| Auditor | `skills/agent-auditor/SKILL.md` | Auditor agent contract (v2.5.0) |
 
 ---
 

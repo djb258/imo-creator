@@ -1,5 +1,5 @@
 {
-  "contract_version": "1.1.0",
+  "contract_version": "1.2.0",
   "authority": "imo-creator (CC-01 Sovereign)",
   "description": "Garage orchestration contract. Defines the end-to-end flow from user intent to certified merge. This is the central coordination layer that binds agents, runtime, and certification into a single deterministic pipeline.",
   "pipeline": {
@@ -11,7 +11,7 @@
     },
     "stage_2_plan": {
       "name": "Planner generates WORK_PACKET",
-      "actor": "ai/agents/planner/",
+      "actor": "skills/agent-planner/",
       "inputs": [
         "User request",
         "sys/contracts/doctrine_version.json",
@@ -32,23 +32,29 @@
       ],
       "output": "Isolated repository clone with scope lock",
       "validation": "Mount contract 5-step protocol",
-      "handoff_to": "DB Agent (if schema_impact) or Worker"
+      "handoff_to": "DB Agent (if schema_impact) or Builder"
     },
     "stage_4_db_validation": {
-      "name": "DB Agent validates schema impact",
-      "actor": "ai/agents/db_agent/",
-      "condition": "WORK_PACKET.schema_impact=true OR execution_type=migrate",
+      "name": "DB Agent validates schema impact and produces DB_CHANGESET",
+      "actor": "skills/agent-db/",
+      "condition": "WORK_PACKET.db_required=true OR WORK_PACKET.schema_impact=true",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
         "Mounted repository with database access"
       ],
-      "output": "DB agent validation report",
+      "output": "changesets/outbox/{work_packet_id}/db/db_changeset.json",
+      "handoff_contract": {
+        "artifact_path": "changesets/outbox/{work_packet_id}/db/db_changeset.json",
+        "consumer": "Builder (stage 5, DB Lane)",
+        "sequencing": "Stage 4 must complete successfully before stage 5 begins",
+        "on_missing": "Builder DB Lane HALTs with FAIL_EXECUTION"
+      },
       "on_failure": "Execution blocked. WORK_PACKET returned to Planner with failure details.",
-      "handoff_to": "Worker (if validation passes)"
+      "handoff_to": "Builder (if validation passes)"
     },
     "stage_5_execute": {
-      "name": "Worker executes against mounted repo",
-      "actor": "ai/agents/worker/",
+      "name": "Builder executes against mounted repo",
+      "actor": "skills/agent-builder/",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
         "Mounted repository (scope-locked to file_targets)"
@@ -61,7 +67,7 @@
       "name": "Artifact writer collects and hashes outputs",
       "actor": "sys/runtime/artifact_writer/",
       "inputs": [
-        "Modified files from Worker execution",
+        "Modified files from Builder execution",
         "Generated artifacts",
         "Execution log"
       ],
@@ -70,7 +76,7 @@
     },
     "stage_7_audit": {
       "name": "Auditor evaluates execution against doctrine",
-      "actor": "ai/agents/auditor/",
+      "actor": "skills/agent-auditor/",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
         "Artifact bundle from Writer",
@@ -135,15 +141,15 @@
     },
     "db_validation_failure": {
       "trigger": "Schema changes violate CTB registry, cardinality, or immutability rules",
-      "resolution": "Worker must not execute. Planner revises scope or human approves exception via ADR."
+      "resolution": "Builder must not execute. Planner revises scope or human approves exception via ADR."
     },
     "scope_violation": {
-      "trigger": "Worker attempts to modify files outside file_targets",
-      "resolution": "Worker halts. New WORK_PACKET required with corrected scope."
+      "trigger": "Builder attempts to modify files outside file_targets",
+      "resolution": "Builder halts. New WORK_PACKET required with corrected scope."
     },
     "audit_fail_execution": {
       "trigger": "Implementation incorrect or incomplete",
-      "resolution": "New WORK_PACKET. Worker re-executes with corrections."
+      "resolution": "New WORK_PACKET. Builder re-executes with corrections."
     },
     "audit_fail_scope": {
       "trigger": "Scope boundary violated, protected assets modified",
@@ -151,11 +157,21 @@
     },
     "sanitation_fail": {
       "trigger": "Workspace has untracked files, temp files, scope leak, missing artifacts, or uncommitted generated files",
-      "resolution": "New WORK_PACKET required. Worker re-executes with cleanup. Sanitation re-runs after next Auditor PASS."
+      "resolution": "New WORK_PACKET required. Builder re-executes with cleanup. Sanitation re-runs after next Auditor PASS."
     },
     "certification_fail": {
       "trigger": "Signature invalid, hash mismatch, doctrine version stale",
       "resolution": "Re-run pipeline from appropriate stage. Stale doctrine requires doctrine update first."
+    },
+    "artifact_write_failure": {
+      "trigger": "File write to inbox, outbox, or changesets directory fails (disk full, permission denied, path not found)",
+      "resolution": "Pipeline HALTs at the failing stage. No silent data loss. The failing agent logs the write error with full path and error detail. Human must resolve the infrastructure issue (disk space, permissions, directory creation) before re-running the pipeline from the failed stage.",
+      "dead_letter_protocol": {
+        "detection": "Every file write operation must verify the written file exists and is non-empty after write",
+        "on_failure": "Agent records failure in execution_log with: attempted_path, error_message, stage, timestamp",
+        "retry": "No automatic retry. Infrastructure failures require human diagnosis.",
+        "recovery": "After infrastructure fix, re-run pipeline from the failed stage with the same WORK_PACKET"
+      }
     }
   },
   "invariants": [

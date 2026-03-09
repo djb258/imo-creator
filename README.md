@@ -105,11 +105,11 @@ IMO-Creator includes a V2 Agent Team with five agent roles:
 
 | Role | Prompt | Purpose |
 |------|--------|---------|
-| Planner | `ai/agents/planner/master_prompt.md` | Generates WORK_PACKET artifacts |
-| Worker | `ai/agents/worker/master_prompt.md` | Executes approved WORK_PACKETs |
-| Auditor | `ai/agents/auditor/master_prompt.md` | Verifies compliance, pressure test gate |
-| Orchestrator | `ai/agents/orchestrator/master_prompt.md` | Read-only governance inspector |
-| DB Agent | `ai/agents/db_agent/master_prompt.md` | Database change governance |
+| Planner | `skills/agent-planner/SKILL.md` | Generates WORK_PACKET artifacts |
+| Builder | `skills/agent-builder/SKILL.md` | Executes approved WORK_PACKETs |
+| Auditor | `skills/agent-auditor/SKILL.md` | Verifies compliance, pressure test gate |
+| Orchestrator | `skills/agent-orchestrator/SKILL.md` | Deterministic intake + ID minting |
+| DB Agent | `skills/agent-db/SKILL.md` | Database change governance |
 
 ### Pressure Testing
 

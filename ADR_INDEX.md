@@ -30,10 +30,10 @@
 | ADR-019 | barton-outreach-core | 2026-01-30 | FREE extraction pipeline complete | ACCEPTED | FREE extraction pipeline completed |
 | ADR-020 | barton-outreach-core | — | People sub-hub dual canonical exception | ACCEPTED | SUPPORTING leaf type + people master reclassification |
 | ADR-021 | imo-creator | 2026-02-25 | DB Lane + UI Lane + Container Surface (V2 Control Plane) | ACCEPTED | DB_CHANGESET, UI_CHANGESET, CONTAINER_RUN artifacts; WORK_PACKET V2 routing flags; adapter model for UI and container |
-| ADR-022 | imo-creator | 2026-03-01 | Agent Teams Integration for Garage Pipeline | PROPOSED | Native Claude Code Agent Teams + worktree isolation for parallel execution within Worker, Auditor, and fleet refit stages |
-| ADR-023 | imo-creator | 2026-03-01 | PSB Libraries (Prompt, Reverse Prompt, Skills) | PROPOSED | Database-backed Prompt Library, Reverse Prompt Library, and Skills Library in psb schema — migrations 012-015, column registry |
-| ADR-024 | imo-creator | 2026-03-02 | CLAUDE.md Path Corrections | PROPOSED | Fix 10 broken agent/contract file references after Garage V2 restructure |
-| ADR-025 | imo-creator | 2026-03-02 | V2 Path Corrections — Remaining Stale Refs | PROPOSED | Fix stale templates/agents/ refs in SYSTEM_MANIFEST.md, REPO_HOUSEKEEPING.md, HUB_COMPLIANCE.md; flag DOPPLER.md gap |
+| ADR-022 | imo-creator | 2026-03-01 | Agent Teams Integration for Garage Pipeline | ACCEPTED | Native Claude Code Agent Teams + worktree isolation for parallel execution within Worker, Auditor, and fleet refit stages |
+| ADR-023 | imo-creator | 2026-03-01 | PSB Libraries (Prompt, Reverse Prompt, Skills) | ACCEPTED | Database-backed Prompt Library, Reverse Prompt Library, and Skills Library in psb schema — migrations 012-015, column registry. Deployed to Neon. |
+| ADR-024 | imo-creator | 2026-03-02 | CLAUDE.md Path Corrections | ACCEPTED | Fix 10 broken agent/contract file references after Garage V2 restructure |
+| ADR-025 | imo-creator | 2026-03-02 | V2 Path Corrections — Remaining Stale Refs | ACCEPTED | Fix stale templates/agents/ refs in SYSTEM_MANIFEST.md, REPO_HOUSEKEEPING.md, HUB_COMPLIANCE.md; flag DOPPLER.md gap |
 | ADR-026 | imo-creator | 2026-03-05 | DeltaHound Tool Registration (TOOL-012) | ACCEPTED | Register DeltaHound homebrew field-monitoring tool in SNAP_ON_TOOLBOX.yaml as Tier 0 |
 | ADR-027 | imo-creator | 2026-03-05 | DeltaHound Sub-Hub 1 Scheduler — GitHub Actions vs Cloudflare Scheduled Workers | ACCEPTED | GitHub Actions selected for DeltaHound Scheduler; Cloudflare Scheduled Workers evaluated and rejected on stack simplicity grounds |
 
@@ -77,6 +77,6 @@ ADR numbers are **global across the fleet**, not per-repo. When creating a new A
 | Field | Value |
 |-------|-------|
 | Created | 2026-02-15 |
-| Last Modified | 2026-03-05 |
+| Last Modified | 2026-03-09 |
 | Maintained By | Human + AI (after ADR creation) |
 | Audit Script | scripts/adr-check.sh |
