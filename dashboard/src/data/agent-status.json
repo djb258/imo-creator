@@ -1,0 +1,29 @@
+{
+  "lastUpdated": "2026-03-09T14:30:00Z",
+  "agents": [
+    {
+      "id": "worker-1",
+      "repo": "imo-creator",
+      "workPacket": "WP-001",
+      "currentPhase": "Phase 2 — Build",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-03-09T14:00:00Z"
+    },
+    {
+      "id": "worker-2",
+      "repo": "barton-outreach-core",
+      "workPacket": "WP-003",
+      "currentPhase": "Phase 4 — Stamp",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-03-09T14:30:00Z"
+    },
+    {
+      "id": "planner-1",
+      "repo": "company-lifecycle-cl",
+      "workPacket": "WP-005",
+      "currentPhase": "Phase 1 — Plan",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-03-09T12:00:00Z"
+    }
+  ]
+}
