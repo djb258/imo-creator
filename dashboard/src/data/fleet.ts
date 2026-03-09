@@ -155,14 +155,12 @@ export const fleet: FleetRepo[] = [
       { file: 'CLAUDE.md', status: 'PRESENT' },
       { file: 'README.md', status: 'PRESENT' },
       { file: 'CONSTITUTION.md', status: 'PRESENT' },
-      { file: 'docs/OSAM.md', status: 'MISSING' },
+      { file: 'docs/OSAM.md', status: 'PRESENT' },
       { file: 'docs/adr/ADR-INDEX.md', status: 'PRESENT' },
       { file: 'docs/checklists/HUB_COMPLIANCE.md', status: 'PRESENT' },
     ],
     workPackets: [],
-    todos: [
-      { id: 'T-050', text: 'Create docs/OSAM.md', priority: 'HIGH', done: false },
-    ],
+    todos: [],
   },
   {
     name: 'research',
