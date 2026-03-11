@@ -124,21 +124,24 @@ All branches live under the `dev` environment in the `imo-creator` Doppler proje
 
 ---
 
-## Neon Database Registry
+## Neon Vault Registry (BAR-100: vault-only, NOT working database)
 
-All 7 databases verified connected on 2026-03-02.
+All 7 vault instances verified connected on 2026-03-02.
+**BAR-100**: Neon is cold archive / system of record. Working data lives in CF D1/KV.
+**BAR-102**: Hyperdrive syncs D1 → Neon vault on nightly schedule.
 
-| Owner | Vault Prefix | Neon Host | Database | Region |
-|-------|-------------|-----------|----------|--------|
-| Sovereign (Garage) | — | ep-round-bird-a4a7s49a | neondb | us-east-1 |
-| barton-outreach-core | `OUTREACH_` | ep-ancient-waterfall-a42vy0du | Marketing DB | us-east-1 |
-| company-lifecycle-cl | `CL_` | ep-empty-queen-ai0gmyqg | neondb | us-east-1 |
-| client-subhive | `CLIENT_` | ep-frosty-brook-ad6wval6 | neondb | us-east-1 |
-| sales-navigator | `SALES_` | ep-orange-pine-aiffwvhb | neondb | us-east-1 |
-| barton-storage | `STORAGE_` | ep-rapid-dream-aelbcqxw | neondb | us-east-2 |
-| research | `RESEARCH_` | ep-young-block-aii5nj6b | neondb | us-east-1 |
+| Owner | Vault Prefix | Neon Host | Database | Region | Role |
+|-------|-------------|-----------|----------|--------|------|
+| Sovereign (Garage) | — | ep-round-bird-a4a7s49a | neondb | us-east-1 | Vault |
+| barton-outreach-core | `OUTREACH_` | ep-ancient-waterfall-a42vy0du | Marketing DB | us-east-1 | Vault |
+| company-lifecycle-cl | `CL_` | ep-empty-queen-ai0gmyqg | neondb | us-east-1 | Vault |
+| client-subhive | `CLIENT_` | ep-frosty-brook-ad6wval6 | neondb | us-east-1 | Vault |
+| sales-navigator | `SALES_` | ep-orange-pine-aiffwvhb | neondb | us-east-1 | Vault |
+| barton-storage | `STORAGE_` | ep-rapid-dream-aelbcqxw | neondb | us-east-2 | Vault |
+| research | `RESEARCH_` | ep-young-block-aii5nj6b | neondb | us-east-1 | Vault |
 
 **Isolation rule**: Each child has its own dedicated Neon project. No database sharing.
+**Working layer**: Each child's working data lives in CF D1 hot mirrors (see CF_INFRASTRUCTURE_REGISTRY.yaml).
 
 ---
 

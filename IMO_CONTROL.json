@@ -244,7 +244,7 @@
   },
 
   "ui_builds": {
-    "platform_target": "lovable.dev",
+    "platform_target": "figma-ui",
     "requirements": {
       "structure": "CTB_ALTITUDE",
       "location": "src/ui/",

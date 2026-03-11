@@ -19,7 +19,7 @@ export const processes: Process[] = [
       repos: ['company-lifecycle-cl', 'barton-outreach-core', 'client'],
       subHubs: ['CL-INTAKE', 'CL-LCS', 'company_target', 'dol', 'people', 'blog', 'bit'],
       tools: ['Hunter', 'Clay', 'Apollo'],
-      services: ['Neon PostgreSQL', 'Doppler', 'Mailgun', 'HeyReach', 'Calendly'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler', 'Mailgun', 'HeyReach', 'Calendly'],
       skills: ['/bootstrap', '/feature-dev', '/process-creator'],
     },
     imo: {
@@ -95,7 +95,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['people', 'company_target', 'bit'],
       tools: ['Hunter', 'Clay'],
-      services: ['Neon PostgreSQL', 'Doppler'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
       skills: ['/feature-dev'],
     },
     imo: {
@@ -162,7 +162,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['blog', 'company_target', 'bit'],
       tools: ['ScraperAPI'],
-      services: ['Neon PostgreSQL', 'Doppler'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
       skills: ['/feature-dev'],
     },
     imo: {
@@ -229,7 +229,7 @@ export const processes: Process[] = [
     heir: {
       repos: ['barton-outreach-core'],
       subHubs: ['dol', 'company_target', 'bit'],
-      services: ['Neon PostgreSQL', 'Doppler'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {
@@ -299,7 +299,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['people', 'company_target', 'bit'],
       tools: ['Hunter', 'Clay', 'Apollo'],
-      services: ['Neon PostgreSQL', 'Doppler'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {
@@ -369,7 +369,7 @@ export const processes: Process[] = [
     heir: {
       repos: ['barton-outreach-core'],
       subHubs: ['bit', 'people', 'dol', 'blog', 'company_target'],
-      services: ['Neon PostgreSQL', 'Doppler'],
+      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {

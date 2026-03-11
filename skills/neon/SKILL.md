@@ -15,25 +15,31 @@ description: >
 
 # Neon — Platform Skill
 
-Neon is the source-of-truth data layer. Full PostgreSQL with serverless economics —
-compute separates from storage, scales to zero when idle, branches like Git. Acquired
-by Databricks (May 2025), which dropped prices significantly.
+Neon is the **vault / cold archive** — the system of record and restore source. Full
+PostgreSQL with serverless economics — compute separates from storage, scales to zero
+when idle, branches like Git. Acquired by Databricks (May 2025).
 
-The constraints here dictate connection architecture, cold-start handling, and cost
-management. Get the connection pattern wrong and your app either leaks connections or
-chokes on cold starts.
+**BAR-100 Architecture Shift**: Neon is NO LONGER the working database. The working
+layer is Cloudflare D1/KV/Queues (see cloudflare skill). Neon serves as:
+- Vault (cold archive, system of record)
+- Restore source (disaster recovery)
+- Schema governance (CTB enforcement, migrations)
+- Nightly sync target via Hyperdrive (BAR-102)
+
+The constraints here dictate vault connection architecture, migration patterns, and
+governance enforcement. Working-layer reads/writes go to CF D1/KV.
 
 ## Quick Decision Matrix
 
 | Question | Answer determines |
 |----------|------------------|
 | Serverless or long-running? | HTTP driver (neon()) vs WebSocket Pool vs TCP driver |
-| Going through Cloudflare Hyperdrive? | Use pg/Postgres.js, NOT Neon serverless driver |
+| Going through Cloudflare Hyperdrive? | Vault-sync only (BAR-102). Use pg/Postgres.js, NOT Neon serverless driver |
 | Need session features (SET, temp tables, advisory locks)? | Must use direct connection, not pooler |
 | Running pg_dump or migrations? | Direct connection required |
 | Data > 0.5GB? | Free plan won't hold it — need Launch or Scale |
 | Need 24/7 uptime with no cold starts? | Set min compute > 0, or accept PgBouncer-masked cold starts |
-| Write-heavy workload? | Neon handles this well (unlike D1). Size compute appropriately |
+| Write-heavy workload? | Working writes go to CF D1/KV. Neon vault receives nightly sync only (BAR-102) |
 
 ## Architecture Fundamentals
 
@@ -143,23 +149,27 @@ For full pricing breakdown and cost examples, read `references/pricing.md`.
 
 ## Fleet Reference — Ultimate Tool (UT)
 
-The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) uses Neon as the source-of-truth
-data layer for child repos that call UT. While UT's own metadata lives in Cloudflare D1
-(edge SQLite for speed), the relational data that child repos own — company records, contacts,
-pipeline state, enrichment results — lives in Neon.
+The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) uses **Cloudflare D1/KV as the
+working data layer** (BAR-100). Neon serves as the vault (cold archive / system of record).
 
-**How UT and Neon interact:**
-- Child repos store their CTB-governed data in Neon (each repo has its own Neon project)
-- UT's Cloudflare Workers connect to child repo Neon instances via Hyperdrive (recommended)
-  or the Neon serverless driver for one-shot queries
-- UT's movement detection pipeline (SH-16 through SH-19) writes change events that child
-  repos consume from their Neon message queue tables
-- UT does NOT own any Neon database — it connects to child repo databases as a service consumer
+**Three-layer architecture (BAR-100):**
+- **CF (D1/KV/Queues/R2/Workers)** = working layer (hot-path reads/writes)
+- **Composio** = external action bridge
+- **Hyperdrive** = vault sync pipe (nightly, BAR-102)
+- **Neon** = vault (cold archive, restore source, schema governance)
 
-**Connection pattern for UT → Neon:**
-- UT Workers use Hyperdrive with `node-postgres` (pg) — never the Neon serverless driver
-  through Hyperdrive (see "Connecting to Neon from Workers" above)
-- Each child repo provides a dedicated Neon role for UT access (non-superuser, scoped permissions)
+**How UT and Neon interact (post BAR-100):**
+- Child repos store working data in D1 hot mirrors (edge SQLite) and KV (hot reads)
+- Neon retains CTB-governed schema, migration history, and cold archive
+- Hyperdrive syncs D1 working data → Neon vault on nightly schedule (BAR-102)
+- UT's movement detection pipeline (SH-16 through SH-19) writes change events to CF Queues,
+  NOT Neon message queue tables
+- UT does NOT own any Neon database — vault access is read-only for restore/audit
+
+**Connection pattern for UT → Neon vault:**
+- Vault-sync only: Hyperdrive with `node-postgres` (pg) on nightly schedule
+- Admin/migration: Direct connection for schema governance
+- Each child repo provides a dedicated Neon role for vault access (non-superuser, scoped)
 
 UT's full spec: `templates/snap-on/ultimate-tool/README.md`
 

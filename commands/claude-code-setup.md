@@ -171,7 +171,7 @@ ls -la .github/ docker-compose* Dockerfile 2>/dev/null
 | Language/Runtime | package.json, pyproject.toml, go.mod, Cargo.toml | All categories |
 | Frontend framework | React, Vue, Angular, Next.js in deps | MCP, Skills, Plugins |
 | Backend framework | Express, FastAPI, Django in deps | MCP, Skills |
-| Database | Prisma, Supabase, Neon, raw SQL, migrations dir | MCP, Skills |
+| Database | CF D1 (working), Neon (vault), Prisma, raw SQL, migrations dir | MCP, Skills |
 | External APIs | Stripe, AWS SDK, vendor SDKs in deps | MCP, Tool Authority Gate |
 | Testing | Jest, pytest, Playwright configs, test dirs | Hooks, Subagents |
 | CI/CD | GitHub Actions, workflow files | MCP, Hooks |
@@ -242,8 +242,8 @@ Most Claude Code automations (hooks, skills, subagents, plugins) are native feat
 |-----------------|------------------------|-----------|
 | Popular libraries (React, Express, etc.) | context7 — live docs | Check vendor status |
 | Frontend with UI testing | Playwright MCP | Check: playwright not banned (selenium is) |
-| Supabase in deps | Supabase MCP | APPROVED (Infrastructure) |
-| PostgreSQL / Neon | Database MCP / Neon MCP | APPROVED (Infrastructure for Neon) |
+| Cloudflare D1/KV/R2 | Cloudflare MCP / Wrangler | APPROVED (Working layer — BAR-100) |
+| PostgreSQL / Neon | Database MCP / Neon MCP | APPROVED (Vault-only — BAR-100) |
 | GitHub repository | GitHub MCP | Check vendor status |
 | Linear for issues | Linear MCP | Check vendor status |
 | AWS SDK in deps | AWS MCP | Check vendor status |

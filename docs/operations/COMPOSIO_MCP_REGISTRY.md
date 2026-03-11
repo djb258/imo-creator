@@ -5,8 +5,8 @@
 All external software integrations (except hardwired services) route through a **single Composio MCP server** (`composio-sovereign`). This is the centralized CC-03 spoke pipe — one connection, all apps, all hubs.
 
 **Hardwired exceptions** (connect directly, NOT through Composio):
-- **Cloudflare** — direct API
-- **Neon** — direct PostgreSQL connection
+- **Cloudflare** — direct API (D1/KV/Queues/R2 = working layer, BAR-100)
+- **Neon** — direct PostgreSQL connection (vault-only, BAR-100; nightly sync via Hyperdrive, BAR-102)
 - **Doppler** — direct CLI / API
 
 Everything else goes Composio-first.
@@ -50,8 +50,9 @@ Everything else goes Composio-first.
 
 | Request Type | Route |
 |-------------|-------|
-| DNS, CDN, Workers | Cloudflare (direct) |
-| Database queries | Neon (direct PostgreSQL) |
+| DNS, CDN, Workers, D1, KV, Queues, R2 | Cloudflare (direct — working layer) |
+| Working database queries | CF D1 (direct binding — BAR-100) |
+| Vault database queries | Neon (direct PostgreSQL — vault-only) |
 | Secrets management | Doppler (direct CLI) |
 | **Everything else** | **Composio-first** |
 

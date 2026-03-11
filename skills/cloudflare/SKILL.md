@@ -28,10 +28,10 @@ Before writing code, answer these:
 |----------|------------------|
 | How much CPU per request? | Whether 30s default is enough or you need to set `cpu_ms` |
 | How many subrequests? | Whether you'll hit the 1,000/invocation cap |
-| Is the data relational? | D1 (edge SQLite) vs KV (key-value) vs Neon (full Postgres) |
-| Does it need strong consistency? | KV is eventually consistent (up to 60s). D1 is consistent. Neon is consistent |
-| How big is the dataset? | D1 caps at 10GB/database. Beyond that → Neon |
-| Is it read-heavy or write-heavy? | KV for reads, D1 for balanced, Neon for write-heavy |
+| Is the data relational? | D1 (edge SQLite, working layer) vs KV (key-value, hot reads) — Neon is vault only (BAR-100) |
+| Does it need strong consistency? | KV is eventually consistent (up to 60s). D1 is consistent. Use D1 for working data |
+| How big is the dataset? | D1 caps at 10GB/database. Split across multiple D1 databases if needed |
+| Is it read-heavy or write-heavy? | KV for reads, D1 for balanced read/write. Neon is vault-sync only (BAR-102) |
 | Do you need zero egress cost on files? | R2 is the answer |
 | Need single-writer coordination? | Durable Objects |
 
@@ -56,7 +56,7 @@ For full limits table and pricing details, read `references/workers-limits.md`.
 Globally distributed, eventually consistent. Think of it as a CDN for data, not a database.
 
 **Critical constraint:** Writes propagate in up to 60 seconds globally. If you need
-read-after-write consistency, KV is the wrong tool. Use D1 or Neon.
+read-after-write consistency, KV is the wrong tool. Use D1 (the working database under BAR-100).
 
 - Keys: 512 bytes max. Values: 25MB max. Metadata: 1KB/key
 - Shares the 1,000-operation-per-invocation cap with all other external services
@@ -112,13 +112,18 @@ SQLite backend on free plan, KV backend on paid.
 
 1,200 requests per 5 minutes per user across all API access methods. Exceed = HTTP 429 for 5 minutes.
 
-## Connecting to Neon from Workers
+## Connecting to Neon Vault from Workers (BAR-100/102)
 
-Two documented paths:
-1. **Hyperdrive** (recommended): CF's global connection pooler. Use `node-postgres` (pg) or Postgres.js — do NOT use the Neon serverless driver with Hyperdrive. Create a dedicated Neon role, use direct (non-pooled) connection string
-2. **Neon serverless driver**: Direct HTTP/WebSocket queries. Good for simple one-shot queries from edge functions
+**Neon is vault-only. Working data lives in D1/KV.** Vault connections are for:
+- Nightly sync (BAR-102): Hyperdrive pushes D1 working data → Neon vault
+- Admin/migration: Schema governance, CTB enforcement
+- Disaster recovery: Restore from Neon vault to D1
 
-See the Neon skill for Neon-side configuration details.
+Two vault-access paths:
+1. **Hyperdrive** (vault-sync): CF's global connection pooler. Use `node-postgres` (pg) — NOT for hot-path queries
+2. **Neon serverless driver**: Admin one-shot queries for vault inspection
+
+See the Neon skill for vault-side configuration details.
 
 ## Fleet Reference — Ultimate Tool (UT)
 

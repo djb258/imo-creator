@@ -519,9 +519,11 @@ deployment_standards:
       alternative: "Cloud Function / Lambda"
 
     database:
-      primary: "Neon PostgreSQL"
+      working: "Cloudflare D1 (edge SQLite, BAR-100)"
+      vault: "Neon PostgreSQL (cold archive, BAR-100)"
+      sync: "Hyperdrive (nightly vault sync, BAR-102)"
       backup: "Daily automated"
-      migration: "Alembic (Python) or Prisma (JS)"
+      migration: "Wrangler D1 (working) / psql (vault)"
 
     storage:
       primary: "Firebase Storage"

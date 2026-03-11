@@ -15,7 +15,9 @@ worker:
   local_project: "svgagency-api"  # Under Cursor Builds/
 
 # ---------------------------------------------------------------------------
-# HYPERDRIVE — Neon PostgreSQL Bindings (7)
+# HYPERDRIVE — Neon Vault Sync Pipes (7)
+# Role: Nightly vault-sync only (BAR-102). NOT hot-path.
+# Neon = cold archive / system of record / restore source.
 # ---------------------------------------------------------------------------
 hyperdrive:
   - binding: "HD_SOVEREIGN"
@@ -47,9 +49,11 @@ hyperdrive:
     target: "Neon storage DB"
 
 # ---------------------------------------------------------------------------
-# D1 — Cloudflare SQLite Databases (3)
+# D1 — Cloudflare SQLite Databases (7)
+# Role: Working database at edge. CF-primary (BAR-100).
 # ---------------------------------------------------------------------------
 d1:
+  # --- Purpose-built D1 databases ---
   - binding: "D1_REFERENCE_BIBLE"
     database_name: "svg-reference-bible"
     database_id: "cbd9da61-18f1-49a4-878e-41ff5474e375"
@@ -70,6 +74,39 @@ d1:
     purpose: "Email metadata index for client filing and triage"
     region: "ENAM"
     created: "2026-03-11"
+
+  # --- D1 Hot Mirrors (Neon vault stays via Hyperdrive) ---
+  - binding: "D1_SOVEREIGN"
+    database_name: "svg-d1-sovereign"
+    database_id: "0e8e1242-5d66-427a-9c77-8df8d372fbb2"
+    purpose: "Hot mirror of Neon sovereign DB — edge working copy"
+    region: "ENAM"
+    created: "2026-03-11"
+    mirror_of: "HD_SOVEREIGN"
+
+  - binding: "D1_SPINE"
+    database_name: "svg-d1-spine"
+    database_id: "641a9a1e-0882-41a7-82af-ea700e7cfbb3"
+    purpose: "Hot mirror of CL spine — edge working copy"
+    region: "ENAM"
+    created: "2026-03-11"
+    mirror_of: "HD_CL"
+
+  - binding: "D1_OUTREACH_OPS"
+    database_name: "svg-d1-outreach-ops"
+    database_id: "73a285b8-770a-4370-abbe-ce9607be0b34"
+    purpose: "Hot mirror of outreach ops — edge working copy"
+    region: "ENAM"
+    created: "2026-03-11"
+    mirror_of: "HD_OUTREACH"
+
+  - binding: "D1_STORAGE"
+    database_name: "svg-d1-storage"
+    database_id: "47417f00-0eab-4258-947a-3959c063c1de"
+    purpose: "Hot mirror of storage DB — edge working copy"
+    region: "ENAM"
+    created: "2026-03-11"
+    mirror_of: "HD_STORAGE"
 
 # ---------------------------------------------------------------------------
 # KV — Key-Value Namespaces (4)
@@ -122,4 +159,5 @@ document_control:
   created: "2026-03-11"
   last_modified: "2026-03-11"
   maintained_by: "Human + AI"
-  total_bindings: 16  # 7 Hyperdrive + 3 D1 + 4 KV + 1 Queue + 1 R2
+  total_bindings: 20  # 7 Hyperdrive + 7 D1 + 4 KV + 1 Queue + 1 R2
+  architecture: "CF-primary (BAR-100) — D1/KV/Queues/R2 = working layer, Hyperdrive = vault sync, Neon = cold archive"
