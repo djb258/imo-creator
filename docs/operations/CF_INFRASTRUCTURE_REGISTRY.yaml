@@ -1,0 +1,125 @@
+# =============================================================================
+# CF INFRASTRUCTURE REGISTRY — Cloudflare Resource Inventory
+# =============================================================================
+# Authority: imo-creator (Sovereign CC-01)
+# Purpose: Map all Cloudflare resources in the fleet
+# Worker: svgagency-api @ svg-outreach.workers.dev
+# Account: Dbarton@svg.agency (a1dd98c646e8d2f4ae6f1ca6c0b79653)
+# =============================================================================
+
+worker:
+  name: "svgagency-api"
+  url: "https://svgagency-api.svg-outreach.workers.dev"
+  compatibility_date: "2024-12-01"
+  compatibility_flags: ["nodejs_compat"]
+  local_project: "svgagency-api"  # Under Cursor Builds/
+
+# ---------------------------------------------------------------------------
+# HYPERDRIVE — Neon PostgreSQL Bindings (7)
+# ---------------------------------------------------------------------------
+hyperdrive:
+  - binding: "HD_SOVEREIGN"
+    id: "7f5cd67eb92e42d3a306bb339442036d"
+    target: "Neon sovereign DB"
+
+  - binding: "HD_CL"
+    id: "fcf2ec60cfc74cc38de13db84bf7d1d9"
+    target: "Neon company-lifecycle-cl DB"
+
+  - binding: "HD_CLIENT"
+    id: "c3851bccca8b4201a78ba5594c2b1c02"
+    target: "Neon client DB"
+
+  - binding: "HD_OUTREACH"
+    id: "6a76791c688346e88def0060e41a2be5"
+    target: "Neon outreach DB"
+
+  - binding: "HD_RESEARCH"
+    id: "37db3276870f4b8ca283ed69686de280"
+    target: "Neon research DB"
+
+  - binding: "HD_SALES"
+    id: "f61af42934cc47f48978ec14bf89089d"
+    target: "Neon sales DB"
+
+  - binding: "HD_STORAGE"
+    id: "60118409ff0642708f3679bf0c7fd431"
+    target: "Neon storage DB"
+
+# ---------------------------------------------------------------------------
+# D1 — Cloudflare SQLite Databases (3)
+# ---------------------------------------------------------------------------
+d1:
+  - binding: "D1_REFERENCE_BIBLE"
+    database_name: "svg-reference-bible"
+    database_id: "cbd9da61-18f1-49a4-878e-41ff5474e375"
+    purpose: "Glossary, architecture docs, schema reference, CF platform ref"
+    region: "ENAM"
+    created: "2026-03-11"
+
+  - binding: "D1_ACTIVITY_LOG"
+    database_name: "svg-activity-log"
+    database_id: "0401aba8-ebf0-4a61-91d6-1180dd4aa0b6"
+    purpose: "Womb-to-tomb client activity ledger (working DB at edge)"
+    region: "ENAM"
+    created: "2026-03-11"
+
+  - binding: "D1_EMAIL_TRIAGE"
+    database_name: "svg-email-triage"
+    database_id: "c6d09ddc-1706-4f0d-af6c-87e2339b7159"
+    purpose: "Email metadata index for client filing and triage"
+    region: "ENAM"
+    created: "2026-03-11"
+
+# ---------------------------------------------------------------------------
+# KV — Key-Value Namespaces (4)
+# ---------------------------------------------------------------------------
+kv:
+  - binding: "KV_PIPELINE_STATE"
+    id: "4bf6fead24f04b77b674638761083e78"
+    purpose: "Outreach/sales stage tracking — hot path, low latency edge reads"
+    created: "2026-03-11"
+
+  - binding: "KV_CONTENT_CACHE"
+    id: "f1fde69605ce4e81bf159be1518732eb"
+    purpose: "Edge cache layer for 600pg insurance knowledge base (source stays in Neon)"
+    created: "2026-03-11"
+
+  - binding: "KV_EGRESS"
+    id: "66e6c7bec8c1479ba708c0bcbb6a0e23"
+    purpose: "Field monitor egress (pre-existing)"
+    created: "2026-03-06"
+
+  - binding: "KV_PARSER"
+    id: "fdb97182fc0845509053eb5925c70b1b"
+    purpose: "Field monitor parser (pre-existing)"
+    created: "2026-03-06"
+
+# ---------------------------------------------------------------------------
+# QUEUES — Async Signal Processing (1)
+# ---------------------------------------------------------------------------
+queues:
+  - binding: "QUEUE_SIGNAL"
+    queue_name: "svg-signal-queue"
+    purpose: "LCS signals from sub-hubs waiting to be processed"
+    mode: "producer"  # Consumer handler not yet implemented
+    created: "2026-03-11"
+
+# ---------------------------------------------------------------------------
+# R2 — Object Storage (1)
+# ---------------------------------------------------------------------------
+r2:
+  - binding: "R2_FILES"
+    bucket_name: "svg-files"
+    purpose: "PDFs, exports, client deliverables"
+    storage_class: "Standard"
+    created: "2026-03-11"
+
+# =============================================================================
+# DOCUMENT CONTROL
+# =============================================================================
+document_control:
+  created: "2026-03-11"
+  last_modified: "2026-03-11"
+  maintained_by: "Human + AI"
+  total_bindings: 16  # 7 Hyperdrive + 3 D1 + 4 KV + 1 Queue + 1 R2
