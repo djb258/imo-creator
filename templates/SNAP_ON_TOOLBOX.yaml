@@ -180,6 +180,84 @@ tools:
     accuracy: "N/A"
     accuracy_notes: "Code generation tool — quality depends on target codebase"
 
+  UIUXProMax:
+    tool_id: "TOOL-014"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-030"
+    software:
+      primary: "UI/UX Pro Max"
+      dependencies: []
+      vendor: null
+      requires_api_key: false
+      source: "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill"
+    purpose:
+      summary: "Design intelligence database — proven palettes, pairings, and UX patterns for non-designers"
+      what_it_does:
+        - "67+ UI styles, 161 color palettes, 57 font pairings, 99 UX guidelines"
+        - "25 chart type recommendations across 9 tech stacks"
+        - "161 industry-specific reasoning rules (SaaS, fintech, healthcare, etc.)"
+        - "Deterministic design lookup — query database instead of guessing"
+      what_it_does_NOT_do:
+        - "Replace human designers for brand-critical work"
+        - "Generate designs from scratch — it provides reference data"
+        - "Runtime LLM decisions — output is deterministic lookup"
+    usage_doctrine: |
+      Activates alongside any frontend build task. Provides the design
+      system brain — color, typography, UX patterns. Claude queries
+      proven palettes and pairings instead of guessing.
+      Determinism in design: lookup, not generation.
+    throttle:
+      rate_limits:
+        - {scope: "per_session", limit: null, notes: "Local skill, no external calls"}
+      cost: {model: "free", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "none", max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "N/A", action: "passive_reference_database"}
+      timeout: {max_seconds: null}
+    accuracy: "N/A"
+    accuracy_notes: "Reference database — quality depends on design brief alignment"
+
+  DevBrowser:
+    tool_id: "TOOL-015"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-031"
+    software:
+      primary: "Playwright MCP"
+      alternatives: ["Anthropic dev-browser plugin"]
+      dependencies: ["@playwright/mcp"]
+      vendor: "Microsoft (Playwright) / Anthropic (dev-browser)"
+      requires_api_key: false
+      source: "https://github.com/microsoft/playwright-mcp"
+      install: "claude mcp add playwright -- npx @playwright/mcp@latest"
+    purpose:
+      summary: "Visual QA loop — screenshot, evaluate, and fix UI without human eyes"
+      what_it_does:
+        - "Open browser, navigate to built UI, take screenshots"
+        - "Accessibility tree snapshots for token-efficient verification"
+        - "Cross-browser testing (Chrome, Firefox, Safari)"
+        - "Close the build-verify-fix circle autonomously"
+      what_it_does_NOT_do:
+        - "Replace end-to-end test suites"
+        - "Production monitoring or uptime checks"
+        - "Runtime LLM decisions — browser is source of truth"
+    usage_doctrine: |
+      Circle validation — output feeds back to input. After any frontend
+      build, dev-browser screenshots and verifies the result. If something
+      looks wrong, fix and re-verify. Iterate until clean.
+      Preference order: 1) Anthropic dev-browser  2) Playwright MCP
+    throttle:
+      rate_limits:
+        - {scope: "per_verification", limit: 10, notes: "Max 10 screenshot-fix cycles per page"}
+      cost: {model: "free", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "none", max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "browser_crash_or_timeout", action: "abort_page_continue_pipeline"}
+      timeout: {max_seconds: 30}
+    accuracy: "N/A"
+    accuracy_notes: "Visual verification tool — pixel-accurate rendering via real browser"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # TIER 1: GENERIC CHEAP TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════

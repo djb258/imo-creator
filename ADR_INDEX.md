@@ -38,6 +38,8 @@
 | ADR-027 | imo-creator | 2026-03-05 | DeltaHound Sub-Hub 1 Scheduler — GitHub Actions vs Cloudflare Scheduled Workers | ACCEPTED | GitHub Actions selected for DeltaHound Scheduler; Cloudflare Scheduled Workers evaluated and rejected on stack simplicity grounds |
 | ADR-028 | imo-creator | 2026-03-11 | BAR-104 LOCKED File Platform Purge | ACCEPTED | Update SNAP_ON_TOOLBOX.yaml, CONSTITUTION.md, hostinger templates, TEMPLATES_MANIFEST.yaml — purge retired platform refs (Lovable/Supabase/Hostinger) per BAR-100 |
 | ADR-029 | imo-creator | 2026-03-12 | CLI-Anything Tool Registration (TOOL-013) | ACCEPTED | Register CLI-Anything in SNAP_ON_TOOLBOX.yaml as Tier 0 — generates CLI wrappers for GUI-only software |
+| ADR-030 | imo-creator | 2026-03-12 | UI/UX Pro Max Tool Registration (TOOL-014) | ACCEPTED | Register UI/UX Pro Max design intelligence skill in SNAP_ON_TOOLBOX.yaml as Tier 0 — deterministic design lookup for non-designers |
+| ADR-031 | imo-creator | 2026-03-12 | Dev-Browser / Playwright MCP Tool Registration (TOOL-015) | ACCEPTED | Register Dev-Browser / Playwright MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — visual QA circle for frontend verification |
 
 ---
 
