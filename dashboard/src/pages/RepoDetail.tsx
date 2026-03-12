@@ -8,6 +8,10 @@ import { SubHubCard } from '../components/SubHubCard';
 import { WorkPacketList } from '../components/WorkPacketList';
 import { TodoPanel } from '../components/TodoPanel';
 import { REPO_ROOTS } from '../data/docResolver';
+import { useAPI } from '../lib/useAPI';
+import { getSchema } from '../lib/api';
+
+interface SchemaRow { table_name: string; column_name: string; data_type: string; is_nullable: string }
 
 export function RepoDetail() {
   const { name } = useParams<{ name: string }>();
@@ -34,6 +38,21 @@ export function RepoDetail() {
   }
 
   const participatingProcesses = getProcessesForRepo(repo.name);
+
+  // Live schema data
+  const schema = useAPI<{ results: SchemaRow[] }>(
+    () => getSchema().catch(() => ({ results: [] })),
+    []
+  );
+
+  // Group schema by table
+  const schemaByTable: Record<string, SchemaRow[]> = {};
+  if (schema.data?.results) {
+    for (const row of schema.data.results) {
+      if (!schemaByTable[row.table_name]) schemaByTable[row.table_name] = [];
+      schemaByTable[row.table_name].push(row);
+    }
+  }
 
   // Auto-generate todos for missing docs
   const autoTodos = repo.docs
@@ -218,7 +237,7 @@ export function RepoDetail() {
 
       {/* Sub-Hub Registry (only for UT / Garage) */}
       {repo.subHubs && repo.subHubs.length > 0 && (
-        <div>
+        <div style={{ marginBottom: 'var(--sp-6)' }}>
           <div
             style={{
               fontSize: 'var(--text-xs)',
@@ -240,6 +259,80 @@ export function RepoDetail() {
           >
             {repo.subHubs.map((hub) => (
               <SubHubCard key={hub.id} hub={hub} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Live Schema */}
+      {!schema.error && schema.data?.results && schema.data.results.length > 0 && (
+        <div>
+          <div
+            style={{
+              fontSize: 'var(--text-xs)',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 'var(--sp-3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--sp-2)',
+            }}
+          >
+            Schema ({Object.keys(schemaByTable).length} tables)
+            {schema.loading && <span style={{ color: 'var(--yellow)' }}>loading...</span>}
+            {!schema.loading && <span style={{ color: 'var(--green)' }}>live</span>}
+            <button
+              onClick={schema.refresh}
+              style={{
+                all: 'unset',
+                cursor: 'pointer',
+                fontSize: 'var(--text-xs)',
+                color: 'var(--accent)',
+                marginLeft: 'auto',
+              }}
+            >
+              refresh
+            </button>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: 'var(--sp-3)',
+            }}
+          >
+            {Object.entries(schemaByTable).slice(0, 20).map(([table, cols]) => (
+              <div
+                key={table}
+                style={{
+                  padding: 'var(--sp-3) var(--sp-4)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: 'var(--text-xs)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                <div style={{ fontWeight: 700, color: 'var(--accent)', marginBottom: 'var(--sp-2)' }}>
+                  {table}
+                </div>
+                {cols.map((col) => (
+                  <div
+                    key={col.column_name}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      padding: '1px 0',
+                      borderBottom: '1px solid var(--border-subtle)',
+                    }}
+                  >
+                    <span style={{ color: 'var(--text-primary)' }}>{col.column_name}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>{col.data_type}</span>
+                  </div>
+                ))}
+              </div>
             ))}
           </div>
         </div>

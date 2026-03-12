@@ -9,11 +9,21 @@ const ProcessMermaid = lazy(() => import('../components/ProcessMermaid').then(m 
 import { ProcessBlock } from '../components/ProcessBlock';
 import { BlockExpander } from '../components/BlockExpander';
 import { REPO_ROOTS } from '../data/docResolver';
+import { useAPI } from '../lib/useAPI';
+import { getHandoffRules } from '../lib/api';
+
+interface HandoffRow { source_hub: string; target_hub: string; handoff_type: string; description: string }
 
 export function ProcessDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const process = processes.find((p) => p.id === id);
+
+  // Live handoff rules
+  const handoff = useAPI<{ results: HandoffRow[] }>(
+    () => getHandoffRules().catch(() => ({ results: [] })),
+    []
+  );
 
   if (!process) {
     return (
@@ -263,6 +273,69 @@ export function ProcessDetail() {
       <BlockExpander title="Doctrine View (HEIR / IMO / ERD / ORBT / CTB)">
         <ProcessBlock process={process} />
       </BlockExpander>
+
+      {/* Live Handoff Rules */}
+      {!handoff.error && handoff.data?.results && handoff.data.results.length > 0 && (
+        <div style={{ marginTop: 'var(--sp-6)' }}>
+          <div
+            style={{
+              fontSize: 'var(--text-xs)',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 'var(--sp-3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--sp-2)',
+            }}
+          >
+            Handoff Rules ({handoff.data.results.length})
+            {handoff.loading && <span style={{ color: 'var(--yellow)' }}>loading...</span>}
+            {!handoff.loading && <span style={{ color: 'var(--green)' }}>live</span>}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)' }}>
+            {handoff.data.results.map((rule, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--sp-3)',
+                  padding: 'var(--sp-2) var(--sp-3)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: 'var(--text-xs)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                <span style={{ color: 'var(--blue)', fontWeight: 600, minWidth: 100 }}>
+                  {rule.source_hub}
+                </span>
+                <span style={{ color: 'var(--text-muted)' }}>&rarr;</span>
+                <span style={{ color: 'var(--green)', fontWeight: 600, minWidth: 100 }}>
+                  {rule.target_hub}
+                </span>
+                <span
+                  style={{
+                    padding: '0 var(--sp-2)',
+                    borderRadius: '999px',
+                    background: 'var(--orange-dim)',
+                    color: 'var(--orange)',
+                    fontWeight: 600,
+                  }}
+                >
+                  {rule.handoff_type}
+                </span>
+                <span style={{ color: 'var(--text-muted)', flex: 1 }}>
+                  {rule.description?.slice(0, 80)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

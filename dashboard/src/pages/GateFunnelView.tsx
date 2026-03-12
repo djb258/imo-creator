@@ -1,6 +1,15 @@
 import { GateFunnel } from '../components/GateFunnel';
+import { useAPI } from '../lib/useAPI';
+import { getHealth } from '../lib/api';
 
 export function GateFunnelView() {
+  const health = useAPI<{ status: string; timestamp?: string }>(
+    () => getHealth().catch(() => ({ status: 'offline' })),
+    []
+  );
+
+  const isOnline = !health.error && health.data?.status === 'ok';
+
   return (
     <div style={{ padding: 'var(--sp-8)' }}>
       <h1
@@ -22,18 +31,30 @@ export function GateFunnelView() {
           color: 'var(--text-secondary)',
         }}
       >
-        Movement detection pipeline — SH-16 → SH-20
+        Movement detection pipeline — SH-16 &rarr; SH-20
       </p>
-      <p
+      <div
         style={{
           margin: '0 0 var(--sp-8)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--sp-2)',
           fontSize: 'var(--text-xs)',
           fontFamily: 'var(--font-mono)',
-          color: 'var(--text-muted)',
         }}
       >
-        Mock data — wire to real worker endpoints in a future phase
-      </p>
+        <span
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            background: isOnline ? 'var(--green)' : 'var(--yellow)',
+          }}
+        />
+        <span style={{ color: isOnline ? 'var(--green)' : 'var(--yellow)' }}>
+          {isOnline ? 'Layer 0 Engine connected' : 'Static view — Layer 0 Engine offline'}
+        </span>
+      </div>
 
       <GateFunnel />
 

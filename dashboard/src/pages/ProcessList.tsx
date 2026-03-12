@@ -1,9 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { processes } from '../data/processes';
 import { StatusBadge } from '../components/StatusBadge';
+import { useAPI } from '../lib/useAPI';
+import { getGlossary } from '../lib/api';
+
+interface GlossaryRow { term: string; definition: string; category: string; source_hub: string }
 
 export function ProcessList() {
   const navigate = useNavigate();
+  const glossary = useAPI<{ results: GlossaryRow[] }>(
+    () => getGlossary().catch(() => ({ results: [] })),
+    []
+  );
 
   return (
     <div style={{ padding: 'var(--sp-8)' }}>
@@ -172,6 +180,82 @@ export function ProcessList() {
           );
         })}
       </div>
+
+      {/* Live Glossary */}
+      {!glossary.error && glossary.data?.results && glossary.data.results.length > 0 && (
+        <div style={{ marginTop: 'var(--sp-8)' }}>
+          <div
+            style={{
+              fontSize: 'var(--text-xs)',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 'var(--sp-3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--sp-2)',
+            }}
+          >
+            Glossary ({glossary.data.results.length})
+            {glossary.loading && <span style={{ color: 'var(--yellow)' }}>loading...</span>}
+            {!glossary.loading && <span style={{ color: 'var(--green)' }}>live</span>}
+            <button
+              onClick={glossary.refresh}
+              style={{
+                all: 'unset',
+                cursor: 'pointer',
+                fontSize: 'var(--text-xs)',
+                color: 'var(--accent)',
+                marginLeft: 'auto',
+              }}
+            >
+              refresh
+            </button>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: 'var(--sp-3)',
+            }}
+          >
+            {glossary.data.results.slice(0, 30).map((item) => (
+              <div
+                key={item.term}
+                style={{
+                  padding: 'var(--sp-3) var(--sp-4)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: 'var(--text-xs)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--sp-1)' }}>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 700 }}>{item.term}</span>
+                  {item.category && (
+                    <span
+                      style={{
+                        padding: '0 var(--sp-2)',
+                        borderRadius: '999px',
+                        background: 'var(--purple-dim)',
+                        color: 'var(--purple)',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {item.category}
+                    </span>
+                  )}
+                </div>
+                <div style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                  {item.definition?.slice(0, 120)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
