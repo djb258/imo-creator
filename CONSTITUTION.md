@@ -12,7 +12,7 @@ It defines invariants, gates, and authority boundaries for all derived systems.
 - **Descent order** — CC layers define authority hierarchy
 - **Flow ownership** — IMO defines ingress/middle/egress within hubs
 - **Hub/Spoke geometry** — Hubs own logic, spokes carry data
-- **Enforcement mechanisms** — Pre-commit, CI, Claude Code, Lovable.dev
+- **Enforcement mechanisms** — Pre-commit, CI, Claude Code, Figma UI
 
 ---
 

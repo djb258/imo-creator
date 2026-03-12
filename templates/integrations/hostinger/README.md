@@ -1,8 +1,13 @@
-# Hostinger Custom Integration for Composio
+# ⛔ RETIRED — Hostinger Custom Integration for Composio
+
+> **RETIRED per BAR-100 / ADR-028 (2026-03-11)**
+> Hostinger VPS + n8n replaced by **CF Workers + Queues** (native orchestration).
+> This file is preserved for git history only. Do NOT use for new integrations.
 
 **Doctrine ID**: 04.04.13
-**Status**: Active
+**Status**: RETIRED (BAR-100)
 **Created**: 2025-12-01
+**Retired**: 2026-03-11
 
 ## Overview
 

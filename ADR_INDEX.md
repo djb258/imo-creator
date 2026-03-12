@@ -36,6 +36,7 @@
 | ADR-025 | imo-creator | 2026-03-02 | V2 Path Corrections — Remaining Stale Refs | ACCEPTED | Fix stale templates/agents/ refs in SYSTEM_MANIFEST.md, REPO_HOUSEKEEPING.md, HUB_COMPLIANCE.md; flag DOPPLER.md gap |
 | ADR-026 | imo-creator | 2026-03-05 | DeltaHound Tool Registration (TOOL-012) | ACCEPTED | Register DeltaHound homebrew field-monitoring tool in SNAP_ON_TOOLBOX.yaml as Tier 0 |
 | ADR-027 | imo-creator | 2026-03-05 | DeltaHound Sub-Hub 1 Scheduler — GitHub Actions vs Cloudflare Scheduled Workers | ACCEPTED | GitHub Actions selected for DeltaHound Scheduler; Cloudflare Scheduled Workers evaluated and rejected on stack simplicity grounds |
+| ADR-028 | imo-creator | 2026-03-11 | BAR-104 LOCKED File Platform Purge | ACCEPTED | Update SNAP_ON_TOOLBOX.yaml, CONSTITUTION.md, hostinger templates, TEMPLATES_MANIFEST.yaml — purge retired platform refs (Lovable/Supabase/Hostinger) per BAR-100 |
 
 ---
 

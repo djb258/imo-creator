@@ -605,10 +605,12 @@ files:
     - path: "templates/integrations/hostinger/integrations.yaml"
       purpose: "Hostinger integration config"
       required: false
+      status: "RETIRED (BAR-100 — Hostinger replaced by CF Workers + Queues, ADR-028)"
 
     - path: "templates/integrations/hostinger/README.md"
       purpose: "Hostinger integration guide"
       required: false
+      status: "RETIRED (BAR-100 — Hostinger replaced by CF Workers + Queues, ADR-028)"
 
     - path: "templates/integrations/abacus-ai/integrations.yaml"
       purpose: "Abacus AI integration config"
