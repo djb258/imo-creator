@@ -1,4 +1,4 @@
-import { Plugin } from 'vite';
+import type { Plugin } from 'vite';
 import { readFile, readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export function useAPI<T>(fetcher: () => Promise<T>, deps: unknown[] = []) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useAPI<T>(fetcher: () => Promise<any>, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

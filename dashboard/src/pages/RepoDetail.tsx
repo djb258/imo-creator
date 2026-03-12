@@ -41,7 +41,7 @@ export function RepoDetail() {
 
   // Live schema data
   const schema = useAPI<{ results: SchemaRow[] }>(
-    () => getSchema().catch(() => ({ results: [] })),
+    () => getSchema().catch((): { results: SchemaRow[] } => ({ results: [] })),
     []
   );
 

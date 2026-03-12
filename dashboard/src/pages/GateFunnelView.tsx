@@ -4,7 +4,7 @@ import { getHealth } from '../lib/api';
 
 export function GateFunnelView() {
   const health = useAPI<{ status: string; timestamp?: string }>(
-    () => getHealth().catch(() => ({ status: 'offline' })),
+    () => getHealth().catch((): { status: string; timestamp?: string } => ({ status: 'offline' })),
     []
   );
 

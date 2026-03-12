@@ -6,25 +6,33 @@ import { ProcessList } from './pages/ProcessList';
 import { ProcessDetail } from './pages/ProcessDetail';
 import { PipelineMonitor } from './pages/PipelineMonitor';
 import { GateFunnelView } from './pages/GateFunnelView';
+import { Layer0View } from './pages/Layer0View';
 import { useAPI } from './lib/useAPI';
-import { getHealth } from './lib/api';
+import { getHealth, getL0Health } from './lib/api';
 import { useState, useEffect } from 'react';
 
+function HealthDot({ loading, online }: { loading: boolean; online: boolean }) {
+  const color = loading ? 'var(--yellow)' : online ? 'var(--green)' : 'var(--red)';
+  return <span style={{ width: 6, height: 6, borderRadius: '50%', background: color, flexShrink: 0 }} />;
+}
+
 function StatusBar() {
-  const health = useAPI<{ status: string }>(() => getHealth().catch(() => ({ status: 'offline' })), []);
+  const health = useAPI<{ status: string }>(() => getHealth().catch((): { status: string } => ({ status: 'offline' })), []);
+  const l0Health = useAPI<{ status: string }>(() => getL0Health().catch((): { status: string } => ({ status: 'offline' })), []);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
-  // Auto-refresh health every 30s
   useEffect(() => {
     const id = setInterval(() => {
       health.refresh();
+      l0Health.refresh();
       setLastRefresh(new Date());
     }, 30_000);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isOnline = !health.error && health.data?.status === 'ok';
+  const apiOnline = !health.error && health.data?.status === 'ok';
+  const l0Online = !l0Health.error && l0Health.data?.status === 'ok';
 
   return (
     <div
@@ -40,30 +48,24 @@ function StatusBar() {
         flexShrink: 0,
       }}
     >
-      <span
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--sp-1)',
-        }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: '50%',
-            background: health.loading ? 'var(--yellow)' : isOnline ? 'var(--green)' : 'var(--red)',
-          }}
-        />
-        <span style={{ color: health.loading ? 'var(--yellow)' : isOnline ? 'var(--green)' : 'var(--red)' }}>
-          {health.loading ? 'connecting...' : isOnline ? 'API connected' : 'API offline'}
+      <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
+        <HealthDot loading={health.loading} online={apiOnline} />
+        <span style={{ color: health.loading ? 'var(--yellow)' : apiOnline ? 'var(--green)' : 'var(--red)' }}>
+          API: {health.loading ? '...' : apiOnline ? 'OK' : 'OFF'}
+        </span>
+      </span>
+      <span style={{ color: 'var(--border-default)' }}>|</span>
+      <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
+        <HealthDot loading={l0Health.loading} online={l0Online} />
+        <span style={{ color: l0Health.loading ? 'var(--yellow)' : l0Online ? 'var(--green)' : 'var(--red)' }}>
+          Layer 0: {l0Health.loading ? '...' : l0Online ? 'OK' : 'OFF'}
         </span>
       </span>
       <span style={{ color: 'var(--text-muted)' }}>
-        Last check: {lastRefresh.toLocaleTimeString()}
+        {lastRefresh.toLocaleTimeString()}
       </span>
       <button
-        onClick={() => { health.refresh(); setLastRefresh(new Date()); }}
+        onClick={() => { health.refresh(); l0Health.refresh(); setLastRefresh(new Date()); }}
         style={{
           all: 'unset',
           cursor: 'pointer',
@@ -87,6 +89,7 @@ export default function App() {
           <main style={{ flex: 1, overflow: 'auto' }}>
             <Routes>
               <Route path="/" element={<FleetOverview />} />
+              <Route path="/layer0" element={<Layer0View />} />
               <Route path="/repo/:name" element={<RepoDetail />} />
               <Route path="/processes" element={<ProcessList />} />
               <Route path="/process/:id" element={<ProcessDetail />} />

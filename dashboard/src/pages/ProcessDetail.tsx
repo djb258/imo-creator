@@ -21,7 +21,7 @@ export function ProcessDetail() {
 
   // Live handoff rules
   const handoff = useAPI<{ results: HandoffRow[] }>(
-    () => getHandoffRules().catch(() => ({ results: [] })),
+    () => getHandoffRules().catch((): { results: HandoffRow[] } => ({ results: [] })),
     []
   );
 

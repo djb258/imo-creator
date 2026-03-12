@@ -1,7 +1,8 @@
 import { fleet } from '../data/fleet';
 import { RepoCard } from '../components/RepoCard';
 import { useAPI } from '../lib/useAPI';
-import { getArchitecture, getCFPlatform } from '../lib/api';
+import { getArchitecture, getCFPlatform, getL0Constants } from '../lib/api';
+import type { L0Constant } from '../lib/api';
 
 interface ArchRow { component: string; component_type: string; description: string; parent_component: string }
 interface CFRow { product: string; binding_name: string; description: string; database_id: string }
@@ -12,6 +13,7 @@ export function FleetOverview() {
 
   const arch = useAPI<{ results: ArchRow[] }>(() => getArchitecture(), []);
   const cf = useAPI<{ results: CFRow[] }>(() => getCFPlatform(), []);
+  const l0 = useAPI<{ constants: L0Constant[]; total?: number }>(() => getL0Constants().catch(() => ({ constants: [], total: 0 })), []);
 
   // Group architecture components by type
   const archByType: Record<string, ArchRow[]> = {};
@@ -46,6 +48,50 @@ export function FleetOverview() {
       >
         The Garage floor — all Cars visible at once
       </p>
+
+      {/* Locked Constants — headline metric */}
+      <div
+        style={{
+          padding: 'var(--sp-4) var(--sp-6)',
+          background: l0.error ? 'var(--yellow-dim)' : 'var(--bg-surface)',
+          border: `1px solid ${l0.error ? 'var(--yellow)' : 'var(--accent)'}`,
+          borderRadius: 'var(--radius-md)',
+          marginBottom: 'var(--sp-8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontSize: 'var(--text-xs)',
+              fontFamily: 'var(--font-mono)',
+              color: l0.error ? 'var(--yellow)' : 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 'var(--sp-1)',
+            }}
+          >
+            {l0.error ? 'Layer 0 Engine: Offline' : 'Layer 0 Engine'}
+          </div>
+          <div
+            style={{
+              fontSize: 'var(--text-2xl)',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 800,
+              color: l0.error ? 'var(--yellow)' : 'var(--accent)',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {l0.loading ? '...' : l0.data?.total ?? l0.data?.constants?.length ?? 0}
+          </div>
+          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+            Locked Constants
+          </div>
+        </div>
+        <div style={{ fontSize: 32, opacity: 0.3 }}>C</div>
+      </div>
 
       {/* Garage */}
       <div

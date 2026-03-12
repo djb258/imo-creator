@@ -9,7 +9,7 @@ interface GlossaryRow { term: string; definition: string; category: string; sour
 export function ProcessList() {
   const navigate = useNavigate();
   const glossary = useAPI<{ results: GlossaryRow[] }>(
-    () => getGlossary().catch(() => ({ results: [] })),
+    () => getGlossary().catch((): { results: GlossaryRow[] } => ({ results: [] })),
     []
   );
 

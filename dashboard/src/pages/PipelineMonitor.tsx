@@ -38,7 +38,7 @@ export function PipelineMonitor() {
   // Live activity for first active company (demo)
   const demoSovereignId = 'demo'; // placeholder — real IDs come from fleet
   const activity = useAPI<{ timeline: ActivityRow[] }>(
-    () => getActivityTimeline(demoSovereignId).catch(() => ({ timeline: [] })),
+    () => getActivityTimeline(demoSovereignId).catch((): { timeline: ActivityRow[] } => ({ timeline: [] })),
     [demoSovereignId]
   );
 
