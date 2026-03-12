@@ -98,3 +98,10 @@ For master skills: use the skill-creator skill directly (`skills/skill-creator/S
 6. If a platform constraint affects a build decision, the master skill is authoritative.
 7. Skills are NOT doctrine. They do not override CLAUDE.md, CONSTITUTION.md, or any
    locked file. Skills inform build decisions within doctrine's boundaries.
+
+## Layer 0 Governance
+
+All skills — agent, master, and car — conform to Layer 0 Doctrine (docs/LAYER0_DOCTRINE.md).
+The skill-creator is domain-agnostic. Domain content is always the variable, never embedded
+in the tool. If you can look at the skill-creator SKILL.md and determine what domain it's
+being used for, it's broken.

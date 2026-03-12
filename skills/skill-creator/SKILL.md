@@ -7,267 +7,461 @@ description: >
   quick_validate.py and can be executed by any LLM without prior context.
 ---
 
-## IMO — Ingress / Middle / Egress
+## Layer 0 Doctrine
 
-**Ingress (Trigger):** User requests a new skill, or requests modification of an existing skill.
+This skill is a constant-extraction engine. Its purpose is to take a domain and extract
+every constant until the remaining variable space is within operational tolerance. The
+output is a skill package — a locked set of constants structured for LLM execution.
 
-**Middle (Processing):**
-- Apply the Constants/Variables filter to the skill's domain
-- Map the hub-and-spoke configuration
-- Define the IMO for the skill's execution
-- Write the skill so its structure demonstrates the framework — the document IS the instruction, not a description of it
+**One Objective:** Extract constants from the domain.
 
-**Egress (Output):** A validated skill package at `skills/<skill-name>/SKILL.md` that passes `quick_validate.py` and can be executed by any LLM without prior context.
+**Three Validators:** Every candidate constant must survive all three:
+- IMO: Does it stay fixed regardless of what flows through the process?
+- CTB: Does it stay fixed at every level of the hierarchy?
+- Circle: Does it still hold after a full feedback cycle?
 
-**Go/No-Go Gate:** Do not deliver a skill until it passes the swap test — can a different LLM pick up this skill cold and produce the same output? If no, the skill is not done.
-
----
-
-## Constants — What Is Fixed About Every Skill
-
-These do not change regardless of domain, tool, or use case:
-
-1. Every skill has a `SKILL.md` with YAML frontmatter (`name`, `description`) and a Markdown body.
-2. Every skill separates Constants from Variables before any workflow instructions appear.
-3. Every skill states its IMO — what triggers it, what processing it performs, what output it produces.
-4. Every skill has a Rules/Boundaries section stating what it NEVER does.
-5. Every skill uses progressive disclosure: metadata → SKILL.md body → reference files as needed.
-6. Every skill earns its tokens — context is a finite resource; every line must justify its presence.
-7. Every skill passes the swap test before delivery.
-8. Constants first. Variables are a last resort. Every variable requires guard rails. Drive toward constants.
+**Block Architecture:** This skill is built from blocks. Each block is governed by one of
+the four elements (C&V, IMO, CTB, Circle). Every block — regardless of its governing
+element — follows the same internal format defined by all four elements. The number of
+blocks is determined by the domain. The format per block is the constant.
 
 ---
 
-## Variables — What Changes Per Skill
+## Block Format — The Constant
 
-These are set per domain and per invocation:
+Every block in every skill follows this structure. This does not change.
 
-| Variable | What It Is | Who Sets It |
-|----------|-----------|-------------|
-| `skill_domain` | The specific capability being packaged | User or task context |
-| `tool_names` | Specific tools, APIs, or services used | Determined after constants are locked |
-| `reference_files` | Domain-specific docs loaded as needed | Identified during Step 2 |
-| `scripts` | Executable code for repetitive operations | Written per domain |
-| `activation_state` | Active by default or optional | Set per deployment |
+```
+BLOCK [N]: [Name]
+Governed by: [C&V | IMO | CTB | Circle]
 
-**Rule:** Tool names and implementation details are always Variables. They never appear in the Constants block.
+Constants: What is fixed in this block regardless of domain or invocation.
+Variables: What changes per domain or invocation.
 
----
+IMO:
+  Input: What this block receives from prior blocks or the user.
+  Middle: What this block does — the specific work governed by its element.
+  Output: What this block produces for downstream blocks.
 
-## Hub-and-Spoke Configuration
+CTB:
+  Trunk: The primary concept this block handles.
+  Branches: Supporting elements.
+  Leaves: Specific details or implementation items.
 
-The skill creation process is a wheel. The hub is the locked skill package. Each spoke is a phase that feeds the hub.
+Circle:
+  Validation: How you know this block's output is correct.
+  Feedback: If wrong, which prior block receives the correction signal.
 
-| Spoke | Input | Output | Interface to Hub |
-|-------|-------|--------|-----------------|
-| Understand | User request + examples | Confirmed domain scope | Go/No-Go: scope is unambiguous |
-| Plan | Domain scope | Resource inventory (scripts, refs, templates) | Go/No-Go: all resources identified |
-| Initialize | Resource inventory | Scaffolded skill directory | Go/No-Go: init_skill.py ran successfully |
-| Build | Scaffolded directory | Populated SKILL.md + resources | Go/No-Go: swap test passes |
-| Validate | Populated skill | Validation report | Go/No-Go: quick_validate.py passes |
-| Deliver | Validated skill | Skill package sent to user | Final output |
-
-**Hub rule:** The hub (locked skill package) is the only thing that touches the outside world. Spokes do not call other spokes. Each spoke completes its job and hands off to the hub.
+Go/No-Go: The gate. What must be true before proceeding to the next block.
+```
 
 ---
 
-## Phase Failure Handling — Constants
+## Skill-Creator Blocks
 
-Every phase has two exit paths: Go (proceed to next spoke) and No-Go (failure). No-Go is not a variable — the response to any phase failure is a constant:
-
-**IMO of a Phase Failure:**
-- **Ingress:** A phase produces an unexpected result that does not match its defined output.
-- **Middle:** Log the failure with three fields — (1) which phase failed, (2) what was attempted, (3) what was returned. Do not guess. Do not retry silently.
-- **Egress:** Escalate to the user with the three-field log. State the phase name, the attempted action, and the exact error or unexpected output. Ask for direction before proceeding.
+### BLOCK 1: Domain Scope
+**Governed by: C&V**
 
 **Constants:**
-- Silent retry is never the response to a phase failure.
-- The three-field log is always produced before escalation.
-- The user decides whether to retry, revise the skill, or abort.
+- Every skill has a single, unambiguous trigger condition.
+- Every skill has a testable output (the swap test).
+- The two-question entry: "What triggers this?" and "How do we get it?"
 
 **Variables:**
-- The specific phase that failed.
-- The specific error or unexpected output.
+- The specific domain being skilled.
+- The specific examples and edge cases.
 
-**OTHER path:** If the failure cannot be classified by any known error type, it routes to OTHER. Log it to the error table with `phase_failed`, `attempted_action`, and `raw_output`. Do not attempt to resolve OTHER without user input.
+**IMO:**
+- Input: User request — "I need a skill that does X."
+- Middle: Apply C&V lens. What is fixed about this domain regardless of implementation?
+  What changes per invocation? Ask the two-question entry. If either question cannot be
+  answered, stop and ask the user.
+- Output: Confirmed domain scope with initial constants and variables separated.
+
+**CTB:**
+- Trunk: The domain definition — what this skill IS.
+- Branches: The trigger condition, the output definition.
+- Leaves: Specific examples and edge cases.
+
+**Circle:**
+- Validation: Can you state in one sentence what triggers this skill and what it produces?
+- Feedback: If no, return to user for clarification. Do not proceed with ambiguity.
+
+**Go/No-Go:** Trigger and output are unambiguous. Both entry questions answered. Proceed.
 
 ---
 
-## Rules — What This Skill Never Does
+### BLOCK 2: Constant Extraction
+**Governed by: C&V**
 
-- Never put tool names in the Constants block. Tools are Variables. A constant that names a tool is not a constant — it is a variable that has been mislabeled.
-- Never skip the Constants/Variables filter. If you cannot state what is fixed about this skill, you do not understand the domain well enough to write the skill.
-- Never write a skill that describes the framework without demonstrating it. The structure of the skill IS the instruction. Prose descriptions of how to apply a framework are not the same as a document structured by that framework.
-- Never deliver a skill that fails the swap test. If a different LLM cannot pick it up cold and produce the same output, the skill is incomplete.
-- Never let reference files duplicate SKILL.md content. Information lives in one place only.
-- Never include README.md, CHANGELOG.md, or auxiliary documentation. Skills are for AI agents, not users.
-- Never exceed 500 lines in SKILL.md. Move variant-specific details to reference files.
+**Constants:**
+- Constants first. Variables are a last resort.
+- Every candidate constant must survive all three validators (IMO/CTB/Circle).
+- A constant that names a specific tool is not a constant — it is a mislabeled variable.
+- Constants are structural truths. Variables are implementation details.
+
+**Variables:**
+- The specific constants discovered for this domain.
+- The number of gates required (determined by domain complexity).
+
+**IMO:**
+- Input: Domain scope from Block 1.
+- Middle: Run the gate mechanism. At each gate:
+  1. Identify a candidate constant.
+  2. Validate with IMO: Does it hold regardless of what flows through?
+  3. Validate with CTB: Does it hold at every level of the hierarchy?
+  4. Validate with Circle: Does it hold after a full feedback cycle?
+  5. If it survives all three, lock it. Move to next gate.
+  6. Back-propagate: Does the new constant invalidate any prior constant?
+  7. If prior constant breaks, reclassify it as variable and re-run that gate.
+  8. Stop when no new constants found AND back-propagation clean.
+- Output: Locked constants list. Isolated variable space. Gate count documented.
+
+**CTB:**
+- Trunk: The constants block of the target skill.
+- Branches: Each individual constant, numbered and defined.
+- Leaves: The validation evidence for each constant (which tests it passed).
+
+**Circle:**
+- Validation: Is the variable count low? A high variable count means the constants block
+  is incomplete. Variables are edge functions — if a skill has many, it has too many
+  moving parts. That is a design gap.
+- Feedback: If variable count is high, return to gate mechanism and extract more constants.
+
+**Go/No-Go:** Constants locked. Variable count minimized. Every constant has validation
+evidence. Proceed.
 
 ---
 
-## Workflow
+### BLOCK 3: Process Definition
+**Governed by: IMO**
 
-### Phase 1 — Understand (Spoke 1)
+**Constants:**
+- Every skill has exactly one IMO: one trigger, one processing description, one output.
+- The IMO appears at the top of every skill before any other content.
+- An LLM reading the skill must know what it is executing before it reads the instructions.
+- A "state" in the skill is just identifying your position on the IMO.
 
-**Constants for this phase:**
-- The skill must have a single, unambiguous trigger condition.
-- The skill must have a testable output (the swap test).
+**Variables:**
+- The specific trigger for this skill.
+- The specific processing steps.
+- The specific output format and deliverable.
 
-**Variables for this phase:**
-- The specific domain, examples, and edge cases.
+**IMO:**
+- Input: Constants and variables from Block 2.
+- Middle: Define the skill's IMO.
+  - Ingress: What triggers this skill? What is the input? Be specific — an LLM must be
+    able to recognize the trigger without human help.
+  - Middle: What processing does the skill perform? State it as operations on constants
+    and variables, not as prose descriptions.
+  - Egress: What does this skill produce? State the exact output — file, data structure,
+    decision, action. If the output is not testable, the IMO is incomplete.
+- Output: The skill's IMO block — ready to drop into SKILL.md.
 
-**Execute:**
-Ask the user: "What does this skill do, and can you give me a concrete example of how it would be used?" Do not proceed until you can answer both questions without ambiguity. If the trigger condition is unclear, ask before proceeding. This is the IMO input gate — if you cannot identify the trigger, you cannot build the skill.
+**CTB:**
+- Trunk: The overall process (trigger → process → output).
+- Branches: Ingress definition, Middle definition, Egress definition.
+- Leaves: Specific trigger conditions, processing steps, output specs.
 
-**Go/No-Go:** Can you state in one sentence what triggers this skill and what output it produces? If yes, proceed. If no, ask.
+**Circle:**
+- Validation: Can an LLM read just the IMO block and know what to do without reading
+  anything else? If no, the IMO is incomplete.
+- Feedback: If IMO is unclear, return to Block 1 (domain scope may be ambiguous).
 
-### Phase 2 — Plan (Spoke 2)
+**Go/No-Go:** IMO is complete, testable, and self-contained. Proceed.
 
-**Constants for this phase:**
-- Every skill has exactly three resource types: scripts, references, templates.
-- Resource type is determined by reuse pattern, not by content.
+---
 
-**Variables for this phase:**
-- Which resource types this specific skill needs.
-- What files belong in each type.
+### BLOCK 4: Workflow Design
+**Governed by: IMO**
 
-| Resource Type | Use When | Example |
-|--------------|----------|---------|
-| `scripts/` | Code that would be rewritten repeatedly | `rotate_pdf.py`, `init_skill.py` |
-| `references/` | Documentation loaded into context as needed | Database schemas, API docs, domain policies |
-| `templates/` | Output assets not loaded into context | HTML boilerplate, fonts, logos |
+**Constants:**
+- Every workflow phase is itself an IMO with its own input, middle, output.
+- Every phase has a Go/No-Go gate.
+- Phases do not call other phases directly — each completes and hands off to the hub.
+- Silent retry is never the response to a phase failure.
+- The three-field failure log is always produced: phase_failed, attempted_action, raw_output.
 
-**Execute:** For each example from Phase 1, identify which resource type handles it. List every file needed. This is the Variables inventory — the only things that change per skill.
+**Variables:**
+- The number of phases (determined by domain complexity).
+- The specific work each phase performs.
+- The specific Go/No-Go criteria per phase.
 
-**Go/No-Go:** Is every resource identified and typed? If yes, proceed. If no, return to Phase 1.
+**IMO:**
+- Input: The skill's IMO from Block 3 + constants/variables from Block 2.
+- Middle: Decompose the skill's Middle into execution phases. Each phase is a spoke
+  on the hub-and-spoke. Each phase has:
+  - Its own constants (what is fixed for this phase).
+  - Its own variables (what changes per invocation in this phase).
+  - Its own IMO (input to this phase, processing, output from this phase).
+  - Its own Go/No-Go gate.
+  For each phase, ask: "Is this the minimum number of steps to produce the output?"
+  If any phase can be eliminated by moving its work to constants, eliminate it.
+- Output: Complete workflow with phases, each structured as an IMO with Go/No-Go gates.
 
-### Phase 3 — Initialize (Spoke 3)
+**CTB:**
+- Trunk: The overall workflow.
+- Branches: Individual phases.
+- Leaves: Phase-specific constants, variables, IMO, and gates.
 
-**Constants for this phase:**
-- New skills always use `init_skill.py`. No exceptions.
-- Existing skills skip this phase.
+**Circle:**
+- Validation: Walk through the workflow mentally with a concrete example. Does each
+  phase produce what the next phase needs? Does every Go/No-Go gate have a clear
+  pass/fail criterion?
+- Feedback: If a phase's output doesn't match the next phase's input, the interface
+  is broken. Fix the phase or add a missing phase.
 
-**Execute:**
+**Go/No-Go:** Every phase has IMO + Go/No-Go. No phase calls another phase directly.
+Concrete example walks through cleanly. Proceed.
 
-```bash
-python skills/skill-creator/scripts/init_skill.py <skill-name>
-```
+---
 
-This creates the scaffold at `skills/<skill-name>/` with proper frontmatter, placeholder SKILL.md, and example resource directories.
+### BLOCK 5: Skill Organization
+**Governed by: CTB**
 
-**Go/No-Go:** Does `skills/<skill-name>/SKILL.md` exist? If yes, proceed. If no, diagnose and re-run.
+**Constants:**
+- SKILL.md structure is always: Layer 0 Doctrine → IMO → Constants → Variables →
+  Workflow → Rules → Reference Pointers.
+- The frontmatter description field is the primary trigger mechanism.
+- Every skill uses progressive disclosure: frontmatter → body → references as needed.
+- Every skill earns its tokens — context is finite; every line justifies its presence.
+- Never exceed 500 lines in SKILL.md. Move details to reference files.
+- Information lives in one place only. No duplication between SKILL.md and references.
 
-### Phase 4 — Build (Spoke 4)
-
-**Constants for this phase:**
-- SKILL.md structure is always: IMO → Constants → Variables → Hub-and-Spoke → Rules → Workflow → Reference pointers.
-- The frontmatter `description` field is the primary trigger mechanism — it must state what the skill does AND when to use it.
-- Every workflow phase has a Go/No-Go gate.
-
-**Variables for this phase:**
+**Variables:**
 - The domain-specific content of each section.
-- Which reference files to point to and when.
+- Which reference files to create and when to load them.
 
-**Execute — Write SKILL.md in this order:**
+**IMO:**
+- Input: All outputs from Blocks 1-4 (scope, constants, variables, IMO, workflow).
+- Middle: Assemble the skill as a CTB:
+  - Trunk: The SKILL.md file itself — the single source of truth.
+  - Branches: Major sections (IMO, Constants, Variables, Workflow, Rules, References).
+  - Leaves: Specific content within each section.
+  Write the skill so its structure demonstrates the framework. The document IS the
+  instruction, not a description of it. Every section should be a block following the
+  block format.
+- Output: Assembled SKILL.md ready for validation.
 
-1. **YAML frontmatter** — `name` and `description`. The description is the trigger. Write it last, after the body is complete, so it accurately reflects what the skill does.
-2. **IMO block** — State the trigger, processing, and output before any other content. An LLM reading this skill must know what it is executing before it reads the instructions.
-3. **Constants block** — List everything that is fixed about this skill regardless of invocation. No tool names. No implementation details. Structural truths only.
-4. **Variables block** — List everything that changes per invocation. This is where tool names, configuration values, and domain-specific parameters live.
-5. **Hub-and-Spoke map** — Name the hub. Name the spokes. Show the interface between each spoke and the hub as a table. An LLM reading this map must be able to identify the processing center and the transport pipes without reading any other section.
-6. **Rules/Boundaries** — What this skill NEVER does. This is the highest-value section. State hard constraints explicitly. "Never" is a constant. Boundaries prevent the most common failure modes.
-7. **Workflow** — Step-by-step execution with Go/No-Go gates. Each phase is a spoke. Each phase has its own Constants, Variables, and Go/No-Go. The workflow is not prose — it is an executable sequence.
-8. **Reference pointers** — State which reference files exist, what they contain, and when to load them. Do not duplicate their content in SKILL.md.
+**CTB:**
+- Trunk: SKILL.md
+- Branches: Each major section.
+- Leaves: Content within sections + reference file pointers.
 
-**Consult these reference files for established patterns:**
-- Multi-step processes: `skills/skill-creator/references/workflows.md`
-- Output formats: `skills/skill-creator/references/output-patterns.md`
-- Progressive disclosure: `skills/skill-creator/references/progressive-disclosure-patterns.md`
+**Circle:**
+- Validation: Does the skill read top-to-bottom without requiring the reader to jump
+  around? Does each section build on the previous? Is the progressive disclosure clean?
+- Feedback: If the organization is confusing, the CTB is wrong — the trunk/branch/leaf
+  assignment needs rework. Return to this block and reorganize.
 
-**Reference file maturity caveat — Constants:**
-- Reference files are living documents. They accumulate proven doctrine from real usage.
-- A reference file is scaffolding until it has been exercised on at least three real skills built through this pipeline.
-- Do not treat reference file patterns as proven constants until they carry that history.
-- When a reference file pattern fails on a real skill, update the reference file. That is the iteration loop.
+**Go/No-Go:** SKILL.md assembled. Under 500 lines. No duplication. Progressive disclosure
+clean. Proceed.
 
-**Go/No-Go (Swap Test — Defined Rubric):**
+---
 
-The swap test is a human-executed gate, not an automated check. Execute it as follows:
+### BLOCK 6: Rules & Boundaries
+**Governed by: C&V**
 
-1. Send the completed SKILL.md to a second LLM in a fresh session with zero prior context.
-2. Give it one concrete example from Phase 1 and ask it to execute the skill.
-3. Compare the output against your expected output on three criteria:
-   - **Constants match** — did the second LLM identify the same fixed elements?
-   - **Variables match** — did it identify the same configurable elements?
-   - **IMO match** — did it produce the same trigger/processing/output decomposition?
+**Constants:**
+- Every skill has a Rules section stating what it NEVER does.
+- "Never" is a constant. Boundaries are the highest-value section of any skill.
+- Rules prevent the most common failure modes before they happen.
+- Rules are constraints expressed as constants — they reduce the variable space by
+  eliminating entire categories of behavior.
 
-**Pass:** All three criteria match. Proceed to Phase 5.
-**Fail:** Any mismatch. Identify which section caused the deviation — that is a missing constant, a missing boundary, or an ambiguous workflow step. Fix it and re-run the swap test.
+**Variables:**
+- The specific rules for this domain.
+- The specific failure modes being prevented.
 
-**Constants for this gate:**
-- The swap test is always run on a fresh session with no prior context.
-- A mismatch in Constants is the highest-severity failure — it means the skill's structural truths are not stated clearly enough.
+**IMO:**
+- Input: The assembled skill from Block 5 + real-world knowledge of failure modes.
+- Middle: For each constant and each workflow phase, ask: "What is the most common way
+  an LLM will screw this up?" State the answer as a "Never" rule. Each rule is a
+  constant that eliminates a class of variables (failure modes).
+  Also add these universal rules that apply to every skill:
+  - Never put tool names in the Constants block.
+  - Never skip the Constants/Variables separation.
+  - Never write a skill that describes the framework without demonstrating it.
+  - Never deliver a skill that fails the swap test.
+  - Never let reference files duplicate SKILL.md content.
+- Output: Complete Rules section for the skill.
 
-**Variables for this gate:**
+**CTB:**
+- Trunk: The Rules section.
+- Branches: Domain-specific rules + universal rules.
+- Leaves: Individual "Never" statements.
+
+**Circle:**
+- Validation: For each rule, can you describe the specific failure it prevents? If you
+  cannot, the rule is vague — sharpen it or remove it.
+- Feedback: If failures are occurring that no rule covers, add a rule. This block is
+  never truly finished — it grows with real usage.
+
+**Go/No-Go:** Every rule prevents a specific, describable failure mode. Universal rules
+included. Proceed.
+
+---
+
+### BLOCK 7: Swap Test
+**Governed by: Circle**
+
+**Constants:**
+- The swap test is always run on a fresh session with zero prior context.
+- A mismatch in Constants is the highest-severity failure.
+- The swap test has three comparison criteria: Constants match, Variables match, IMO match.
+- The swap test is human-executed, not automated.
+
+**Variables:**
 - The specific example used for the test.
-- The second LLM used for comparison.
+- The specific second LLM used for comparison.
+- The specific results of the comparison.
 
-### Phase 5 — Validate (Spoke 5)
+**IMO:**
+- Input: The complete assembled skill from Blocks 1-6.
+- Middle: Execute the swap test:
+  1. Send SKILL.md to a second LLM in a fresh session with zero context.
+  2. Give it one concrete example and ask it to execute the skill.
+  3. Compare output on three criteria:
+     - Constants match: Did the second LLM identify the same fixed elements?
+     - Variables match: Did it identify the same configurable elements?
+     - IMO match: Did it produce the same trigger/processing/output decomposition?
+- Output: PASS (all three match) or FAIL (identify which criterion failed and which
+  block produced the deviation).
 
-**Constants for this phase:**
+**CTB:**
+- Trunk: The swap test verdict (PASS/FAIL).
+- Branches: Each comparison criterion.
+- Leaves: Specific matches or mismatches.
+
+**Circle:**
+- Validation: PASS means the skill is LLM-agnostic and context-independent. This is
+  the definition of "done."
+- Feedback: FAIL routes correction to the specific block that produced the mismatch:
+  - Constants mismatch → return to Block 2 (constant extraction).
+  - Variables mismatch → return to Block 2 (variable identification).
+  - IMO mismatch → return to Block 3 (process definition).
+  - Workflow confusion → return to Block 4 (workflow design).
+  - Organizational confusion → return to Block 5 (skill organization).
+  - Missing rule → return to Block 6 (rules & boundaries).
+
+**Go/No-Go:** PASS = proceed to validation. FAIL = return to identified block.
+
+---
+
+### BLOCK 8: Automated Validation
+**Governed by: Circle**
+
+**Constants:**
 - Validation is always run before delivery. No exceptions.
 - A skill that fails validation is not delivered.
+- Validation is automated via quick_validate.py.
 
-**Execute:**
+**Variables:**
+- The specific validation errors (if any).
 
-```bash
-python skills/skill-creator/scripts/quick_validate.py <skill-name>
-```
+**IMO:**
+- Input: Swap-tested skill from Block 7.
+- Middle: Run automated validation:
+  ```bash
+  python skills/skill-creator/scripts/quick_validate.py <skill-name>
+  ```
+- Output: All checks passed OR specific errors to fix.
 
-If validation fails, fix the errors and re-run. Do not deliver until validation passes.
+**CTB:**
+- Trunk: Validation verdict (PASS/FAIL).
+- Branches: Individual checks.
+- Leaves: Specific pass/fail per check.
 
-**Go/No-Go:** Does `quick_validate.py` report all checks passed? If yes, proceed to delivery. If no, fix and re-validate.
+**Circle:**
+- Validation: Automated — the script runs the checks.
+- Feedback: If validation fails, fix errors and re-run. Do not deliver until clean.
 
-### Phase 6 — Deliver (Spoke 6)
-
-**Constants for this phase:**
-- Delivery is the SKILL.md path plus confirmation of validation pass.
-
-**Execute:**
-Present the validated skill path to the user:
-
-```
-skills/<skill-name>/SKILL.md
-```
-
-**Go/No-Go:** Skill delivered. Task complete. Iterate based on real usage.
+**Go/No-Go:** quick_validate.py reports all checks passed. Proceed to delivery.
 
 ---
 
-## Constant-First Principle (Applied to Skill Design)
+### BLOCK 9: Delivery
+**Governed by: IMO**
 
-Constants first. Variables are a last resort.
+**Constants:**
+- Delivery is the SKILL.md path plus confirmation of swap test and validation pass.
+- The delivered skill must be executable by any LLM without prior context.
 
-Every time something is labeled a Variable in a skill, you are committing to writing guard rails, conditional handling, and validation logic. Every time something is locked as a Constant, the skill gets simpler and more predictable. If you can make it a constant, make it a constant. Only declare a Variable when the value genuinely cannot be known at design time.
+**Variables:**
+- The specific skill path.
 
-The funnel is a constant-reduction machine. Each phase of the workflow eliminates a class of unknowns. By the time the LLM reaches Phase 6, the only things still open are the true variables — the ones that cannot be resolved by design. Everything else has been classified, handled, and exited cleanly by a prior phase.
+**IMO:**
+- Input: Validated skill from Block 8.
+- Middle: Present the skill package to the user:
+  ```
+  skills/<skill-name>/SKILL.md
+  ```
+- Output: Skill delivered. Task complete.
 
-A variable is an edge function. If a skill has many variables, it has too many edge functions. That is a design gap, not a feature. High variable count means the Constants block is incomplete.
+**CTB:**
+- Trunk: The delivered skill package.
+- Branches: SKILL.md + reference files + scripts (if any).
+- Leaves: Individual files.
 
-**Diagnostic:** If an LLM executing this skill frequently hits OTHER (unclassified behavior), a phase or a constant is missing. That is your signal to return to Phase 1 and re-examine the domain scope.
+**Circle:**
+- Validation: User confirms receipt.
+- Feedback: Iteration begins — see Block 10.
+
+**Go/No-Go:** Skill delivered. Move to iteration.
+
+---
+
+### BLOCK 10: Iteration Protocol
+**Governed by: Circle**
+
+**Constants:**
+- Every skill improves through real usage, not through speculation.
+- Deviation from expected output signals a specific gap: missing constant, missing rule,
+  or missing workflow phase.
+- High ERROR table volume means a workflow gate or Constants block entry is missing.
+  Fix the skill, not the error handler.
+- The swap test remains the definition of "done" across all iterations.
+
+**Variables:**
+- The specific deviations observed in real usage.
+- The specific fixes applied.
+
+**IMO:**
+- Input: Real-world usage data — where did the LLM deviate from expected output?
+- Middle: Diagnose the deviation:
+  1. Is it a Constants gap? → Return to Block 2, add the missing constant.
+  2. Is it a Rules gap? → Return to Block 6, add the missing boundary.
+  3. Is it a Workflow gap? → Return to Block 4, add or refine a phase.
+  4. Is it an IMO gap? → Return to Block 3, clarify the process.
+  5. Is it an Organization gap? → Return to Block 5, restructure.
+  6. Is it unclassifiable (OTHER)? → Log to error table. Do not guess. Ask the user.
+- Output: Specific correction routed to specific block. Re-run Blocks 7-9 after fix.
+
+**CTB:**
+- Trunk: The iteration cycle.
+- Branches: Diagnosis categories (constants gap, rules gap, workflow gap, etc.).
+- Leaves: Specific deviations and their fixes.
+
+**Circle:**
+- Validation: After fix, does the swap test still pass? If not, the fix broke something.
+  Back-propagate.
+- Feedback: This block never closes. Every real-world use is an input to this block.
+  The skill is alive as long as it is in use.
+
+**Go/No-Go:** N/A — this block runs continuously. The goal: a skill that produces
+identical output regardless of which LLM executes it, in which session, with no prior
+context. That is the swap test. That is done.
 
 ---
 
 ## CTB Backbone Mapping
 
-When a skill produces output that writes to a database, the output maps to CTB leaf types:
-
+When a skill produces output that writes to a database:
 - Confirmed, validated output → CANONICAL table write via registered promotion path.
 - Unclassified or failed output → ERROR table write.
 
-The skill's workflow IS the promotion path. No data reaches a CANONICAL table without completing the skill's workflow gates — same as no data reaches a CANONICAL table in CTB without a registered promotion path. The skill enforces promotion at the application layer. CTB enforces it at the database layer. Two altitudes, same architecture.
-
-**Diagnostic:** High ERROR table volume means a workflow gate or a Constants block entry is missing. Fix the skill, not the error handler.
+The skill's workflow IS the promotion path. Canonical = constants that survived. Error =
+variables that didn't. Two altitudes, same architecture.
 
 ---
 
@@ -275,21 +469,28 @@ The skill's workflow IS the promotion path. No data reaches a CANONICAL table wi
 
 | File | Contains | Load When |
 |------|----------|-----------|
-| `references/workflows.md` | Established multi-step process patterns | Phase 4 — building workflow sections |
-| `references/output-patterns.md` | Standard output format patterns | Phase 4 — defining egress format |
-| `references/progressive-disclosure-patterns.md` | Context-efficient information layering | Phase 4 — structuring reference pointers |
+| `references/workflows.md` | Established multi-step process patterns | Block 4 — designing workflow |
+| `references/output-patterns.md` | Standard output format patterns | Block 3 — defining IMO egress |
+| `references/progressive-disclosure-patterns.md` | Context-efficient information layering | Block 5 — organizing skill |
+| `references/operators-checklist.md` | Step-by-step execution checklist | Any time — operator's manual |
 
 Do not duplicate reference file content in this SKILL.md. Load as needed.
 
 ---
 
-## Iteration
+## The Constant-First Principle
 
-After delivering a skill, iterate based on real usage:
+Constants first. Variables are a last resort.
 
-1. Use the skill on real tasks.
-2. Notice where the LLM deviates from expected output — that is a Constants gap or a missing Go/No-Go gate.
-3. Identify whether the fix is a new constant (add to Constants block), a new boundary (add to Rules), or a new workflow phase (add a spoke).
-4. Implement the fix, re-run validation, re-deliver.
+Every variable commits you to guard rails, conditional handling, and validation logic.
+Every constant simplifies the skill and makes it more predictable. If you can make it a
+constant, make it a constant. Only declare a variable when the value genuinely cannot be
+known at design time.
 
-**The goal:** A skill that produces identical output regardless of which LLM executes it, in which session, with no prior context. That is the swap test. That is done.
+The gate mechanism is a constant-reduction machine. Each gate eliminates a class of
+unknowns. By the time the LLM reaches Block 9, the only things still open are the true
+variables — the ones that cannot be resolved by design. Everything else has been
+classified, locked, and exited cleanly by a prior block.
+
+A variable is an edge function. High variable count means the Constants block is
+incomplete. That is a design gap, not a feature.
