@@ -258,6 +258,82 @@ tools:
     accuracy: "N/A"
     accuracy_notes: "Visual verification tool — pixel-accurate rendering via real browser"
 
+  - tool_id: "TOOL-016"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-032"
+    software:
+      primary: "shadcn/ui MCP"
+      alternatives: ["@jpisnice/shadcn-ui-mcp-server"]
+      dependencies: ["shadcn"]
+      vendor: "shadcn (official)"
+      requires_api_key: false
+      source: "https://ui.shadcn.com/docs/mcp"
+      install: "claude mcp add shadcn-ui -- npx shadcn@latest mcp"
+    purpose:
+      summary: "Direct component lookup — query available shadcn/ui components, props, variants instead of guessing"
+      what_it_does:
+        - "Browse available components from any shadcn-compatible registry"
+        - "Search for specific components by name or category"
+        - "Install components directly into the project via natural language"
+        - "Return exact API surface — props, variants, slots — for deterministic usage"
+      what_it_does_NOT_do:
+        - "Design decisions — component selection is human/doctrine-driven"
+        - "Runtime rendering or preview"
+        - "Replace reading component source code for complex customization"
+    usage_doctrine: |
+      Determinism over hallucination. When building React UI with shadcn/ui,
+      Claude looks up the exact component API from the registry instead of
+      guessing props or variants from training data. Registry is source of truth.
+    throttle:
+      rate_limits:
+        - {scope: "per_component_lookup", limit: 50, notes: "Generous — lookups are free and fast"}
+      cost: {model: "free", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "none", max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "registry_unreachable", action: "fallback_to_local_node_modules"}
+      timeout: {max_seconds: 15}
+    accuracy: "N/A"
+    accuracy_notes: "Registry lookup — returns exact published component API"
+
+  - tool_id: "TOOL-017"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-033"
+    software:
+      primary: "a11y-mcp"
+      alternatives: ["a11y-mcp-server", "mcp-accessibility-scanner"]
+      dependencies: ["a11y-mcp", "axe-core", "puppeteer"]
+      vendor: "Community (priyankark)"
+      requires_api_key: false
+      source: "https://github.com/priyankark/a11y-mcp"
+      install: "claude mcp add a11y -- npx a11y-mcp"
+    purpose:
+      summary: "Accessibility auditing with axe-core — catches WCAG violations before they ship"
+      what_it_does:
+        - "Run axe-core accessibility audits on any webpage URL"
+        - "Filter by WCAG tag (wcag2a, wcag2aa, wcag21aa, best-practice)"
+        - "Return detailed violation reports with element selectors and fix suggestions"
+        - "Summary mode for quick pass/fail gate checks"
+      what_it_does_NOT_do:
+        - "Fix accessibility issues automatically — reports only"
+        - "Test keyboard navigation flows or screen reader compatibility"
+        - "Replace manual accessibility testing by disabled users"
+    usage_doctrine: |
+      Gate check, not afterthought. Run a11y audit after any UI build before
+      declaring the page complete. WCAG 2.1 AA is the minimum bar.
+      Violations are bugs, not suggestions.
+    throttle:
+      rate_limits:
+        - {scope: "per_page_audit", limit: 20, notes: "Max 20 audits per session"}
+      cost: {model: "free", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "none", max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "puppeteer_crash_or_timeout", action: "log_and_skip"}
+      timeout: {max_seconds: 30}
+    accuracy: "N/A"
+    accuracy_notes: "axe-core engine — industry-standard WCAG rule set, deterministic"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # TIER 1: GENERIC CHEAP TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════

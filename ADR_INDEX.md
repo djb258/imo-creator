@@ -40,6 +40,8 @@
 | ADR-029 | imo-creator | 2026-03-12 | CLI-Anything Tool Registration (TOOL-013) | ACCEPTED | Register CLI-Anything in SNAP_ON_TOOLBOX.yaml as Tier 0 — generates CLI wrappers for GUI-only software |
 | ADR-030 | imo-creator | 2026-03-12 | UI/UX Pro Max Tool Registration (TOOL-014) | ACCEPTED | Register UI/UX Pro Max design intelligence skill in SNAP_ON_TOOLBOX.yaml as Tier 0 — deterministic design lookup for non-designers |
 | ADR-031 | imo-creator | 2026-03-12 | Dev-Browser / Playwright MCP Tool Registration (TOOL-015) | ACCEPTED | Register Dev-Browser / Playwright MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — visual QA circle for frontend verification |
+| ADR-032 | imo-creator | 2026-03-12 | shadcn/ui MCP Tool Registration (TOOL-016) | ACCEPTED | Register shadcn/ui MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — deterministic component API lookup from official registry |
+| ADR-033 | imo-creator | 2026-03-12 | a11y-mcp Tool Registration (TOOL-017) | ACCEPTED | Register a11y-mcp in SNAP_ON_TOOLBOX.yaml as Tier 0 — axe-core WCAG accessibility auditing gate |
 
 ---
 
