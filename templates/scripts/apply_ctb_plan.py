@@ -8,7 +8,7 @@ Integrates with:
 - Obsidian (doctrine documentation sync)
 - Git Projects (task generation from manifest)
 - GitKraken (visual diff and tree visualization)
-- Lovable.dev (CTB tree rendering)
+- CF Pages (CTB tree rendering)
 
 Usage:
     python apply_ctb_plan.py [ctb_plan.json]
@@ -374,7 +374,7 @@ def main():
     print(f"  • Obsidian sync: Check docs/ for new .md files")
     print(f"  • Git Projects: Manifest available for task generation")
     print(f"  • GitKraken: Open to see visual CTB tree")
-    print(f"  • Lovable.dev: Can render CTB from {MANIFEST_FILE}")
+    print(f"  • CF Pages: Can render CTB from {MANIFEST_FILE}")
     print("")
 
 if __name__ == "__main__":

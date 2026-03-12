@@ -366,7 +366,7 @@ hives:
         blueprint_link: "firebase://blueprints/mkt-sales-navigator"
 
       - name: mkt-analytics-dashboard
-        description: "Looker + Supabase visualization layer + KPI tracking"
+        description: "Looker + CF Pages visualization layer + KPI tracking"
         altitude: 10k
         status: active
         primary_owner: "[OWNER_NAME]"
@@ -376,7 +376,7 @@ hives:
         tech_stack:
           - "Next.js"
           - "Looker"
-          - "Supabase"
+          - "CF Pages"
           - "D3.js"
         key_features:
           - "Real-time KPI dashboards"

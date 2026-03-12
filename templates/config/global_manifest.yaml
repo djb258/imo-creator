@@ -404,14 +404,16 @@ mcp_integration:
     database_operations:
       # Database operations MUST use direct connections
       # Composio does NOT provide database tools (neon_execute_sql does NOT exist)
-      method: "direct_pg_client"
-      connection_source: "DATABASE_URL"  # Use environment variable
+      method: "d1_binding"
+      connection_source: "D1 binding (wrangler.toml)"  # CF Workers D1 database
       pattern: |
-        const { Client } = require('pg');
-        const client = new Client({ connectionString: process.env.DATABASE_URL });
-        await client.connect();
-        const result = await client.query(sql);
-        await client.end();
+        // In CF Worker handler:
+        export default {
+          async fetch(request, env) {
+            const result = await env.DB.prepare(sql).all();
+            return Response.json(result);
+          }
+        };
 
       # What to use Composio for:
       composio_for:
@@ -1146,7 +1148,7 @@ error_log_registry:
       - all_agents
     read:
       - repo-dashboard
-      - lovable
+      - cf-pages
       - deepwiki
   enforcement:
     required_on_repo_build: true
