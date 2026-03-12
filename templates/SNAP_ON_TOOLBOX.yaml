@@ -143,6 +143,43 @@ tools:
     accuracy: "90%"
     accuracy_notes: "URL exists != person still there"
 
+  CLIAnything:
+    tool_id: "TOOL-013"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-029"
+    software:
+      primary: "CLI-Anything"
+      dependencies: []
+      vendor: null
+      requires_api_key: false
+      source: "https://github.com/HKUDS/CLI-Anything"
+    purpose:
+      summary: "Generate CLI wrappers for any software — makes GUI apps agent-controllable"
+      what_it_does:
+        - "Analyze codebase and generate structured CLI harness"
+        - "PEP 420 namespace package output with JSON mode"
+        - "REPL mode, undo/redo, test suite generation"
+      what_it_does_NOT_do:
+        - "Replace existing APIs, MCP servers, or Composio toolkits"
+        - "Runtime LLM decisions — output is deterministic CLI"
+    usage_doctrine: |
+      CLI-Anything is LAST RESORT. Before using, check in order:
+      1. Composio toolkit exists? → Use Composio
+      2. MCP server exists? → Use MCP
+      3. REST API exists? → Use direct API
+      4. None of the above? → CLI-Anything
+    throttle:
+      rate_limits:
+        - {scope: "per_run", limit: 1, notes: "Local tool, one generation at a time"}
+      cost: {model: "free", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "none", max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "generation_failure", action: "abort_no_retry"}
+      timeout: {max_seconds: 300}
+    accuracy: "N/A"
+    accuracy_notes: "Code generation tool — quality depends on target codebase"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # TIER 1: GENERIC CHEAP TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════
