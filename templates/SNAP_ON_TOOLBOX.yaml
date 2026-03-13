@@ -334,6 +334,45 @@ tools:
     accuracy: "N/A"
     accuracy_notes: "axe-core engine — industry-standard WCAG rule set, deterministic"
 
+  - tool_id: "TOOL-018"
+    tier: 0
+    status: "active"
+    adr_ref: "ADR-034"
+    software:
+      primary: "Supadata"
+      alternatives: ["@supadata/js (SDK)", "direct REST API"]
+      dependencies: ["@supadata/mcp"]
+      vendor: "Supadata (rafalzawadzki)"
+      requires_api_key: true
+      source: "https://supadata.ai/"
+      install: "claude mcp add supadata -e SUPADATA_API_KEY=<key> -- npx -y @supadata/mcp"
+    purpose:
+      summary: "Video transcript extraction + web scraping — data ingestion spoke"
+      what_it_does:
+        - "Extract transcripts from YouTube, TikTok, Instagram, Facebook, Twitter videos"
+        - "Scrape web pages and return clean structured Markdown"
+        - "AI-powered structured data extraction from video content"
+        - "Batch processing for multiple URLs"
+      what_it_does_NOT_do:
+        - "Analyze, process, or make decisions on ingested content — spoke only"
+        - "Store data — returns results for hub to persist"
+        - "Generate content — extraction and transformation only"
+    usage_doctrine: |
+      Data ingestion SPOKE. Feeds raw content INTO the system for hub processing.
+      Does not process, analyze, or decide. Hub-spoke discipline applies.
+      Free tier: 100 requests — use judiciously for testing.
+    throttle:
+      rate_limits:
+        - {scope: "per_session", limit: 20, notes: "Max 20 transcript/scrape calls per session"}
+        - {scope: "free_tier_total", limit: 100, notes: "Free tier cap — monitor usage"}
+      cost: {model: "freemium", estimated_cost_per_call: 0.00}
+      backoff: {strategy: "exponential", max_retries: 2}
+    guardrails:
+      kill_switch: {trigger: "rate_limit_exceeded", action: "stop_and_warn"}
+      timeout: {max_seconds: 30}
+    accuracy: "N/A"
+    accuracy_notes: "Deterministic transcript extraction — returns raw video captions and page content"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # TIER 1: GENERIC CHEAP TOOLS
 # ═══════════════════════════════════════════════════════════════════════════════

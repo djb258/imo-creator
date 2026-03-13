@@ -42,6 +42,7 @@
 | ADR-031 | imo-creator | 2026-03-12 | Dev-Browser / Playwright MCP Tool Registration (TOOL-015) | ACCEPTED | Register Dev-Browser / Playwright MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — visual QA circle for frontend verification |
 | ADR-032 | imo-creator | 2026-03-12 | shadcn/ui MCP Tool Registration (TOOL-016) | ACCEPTED | Register shadcn/ui MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — deterministic component API lookup from official registry |
 | ADR-033 | imo-creator | 2026-03-12 | a11y-mcp Tool Registration (TOOL-017) | ACCEPTED | Register a11y-mcp in SNAP_ON_TOOLBOX.yaml as Tier 0 — axe-core WCAG accessibility auditing gate |
+| ADR-034 | imo-creator | 2026-03-13 | Supadata MCP Tool Registration (TOOL-018) | ACCEPTED | Register Supadata MCP in SNAP_ON_TOOLBOX.yaml as Tier 0 — video transcript extraction + web scraping spoke |
 
 ---
 
