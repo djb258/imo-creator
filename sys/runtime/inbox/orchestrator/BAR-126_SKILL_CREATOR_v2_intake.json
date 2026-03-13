@@ -1,0 +1,24 @@
+{
+  "packet_type": "planner_intake",
+  "bar": "BAR-126",
+  "title": "skill-creator SKILL.md v2 — Align to OPERATOR_PROFILE v4",
+  "priority": "high",
+  "created": "2026-03-13T17:00:00Z",
+  "source": "orchestrator (claude.ai)",
+  "context": "skill-creator SKILL.md updated to conform to OPERATOR_PROFILE v4. Three fixes applied: (1) Five validators instead of three — C&V and Hub-and-Spoke added as explicit validation elements in Tier 0 and Block 2. (2) Hub-and-Spoke Configuration table required in Block 4 output for skills with external I/O boundaries — matches agent skill format. (3) New Block 7 (Compliance Gate) inserted — runs OPERATOR_PROFILE Block 6 six-gate audit against skill output before swap test, with three-tier enforcement model. Block numbering shifted: old 7-10 became 8-11.",
+  "instructions": [
+    "1. Read payload at sys/runtime/inbox/orchestrator/BAR-126_SKILL_CREATOR_v2_payload.md",
+    "2. Write it to skills/skill-creator/SKILL.md (overwrite existing)",
+    "3. Verify file written correctly",
+    "4. git add skills/skill-creator/SKILL.md",
+    "5. git commit -m 'BAR-126: skill-creator SKILL.md v2 — align to OPERATOR_PROFILE v4 five-element validation'",
+    "6. Do NOT push — Dave pushes after review",
+    "7. Write confirmation to sys/runtime/outbox/builder/BAR-126_SKILL_CREATOR_v2.json"
+  ],
+  "constraints": [
+    "Do NOT modify the payload content",
+    "Do NOT update Linear",
+    "Do NOT push to remote",
+    "This is a doctrine-adjacent file — verify overwrite is clean"
+  ]
+}
