@@ -81,6 +81,19 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 |------|---------|
 | `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | Prompt and Skills Bay governance — Transformation Law, PSB artifacts, audit requirements, Garage relationship (v1.0.0) |
 
+### Operator Profile (HUMAN AUTHORITY ONLY)
+
+| File | Purpose |
+|------|---------|
+| `docs/OPERATOR_PROFILE.md` | Document of documents — operator constants, block format, five elements, compliance gate. HUMAN AUTHORITY ONLY — no LLM may modify. |
+
+### Skills System Governance
+
+| File | Purpose |
+|------|---------|
+| `skills/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules |
+| `skills/skill-creator/SKILL.md` | Skill creation engine — 10-block constant-extraction pipeline for producing new skills |
+
 ---
 
 ## TOOL DOCTRINE (CONSTITUTIONAL)
@@ -382,6 +395,8 @@ Drift is a child repo problem, not a template problem.
 5. **Changes require ADR. No shortcuts.**
 6. **Drift is a bug. Templates are correct.**
 7. **Determinism first. LLM as tail only.**
+8. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**
+9. **Skills use the block format. Five elements validate every constant.**
 
 ---
 

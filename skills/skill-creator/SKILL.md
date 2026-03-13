@@ -15,15 +15,17 @@ output is a skill package — a locked set of constants structured for LLM execu
 
 **One Objective:** Extract constants from the domain.
 
-**Three Validators:** Every candidate constant must survive all three:
-- IMO: Does it stay fixed regardless of what flows through the process?
-- CTB: Does it stay fixed at every level of the hierarchy?
-- Circle: Does it still hold after a full feedback cycle?
+**Five Elements:** Every candidate constant must survive all five:
+1. C&V — The OBJECTIVE. Separate fixed from changing.
+2. IMO — The PROCESS. Does it hold regardless of what flows through?
+3. CTB — The HIERARCHY. Does it hold at every level?
+4. Hub-and-Spoke — The PHYSICAL MODEL. Is the rim/spoke/hub separation clean?
+5. Circle — The VALIDATION. Does it hold after a full feedback cycle?
 
 **Block Architecture:** This skill is built from blocks. Each block is governed by one of
-the four elements (C&V, IMO, CTB, Circle). Every block — regardless of its governing
-element — follows the same internal format defined by all four elements. The number of
-blocks is determined by the domain. The format per block is the constant.
+the five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle). Every block — regardless of its
+governing element — follows the same internal format defined by all five elements. The
+number of blocks is determined by the domain. The format per block is the constant.
 
 ---
 
@@ -65,7 +67,7 @@ Go/No-Go: The gate. What must be true before proceeding to the next block.
 **Constants:**
 - Every skill has a single, unambiguous trigger condition.
 - Every skill has a testable output (the swap test).
-- The two-question entry: "What triggers this?" and "How do we get it?"
+- The three-question entry: "What triggers this?", "How do we get it?", and "How does this skill validate its output?"
 
 **Variables:**
 - The specific domain being skilled.
@@ -74,7 +76,7 @@ Go/No-Go: The gate. What must be true before proceeding to the next block.
 **IMO:**
 - Input: User request — "I need a skill that does X."
 - Middle: Apply C&V lens. What is fixed about this domain regardless of implementation?
-  What changes per invocation? Ask the two-question entry. If either question cannot be
+  What changes per invocation? Ask the three-question entry. If any question cannot be
   answered, stop and ask the user.
 - Output: Confirmed domain scope with initial constants and variables separated.
 
@@ -87,7 +89,7 @@ Go/No-Go: The gate. What must be true before proceeding to the next block.
 - Validation: Can you state in one sentence what triggers this skill and what it produces?
 - Feedback: If no, return to user for clarification. Do not proceed with ambiguity.
 
-**Go/No-Go:** Trigger and output are unambiguous. Both entry questions answered. Proceed.
+**Go/No-Go:** Trigger and output are unambiguous. All three entry questions answered. Proceed.
 
 ---
 
@@ -96,7 +98,7 @@ Go/No-Go: The gate. What must be true before proceeding to the next block.
 
 **Constants:**
 - Constants first. Variables are a last resort.
-- Every candidate constant must survive all three validators (IMO/CTB/Circle).
+- Every candidate constant must survive all five elements (C&V/IMO/CTB/Hub-and-Spoke/Circle).
 - A constant that names a specific tool is not a constant — it is a mislabeled variable.
 - Constants are structural truths. Variables are implementation details.
 
@@ -108,13 +110,15 @@ Go/No-Go: The gate. What must be true before proceeding to the next block.
 - Input: Domain scope from Block 1.
 - Middle: Run the gate mechanism. At each gate:
   1. Identify a candidate constant.
-  2. Validate with IMO: Does it hold regardless of what flows through?
-  3. Validate with CTB: Does it hold at every level of the hierarchy?
-  4. Validate with Circle: Does it hold after a full feedback cycle?
-  5. If it survives all three, lock it. Move to next gate.
-  6. Back-propagate: Does the new constant invalidate any prior constant?
-  7. If prior constant breaks, reclassify it as variable and re-run that gate.
-  8. Stop when no new constants found AND back-propagation clean.
+  2. Validate with C&V: Is this genuinely fixed, or a mislabeled variable?
+  3. Validate with IMO: Does it hold regardless of what flows through?
+  4. Validate with CTB: Does it hold at every level of the hierarchy?
+  5. Validate with Hub-and-Spoke: Is the rim/spoke/hub separation clean?
+  6. Validate with Circle: Does it hold after a full feedback cycle?
+  7. If it survives all five, lock it. Move to next gate.
+  8. Back-propagate: Does the new constant invalidate any prior constant?
+  9. If prior constant breaks, reclassify it as variable and re-run that gate.
+  10. Stop when no new constants found AND back-propagation clean.
 - Output: Locked constants list. Isolated variable space. Gate count documented.
 
 **CTB:**
@@ -284,6 +288,12 @@ clean. Proceed.
   - Never write a skill that describes the framework without demonstrating it.
   - Never deliver a skill that fails the swap test.
   - Never let reference files duplicate SKILL.md content.
+  - Every skill must declare its audit mechanism. Ask: How does output from this skill
+    get validated? If the skill produces output that reaches a human or downstream system,
+    it must declare whether it uses self-check only, cross-check (different LLM), human
+    review, or a combination. This maps to OPERATOR_PROFILE.md Block 6 three-tier
+    enforcement. Not every skill needs all three tiers — but every skill must answer
+    the question.
 - Output: Complete Rules section for the skill.
 
 **CTB:**
