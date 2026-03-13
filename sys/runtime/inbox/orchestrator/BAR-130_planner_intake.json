@@ -1,0 +1,73 @@
+{
+  "packet_type": "planner_intake",
+  "bar": "BAR-130",
+  "title": "Skill System v4 Conformance — Fixes 1 & 2 + CLAUDE.md Update",
+  "priority": "high",
+  "created": "2026-03-13T17:00:00Z",
+  "source": "orchestrator (claude.ai)",
+
+  "context": "OPERATOR_PROFILE.md v4 (BAR-126) codified the block format constant and five elements. The skill-creator SKILL.md predates this and uses only three validators. CLAUDE.md has no reference to OPERATOR_PROFILE.md or SKILLS_SYSTEM.md as locked/governed files. This packet covers Fix 1 (skill-creator Tier 0), Fix 2 (skill-creator compliance gate), and CLAUDE.md update. Fix 3 (reformat 8 existing skills) is a separate follow-on task.",
+
+  "instructions": [
+    "TASK 1 — Skill-Creator Fix 1: Tier 0 Update",
+    "  File: skills/skill-creator/SKILL.md",
+    "  Action: Replace the 'Layer 0 Doctrine' section (lines ~11-17 approx)",
+    "  Current text references 'Three Validators' (IMO/CTB/Circle)",
+    "  Replace with 'Five Elements' matching OPERATOR_PROFILE.md v4 Tier 0:",
+    "    1. C&V — The OBJECTIVE. Separate fixed from changing.",
+    "    2. IMO — The PROCESS. Does it hold regardless of what flows through?",
+    "    3. CTB — The HIERARCHY. Does it hold at every level?",
+    "    4. Hub-and-Spoke — The PHYSICAL MODEL. Is the rim/spoke/hub separation clean?",
+    "    5. Circle — The VALIDATION. Does it hold after a full feedback cycle?",
+    "  Update Block 2 (Constant Extraction) validation steps to reference all five elements instead of three",
+    "  Do NOT change any other blocks — content is solid, only the validator list needs updating",
+    "",
+    "TASK 2 — Skill-Creator Fix 2: Compliance Gate Awareness",
+    "  File: skills/skill-creator/SKILL.md",
+    "  Action: Add to Block 6 (Rules & Boundaries) a new rule:",
+    "    'Every skill must declare its audit mechanism. Ask: How does output from this skill get validated? If the skill produces output that reaches a human or downstream system, it must declare whether it uses self-check only, cross-check (different LLM), human review, or a combination. This maps to OPERATOR_PROFILE.md Block 6 three-tier enforcement. Not every skill needs all three tiers — but every skill must answer the question.'",
+    "  Also add to Block 1 (Domain Scope) a third entry question:",
+    "    'How does this skill validate its output?' — in addition to 'What triggers this?' and 'How do we get it?'",
+    "",
+    "TASK 3 — CLAUDE.md Update: Add Governing Documents",
+    "  File: CLAUDE.md",
+    "  Action: In the LOCKED FILES section, add a NEW subsection after 'Prompt and Skills Bay (CONSTITUTIONAL)':",
+    "",
+    "    ### Operator Profile (HUMAN AUTHORITY ONLY)",
+    "",
+    "    | File | Purpose |",
+    "    |------|---------|",
+    "    | `docs/OPERATOR_PROFILE.md` | Document of documents — operator constants, block format, five elements, compliance gate. HUMAN AUTHORITY ONLY — no LLM may modify. |",
+    "",
+    "    ### Skills System Governance",
+    "",
+    "    | File | Purpose |",
+    "    |------|---------|",
+    "    | `skills/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules |",
+    "    | `skills/skill-creator/SKILL.md` | Skill creation engine — 10-block constant-extraction pipeline for producing new skills |",
+    "",
+    "  Also add to the GOLDEN RULES section (after rule 7):",
+    "    8. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**",
+    "    9. **Skills use the block format. Five elements validate every constant.**"
+  ],
+
+  "constraints": [
+    "Do NOT reformat any of the 8 existing agent/platform skills — that is a separate task",
+    "Do NOT change skill-creator blocks other than Layer 0 Doctrine, Block 1, Block 2, and Block 6",
+    "Do NOT modify OPERATOR_PROFILE.md — it is HUMAN AUTHORITY ONLY",
+    "Do NOT update Linear — foreman-only",
+    "Do NOT push to remote — local commit only",
+    "Commit message: BAR-130: Skill-creator v4 conformance (fixes 1-2) + CLAUDE.md governing docs"
+  ],
+
+  "verification": [
+    "skill-creator/SKILL.md references five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle) not three validators",
+    "skill-creator Block 2 validation uses all five elements",
+    "skill-creator Block 6 includes audit mechanism rule",
+    "skill-creator Block 1 includes third entry question about output validation",
+    "CLAUDE.md LOCKED FILES has OPERATOR_PROFILE.md listed as HUMAN AUTHORITY ONLY",
+    "CLAUDE.md LOCKED FILES has SKILLS_SYSTEM.md and skill-creator listed",
+    "CLAUDE.md GOLDEN RULES has rules 8 and 9 added",
+    "No other files modified"
+  ]
+}

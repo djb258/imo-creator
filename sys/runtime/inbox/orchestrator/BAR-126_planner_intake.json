@@ -1,0 +1,24 @@
+{
+  "packet_type": "planner_intake",
+  "bar": "BAR-126",
+  "title": "OPERATOR_PROFILE.md v4 — Write to Disk + Commit",
+  "priority": "high",
+  "created": "2026-03-13T16:30:00Z",
+  "source": "orchestrator (claude.ai)",
+  "context": "OPERATOR_PROFILE.md has been pressure-tested across 6 LLMs over 3 rounds. All blocks passed. Block 6 updated with four convergent fixes from Round 3 attack surface analysis: (1) three-tier enforcement model, (2) all gates fire on every response, (3) max 3 rewrite attempts then escalate, (4) principle-based Gate 2 rejection.",
+  "instructions": [
+    "1. Read payload at sys/runtime/inbox/orchestrator/BAR-126_OPERATOR_PROFILE_v4_payload.md",
+    "2. Write it to docs/OPERATOR_PROFILE.md (overwrite existing)",
+    "3. Verify file written correctly",
+    "4. git add docs/OPERATOR_PROFILE.md",
+    "5. git commit -m BAR-126: OPERATOR_PROFILE.md v4 Block 6 three-tier enforcement",
+    "6. Do NOT push. Dave pushes after review.",
+    "7. Write confirmation to sys/runtime/outbox/builder/BAR-126_OPERATOR_PROFILE_v4.json"
+  ],
+  "constraints": [
+    "Do NOT modify the payload content",
+    "Do NOT update Linear",
+    "Do NOT push to remote",
+    "HUMAN AUTHORITY ONLY file"
+  ]
+}
