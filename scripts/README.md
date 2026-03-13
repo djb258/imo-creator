@@ -15,6 +15,9 @@ These scripts operate on the **imo-creator repo** directly. They are NOT templat
 | `fleet-status.ps1` | Fleet health check (Windows equivalent) |
 | `adr-check.sh` | ADR index audit — compares `ADR_INDEX.md` against actual ADR files found in fleet repos |
 | `adr-check.ps1` | ADR index audit (Windows equivalent) |
+| `composio-cli.sh` | Composio CLI wrapper (Git Bash) — runs CLI from Python 3.13 venv |
+| `composio-cli.ps1` | Composio CLI wrapper (PowerShell) |
+| `composio-cli-setup.sh` | One-time venv setup for Composio CLI |
 
 ### Fleet Scripts
 
