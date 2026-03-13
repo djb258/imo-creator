@@ -1,0 +1,131 @@
+{
+  "synopsis_type": "inbox_cleanup",
+  "date": "2026-03-13",
+  "agent": "builder (Claude Code)",
+  "action": "Cleared 18 completed work packets from inbox (16 builder + 2 work_packets)",
+
+  "completed_work_packets": [
+    {
+      "id": "wp-20260303-fleet-inventory-cl-reconcile",
+      "target": "imo-creator",
+      "summary": "Fleet inventory reconciliation for company-lifecycle-cl"
+    },
+    {
+      "id": "wp-20260304-planner-barrel-allowed-paths-repair",
+      "target": "imo-creator",
+      "summary": "Planner barrel allowed_paths repair"
+    },
+    {
+      "id": "wp-20260305-adr027-deltahound-scheduler-selection",
+      "target": "barton-outreach-core",
+      "summary": "ADR-027 DeltaHound scheduler selection"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase1-bootstrap",
+      "target": "imo-creator",
+      "summary": "Field Monitor phase 1 bootstrap — Neon schema + CTB triggers + indexes"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase1-bootstrap-r2",
+      "target": "imo-creator",
+      "summary": "Field Monitor phase 1 bootstrap requeue — Neon schema + Workers scaffold"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase2-spoke-deploy",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor phase 2 — spoke deployment"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase3-orchestrator-deploy",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor phase 3 — orchestrator deployment"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase4-scheduler-deploy",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor phase 4 — scheduler deployment"
+    },
+    {
+      "id": "wp-20260305-field-monitor-phase5-integration-gate",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor phase 5 — integration gate"
+    },
+    {
+      "id": "wp-20260306-adr027-governance-reconcile",
+      "target": "barton-outreach-core",
+      "summary": "ADR-027 governance reconciliation"
+    },
+    {
+      "id": "wp-20260306-adr027-governance-reconcile-r2",
+      "target": "barton-outreach-core",
+      "summary": "ADR-027 governance reconciliation round 2"
+    },
+    {
+      "id": "wp-20260306-blog-content-seed-bridge-repair",
+      "target": "barton-outreach-core",
+      "summary": "Blog content seed bridge repair"
+    },
+    {
+      "id": "wp-20260306-field-monitor-production-deploy",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor production deployment"
+    },
+    {
+      "id": "wp-20260306-field-monitor-subhub-integrations",
+      "target": "barton-outreach-core",
+      "summary": "Field Monitor sub-hub integrations"
+    },
+    {
+      "id": "wp-20260306-signal-sweep-blog-monitor",
+      "target": "barton-outreach-core",
+      "summary": "Signal Sweep blog monitor — field_monitor vendor tier, sample-gated 100 URLs, bridge to ingest_article()"
+    },
+    {
+      "id": "wp-20260306-talent-flow-linkedin-monitor",
+      "target": "barton-outreach-core",
+      "summary": "Talent Flow LinkedIn monitor — field_monitor vendor tier, sample-gated 100 URLs, bridge to movement engine"
+    }
+  ],
+
+  "still_in_inbox": {
+    "builder": [
+      "wp-20260303-cl-fleet-refit-cert-surfaces",
+      "wp-20260303-ctb-doctrine-db-scope-correction",
+      "wp-20260303-fix1-role-boundary-hard-refuse",
+      "wp-20260303-fix2-5-doc-lane-pipeline",
+      "wp-20260303-fix6-builder-canonical",
+      "wp-20260303-lcs-cid-sid-mid-mount-receipt-repair",
+      "wp-20260303-lcs-cid-sid-mid-pipeline",
+      "wp-20260303-lcs-cid-sid-mid-scope-repair-v2",
+      "wp-20260304-bridge-signal-output-to-lcs-queue",
+      "wp-20260304-mid-egress-lovable-allowed-path-repair",
+      "wp-20260304-mid-egress-lovable-rewire",
+      "wp-20260304-mid-egress-lovable-rewire-envelope-repair",
+      "wp-20260304-outreach-catchall-frame",
+      "wp-20260304-signal-queue-source-hub-check-repair",
+      "wp-20260304-va-green-bridge-smoke-retest",
+      "wp-20260304-va-green-cid-sid-mid-smoke-test",
+      "wp-20260305-field-monitor-phase2-spoke-deploy-r2",
+      "wp-20260306-field-monitor-marketing-db-migration",
+      "wp-20260306-signal-sweep-seed-bridge-audit-repair",
+      "wp-20260306-vendor-blog-ddl"
+    ],
+    "auditor": [
+      "wp-20260303-ctb-doctrine-db-scope-correction-audit",
+      "wp-20260303-lcs-cid-sid-mid-pipeline-audit",
+      "wp-20260304-mid-egress-lovable-allowed-path-repair-audit",
+      "wp-20260304-mid-egress-lovable-rewire-audit",
+      "wp-20260304-mid-egress-lovable-rewire-envelope-repair-audit",
+      "wp-20260304-planner-barrel-allowed-paths-repair-audit",
+      "wp-20260305-adr027-deltahound-scheduler-selection-audit",
+      "wp-20260305-field-monitor-phase3-orchestrator-deploy-audit",
+      "wp-20260305-field-monitor-phase4-scheduler-deploy-audit",
+      "wp-20260305-field-monitor-phase5-integration-gate-audit"
+    ],
+    "planner": [
+      "b7e42d19 — doctrine→company_lifecycle schema migration (CL)",
+      "c4d58a31 — audit failure repair: allowed_paths + mount_receipt (CL)",
+      "d9f17b63 — fleet refit: CI gate + audit_reports dir (CL)"
+    ]
+  }
+}
