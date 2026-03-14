@@ -1,0 +1,15 @@
+doctrine_version: "3.5.0"
+sovereign_id: "imo-creator"
+hub_id: "GARAGE"
+ctb_placement: "trunk"
+imo_topology: "middle"
+services:
+  - "garage-pipeline"
+  - "fleet-refit"
+  - "doctrine-enforcement"
+secrets_provider: "doppler"
+acceptance_criteria:
+  - "All doctrine checks pass"
+  - "All agent skills present under factory/agents/"
+  - "Fleet registry contains all child repos"
+  - "HEIR schema validation passes"
