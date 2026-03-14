@@ -479,11 +479,44 @@ Doctrine version: 1.0.0 | Effective: 2026-02-28 | Index: PSB-CONST-001
 
 ---
 
+## Agent Pipeline Protocol
+
+All agent work flows through sys/runtime/ inbox/outbox pipeline.
+
+### Architecture
+- **Claude.ai** = Foreman (writes packets, reviews auditor reports)
+- **Composio** = Bridge (commits packets to GitHub from Claude.ai)
+- **Claude Code** = Execution engine (runs all 5 agents)
+- **GitHub** = Mailbox (inbox/outbox directories)
+
+### Flow
+1. Dave + Claude.ai (Foreman) write packet
+2. Composio commits packet to sys/runtime/inbox/orchestrator/ on GitHub
+3. Claude.ai opens Claude Code → runs full chain autonomously
+4. Each agent: reads inbox → loads skill → does work → drops packet in next inbox
+5. Auditor does final QA → drops report in outbox/auditor/
+6. Foreman reviews → moves to completed/ → closes BAR
+
+### Rules
+- Foreman touches pipeline TWICE: front (write packet) and back (review Auditor)
+- Claude Code runs all agents in sequence — no human gate between stops
+- Each agent reads its skill file before processing
+- Auditor is the quality gate, not the foreman
+- Any agent can halt pipeline with status=failed
+- Packets are immutable — never edit, write new ones
+- Packet format: see sys/runtime/PACKET_CONTRACT.md
+
+### Fallback
+GitHub Actions (pipeline-trigger.yml) can invoke agents if Claude.ai is not in the loop.
+Requires ANTHROPIC_API_KEY in GitHub repo secrets.
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-06 |
-| Last Modified | 2026-02-28 |
+| Last Modified | 2026-03-14 |
 | Status | ACTIVE |
 | Authority | Human only |
