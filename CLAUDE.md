@@ -76,6 +76,12 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 |------|--------|
 | `law/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
 
+### Structure Manifest (CONSTITUTIONAL)
+
+| File | Purpose |
+|------|--------|
+| `law/STRUCTURE_MANIFEST.yaml` | Canonical directory structure declaration — allowed dirs, banned dirs, banned path references, required files. CI enforces this via scripts/structure-enforce.sh. |
+
 ### Integration Specs
 
 | File | Purpose |
