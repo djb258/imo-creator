@@ -1,0 +1,36 @@
+{
+  "id": "wp-20260305-deltahound-tool-registration",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "imo-creator",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "templates/SNAP_ON_TOOLBOX.yaml",
+    "docs/adr/ADR-026-deltahound-tool-registration.md",
+    "ADR_INDEX.md"
+  ],
+  "summary": "Register DeltaHound (TOOL-012, Tier 0) in SNAP_ON_TOOLBOX.yaml per ADR-026. Homebrew field-change detection engine — Cloudflare Workers + Neon, $0 cost. Toolbox version 2.0.0 → 2.1.0.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-05T00:00:00Z",
+  "payload": {
+    "adr_ref": "ADR-026",
+    "tool_id": "TOOL-012",
+    "tool_name": "DeltaHound",
+    "tier": 0,
+    "toolbox_version_from": "2.0.0",
+    "toolbox_version_to": "2.1.0",
+    "locked_file_modification": true,
+    "human_authorization": "explicit — ADR-026 ACCEPTED, human directed application"
+  },
+  "db_required": false,
+  "ui_required": false,
+  "container_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "docs/adr/ADR-026-deltahound-tool-registration.md",
+    "ADR_INDEX.md"
+  ],
+  "doc_surface": "mixed"
+}
