@@ -111,12 +111,12 @@ echo "================================="
 echo ""
 
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-if [ -f "templates/config/ctb.branchmap.yaml" ]; then
-    echo -e "  ${GREEN}✅${NC} templates/config/ctb.branchmap.yaml"
+if [ -f "fleet/config/ctb.branchmap.yaml" ]; then
+    echo -e "  ${GREEN}✅${NC} fleet/config/ctb.branchmap.yaml"
     PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
     # Check version
-    VERSION=$(grep "version:" templates/config/ctb.branchmap.yaml | head -1 | awk '{print $2}')
+    VERSION=$(grep "version:" fleet/config/ctb.branchmap.yaml | head -1 | awk '{print $2}')
     if [ "$VERSION" == "1.3.3" ]; then
         echo -e "      ${GREEN}✅${NC} Version: $VERSION (latest)"
     else
@@ -124,25 +124,25 @@ if [ -f "templates/config/ctb.branchmap.yaml" ]; then
         WARNING_CHECKS=$((WARNING_CHECKS + 1))
     fi
 else
-    echo -e "  ${RED}❌${NC} templates/config/ctb.branchmap.yaml - MISSING"
+    echo -e "  ${RED}❌${NC} fleet/config/ctb.branchmap.yaml - MISSING"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
 fi
 
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-if [ -f "templates/config/global_manifest.yaml" ]; then
-    echo -e "  ${GREEN}✅${NC} templates/config/global_manifest.yaml"
+if [ -f "fleet/config/global_manifest.yaml" ]; then
+    echo -e "  ${GREEN}✅${NC} fleet/config/global_manifest.yaml"
     PASSED_CHECKS=$((PASSED_CHECKS + 1))
 else
-    echo -e "  ${RED}❌${NC} templates/config/global_manifest.yaml - MISSING"
+    echo -e "  ${RED}❌${NC} fleet/config/global_manifest.yaml - MISSING"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
 fi
 
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-if [ -f "templates/scripts/ctb_init.sh" ]; then
-    echo -e "  ${GREEN}✅${NC} templates/scripts/ctb_init.sh"
+if [ -f "fleet/scripts/ctb_init.sh" ]; then
+    echo -e "  ${GREEN}✅${NC} fleet/scripts/ctb_init.sh"
     PASSED_CHECKS=$((PASSED_CHECKS + 1))
 else
-    echo -e "  ${RED}❌${NC} templates/scripts/ctb_init.sh - MISSING"
+    echo -e "  ${RED}❌${NC} fleet/scripts/ctb_init.sh - MISSING"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
 fi
 
@@ -226,7 +226,7 @@ else
     echo -e "${RED}❌ CTB Structure has ISSUES${NC}"
     echo ""
     echo "Recommended actions:"
-    echo "1. Run: ./templates/scripts/ctb_init.sh"
+    echo "1. Run: ./fleet/scripts/ctb_init.sh"
     echo "2. Ensure all required files exist"
     echo "3. Re-run this verification script"
     echo ""

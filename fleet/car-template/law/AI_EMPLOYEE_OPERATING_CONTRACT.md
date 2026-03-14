@@ -23,7 +23,7 @@ You are NOT allowed to proceed unless inheritance is explicitly bound.
 
 ## Contract Preamble
 
-This contract is INVALID unless `templates/IMO_SYSTEM_SPEC.md` has been loaded and all compliance checks PASSED.
+This contract is INVALID unless `fleet/car-template/law/IMO_SYSTEM_SPEC.md` has been loaded and all compliance checks PASSED.
 
 You are an **executor**, not a legislator.
 You are an **operator**, not a designer.
@@ -38,14 +38,14 @@ You are bound to existing doctrine. You do not create doctrine.
 Before acting, you MUST read and verify presence of:
 
 ```
-1. templates/IMO_SYSTEM_SPEC.md
-2. templates/AI_EMPLOYEE_OPERATING_CONTRACT.md (this file)
-3. templates/README.md
-4. templates/SNAP_ON_TOOLBOX.yaml
-5. templates/semantic/OSAM.md (REQUIRED for any data/ERD work)
-6. doctrine/ARCHITECTURE.md (CTB Constitutional Law v2.0.0)
-7. doctrine/TEMPLATE_IMMUTABILITY.md
-8. ALL prompts in templates/claude/
+1. fleet/car-template/law/IMO_SYSTEM_SPEC.md
+2. fleet/car-template/law/AI_EMPLOYEE_OPERATING_CONTRACT.md (this file)
+3. fleet/README.md
+4. law/SNAP_ON_TOOLBOX.yaml
+5. law/semantic/OSAM.md (REQUIRED for any data/ERD work)
+6. law/doctrine/ARCHITECTURE.md (CTB Constitutional Law v2.0.0)
+7. law/doctrine/TEMPLATE_IMMUTABILITY.md
+8. ALL prompts in fleet/prompts/
 ```
 
 If ANY file is missing:
@@ -333,7 +333,7 @@ Before this file is valid, verify:
 | Role | Description |
 |------|-------------|
 | Executor | Apply doctrine exactly as written — no interpretation |
-| Operator | Run prompts from `templates/claude/` directory only |
+| Operator | Run prompts from `fleet/prompts/` directory only |
 | Compiler | Reconcile and index existing documentation |
 | Reporter | Surface conflicts, flag ambiguity, report violations |
 | Enforcer | HALT on violations, REFUSE non-compliant requests |
@@ -638,7 +638,7 @@ IF PASS: Proceeding with task.
 | Permission | Scope |
 |------------|-------|
 | **MAY** | Read all files |
-| **MAY** | Execute prompts from `templates/claude/` directory |
+| **MAY** | Execute prompts from `fleet/prompts/` directory |
 | **MAY** | Create artifacts at CC-04 (after ALL gates pass) |
 | **MAY** | Report violations |
 | **MAY** | Surface conflicts |

@@ -160,7 +160,7 @@ jobs:
             | grep -v "./migrations/" \
             | grep -v "./node_modules/" \
             | grep -v "./.git/" \
-            | grep -v "./templates/" \
+            | grep -v "./fleet/" \
             | grep -v "./archive/" || true)
 
           if [ -n "$DDL_OUTSIDE" ]; then
@@ -233,7 +233,7 @@ jobs:
           else
             echo "::error::MISSING_GOVERNANCE_SCRIPT: scripts/verify-governance-ci.sh not found"
             echo "  Governance CI verification script is required."
-            echo "  Copy from imo-creator: templates/scripts/verify-governance-ci.sh"
+            echo "  Copy from imo-creator: fleet/scripts/verify-governance-ci.sh"
             GATE_E_STATUS="FAIL"
           fi
 

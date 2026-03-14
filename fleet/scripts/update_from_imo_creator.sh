@@ -78,10 +78,10 @@ IMO_CREATOR_PATH=""
 
 # Check argument first
 if [ -n "$IMO_ARG" ]; then
-    if [ -d "$IMO_ARG/templates/doctrine" ]; then
+    if [ -d "$IMO_ARG/law/doctrine" ]; then
         IMO_CREATOR_PATH="$IMO_ARG"
     else
-        echo -e "${RED}[ERROR]${NC} Specified path does not contain templates/doctrine/"
+        echo -e "${RED}[ERROR]${NC} Specified path does not contain law/doctrine/"
         echo "        Path: $IMO_ARG"
         exit 1
     fi
@@ -97,7 +97,7 @@ if [ -z "$IMO_CREATOR_PATH" ]; then
     )
 
     for path in "${SEARCH_PATHS[@]}"; do
-        if [ -d "$path/templates/doctrine" ]; then
+        if [ -d "$path/law/doctrine" ]; then
             IMO_CREATOR_PATH="$path"
             break
         fi
@@ -114,7 +114,7 @@ if [ -z "$IMO_CREATOR_PATH" ]; then
     exit 1
 fi
 
-MANIFEST="$IMO_CREATOR_PATH/templates/TEMPLATES_MANIFEST.yaml"
+MANIFEST="$IMO_CREATOR_PATH/fleet/TEMPLATES_MANIFEST.yaml"
 
 if [ ! -f "$MANIFEST" ]; then
     echo -e "${RED}[ERROR]${NC} TEMPLATES_MANIFEST.yaml not found in imo-creator"

@@ -104,7 +104,7 @@
     "doctrine_version": {
       "type": "string",
       "minLength": 1,
-      "description": "Must match sys/contracts/doctrine_version.json current_version."
+      "description": "Must match factory/contracts/doctrine_version.json current_version."
     },
     "timestamp": {
       "type": "string",

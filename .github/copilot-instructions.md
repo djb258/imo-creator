@@ -2,7 +2,7 @@
 
 This repository is "IMO Creator" — a meta-repository template factory that generates doctrine-compliant templates for Hub & Spoke architecture systems.
 
-**Authoritative Doctrine**: All work MUST conform to `templates/doctrine/ARCHITECTURE.md` (v2.1.0)
+**Authoritative Doctrine**: All work MUST conform to `law/doctrine/ARCHITECTURE.md` (v2.1.0)
 
 ## Canonical Chain (CC) Architecture
 
@@ -28,40 +28,43 @@ This repository operates at **CC-01 (Sovereign)** level, generating templates fo
 ## Directory Structure
 
 ```
-templates/
+law/
 ├── doctrine/         # Authoritative doctrine documents (LOCKED)
 ├── semantic/         # OSAM query routing contract (LOCKED)
-├── prd/              # Product Requirements templates
-├── adr/              # Architecture Decision Record templates
-├── pr/               # Pull Request templates
-├── checklists/       # Compliance checklists
-├── child/            # Child repo bootstrap templates
-├── claude/           # Claude Code execution prompts (LOCKED)
+├── integrations/     # Integration templates (Composio, Doppler, HEIR, etc.)
+├── registry/         # Machine-readable registries
+└── SNAP_ON_TOOLBOX.yaml  # Master tool registry
+
+fleet/
+├── car-template/     # Child repo bootstrap templates
+├── prompts/          # Claude Code execution prompts (LOCKED)
 ├── scripts/          # Automation scripts for child repos
 ├── config/           # Configuration files
-├── integrations/     # Integration templates (Composio, Doppler, HEIR, etc.)
-├── validators/       # Validator pattern documentation
-├── ai-employee/      # AI employee governance
-├── gpt/              # Custom GPT instructions
-├── audit/            # Audit attestation templates
-├── erd/              # ERD metrics templates
-└── docs/             # Architecture reference documentation
+├── checklists/       # Compliance checklists
+├── adr-templates/    # Architecture Decision Record templates
+├── pr-templates/     # Pull Request templates
+└── registry/         # Fleet registry
+
+factory/
+├── agents/           # Agent skill definitions
+├── contracts/        # Execution contracts and schemas
+└── runtime/          # Mount, runner, writer contracts
 ```
 
 ## Key Files
 
 - `CONSTITUTION.md` — What this constitution governs (repo root)
 - `CLAUDE.md` — AI agent permissions and locked file registry (repo root)
-- `templates/doctrine/ARCHITECTURE.md` — Root doctrine (v2.1.0, consolidates all architecture doctrine)
-- `templates/semantic/OSAM.md` — Query routing contract (v1.1.0)
-- `templates/SNAP_ON_TOOLBOX.yaml` — Master tool registry (check BEFORE suggesting any tool)
-- `templates/TEMPLATES_MANIFEST.yaml` — Machine-readable file index
+- `law/doctrine/ARCHITECTURE.md` — Root doctrine (v2.1.0, consolidates all architecture doctrine)
+- `law/semantic/OSAM.md` — Query routing contract (v1.1.0)
+- `law/SNAP_ON_TOOLBOX.yaml` — Master tool registry (check BEFORE suggesting any tool)
+- `fleet/TEMPLATES_MANIFEST.yaml` — Machine-readable file index
 
 ## Tool Doctrine
 
 Before suggesting ANY tool, library, or vendor:
 
-1. **Check BANNED list** in `templates/SNAP_ON_TOOLBOX.yaml` — if banned, STOP
+1. **Check BANNED list** in `law/SNAP_ON_TOOLBOX.yaml` — if banned, STOP
 2. **Check TIER 0** (free) — prefer free tools first
 3. **Check TIER 1** (cheap) — existing subscriptions
 4. **Check TIER 2** (surgical) — gated by conditions
@@ -84,7 +87,7 @@ Before suggesting ANY tool, library, or vendor:
 1. Determine CC layer scope (CC-01/02/03/04)
 2. Add Conformance section with Doctrine Version and CC Layer
 3. Include Traceability section referencing Canonical Doctrine
-4. Update `templates/TEMPLATES_MANIFEST.yaml` with new file entry
+4. Update `fleet/TEMPLATES_MANIFEST.yaml` with new file entry
 5. Run `scripts/verify_templates_manifest.sh` to confirm sync
 
 ### Modifying existing template
@@ -101,19 +104,19 @@ Before suggesting ANY tool, library, or vendor:
 ## Files to Inspect First
 
 **Doctrine (read first):**
-- `templates/doctrine/ARCHITECTURE.md`
-- `templates/semantic/OSAM.md`
+- `law/doctrine/ARCHITECTURE.md`
+- `law/semantic/OSAM.md`
 
 **Governance:**
 - `CONSTITUTION.md` — Constitutional scope and invariants
 - `CLAUDE.md` — AI permissions, locked files, enforcement
 
 **Templates:**
-- `templates/TEMPLATES_MANIFEST.yaml` — Complete file index
-- `templates/prd/PRD_HUB.md` — Hub PRD template
-- `templates/adr/ADR.md` — ADR template
-- `templates/checklists/HUB_COMPLIANCE.md` — Compliance checklist
-- `templates/SNAP_ON_TOOLBOX.yaml` — Tool registry
+- `fleet/TEMPLATES_MANIFEST.yaml` — Complete file index
+- `fleet/car-template/docs/PRD_HUB.md` — Hub PRD template
+- `fleet/adr-templates/ADR.md` — ADR template
+- `fleet/checklists/HUB_COMPLIANCE.md` — Compliance checklist
+- `law/SNAP_ON_TOOLBOX.yaml` — Tool registry
 
 ## Hard Violations (Stop Immediately)
 

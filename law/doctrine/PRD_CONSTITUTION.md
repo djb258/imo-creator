@@ -66,7 +66,7 @@ A PRD MUST declare which passes exist and in what order.
 
 ## PRD Structural Requirements
 
-Every PRD MUST contain these sections (aligned with `templates/prd/PRD_HUB.md`):
+Every PRD MUST contain these sections (aligned with `fleet/car-template/docs/PRD_HUB.md`):
 
 | Section | Constitutional Purpose |
 |---------|----------------------|

@@ -6,7 +6,7 @@ No exceptions. No partial compliance.
 **This is NOT a one-time audit.** Compliance is continuous — revalidate after every change.
 
 **This checklist MUST be referenced by an attestation document.**
-See: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
+See: `fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
 
 ## Applicability
 
@@ -807,20 +807,20 @@ If CRITICAL > 0 or HIGH > 0 and I selected COMPLIANT, this audit is INVALID.
 | Artifact | Reference |
 |----------|-----------|
 | Constitution | CONSTITUTION.md |
-| **Architecture Doctrine** | templates/doctrine/ARCHITECTURE.md |
+| **Architecture Doctrine** | law/doctrine/ARCHITECTURE.md |
 | CTB Topology | ARCHITECTURE.md Part II |
 | CC Hierarchy | ARCHITECTURE.md Part III |
 | Hub/Spoke Geometry | ARCHITECTURE.md Part IV |
 | IMO Flow | ARCHITECTURE.md Part V |
 | Descent Gates | ARCHITECTURE.md Part VI |
-| PRD Constitution | templates/doctrine/PRD_CONSTITUTION.md |
-| ERD Constitution | templates/doctrine/ERD_CONSTITUTION.md |
-| Process Doctrine | templates/doctrine/PROCESS_DOCTRINE.md |
-| ERD Doctrine | templates/doctrine/ERD_DOCTRINE.md |
-| **OSAM (Semantic Access Map)** | templates/semantic/OSAM.md |
+| PRD Constitution | law/doctrine/PRD_CONSTITUTION.md |
+| ERD Constitution | law/doctrine/ERD_CONSTITUTION.md |
+| Process Doctrine | law/doctrine/PROCESS_DOCTRINE.md |
+| ERD Doctrine | law/doctrine/ERD_DOCTRINE.md |
+| **OSAM (Semantic Access Map)** | law/semantic/OSAM.md |
 | ARCH Pressure Report Schema | archive/agents_v0/contracts/arch_pressure_report.schema.json |
 | FLOW Pressure Report Schema | archive/agents_v0/contracts/flow_pressure_report.schema.json |
-| Registry Enforcement | templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
+| Registry Enforcement | law/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
 
 **Note**: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are now redirects to ARCHITECTURE.md.
 

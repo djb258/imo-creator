@@ -16,7 +16,7 @@ Read in this order. Higher level wins on conflict.
 | 1 | `CLAUDE.md` | AI agents | Locked file registry, permissions, operational rules |
 | 2 | `CONSTITUTION.md` | Humans, downstream repos | What is governed, invariants, transformation law |
 | 3 | `IMO_CONTROL.json` | Machine + agents | Structural governance contract, doctrine file list |
-| 4 | `templates/doctrine/ARCHITECTURE.md` | All | CTB Constitutional Law (v2.1.0) — the root doctrine |
+| 4 | `law/doctrine/ARCHITECTURE.md` | All | CTB Constitutional Law (v2.1.0) — the root doctrine |
 
 ---
 
@@ -24,11 +24,11 @@ Read in this order. Higher level wins on conflict.
 
 | Artifact | Path | Purpose | Maintained By |
 |----------|------|---------|---------------|
-| Column Registry | `templates/child/column_registry.yml.template` | Canonical schema spine — all table/column definitions | Human + AI (fill template) |
-| Hub Registry | `templates/child/REGISTRY.yaml.template` | Hub identity, sub-hubs, spokes, CTB placement | Human + AI (fill template) |
-| Branch Map | `templates/config/ctb.branchmap.yaml` | CTB branch hierarchy, altitude levels, merge flow | Human |
-| CTB Governance | `templates/config/CTB_GOVERNANCE.md` | Table classification, frozen tables, drift detection | Human |
-| Table Registry (DB) | `ctb.table_registry` (created by `templates/migrations/001_ctb_table_registry.sql`) | Runtime mirror of column_registry.yml | Automated (migrations) |
+| Column Registry | `fleet/car-template/column_registry.yml.template` | Canonical schema spine — all table/column definitions | Human + AI (fill template) |
+| Hub Registry | `fleet/car-template/REGISTRY.yaml.template` | Hub identity, sub-hubs, spokes, CTB placement | Human + AI (fill template) |
+| Branch Map | `fleet/config/ctb.branchmap.yaml` | CTB branch hierarchy, altitude levels, merge flow | Human |
+| CTB Governance | `fleet/config/CTB_GOVERNANCE.md` | Table classification, frozen tables, drift detection | Human |
+| Table Registry (DB) | `ctb.table_registry` (created by `fleet/migrations/001_ctb_table_registry.sql`) | Runtime mirror of column_registry.yml | Automated (migrations) |
 
 ---
 
@@ -41,8 +41,8 @@ Read in this order. Higher level wins on conflict.
 | CI | `.github/workflows/reusable-fail-closed-gate.yml` | workflow_call | Fail-closed governance (4 gates) |
 | CI | `.github/workflows/codeql.yml` | push/PR + weekly | Security scanning |
 | CI | `.github/workflows/doctrine-enforcement.yml` (pressure-test-gate) | push/PR to master | Mechanical pressure test — artifact existence + field-level PASS validation |
-| Pre-commit | `templates/scripts/hooks/pre-commit` | git commit | 14 doctrine compliance checks |
-| Claude Code | `templates/claude/APPLY_DOCTRINE.prompt.md` | Agent session | Structural audit via AI |
+| Pre-commit | `fleet/scripts/hooks/pre-commit` | git commit | 14 doctrine compliance checks |
+| Claude Code | `fleet/prompts/APPLY_DOCTRINE.prompt.md` | Agent session | Structural audit via AI |
 | UI Builder | `UI_CONTROL_CONTRACT.json` | UI build | Component discovery gate |
 
 ---
@@ -87,19 +87,19 @@ These redirects are intentional backward-compatibility stubs. They exist in the 
 
 | Artifact | Path | Purpose |
 |----------|------|---------|
-| WORK_PACKET schema | `sys/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
+| WORK_PACKET schema | `factory/contracts/work_packet.schema.json` | Governance envelope for planned work — includes `requires_pressure_test`, `flow_contract` |
 | CHANGESET schema (archived) | `archive/agents_v0/contracts/changeset.schema.json` | Governance envelope for completed changes — includes `requires_pressure_test` |
 | AUDIT_REPORT schema (archived) | `archive/agents_v0/contracts/audit_report.schema.json` | Governance envelope for audit classification |
 | ARCH_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | 5 structural invariants (PASS/FAIL) |
 | FLOW_PRESSURE_REPORT schema (archived) | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | 5 flow invariants (PASS/FAIL) |
-| Planner prompt | `skills/agent-planner/SKILL.md` | WORK_PACKET generation — pressure test classification |
-| Builder prompt | `skills/agent-builder/SKILL.md` | Implementation + pressure test artifact production (formerly Worker) |
-| Auditor prompt | `skills/agent-auditor/SKILL.md` | Compliance verification — constitutional pressure test gate |
-| Orchestrator prompt | `skills/agent-orchestrator/SKILL.md` | Read-only governance inspector — pressure test signal detection |
-| DB Agent prompt | `skills/agent-db/SKILL.md` | Database change governance — DDL/DML enforcement |
-| Constitutional backbone | `docs/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
-| Constitutional governance | `docs/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
-| Protected assets | `docs/constitutional/protected_assets.md` | Protected models and folders |
+| Planner prompt | `factory/agents/agent-planner/SKILL.md` | WORK_PACKET generation — pressure test classification |
+| Builder prompt | `factory/agents/agent-builder/SKILL.md` | Implementation + pressure test artifact production (formerly Worker) |
+| Auditor prompt | `factory/agents/agent-auditor/SKILL.md` | Compliance verification — constitutional pressure test gate |
+| Orchestrator prompt | `factory/agents/agent-orchestrator/SKILL.md` | Read-only governance inspector — pressure test signal detection |
+| DB Agent prompt | `factory/agents/agent-db/SKILL.md` | Database change governance — DDL/DML enforcement |
+| Constitutional backbone | `law/constitutional/backbone.md` | CTB backbone authority, altitude hierarchy, elevation triggers |
+| Constitutional governance | `law/constitutional/governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
+| Protected assets | `law/constitutional/protected_assets.md` | Protected models and folders |
 
 ---
 

@@ -10,7 +10,7 @@
 | `requires_pressure_test` | Must be true when `architectural_flag=true`. |
 | `allowed_paths` | Explicit file paths within scope. No wildcards unless structurally justified. **Barrel rule**: when a directory path is listed, the barrel/re-export file at that directory root (`index.ts`, `index.js`, `index.mts`, `mod.ts`) is implicitly in scope. When individual files within a directory are listed instead of the directory itself, the barrel file MUST be explicitly included if the Builder will modify it. |
 | `summary` | Declarative scope boundary derived from user intent. |
-| `doctrine_version` | Copy from `sys/contracts/doctrine_version.json` current_version. |
+| `doctrine_version` | Copy from `factory/contracts/doctrine_version.json` current_version. |
 | `timestamp` | ISO 8601 at generation time. |
 | `payload` | Domain-specific content. Governance envelope is strict; payload is open. |
 
@@ -55,7 +55,7 @@
 
 ## Validation Checks (All 12 Must Pass)
 
-1. Validate against `sys/contracts/work_packet.schema.json`.
+1. Validate against `factory/contracts/work_packet.schema.json`.
 2. Verify `doctrine_version` matches current.
 3. Verify exactly one of `target_repo_alias` or `target_repo_url` is present.
 4. If `target_repo_alias`: verify alias exists in `repo_registry.json` and `enabled=true`.

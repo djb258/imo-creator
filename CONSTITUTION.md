@@ -54,7 +54,7 @@ IMO-Creator governs structure and declaration only. Runtime behavior, execution 
 
 A system that cannot be summarized as *"This transforms X constants into Y variables"* is not a valid system under this constitution.
 
-See: `templates/doctrine/PRD_CONSTITUTION.md`, `templates/doctrine/ERD_CONSTITUTION.md`, and `templates/doctrine/PROCESS_DOCTRINE.md`
+See: `law/doctrine/PRD_CONSTITUTION.md`, `law/doctrine/ERD_CONSTITUTION.md`, and `law/doctrine/PROCESS_DOCTRINE.md`
 
 **Note**: The Constitution does not adjudicate transformation uniqueness. It governs validity, not redundancy.
 
@@ -192,16 +192,16 @@ See **DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md** for the execution protocol.
 | Layer | Mechanism |
 |-------|-----------|
 | Claude Code | `APPLY_DOCTRINE.prompt.md` — reads doctrine, audits structure, blocks violations |
-| Pre-commit | `templates/scripts/hooks/pre-commit` — validates on every commit |
+| Pre-commit | `fleet/scripts/hooks/pre-commit` — validates on every commit |
 | CI | `.github/workflows/doctrine-enforcement.yml` — fails PR on violations |
 | UI Builder | `UI_CONTROL_CONTRACT.json` — gates UI builds on structure compliance |
-| Audit | `templates/scripts/apply_doctrine_audit.sh` — generates compliance reports |
+| Audit | `fleet/scripts/apply_doctrine_audit.sh` — generates compliance reports |
 
 ### Audit Output Requirement (MANDATORY)
 
 **Every constitutional audit MUST produce a `CONSTITUTIONAL_AUDIT_ATTESTATION.md` artifact.**
 
-- Attestation template: `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
+- Attestation template: `fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md`
 - Location in child repos: repo root OR `docs/audit/`
 - Audits without an attestation are **NON-AUTHORITATIVE**
 
@@ -280,7 +280,7 @@ This repository CANNOT proceed until violations are resolved.
 
 1. Copy `IMO_CONTROL.json` to repository root
 2. Copy `UI_CONTROL_CONTRACT.json` if UI exists
-3. Run `templates/scripts/install-hooks.sh` to install pre-commit
+3. Run `fleet/scripts/install-hooks.sh` to install pre-commit
 4. Create `DOCTRINE.md` pointing to imo-creator
 5. Follow CTB structure exactly
 6. Define local policy within invariant boundaries
@@ -297,4 +297,4 @@ This repository CANNOT proceed until violations are resolved.
 | Authority | IMO-Creator (Sovereign) |
 | Status | CONSTITUTIONAL |
 | First Read | Required for Claude Code |
-| Full Doctrine | `templates/doctrine/` |
+| Full Doctrine | `law/doctrine/` |

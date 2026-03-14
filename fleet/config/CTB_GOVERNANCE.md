@@ -237,8 +237,8 @@ WHERE table_schema = 'your_schema'
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| Architecture Doctrine | `templates/doctrine/ARCHITECTURE.md` | CTB constitutional law |
-| CTB Doctrine | `templates/config/CTB_DOCTRINE.md` | CTB quick reference |
+| Architecture Doctrine | `law/doctrine/ARCHITECTURE.md` | CTB constitutional law |
+| CTB Doctrine | `fleet/config/CTB_DOCTRINE.md` | CTB quick reference |
 | DO NOT MODIFY | `doctrine/DO_NOT_MODIFY_REGISTRY.md` | Frozen components |
 
 ---

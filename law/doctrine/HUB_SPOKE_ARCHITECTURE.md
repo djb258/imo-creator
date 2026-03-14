@@ -9,7 +9,7 @@
 
 All Hub & Spoke definitions now live in the unified architecture document.
 
-**Canonical Source**: `doctrine/ARCHITECTURE.md`
+**Canonical Source**: `law/doctrine/ARCHITECTURE.md`
 
 | Original Content | New Location |
 |------------------|--------------|
@@ -29,4 +29,4 @@ The original content is preserved at: `archive/templates/doctrine/HUB_SPOKE_ARCH
 ## Do Not Add Content Here
 
 This file exists only for backwards compatibility.
-All Hub-Spoke doctrine lives in `doctrine/ARCHITECTURE.md` Part IV.
+All Hub-Spoke doctrine lives in `law/doctrine/ARCHITECTURE.md` Part IV.

@@ -5,7 +5,7 @@
 1. Read `WORK_PACKET.target_repo_alias` (or `target_repo_url` if present).
 2. Enforce exactly-one rule: exactly one of `target_repo_alias` or `target_repo_url` must be present. Both = **FAIL**. Neither = **FAIL**.
 3. **If alias provided:**
-   - Load `sys/registry/repo_registry.json`.
+   - Load `law/registry/repo_registry.json`.
    - Find entry where `repo_alias === target_repo_alias`.
    - If no match: **HALT. FAIL — unknown alias.**
    - If `entry.enabled === false`: **HALT. FAIL — repo disabled.**
@@ -13,7 +13,7 @@
    - If `WORK_PACKET.target_branch` is set: verify it exists in `entry.allowed_branches`. If not: **HALT. FAIL — branch not in allowlist.**
    - If `WORK_PACKET.target_branch` is absent: use `entry.default_branch`.
 4. **If raw URL provided:**
-   - Load `sys/registry/repo_pull_policy.json`.
+   - Load `law/registry/repo_pull_policy.json`.
    - If `allow_raw_url === false`: **HALT. FAIL_SCOPE — raw URLs blocked by policy.**
    - If `allow_raw_url === true`: proceed with raw URL. Log warning.
 5. Derive mount path: `/workspaces/<workspace_slug>/<resolved_branch>/`

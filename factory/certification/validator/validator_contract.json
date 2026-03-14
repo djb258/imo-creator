@@ -12,7 +12,7 @@
     {
       "check_id": "CERT-002",
       "name": "CERT_SCHEMA_VALID",
-      "description": "certification.json must validate against sys/contracts/certification.schema.json.",
+      "description": "certification.json must validate against factory/contracts/certification.schema.json.",
       "on_failure": "BLOCK_MERGE: Certification artifact is malformed or missing required fields."
     },
     {

@@ -1,7 +1,7 @@
 # CTB (Christmas Tree Backbone) Doctrine
 
 **Status**: POINTER DOCUMENT
-**Authority**: SUBORDINATE to `templates/doctrine/ARCHITECTURE.md`
+**Authority**: SUBORDINATE to `law/doctrine/ARCHITECTURE.md`
 
 ---
 
@@ -28,9 +28,9 @@ To update any repository with the latest CTB structure:
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| **ARCHITECTURE.md** | templates/doctrine/ | CTB Constitutional Law (v2.0.0) - CTB structure, CC layers, hub-spoke geometry, descent gates |
-| **REPO_REFACTOR_PROTOCOL.md** | templates/doctrine/ | Repo structure requirements |
-| **CTB_GOVERNANCE.md** | templates/config/ | CTB governance template - leaf types, frozen tables, drift detection |
+| **ARCHITECTURE.md** | law/doctrine/ | CTB Constitutional Law (v2.0.0) - CTB structure, CC layers, hub-spoke geometry, descent gates |
+| **REPO_REFACTOR_PROTOCOL.md** | law/doctrine/ | Repo structure requirements |
+| **CTB_GOVERNANCE.md** | fleet/config/ | CTB governance template - leaf types, frozen tables, drift detection |
 
 **Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 
@@ -56,7 +56,7 @@ To update any repository with the latest CTB structure:
 | `ai/` | AI components |
 | `ui/` | User interface |
 
-**Full definition**: See `templates/doctrine/ARCHITECTURE.md` Part II
+**Full definition**: See `law/doctrine/ARCHITECTURE.md` Part II
 
 ---
 
@@ -69,7 +69,7 @@ To update any repository with the latest CTB structure:
 | CC-03 | Context | ADR, process flows |
 | CC-04 | Process | Code, tests, config |
 
-**Full definition**: See `templates/doctrine/ARCHITECTURE.md` Part III
+**Full definition**: See `law/doctrine/ARCHITECTURE.md` Part III
 
 ---
 
@@ -120,4 +120,4 @@ bash global-config/scripts/ctb_verify.sh
 
 ---
 
-> **RULE**: If any content in this document conflicts with `templates/doctrine/ARCHITECTURE.md`, the canonical doctrine wins. No exceptions.
+> **RULE**: If any content in this document conflicts with `law/doctrine/ARCHITECTURE.md`, the canonical doctrine wins. No exceptions.

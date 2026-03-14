@@ -85,7 +85,7 @@ Sub-hub ADRs are local only. Fleet-wide decisions go to imo-creator/ADR_INDEX.md
 ## 08 HOUSEKEEPING RULES
 
 - Slash commands: `/lockup`, `/housekeeping`, `/sync-check`, `/status`
-- Housekeeping doc: `imo-creator/templates/checklists/REPO_HOUSEKEEPING.md`
+- Housekeeping doc: `imo-creator/fleet/checklists/REPO_HOUSEKEEPING.md`
 - Sub-hub owns exactly: 1 CANONICAL table + 1 ERROR table (ADR-001)
 
 ---

@@ -261,6 +261,6 @@ repo_types:
 scaffold_config:
   enabled: true
   auto_apply_to_new_repos: true
-  template_source: "imo-creator/templates/config/ctb.branchmap.yaml"
-  initialization_script: "templates/scripts/ctb_init.sh"
-  verification_script: "templates/scripts/ctb_verify.sh"
+  template_source: "imo-creator/fleet/config/ctb.branchmap.yaml"
+  initialization_script: "fleet/scripts/ctb_init.sh"
+  verification_script: "fleet/scripts/ctb_verify.sh"

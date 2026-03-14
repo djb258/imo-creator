@@ -6,7 +6,7 @@ description: >
   Trigger on: execution ready for audit, any mention of "auditor", "audit execution",
   "evaluate compliance", "classify work", "certification gate", "check lanes", "fleet
   alignment check", "ORBT telemetry". Also trigger when processing inbox files from
-  sys/runtime/inbox/auditor/. This agent is the FOURTH in the pipeline — it receives
+  factory/runtime/inbox/auditor/. This agent is the FOURTH in the pipeline — it receives
   Builder output and determines PASS, FAIL_EXECUTION, or FAIL_SCOPE. It validates
   envelopes, checks lane artifacts, enforces fleet alignment, checks documentation
   staleness, emits ORBT error telemetry on failures, and verifies artifact integrity.

@@ -17,7 +17,7 @@
 #   - AI may READ this file but not modify it without explicit permission
 #   - Paths must be accessible from imo-creator's location
 #
-# CANONICAL SOURCE: sys/registry/repo_registry.json
+# CANONICAL SOURCE: law/registry/repo_registry.json
 #   This file is the human-readable view. repo_registry.json is the
 #   machine-readable source used by agents and the dashboard.
 #   When in conflict, repo_registry.json is authoritative for paths,
@@ -30,7 +30,7 @@ fleet:
   parent:
     name: "imo-creator"
     current_doctrine_version: "3.5.0"
-    manifest_path: "templates/TEMPLATES_MANIFEST.yaml"
+    manifest_path: "fleet/TEMPLATES_MANIFEST.yaml"
 
   repos:
     - name: "barton-outreach-core"

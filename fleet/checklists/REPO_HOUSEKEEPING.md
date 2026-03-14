@@ -152,7 +152,7 @@ Check for the same logical content living in multiple locations (e.g., three mig
 # Migration directories
 find . -type d -name "migrations" -not -path "./archive/*" -not -path "./.git/*"
 
-# Config directories (note: global-config/ was consolidated to templates/config/)
+# Config directories (note: global-config/ was consolidated to fleet/config/)
 find . -type d \( -name "config" -o -name "configs" \) -not -path "./archive/*"
 ```
 
@@ -231,15 +231,15 @@ done
 python3 -c "
 import json, os
 d = json.load(open('IMO_CONTROL.json'))
-loc = d.get('doctrine_files',{}).get('location','templates/doctrine/')
+loc = d.get('doctrine_files',{}).get('location','law/doctrine/')
 for f in d.get('doctrine_files',{}).get('required',[]):
     path = os.path.join(loc, f['file'])
     status = 'OK' if os.path.exists(path) else 'BROKEN'
     print(f'{status}: {path} (v{f.get(\"version\",\"?\")})')
 " 2>/dev/null
 
-# Agent contract references (V2 — sys/contracts/ for active, archive/agents_v0/contracts/ for archived)
-for f in sys/contracts/*.schema.json; do
+# Agent contract references (V2 — factory/contracts/ for active, archive/agents_v0/contracts/ for archived)
+for f in factory/contracts/*.schema.json; do
   [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
 done
 
@@ -250,7 +250,7 @@ for role in planner worker auditor orchestrator db_agent; do
 done
 
 # Constitutional docs
-for f in docs/constitutional/backbone.md docs/constitutional/governance.md docs/constitutional/protected_assets.md; do
+for f in law/constitutional/backbone.md law/constitutional/governance.md law/constitutional/protected_assets.md; do
   [ -f "$f" ] && echo "OK: $f" || echo "BROKEN: $f"
 done
 ```
@@ -271,8 +271,8 @@ grep -rn "global-config/\|docs/blueprints/\|/agents/contracts/" \
   --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
   . | grep -v archive/ | grep -v .git/ | grep -v node_modules/
 
-# Check for stale templates/agents/ references (should be ai/agents/ or sys/contracts/ since V2)
-grep -rn "templates/agents/" \
+# Check for stale factory/agents/ references (should be factory/agents/ or factory/contracts/ since V2)
+grep -rn "factory/agents/" \
   --include="*.md" --include="*.yaml" --include="*.yml" --include="*.json" \
   . | grep -v archive/ | grep -v .git/ | grep -v "docs/adr/"
 ```
@@ -390,7 +390,7 @@ Verify config files reflect the actual tech stack.
 | .devcontainer/ | | Does it match the current stack? | |
 | .editorconfig | | Still relevant? | |
 | .python-version | | Matches requirements and CI? | |
-| doppler.yaml | | Still in use? (Template repos: check `templates/integrations/doppler.yaml.template`) | |
+| doppler.yaml | | Still in use? (Template repos: check `law/integrations/doppler.yaml.template`) | |
 | IMO_CONTROL.json | | Version matches doctrine files? `doctrine_files.required[].version` matches actual files? | |
 | TEMPLATES_MANIFEST.yaml | | Version matches repo tag? File counts match reality? | |
 
@@ -492,7 +492,7 @@ Compare the declared `total_file_count` in the manifest against reality. Drift h
 
 ```bash
 # Read declared count from manifest
-declared=$(grep "total_file_count:" templates/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '\d+')
+declared=$(grep "total_file_count:" fleet/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '\d+')
 actual=$(find templates -type f | wc -l)
 echo "Declared: $declared | Actual: $actual"
 [ "$declared" = "$actual" ] && echo "MATCH" || echo "MISMATCH — manifest is stale"
@@ -512,7 +512,7 @@ Verify the latest git tag matches the manifest version and no orphan tags are fl
 ```bash
 # Latest tag vs manifest version
 latest_tag=$(git describe --tags --abbrev=0 2>/dev/null)
-manifest_version=$(grep "^  version:" templates/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '[\d.]+')
+manifest_version=$(grep "^  version:" fleet/TEMPLATES_MANIFEST.yaml 2>/dev/null | head -1 | grep -oP '[\d.]+')
 echo "Latest tag: $latest_tag | Manifest version: $manifest_version"
 [ "$latest_tag" = "v$manifest_version" ] && echo "ALIGNED" || echo "MISALIGNED"
 
@@ -643,17 +643,17 @@ Re-run all Phase 1 scans that had findings. Confirm:
 
 | Document | Reference |
 |----------|-----------|
-| Quarterly Hygiene Audit | `templates/checklists/QUARTERLY_HYGIENE_AUDIT.md` |
-| Hub Compliance | `templates/checklists/HUB_COMPLIANCE.md` |
-| Doctrine Architecture | `templates/doctrine/ARCHITECTURE.md` |
-| Template Immutability | `templates/doctrine/TEMPLATE_IMMUTABILITY.md` |
-| Rollback Protocol | `templates/doctrine/ROLLBACK_PROTOCOL.md` |
-| Registry Enforcement | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` |
-| Fail-Closed CI Contract | `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` |
-| Agent Contracts | `sys/contracts/` |
-| Governance Docs | `docs/constitutional/governance.md` |
+| Quarterly Hygiene Audit | `fleet/checklists/QUARTERLY_HYGIENE_AUDIT.md` |
+| Hub Compliance | `fleet/checklists/HUB_COMPLIANCE.md` |
+| Doctrine Architecture | `law/doctrine/ARCHITECTURE.md` |
+| Template Immutability | `law/doctrine/TEMPLATE_IMMUTABILITY.md` |
+| Rollback Protocol | `law/doctrine/ROLLBACK_PROTOCOL.md` |
+| Registry Enforcement | `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` |
+| Fail-Closed CI Contract | `law/doctrine/FAIL_CLOSED_CI_CONTRACT.md` |
+| Agent Contracts | `factory/contracts/` |
+| Governance Docs | `law/constitutional/governance.md` |
 | Authority Map | `docs/AUTHORITY_MAP.md` |
-| Templates Manifest | `templates/TEMPLATES_MANIFEST.yaml` |
+| Templates Manifest | `fleet/TEMPLATES_MANIFEST.yaml` |
 | Workflow Registry | `.github/workflows/WORKFLOW_REGISTRY.md` |
 
 ---

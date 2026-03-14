@@ -58,7 +58,7 @@ The security lockdown system performs the following checks before any build or d
 
 **Manual Security Scan:**
 ```bash
-bash templates/scripts/security_lockdown.sh
+bash fleet/scripts/security_lockdown.sh
 ```
 
 **Automated Security:**
@@ -179,7 +179,7 @@ Secrets are resolved from these sources (in priority order):
 
 4. **Re-scan**
    ```bash
-   bash templates/scripts/security_lockdown.sh
+   bash fleet/scripts/security_lockdown.sh
    ```
 
 ---
@@ -214,4 +214,4 @@ Secrets are resolved from these sources (in priority order):
 |-------|-------|
 | Type | Operational Runbook |
 | Authority | Subordinate to Canonical Doctrine |
-| Extracted From | `templates/config/CTB_DOCTRINE.md` |
+| Extracted From | `fleet/config/CTB_DOCTRINE.md` |

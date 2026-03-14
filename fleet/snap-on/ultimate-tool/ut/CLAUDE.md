@@ -94,12 +94,12 @@ CF Native sub-hubs have zero external dependencies. They run entirely within Clo
 
 | Template | imo-creator Path | Version |
 |----------|------------------|---------|
-| Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
-| Tools | templates/integrations/TOOLS.md | 1.1.0 |
-| OSAM | templates/semantic/OSAM.md | 1.1.0 |
-| PRD | templates/prd/PRD_HUB.md | 1.0.0 |
-| ADR | templates/adr/ADR.md | 1.0.0 |
-| Checklist | templates/checklists/HUB_COMPLIANCE.md | 1.0.0 |
+| Architecture | law/doctrine/ARCHITECTURE.md | 2.1.0 |
+| Tools | law/integrations/TOOLS.md | 1.1.0 |
+| OSAM | law/semantic/OSAM.md | 1.1.0 |
+| PRD | fleet/car-template/docs/PRD_HUB.md | 1.0.0 |
+| ADR | fleet/adr-templates/ADR.md | 1.0.0 |
+| Checklist | fleet/checklists/HUB_COMPLIANCE.md | 1.0.0 |
 
 ---
 

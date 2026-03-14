@@ -14,10 +14,10 @@ The following models are ecosystem-level protected assets. They are defined in p
 |-------|--------------------|-----------------|
 | CTB backbone | `backbone.md §2` | CONSTITUTIONAL |
 | Altitude hierarchy | `backbone.md §3` | CONSTITUTIONAL |
-| Sovereign ID doctrine | `templates/doctrine/ARCHITECTURE.md` | CONSTITUTIONAL |
-| Cantonal pattern | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
-| ERROR pattern | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
-| Registry enforcement model | `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
+| Sovereign ID doctrine | `law/doctrine/ARCHITECTURE.md` | CONSTITUTIONAL |
+| Cantonal pattern | `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
+| ERROR pattern | `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
+| Registry enforcement model | `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | CONSTITUTIONAL |
 
 ### What Protection Means
 
@@ -38,11 +38,11 @@ The following directories in the parent repository are protected. Their contents
 
 | Folder | Purpose | Protection Level |
 |--------|---------|-----------------|
-| `/docs/constitutional/` | Constitutional governance surface | CONSTITUTIONAL |
-| `/templates/doctrine/` | Architectural and structural law | CONSTITUTIONAL |
-| `/templates/semantic/` | Semantic access contracts | CONSTITUTIONAL |
-| `/templates/integrations/TOOLS.md` | Tool doctrine | CONSTITUTIONAL |
-| `/templates/SNAP_ON_TOOLBOX.yaml` | Master tool registry | CONSTITUTIONAL |
+| `/law/constitutional/` | Constitutional governance surface | CONSTITUTIONAL |
+| `/law/doctrine/` | Architectural and structural law | CONSTITUTIONAL |
+| `/law/semantic/` | Semantic access contracts | CONSTITUTIONAL |
+| `/law/integrations/TOOLS.md` | Tool doctrine | CONSTITUTIONAL |
+| `/law/SNAP_ON_TOOLBOX.yaml` | Master tool registry | CONSTITUTIONAL |
 
 ### Child Repo Inherited Protection
 
@@ -97,15 +97,15 @@ The following Garage control plane files are LOCKED. Modification requires archi
 
 | File | Purpose | Protection Level |
 |------|---------|-----------------|
-| `docs/constitutional/imo_creator_charter.md` | Sovereign charter (10 sections) | CONSTITUTIONAL |
+| `law/constitutional/imo_creator_charter.md` | Sovereign charter (10 sections) | CONSTITUTIONAL |
 | `docs/DOCTRINE_INDEX.md` | Canonical doctrine reference index | CONSTITUTIONAL |
-| `sys/contracts/heir.schema.json` | HEIR identity record schema (flat 8-field) | CONSTITUTIONAL |
-| `sys/contracts/work_packet.schema.json` | WORK_PACKET V2 governance envelope | CONSTITUTIONAL |
-| `sys/contracts/orbt_error.schema.json` | ORBT telemetry artifact schema | CONSTITUTIONAL |
-| `sys/contracts/sanitation_report.schema.json` | Post-audit sanitation report schema | CONSTITUTIONAL |
-| `sys/contracts/certification.schema.json` | Signed certification artifact schema | CONSTITUTIONAL |
-| `sys/runtime/execution_runner/runner_contract.json` | 9-phase execution pipeline | CONSTITUTIONAL |
-| `sys/runtime/repo_mount/mount_contract.json` | Repository mount protocol + HEIR validation | CONSTITUTIONAL |
+| `factory/contracts/heir.schema.json` | HEIR identity record schema (flat 8-field) | CONSTITUTIONAL |
+| `factory/contracts/work_packet.schema.json` | WORK_PACKET V2 governance envelope | CONSTITUTIONAL |
+| `factory/contracts/orbt_error.schema.json` | ORBT telemetry artifact schema | CONSTITUTIONAL |
+| `factory/contracts/sanitation_report.schema.json` | Post-audit sanitation report schema | CONSTITUTIONAL |
+| `factory/contracts/certification.schema.json` | Signed certification artifact schema | CONSTITUTIONAL |
+| `factory/runtime/execution_runner/runner_contract.json` | 9-phase execution pipeline | CONSTITUTIONAL |
+| `factory/runtime/repo_mount/mount_contract.json` | Repository mount protocol + HEIR validation | CONSTITUTIONAL |
 
 ---
 

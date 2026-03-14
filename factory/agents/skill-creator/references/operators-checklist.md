@@ -136,7 +136,7 @@ This is the step-by-step process for creating a skill using the refined skill-cr
 ## BLOCK 8: Automated Validation (Governed by Circle)
 
 **Step 21:**
-- [ ] `python skills/skill-creator/scripts/quick_validate.py <skill-name>`
+- [ ] `python factory/agents/skill-creator/scripts/quick_validate.py <skill-name>`
 - [ ] All checks passed → Proceed. Failures → fix and re-run.
 
 **Gate:** Validation passes. → PROCEED.
@@ -146,7 +146,7 @@ This is the step-by-step process for creating a skill using the refined skill-cr
 ## BLOCK 9: Delivery (Governed by IMO)
 
 **Step 22:**
-- [ ] Present path: `skills/<skill-name>/SKILL.md`
+- [ ] Present path: `factory/agents/<skill-name>/SKILL.md`
 - [ ] Confirm swap test + validation passed.
 
 **Gate:** Delivered. → ITERATION.

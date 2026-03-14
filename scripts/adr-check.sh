@@ -35,7 +35,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 INDEX_FILE="$REPO_ROOT/ADR_INDEX.md"
-REGISTRY="$REPO_ROOT/FLEET_REGISTRY.yaml"
+REGISTRY="$REPO_ROOT/fleet/registry/FLEET_REGISTRY.yaml"
 
 if [ ! -f "$INDEX_FILE" ]; then
     echo -e "${RED}[ERROR]${NC} ADR_INDEX.md not found at $INDEX_FILE"
@@ -43,7 +43,7 @@ if [ ! -f "$INDEX_FILE" ]; then
 fi
 
 if [ ! -f "$REGISTRY" ]; then
-    echo -e "${RED}[ERROR]${NC} FLEET_REGISTRY.yaml not found at $REGISTRY"
+    echo -e "${RED}[ERROR]${NC} fleet/registry/FLEET_REGISTRY.yaml not found at $REGISTRY"
     exit 2
 fi
 
@@ -125,7 +125,7 @@ all_repos = [{'name': 'imo-creator', 'path': '.'}] + repos
 # ───────────────────────────────────────────────────────────────────
 # Scan repos for ADR files
 # ───────────────────────────────────────────────────────────────────
-found_adrs = {}  # { "ADR-001": {"repo": "imo-creator", "path": "templates/adr/ADR-001-..."} }
+found_adrs = {}  # { "ADR-001": {"repo": "imo-creator", "path": "fleet/adr-templates/ADR-001-..."} }
 
 for repo_entry in all_repos:
     name = repo_entry.get('name', '')
@@ -150,7 +150,7 @@ for repo_entry in all_repos:
         os.path.join(child_path, 'docs', 'adr', 'ADR-*.md'),
         os.path.join(child_path, 'docs', 'adr', 'adr-*.md'),
         os.path.join(child_path, 'adr', 'ADR-*.md'),
-        os.path.join(child_path, 'templates', 'adr', 'ADR-*-*.md'),  # imo-creator pattern
+        os.path.join(child_path, 'fleet', 'adr-templates', 'ADR-*-*.md'),  # imo-creator pattern
     ]
 
     for pattern in adr_patterns:

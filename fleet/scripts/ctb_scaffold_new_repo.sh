@@ -52,7 +52,7 @@ log_info "Target: $TARGET_REPO"
 log_info ""
 
 # Verify source repository has CTB structure
-if [ ! -f "$SOURCE_REPO/global-config/ctb.branchmap.yaml" ]; then
+if [ ! -f "$SOURCE_REPO/fleet/config/ctb.branchmap.yaml" ]; then
   log_error "Source repository is not CTB-compliant"
   log_error "Please run ctb_init.sh in the source repository first"
   exit 1
@@ -73,10 +73,10 @@ mkdir -p "global-config/scripts"
 mkdir -p ".github/workflows"
 
 # Copy CTB configuration files
-cp "$SOURCE_REPO/global-config/ctb.branchmap.yaml" "global-config/ctb.branchmap.yaml"
-cp "$SOURCE_REPO/templates/scripts/ctb_init.sh" "templates/scripts/ctb_init.sh"
-cp "$SOURCE_REPO/templates/scripts/ctb_verify.sh" "templates/scripts/ctb_verify.sh"
-cp "$SOURCE_REPO/global-config/scripts/ctb_scaffold_new_repo.sh" "global-config/scripts/ctb_scaffold_new_repo.sh"
+cp "$SOURCE_REPO/fleet/config/ctb.branchmap.yaml" "global-config/ctb.branchmap.yaml"
+cp "$SOURCE_REPO/fleet/scripts/ctb_init.sh" "templates/scripts/ctb_init.sh"
+cp "$SOURCE_REPO/fleet/scripts/ctb_verify.sh" "templates/scripts/ctb_verify.sh"
+cp "$SOURCE_REPO/fleet/scripts/ctb_scaffold_new_repo.sh" "global-config/scripts/ctb_scaffold_new_repo.sh"
 
 # Make scripts executable
 chmod +x global-config/scripts/*.sh

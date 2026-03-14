@@ -23,7 +23,7 @@ A stamped template is a **governed artifact**. It carries obligations.
 ```
 PARENT REPOSITORY (imo-creator)
 │
-│  templates/
+│  fleet/
 │  ├── child/
 │  │   ├── IMO_CONTROL.json.template    ← SOURCE
 │  │   ├── REGISTRY.yaml.template       ← SOURCE
@@ -69,7 +69,7 @@ Every stamped template MUST contain or reference:
 ### 3.2 For YAML Files
 
 ```yaml
-# Source: imo-creator/templates/child/REGISTRY.yaml.template
+# Source: imo-creator/fleet/car-template/REGISTRY.yaml.template
 # Copied: [YYYY-MM-DD]
 # Upstream Commit: [COMMIT_HASH]
 ```
@@ -95,7 +95,7 @@ Before copying a template:
 |-------------|-----------|
 | Identify the authoritative source file | YES |
 | Record the current commit hash of parent | YES |
-| Verify you are copying from `templates/` | YES |
+| Verify you are copying from `fleet/` | YES |
 | Verify the template is intended for child use | YES |
 
 ### 4.2 During Copy
@@ -221,7 +221,7 @@ When parent templates change:
 
 ### 8.1 Child Bootstrap Templates
 
-Location: `templates/child/`
+Location: `fleet/car-template/`
 
 | Template | Purpose | Required for Child |
 |----------|---------|-------------------|
@@ -231,17 +231,17 @@ Location: `templates/child/`
 
 ### 8.2 Artifact Templates
 
-Location: `templates/`
+Location: `fleet/`
 
 | Template | Purpose | When to Use |
 |----------|---------|-------------|
-| `prd/PRD_HUB.md` | Hub definition | Creating a hub |
-| `adr/ADR.md` | Decision record | Making architectural decisions |
+| `car-template/docs/PRD_HUB.md` | Hub definition | Creating a hub |
+| `adr-templates/ADR.md` | Decision record | Making architectural decisions |
 | `checklists/HUB_COMPLIANCE.md` | Compliance verification | Before promotion |
 
 ### 8.3 Prompt Templates
 
-Location: `templates/claude/`
+Location: `fleet/prompts/`
 
 | Template | Purpose | Who Uses |
 |----------|---------|----------|

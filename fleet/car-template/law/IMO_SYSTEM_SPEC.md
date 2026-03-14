@@ -21,7 +21,7 @@ This YAML file contains:
 
 ```yaml
 # Parse this for structured data:
-templates/TEMPLATES_MANIFEST.yaml
+fleet/TEMPLATES_MANIFEST.yaml
 ```
 
 ---
@@ -271,7 +271,7 @@ ERD (WHAT tables implement OSAM)
 | **ENRICHMENT** | NO | Lookup/reference — joined for enrichment only |
 | **AUDIT** | NO | Logging/tracking — not for business queries |
 
-**Source**: templates/semantic/OSAM.md
+**Source**: law/semantic/OSAM.md
 
 ---
 

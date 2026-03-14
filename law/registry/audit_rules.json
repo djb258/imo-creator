@@ -8,7 +8,7 @@
     {
       "id": "RULE-001",
       "name": "doctrine_version_match",
-      "description": "WORK_PACKET.doctrine_version must match sys/contracts/doctrine_version.json current_version.",
+      "description": "WORK_PACKET.doctrine_version must match factory/contracts/doctrine_version.json current_version.",
       "severity": "BLOCKING",
       "applies_to": ["audit", "refactor", "build", "migrate"],
       "evaluation": "work_packet.doctrine_version === doctrine_version.current_version"

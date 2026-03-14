@@ -1,6 +1,6 @@
 # LEGACY CONFIG MONOLITH. Garage contracts + registries supersede enforcement logic here.
 # Read-only until decomposed. Do not add new sections. Do not extend automation rules.
-# Authoritative sources: sys/contracts/, sys/registry/, sys/runtime/, sys/certification/.
+# Authoritative sources: factory/contracts/, law/registry/, factory/runtime/, factory/certification/.
 #
 # # CTB Metadata
 # # Generated: 2025-10-23T14:32:39.648010
@@ -50,7 +50,7 @@ acronyms:
   - acronym: ALTITUDE
     stands_for: "System visibility levels (50k–5k)"
     definition: "Defines perspective, scope, and artifact legality—from hub identity to execution."
-    reference: "templates/doctrine/ARCHITECTURE.md Part VI"
+    reference: "law/doctrine/ARCHITECTURE.md Part VI"
     levels:
       - level: 50k
         name: Shell
@@ -499,8 +499,8 @@ mcp_integration:
       - HOSTINGER_API_TOKEN
       - N8N_HOSTINGER_URL
     integration_files:
-      - "global-config/integrations/hostinger/integrations.yaml"
-      - "global-config/integrations/hostinger/README.md"
+      - "law/integrations/hostinger/integrations.yaml"
+      - "law/integrations/hostinger/README.md"
 
   # ============================================================
   # ABACUS.AI ENTERPRISE AI PLATFORM (Added 2025-12-01)
@@ -539,8 +539,8 @@ mcp_integration:
     required_env_vars:
       - ABACUS_AI_API_KEY
     integration_files:
-      - "global-config/integrations/abacus-ai/integrations.yaml"
-      - "global-config/integrations/abacus-ai/README.md"
+      - "law/integrations/abacus-ai/integrations.yaml"
+      - "law/integrations/abacus-ai/README.md"
     integration_points:
       composio: "Custom integration via OpenAPI spec"
       n8n: "HTTP Request node with API key auth"
@@ -692,7 +692,7 @@ imo_ra:
 
   # Schema Files
   schema_files:
-    template: "global-config/imo-ra-schema.json"
+    template: "fleet/config/imo-ra-schema.json"
     instance: "imo-architecture.json"
 
   # Auto-propagation to child repos
@@ -839,9 +839,9 @@ repo_templates:
     auto_apply: true
     inherit_from: imo-creator
     include_files:
-      - global-config/ctb.branchmap.yaml
-      - global-config/global_manifest.yaml
-      - global-config/imo-ra-schema.json
+      - fleet/config/ctb.branchmap.yaml
+      - fleet/config/global_manifest.yaml
+      - fleet/config/imo-ra-schema.json
       - .github/workflows/deepwiki_automation.yml
       - scripts/hooks/post_update_deepwiki.sh
 
@@ -854,7 +854,7 @@ repo_templates:
 
 template_registry:
   version: "1.0"
-  source: "templates/"
+  source: "law/ + fleet/ + factory/"
 
   # ─────────────────────────────────────────────────────────
   # DOCTRINE TEMPLATES (Read-only reference)
@@ -1041,15 +1041,15 @@ template_registry:
     trigger: "update_from_imo_creator.sh"
     files_to_sync:
       always:
-        - "templates/doctrine/ARCHITECTURE.md"
-        - "global-config/global_manifest.yaml"
+        - "law/doctrine/ARCHITECTURE.md"
+        - "fleet/config/global_manifest.yaml"
       on_missing:
-        - "templates/prd/PRD_HUB.md"
-        - "templates/adr/ADR.md"
-        - "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
-        - "templates/checklists/HUB_COMPLIANCE.md"
-        - "templates/integrations/*.md"
-        - "templates/integrations/*.template"
+        - "fleet/car-template/docs/PRD_HUB.md"
+        - "fleet/adr-templates/ADR.md"
+        - "fleet/pr-templates/PULL_REQUEST_TEMPLATE_HUB.md"
+        - "fleet/checklists/HUB_COMPLIANCE.md"
+        - "law/integrations/*.md"
+        - "law/integrations/*.template"
     validation_after_sync:
       - "Check template_registry.enforcement.descent_rules"
       - "Report compliance status"

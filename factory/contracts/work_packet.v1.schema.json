@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "work_packet.v1.schema.json",
   "title": "WORK_PACKET V1 (DEPRECATED)",
-  "description": "V1 governance envelope for planned work. DEPRECATED — retained for backwards-compatible reading only. All new work packets must use V2 schema at sys/contracts/work_packet.schema.json. Translation shim available at sys/runtime/v1_translation_shim.json.",
+  "description": "V1 governance envelope for planned work. DEPRECATED — retained for backwards-compatible reading only. All new work packets must use V2 schema at factory/contracts/work_packet.schema.json. Translation shim available at factory/runtime/v1_translation_shim.json.",
   "type": "object",
   "additionalProperties": false,
   "required": [

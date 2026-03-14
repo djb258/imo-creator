@@ -61,11 +61,11 @@ jobs:
 
       - name: Verify drift audit script exists
         run: |
-          if [ ! -f "templates/scripts/ctb-drift-audit.sh" ]; then
-            echo "::error::templates/scripts/ctb-drift-audit.sh not found — FAIL (not skip). Doctrine: FAIL_CLOSED_CI_CONTRACT.md §2"
+          if [ ! -f "fleet/scripts/ctb-drift-audit.sh" ]; then
+            echo "::error::fleet/scripts/ctb-drift-audit.sh not found — FAIL (not skip). Doctrine: FAIL_CLOSED_CI_CONTRACT.md §2"
             exit 1
           fi
-          chmod +x templates/scripts/ctb-drift-audit.sh
+          chmod +x fleet/scripts/ctb-drift-audit.sh
 
       # ─────────────────────────────────────────────────────────────
       # DRIFT AUDIT
@@ -82,7 +82,7 @@ jobs:
           echo ""
 
           # Run drift audit script — capture exit code without failing the step
-          bash templates/scripts/ctb-drift-audit.sh || AUDIT_EXIT=$?
+          bash fleet/scripts/ctb-drift-audit.sh || AUDIT_EXIT=$?
 
           if [ -z "$AUDIT_EXIT" ]; then
             AUDIT_EXIT=0

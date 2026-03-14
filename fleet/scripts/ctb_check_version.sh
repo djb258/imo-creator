@@ -89,7 +89,7 @@ IMO_REPO="https://github.com/[OWNER]/imo-creator.git"
 log_info "Checking remote version from: $IMO_REPO"
 
 if git clone --depth 1 --quiet "$IMO_REPO" "$TMP_DIR/imo-creator" 2>/dev/null; then
-  REMOTE_VER=$(get_version_from_json "$TMP_DIR/imo-creator/templates/config/ctb_version.json")
+  REMOTE_VER=$(get_version_from_json "$TMP_DIR/imo-creator/fleet/config/ctb_version.json")
   log_info "Remote CTB version: $REMOTE_VER"
 else
   log_error "Failed to clone imo-creator repository"

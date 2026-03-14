@@ -20,10 +20,10 @@ Four migrations need to be executed against the Neon instance, in order:
 export DATABASE_URL=$(doppler secrets get DATABASE_URL --plain)
 
 # 2. Run migrations in order
-psql "$DATABASE_URL" -f templates/migrations/012_psb_prompt_registry.sql
-psql "$DATABASE_URL" -f templates/migrations/013_psb_reverse_prompt_index.sql
-psql "$DATABASE_URL" -f templates/migrations/014_psb_skill_registry.sql
-psql "$DATABASE_URL" -f templates/migrations/015_psb_egress_views.sql
+psql "$DATABASE_URL" -f fleet/migrations/012_psb_prompt_registry.sql
+psql "$DATABASE_URL" -f fleet/migrations/013_psb_reverse_prompt_index.sql
+psql "$DATABASE_URL" -f fleet/migrations/014_psb_skill_registry.sql
+psql "$DATABASE_URL" -f fleet/migrations/015_psb_egress_views.sql
 ```
 
 ## What Gets Created
@@ -61,7 +61,7 @@ psql "$DATABASE_URL" -c "SELECT trigger_name, event_object_table FROM informatio
 
 ## After Deployment
 
-1. ~~Seed the 15 existing prompts from `templates/claude/*.prompt.md` into `psb.prompt_registry`~~ DONE (2026-03-02)
+1. ~~Seed the 15 existing prompts from `fleet/prompts/*.prompt.md` into `psb.prompt_registry`~~ DONE (2026-03-02)
 2. ~~Seed the 5 agent definitions from `ai/agents/` into `psb.skill_registry`~~ DONE (2026-03-02, 5 core + 3 claude agents = 8 total)
 3. ~~Create reverse prompt index entries for each prompt~~ DONE (2026-03-03, 21 entries seeded via migration 017)
 4. ~~Create prompt-skill bindings~~ DONE (2026-03-03, 32 bindings seeded via migration 017)
@@ -84,8 +84,8 @@ Migration 016 creates the `garage` schema for sovereign control plane event hist
 **CTB Doctrine Analysis**: imo-creator operates at CC-01 (Sovereign). CTB Registry Enforcement (§1-§10) scopes to "All child repositories" — the sovereign uses `taxonomy_registry.json` classifications (SPINE/STATE/EVENT/CONFIG/CACHE), not CTB leaf_types (CANONICAL/ERROR/STAGING/MV/REGISTRY).
 
 **From 5 proposed tables → 3 survived + 2 eliminated**:
-- `doctrine_registry` table — ELIMINATED (redundant with `sys/registry/doctrine_registry.json`)
-- `fleet_registry` table — ELIMINATED (redundant with `FLEET_REGISTRY.yaml` + `sys/registry/fleet_inventory.json`)
+- `doctrine_registry` table — ELIMINATED (redundant with `law/registry/doctrine_registry.json`)
+- `fleet_registry` table — ELIMINATED (redundant with `FLEET_REGISTRY.yaml` + `law/registry/fleet_inventory.json`)
 - `error_log` — SURVIVED (renamed from `error_registry`; EVENT, not CONFIG)
 - `execution_log` — SURVIVED (renamed from `work_packet_history`)
 - `certification_log` — SURVIVED (renamed from `certification_history`)
@@ -97,7 +97,7 @@ Migration 016 creates the `garage` schema for sovereign control plane event hist
 
 ### Column Registry
 
-`templates/child/garage_column_registry.yml` v1.0.0
+`fleet/car-template/garage_column_registry.yml` v1.0.0
 
 ### Triggers Installed
 

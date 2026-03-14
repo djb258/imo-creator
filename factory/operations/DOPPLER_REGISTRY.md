@@ -224,7 +224,7 @@ All 7 vault instances verified connected on 2026-03-02.
 
 ## Rotation Schedule
 
-Per `templates/integrations/DOPPLER.md` and `engine_contract.json`:
+Per `law/integrations/DOPPLER.md` and `engine_contract.json`:
 
 | Secret Type | Rotation Frequency |
 |-------------|-------------------|

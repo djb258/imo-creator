@@ -138,7 +138,7 @@ Every repo MUST have machine-readable agent instructions:
 ```yaml
 doctrine:
   version: "2.0.0"
-  source: "imo-creator/templates/doctrine/"
+  source: "imo-creator/law/doctrine/"
   files:
     - ARCHITECTURE.md
     - REPO_REFACTOR_PROTOCOL.md
@@ -267,7 +267,7 @@ RESULT:  Humans and AI confused about where things live
 
 Per CONSTITUTION.md §Violation Zero Tolerance:
 
-1. Execute `templates/checklists/HUB_COMPLIANCE.md` for the hub
+1. Execute `fleet/checklists/HUB_COMPLIANCE.md` for the hub
 2. Fill out EVERY section with actual counts
 3. Complete the Compliance Gate Verification section
 4. Complete the AI Agent Acknowledgment (if you are an AI agent)
@@ -342,7 +342,7 @@ Every repo MUST contain a `DOCTRINE.md` with ONLY this content:
 This repo conforms to CTB Doctrine v1.1.0.
 
 **Source of truth:**
-imo-creator/templates/doctrine/
+imo-creator/law/doctrine/
 ├── ARCHITECTURE.md
 └── REPO_REFACTOR_PROTOCOL.md
 

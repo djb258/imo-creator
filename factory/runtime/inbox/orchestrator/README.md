@@ -8,4 +8,4 @@ Foreman (Claude.ai) drops packets here after working with Dave. Orchestrator rea
 **Writes to this directory**: Foreman only
 **Reads from this directory**: Orchestrator only
 
-See `sys/runtime/PACKET_CONTRACT.md` for envelope schema and handoff rules.
+See `factory/runtime/PACKET_CONTRACT.md` for envelope schema and handoff rules.

@@ -7,4 +7,4 @@ Receives completed work from DB Agent. Final QA — checks against BAR spec, val
 **Writes to this directory**: DB Agent only
 **Reads from this directory**: Auditor only
 
-See `sys/runtime/PACKET_CONTRACT.md` for envelope schema and handoff rules.
+See `factory/runtime/PACKET_CONTRACT.md` for envelope schema and handoff rules.

@@ -40,7 +40,7 @@ git pull origin master
 
 Verify you have the new file:
 ```bash
-ls templates/doctrine/ARCHITECTURE.md
+ls law/doctrine/ARCHITECTURE.md
 ```
 
 ### Step 2: Update DOCTRINE.md References
@@ -51,16 +51,16 @@ If your child repo's `DOCTRINE.md` references the old files, update:
 ```markdown
 | Doctrine | imo-creator Path |
 |----------|------------------|
-| Architecture | templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md |
-| Hub-Spoke | templates/doctrine/HUB_SPOKE_ARCHITECTURE.md |
-| Descent | templates/doctrine/ALTITUDE_DESCENT_MODEL.md |
+| Architecture | law/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md |
+| Hub-Spoke | law/doctrine/HUB_SPOKE_ARCHITECTURE.md |
+| Descent | law/doctrine/ALTITUDE_DESCENT_MODEL.md |
 ```
 
 **After:**
 ```markdown
 | Doctrine | imo-creator Path |
 |----------|------------------|
-| Architecture | templates/doctrine/ARCHITECTURE.md |
+| Architecture | law/doctrine/ARCHITECTURE.md |
 ```
 
 ### Step 3: Update CLAUDE.md References
@@ -69,14 +69,14 @@ If your `CLAUDE.md` references old files in the locked files table:
 
 **Before:**
 ```markdown
-| templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md | Operating physics |
-| templates/doctrine/HUB_SPOKE_ARCHITECTURE.md | Hub-spoke geometry |
-| templates/doctrine/ALTITUDE_DESCENT_MODEL.md | Descent gates |
+| law/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md | Operating physics |
+| law/doctrine/HUB_SPOKE_ARCHITECTURE.md | Hub-spoke geometry |
+| law/doctrine/ALTITUDE_DESCENT_MODEL.md | Descent gates |
 ```
 
 **After:**
 ```markdown
-| templates/doctrine/ARCHITECTURE.md | CTB Constitutional Law (all architecture) |
+| law/doctrine/ARCHITECTURE.md | CTB Constitutional Law (all architecture) |
 ```
 
 ### Step 4: Update Reading Order References
@@ -90,7 +90,7 @@ If any documentation references reading order:
 
 **After:**
 ```
-4. doctrine/ARCHITECTURE.md — CTB Constitutional Law
+4. law/doctrine/ARCHITECTURE.md — CTB Constitutional Law
 ```
 
 ### Step 5: Update Section References
@@ -129,7 +129,7 @@ The old files (CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, AL
 If your AI agent reads the old file, it will see:
 ```markdown
 **Status**: REDIRECT
-**Canonical Source**: doctrine/ARCHITECTURE.md
+**Canonical Source**: law/doctrine/ARCHITECTURE.md
 ```
 
 This means:
@@ -154,7 +154,7 @@ grep -r "ALTITUDE_DESCENT_MODEL" .
 
 Check if you have the new file:
 ```bash
-ls templates/doctrine/ARCHITECTURE.md
+ls law/doctrine/ARCHITECTURE.md
 ```
 
 ---

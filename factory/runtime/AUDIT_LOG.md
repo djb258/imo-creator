@@ -201,7 +201,7 @@
 | **Target** | imo-creator |
 | **Checks** | 7/7 PASS |
 | **Result** | IDEMPOTENT_VERIFIED — zero mutations needed |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-adr027-governance-reconcile.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-adr027-governance-reconcile.json` |
 
 ### wp-20260306-field-monitor-production-deploy
 
@@ -213,7 +213,7 @@
 | **Target** | imo-creator |
 | **Checks** | 9-point: service bindings (PASS), DATABASE_URL→Marketing DB (PASS), no eval() (PASS), ParserConfig KV (PASS), smoke test 7/7 (PASS), deploy order (PASS), KV namespace IDs (PASS), no scope expansion (PASS), worker liveness (CANNOT_VERIFY_LOCALLY) |
 | **Qualification** | 8/8 code-level PASS, 1 infra deferred |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-field-monitor-production-deploy.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-field-monitor-production-deploy.json` |
 
 ### wp-20260306-blog-content-seed-bridge-repair
 
@@ -226,7 +226,7 @@
 | **Target** | barton-outreach-core |
 | **Checks** | 9/9 PASS (vendor.blog columns, regexp_replace, idempotent, source enum, non-None fields, protected files, kill switches, read-only, scope) |
 | **Resolved Failures** | SEED-001, BRIDGE-001 |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-blog-content-seed-bridge-repair.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-blog-content-seed-bridge-repair.json` |
 
 ### wp-20260306-field-monitor-subhub-integrations
 
@@ -237,7 +237,7 @@
 | **Scope** | 3 parser seed scripts migrated from fn_body to ParserConfig JSON format |
 | **Target** | barton-outreach-core |
 | **Checks** | 10/10 PASS (files exist, ParserConfig JSON, config dicts, schema match, kill switches, sample gates, read-only, protected files, scope) |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-field-monitor-subhub-integrations.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-field-monitor-subhub-integrations.json` |
 
 ### wp-20260306-signal-sweep-blog-monitor
 
@@ -248,7 +248,7 @@
 | **Scope** | Signal Sweep blog monitor — 7 files in blog-content hub |
 | **Target** | barton-outreach-core |
 | **Checks** | 8/8 PASS (change_bridge read-only, url_seeder dry_run+kill switches, protected files untouched, kill switches (3), sample gate LIMIT 100, bridge_to_article_input correct, talent-flow dependency honored, no scope expansion) |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-signal-sweep-blog-monitor.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-signal-sweep-blog-monitor.json` |
 
 ### wp-20260306-talent-flow-linkedin-monitor
 
@@ -259,7 +259,7 @@
 | **Scope** | Talent Flow LinkedIn monitor — 5 files in people-intelligence hub |
 | **Target** | barton-outreach-core |
 | **Checks** | 7/7 PASS (linkedin_monitor read-only, protected files untouched, kill switches (2), sample gate LIMIT 100, bridge_to_movement_event correct, barrel updated, no scope expansion) |
-| **Audit Output** | `sys/runtime/outbox/auditor/audit-20260306-talent-flow-linkedin-monitor.json` |
+| **Audit Output** | `factory/runtime/outbox/auditor/audit-20260306-talent-flow-linkedin-monitor.json` |
 
 ---
 
@@ -319,4 +319,4 @@ These packets have a terminal status (PASS, VERIFIED, VERIFIED_IDEMPOTENT, BUILD
 |-------|-------|
 | Created | 2026-03-06 |
 | Maintained By | Auditor agent |
-| Source | sys/runtime/inbox/auditor/ + sys/runtime/outbox/auditor/ |
+| Source | factory/runtime/inbox/auditor/ + factory/runtime/outbox/auditor/ |

@@ -5,7 +5,7 @@ description: >
   DB, UI, container, and documentation lanes against mounted child repository clones.
   Trigger on: WORK_PACKET ready for execution, any mention of "builder", "execute work
   packet", "apply changes", "mount repo", "run lanes", "fleet refit", "apply refit bundle".
-  Also trigger when processing inbox files from sys/runtime/inbox/builder/. This is the
+  Also trigger when processing inbox files from factory/runtime/inbox/builder/. This is the
   agent that DOES the work — it resolves repos, mounts clones, applies code changes within
   allowed_paths, applies DB_CHANGESETs, handles UI changes, runs containers, and produces
   documentation artifacts. Formerly named Worker (deprecated alias).

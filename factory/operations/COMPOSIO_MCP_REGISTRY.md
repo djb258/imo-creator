@@ -241,7 +241,7 @@ The MCP server (`composio-sovereign`) is for AI agent access. Child repos doing 
 
 ## IMO Placement (Doctrine Reference)
 
-Per `templates/integrations/COMPOSIO.md` (LOCKED — read only):
+Per `law/integrations/COMPOSIO.md` (LOCKED — read only):
 
 | Layer | MCP Role | CC Layer |
 |-------|----------|----------|
@@ -289,4 +289,4 @@ claude mcp list
 | Created | 2026-03-11 |
 | Last Modified | 2026-03-11 |
 | Authority | Operations (Human + AI) |
-| Related Files | `templates/integrations/COMPOSIO.md` (LOCKED template), `FLEET_SECRETS_MANIFEST.yaml`, `~/.claude.json`, `%APPDATA%/Claude/claude_desktop_config.json` |
+| Related Files | `law/integrations/COMPOSIO.md` (LOCKED template), `FLEET_SECRETS_MANIFEST.yaml`, `~/.claude.json`, `%APPDATA%/Claude/claude_desktop_config.json` |

@@ -12,7 +12,7 @@
 
 | Check | Rule | On Failure |
 |-------|------|-----------|
-| WORK_PACKET schema valid | Validate against sys/contracts/work_packet.schema.json | FAIL_SCOPE |
+| WORK_PACKET schema valid | Validate against factory/contracts/work_packet.schema.json | FAIL_SCOPE |
 | doctrine_version current | RULE-001 | FAIL_SCOPE |
 | file_target_containment | RULE-002: All modified files within allowed_paths | FAIL_SCOPE |
 | no_governance_in_car | RULE-009 | FAIL_SCOPE |

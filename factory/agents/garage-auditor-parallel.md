@@ -34,7 +34,7 @@ Rules are assigned to subagents in these groups:
 - `audit_rule_ids`: The specific rule IDs you are responsible for evaluating
 - `work_packet`: The WORK_PACKET JSON
 - `artifact_bundle`: The artifact bundle from Stage 6
-- `audit_rules_registry`: The audit rules definitions from sys/registry/audit_rules.json
+- `audit_rules_registry`: The audit rules definitions from law/registry/audit_rules.json
 
 ## What You Return
 

@@ -38,7 +38,7 @@
       "rule_id": "SAN-006",
       "name": "no_modified_registry_files",
       "classification": "BLOCKING",
-      "description": "No files in sys/registry/ may have been modified during Worker execution. Registry files are Garage-side governance. Any modification in the mounted child repo workspace is a governance leak. This is a redundant safety check complementing RULE-009."
+      "description": "No files in law/registry/ may have been modified during Worker execution. Registry files are Garage-side governance. Any modification in the mounted child repo workspace is a governance leak. This is a redundant safety check complementing RULE-009."
     },
     {
       "rule_id": "SAN-007",

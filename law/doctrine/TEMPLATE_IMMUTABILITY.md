@@ -19,7 +19,7 @@ This doctrine governs the immutability of all templates and doctrine files in IM
 
 The following artifacts are LOCKED and IMMUTABLE:
 
-### Doctrine Files (templates/doctrine/)
+### Doctrine Files (law/doctrine/)
 
 | File | Status | Change Protocol |
 |------|--------|-----------------|
@@ -43,11 +43,11 @@ The following artifacts are LOCKED and IMMUTABLE:
 
 | Directory | Status | Change Protocol |
 |-----------|--------|-----------------|
-| `templates/prd/` | LOCKED | ADR + Human Approval |
-| `templates/adr/` | LOCKED | ADR + Human Approval |
-| `templates/pr/` | LOCKED | ADR + Human Approval |
-| `templates/checklists/` | LOCKED | ADR + Human Approval |
-| `templates/claude/` | LOCKED | ADR + Human Approval |
+| `fleet/car-template/docs/` | LOCKED | ADR + Human Approval |
+| `fleet/adr-templates/` | LOCKED | ADR + Human Approval |
+| `fleet/pr-templates/` | LOCKED | ADR + Human Approval |
+| `fleet/checklists/` | LOCKED | ADR + Human Approval |
+| `fleet/prompts/` | LOCKED | ADR + Human Approval |
 
 ---
 
@@ -155,41 +155,40 @@ No silent approvals. No assumed consent.
 ## Template Directory Structure (LOCKED)
 
 ```
-templates/
-├── README.md                              # Directory guide
+law/
 ├── SNAP_ON_TOOLBOX.yaml                   # Tool registry
 ├── doctrine/                              # LOCKED DOCTRINE
 │   ├── ARCHITECTURE.md                    # Primary architecture doctrine (v2.0.0)
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md # REDIRECT → ARCHITECTURE.md
-│   ├── HUB_SPOKE_ARCHITECTURE.md          # REDIRECT → ARCHITECTURE.md Part IV
-│   ├── ALTITUDE_DESCENT_MODEL.md          # REDIRECT → ARCHITECTURE.md Part VI
 │   ├── REPO_REFACTOR_PROTOCOL.md          # Structure rules
 │   ├── DBA_ENFORCEMENT_DOCTRINE.md        # DBA rules
 │   └── TEMPLATE_IMMUTABILITY.md           # This file
-├── claude/                                # LOCKED PROMPTS
+├── integrations/                          # LOCKED TEMPLATES
+│   ├── COMPOSIO.md
+│   ├── DOPPLER.md
+│   ├── HEIR.md
+│   ├── OBSIDIAN.md
+│   └── TOOLS.md
+├── semantic/                              # LOCKED SEMANTIC
+│   └── OSAM.md
+
+fleet/
+├── prompts/                               # LOCKED PROMPTS
 │   ├── APPLY_DOCTRINE.prompt.md           # Doctrine execution
 │   ├── DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md
 │   ├── DECLARE_DATA_AND_RENDER_ERD.prompt.md
 │   ├── DECLARE_EXECUTION_WIRING.prompt.md
 │   └── DBA_ENFORCEMENT.prompt.md          # DBA enforcement
-├── prd/                                   # LOCKED TEMPLATES
+├── car-template/docs/                     # LOCKED TEMPLATES
 │   └── PRD_HUB.md
-├── adr/                                   # LOCKED TEMPLATES
+├── adr-templates/                         # LOCKED TEMPLATES
 │   └── ADR.md
-├── pr/                                    # LOCKED TEMPLATES
+├── pr-templates/                          # LOCKED TEMPLATES
 │   ├── PULL_REQUEST_TEMPLATE_HUB.md
 │   └── PULL_REQUEST_TEMPLATE_SPOKE.md
 ├── checklists/                            # LOCKED TEMPLATES
 │   ├── HUB_COMPLIANCE.md
-│   └── QUARTERLY_HYGIENE_AUDIT.md
-├── audit/                                 # LOCKED TEMPLATES
+│   ├── QUARTERLY_HYGIENE_AUDIT.md
 │   └── CONSTITUTIONAL_AUDIT_ATTESTATION.md
-└── integrations/                          # LOCKED TEMPLATES
-    ├── COMPOSIO.md
-    ├── DOPPLER.md
-    ├── HEIR.md
-    ├── OBSIDIAN.md
-    └── TOOLS.md
 ```
 
 **This structure is IMMUTABLE.**

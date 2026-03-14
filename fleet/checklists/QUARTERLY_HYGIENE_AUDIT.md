@@ -274,12 +274,12 @@ For each hub, verify:
 
 | Document | Reference |
 |----------|-----------|
-| Constitutional Attestation | templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md |
-| Hub Compliance | templates/checklists/HUB_COMPLIANCE.md |
-| Repo Housekeeping | templates/checklists/REPO_HOUSEKEEPING.md |
-| Hygiene Auditor | templates/claude/HYGIENE_AUDITOR.prompt.md |
-| Architecture Doctrine | templates/doctrine/ARCHITECTURE.md |
-| Registry Enforcement | templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
+| Constitutional Attestation | fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md |
+| Hub Compliance | fleet/checklists/HUB_COMPLIANCE.md |
+| Repo Housekeeping | fleet/checklists/REPO_HOUSEKEEPING.md |
+| Hygiene Auditor | fleet/prompts/HYGIENE_AUDITOR.prompt.md |
+| Architecture Doctrine | law/doctrine/ARCHITECTURE.md |
+| Registry Enforcement | law/doctrine/CTB_REGISTRY_ENFORCEMENT.md |
 
 ---
 

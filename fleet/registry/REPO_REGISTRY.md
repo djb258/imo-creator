@@ -8,7 +8,7 @@
 
 ## Purpose
 
-The Repo Registry provides deterministic alias-to-URL resolution for all child repositories. Instead of passing raw GitHub URLs through WORK_PACKETs, users reference repos by short alias (e.g., `client`, `outreach`, `sales`). The Worker resolves the alias through `sys/registry/repo_registry.json` before mounting.
+The Repo Registry provides deterministic alias-to-URL resolution for all child repositories. Instead of passing raw GitHub URLs through WORK_PACKETs, users reference repos by short alias (e.g., `client`, `outreach`, `sales`). The Worker resolves the alias through `law/registry/repo_registry.json` before mounting.
 
 This enables phone-friendly intake, eliminates URL typos, and enforces branch allowlists and enable/disable gates at the registry level.
 
@@ -34,15 +34,15 @@ User says "client"
 
 | File | Purpose |
 |------|---------|
-| `sys/registry/repo_registry.json` | Alias → URL + branch + auth mapping for all child repos |
-| `sys/registry/repo_registry.schema.json` | JSON Schema enforcing registry structure |
-| `sys/registry/repo_pull_policy.json` | Controls whether raw URLs (bypassing alias) are permitted |
+| `law/registry/repo_registry.json` | Alias → URL + branch + auth mapping for all child repos |
+| `law/registry/repo_registry.schema.json` | JSON Schema enforcing registry structure |
+| `law/registry/repo_pull_policy.json` | Controls whether raw URLs (bypassing alias) are permitted |
 
 ---
 
 ## How to Add a New Repo Alias
 
-1. Open `sys/registry/repo_registry.json`.
+1. Open `law/registry/repo_registry.json`.
 2. Add an entry to the `repos` array:
 
 ```json
@@ -58,7 +58,7 @@ User says "client"
 }
 ```
 
-3. Validate against `sys/registry/repo_registry.schema.json`.
+3. Validate against `law/registry/repo_registry.schema.json`.
 4. Commit. The alias is now available for WORK_PACKETs.
 
 ### Field Rules
@@ -130,7 +130,7 @@ This is an emergency-only path. Permanent raw URL access is not permitted.
 
 ## Audit Enforcement
 
-**RULE-013: NO_UNREGISTERED_REPO_PULL** (in `sys/registry/audit_rules.json`)
+**RULE-013: NO_UNREGISTERED_REPO_PULL** (in `law/registry/audit_rules.json`)
 
 The Auditor evaluates every execution for:
 
@@ -191,4 +191,4 @@ No mount_receipt = no proof of resolution = audit failure.
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | Version | 1.0.0 |
-| Related | `sys/registry/repo_registry.json`, `sys/registry/repo_pull_policy.json`, RULE-013 |
+| Related | `law/registry/repo_registry.json`, `law/registry/repo_pull_policy.json`, RULE-013 |

@@ -55,10 +55,10 @@ vault/
 ## Required Templates
 
 ### `70-TEMPLATES/PRD.md`
-Copy from `templates/prd/PRD_HUB.md`
+Copy from `fleet/car-template/docs/PRD_HUB.md`
 
 ### `70-TEMPLATES/ADR.md`
-Copy from `templates/adr/ADR.md`
+Copy from `fleet/adr-templates/ADR.md`
 
 ### `70-TEMPLATES/Meeting.md`
 ```markdown

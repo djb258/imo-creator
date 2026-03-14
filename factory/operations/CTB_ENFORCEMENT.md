@@ -44,7 +44,7 @@ The CTB enforcement system performs the following checks on every repo creation,
 
 ### 4. Configuration Validation
 
-- Verifies `templates/config/ctb.branchmap.yaml` includes all branches
+- Verifies `fleet/config/ctb.branchmap.yaml` includes all branches
 - Checks CTB_DOCTRINE.md is present and current
 
 ---
@@ -54,10 +54,10 @@ The CTB enforcement system performs the following checks on every repo creation,
 **Manual Enforcement:**
 ```bash
 # Standard mode (recommended)
-bash templates/scripts/ctb_enforce.sh
+bash fleet/scripts/ctb_enforce.sh
 
 # Strict mode (requires all ports healthy)
-bash templates/scripts/ctb_enforce.sh --strict
+bash fleet/scripts/ctb_enforce.sh --strict
 ```
 
 **Automated Enforcement:**
@@ -112,13 +112,13 @@ Log format:
 **Remediation:**
 ```bash
 # Option 1: Run initialization
-bash templates/scripts/ctb_init.sh
+bash fleet/scripts/ctb_init.sh
 
 # Option 2: Update from IMO-Creator
-bash templates/scripts/update_from_imo_creator.sh
+bash fleet/scripts/update_from_imo_creator.sh
 
 # Verify fix
-bash templates/scripts/ctb_enforce.sh
+bash fleet/scripts/ctb_enforce.sh
 ```
 
 ---
@@ -137,4 +137,4 @@ If a repository cannot support these integrations due to technical constraints, 
 |-------|-------|
 | Type | Operational Runbook |
 | Authority | Subordinate to Canonical Doctrine |
-| Extracted From | `templates/config/CTB_DOCTRINE.md` |
+| Extracted From | `fleet/config/CTB_DOCTRINE.md` |

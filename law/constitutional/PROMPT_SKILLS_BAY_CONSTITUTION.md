@@ -1,7 +1,7 @@
 # PROMPT_SKILLS_BAY_CONSTITUTION.md
 
 **Document Classification:** CONSTITUTIONAL — IMMUTABLE WITHOUT ADR AND HUMAN APPROVAL
-**Placement:** `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md`
+**Placement:** `law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md`
 **Doctrine Version:** 1.0.0
 **Effective Date:** 2026-02-28
 **Authority:** Derives from and is subordinate to CONSTITUTION.md and ARCHITECTURE.md
@@ -532,4 +532,4 @@ The CLAUDE.md block for this constitution is maintained in the IMO-Creator `CLAU
 
 *This document is CONSTITUTIONAL and IMMUTABLE without an ADR and human approval. Doctrine Version: 1.0.0 | Effective: 2026-02-28 | Index: PSB-CONST-001*
 
-*Placement: docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md*
+*Placement: law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md*

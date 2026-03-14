@@ -59,7 +59,7 @@ Per REPO_REFACTOR_PROTOCOL.md §9, remediation follows this sequence:
 
 ## Hub Compliance Roll-Up
 
-_Reference: `templates/checklists/HUB_COMPLIANCE.md`_
+_Reference: `fleet/checklists/HUB_COMPLIANCE.md`_
 
 ### Hub: [HUB_NAME]
 
@@ -91,7 +91,7 @@ _(Copy this section for each additional hub/sub-hub)_
 
 ## ERD Compliance Roll-Up
 
-_Reference: `templates/doctrine/ERD_CONSTITUTION.md`_
+_Reference: `law/doctrine/ERD_CONSTITUTION.md`_
 
 ### Pressure Test Summary
 
@@ -115,7 +115,7 @@ _Reference: `templates/doctrine/ERD_CONSTITUTION.md`_
 
 ## Process Compliance Roll-Up
 
-_Reference: `templates/doctrine/PROCESS_DOCTRINE.md`_
+_Reference: `law/doctrine/PROCESS_DOCTRINE.md`_
 
 | Check | Status |
 |-------|--------|

@@ -31,7 +31,7 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `UI_CONTROL_CONTRACT.json` | UI build control | CONSTITUTIONAL |
 | `CLAUDE.md` | AI assistant context | OPERATIONAL |
 
-### Doctrine (templates/doctrine/)
+### Doctrine (law/doctrine/)
 
 | File | Purpose | Version |
 |------|---------|---------|
@@ -41,33 +41,33 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `ALTITUDE_DESCENT_MODEL.md` | REDIRECT to ARCHITECTURE.md Part VI | N/A |
 | `REPO_REFACTOR_PROTOCOL.md` | Repo structure law | 1.2.0 |
 
-### Templates (templates/)
+### Templates (fleet/)
 
 | Directory | Purpose |
 |-----------|---------|
-| `templates/prd/` | PRD templates for hubs |
-| `templates/adr/` | ADR templates |
-| `templates/pr/` | Pull request templates |
-| `templates/checklists/` | Compliance checklists |
-| `templates/integrations/` | Tool integration guides |
-| `templates/claude/` | Claude Code lifecycle prompts |
+| `fleet/car-template/docs/` | PRD templates for hubs |
+| `fleet/adr-templates/` | ADR templates |
+| `fleet/pr-templates/` | Pull request templates |
+| `fleet/checklists/` | Compliance checklists |
+| `law/integrations/` | Tool integration guides |
+| `fleet/prompts/` | Claude Code lifecycle prompts |
 
 ### Agent Contracts & Prompts (V2)
 
 | Directory/File | Purpose |
 |----------------|---------|
-| `sys/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
+| `factory/contracts/work_packet.schema.json` | WORK_PACKET governance envelope |
 | `archive/agents_v0/contracts/changeset.schema.json` | CHANGESET governance envelope (archived) |
 | `archive/agents_v0/contracts/audit_report.schema.json` | AUDIT_REPORT governance envelope (archived) |
 | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | Structural pressure test (5 PASS/FAIL fields) (archived) |
 | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | Flow pressure test (5 PASS/FAIL fields) (archived) |
-| `skills/agent-planner/SKILL.md` | Planner role prompt |
-| `skills/agent-builder/SKILL.md` | Builder role prompt (formerly Worker) |
-| `skills/agent-auditor/SKILL.md` | Auditor role prompt |
-| `skills/agent-orchestrator/SKILL.md` | Orchestrator role prompt (formerly Control Panel) |
-| `skills/agent-db/SKILL.md` | DB Agent role prompt |
+| `factory/agents/agent-planner/SKILL.md` | Planner role prompt |
+| `factory/agents/agent-builder/SKILL.md` | Builder role prompt (formerly Worker) |
+| `factory/agents/agent-auditor/SKILL.md` | Auditor role prompt |
+| `factory/agents/agent-orchestrator/SKILL.md` | Orchestrator role prompt (formerly Control Panel) |
+| `factory/agents/agent-db/SKILL.md` | DB Agent role prompt |
 
-### Constitutional Documents (docs/constitutional/)
+### Constitutional Documents (law/constitutional/)
 
 | File | Purpose |
 |------|---------|
@@ -75,7 +75,7 @@ IMO-Creator is the **governing sovereign** for all derived systems. It is a **te
 | `governance.md` | Agent roles, artifact flow, bus enforcement, pressure test routing |
 | `protected_assets.md` | Protected models and folders |
 
-### Global Configuration (templates/config/)
+### Global Configuration (fleet/config/)
 
 | File | Purpose |
 |------|---------|
@@ -112,7 +112,7 @@ Child repositories inherit from IMO-Creator by:
 
 1. Copying `IMO_CONTROL.json` to root
 2. Copying `UI_CONTROL_CONTRACT.json` if UI exists
-3. Running `scripts/install-hooks.sh`
+3. Running `fleet/scripts/install-hooks.sh`
 4. Creating `DOCTRINE.md` pointing to imo-creator
 5. Following CTB structure exactly
 
@@ -128,17 +128,17 @@ CONSTITUTION.md (Law)
     │
     ├── IMO_CONTROL.json (Control Plane)
     │
-    ├── templates/doctrine/ (Executable Doctrine)
+    ├── law/doctrine/ (Executable Doctrine)
     │       │
     │       ├── ARCHITECTURE.md (Primary architecture doctrine v2.1.0)
     │       └── REPO_REFACTOR_PROTOCOL.md (Subordinate)
     │
-    ├── docs/constitutional/ (Agent Governance)
+    ├── law/constitutional/ (Agent Governance)
     │       ├── backbone.md
     │       ├── governance.md
     │       └── protected_assets.md
     │
-    ├── sys/contracts/ (Active Schema Contracts)
+    ├── factory/contracts/ (Active Schema Contracts)
     │       └── work_packet.schema.json
     │
     └── archive/agents_v0/contracts/ (Archived Schema Contracts)
@@ -171,8 +171,8 @@ All other documents are operational and subordinate to doctrine.
 |----------|----------|---------|
 | IMO_CONTROL.json | Root | Claude Code behavior binding |
 | UI_CONTROL_CONTRACT.json | Root | UI build control |
-| FLEET_REGISTRY.yaml | Root | Fleet child repo inventory |
-| TEMPLATES_MANIFEST.yaml | templates/ | Machine-readable file index (v3.4.0) |
+| FLEET_REGISTRY.yaml | fleet/registry/ | Fleet child repo inventory |
+| TEMPLATES_MANIFEST.yaml | law/ | Machine-readable file index (v3.4.0) |
 | AUTHORITY_MAP.md | docs/ | Governance topology |
 | REGISTRY.yaml | N/A (in child repos) | Child repo component registry |
 

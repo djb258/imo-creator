@@ -17,7 +17,7 @@ git status --short
 
 Write-Host ""
 Write-Host "[GIT] Adding doctrine files..." -ForegroundColor Cyan
-git add templates/doctrine/
+git add law/doctrine/
 
 Write-Host "[GIT] Committing: $Message" -ForegroundColor Cyan
 git commit -m $Message

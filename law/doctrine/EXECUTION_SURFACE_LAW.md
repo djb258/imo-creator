@@ -36,8 +36,8 @@ These locations may contain executable content for **governance purposes only**.
 | Location | Allowed Content | Constraint |
 |----------|-----------------|------------|
 | `.github/workflows/` | CI/CD workflow definitions | YAML only — no custom scripts embedded |
-| `scripts/` (repo root) | Governance scripts distributed by imo-creator | Only scripts from `templates/scripts/` — no custom scripts |
-| `.git/hooks/` | Pre-commit hook | Only the hook from `templates/scripts/hooks/pre-commit` |
+| `scripts/` (repo root) | Governance scripts distributed by imo-creator | Only scripts from `fleet/scripts/` — no custom scripts |
+| `.git/hooks/` | Pre-commit hook | Only the hook from `fleet/scripts/hooks/pre-commit` |
 | `migrations/` (repo root) | Database migration SQL | Only SQL files — no application logic |
 
 **Rule**: Support surfaces exist for governance enforcement. They MUST NOT contain application logic, business rules, or runtime code.

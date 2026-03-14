@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Prerequisites** | `templates/IMO_SYSTEM_SPEC.md`, `templates/AI_EMPLOYEE_OPERATING_CONTRACT.md` |
+| **Prerequisites** | `fleet/car-template/law/IMO_SYSTEM_SPEC.md`, `fleet/car-template/law/AI_EMPLOYEE_OPERATING_CONTRACT.md` |
 | **Runs After** | Repository detection (is this PARENT or CHILD?) |
 | **Next Prompt** | If creating hub: `HUB_DESIGN_DECLARATION_INTAKE.prompt.md` |
 | | If validating PRD: `PRD_TO_ERD_WORKFLOW.prompt.md` |
@@ -14,7 +14,7 @@
 
 ---
 
-> **MANDATORY PREAMBLE**: This prompt is INVALID unless `templates/IMO_SYSTEM_SPEC.md`
+> **MANDATORY PREAMBLE**: This prompt is INVALID unless `fleet/car-template/law/IMO_SYSTEM_SPEC.md`
 > has been loaded and complied with. Load IMO_SYSTEM_SPEC.md FIRST. Then load
 > AI_EMPLOYEE_OPERATING_CONTRACT.md. Then proceed with this prompt.
 
@@ -61,8 +61,8 @@ This file is the binding contract. It defines:
    └─ Parse governance, doctrine_files, structure, forbidden, descent_gates
 
 3. READ all doctrine files listed in doctrine_files.required[]
-   └─ templates/doctrine/ARCHITECTURE.md (primary architecture doctrine)
-   └─ templates/doctrine/REPO_REFACTOR_PROTOCOL.md
+   └─ law/doctrine/ARCHITECTURE.md (primary architecture doctrine)
+   └─ law/doctrine/REPO_REFACTOR_PROTOCOL.md
    └─ (Note: CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md are redirects to ARCHITECTURE.md)
 
 4. AUDIT repository structure against IMO_CONTROL.json
@@ -181,7 +181,7 @@ COMPLIANCE CHECK:
 ║  • Confusing "I created files" with "The repo passes verification"            ║
 ║                                                                               ║
 ║  REQUIRED:                                                                    ║
-║  • Execute templates/checklists/HUB_COMPLIANCE.md for EACH hub                ║
+║  • Execute fleet/checklists/HUB_COMPLIANCE.md for EACH hub                ║
 ║  • Fill out EVERY section with actual counts                                  ║
 ║  • Produce the filled-out checklist as proof                                  ║
 ║  • If ANY CRITICAL unchecked or ANY HIGH violation → NON-COMPLIANT            ║

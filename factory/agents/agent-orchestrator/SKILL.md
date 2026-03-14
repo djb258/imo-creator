@@ -6,7 +6,7 @@ description: >
   Garage pipeline: user intent that needs to become a WORK_PACKET, raw task descriptions
   needing structured intake, or any mention of "orchestrator", "intake", "mint ID",
   "classify ORBT", or "route to planner". Also trigger when processing inbox files from
-  sys/runtime/inbox/orchestrator/. This agent is the FIRST in the pipeline — nothing
+  factory/runtime/inbox/orchestrator/. This agent is the FIRST in the pipeline — nothing
   reaches the Planner without passing through the Orchestrator.
 ---
 
@@ -24,13 +24,13 @@ Classify ORBT mode deterministically. Set execution type. Route to Planner. Noth
 **Ingress (Trigger):** Human intent + target repo reference arrives (natural language or inbox JSON).
 
 **Middle (Processing):**
-- Validate target repo against `sys/registry/repo_registry.json`
+- Validate target repo against `law/registry/repo_registry.json`
 - Mint UUID v4 operational ID (once, never reused, never delegated)
 - Classify `orbt_mode` via keyword matching (priority-ordered, first match wins)
 - Classify `execution_type` deterministically (standard or fleet_refit)
 - Normalize intent summary (clean, no interpretation)
 
-**Egress (Output):** Single Planner Intake Packet written to `sys/runtime/outbox/orchestrator/` then moved to `sys/runtime/inbox/planner/`.
+**Egress (Output):** Single Planner Intake Packet written to `factory/runtime/outbox/orchestrator/` then moved to `factory/runtime/inbox/planner/`.
 
 **Go/No-Go Gate:** All 7 validation checks pass before emitting packet. Any failure = HALT.
 

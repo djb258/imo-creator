@@ -258,7 +258,7 @@ Proceeding to PRD governance...
 Only after successful validation:
 
 1. Check if `PRD_HUB.md` exists for this hub
-2. If MISSING → Generate PRD from `templates/prd/PRD_HUB.md`
+2. If MISSING → Generate PRD from `fleet/car-template/docs/PRD_HUB.md`
 3. If EXISTS → Verify consistency with declaration
 
 ### PRD Generation Rules

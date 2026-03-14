@@ -39,13 +39,13 @@ The following artifacts exist in imo-creator only. Child repos must not contain 
 
 | Artifact | Location | Purpose |
 |----------|----------|---------|
-| Agent definitions | `skills/agent-*/` | Planner, Builder, Auditor, DB Agent skill prompts |
-| WORK_PACKET schema | `sys/contracts/work_packet.schema.json` | V2 execution contract |
-| Certification schema | `sys/contracts/certification.schema.json` | Merge-blocking signed artifact |
-| Doctrine registry | `sys/registry/doctrine_registry.json` | Machine-readable doctrine inventory |
-| Taxonomy registry | `sys/registry/taxonomy_registry.json` | Classification enums |
-| Audit rules | `sys/registry/audit_rules.json` | Deterministic evaluation rules |
-| Execution contracts | `sys/runtime/` | Mount, runner, writer contracts |
+| Agent definitions | `factory/agents/agent-*/` | Planner, Builder, Auditor, DB Agent skill prompts |
+| WORK_PACKET schema | `factory/contracts/work_packet.schema.json` | V2 execution contract |
+| Certification schema | `factory/contracts/certification.schema.json` | Merge-blocking signed artifact |
+| Doctrine registry | `law/registry/doctrine_registry.json` | Machine-readable doctrine inventory |
+| Taxonomy registry | `law/registry/taxonomy_registry.json` | Classification enums |
+| Audit rules | `law/registry/audit_rules.json` | Deterministic evaluation rules |
+| Execution contracts | `factory/runtime/` | Mount, runner, writer contracts |
 | Certification infrastructure | `sys/certification/` | Signature engine, validator |
 | Orchestration contract | `app/garage/orchestration_contract.json` | Pipeline definition |
 
@@ -95,10 +95,10 @@ All agent definitions live in the Garage:
 
 | Agent | Location | Role |
 |-------|----------|------|
-| Planner | `skills/agent-planner/SKILL.md` | Generates WORK_PACKET from user intent |
-| Builder | `skills/agent-builder/SKILL.md` | Executes approved WORK_PACKET (formerly Worker) |
-| Auditor | `skills/agent-auditor/SKILL.md` | Evaluates execution compliance |
-| DB Agent | `skills/agent-db/SKILL.md` | Database governance specialist |
+| Planner | `factory/agents/agent-planner/SKILL.md` | Generates WORK_PACKET from user intent |
+| Builder | `factory/agents/agent-builder/SKILL.md` | Executes approved WORK_PACKET (formerly Worker) |
+| Auditor | `factory/agents/agent-auditor/SKILL.md` | Evaluates execution compliance |
+| DB Agent | `factory/agents/agent-db/SKILL.md` | Database governance specialist |
 
 Agents are invoked by the Garage orchestration pipeline. They do not self-invoke. They do not reside in child repos.
 
@@ -120,8 +120,8 @@ No child repo PR merges without a valid Garage certification.
 | Requirement | Check |
 |-------------|-------|
 | certification.json exists | `.garage/certification.json` present in PR branch |
-| Schema valid | Validates against `sys/contracts/certification.schema.json` |
-| doctrine_version current | Matches `sys/contracts/doctrine_version.json` |
+| Schema valid | Validates against `factory/contracts/certification.schema.json` |
+| doctrine_version current | Matches `factory/contracts/doctrine_version.json` |
 | audit_status = PASS | Derived from auditor classification |
 | Signature valid | HMAC-SHA256 validates against GARAGE_SIGNING_KEY |
 | Artifact hash valid | SHA-256 of required artifacts matches `artifact_hash` field |
@@ -148,9 +148,9 @@ These terms are **local analogies** used within Garage documentation. The canoni
 | Document | Relationship |
 |----------|-------------|
 | CONSTITUTION.md | Supreme. Garage Constitution is subordinate. |
-| docs/constitutional/backbone.md | Peer. Garage operates within backbone primitives. |
-| docs/constitutional/governance.md | Peer. Garage implements the agent governance model defined here. |
-| docs/constitutional/protected_assets.md | Peer. Garage respects all protected models and folders. |
+| law/constitutional/backbone.md | Peer. Garage operates within backbone primitives. |
+| law/constitutional/governance.md | Peer. Garage implements the agent governance model defined here. |
+| law/constitutional/protected_assets.md | Peer. Garage respects all protected models and folders. |
 | ARCHITECTURE.md | Authority. Garage structure follows CTB topology. |
 
 ---

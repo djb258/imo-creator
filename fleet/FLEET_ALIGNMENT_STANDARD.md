@@ -73,7 +73,7 @@ Written by artifact_writer at end of execution. Read by CI gate. Worker must NOT
 
 ### 5. CI Schema Validation
 
-The certification gate must validate `.garage/certification.json` against `sys/contracts/certification.schema.json` (from imo-creator). This can be done via:
+The certification gate must validate `.garage/certification.json` against `factory/contracts/certification.schema.json` (from imo-creator). This can be done via:
 - Inline JSON schema validation in the workflow
 - A shared validation action/script referenced from imo-creator
 
@@ -160,4 +160,4 @@ No governance logic is pushed to child repos. Only structural directories and CI
 | Created | 2026-02-25 |
 | Authority | imo-creator (Sovereign) |
 | Version | 1.0.0 |
-| Related | `sys/registry/fleet_inventory.json`, `docs/ENFORCEMENT_MODEL.md`, RULE-009 |
+| Related | `law/registry/fleet_inventory.json`, `docs/ENFORCEMENT_MODEL.md`, RULE-009 |

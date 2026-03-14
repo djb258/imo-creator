@@ -3,7 +3,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # Authority: imo-creator (Constitutional)
 # Status: LOCKED - Claude Code MUST read before suggesting any tool
-# Location: imo-creator/templates/SNAP_ON_TOOLBOX.yaml
+# Location: imo-creator/law/SNAP_ON_TOOLBOX.yaml
 # ═══════════════════════════════════════════════════════════════════════════════
 
 version: "2.0.0"

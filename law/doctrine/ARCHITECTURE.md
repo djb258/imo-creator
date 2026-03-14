@@ -464,10 +464,10 @@ This document consolidates and supersedes:
 
 | Archived File | Original Path | Status |
 |---------------|---------------|--------|
-| CANONICAL_ARCHITECTURE_DOCTRINE.md | templates/doctrine/ | ARCHIVED |
-| HUB_SPOKE_ARCHITECTURE.md | templates/doctrine/ | ARCHIVED |
-| ALTITUDE_DESCENT_MODEL.md | templates/doctrine/ | ARCHIVED |
+| CANONICAL_ARCHITECTURE_DOCTRINE.md | law/doctrine/ | ARCHIVED |
+| HUB_SPOKE_ARCHITECTURE.md | law/doctrine/ | ARCHIVED |
+| ALTITUDE_DESCENT_MODEL.md | law/doctrine/ | ARCHIVED |
 
-Archived files are preserved at: `archive/templates/doctrine/`
+Archived files are preserved at: `archive/law/doctrine/`
 
 **This document is now the sole authoritative source for architectural law.**

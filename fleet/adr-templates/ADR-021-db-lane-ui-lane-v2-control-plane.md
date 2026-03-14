@@ -77,7 +77,7 @@ Introduce two new artifact types and corresponding execution lanes:
 
 ### New Artifact: DB_CHANGESET
 
-- Schema: `sys/contracts/db_changeset.schema.json`
+- Schema: `factory/contracts/db_changeset.schema.json`
 - Producer: DB Agent (`ai/agents/db_agent/`)
 - Consumer: Worker (applies migrations), Auditor (validates)
 - Output path: `changesets/outbox/<work_packet_id>/db/`
@@ -85,7 +85,7 @@ Introduce two new artifact types and corresponding execution lanes:
 
 ### New Artifact: UI_CHANGESET
 
-- Schema: `sys/contracts/ui_changeset.schema.json`
+- Schema: `factory/contracts/ui_changeset.schema.json`
 - Producer: Worker (UI adapter mode)
 - Consumer: Auditor (validates)
 - Output path: `changesets/outbox/<work_packet_id>/ui/`
@@ -93,7 +93,7 @@ Introduce two new artifact types and corresponding execution lanes:
 
 ### New Artifact: CONTAINER_RUN
 
-- Schema: `sys/contracts/container_run.schema.json`
+- Schema: `factory/contracts/container_run.schema.json`
 - Producer: Worker (container adapter mode)
 - Consumer: Auditor (validates)
 - Contains: container_profile, container_target, build_log, test_results, exit_code
@@ -166,7 +166,7 @@ Worker (container_required=true) → CONTAINER_RUN artifact
 |--------|----------------|
 | Standalone UI Agent | Premature. UI work does not yet have enough distinct policy to warrant a full agent. Adapter model is sufficient and avoids agent sprawl. |
 | DB logic stays in Worker | Violates separation of concerns. Worker should not make schema policy decisions. CTB registry enforcement requires specialist knowledge. |
-| New top-level directories | Violates CTB topology. All new artifacts use existing `sys/contracts/` and `changesets/` paths. |
+| New top-level directories | Violates CTB topology. All new artifacts use existing `factory/contracts/` and `changesets/` paths. |
 | Do Nothing | DB and UI blind spots in audit remain. Certification cannot enforce lane-specific rules. |
 
 ---

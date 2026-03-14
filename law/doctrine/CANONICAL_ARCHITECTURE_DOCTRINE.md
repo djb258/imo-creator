@@ -9,7 +9,7 @@
 
 All architectural doctrine now lives in the unified architecture document.
 
-**Canonical Source**: `doctrine/ARCHITECTURE.md`
+**Canonical Source**: `law/doctrine/ARCHITECTURE.md`
 
 | Original Content | New Location |
 |------------------|--------------|
@@ -43,9 +43,9 @@ The original content is preserved at: `archive/templates/doctrine/CANONICAL_ARCH
 ## Do Not Add Content Here
 
 This file exists only for backwards compatibility.
-All architectural doctrine lives in `doctrine/ARCHITECTURE.md`.
+All architectural doctrine lives in `law/doctrine/ARCHITECTURE.md`.
 
 If you need to modify architectural rules:
 1. Create ADR
-2. Modify doctrine/ARCHITECTURE.md
+2. Modify law/doctrine/ARCHITECTURE.md
 3. Get human approval

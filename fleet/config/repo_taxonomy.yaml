@@ -1,4 +1,4 @@
-# LEGACY (Push Model). Garage registry (sys/registry/repo_registry.json) is authoritative.
+# LEGACY (Push Model). Garage registry (law/registry/repo_registry.json) is authoritative.
 # Do not extend this file. New repos must be added to repo_registry.json instead.
 # This file is retained read-only for historical reference during migration.
 #
@@ -723,14 +723,14 @@ hives:
 cross_cutting:
   documentation:
     - "All repos follow LLM_ONBOARDING.md pattern"
-    - "CTB branch structure documented in global-config/"
+    - "CTB branch structure documented in fleet/config/"
     - "Blueprint links stored in Firebase"
     - "CLAUDE.md provides quick context"
 
   security:
     - "Zero-tolerance policy for .env files in commits"
     - "MCP vault for all secrets"
-    - "Security lockdown scripts in global-config/"
+    - "Security lockdown scripts in fleet/scripts/"
     - "Automated secret scanning (TruffleHog, git-secrets)"
 
   testing:
@@ -800,15 +800,15 @@ doctrine_enforcement:
     - "LLM_ONBOARDING.md"
     - ".env.example"
     - "config/mcp_registry.json"
-    - "global-config/ctb.branchmap.yaml"
+    - "fleet/config/ctb.branchmap.yaml"
 
   required_branches:
     - "master"
     - "At least one sys/ branch (per doctrine)"
 
   validation_scripts:
-    - "global-config/scripts/ctb_enforce.sh"
-    - "global-config/scripts/security_lockdown.sh"
+    - "fleet/scripts/ctb_enforce.sh"
+    - "fleet/scripts/security_lockdown.sh"
 
   audit_logging:
     - "logs/ctb_enforcement.log"

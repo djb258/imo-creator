@@ -43,7 +43,7 @@ You may ONLY read from paths that exist constitutionally.
 
 ### Doctrine
 
-- `templates/doctrine/*.md`
+- `law/doctrine/*.md`
 - `CONSTITUTION.md` (if present)
 - `REPO_REFACTOR_PROTOCOL.md` (if present)
 

@@ -1,4 +1,4 @@
-# templates/scripts/
+# fleet/scripts/
 
 **Purpose**: Template scripts for child repos. Copied during bootstrap.
 

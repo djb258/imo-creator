@@ -1,6 +1,6 @@
 # /bootstrap — Repo Doctrine Stamper
 
-**Skill**: `imo-creator/skills/bootstrap/SKILL.md`
+**Skill**: `imo-creator/fleet/scripts/bootstrap/SKILL.md`
 **Tier**: Garage command — available fleet-wide
 **Pipeline**: Detect → Inventory → Resolve → Stamp → Sovereign → Report
 
@@ -29,10 +29,10 @@ Produces a BOOTSTRAP REPORT every run.
 
 ## Execution Rules
 
-1. **Read the skill first**: Load `imo-creator/skills/bootstrap/SKILL.md` before doing anything
+1. **Read the skill first**: Load `imo-creator/fleet/scripts/bootstrap/SKILL.md` before doing anything
 2. **Tier must be declared**: Never infer silently — if ambiguous, ask
 3. **Sovereign ID**: Always ask the developer — never generate one
-4. **Templates source**: All files sourced from `imo-creator/templates/` only
+4. **Templates source**: All files sourced from `imo-creator/fleet/` and `imo-creator/law/` only
 5. **Halt condition**: If `imo-creator/` path is unresolvable, stop and report — do not improvise
 6. **Running on imo-creator itself**: Doctrine violation — halt immediately
 
@@ -44,21 +44,21 @@ Bootstrap halts. Running bootstrap on the Garage is a doctrine violation.
 ### Car Repo
 | File | Source Template |
 |------|----------------|
-| `CLAUDE.md` | `imo-creator/templates/claude/CLAUDE_CAR.md` |
-| `README.md` | `imo-creator/templates/docs/README_CAR.md` |
-| `docs/SYSTEM_MAP.md` | `imo-creator/templates/docs/SYSTEM_MAP.md` |
-| `docs/PRD.md` | `imo-creator/templates/prd/PRD_HUB.md` |
-| `docs/OSAM.md` | `imo-creator/templates/semantic/OSAM.md` |
-| `ADRs/ADR-001-initial-architecture.md` | `imo-creator/templates/adr/ADR.md` |
+| `CLAUDE.md` | `imo-creator/fleet/prompts/CLAUDE_CAR.md` |
+| `README.md` | `imo-creator/fleet/docs/README_CAR.md` |
+| `docs/SYSTEM_MAP.md` | `imo-creator/fleet/docs/SYSTEM_MAP.md` |
+| `docs/PRD.md` | `imo-creator/fleet/car-template/docs/PRD_HUB.md` |
+| `docs/OSAM.md` | `imo-creator/law/semantic/OSAM.md` |
+| `ADRs/ADR-001-initial-architecture.md` | `imo-creator/fleet/adr-templates/ADR.md` |
 
 ### Sub-Hub
 | File | Source Template |
 |------|----------------|
-| `CLAUDE.md` | `imo-creator/templates/claude/CLAUDE_SUBHUB.md` |
-| `README.md` | `imo-creator/templates/docs/README_SUBHUB.md` |
-| `docs/PRD.md` | `imo-creator/templates/prd/PRD_HUB.md` |
-| `docs/OSAM.md` | `imo-creator/templates/semantic/OSAM.md` |
-| `ADRs/ADR-001-initial-architecture.md` | `imo-creator/templates/adr/ADR.md` |
+| `CLAUDE.md` | `imo-creator/fleet/prompts/CLAUDE_SUBHUB.md` |
+| `README.md` | `imo-creator/fleet/docs/README_SUBHUB.md` |
+| `docs/PRD.md` | `imo-creator/fleet/car-template/docs/PRD_HUB.md` |
+| `docs/OSAM.md` | `imo-creator/law/semantic/OSAM.md` |
+| `ADRs/ADR-001-initial-architecture.md` | `imo-creator/fleet/adr-templates/ADR.md` |
 
 ## Placeholder Replacement
 
@@ -103,6 +103,6 @@ STATUS: BOOTSTRAP COMPLETE
 
 ## Full Skill Reference
 
-→ `imo-creator/skills/bootstrap/SKILL.md`
-→ `imo-creator/skills/bootstrap/references/tier-skeletons.md`
-→ `imo-creator/skills/bootstrap/references/placeholder-map.md`
+→ `imo-creator/fleet/scripts/bootstrap/SKILL.md`
+→ `imo-creator/fleet/scripts/bootstrap/tier-skeletons.md`
+→ `imo-creator/fleet/scripts/bootstrap/placeholder-map.md`

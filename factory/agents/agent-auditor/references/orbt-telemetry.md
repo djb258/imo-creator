@@ -6,7 +6,7 @@ For every `FAIL_EXECUTION`, `FAIL_SCOPE`, or `A_MASTER` classification, the Audi
 
 ## Emission Protocol
 
-1. Construct ORBT error artifact conforming to `sys/contracts/orbt_error.schema.json`.
+1. Construct ORBT error artifact conforming to `factory/contracts/orbt_error.schema.json`.
 2. Validate artifact against schema before writing. If schema validation fails: **FAIL_EXECUTION** — Auditor cannot emit malformed telemetry.
 3. Populate fields:
    - `process_id`: from WORK_PACKET.payload.process_id (if available) or derive from work_packet_id.

@@ -109,7 +109,7 @@ STEP 1: Does IMO_CONTROL.json exist at repo root?
         │
         └─ NO → Continue to Step 2
 
-STEP 2: Does templates/doctrine/ directory exist?
+STEP 2: Does law/doctrine/ directory exist?
         │
         ├─ YES → This is IMO-CREATOR (parent repo)
         │        Your authority: READ-ONLY
@@ -123,7 +123,7 @@ STEP 2: Does templates/doctrine/ directory exist?
 
 | Marker | Parent (imo-creator) | Child Repo |
 |--------|---------------------|------------|
-| `templates/doctrine/` directory | ✅ EXISTS | ❌ ABSENT |
+| `law/doctrine/` directory | ✅ EXISTS | ❌ ABSENT |
 | `IMO_CONTROL.json` at root | ❌ ABSENT | ✅ EXISTS |
 | `TEMPLATES_MANIFEST.yaml` | ✅ EXISTS (authoritative) | ❌ ABSENT or synced copy |
 
@@ -140,10 +140,10 @@ STEP 2: Does templates/doctrine/ directory exist?
 **If PARENT (imo-creator):**
 ```
 1. CONSTITUTION.md (repo root)
-2. templates/TEMPLATES_MANIFEST.yaml
-3. templates/IMO_SYSTEM_SPEC.md
-4. templates/doctrine/ARCHITECTURE.md
-5. Task-specific prompts in templates/claude/
+2. fleet/TEMPLATES_MANIFEST.yaml
+3. fleet/car-template/law/IMO_SYSTEM_SPEC.md
+4. law/doctrine/ARCHITECTURE.md
+5. Task-specific prompts in fleet/prompts/
 ```
 
 **If CHILD:**
@@ -167,7 +167,7 @@ Type: [PARENT / CHILD / UNGOVERNED]
 
 Detection markers:
   IMO_CONTROL.json at root: [YES / NO]
-  templates/doctrine/ exists: [YES / NO]
+  law/doctrine/ exists: [YES / NO]
 
 Authority level: [READ-ONLY / OPERATIONAL / NONE]
 Reading order: [in_parent_repo / in_child_repo / N/A]
@@ -314,7 +314,7 @@ Does the target hub have HUB_DESIGN_DECLARATION.yaml?
 
 **No PRD work without confirmed declaration. No inference. No bypass.**
 
-Reference: `templates/claude/HUB_DESIGN_DECLARATION_INTAKE.prompt.md`
+Reference: `fleet/prompts/HUB_DESIGN_DECLARATION_INTAKE.prompt.md`
 
 ### Gate 3: Constitutional Validity
 
@@ -565,7 +565,7 @@ Human intervention required.
 ║                                                                               ║
 ║  BEFORE declaring any task complete, you MUST:                                ║
 ║                                                                               ║
-║  1. Execute templates/checklists/HUB_COMPLIANCE.md                            ║
+║  1. Execute fleet/checklists/HUB_COMPLIANCE.md                            ║
 ║  2. Fill out EVERY section with actual counts                                 ║
 ║  3. Complete the Compliance Gate Verification                                 ║
 ║  4. Complete the AI Agent Acknowledgment                                      ║
@@ -585,7 +585,7 @@ Human intervention required.
 
 | Step | Action | Required |
 |------|--------|----------|
-| 1 | Execute `templates/checklists/HUB_COMPLIANCE.md` | YES |
+| 1 | Execute `fleet/checklists/HUB_COMPLIANCE.md` | YES |
 | 2 | Count CRITICAL items unchecked | YES |
 | 3 | Count HIGH violations | YES |
 | 4 | If counts > 0 → FIX before proceeding | YES |
@@ -652,7 +652,7 @@ AI employee MUST produce attestation when:
 | Audit requested | YES |
 | Human requests it | YES |
 
-Attestation follows `templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md` format.
+Attestation follows `fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md` format.
 
 ---
 

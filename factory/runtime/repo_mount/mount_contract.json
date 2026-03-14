@@ -25,7 +25,7 @@
     "step_0_resolve": {
       "action": "Resolve target_repo_alias to a repo_registry.json entry.",
       "sequence": [
-        "1. Load sys/registry/repo_registry.json.",
+        "1. Load law/registry/repo_registry.json.",
         "2. Find entry where repo_alias === target_repo_alias.",
         "3. If no match: FAIL — unknown alias. Do not proceed.",
         "4. If entry.enabled === false: FAIL — repo disabled. Do not proceed.",
@@ -34,7 +34,7 @@
         "7. If target_branch absent: use entry.default_branch.",
         "8. Emit mount_receipt with resolved fields."
       ],
-      "raw_url_gate": "If target_repo_url is provided instead of alias: load sys/registry/repo_pull_policy.json. If allow_raw_url=false: FAIL — raw URLs blocked. If allow_raw_url=true: proceed but log warning."
+      "raw_url_gate": "If target_repo_url is provided instead of alias: load law/registry/repo_pull_policy.json. If allow_raw_url=false: FAIL — raw URLs blocked. If allow_raw_url=true: proceed but log warning."
     }
   },
   "mount_path_derivation": {
@@ -54,7 +54,7 @@
       "remote_head_sha": "SHA of origin/<resolved_branch> after clone completes. Captured via `git rev-parse origin/<branch>`.",
       "detached_head": "Boolean. True if the cloned workspace is in detached HEAD state. Captured via `git symbolic-ref HEAD` (failure = detached).",
       "heir_present": "Boolean. True only if heir.doctrine.yaml exists in mounted repo root.",
-      "heir_valid": "Boolean. True only if heir.doctrine.yaml passes schema validation against sys/contracts/heir.schema.json.",
+      "heir_valid": "Boolean. True only if heir.doctrine.yaml passes schema validation against factory/contracts/heir.schema.json.",
       "heir_hash": "String. SHA-256 hash of heir.doctrine.yaml file contents. Format: sha256:<hex64>.",
       "heir_doctrine_version": "String. The doctrine_version value extracted from heir.doctrine.yaml.",
       "doctrine_version": "Current Garage doctrine version at resolution time.",
@@ -106,7 +106,7 @@
         "4. Compute SHA-256 hash of heir.doctrine.yaml file contents. Set mount_receipt.heir_hash = sha256:<hex64>.",
         "5. Parse YAML into JSON object. If parse fails: FAIL mount. Set heir_valid=false.",
         "6. Extract doctrine_version field. Set mount_receipt.heir_doctrine_version = extracted value.",
-        "7. Validate parsed object against sys/contracts/heir.schema.json.",
+        "7. Validate parsed object against factory/contracts/heir.schema.json.",
         "8. If schema validation fails: FAIL mount. Set heir_valid=false. Record specific validation errors.",
         "9. If schema validation passes: set mount_receipt.heir_valid = true.",
         "10. Verify heir_doctrine_version is compatible with current doctrine_version.json. If stale: FAIL mount."

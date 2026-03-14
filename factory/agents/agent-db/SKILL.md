@@ -134,7 +134,7 @@ See `references/drift-detection.md` for full drift check table.
 
 ### Phase 5 — Assemble DB_CHANGESET
 
-Assemble all fields, validate against `sys/contracts/db_changeset.schema.json`, write to outbox.
+Assemble all fields, validate against `factory/contracts/db_changeset.schema.json`, write to outbox.
 
 ---
 

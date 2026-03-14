@@ -44,7 +44,7 @@ A file FAILS placeholder enforcement if:
 | `DOCTRINE.md` | REQUIRED |
 | `doctrine/REPO_DOMAIN_SPEC.md` | REQUIRED |
 | `*.template` files | EXEMPT (templates are allowed to have placeholders) |
-| Files in `templates/` directory of parent repo | EXEMPT |
+| Files in `law/`, `fleet/`, `factory/` directories of parent repo | EXEMPT |
 
 ---
 
@@ -149,7 +149,7 @@ A repository FAILS if ANY of the following are true:
 | File | Required |
 |------|----------|
 | `doctrine/OSAM.md` | YES (child repos) |
-| `templates/semantic/OSAM.md` | Template (parent repo) |
+| `law/semantic/OSAM.md` | Template (parent repo) |
 
 ### 5.4 OSAM Validation
 

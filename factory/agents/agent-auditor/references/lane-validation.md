@@ -5,7 +5,7 @@
 | Check | On Failure |
 |-------|-----------|
 | DB_CHANGESET exists at `changesets/outbox/<wp_id>/db/db_changeset.json` | FAIL_EXECUTION |
-| DB_CHANGESET validates against `sys/contracts/db_changeset.schema.json` | FAIL_EXECUTION |
+| DB_CHANGESET validates against `factory/contracts/db_changeset.schema.json` | FAIL_EXECUTION |
 | `db_system` matches WORK_PACKET.db_system | FAIL_SCOPE |
 | `db_targets` is subset of WORK_PACKET.db_targets | FAIL_SCOPE |
 | `rollback_plan` is present and complete (strategy + migrations + verification) | FAIL_EXECUTION |
@@ -18,7 +18,7 @@
 | Check | On Failure |
 |-------|-----------|
 | UI_CHANGESET exists at `changesets/outbox/<wp_id>/ui/ui_changeset.json` | FAIL_EXECUTION |
-| UI_CHANGESET validates against `sys/contracts/ui_changeset.schema.json` | FAIL_EXECUTION |
+| UI_CHANGESET validates against `factory/contracts/ui_changeset.schema.json` | FAIL_EXECUTION |
 | `ui_surface` matches WORK_PACKET.ui_surface | FAIL_SCOPE |
 | `ui_target` matches WORK_PACKET.ui_target | FAIL_SCOPE |
 | `preview_artifacts` array is non-empty and all files exist | FAIL_EXECUTION |
@@ -30,7 +30,7 @@
 | Check | On Failure |
 |-------|-----------|
 | CONTAINER_RUN exists at `changesets/outbox/<wp_id>/container/container_run.json` | FAIL_EXECUTION |
-| CONTAINER_RUN validates against `sys/contracts/container_run.schema.json` | FAIL_EXECUTION |
+| CONTAINER_RUN validates against `factory/contracts/container_run.schema.json` | FAIL_EXECUTION |
 | `container_profile` matches WORK_PACKET.container_profile | FAIL_SCOPE |
 | `container_target` matches WORK_PACKET.container_target | FAIL_SCOPE |
 | `exit_code` is 0 | FAIL_EXECUTION |

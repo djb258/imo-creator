@@ -16,7 +16,7 @@ git status --short
 
 echo ""
 echo "[GIT] Adding doctrine files..."
-git add templates/doctrine/
+git add law/doctrine/
 
 echo "[GIT] Committing: $MESSAGE"
 git commit -m "$MESSAGE"

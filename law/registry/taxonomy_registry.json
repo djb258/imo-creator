@@ -80,13 +80,13 @@
   "garage_exclusive_artifacts": {
     "description": "Artifacts that must reside in the Garage (imo-creator) only. Child repos must not contain these.",
     "artifacts": [
-      "Agent skills (skills/agent-*/)",
-      "WORK_PACKET schema (sys/contracts/work_packet.schema.json)",
-      "Certification schema (sys/contracts/certification.schema.json)",
-      "Audit taxonomy (sys/registry/taxonomy_registry.json)",
-      "Doctrine registry (sys/registry/doctrine_registry.json)",
-      "Audit rules (sys/registry/audit_rules.json)",
-      "Execution contracts (sys/runtime/)"
+      "Agent skills (factory/agents/agent-*/)",
+      "WORK_PACKET schema (factory/contracts/work_packet.schema.json)",
+      "Certification schema (factory/contracts/certification.schema.json)",
+      "Audit taxonomy (law/registry/taxonomy_registry.json)",
+      "Doctrine registry (law/registry/doctrine_registry.json)",
+      "Audit rules (law/registry/audit_rules.json)",
+      "Execution contracts (factory/runtime/)"
     ]
   }
 }

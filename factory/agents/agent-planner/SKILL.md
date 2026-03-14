@@ -5,7 +5,7 @@ description: >
   routes execution lanes. Trigger when: a Planner Intake Packet arrives from the
   Orchestrator, user intent needs to be translated into a WORK_PACKET, or any mention of
   "planner", "work packet", "route lanes", "generate WP", "plan execution", "scope the
-  work". Also trigger when processing inbox files from sys/runtime/inbox/planner/. This
+  work". Also trigger when processing inbox files from factory/runtime/inbox/planner/. This
   agent converts structured intake into the execution envelope that drives the entire
   Builder pipeline. It validates target repos, classifies lanes (DB, UI, container, doc),
   and sets scope boundaries. If the work needs a WORK_PACKET, this is the agent.
@@ -32,9 +32,9 @@ execution lanes. Validate all references. Set scope boundaries. Nothing else.
 - Set `architectural_flag` and `requires_pressure_test` if protected assets affected
 - Generate `allowed_paths`, `summary`, `payload`
 
-**Egress (Output):** Single valid WORK_PACKET V2 JSON to `work_packets/outbox/`, then moved to `sys/runtime/inbox/builder/`.
+**Egress (Output):** Single valid WORK_PACKET V2 JSON to `factory/runtime/outbox/planner/`, then moved to `factory/runtime/inbox/builder/`.
 
-**Go/No-Go Gate:** WORK_PACKET validates against `sys/contracts/work_packet.schema.json`. All 12 validation checks pass. Any failure = HALT.
+**Go/No-Go Gate:** WORK_PACKET validates against `factory/contracts/work_packet.schema.json`. All 12 validation checks pass. Any failure = HALT.
 
 ---
 
@@ -85,7 +85,7 @@ execution lanes. Validate all references. Set scope boundaries. Nothing else.
 ## Rules — What This Agent Never Does
 
 - **HARD REFUSE — ROLE BOUNDARY (non-overridable):** Cross-boundary requests refused without exception.
-- Never write code or modify files outside `work_packets/outbox/`.
+- Never write code or modify files outside `factory/runtime/outbox/planner/`.
 - Never generate migration SQL — that is the DB Agent's job.
 - Never generate UI components — that is the Builder's job.
 - Never build or run containers — that is the container_runner's job.

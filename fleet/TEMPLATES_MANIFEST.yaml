@@ -9,7 +9,7 @@
 #
 # AI AGENTS: READ THIS FIRST WHEN PULLING TEMPLATES
 #
-# This manifest lists EVERY file in the templates folder.
+# This manifest lists EVERY file in the law/, fleet/, and factory/ folders.
 # When pulling templates, you MUST download ALL files listed here.
 # Partial downloads are PROHIBITED.
 #
@@ -24,7 +24,7 @@
 manifest:
   version: "3.4.1"
   last_updated: "2026-02-25"
-  total_file_count: 152  # Run: find templates -type f | wc -l to verify
+  total_file_count: 152  # Run: find law fleet factory -type f | wc -l to verify
   ctb_hardening_version: "3.4.1"
   note: "Audit sweep — 12-file fix, checklist hardening, version alignment, reference integrity"
   authority: "CONSTITUTIONAL"
@@ -70,31 +70,31 @@ files:
   # ROOT LEVEL FILES
   # ═══════════════════════════════════════════════════════════════════════════
   root:
-    - path: "templates/TEMPLATES_MANIFEST.yaml"
+    - path: "fleet/TEMPLATES_MANIFEST.yaml"
       purpose: "This file - complete file list for pulling"
       required: true
 
-    - path: "templates/README.md"
+    - path: "fleet/README.md"
       purpose: "Directory guide and reading order"
       required: true
 
-    - path: "templates/IMO_SYSTEM_SPEC.md"
+    - path: "fleet/car-template/law/IMO_SYSTEM_SPEC.md"
       purpose: "Compiled system index - FIRST READ for AI agents"
       required: true
 
-    - path: "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
+    - path: "fleet/car-template/law/AI_EMPLOYEE_OPERATING_CONTRACT.md"
       purpose: "Agent constraints and permissions"
       required: true
 
-    - path: "templates/SNAP_ON_TOOLBOX.yaml"
+    - path: "law/SNAP_ON_TOOLBOX.yaml"
       purpose: "Master tool registry - approved tools only"
       required: true
 
-    - path: "templates/GUARDSPEC.md"
+    - path: "fleet/car-template/law/GUARDSPEC.md"
       purpose: "Guard specifications"
       required: true
 
-    - path: "templates/TEMPLATE_STAMP_PROTOCOL.md"
+    - path: "fleet/TEMPLATE_STAMP_PROTOCOL.md"
       purpose: "Template stamping protocol"
       required: true
 
@@ -103,7 +103,7 @@ files:
   # ═══════════════════════════════════════════════════════════════════════════
   doctrine:
     # PRIMARY ARCHITECTURE DOCTRINE (READ FIRST)
-    - path: "templates/doctrine/ARCHITECTURE.md"
+    - path: "law/doctrine/ARCHITECTURE.md"
       purpose: "CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID, ownership"
       required: true
       locked: true
@@ -111,89 +111,89 @@ files:
       note: "Primary architecture doctrine. Consolidates CANONICAL, HUB_SPOKE, and ALTITUDE."
 
     # REDIRECT FILES (backward compatibility)
-    - path: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+    - path: "law/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
       purpose: "REDIRECT → ARCHITECTURE.md"
       required: true
       locked: true
       status: "REDIRECT"
 
-    - path: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+    - path: "law/doctrine/HUB_SPOKE_ARCHITECTURE.md"
       purpose: "REDIRECT → ARCHITECTURE.md Part IV"
       required: true
       locked: true
       status: "REDIRECT"
 
-    - path: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+    - path: "law/doctrine/ALTITUDE_DESCENT_MODEL.md"
       purpose: "REDIRECT → ARCHITECTURE.md Part VI"
       required: true
       locked: true
       status: "REDIRECT"
 
-    - path: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+    - path: "law/doctrine/REPO_REFACTOR_PROTOCOL.md"
       purpose: "Refactor sequence, structure requirements"
       required: true
       locked: true
 
-    - path: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+    - path: "law/doctrine/TEMPLATE_IMMUTABILITY.md"
       purpose: "Immutability rules, AI prohibition"
       required: true
       locked: true
 
-    - path: "templates/doctrine/PRD_CONSTITUTION.md"
+    - path: "law/doctrine/PRD_CONSTITUTION.md"
       purpose: "PRD governance rules"
       required: true
       locked: true
 
-    - path: "templates/doctrine/ERD_CONSTITUTION.md"
+    - path: "law/doctrine/ERD_CONSTITUTION.md"
       purpose: "ERD governance rules"
       required: true
       locked: true
 
-    - path: "templates/doctrine/ERD_DOCTRINE.md"
+    - path: "law/doctrine/ERD_DOCTRINE.md"
       purpose: "ERD structure and validation"
       required: true
       locked: true
 
-    - path: "templates/doctrine/PROCESS_DOCTRINE.md"
+    - path: "law/doctrine/PROCESS_DOCTRINE.md"
       purpose: "Process declaration rules"
       required: true
       locked: true
 
-    - path: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+    - path: "law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
       purpose: "Database change rules"
       required: true
       locked: true
 
-    - path: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+    - path: "law/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
       purpose: "Documentation ERD standards"
       required: true
       locked: true
 
-    - path: "templates/doctrine/ROLLBACK_PROTOCOL.md"
+    - path: "law/doctrine/ROLLBACK_PROTOCOL.md"
       purpose: "Doctrine sync rollback procedure — when to use, 6-step revert, version pinning"
       required: true
       locked: true
       version: "1.0.0"
 
-    - path: "templates/doctrine/EXECUTION_SURFACE_LAW.md"
+    - path: "law/doctrine/EXECUTION_SURFACE_LAW.md"
       purpose: "Execution surface containment — where code can run, prohibited directories"
       required: true
       locked: true
       version: "1.0.0"
 
-    - path: "templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
+    - path: "law/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
       purpose: "Registry-first enforcement — build-time, database, application gates, live drift audit, batch-level RAW lockdown, vendor JSON containment, and bootstrap enforcement"
       required: true
       locked: true
       version: "1.5.0"
 
-    - path: "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
+    - path: "law/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
       purpose: "Fail-closed CI contract — default deny, 5-gate enforcement, no continue-on-error, bootstrap guarantees"
       required: true
       locked: true
       version: "1.1.0"
 
-    - path: "templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md"
+    - path: "law/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md"
       purpose: "Legacy collapse protocol — 5-phase migration from ungoverned to CTB-governed"
       required: true
       locked: true
@@ -203,7 +203,7 @@ files:
   # SEMANTIC (OSAM - QUERY ROUTING CONTRACT)
   # ═══════════════════════════════════════════════════════════════════════════
   semantic:
-    - path: "templates/semantic/OSAM.md"
+    - path: "law/semantic/OSAM.md"
       purpose: "Operational Semantic Access Map - authoritative query-routing contract"
       required: true
       locked: true
@@ -219,57 +219,57 @@ files:
   # AGENT CONTRACTS + ROLE PROMPTS (CONSTITUTIONAL)
   # ═══════════════════════════════════════════════════════════════════════════
   agents:
-    - path: "templates/agents/contracts/work_packet.schema.json"
+    - path: "factory/agents/contracts/work_packet.schema.json"
       purpose: "WORK_PACKET governance envelope — includes requires_pressure_test, flow_contract"
       required: true
       locked: true
 
-    - path: "templates/agents/contracts/changeset.schema.json"
+    - path: "factory/agents/contracts/changeset.schema.json"
       purpose: "CHANGESET governance envelope — includes requires_pressure_test"
       required: true
       locked: true
 
-    - path: "templates/agents/contracts/audit_report.schema.json"
+    - path: "factory/agents/contracts/audit_report.schema.json"
       purpose: "AUDIT_REPORT governance envelope — classification: PASS, FAIL_EXECUTION, FAIL_SCOPE"
       required: true
       locked: true
 
-    - path: "templates/agents/contracts/arch_pressure_report.schema.json"
+    - path: "factory/agents/contracts/arch_pressure_report.schema.json"
       purpose: "Structural pressure test — 5 PASS/FAIL invariant fields"
       required: true
       locked: true
 
-    - path: "templates/agents/contracts/flow_pressure_report.schema.json"
+    - path: "factory/agents/contracts/flow_pressure_report.schema.json"
       purpose: "Flow pressure test — 5 PASS/FAIL invariant fields"
       required: true
       locked: true
 
-    - path: "templates/agents/contracts/examples/ARCH_PRESSURE_REPORT.json"
+    - path: "factory/agents/contracts/examples/ARCH_PRESSURE_REPORT.json"
       purpose: "Example valid structural pressure report (all PASS)"
       required: false
       locked: false
 
-    - path: "templates/agents/contracts/examples/FLOW_PRESSURE_REPORT.json"
+    - path: "factory/agents/contracts/examples/FLOW_PRESSURE_REPORT.json"
       purpose: "Example valid flow pressure report (all PASS)"
       required: false
       locked: false
 
-    - path: "templates/agents/planner/master_prompt.md"
+    - path: "factory/agents/planner/master_prompt.md"
       purpose: "Planner role — generates WORK_PACKET artifacts, pressure test classification"
       required: true
       locked: true
 
-    - path: "templates/agents/builder/master_prompt.md"
+    - path: "factory/agents/builder/master_prompt.md"
       purpose: "Builder role — executes WORK_PACKET, produces CHANGESET + pressure test artifacts"
       required: true
       locked: true
 
-    - path: "templates/agents/auditor/master_prompt.md"
+    - path: "factory/agents/auditor/master_prompt.md"
       purpose: "Auditor role — verifies compliance, constitutional pressure test gate"
       required: true
       locked: true
 
-    - path: "templates/agents/control_panel/master_prompt.md"
+    - path: "factory/agents/control_panel/master_prompt.md"
       purpose: "Control Panel role — read-only governance inspector, pressure test signal detection"
       required: true
       locked: true
@@ -278,77 +278,77 @@ files:
   # CLAUDE PROMPTS (LOCKED - AI CANNOT MODIFY)
   # ═══════════════════════════════════════════════════════════════════════════
   claude:
-    - path: "templates/claude/APPLY_DOCTRINE.prompt.md"
+    - path: "fleet/prompts/APPLY_DOCTRINE.prompt.md"
       purpose: "Main doctrine execution prompt"
       required: true
       locked: true
 
-    - path: "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md"
+    - path: "fleet/prompts/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md"
       purpose: "Structure declaration and CTB rendering"
       required: true
       locked: true
 
-    - path: "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md"
+    - path: "fleet/prompts/DECLARE_DATA_AND_RENDER_ERD.prompt.md"
       purpose: "Data declaration and ERD rendering"
       required: true
       locked: true
 
-    - path: "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md"
+    - path: "fleet/prompts/DECLARE_EXECUTION_WIRING.prompt.md"
       purpose: "Execution wiring declaration"
       required: true
       locked: true
 
-    - path: "templates/claude/DBA_ENFORCEMENT.prompt.md"
+    - path: "fleet/prompts/DBA_ENFORCEMENT.prompt.md"
       purpose: "DBA enforcement prompt"
       required: true
       locked: true
 
-    - path: "templates/claude/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md"
+    - path: "fleet/prompts/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md"
       purpose: "Documentation ERD enforcement"
       required: true
       locked: true
 
-    - path: "templates/claude/SYSTEM_FLOW_PROJECTION.prompt.md"
+    - path: "fleet/prompts/SYSTEM_FLOW_PROJECTION.prompt.md"
       purpose: "System flow visualization"
       required: true
       locked: true
 
-    - path: "templates/claude/SYSTEM_MODEL_REGENERATOR.prompt.md"
+    - path: "fleet/prompts/SYSTEM_MODEL_REGENERATOR.prompt.md"
       purpose: "System model compilation"
       required: true
       locked: true
 
-    - path: "templates/claude/UI_DOCTRINE_GENERATOR.prompt.md"
+    - path: "fleet/prompts/UI_DOCTRINE_GENERATOR.prompt.md"
       purpose: "UI doctrine bootstrap"
       required: true
       locked: true
 
-    - path: "templates/claude/UI_DOCTRINE_REGENERATOR.prompt.md"
+    - path: "fleet/prompts/UI_DOCTRINE_REGENERATOR.prompt.md"
       purpose: "UI doctrine CI sync"
       required: true
       locked: true
 
-    - path: "templates/claude/HYGIENE_AUDITOR.prompt.md"
+    - path: "fleet/prompts/HYGIENE_AUDITOR.prompt.md"
       purpose: "Scheduled hygiene audits"
       required: true
       locked: true
 
-    - path: "templates/claude/CLEANUP_EXECUTOR.prompt.md"
+    - path: "fleet/prompts/CLEANUP_EXECUTOR.prompt.md"
       purpose: "Cleanup execution after audits"
       required: true
       locked: true
 
-    - path: "templates/claude/PRD_MIGRATION.prompt.md"
+    - path: "fleet/prompts/PRD_MIGRATION.prompt.md"
       purpose: "Retrofit existing PRDs with HSS (Hub-and-Spoke Set Up)"
       required: true
       locked: true
 
-    - path: "templates/claude/PRD_TO_ERD_WORKFLOW.prompt.md"
+    - path: "fleet/prompts/PRD_TO_ERD_WORKFLOW.prompt.md"
       purpose: "PRD validation, question generation, ERD creation workflow"
       required: true
       locked: true
 
-    - path: "templates/claude/HUB_DESIGN_DECLARATION_INTAKE.prompt.md"
+    - path: "fleet/prompts/HUB_DESIGN_DECLARATION_INTAKE.prompt.md"
       purpose: "Hub declaration intake agent - generates fillable YAML, validates, enforces ordering"
       required: true
       locked: true
@@ -357,11 +357,11 @@ files:
   # AI EMPLOYEE
   # ═══════════════════════════════════════════════════════════════════════════
   ai_employee:
-    - path: "templates/ai-employee/AI_EMPLOYEE_PROTOCOL.md"
+    - path: "fleet/car-template/law/ai-employee/AI_EMPLOYEE_PROTOCOL.md"
       purpose: "AI employee operational protocol"
       required: true
 
-    - path: "templates/ai-employee/AI_EMPLOYEE_TASK.yaml"
+    - path: "fleet/car-template/law/ai-employee/AI_EMPLOYEE_TASK.yaml"
       purpose: "AI employee task payload format"
       required: true
 
@@ -369,7 +369,7 @@ files:
   # GPT (CUSTOM GPT INSTRUCTIONS)
   # ═══════════════════════════════════════════════════════════════════════════
   gpt:
-    - path: "templates/gpt/PRD_INTAKE_GUIDE.md"
+    - path: "fleet/gpt/PRD_INTAKE_GUIDE.md"
       purpose: "HSS intake - Custom GPT instructions for PRD information collection"
       required: false
       action: "Paste into Custom GPT instructions"
@@ -379,59 +379,59 @@ files:
   # TEMPLATES (COPY TO CHILD REPOS)
   # ═══════════════════════════════════════════════════════════════════════════
   prd:
-    - path: "templates/prd/PRD_HUB.md"
+    - path: "fleet/car-template/docs/PRD_HUB.md"
       purpose: "Hub PRD template"
       required: true
       action: "Copy and fill in"
 
   adr:
-    - path: "templates/adr/ADR.md"
+    - path: "fleet/adr-templates/ADR.md"
       purpose: "ADR template"
       required: true
       action: "Copy and fill in"
 
-    - path: "templates/adr/ADR-001-subhub-table-cardinality.md"
+    - path: "fleet/adr-templates/ADR-001-subhub-table-cardinality.md"
       purpose: "ADR-001: Sub-hub table cardinality constraint (OWN-10a/10b/10c)"
       required: true
       status: "Accepted"
       note: "Constitutional amendment — adds table cardinality to ARCHITECTURE.md v2.1.0"
 
   pr:
-    - path: "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+    - path: "fleet/pr-templates/PULL_REQUEST_TEMPLATE_HUB.md"
       purpose: "Hub PR template"
       required: true
       action: "Copy and fill in"
 
-    - path: "templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+    - path: "fleet/pr-templates/PULL_REQUEST_TEMPLATE_SPOKE.md"
       purpose: "Spoke PR template"
       required: true
       action: "Copy and fill in"
 
   checklists:
-    - path: "templates/checklists/HUB_COMPLIANCE.md"
+    - path: "fleet/checklists/HUB_COMPLIANCE.md"
       purpose: "Hub compliance checklist"
       required: true
       action: "Execute per hub"
 
-    - path: "templates/checklists/QUARTERLY_HYGIENE_AUDIT.md"
+    - path: "fleet/checklists/QUARTERLY_HYGIENE_AUDIT.md"
       purpose: "Quarterly audit checklist"
       required: true
       action: "Execute quarterly"
 
-    - path: "templates/checklists/REPO_HOUSEKEEPING.md"
+    - path: "fleet/checklists/REPO_HOUSEKEEPING.md"
       purpose: "Structural housekeeping audit — repo file/folder hygiene, debris, references, secrets"
       required: true
       action: "Execute quarterly or post-refactor"
       note: "Complement to QUARTERLY_HYGIENE_AUDIT.md (governance) and HUB_COMPLIANCE.md (hub readiness)"
 
   audit:
-    - path: "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+    - path: "fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
       purpose: "Audit attestation template"
       required: true
       action: "Produce after audits"
 
   erd:
-    - path: "templates/erd/ERD_METRICS.yaml.template"
+    - path: "fleet/erd/ERD_METRICS.yaml.template"
       purpose: "Runtime metrics template - sync before work sessions"
       required: true
       action: "Copy to child repos, auto-update from database"
@@ -442,65 +442,65 @@ files:
   # ARCHITECTURE DOCS (Reference documentation for child repos)
   # ═══════════════════════════════════════════════════════════════════════════
   docs_architecture:
-    - path: "templates/docs/architecture/HUBS_AND_SPOKES.md"
+    - path: "fleet/docs/architecture/HUBS_AND_SPOKES.md"
       purpose: "Hub and spoke definitions with enforcement rules"
       required: true
       action: "Copy to child repos as reference"
       note: "NON-AUTHORITATIVE — definitions and enforcement rules"
 
-    - path: "templates/docs/architecture/SYSTEM_FUNNEL_OVERVIEW.md"
+    - path: "fleet/docs/architecture/SYSTEM_FUNNEL_OVERVIEW.md"
       purpose: "End-to-end lifecycle from idea to execution"
       required: true
       action: "Copy to child repos as reference"
       note: "NON-AUTHORITATIVE — lifecycle explanation"
 
   child:
-    - path: "templates/child/DOCTRINE.md.template"
+    - path: "fleet/car-template/DOCTRINE.md.template"
       purpose: "Child repo doctrine pointer template"
       required: true
       action: "Copy to child repos"
 
-    - path: "templates/child/IMO_CONTROL.json.template"
+    - path: "fleet/car-template/IMO_CONTROL.json.template"
       purpose: "Child repo control file template"
       required: true
       action: "Copy to child repos"
 
-    - path: "templates/child/REGISTRY.yaml.template"
+    - path: "fleet/car-template/REGISTRY.yaml.template"
       purpose: "Child repo registry template"
       required: true
       action: "Copy to child repos"
 
-    - path: "templates/child/HUB_DESIGN_DECLARATION.yaml.template"
+    - path: "fleet/car-template/HUB_DESIGN_DECLARATION.yaml.template"
       purpose: "Hub design declaration template - must be filled before PRD"
       required: true
       action: "Generate per hub, human fills, AI validates"
       workflow: "Declaration → PRD → ERD → Process"
 
-    - path: "templates/child/REPO_DOMAIN_SPEC.md.template"
+    - path: "fleet/car-template/REPO_DOMAIN_SPEC.md.template"
       purpose: "Repository domain specification - bindings for child repos"
       required: true
       action: "Generate stub, human fills domain-specific bindings"
       note: "Child repos HALT without this file"
 
-    - path: "templates/child/column_registry.yml.template"
+    - path: "fleet/car-template/column_registry.yml.template"
       purpose: "Column registry spine - canonical schema declaration for all hub tables"
       required: true
       action: "Copy to child repo, fill in table/column definitions"
       note: "Registry-first: all generated types derive from this file"
 
-    - path: "templates/child/CC_OPERATIONAL_DIGEST.md"
+    - path: "fleet/car-template/CC_OPERATIONAL_DIGEST.md"
       purpose: "CC Operational Digest - ALL operational rules in one file for TIER 1 loading"
       required: true
       action: "Copy to child repo root as CC_OPERATIONAL_DIGEST.md"
       note: "TIER 1 mandatory file. Projection of parent doctrine — regenerate from parent on version bump."
 
-    - path: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+    - path: "fleet/car-template/DOCTRINE_CHECKPOINT.yaml.template"
       purpose: "Doctrine checkpoint - CC fills before each coding session, enforced by pre-commit CHECK 11"
       required: true
       action: "Copy to child repo root as DOCTRINE_CHECKPOINT.yaml"
       note: "Expires after 24 hours. Pre-commit blocks commits with missing/stale/incomplete checkpoints."
 
-    - path: "templates/child/STARTUP_PROTOCOL.md"
+    - path: "fleet/car-template/STARTUP_PROTOCOL.md"
       purpose: "CC Startup Protocol - mandatory session startup sequence (version check, Tier 1 load, checkpoint verify)"
       required: true
       action: "Copy to child repo root as STARTUP_PROTOCOL.md"
@@ -510,51 +510,51 @@ files:
   # CONFIG
   # ═══════════════════════════════════════════════════════════════════════════
   config:
-    - path: "templates/config/global_manifest.yaml"
+    - path: "fleet/config/global_manifest.yaml"
       purpose: "Global automation config"
       required: true
 
-    - path: "templates/config/ctb.branchmap.yaml"
+    - path: "fleet/config/ctb.branchmap.yaml"
       purpose: "CTB branch mapping"
       required: true
 
-    - path: "templates/config/CTB_DOCTRINE.md"
+    - path: "fleet/config/CTB_DOCTRINE.md"
       purpose: "CTB doctrine reference"
       required: true
 
-    - path: "templates/config/ctb_version.json"
+    - path: "fleet/config/ctb_version.json"
       purpose: "CTB version tracking"
       required: true
 
-    - path: "templates/config/imo_global_config.yaml"
+    - path: "fleet/config/imo_global_config.yaml"
       purpose: "IMO global config"
       required: true
 
-    - path: "templates/config/imo-ra-schema.json"
+    - path: "fleet/config/imo-ra-schema.json"
       purpose: "IMO-RA schema definition"
       required: true
 
-    - path: "templates/config/QUICK_REFERENCE.md"
+    - path: "fleet/config/QUICK_REFERENCE.md"
       purpose: "Quick reference guide"
       required: true
 
-    - path: "templates/config/repo_organization_standard.yaml"
+    - path: "fleet/config/repo_organization_standard.yaml"
       purpose: "Repo organization standards"
       required: true
 
-    - path: "templates/config/repo_taxonomy.yaml"
+    - path: "fleet/config/repo_taxonomy.yaml"
       purpose: "Repo taxonomy definitions"
       required: true
 
-    - path: "templates/config/required_tools.yaml"
+    - path: "fleet/config/required_tools.yaml"
       purpose: "Required tools list"
       required: true
 
-    - path: "templates/config/branch_protection_config.json"
+    - path: "fleet/config/branch_protection_config.json"
       purpose: "Branch protection settings"
       required: true
 
-    - path: "templates/config/CTB_GOVERNANCE.md"
+    - path: "fleet/config/CTB_GOVERNANCE.md"
       purpose: "CTB governance document template — table classification, frozen tables, drift detection"
       required: true
 
@@ -562,61 +562,61 @@ files:
   # INTEGRATIONS
   # ═══════════════════════════════════════════════════════════════════════════
   integrations:
-    - path: "templates/integrations/TOOLS.md"
+    - path: "law/integrations/TOOLS.md"
       purpose: "Tool doctrine"
       required: true
 
-    - path: "templates/integrations/COMPOSIO.md"
+    - path: "law/integrations/COMPOSIO.md"
       purpose: "Composio integration guide"
       required: true
 
-    - path: "templates/integrations/DOPPLER.md"
+    - path: "law/integrations/DOPPLER.md"
       purpose: "Doppler integration guide"
       required: true
 
-    - path: "templates/integrations/doppler.yaml.template"
+    - path: "law/integrations/doppler.yaml.template"
       purpose: "Doppler config template"
       required: true
 
-    - path: "templates/integrations/HEIR.md"
+    - path: "law/integrations/HEIR.md"
       purpose: "HEIR integration guide"
       required: true
 
-    - path: "templates/integrations/heir.doctrine.yaml.template"
+    - path: "law/integrations/heir.doctrine.yaml.template"
       purpose: "HEIR config template"
       required: true
 
-    - path: "templates/integrations/OBSIDIAN.md"
+    - path: "law/integrations/OBSIDIAN.md"
       purpose: "Obsidian integration guide"
       required: true
 
-    - path: "templates/integrations/doppler/doppler.bash"
+    - path: "law/integrations/doppler/doppler.bash"
       purpose: "Doppler bash config"
       required: false
 
-    - path: "templates/integrations/doppler/doppler.fish"
+    - path: "law/integrations/doppler/doppler.fish"
       purpose: "Doppler fish config"
       required: false
 
-    - path: "templates/integrations/doppler/doppler.zsh"
+    - path: "law/integrations/doppler/doppler.zsh"
       purpose: "Doppler zsh config"
       required: false
 
-    - path: "templates/integrations/hostinger/integrations.yaml"
+    - path: "law/integrations/hostinger/integrations.yaml"
       purpose: "Hostinger integration config"
       required: false
       status: "RETIRED (BAR-100 — Hostinger replaced by CF Workers + Queues, ADR-028)"
 
-    - path: "templates/integrations/hostinger/README.md"
+    - path: "law/integrations/hostinger/README.md"
       purpose: "Hostinger integration guide"
       required: false
       status: "RETIRED (BAR-100 — Hostinger replaced by CF Workers + Queues, ADR-028)"
 
-    - path: "templates/integrations/abacus-ai/integrations.yaml"
+    - path: "law/integrations/abacus-ai/integrations.yaml"
       purpose: "Abacus AI integration config"
       required: false
 
-    - path: "templates/integrations/abacus-ai/README.md"
+    - path: "law/integrations/abacus-ai/README.md"
       purpose: "Abacus AI integration guide"
       required: false
 
@@ -624,140 +624,140 @@ files:
   # SCRIPTS
   # ═══════════════════════════════════════════════════════════════════════════
   scripts:
-    - path: "templates/scripts/apply_doctrine_audit.sh"
+    - path: "fleet/scripts/apply_doctrine_audit.sh"
       purpose: "Doctrine audit script"
       required: true
 
-    - path: "templates/scripts/install-hooks.sh"
+    - path: "fleet/scripts/install-hooks.sh"
       purpose: "Git hooks installer (Unix)"
       required: true
 
-    - path: "templates/scripts/install-hooks.ps1"
+    - path: "fleet/scripts/install-hooks.ps1"
       purpose: "Git hooks installer (Windows)"
       required: true
 
-    - path: "templates/scripts/update_from_imo_creator.sh"
+    - path: "fleet/scripts/update_from_imo_creator.sh"
       purpose: "Pull updates from imo-creator"
       required: true
 
-    - path: "templates/scripts/push-doctrine-update.sh"
+    - path: "fleet/scripts/push-doctrine-update.sh"
       purpose: "Push doctrine updates (Unix)"
       required: true
 
-    - path: "templates/scripts/push-doctrine-update.ps1"
+    - path: "fleet/scripts/push-doctrine-update.ps1"
       purpose: "Push doctrine updates (Windows)"
       required: true
 
-    - path: "templates/scripts/ctb_init.sh"
+    - path: "fleet/scripts/ctb_init.sh"
       purpose: "CTB initialization"
       required: true
 
-    - path: "templates/scripts/ctb_verify.sh"
+    - path: "fleet/scripts/ctb_verify.sh"
       purpose: "CTB verification"
       required: true
 
-    - path: "templates/scripts/ctb_enforce.sh"
+    - path: "fleet/scripts/ctb_enforce.sh"
       purpose: "CTB enforcement"
       required: true
 
-    - path: "templates/scripts/ctb_check_version.sh"
+    - path: "fleet/scripts/ctb_check_version.sh"
       purpose: "CTB version check"
       required: true
 
-    - path: "templates/scripts/ctb_scaffold_new_repo.sh"
+    - path: "fleet/scripts/ctb_scaffold_new_repo.sh"
       purpose: "New repo scaffolding"
       required: true
 
-    - path: "templates/scripts/apply_ctb_plan.py"
+    - path: "fleet/scripts/apply_ctb_plan.py"
       purpose: "CTB plan application"
       required: true
 
-    - path: "templates/scripts/dev_setup.sh"
+    - path: "fleet/scripts/dev_setup.sh"
       purpose: "Development setup"
       required: true
 
-    - path: "templates/scripts/security_lockdown.sh"
+    - path: "fleet/scripts/security_lockdown.sh"
       purpose: "Security lockdown"
       required: true
 
-    - path: "templates/scripts/install_required_tools.sh"
+    - path: "fleet/scripts/install_required_tools.sh"
       purpose: "Install required tools"
       required: true
 
-    - path: "templates/scripts/verify_required_tools.sh"
+    - path: "fleet/scripts/verify_required_tools.sh"
       purpose: "Verify required tools"
       required: true
 
-    - path: "templates/scripts/codegen-generate.sh"
+    - path: "fleet/scripts/codegen-generate.sh"
       purpose: "Registry-first codegen - generates TypeScript types and Zod schemas from column_registry.yml"
       required: true
 
-    - path: "templates/scripts/codegen-verify.sh"
+    - path: "fleet/scripts/codegen-verify.sh"
       purpose: "Registry-first drift detection - verifies generated files match column_registry.yml"
       required: true
 
-    - path: "templates/scripts/verify_manifest.sh"
+    - path: "fleet/scripts/verify_manifest.sh"
       purpose: "Manifest sync verification (Unix) — diffs disk vs manifest, exits non-zero on mismatch"
       required: true
 
-    - path: "templates/scripts/verify_manifest.ps1"
+    - path: "fleet/scripts/verify_manifest.ps1"
       purpose: "Manifest sync verification (Windows) — diffs disk vs manifest, exits non-zero on mismatch"
       required: true
 
-    - path: "templates/scripts/README.md"
+    - path: "fleet/scripts/README.md"
       purpose: "Scripts directory documentation — purpose and inventory of all template scripts"
       required: false
 
-    - path: "templates/scripts/validate-schema-completeness.sh"
+    - path: "fleet/scripts/validate-schema-completeness.sh"
       purpose: "Schema completeness validator (Unix) — enforces DBA Gate B metadata requirements on column_registry.yml"
       required: true
 
-    - path: "templates/scripts/validate-schema-completeness.ps1"
+    - path: "fleet/scripts/validate-schema-completeness.ps1"
       purpose: "Schema completeness validator (Windows) — enforces DBA Gate B metadata requirements on column_registry.yml"
       required: true
 
-    - path: "templates/scripts/generate-data-dictionary.sh"
+    - path: "fleet/scripts/generate-data-dictionary.sh"
       purpose: "Data dictionary generator — produces docs/data/COLUMN_DATA_DICTIONARY.md from column_registry.yml"
       required: true
 
-    - path: "templates/scripts/update_from_imo_creator.ps1"
+    - path: "fleet/scripts/update_from_imo_creator.ps1"
       purpose: "Manifest-driven doctrine sync from imo-creator (Windows) — reads manifest rules dynamically"
       required: true
 
-    - path: "templates/scripts/detect-staleness.sh"
+    - path: "fleet/scripts/detect-staleness.sh"
       purpose: "Staleness detection audit (Unix) — checks governance artifacts for freshness relative to code changes"
       required: true
 
-    - path: "templates/scripts/detect-staleness.ps1"
+    - path: "fleet/scripts/detect-staleness.ps1"
       purpose: "Staleness detection audit (Windows) — checks governance artifacts for freshness relative to code changes"
       required: true
 
-    - path: "templates/scripts/ctb-registry-gate.sh"
+    - path: "fleet/scripts/ctb-registry-gate.sh"
       purpose: "CTB registry gate (Unix) — validates migrations vs column_registry.yml + sub-hub cardinality enforcement"
       required: true
 
-    - path: "templates/scripts/ctb-registry-gate.ps1"
+    - path: "fleet/scripts/ctb-registry-gate.ps1"
       purpose: "CTB registry gate (Windows) — validates migrations vs column_registry.yml + sub-hub cardinality enforcement"
       required: true
 
-    - path: "templates/scripts/detect-banned-db-clients.sh"
+    - path: "fleet/scripts/detect-banned-db-clients.sh"
       purpose: "Banned DB client detection — scans src/ for direct database access bypassing Gatekeeper module"
       required: true
 
-    - path: "templates/scripts/verify-governance-ci.sh"
+    - path: "fleet/scripts/verify-governance-ci.sh"
       purpose: "Governance CI adoption verification — validates required workflow references, no continue-on-error, enforcement scripts present"
       required: true
 
-    - path: "templates/scripts/bootstrap-audit.sh"
+    - path: "fleet/scripts/bootstrap-audit.sh"
       purpose: "Bootstrap audit — Day 0 structural validation, produces docs/BOOTSTRAP_AUDIT.md attestation"
       required: true
 
-    - path: "templates/scripts/ctb-drift-audit.sh"
+    - path: "fleet/scripts/ctb-drift-audit.sh"
       purpose: "CTB drift audit — live database vs ctb.table_registry vs column_registry.yml drift detection (baseline/strict modes)"
       required: true
       locked: true
 
-    - path: "templates/scripts/hooks/pre-commit"
+    - path: "fleet/scripts/hooks/pre-commit"
       purpose: "Pre-commit hook (includes registry-first, manifest sync, doctrine checkpoint, and schema completeness enforcement gates)"
       required: true
 
@@ -765,51 +765,51 @@ files:
   # MIGRATIONS (DATABASE GOVERNANCE)
   # ═══════════════════════════════════════════════════════════════════════════
   migrations:
-    - path: "templates/migrations/README.md"
+    - path: "fleet/migrations/README.md"
       purpose: "Migration directory documentation — architecture, usage, design principles"
       required: true
 
-    - path: "templates/migrations/001_ctb_table_registry.sql"
+    - path: "fleet/migrations/001_ctb_table_registry.sql"
       purpose: "CTB schema + table_registry + audit log — runtime registry of all allowed tables"
       required: true
 
-    - path: "templates/migrations/002_ctb_event_trigger.sql"
+    - path: "fleet/migrations/002_ctb_event_trigger.sql"
       purpose: "DDL event trigger — blocks CREATE/ALTER/DROP TABLE on unregistered tables"
       required: true
 
-    - path: "templates/migrations/003_ctb_write_guards.sql"
+    - path: "fleet/migrations/003_ctb_write_guards.sql"
       purpose: "Write guard triggers — blocks INSERT/UPDATE/DELETE on unregistered or frozen tables"
       required: true
 
-    - path: "templates/migrations/004_ctb_promotion_enforcement.sql"
+    - path: "fleet/migrations/004_ctb_promotion_enforcement.sql"
       purpose: "Promotion enforcement — controls SUPPORTING → CANONICAL data flow via declared paths"
       required: true
 
-    - path: "templates/migrations/005_raw_immutability.sql"
+    - path: "fleet/migrations/005_raw_immutability.sql"
       purpose: "RAW immutability — INSERT-only enforcement on STAGING/SUPPORTING/CANONICAL, vendor bridge registration"
       required: true
 
-    - path: "templates/migrations/006_raw_batch_registry.sql"
+    - path: "fleet/migrations/006_raw_batch_registry.sql"
       purpose: "Batch registry — tracks every ingestion batch with supersede chain and status lifecycle"
       required: true
 
-    - path: "templates/migrations/007_raw_active_view_template.sql"
+    - path: "fleet/migrations/007_raw_active_view_template.sql"
       purpose: "RAW active view — helper to create _active views filtering to current batches, validation functions"
       required: true
 
-    - path: "templates/migrations/008_vendor_json_template.sql"
+    - path: "fleet/migrations/008_vendor_json_template.sql"
       purpose: "Vendor JSON table template — per-sub-hub JSON sandbox with validation helper"
       required: true
 
-    - path: "templates/migrations/009_bridge_template.sql"
+    - path: "fleet/migrations/009_bridge_template.sql"
       purpose: "Frozen bridge function template — versioned JSON→RAW transformation with strict validation"
       required: true
 
-    - path: "templates/migrations/010_vendor_write_permissions.sql"
+    - path: "fleet/migrations/010_vendor_write_permissions.sql"
       purpose: "Role separation template — ctb_vendor_writer, ctb_data_reader, ctb_bridge_executor roles"
       required: true
 
-    - path: "templates/migrations/011_enforce_application_role.sql"
+    - path: "fleet/migrations/011_enforce_application_role.sql"
       purpose: "Application role enforcement — ctb_app_role (non-superuser), validate_application_role() function"
       required: true
 
@@ -817,19 +817,19 @@ files:
   # MODULES (APPLICATION-LEVEL ENFORCEMENT)
   # ═══════════════════════════════════════════════════════════════════════════
   modules:
-    - path: "templates/modules/gatekeeper/README.md"
+    - path: "fleet/car-template/src/gatekeeper/README.md"
       purpose: "Gatekeeper module documentation — purpose, file inventory, usage example"
       required: true
 
-    - path: "templates/modules/gatekeeper/index.ts"
+    - path: "fleet/car-template/src/gatekeeper/index.ts"
       purpose: "Gatekeeper class — application-level DB write wrapper enforcing CTB registry"
       required: true
 
-    - path: "templates/modules/gatekeeper/types.ts"
+    - path: "fleet/car-template/src/gatekeeper/types.ts"
       purpose: "Gatekeeper type definitions — config, registry entries, audit entries, results"
       required: true
 
-    - path: "templates/modules/gatekeeper/audit-logger.ts"
+    - path: "fleet/car-template/src/gatekeeper/audit-logger.ts"
       purpose: "Audit logger — structured audit trail for every database write operation"
       required: true
 
@@ -837,7 +837,7 @@ files:
   # VALIDATORS
   # ═══════════════════════════════════════════════════════════════════════════
   validators:
-    - path: "templates/validators/README.md"
+    - path: "fleet/validators/README.md"
       purpose: "Validator documentation"
       required: true
 
@@ -881,7 +881,7 @@ reading_order:
     steps:
       - "Check: Does IMO_CONTROL.json exist at repo root?"
       - "If YES → CHILD repo → Follow in_child_repo tiers"
-      - "If NO → Check: Does templates/doctrine/ directory exist?"
+      - "If NO → Check: Does law/doctrine/ directory exist?"
       - "If YES → PARENT repo (imo-creator) → Follow in_parent_repo tiers"
       - "If NO → UNGOVERNED → HALT"
 
@@ -904,61 +904,61 @@ reading_order:
           location: "repo root"
           purpose: "Constitutional orientation — what is governed, invariants"
 
-        - file: "templates/TEMPLATES_MANIFEST.yaml"
-          location: "templates/"
+        - file: "fleet/TEMPLATES_MANIFEST.yaml"
+          location: "law/ + fleet/ + factory/"
           purpose: "This file — machine-readable index, tier system, file registry"
 
     tier_2_domain:
       description: "Load on-demand when working in that domain"
       files:
-        - file: "templates/doctrine/ARCHITECTURE.md"
+        - file: "law/doctrine/ARCHITECTURE.md"
           domain: "structure, placement, CC layers, hub-spoke, IMO, descent"
           trigger: "Any structural or architectural question"
 
-        - file: "templates/SNAP_ON_TOOLBOX.yaml"
+        - file: "law/SNAP_ON_TOOLBOX.yaml"
           domain: "tool selection, vendor evaluation"
           trigger: "Any tool suggestion or evaluation"
 
-        - file: "templates/semantic/OSAM.md"
+        - file: "law/semantic/OSAM.md"
           domain: "query routing, data schema, joins, table ownership"
           trigger: "Any data or query question"
 
-        - file: "templates/integrations/TOOLS.md"
+        - file: "law/integrations/TOOLS.md"
           domain: "tool admission, LLM containment, tool ledger"
           trigger: "Tool doctrine or LLM usage question"
 
-        - file: "templates/claude/APPLY_DOCTRINE.prompt.md"
+        - file: "fleet/prompts/APPLY_DOCTRINE.prompt.md"
           domain: "doctrine application to child repos"
           trigger: "Applying doctrine to a downstream repo"
 
     tier_3_audit:
       description: "Never auto-loaded. Human-requested or audit-triggered only."
       files:
-        - file: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+        - file: "law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
           trigger: "Database change governance audit"
-        - file: "templates/doctrine/ERD_CONSTITUTION.md"
+        - file: "law/doctrine/ERD_CONSTITUTION.md"
           trigger: "ERD validation audit"
-        - file: "templates/doctrine/ERD_DOCTRINE.md"
+        - file: "law/doctrine/ERD_DOCTRINE.md"
           trigger: "ERD format standards audit"
-        - file: "templates/doctrine/PRD_CONSTITUTION.md"
+        - file: "law/doctrine/PRD_CONSTITUTION.md"
           trigger: "PRD validity audit"
-        - file: "templates/doctrine/PROCESS_DOCTRINE.md"
+        - file: "law/doctrine/PROCESS_DOCTRINE.md"
           trigger: "Process declaration audit"
-        - file: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+        - file: "law/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
           trigger: "Documentation ERD standards audit"
-        - file: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+        - file: "law/doctrine/REPO_REFACTOR_PROTOCOL.md"
           trigger: "Refactor sequence audit"
-        - file: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+        - file: "law/doctrine/TEMPLATE_IMMUTABILITY.md"
           trigger: "Template modification audit"
-        - file: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+        - file: "law/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
           trigger: "Never — redirect stub"
-        - file: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+        - file: "law/doctrine/HUB_SPOKE_ARCHITECTURE.md"
           trigger: "Never — redirect stub"
-        - file: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+        - file: "law/doctrine/ALTITUDE_DESCENT_MODEL.md"
           trigger: "Never — redirect stub"
-        - file: "templates/IMO_SYSTEM_SPEC.md"
+        - file: "fleet/car-template/law/IMO_SYSTEM_SPEC.md"
           trigger: "System index reference"
-        - file: "templates/AI_EMPLOYEE_OPERATING_CONTRACT.md"
+        - file: "fleet/car-template/law/AI_EMPLOYEE_OPERATING_CONTRACT.md"
           trigger: "AI employee governance reference"
         - note: "All 15 claude prompt files — loaded individually when executing that specific ceremony"
 
@@ -1150,22 +1150,22 @@ bootstrap:
       action: "copy_control_files"
       description: "Copy governance files to child repo root"
       files:
-        - source: "templates/child/IMO_CONTROL.json.template"
+        - source: "fleet/car-template/IMO_CONTROL.json.template"
           destination: "IMO_CONTROL.json"
           then: "Fill in hub-specific values"
-        - source: "templates/child/DOCTRINE.md.template"
+        - source: "fleet/car-template/DOCTRINE.md.template"
           destination: "DOCTRINE.md"
           then: "Update version reference"
-        - source: "templates/child/REGISTRY.yaml.template"
+        - source: "fleet/car-template/REGISTRY.yaml.template"
           destination: "REGISTRY.yaml"
           then: "Fill in hub identity"
-        - source: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+        - source: "fleet/car-template/DOCTRINE_CHECKPOINT.yaml.template"
           destination: "DOCTRINE_CHECKPOINT.yaml"
           then: "CC fills before each coding session"
-        - source: "templates/child/CC_OPERATIONAL_DIGEST.md"
+        - source: "fleet/car-template/CC_OPERATIONAL_DIGEST.md"
           destination: "CC_OPERATIONAL_DIGEST.md"
           then: "TIER 1 mandatory — read before any work"
-        - source: "templates/child/STARTUP_PROTOCOL.md"
+        - source: "fleet/car-template/STARTUP_PROTOCOL.md"
           destination: "STARTUP_PROTOCOL.md"
           then: "CC executes this sequence every session"
 
@@ -1188,17 +1188,17 @@ bootstrap:
       action: "copy_templates"
       description: "Copy artifact templates"
       files:
-        - source: "templates/prd/PRD_HUB.md"
+        - source: "fleet/car-template/docs/PRD_HUB.md"
           destination: "docs/prd/PRD_HUB.md"
-        - source: "templates/adr/ADR.md"
+        - source: "fleet/adr-templates/ADR.md"
           destination: "docs/adr/ADR_TEMPLATE.md"
-        - source: "templates/checklists/HUB_COMPLIANCE.md"
+        - source: "fleet/checklists/HUB_COMPLIANCE.md"
           destination: "docs/checklists/HUB_COMPLIANCE.md"
 
     - step: 5
       action: "install_hooks"
       description: "Install git hooks"
-      command: "cp templates/scripts/hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
+      command: "cp fleet/scripts/hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
 
     - step: 6
       action: "create_claude_md"
@@ -1210,10 +1210,10 @@ bootstrap:
 
         | Template | imo-creator Path | Version |
         |----------|------------------|---------|
-        | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
-        | Tools | templates/integrations/TOOLS.md | 1.1.0 |
-        | OSAM | templates/semantic/OSAM.md | 1.1.0 |
-        | Manifest | templates/TEMPLATES_MANIFEST.yaml | 3.3.0 |
+        | Architecture | law/doctrine/ARCHITECTURE.md | 2.1.0 |
+        | Tools | law/integrations/TOOLS.md | 1.1.0 |
+        | OSAM | law/semantic/OSAM.md | 1.1.0 |
+        | Manifest | fleet/TEMPLATES_MANIFEST.yaml | 3.4.1 |
 
         ## This Hub
 
@@ -1299,134 +1299,134 @@ update_manifest:
     description: "These files are ALWAYS synced on update — overwrite in child repo"
     files:
       # Doctrine (constitutional law — all 16 files)
-      - source: "templates/doctrine/ARCHITECTURE.md"
+      - source: "law/doctrine/ARCHITECTURE.md"
         destination: "doctrine/ARCHITECTURE.md"
-      - source: "templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
+      - source: "law/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
         destination: "doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md"
-      - source: "templates/doctrine/HUB_SPOKE_ARCHITECTURE.md"
+      - source: "law/doctrine/HUB_SPOKE_ARCHITECTURE.md"
         destination: "doctrine/HUB_SPOKE_ARCHITECTURE.md"
-      - source: "templates/doctrine/ALTITUDE_DESCENT_MODEL.md"
+      - source: "law/doctrine/ALTITUDE_DESCENT_MODEL.md"
         destination: "doctrine/ALTITUDE_DESCENT_MODEL.md"
-      - source: "templates/doctrine/REPO_REFACTOR_PROTOCOL.md"
+      - source: "law/doctrine/REPO_REFACTOR_PROTOCOL.md"
         destination: "doctrine/REPO_REFACTOR_PROTOCOL.md"
-      - source: "templates/doctrine/TEMPLATE_IMMUTABILITY.md"
+      - source: "law/doctrine/TEMPLATE_IMMUTABILITY.md"
         destination: "doctrine/TEMPLATE_IMMUTABILITY.md"
-      - source: "templates/doctrine/PRD_CONSTITUTION.md"
+      - source: "law/doctrine/PRD_CONSTITUTION.md"
         destination: "doctrine/PRD_CONSTITUTION.md"
-      - source: "templates/doctrine/ERD_CONSTITUTION.md"
+      - source: "law/doctrine/ERD_CONSTITUTION.md"
         destination: "doctrine/ERD_CONSTITUTION.md"
-      - source: "templates/doctrine/ERD_DOCTRINE.md"
+      - source: "law/doctrine/ERD_DOCTRINE.md"
         destination: "doctrine/ERD_DOCTRINE.md"
-      - source: "templates/doctrine/PROCESS_DOCTRINE.md"
+      - source: "law/doctrine/PROCESS_DOCTRINE.md"
         destination: "doctrine/PROCESS_DOCTRINE.md"
-      - source: "templates/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
+      - source: "law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
         destination: "doctrine/DBA_ENFORCEMENT_DOCTRINE.md"
-      - source: "templates/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
+      - source: "law/doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
         destination: "doctrine/DOCUMENTATION_ERD_DOCTRINE.md"
-      - source: "templates/doctrine/ROLLBACK_PROTOCOL.md"
+      - source: "law/doctrine/ROLLBACK_PROTOCOL.md"
         destination: "doctrine/ROLLBACK_PROTOCOL.md"
-      - source: "templates/doctrine/EXECUTION_SURFACE_LAW.md"
+      - source: "law/doctrine/EXECUTION_SURFACE_LAW.md"
         destination: "doctrine/EXECUTION_SURFACE_LAW.md"
-      - source: "templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
+      - source: "law/doctrine/CTB_REGISTRY_ENFORCEMENT.md"
         destination: "doctrine/CTB_REGISTRY_ENFORCEMENT.md"
-      - source: "templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
+      - source: "law/doctrine/FAIL_CLOSED_CI_CONTRACT.md"
         destination: "doctrine/FAIL_CLOSED_CI_CONTRACT.md"
-      - source: "templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md"
+      - source: "law/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md"
         destination: "doctrine/LEGACY_COLLAPSE_PLAYBOOK.md"
       # Semantic + Constitutional
-      - source: "templates/semantic/OSAM.md"
+      - source: "law/semantic/OSAM.md"
         destination: "doctrine/OSAM.md"
-      - source: "templates/integrations/TOOLS.md"
+      - source: "law/integrations/TOOLS.md"
         destination: "doctrine/TOOLS.md"
-      - source: "templates/SNAP_ON_TOOLBOX.yaml"
+      - source: "law/SNAP_ON_TOOLBOX.yaml"
         destination: "SNAP_ON_TOOLBOX.yaml"
       # Operational (TIER 1)
-      - source: "templates/child/CC_OPERATIONAL_DIGEST.md"
+      - source: "fleet/car-template/CC_OPERATIONAL_DIGEST.md"
         destination: "CC_OPERATIONAL_DIGEST.md"
-      - source: "templates/child/STARTUP_PROTOCOL.md"
+      - source: "fleet/car-template/STARTUP_PROTOCOL.md"
         destination: "STARTUP_PROTOCOL.md"
       # Compliance
-      - source: "templates/checklists/HUB_COMPLIANCE.md"
+      - source: "fleet/checklists/HUB_COMPLIANCE.md"
         destination: "docs/checklists/HUB_COMPLIANCE.md"
       # Git hooks
-      - source: "templates/scripts/hooks/pre-commit"
+      - source: "fleet/scripts/hooks/pre-commit"
         destination: ".git/hooks/pre-commit"
       # Scripts (always overwrite — these are tooling, not customized)
-      - source: "templates/scripts/codegen-generate.sh"
+      - source: "fleet/scripts/codegen-generate.sh"
         destination: "scripts/codegen-generate.sh"
-      - source: "templates/scripts/codegen-verify.sh"
+      - source: "fleet/scripts/codegen-verify.sh"
         destination: "scripts/codegen-verify.sh"
-      - source: "templates/scripts/validate-schema-completeness.sh"
+      - source: "fleet/scripts/validate-schema-completeness.sh"
         destination: "scripts/validate-schema-completeness.sh"
-      - source: "templates/scripts/generate-data-dictionary.sh"
+      - source: "fleet/scripts/generate-data-dictionary.sh"
         destination: "scripts/generate-data-dictionary.sh"
-      - source: "templates/scripts/install-hooks.sh"
+      - source: "fleet/scripts/install-hooks.sh"
         destination: "scripts/install-hooks.sh"
-      - source: "templates/scripts/update_from_imo_creator.sh"
+      - source: "fleet/scripts/update_from_imo_creator.sh"
         destination: "scripts/update_from_imo_creator.sh"
-      - source: "templates/scripts/detect-staleness.sh"
+      - source: "fleet/scripts/detect-staleness.sh"
         destination: "scripts/detect-staleness.sh"
-      - source: "templates/scripts/ctb-registry-gate.sh"
+      - source: "fleet/scripts/ctb-registry-gate.sh"
         destination: "scripts/ctb-registry-gate.sh"
-      - source: "templates/scripts/detect-banned-db-clients.sh"
+      - source: "fleet/scripts/detect-banned-db-clients.sh"
         destination: "scripts/detect-banned-db-clients.sh"
-      - source: "templates/scripts/verify-governance-ci.sh"
+      - source: "fleet/scripts/verify-governance-ci.sh"
         destination: "scripts/verify-governance-ci.sh"
-      - source: "templates/scripts/bootstrap-audit.sh"
+      - source: "fleet/scripts/bootstrap-audit.sh"
         destination: "scripts/bootstrap-audit.sh"
-      - source: "templates/scripts/ctb-drift-audit.sh"
+      - source: "fleet/scripts/ctb-drift-audit.sh"
         destination: "scripts/ctb-drift-audit.sh"
 
   sync_if_missing:
     description: "These files are synced only if they don't exist in child (templates that get customized)"
     files:
-      - source: "templates/prd/PRD_HUB.md"
+      - source: "fleet/car-template/docs/PRD_HUB.md"
         destination: "docs/prd/PRD_HUB.md"
-      - source: "templates/adr/ADR.md"
+      - source: "fleet/adr-templates/ADR.md"
         destination: "docs/adr/ADR_TEMPLATE.md"
-      - source: "templates/pr/PULL_REQUEST_TEMPLATE_HUB.md"
+      - source: "fleet/pr-templates/PULL_REQUEST_TEMPLATE_HUB.md"
         destination: ".github/PULL_REQUEST_TEMPLATE_HUB.md"
-      - source: "templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md"
+      - source: "fleet/pr-templates/PULL_REQUEST_TEMPLATE_SPOKE.md"
         destination: ".github/PULL_REQUEST_TEMPLATE_SPOKE.md"
-      - source: "templates/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
+      - source: "fleet/checklists/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
         destination: "docs/audit/CONSTITUTIONAL_AUDIT_ATTESTATION.md"
-      - source: "templates/child/column_registry.yml.template"
+      - source: "fleet/car-template/column_registry.yml.template"
         destination: "column_registry.yml"
-      - source: "templates/child/DOCTRINE_CHECKPOINT.yaml.template"
+      - source: "fleet/car-template/DOCTRINE_CHECKPOINT.yaml.template"
         destination: "DOCTRINE_CHECKPOINT.yaml"
-      - source: "templates/checklists/QUARTERLY_HYGIENE_AUDIT.md"
+      - source: "fleet/checklists/QUARTERLY_HYGIENE_AUDIT.md"
         destination: "docs/checklists/QUARTERLY_HYGIENE_AUDIT.md"
-      - source: "templates/checklists/REPO_HOUSEKEEPING.md"
+      - source: "fleet/checklists/REPO_HOUSEKEEPING.md"
         destination: "docs/checklists/REPO_HOUSEKEEPING.md"
       # Migrations (database governance — copy once, child may customize order)
-      - source: "templates/migrations/001_ctb_table_registry.sql"
+      - source: "fleet/migrations/001_ctb_table_registry.sql"
         destination: "migrations/001_ctb_table_registry.sql"
-      - source: "templates/migrations/002_ctb_event_trigger.sql"
+      - source: "fleet/migrations/002_ctb_event_trigger.sql"
         destination: "migrations/002_ctb_event_trigger.sql"
-      - source: "templates/migrations/003_ctb_write_guards.sql"
+      - source: "fleet/migrations/003_ctb_write_guards.sql"
         destination: "migrations/003_ctb_write_guards.sql"
-      - source: "templates/migrations/004_ctb_promotion_enforcement.sql"
+      - source: "fleet/migrations/004_ctb_promotion_enforcement.sql"
         destination: "migrations/004_ctb_promotion_enforcement.sql"
-      - source: "templates/migrations/005_raw_immutability.sql"
+      - source: "fleet/migrations/005_raw_immutability.sql"
         destination: "migrations/005_raw_immutability.sql"
-      - source: "templates/migrations/006_raw_batch_registry.sql"
+      - source: "fleet/migrations/006_raw_batch_registry.sql"
         destination: "migrations/006_raw_batch_registry.sql"
-      - source: "templates/migrations/007_raw_active_view_template.sql"
+      - source: "fleet/migrations/007_raw_active_view_template.sql"
         destination: "migrations/007_raw_active_view_template.sql"
-      - source: "templates/migrations/008_vendor_json_template.sql"
+      - source: "fleet/migrations/008_vendor_json_template.sql"
         destination: "migrations/008_vendor_json_template.sql"
-      - source: "templates/migrations/009_bridge_template.sql"
+      - source: "fleet/migrations/009_bridge_template.sql"
         destination: "migrations/009_bridge_template.sql"
-      - source: "templates/migrations/010_vendor_write_permissions.sql"
+      - source: "fleet/migrations/010_vendor_write_permissions.sql"
         destination: "migrations/010_vendor_write_permissions.sql"
-      - source: "templates/migrations/011_enforce_application_role.sql"
+      - source: "fleet/migrations/011_enforce_application_role.sql"
         destination: "migrations/011_enforce_application_role.sql"
       # Gatekeeper module (application-level enforcement)
-      - source: "templates/modules/gatekeeper/index.ts"
+      - source: "fleet/car-template/src/gatekeeper/index.ts"
         destination: "src/data/modules/gatekeeper/index.ts"
-      - source: "templates/modules/gatekeeper/types.ts"
+      - source: "fleet/car-template/src/gatekeeper/types.ts"
         destination: "src/data/modules/gatekeeper/types.ts"
-      - source: "templates/modules/gatekeeper/audit-logger.ts"
+      - source: "fleet/car-template/src/gatekeeper/audit-logger.ts"
         destination: "src/data/modules/gatekeeper/audit-logger.ts"
 
   never_sync:
@@ -1749,4 +1749,4 @@ document_control:
   status: "ACTIVE"
   authority: "CONSTITUTIONAL"
   scope: "PARENT"
-  update_trigger: "Any file added/removed from templates/"
+  update_trigger: "Any file added/removed from law/, fleet/, or factory/"

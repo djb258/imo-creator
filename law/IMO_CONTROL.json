@@ -48,20 +48,20 @@
       "cleanup_execution"
     ],
     "phase_prompts": {
-      "constitutional_admission": "templates/claude/APPLY_DOCTRINE.prompt.md",
-      "structural_instantiation": "templates/claude/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md",
-      "data_declaration": "templates/claude/DECLARE_DATA_AND_RENDER_ERD.prompt.md",
-      "execution_wiring": "templates/claude/DECLARE_EXECUTION_WIRING.prompt.md",
-      "dba_enforcement": "templates/claude/DBA_ENFORCEMENT.prompt.md",
-      "documentation_enforcement": "templates/claude/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md",
-      "hygiene_audit": "templates/claude/HYGIENE_AUDITOR.prompt.md",
-      "cleanup_execution": "templates/claude/CLEANUP_EXECUTOR.prompt.md"
+      "constitutional_admission": "fleet/prompts/APPLY_DOCTRINE.prompt.md",
+      "structural_instantiation": "fleet/prompts/DECLARE_STRUCTURE_AND_RENDER_TREE.prompt.md",
+      "data_declaration": "fleet/prompts/DECLARE_DATA_AND_RENDER_ERD.prompt.md",
+      "execution_wiring": "fleet/prompts/DECLARE_EXECUTION_WIRING.prompt.md",
+      "dba_enforcement": "fleet/prompts/DBA_ENFORCEMENT.prompt.md",
+      "documentation_enforcement": "fleet/prompts/DOCUMENTATION_ERD_ENFORCEMENT.prompt.md",
+      "hygiene_audit": "fleet/prompts/HYGIENE_AUDITOR.prompt.md",
+      "cleanup_execution": "fleet/prompts/CLEANUP_EXECUTOR.prompt.md"
     }
   },
 
   "doctrine_files": {
     "authority": "CONSTITUTIONAL",
-    "location": "templates/doctrine/",
+    "location": "law/doctrine/",
     "required": [
       {
         "file": "ARCHITECTURE.md",

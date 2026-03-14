@@ -56,7 +56,7 @@ Orchestrator Intake Packet (or raw user intent)
 
 ## Alias Validation Sequence
 
-1. Load `sys/registry/repo_registry.json`.
+1. Load `law/registry/repo_registry.json`.
 2. Verify `target_repo_alias` matches an entry where `repo_alias === target_repo_alias`.
 3. If no match: **FAIL_SCOPE** — alias not in registry.
 4. Verify `entry.enabled === true`. If disabled: **FAIL_SCOPE**.
@@ -66,17 +66,17 @@ Orchestrator Intake Packet (or raw user intent)
 
 ## Raw URL Handling
 
-1. Load `sys/registry/repo_pull_policy.json`.
+1. Load `law/registry/repo_pull_policy.json`.
 2. If `allow_raw_url === false` and user provides URL: **FAIL_SCOPE**.
 3. If `allow_raw_url === true`: set `target_repo_url`. Log that raw URL path was used.
 4. Never construct a repo URL from an alias. Resolution is the Builder's job.
 
 ## Inbox Mode Protocol
 
-1. Read the first JSON file in `sys/runtime/inbox/planner/`.
+1. Read the first JSON file in `factory/runtime/inbox/planner/`.
 2. Validate schema before processing.
 3. Process deterministically.
-4. Write output to `sys/runtime/outbox/planner/`.
-5. Atomically move output to `sys/runtime/inbox/builder/`.
+4. Write output to `factory/runtime/outbox/planner/`.
+5. Atomically move output to `factory/runtime/inbox/builder/`.
 6. Delete original input file after successful move.
 7. Halt on any schema validation error.

@@ -23,7 +23,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 2: Planner generates WORK_PACKET     │
-│  Actor: skills/agent-planner/                │
+│  Actor: factory/agents/agent-planner/                │
 │  Input: User request + doctrine + registry  │
 │  Output: work_packets/outbox/{id}.json      │
 │  Gate: Schema validation                    │
@@ -32,7 +32,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 3: Execution runner mounts repo      │
-│  Actor: sys/runtime/execution_runner/       │
+│  Actor: factory/runtime/execution_runner/       │
 │  Input: WORK_PACKET from inbox              │
 │  Output: Isolated clone with scope lock     │
 │  Gate: Mount validation (5-step protocol)   │
@@ -41,7 +41,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 4: DB Agent validates (conditional)  │
-│  Actor: skills/agent-db/                    │
+│  Actor: factory/agents/agent-db/                    │
 │  Condition: schema_impact=true OR migrate   │
 │  Input: WORK_PACKET + mounted repo + DB     │
 │  Output: DB validation report               │
@@ -52,7 +52,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 5: Builder executes                  │
-│  Actor: skills/agent-builder/               │
+│  Actor: factory/agents/agent-builder/               │
 │  Input: WORK_PACKET + mounted repo          │
 │  Output: Modified files + artifacts + log   │
 │  Gate: Scope containment (file_targets)     │
@@ -62,7 +62,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 6: Artifact writer collects + hashes │
-│  Actor: sys/runtime/artifact_writer/        │
+│  Actor: factory/runtime/artifact_writer/        │
 │  Input: Builder outputs                     │
 │  Output: Hashed artifact bundle             │
 │  Gate: All required_artifacts present       │
@@ -71,7 +71,7 @@ USER INTENT
                    ▼
 ┌─────────────────────────────────────────────┐
 │  STAGE 7: Auditor evaluates                 │
-│  Actor: skills/agent-auditor/               │
+│  Actor: factory/agents/agent-auditor/               │
 │  Input: WORK_PACKET + artifacts + rules     │
 │  Output: PASS | FAIL_EXECUTION | FAIL_SCOPE │
 │  Gate: 12 audit rules, sequential eval      │
@@ -86,7 +86,7 @@ USER INTENT
            ▼                ▼
 ┌──────────────────┐  ┌──────────────────────────────┐
 │  Return to Human │  │  STAGE 8: Signature engine    │
-│  with failure    │  │  Actor: sys/certification/    │
+│  with failure    │  │  Actor: factory/certification/    │
 │  reasons         │  │  Input: Audit + hash + key    │
 │                  │  │  Output: certification.json   │
 │  New WORK_PACKET │  │  Gate: Signing conditions     │
@@ -130,9 +130,9 @@ The Planner will translate this into a formal WORK_PACKET.
 ### Stage 2: Planner Generates WORK_PACKET
 
 The Planner reads:
-- `sys/contracts/doctrine_version.json` for current version
-- `sys/registry/taxonomy_registry.json` for valid classifications
-- `FLEET_REGISTRY.yaml` for valid target repos
+- `factory/contracts/doctrine_version.json` for current version
+- `law/registry/taxonomy_registry.json` for valid classifications
+- `fleet/registry/FLEET_REGISTRY.yaml` for valid target repos
 
 The Planner outputs a WORK_PACKET V2 to `work_packets/outbox/`.
 
@@ -182,7 +182,7 @@ The artifact writer:
 
 ### Stage 7: Auditor Evaluates
 
-The Auditor evaluates 12 rules from `sys/registry/audit_rules.json`:
+The Auditor evaluates 12 rules from `law/registry/audit_rules.json`:
 
 | Phase | Rules | Failure Type |
 |-------|-------|-------------|

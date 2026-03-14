@@ -54,17 +54,17 @@ If any validation fails: HALT. Report the error. Do not emit a Planner Intake Pa
 
 ## Registry References
 
-- `sys/registry/repo_registry.json` — alias validation
-- `sys/registry/repo_pull_policy.json` — raw URL gate
-- `sys/registry/fleet_inventory.json` — fleet alignment status (informs refit detection)
+- `law/registry/repo_registry.json` — alias validation
+- `law/registry/repo_pull_policy.json` — raw URL gate
+- `law/registry/fleet_inventory.json` — fleet alignment status (informs refit detection)
 
 ## Inbox Mode Protocol
 
-1. Read the first JSON file in `sys/runtime/inbox/orchestrator/`.
+1. Read the first JSON file in `factory/runtime/inbox/orchestrator/`.
 2. Validate schema before processing.
 3. Process deterministically.
-4. Write output to `sys/runtime/outbox/orchestrator/`.
-5. Atomically move output to `sys/runtime/inbox/planner/`.
+4. Write output to `factory/runtime/outbox/orchestrator/`.
+5. Atomically move output to `factory/runtime/inbox/planner/`.
 6. Delete original input file after successful move.
 7. Halt on any schema validation error.
 

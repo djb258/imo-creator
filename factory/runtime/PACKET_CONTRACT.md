@@ -8,7 +8,7 @@
 
 ## 1. JSON Packet Envelope Schema
 
-Every packet in the `sys/runtime/` pipeline MUST conform to this envelope:
+Every packet in the `factory/runtime/` pipeline MUST conform to this envelope:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -51,7 +51,7 @@ Every packet in the `sys/runtime/` pipeline MUST conform to this envelope:
 | **Claude.ai** | Foreman — writes packets, reviews auditor reports | Anthropic AI (phone/web) |
 | **Composio** | Bridge — commits packets to GitHub from Claude.ai | MCP integration (CC-03) |
 | **Claude Code** | Execution engine — runs all 5 agents | Anthropic infrastructure (via Claude.ai) |
-| **GitHub** | Mailbox — `sys/runtime/inbox/` and `outbox/` directories | Repository |
+| **GitHub** | Mailbox — `factory/runtime/inbox/` and `outbox/` directories | Repository |
 
 ### How Agents Get Invoked
 
@@ -77,27 +77,27 @@ Claude.ai opens Claude Code on imo-creator
     │
     ▼
 Claude Code reads inbox/orchestrator/ → becomes Orchestrator
-    reads skill: skills/agent-orchestrator/SKILL.md
+    reads skill: factory/agents/agent-orchestrator/SKILL.md
     does work → writes outbox/orchestrator/ → drops packet in inbox/planner/
     │
     ▼
 Claude Code reads inbox/planner/ → becomes Planner
-    reads skill: skills/agent-planner/SKILL.md
+    reads skill: factory/agents/agent-planner/SKILL.md
     does work → writes outbox/planner/ → drops packet in inbox/builder/
     │
     ▼
 Claude Code reads inbox/builder/ → becomes Builder
-    reads skill: skills/agent-builder/SKILL.md
+    reads skill: factory/agents/agent-builder/SKILL.md
     does work → writes outbox/builder/ → drops packet in inbox/db-agent/
     │
     ▼
 Claude Code reads inbox/db-agent/ → becomes DB Agent
-    reads skill: skills/agent-db/SKILL.md
+    reads skill: factory/agents/agent-db/SKILL.md
     does work → writes outbox/db-agent/ → drops packet in inbox/auditor/
     │
     ▼
 Claude Code reads inbox/auditor/ → becomes Auditor
-    reads skill: skills/agent-auditor/SKILL.md
+    reads skill: factory/agents/agent-auditor/SKILL.md
     does work → writes report to outbox/auditor/ → STOP
     │
     ▼
@@ -168,7 +168,7 @@ If Claude.ai is not in the loop, `pipeline-trigger.yml` can detect new packets o
 
 | Rule | Detail |
 |------|--------|
-| Trigger | `push` to `master`/`main` with changes in `sys/runtime/inbox/**/*.json` |
+| Trigger | `push` to `master`/`main` with changes in `factory/runtime/inbox/**/*.json` |
 | Detection | `git diff HEAD~1 HEAD` — which inbox got a new file? |
 | Execution | `anthropics/claude-code-action@v1` (requires `ANTHROPIC_API_KEY` in repo secrets) |
 | Manual retry | `workflow_dispatch` with agent name + optional packet path |
