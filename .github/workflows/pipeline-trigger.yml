@@ -2,10 +2,9 @@
 # AGENT PIPELINE TRIGGER
 # ═══════════════════════════════════════════════════════════════════════════════
 # Authority: BAR-134
-# Purpose: Auto-dispatch agents when packets land in their inbox
-# Behavior: Detect new packet → signal runner → runner has its own credentials
-# Flow: Foreman push → Orchestrator → Planner → Builder → DB Agent → Auditor
-# Security: CI holds ZERO API keys. It detects and signals only.
+# Purpose: When a packet lands in an agent's inbox, invoke that agent
+# Behavior: Detect new .json in inbox → run the agent → agent drops next packet
+# Flow: Foreman (Claude.ai via Composio) → Orchestrator → Planner → Builder → DB Agent → Auditor
 # ═══════════════════════════════════════════════════════════════════════════════
 
 name: Agent Pipeline
@@ -18,11 +17,10 @@ on:
     paths:
       - 'sys/runtime/inbox/**/*.json'
 
-  # Manual dispatch for retries or reprocessing
   workflow_dispatch:
     inputs:
       agent:
-        description: 'Agent to invoke (orchestrator|planner|builder|db-agent|auditor)'
+        description: 'Agent to invoke'
         required: true
         type: choice
         options:
@@ -32,192 +30,96 @@ on:
           - db-agent
           - auditor
       packet_file:
-        description: 'Path to specific packet file (optional — processes oldest pending if blank)'
+        description: 'Packet file path (optional — uses oldest if blank)'
         required: false
         type: string
 
 jobs:
-  # ─────────────────────────────────────────────────────────────────────────────
-  # DETECT: Which inbox got a new packet?
-  # ─────────────────────────────────────────────────────────────────────────────
-  detect:
-    name: Detect New Packet
+  run-agent:
+    name: Run Agent
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    outputs:
-      agent: ${{ steps.detect.outputs.agent }}
-      packet_file: ${{ steps.detect.outputs.packet_file }}
-      should_run: ${{ steps.detect.outputs.should_run }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Detect which inbox received a packet
+      - name: Detect agent and packet
         id: detect
         run: |
-          # Get files changed in this push
-          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'sys/runtime/inbox/' 2>/dev/null || echo "")
-
-          if [ -z "$CHANGED" ]; then
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "No new inbox packets detected."
-            exit 0
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            AGENT="${{ inputs.agent }}"
+            PACKET="${{ inputs.packet_file }}"
+          else
+            # Find which inbox got a new .json
+            CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'sys/runtime/inbox/' 2>/dev/null || echo "")
+            AGENT=""
+            PACKET=""
+            for file in $CHANGED; do
+              case "$file" in
+                sys/runtime/inbox/orchestrator/*.json) AGENT="orchestrator"; PACKET="$file"; break ;;
+                sys/runtime/inbox/planner/*.json)      AGENT="planner";      PACKET="$file"; break ;;
+                sys/runtime/inbox/builder/*.json)      AGENT="builder";      PACKET="$file"; break ;;
+                sys/runtime/inbox/db-agent/*.json)     AGENT="db-agent";     PACKET="$file"; break ;;
+                sys/runtime/inbox/auditor/*.json)      AGENT="auditor";      PACKET="$file"; break ;;
+              esac
+            done
           fi
 
-          echo "Changed files:"
-          echo "$CHANGED"
-
-          # Determine which agent inbox was targeted (take first match)
-          AGENT=""
-          PACKET=""
-          for file in $CHANGED; do
-            case "$file" in
-              sys/runtime/inbox/orchestrator/*.json)
-                AGENT="orchestrator"
-                PACKET="$file"
-                break
-                ;;
-              sys/runtime/inbox/planner/*.json)
-                AGENT="planner"
-                PACKET="$file"
-                break
-                ;;
-              sys/runtime/inbox/builder/*.json)
-                AGENT="builder"
-                PACKET="$file"
-                break
-                ;;
-              sys/runtime/inbox/db-agent/*.json)
-                AGENT="db-agent"
-                PACKET="$file"
-                break
-                ;;
-              sys/runtime/inbox/auditor/*.json)
-                AGENT="auditor"
-                PACKET="$file"
-                break
-                ;;
-            esac
-          done
-
-          if [ -z "$AGENT" ]; then
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Changed files not in a recognized agent inbox."
-            exit 0
+          # If no specific packet, grab oldest in inbox
+          if [ -z "$PACKET" ] && [ -n "$AGENT" ]; then
+            PACKET=$(ls -tr "sys/runtime/inbox/$AGENT"/*.json 2>/dev/null | head -1)
           fi
 
-          echo "agent=$AGENT" >> "$GITHUB_OUTPUT"
-          echo "packet_file=$PACKET" >> "$GITHUB_OUTPUT"
-          echo "should_run=true" >> "$GITHUB_OUTPUT"
-          echo "Detected: agent=$AGENT, packet=$PACKET"
-
-  # ─────────────────────────────────────────────────────────────────────────────
-  # SIGNAL: Notify the runner to pick up the packet
-  # ─────────────────────────────────────────────────────────────────────────────
-  signal:
-    name: "Signal: ${{ needs.detect.outputs.agent || inputs.agent }}"
-    runs-on: ubuntu-latest
-    needs: [detect]
-    if: |
-      (github.event_name == 'push' && needs.detect.outputs.should_run == 'true') ||
-      github.event_name == 'workflow_dispatch'
-    env:
-      AGENT: ${{ needs.detect.outputs.agent || inputs.agent }}
-      PACKET_FILE: ${{ needs.detect.outputs.packet_file || inputs.packet_file }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Resolve agent and packet
-        id: resolve
-        run: |
-          # Map agent name to skill directory
+          # Map agent to skill
           case "$AGENT" in
-            orchestrator) SKILL_DIR="skills/agent-orchestrator" ;;
-            planner)      SKILL_DIR="skills/agent-planner" ;;
-            builder)      SKILL_DIR="skills/agent-builder" ;;
-            db-agent)     SKILL_DIR="skills/agent-db" ;;
-            auditor)      SKILL_DIR="skills/agent-auditor" ;;
-            *)
-              echo "ERROR: Unknown agent '$AGENT'"
-              exit 1
-              ;;
+            orchestrator) SKILL="skills/agent-orchestrator/SKILL.md" ;;
+            planner)      SKILL="skills/agent-planner/SKILL.md" ;;
+            builder)      SKILL="skills/agent-builder/SKILL.md" ;;
+            db-agent)     SKILL="skills/agent-db/SKILL.md" ;;
+            auditor)      SKILL="skills/agent-auditor/SKILL.md" ;;
+            *)            echo "No agent detected"; exit 0 ;;
           esac
 
-          # Find packet if not specified
-          if [ -n "$PACKET_FILE" ] && [ -f "$PACKET_FILE" ]; then
-            PACKET="$PACKET_FILE"
-          else
-            INBOX="sys/runtime/inbox/$AGENT"
-            PACKET=$(ls -tr "$INBOX"/*.json 2>/dev/null | head -1)
-          fi
-
-          echo "skill_dir=$SKILL_DIR" >> "$GITHUB_OUTPUT"
+          echo "agent=$AGENT" >> "$GITHUB_OUTPUT"
           echo "packet=$PACKET" >> "$GITHUB_OUTPUT"
+          echo "skill=$SKILL" >> "$GITHUB_OUTPUT"
+          echo "Agent: $AGENT | Packet: $PACKET"
 
-          echo "Agent: $AGENT"
-          echo "Skill: $SKILL_DIR"
-          echo "Packet: $PACKET"
+      - name: Invoke agent
+        if: steps.detect.outputs.agent != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are the ${{ steps.detect.outputs.agent }} agent.
 
-      - name: Write dispatch signal
-        run: |
-          # Write a signal file that the runner polls or watches
-          mkdir -p sys/runtime/signals
-          SIGNAL_FILE="sys/runtime/signals/dispatch-$(date +%Y%m%dT%H%M%S)-${AGENT}.json"
+            READ your skill: ${{ steps.detect.outputs.skill }}
+            READ the contract: sys/runtime/PACKET_CONTRACT.md
+            READ your packet: ${{ steps.detect.outputs.packet }}
 
-          cat > "$SIGNAL_FILE" <<SIGNAL
-          {
-            "signal_id": "$(uuidgen || echo ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})",
-            "agent": "$AGENT",
-            "skill_dir": "${{ steps.resolve.outputs.skill_dir }}",
-            "packet_file": "${{ steps.resolve.outputs.packet }}",
-            "triggered_by": "${{ github.event_name }}",
-            "commit_sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "created_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          }
-          SIGNAL
+            Do the work. When done:
+            1. Write output to sys/runtime/outbox/${{ steps.detect.outputs.agent }}/
+            2. Drop the next packet in the next agent's inbox:
+               orchestrator → inbox/planner/
+               planner → inbox/builder/
+               builder → inbox/db-agent/
+               db-agent → inbox/auditor/
+               auditor → STOP (write report to outbox/auditor/ only)
+            3. Commit: "pipeline(${{ steps.detect.outputs.agent }}): [BAR-ID] — [description]"
+            4. Push.
 
-          echo "Signal written: $SIGNAL_FILE"
-          cat "$SIGNAL_FILE"
-
-      - name: Dispatch to runner
-        run: |
-          # ─────────────────────────────────────────────────────────────
-          # DISPATCH OPTIONS (configure one):
-          #
-          # Option A: Repository dispatch event
-          #   The runner listens for repository_dispatch events via
-          #   GitHub API. Runner has its own Doppler/Anthropic creds.
-          #
-          # Option B: Webhook to runner endpoint
-          #   POST signal payload to a webhook URL the runner exposes.
-          #   Runner processes and invokes Claude Code locally.
-          #
-          # Option C: Self-hosted runner
-          #   This workflow runs on a self-hosted runner that already
-          #   has Doppler installed and credentials configured.
-          #   Change runs-on to: self-hosted
-          # ─────────────────────────────────────────────────────────────
-
-          # Default: repository_dispatch (runner picks up via GitHub API)
-          echo "::notice::Pipeline signal dispatched for agent '$AGENT'"
-          echo "::notice::Packet: ${{ steps.resolve.outputs.packet }}"
-          echo "::notice::Runner with Doppler credentials should pick this up"
-
-          # When runner infrastructure is configured, uncomment ONE:
-          #
-          # --- Option A: repository_dispatch ---
-          # curl -X POST \
-          #   -H "Accept: application/vnd.github+json" \
-          #   -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          #   https://api.github.com/repos/${{ github.repository }}/dispatches \
-          #   -d "{\"event_type\":\"agent-pipeline\",\"client_payload\":{\"agent\":\"$AGENT\",\"packet\":\"${{ steps.resolve.outputs.packet }}\",\"skill_dir\":\"${{ steps.resolve.outputs.skill_dir }}\"}}"
-          #
-          # --- Option B: webhook ---
-          # curl -X POST "${{ secrets.RUNNER_WEBHOOK_URL }}" \
-          #   -H "Content-Type: application/json" \
-          #   -d @sys/runtime/signals/dispatch-*-${AGENT}.json
+            Packets are immutable. If blocked, write status=failed and STOP.
+          allowed_tools: |
+            Read
+            Write
+            Edit
+            Glob
+            Grep
+            Bash(git status)
+            Bash(git add)
+            Bash(git commit)
+            Bash(git push)
+            Bash(ls)
+            Bash(mkdir)
+          timeout_minutes: 30

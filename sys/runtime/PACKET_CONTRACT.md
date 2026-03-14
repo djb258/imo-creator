@@ -140,67 +140,55 @@ Example: `BAR-134_build-agent-pipeline_orchestrator.json`
 
 ---
 
-## 7. Automatic Trigger Mechanism
+## 7. Automatic Trigger
 
-Packets are **not** polled. The pipeline is **push-triggered** via GitHub Actions.
+Mailbox to mailbox. Each agent does work, drops a packet in the next agent's inbox.
 
 ### How It Works
 
 ```
-Foreman commits packet to inbox/orchestrator/
+Claude.ai (Foreman) + Dave
     │
     ▼
-git push to master/main
+Composio → commits packet to inbox/orchestrator/ on GitHub
     │
     ▼
-GitHub Actions: pipeline-trigger.yml
+GitHub Actions detects new .json → invokes Orchestrator
     │
     ▼
-Detect job: "Which inbox got a new .json file?"
+Orchestrator does work → drops packet in inbox/planner/ → commits + pushes
     │
     ▼
-Signal job: Write dispatch signal → notify runner
+GitHub Actions detects new .json → invokes Planner
     │
     ▼
-Runner (with its own Doppler/Anthropic creds) picks up signal
+Planner does work → drops packet in inbox/builder/ → commits + pushes
     │
     ▼
-Runner invokes Claude Code with agent skill + packet
+... continues through DB Agent ...
     │
     ▼
-Agent processes → commits output + next packet → pushes
+Auditor does work → drops report in outbox/auditor/ → STOP
     │
     ▼
-That push triggers pipeline-trigger.yml AGAIN → next agent fires
-    │
-    ▼
-Cascade continues until Auditor (terminal — no downstream inbox)
+Dave reviews in Claude.ai
 ```
 
-### Security Model
-
-**CI holds ZERO API keys.** GitHub Actions only detects and signals. The runner that actually invokes Claude Code has its own Doppler credentials and fetches `GLOBAL_ANTHROPIC_API_KEY` from the vault at runtime.
-
-### Trigger Rules
+### Rules
 
 | Rule | Detail |
 |------|--------|
-| Trigger event | `push` to `master`/`main` with changes in `sys/runtime/inbox/**/*.json` |
-| Detection | `git diff HEAD~1 HEAD` on inbox paths |
-| Signal | Writes dispatch signal to `sys/runtime/signals/` + notifies runner |
-| Execution | Runner with Doppler creds invokes Claude Code locally |
-| Cascade | Each agent's commit+push re-triggers the workflow for the next agent |
+| Trigger | `push` to `master`/`main` with changes in `sys/runtime/inbox/**/*.json` |
+| Detection | `git diff HEAD~1 HEAD` — which inbox got a new file? |
+| Execution | GitHub Actions invokes that agent via `claude-code-action` |
+| Cascade | Agent commits next packet → push re-triggers workflow → next agent runs |
 | Terminal | Auditor writes to `outbox/auditor/` only — no downstream inbox, cascade stops |
 | Manual retry | `workflow_dispatch` with agent name + optional packet path |
-| Failure halt | Agent writes `status=failed` packet — no downstream packet created, cascade stops |
+| Failure | Agent writes `status=failed` — no downstream packet, cascade stops |
 
-### Runner Dispatch Options
+### Entry Point
 
-| Option | How It Works |
-|--------|-------------|
-| **Repository dispatch** | CI fires `repository_dispatch` event → runner listens via GitHub API |
-| **Webhook** | CI POSTs signal to runner's webhook endpoint |
-| **Self-hosted runner** | Workflow runs directly on a runner with Doppler pre-installed |
+Claude.ai (Foreman) uses Composio's GitHub integration to commit the initial packet directly to `sys/runtime/inbox/orchestrator/`. Dave never leaves the Claude.ai conversation.
 
 ### Workflow File
 
