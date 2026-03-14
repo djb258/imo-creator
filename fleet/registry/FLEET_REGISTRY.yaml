@@ -73,6 +73,15 @@ fleet:
       last_synced: "2026-03-09"
       status: "ACTIVE"
 
+    - name: "barton-processes"
+      path: "../Barton-Processes"
+      github: "djb258/Barton-Processes"
+      purpose: "Process engine — all executable code across the fleet"
+      child_version: "3.5.0"
+      last_synced: "2026-03-14"
+      status: "ACTIVE"
+      repo_type: "process-engine"
+
     - name: "research"
       path: "[TBD — no local repo yet]"
       purpose: "Research hub"
@@ -96,5 +105,5 @@ fleet:
 
 document_control:
   created: "2026-02-15"
-  last_modified: "2026-03-09"
+  last_modified: "2026-03-14"
   maintained_by: "Human only"

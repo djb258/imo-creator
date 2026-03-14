@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════
+# HEIR — barton-processes (Fleet Registry Copy)
+# ═══════════════════════════════════════════════════════════════
+# This is the Garage's record of the barton-processes child repo.
+# Canonical copy lives at: barton-processes/law/heir.yaml
+# ═══════════════════════════════════════════════════════════════
+
+doctrine_version: "3.5.0"
+sovereign_ref: "imo-creator"
+hub_id: "barton-processes"
+hub_name: "Barton Processes"
+ctb_placement: "factory"
+imo_topology: "middle"
+repo_type: "process-engine"
+
+services:
+  - "neon-db-agent"
+  - "cl-pipeline"
+  - "lcs-runtime"
+  - "lcs-delivery"
+  - "lcs-gates"
+  - "dol-refresh"
+  - "people-intel"
+  - "blog-monitor"
+  - "talent-flow"
+  - "outreach-execution"
+  - "field-monitor"
+  - "client-ai-services"
+  - "client-ui-api"
+  - "sales-meeting-service"
+  - "bit-scoring"
+
+secrets_provider: "doppler"
+
+acceptance_criteria:
+  - "Every process has a numbered directory under factory/"
+  - "Every process has heir.yaml with declared dependencies"
+  - "process-registry.yaml matches actual factory/ contents"
+  - "ZERO executables remain in any blueprint repo after extraction"
+
+status: "phase-0"
+registered: "2026-03-14"
+bar: "BAR-136"

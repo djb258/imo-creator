@@ -1,6 +1,6 @@
 {
   "doctrine_version": "3.5.0",
-  "updated_at": "2026-03-09T00:00:00Z",
+  "updated_at": "2026-03-14T00:00:00Z",
   "repos": [
     {
       "repo_alias": "client",
@@ -76,6 +76,18 @@
       "auth_method": "local",
       "workspace_slug": "barton-storage",
       "enabled": true
+    },
+    {
+      "repo_alias": "barton-processes",
+      "display_name": "Process Engine — All Executable Code",
+      "github_url": "https://github.com/djb258/Barton-Processes.git",
+      "local_path": "../Barton-Processes",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master"],
+      "auth_method": "local",
+      "workspace_slug": "barton-processes",
+      "enabled": true,
+      "repo_type": "process-engine"
     }
   ]
 }
