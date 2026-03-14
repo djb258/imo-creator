@@ -140,6 +140,61 @@ Example: `BAR-134_build-agent-pipeline_orchestrator.json`
 
 ---
 
+## 7. Automatic Trigger Mechanism
+
+Packets are **not** polled. The pipeline is **push-triggered** via GitHub Actions.
+
+### How It Works
+
+```
+Foreman commits packet to inbox/orchestrator/
+    │
+    ▼
+git push to master/main
+    │
+    ▼
+GitHub Actions: pipeline-trigger.yml
+    │
+    ▼
+Detect job: "Which inbox got a new .json file?"
+    │
+    ▼
+Dispatch job: Invoke that agent via Claude Code Action
+    │
+    ▼
+Agent processes packet → commits output + next packet → pushes
+    │
+    ▼
+That push triggers pipeline-trigger.yml AGAIN → next agent fires
+    │
+    ▼
+Cascade continues until Auditor (terminal — no downstream inbox)
+```
+
+### Trigger Rules
+
+| Rule | Detail |
+|------|--------|
+| Trigger event | `push` to `master`/`main` with changes in `sys/runtime/inbox/**/*.json` |
+| Detection | `git diff HEAD~1 HEAD` on inbox paths |
+| Dispatch | `anthropics/claude-code-action@v1` with agent skill + packet |
+| Cascade | Each agent's commit+push re-triggers the workflow for the next agent |
+| Terminal | Auditor writes to `outbox/auditor/` only — no downstream inbox, cascade stops |
+| Manual retry | `workflow_dispatch` with agent name + optional packet path |
+| Failure halt | Agent writes `status=failed` packet — no downstream packet created, cascade stops |
+
+### Required Secret
+
+| Secret | Source | Purpose |
+|--------|--------|---------|
+| `ANTHROPIC_API_KEY` | Doppler vault (`GLOBAL_ANTHROPIC_API_KEY`) | Authenticates Claude Code Action |
+
+### Workflow File
+
+`.github/workflows/pipeline-trigger.yml`
+
+---
+
 ## Document Control
 
 | Field | Value |

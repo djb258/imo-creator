@@ -1,0 +1,211 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# AGENT PIPELINE TRIGGER
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: BAR-134
+# Purpose: Auto-dispatch agents when packets land in their inbox
+# Behavior: Detect new packet → invoke correct agent → agent cascades to next
+# Flow: Foreman push → Orchestrator → Planner → Builder → DB Agent → Auditor
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Agent Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'sys/runtime/inbox/**/*.json'
+
+  # Manual dispatch for retries or reprocessing
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: 'Agent to invoke (orchestrator|planner|builder|db-agent|auditor)'
+        required: true
+        type: choice
+        options:
+          - orchestrator
+          - planner
+          - builder
+          - db-agent
+          - auditor
+      packet_file:
+        description: 'Path to specific packet file (optional — processes oldest pending if blank)'
+        required: false
+        type: string
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DETECT: Which inbox got a new packet?
+  # ─────────────────────────────────────────────────────────────────────────────
+  detect:
+    name: Detect New Packet
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    outputs:
+      agent: ${{ steps.detect.outputs.agent }}
+      packet_file: ${{ steps.detect.outputs.packet_file }}
+      should_run: ${{ steps.detect.outputs.should_run }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect which inbox received a packet
+        id: detect
+        run: |
+          # Get files changed in this push
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'sys/runtime/inbox/' 2>/dev/null || echo "")
+
+          if [ -z "$CHANGED" ]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "No new inbox packets detected."
+            exit 0
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          # Determine which agent inbox was targeted (take first match)
+          AGENT=""
+          PACKET=""
+          for file in $CHANGED; do
+            case "$file" in
+              sys/runtime/inbox/orchestrator/*.json)
+                AGENT="orchestrator"
+                PACKET="$file"
+                break
+                ;;
+              sys/runtime/inbox/planner/*.json)
+                AGENT="planner"
+                PACKET="$file"
+                break
+                ;;
+              sys/runtime/inbox/builder/*.json)
+                AGENT="builder"
+                PACKET="$file"
+                break
+                ;;
+              sys/runtime/inbox/db-agent/*.json)
+                AGENT="db-agent"
+                PACKET="$file"
+                break
+                ;;
+              sys/runtime/inbox/auditor/*.json)
+                AGENT="auditor"
+                PACKET="$file"
+                break
+                ;;
+            esac
+          done
+
+          if [ -z "$AGENT" ]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Changed files not in a recognized agent inbox."
+            exit 0
+          fi
+
+          echo "agent=$AGENT" >> "$GITHUB_OUTPUT"
+          echo "packet_file=$PACKET" >> "$GITHUB_OUTPUT"
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+          echo "Detected: agent=$AGENT, packet=$PACKET"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISPATCH: Run the agent via Claude Code
+  # ─────────────────────────────────────────────────────────────────────────────
+  dispatch:
+    name: "Dispatch: ${{ needs.detect.outputs.agent || inputs.agent }}"
+    runs-on: ubuntu-latest
+    needs: [detect]
+    if: |
+      (github.event_name == 'push' && needs.detect.outputs.should_run == 'true') ||
+      github.event_name == 'workflow_dispatch'
+    env:
+      AGENT: ${{ needs.detect.outputs.agent || inputs.agent }}
+      PACKET_FILE: ${{ needs.detect.outputs.packet_file || inputs.packet_file }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve agent skill path
+        id: skill
+        run: |
+          # Map agent name to skill directory
+          case "$AGENT" in
+            orchestrator) SKILL_DIR="skills/agent-orchestrator" ;;
+            planner)      SKILL_DIR="skills/agent-planner" ;;
+            builder)      SKILL_DIR="skills/agent-builder" ;;
+            db-agent)     SKILL_DIR="skills/agent-db" ;;
+            auditor)      SKILL_DIR="skills/agent-auditor" ;;
+            *)
+              echo "ERROR: Unknown agent '$AGENT'"
+              exit 1
+              ;;
+          esac
+
+          echo "skill_dir=$SKILL_DIR" >> "$GITHUB_OUTPUT"
+          echo "Resolved skill: $SKILL_DIR"
+
+      - name: Find packet to process
+        id: packet
+        run: |
+          if [ -n "$PACKET_FILE" ] && [ -f "$PACKET_FILE" ]; then
+            echo "file=$PACKET_FILE" >> "$GITHUB_OUTPUT"
+            echo "Using specified packet: $PACKET_FILE"
+          else
+            # Find oldest pending packet in this agent's inbox (FIFO)
+            INBOX="sys/runtime/inbox/$AGENT"
+            OLDEST=$(ls -tr "$INBOX"/*.json 2>/dev/null | head -1)
+            if [ -z "$OLDEST" ]; then
+              echo "No pending packets in $INBOX"
+              echo "file=" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "file=$OLDEST" >> "$GITHUB_OUTPUT"
+            echo "Processing oldest packet: $OLDEST"
+          fi
+
+      - name: Invoke agent via Claude Code
+        if: steps.packet.outputs.file != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are the ${{ env.AGENT }} agent in the IMO-Creator pipeline.
+
+            READ your skill file: ${{ steps.skill.outputs.skill_dir }}/SKILL.md
+            READ the pipeline contract: sys/runtime/PACKET_CONTRACT.md
+            READ your assigned packet: ${{ steps.packet.outputs.file }}
+
+            EXECUTE the work described in the packet payload.
+
+            When done:
+            1. Write your output to sys/runtime/outbox/${{ env.AGENT }}/
+            2. If you are NOT the auditor, create a new packet in the NEXT agent's inbox:
+               - orchestrator → inbox/planner/
+               - planner → inbox/builder/
+               - builder → inbox/db-agent/
+               - db-agent → inbox/auditor/
+            3. Commit all changes with message: "pipeline(${{ env.AGENT }}): [BAR-ID] — [short description]"
+            4. Push to the current branch.
+
+            IMPORTANT:
+            - Follow PACKET_CONTRACT.md handoff rules exactly
+            - Packets are immutable — write NEW packets, never edit existing ones
+            - If you encounter a blocking error, write a packet with status=failed and STOP
+          allowed_tools: |
+            Read
+            Write
+            Edit
+            Glob
+            Grep
+            Bash(git status)
+            Bash(git add)
+            Bash(git commit)
+            Bash(git push)
+            Bash(ls)
+            Bash(mkdir)
+          timeout_minutes: 30
