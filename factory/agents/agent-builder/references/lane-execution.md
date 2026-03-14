@@ -38,7 +38,7 @@
 
 | Constraint | Rule |
 |------------|------|
-| Runner contract | Follow `sys/runtime/container_runner/runner_contract.json` protocol. |
+| Runner contract | Follow `factory/runtime/container_runner/runner_contract.json` protocol. |
 | Profile select | Use `WORK_PACKET.container_profile` to select base image and tooling. |
 | Build | Build container from `WORK_PACKET.container_target` directory. |
 | Run | Execute tests/builds in isolated container. Capture results. |

@@ -6,10 +6,10 @@ Internal capability for fleet alignment. Only invoked when `execution_type === "
 
 ## Behavior
 
-1. Load bundle from `sys/runtime/fleet_refit/bundle/`.
+1. Load bundle from `factory/runtime/fleet_refit/bundle/`.
 2. Copy bundle contents into mounted repo at `repo_path`.
 3. Perform placeholder substitution using values from `registry_entry`:
-   - `{{doctrine_version}}` from `sys/runtime/doctrine_version.json`
+   - `{{doctrine_version}}` from `factory/runtime/doctrine_version.json`
    - `{{sovereign_id}}` from Garage identity (CC-01)
    - `{{hub_id}}` from `registry_entry.repo_alias`
    - `{{ctb_placement}}` from `registry_entry.ctb_placement` (or WORK_PACKET payload)
@@ -31,7 +31,7 @@ Internal capability for fleet alignment. Only invoked when `execution_type === "
 
 Produce refit artifact: `changesets/outbox/refit_<operational_id>.json`
 
-Schema: `sys/contracts/refit_report.schema.json`
+Schema: `factory/contracts/refit_report.schema.json`
 
 Fields:
 - `process_id` — execution process ID

@@ -11,24 +11,24 @@
     },
     "stage_2_plan": {
       "name": "Planner generates WORK_PACKET",
-      "actor": "skills/agent-planner/",
+      "actor": "factory/agents/agent-planner/",
       "inputs": [
         "User request",
-        "sys/contracts/doctrine_version.json",
-        "sys/registry/doctrine_registry.json",
-        "sys/registry/taxonomy_registry.json",
-        "FLEET_REGISTRY.yaml"
+        "factory/contracts/doctrine_version.json",
+        "law/registry/doctrine_registry.json",
+        "law/registry/taxonomy_registry.json",
+        "fleet/registry/FLEET_REGISTRY.yaml"
       ],
       "output": "work_packets/outbox/{work_packet_id}.json",
-      "validation": "WORK_PACKET must validate against sys/contracts/work_packet.schema.json",
+      "validation": "WORK_PACKET must validate against factory/contracts/work_packet.schema.json",
       "handoff_to": "Execution Runner"
     },
     "stage_3_mount": {
       "name": "Execution runner mounts target repo",
-      "actor": "sys/runtime/execution_runner/",
+      "actor": "factory/runtime/execution_runner/",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
-        "sys/runtime/repo_mount/mount_contract.json"
+        "factory/runtime/repo_mount/mount_contract.json"
       ],
       "output": "Isolated repository clone with scope lock",
       "validation": "Mount contract 5-step protocol",
@@ -36,7 +36,7 @@
     },
     "stage_4_db_validation": {
       "name": "DB Agent validates schema impact and produces DB_CHANGESET",
-      "actor": "skills/agent-db/",
+      "actor": "factory/agents/agent-db/",
       "condition": "WORK_PACKET.db_required=true OR WORK_PACKET.schema_impact=true",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
@@ -54,7 +54,7 @@
     },
     "stage_5_execute": {
       "name": "Builder executes against mounted repo",
-      "actor": "skills/agent-builder/",
+      "actor": "factory/agents/agent-builder/",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
         "Mounted repository (scope-locked to file_targets)"
@@ -65,7 +65,7 @@
     },
     "stage_6_collect": {
       "name": "Artifact writer collects and hashes outputs",
-      "actor": "sys/runtime/artifact_writer/",
+      "actor": "factory/runtime/artifact_writer/",
       "inputs": [
         "Modified files from Builder execution",
         "Generated artifacts",
@@ -76,12 +76,12 @@
     },
     "stage_7_audit": {
       "name": "Auditor evaluates execution against doctrine",
-      "actor": "skills/agent-auditor/",
+      "actor": "factory/agents/agent-auditor/",
       "inputs": [
         "work_packets/inbox/{work_packet_id}.json",
         "Artifact bundle from Writer",
-        "sys/registry/audit_rules.json",
-        "sys/registry/doctrine_registry.json",
+        "law/registry/audit_rules.json",
+        "law/registry/doctrine_registry.json",
         "Constitutional documents"
       ],
       "output": "Classification: PASS | FAIL_EXECUTION | FAIL_SCOPE",
@@ -89,12 +89,12 @@
     },
     "stage_7b_sanitation": {
       "name": "Sanitation pass validates workspace cleanliness",
-      "actor": "sys/runtime/sanitation/",
+      "actor": "factory/runtime/sanitation/",
       "condition": "Audit classification is PASS. Sanitation runs ONLY after Auditor PASS.",
       "inputs": [
         "Mounted workspace state",
         "WORK_PACKET (for allowed_paths reference)",
-        "sys/runtime/sanitation/sanitation_contract.json"
+        "factory/runtime/sanitation/sanitation_contract.json"
       ],
       "output": "changesets/outbox/<work_packet_id>/sanitation_report.json with status: CLEAN | PASS_WITH_WARNINGS | FAIL",
       "on_failure": "sanitation_status === FAIL blocks certification. New WORK_PACKET required to remediate.",
@@ -102,7 +102,7 @@
     },
     "stage_8_certify": {
       "name": "Signature engine issues certification",
-      "actor": "sys/certification/signature_engine/",
+      "actor": "factory/certification/signature_engine/",
       "condition": "Audit classification is PASS AND sanitation_status is CLEAN or PASS_WITH_WARNINGS",
       "inputs": [
         "Audit classification",
@@ -115,7 +115,7 @@
     },
     "stage_9_validate": {
       "name": "Child repo CI validates certification",
-      "actor": "sys/certification/validator/ (runs in child repo CI)",
+      "actor": "factory/certification/validator/ (runs in child repo CI)",
       "inputs": [
         ".garage/certification.json from PR branch",
         "GARAGE_SIGNING_KEY"

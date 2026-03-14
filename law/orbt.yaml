@@ -1,0 +1,7 @@
+orbt_mode: "OPERATIONAL"
+hub_id: "GARAGE"
+sovereign_id: "imo-creator"
+classification: "sovereign"
+phase: "active"
+last_validated: "2026-03-14"
+notes: "Garage is always OPERATIONAL — it produces and certifies, never enters BOOTSTRAP or REPAIR itself."
