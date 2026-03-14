@@ -13,6 +13,18 @@ This is the **repo of repos**. All doctrine originates here. Downstream repos CO
 
 The following files are **LAW**. Claude Code may READ them. Claude Code may NEVER modify them.
 
+### Layer 0 — The Foundation (HUMAN AUTHORITY ONLY)
+
+| File | Purpose | Write Authority |
+|------|---------|-----------------|
+| `CLAUDE.md` | This file. Master instruction set for all AI agents operating in this repo. LOCKED. | Human only — no LLM may modify. |
+| `docs/LAYER0_DOCTRINE.md` | Layer 0 Doctrine — the universal constant-extraction engine. Three validators (IMO, CTB, Circle), gate mechanism, two-phase altitude structure, fractal IMO, tolerance cascade. Everything in the system derives from this. LOCKED. | Human only — no LLM may modify. |
+| `skills/skill-creator/SKILL.md` | Layer 0 Implementation Engine — 10-block constant-extraction pipeline. Extends three validators to five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle). Produces all skills. Defines the block format constant. LOCKED. | Human only — no LLM may modify. |
+
+**These three files are the top of the hierarchy. They govern everything below. No AI agent — Claude Code, Copilot, or any other LLM — may modify them. Changes require the human operator (Dave) directly.**
+
+**Layer 0 is the engine. Everything below is fuel it processes.**
+
 ### Doctrine (Constitutional Law)
 
 | File | Purpose |
@@ -91,8 +103,10 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|---------|
-| `skills/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules |
-| `skills/skill-creator/SKILL.md` | Skill creation engine — 10-block constant-extraction pipeline for producing new skills |
+| `skills/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules. All tiers conform to Layer 0 Doctrine. |
+| `skills/skill-creator/SKILL.md` | Layer 0 implementation engine — 10-block constant-extraction pipeline. Registered above in Layer 0 section. Produces all other skills. |
+
+**Chain of authority:** Layer 0 Doctrine → skill-creator (Layer 0 engine) → SKILLS_SYSTEM.md (governance) → all skills (agent, master, car).
 
 ---
 
@@ -141,6 +155,8 @@ FORBIDDEN:
 ## ENFORCEMENT
 
 ### What LOCKED Means
+
+**The three Layer 0 files (`CLAUDE.md`, `docs/LAYER0_DOCTRINE.md`, `skills/skill-creator/SKILL.md`) are HUMAN AUTHORITY ONLY. No LLM may modify them under any circumstances. No ADR process — only the human operator.**
 
 | Action | Permitted |
 |--------|-----------|
@@ -311,26 +327,37 @@ Any change to a LOCKED FILE requires:
 ```
 imo-creator (THIS REPO) ← SOVEREIGN
 │
-├── templates/doctrine/     ← CONSTITUTIONAL LAW (locked)
+├── docs/LAYER0_DOCTRINE.md ← THE FOUNDATION (locked)
+│   └── Constant-extraction engine — IMO, CTB, Circle, gate mechanism
+│
+├── skills/                  ← LAYER 0 ENGINE + MASTER TOOLBOX
+│   ├── skill-creator/SKILL.md       ← Layer 0 implementation (10-block pipeline, locked)
+│   ├── SKILLS_SYSTEM.md             ← Skills governance (three tiers, locked)
+│   ├── agent-*/                     ← Garage Control Plane agents
+│   └── <platform>/                  ← Master platform skills (neon, cloudflare, lovable, etc.)
+│
+├── docs/                    ← GOVERNING DOCUMENTS (locked)
+│   ├── OPERATOR_PROFILE.md          ← Document of documents (HUMAN AUTHORITY ONLY)
+│   └── constitutional/              ← Constitutional governance docs
+│
+├── templates/doctrine/      ← CONSTITUTIONAL LAW (locked)
 │   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.1.0)
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  ← REDIRECT
-│   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
-│   ├── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
 │   ├── EXECUTION_SURFACE_LAW.md     ← Execution containment (v1.0.0)
 │   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown + vendor JSON + bootstrap (v1.5.0)
 │   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI + bootstrap guarantees (v1.1.0)
+│   ├── ROLLBACK_PROTOCOL.md         ← Doctrine sync rollback procedure
 │   └── LEGACY_COLLAPSE_PLAYBOOK.md  ← Legacy migration (v1.0.0)
 │
 ├── templates/integrations/TOOLS.md ← CONSTITUTIONAL LAW (locked)
 │
-├── templates/semantic/     ← CONSTITUTIONAL LAW (locked)
+├── templates/semantic/      ← CONSTITUTIONAL LAW (locked)
 │   └── OSAM.md
 │
-├── templates/prd/          ← TEMPLATE LAW (locked)
-├── templates/adr/          ← TEMPLATE LAW (locked)
-├── templates/checklists/   ← TEMPLATE LAW (locked)
-├── templates/pr/           ← TEMPLATE LAW (locked)
-├── templates/integrations/ ← SPEC LAW (locked)
+├── templates/prd/           ← TEMPLATE LAW (locked)
+├── templates/adr/           ← TEMPLATE LAW (locked)
+├── templates/checklists/    ← TEMPLATE LAW (locked)
+├── templates/pr/            ← TEMPLATE LAW (locked)
+├── templates/integrations/  ← SPEC LAW (locked)
 │
 ├── barton-outreach-core (child repo)
 │   └── Conforms to imo-creator
@@ -363,7 +390,10 @@ imo-creator (THIS REPO) ← SOVEREIGN
 | Read templates | ✅ YES |
 | Create NEW templates (with human approval) | ✅ YES |
 | Create ADR drafts (for human review) | ✅ YES |
-| Modify locked files | ❌ NO |
+| Modify CLAUDE.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify docs/LAYER0_DOCTRINE.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify skills/skill-creator/SKILL.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify other locked files | ❌ NO |
 | Modify template structure | ❌ NO |
 | Reinterpret templates | ❌ NO |
 | Add concepts not in canonical | ❌ NO |
@@ -388,15 +418,16 @@ Drift is a child repo problem, not a template problem.
 
 ## GOLDEN RULES
 
-1. **This repo is the parent. It conforms to nothing.**
-2. **Locked files are law. Read, don't touch.**
-3. **Templates are structure. Fill in blanks, don't redesign.**
-4. **Children conform to parent. Never the reverse.**
-5. **Changes require ADR. No shortcuts.**
-6. **Drift is a bug. Templates are correct.**
-7. **Determinism first. LLM as tail only.**
-8. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**
-9. **Skills use the block format. Five elements validate every constant.**
+1. **Layer 0 is the engine. Everything else is fuel it processes.** Constants first. Variables are a last resort.
+2. **This repo is the parent. It conforms to nothing.**
+3. **Locked files are law. Read, don't touch.**
+4. **Templates are structure. Fill in blanks, don't redesign.**
+5. **Children conform to parent. Never the reverse.**
+6. **Changes require ADR. No shortcuts.**
+7. **Drift is a bug. Templates are correct.**
+8. **Determinism first. LLM as tail only.**
+9. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**
+10. **Skills use the block format. Five elements validate every constant.**
 
 ---
 
