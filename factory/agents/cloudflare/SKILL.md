@@ -1,5 +1,8 @@
 ---
 name: cloudflare
+metadata:
+  version: 1.1.0
+  tier: master
 description: >
   Platform capabilities, hard limits, pricing gates, and integration patterns for
   Cloudflare Workers, Hono, KV, D1, R2, Durable Objects, Queues, and Workflows.
@@ -278,7 +281,7 @@ See the Neon skill for vault-side configuration details.
 
 #### Fleet Reference — Ultimate Tool (UT)
 
-The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) is the fleet's heaviest Cloudflare
+The **Ultimate Tool** (`fleet/snap-on/ultimate-tool/`) is the fleet's heaviest Cloudflare
 consumer. UT is a sovereign AI platform (TOOL-012, pending ADR-026) built entirely on Cloudflare,
 with 14 of its 20 sub-hubs running as Cloudflare-native services:
 
@@ -300,8 +303,8 @@ with 14 of its 20 sub-hubs running as Cloudflare-native services:
 | SH-19 (Orchestrator) | Workers Runtime | Movement detection pipeline coordination |
 
 **When building or debugging any Cloudflare component**, check whether it's part of UT.
-UT's full spec lives at `templates/snap-on/ultimate-tool/README.md`. The field-monitor
-implementation lives at `templates/snap-on/ultimate-tool/field-monitor/`.
+UT's full spec lives at `fleet/snap-on/ultimate-tool/README.md`. The field-monitor
+implementation lives at `fleet/snap-on/ultimate-tool/field-monitor/`.
 
 Child repos never import UT code — they call UT via HTTP through SH-06 (the Rim).
 

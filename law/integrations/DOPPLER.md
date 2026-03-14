@@ -119,13 +119,6 @@ doppler run -- npm start
     DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
 ```
 
-### Vercel
-
-```bash
-# Sync to Vercel
-doppler secrets download --no-file --format env | vercel env add
-```
-
 ---
 
 ## Secret Rotation

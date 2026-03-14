@@ -1,5 +1,8 @@
 ---
 name: agent-orchestrator
+metadata:
+  version: 1.2.0
+  tier: agent
 description: >
   Garage Control Plane intake agent — deterministic normalization, ID minting, ORBT
   classification, and routing to Planner. Trigger on any new work request entering the

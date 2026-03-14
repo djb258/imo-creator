@@ -83,7 +83,7 @@ ls -la | grep -v "^d" | grep -v ".git" | grep -v ".env" | grep -v ".gitignore"
 
 ### 2. Scaffolding / Boilerplate Detection
 
-Check if the repo was originally scaffolded from a different project (Lovable, CRA, Next.js, etc.) and still carries dead artifacts.
+Check if the repo was originally scaffolded from a different project (CRA, Next.js, etc.) and still carries dead artifacts.
 
 ```bash
 # Common scaffolding leftovers

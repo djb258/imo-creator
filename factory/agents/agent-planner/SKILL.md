@@ -1,5 +1,8 @@
 ---
 name: agent-planner
+metadata:
+  version: 2.5.0
+  tier: agent
 description: >
   Garage Control Plane planning agent — generates validated WORK_PACKET V2 envelopes and
   routes execution lanes. Trigger when: a Planner Intake Packet arrives from the

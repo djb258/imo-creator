@@ -79,5 +79,5 @@ const promo = await gk.promote(
 |-------|-------|
 | Created | 2026-02-20 |
 | Authority | IMO-Creator (CC-01) |
-| Runtime | Deno / Supabase Edge Functions (TypeScript) |
+| Runtime | Edge Functions (TypeScript) |
 | Doctrine | CTB_REGISTRY_ENFORCEMENT.md §5 |

@@ -60,7 +60,7 @@ hives:
         doctrine_id: "SHQ.01"
         github_url: "https://github.com/[OWNER]/imo-creator"
         deployment:
-          frontend: "https://imo-creator.vercel.app"
+          frontend: "N/A"
           backend: "Composio Hosted"
         tech_stack:
           - "Node.js"
@@ -740,7 +740,7 @@ cross_cutting:
     - "Integration tests via GitHub Actions"
 
   deployment:
-    - "Frontend: Vercel"
+    - "Frontend: Platform-managed hosting"
     - "API: Composio Hosted"
     - "Database: Neon PostgreSQL"
     - "Storage: Firebase"

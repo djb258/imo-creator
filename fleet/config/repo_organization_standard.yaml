@@ -510,9 +510,9 @@ testing_standards:
 deployment_standards:
   platforms:
     frontend:
-      primary: "Vercel"
-      staging: "Vercel Preview"
-      configuration: "vercel.json"
+      primary: "Platform-managed hosting"
+      staging: "Preview deployments"
+      configuration: "deployment config"
 
     backend:
       primary: "Composio Hosted"
@@ -527,7 +527,7 @@ deployment_standards:
 
     storage:
       primary: "Firebase Storage"
-      cdn: "Vercel or Cloudflare"
+      cdn: "CDN provider"
 
   environment_tiers:
     development:

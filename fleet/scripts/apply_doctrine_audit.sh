@@ -352,7 +352,7 @@ echo "Checking UI structure..."
 
 if [ -d "$REPO_ROOT/src/ui" ]; then
     if [ ! -f "$REPO_ROOT/src/ui/ui.manifest.json" ]; then
-        add_warning "UI_STRUCTURE" "src/ui/ui.manifest.json" "UI manifest recommended for Lovable.dev" "Create ui.manifest.json"
+        add_warning "UI_STRUCTURE" "src/ui/ui.manifest.json" "UI manifest recommended for design tool integration" "Create ui.manifest.json"
     else
         add_passed "ui.manifest.json exists"
     fi

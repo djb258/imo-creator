@@ -23,7 +23,7 @@ pattern.
 |---|---|---|
 | **Scope** | Platform capabilities and limits | This repo's specific usage of that platform |
 | **Lives in** | `IMO-Creator/skills/<platform>/` | `<child-repo>/skills/<repo>-<platform>/` |
-| **Answers** | "What CAN Cloudflare/Neon/Lovable do?" | "What DOES this repo do with Cloudflare/Neon/Lovable?" |
+| **Answers** | "What CAN this platform do?" | "What DOES this repo do with this platform?" |
 | **Contains** | Limits, pricing, gates, integration patterns | Connection strings, table names, endpoints, bindings, schemas |
 | **Changes when** | Platform updates capabilities/pricing | Repo config changes |
 | **Format** | skill-creator compliant SKILL.md | skill-creator compliant SKILL.md (identical format) |
@@ -64,14 +64,11 @@ how THIS repo uses the platform.)
 
 ## Schema / Data Model
 
-<!-- Tables, columns, indexes that matter. For Neon: the actual schema.
-     For Cloudflare: the bindings in wrangler.toml. For Lovable: N/A -->
+<!-- Tables, columns, indexes that matter. Platform-specific schema details. -->
 
 ## Endpoints / Routes
 
-<!-- For Cloudflare Workers: the actual POST/GET routes.
-     For Neon: key queries or stored procedures.
-     For Lovable: the deployed URL and any API endpoints -->
+<!-- Platform-specific endpoints, routes, or key queries. -->
 
 ## Operational Patterns
 

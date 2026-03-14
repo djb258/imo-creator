@@ -604,10 +604,7 @@ deployment:
       enabled: true
       auto_deploy: true
       environment: production
-    vercel:
-      enabled: true
-      auto_deploy: true
-      environment: production
+    # vercel: removed (deprecated platform — see BAR-130)
 
   health_checks:
     enabled: true

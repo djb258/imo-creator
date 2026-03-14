@@ -1,5 +1,8 @@
 ---
 name: agent-auditor
+metadata:
+  version: 2.7.0
+  tier: agent
 description: >
   Garage Control Plane compliance agent — evaluates Builder execution against doctrine
   registry and audit rules across all lanes, issues classification, and feeds certification.

@@ -1,5 +1,8 @@
 ---
 name: neon
+metadata:
+  version: 1.1.0
+  tier: master
 description: >
   Platform capabilities, hard limits, pricing, and integration patterns for Neon
   Serverless PostgreSQL — connection pooling, branching, autoscaling, scale-to-zero,
@@ -273,7 +276,7 @@ For full pricing breakdown and cost examples, read `references/pricing.md`.
 The feedback loop between the working layer and the vault.
 
 **Constants:**
-- The **Ultimate Tool** (`templates/snap-on/ultimate-tool/`) uses **Cloudflare D1/KV as the working data layer** (BAR-100)
+- The **Ultimate Tool** (`fleet/snap-on/ultimate-tool/`) uses **Cloudflare D1/KV as the working data layer** (BAR-100)
 - Neon serves as the vault (cold archive / system of record)
 - Child repos never write directly to Neon during hot-path operations
 - UT does NOT own any Neon database — vault access is read-only for restore/audit
@@ -299,7 +302,7 @@ The feedback loop between the working layer and the vault.
 - Admin/migration: Direct connection for schema governance
 - Each child repo provides a dedicated Neon role for vault access (non-superuser, scoped)
 
-UT's full spec: `templates/snap-on/ultimate-tool/README.md`
+UT's full spec: `fleet/snap-on/ultimate-tool/README.md`
 
 **Variables:**
 

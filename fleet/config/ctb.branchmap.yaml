@@ -180,7 +180,7 @@ file_organization:
 
   sys/security-audit:
     - ".env.example"
-    - "VERCEL_ENVS.md"
+    - ".env.example"
 
   sys/chartdb:
     - "chartdb/**"

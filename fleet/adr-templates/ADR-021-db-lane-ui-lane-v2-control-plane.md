@@ -64,7 +64,7 @@
 The V1 control plane routes all work through a single Builder lane. Database schema changes and UI changes flow through the same execution path as application code changes. This creates three problems:
 
 1. **DB policy leakage**: The Builder agent makes schema decisions that should be governed by a dedicated DB specialist with CTB registry enforcement knowledge.
-2. **UI surface ambiguity**: UI work spans three distinct surfaces (local repo, Lovable.dev, Figma) with different execution models, but the Builder treats them identically.
+2. **UI surface ambiguity**: UI work spans distinct surfaces (local repo, Figma) with different execution models, but the Builder treats them identically.
 3. **Audit blind spots**: The Auditor cannot enforce DB-specific or UI-specific rules when all artifacts look like generic CHANGESETs.
 
 The Garage refactor (v3.5.0) centralized agents and introduced certification. This ADR extends the control plane with dedicated lanes while preserving backward compatibility.
@@ -108,7 +108,7 @@ V2 extends V1 with routing flags. V1 fields preserved. New fields:
 | `db_targets` | array | Required if db_required=true |
 | `db_system` | enum (neon, firebase, bigquery) | Required if db_required=true |
 | `ui_required` | boolean | If true: `ui_surface` and `ui_target` required |
-| `ui_surface` | enum (local, lovable, figma) | Required if ui_required=true |
+| `ui_surface` | enum (local, figma) | Required if ui_required=true |
 | `ui_target` | string | Required if ui_required=true |
 | `container_required` | boolean | If true: `container_profile` and `container_target` required |
 | `container_profile` | enum (node, python, mixed) | Required if container_required=true |
@@ -120,7 +120,7 @@ The DB Agent generates the DB_CHANGESET (migrations, rollback plan, validation s
 
 ### UI Adapter Model
 
-The UI lane is an adapter on the Worker, not a standalone agent. The Worker operates in "UI adapter mode" when `ui_required=true`. This is intentional — UI work does not yet warrant a full agent with its own master prompt. The adapter model routes to the correct surface (local, Lovable.dev, Figma) while keeping execution within the Worker's existing envelope.
+The UI lane is an adapter on the Worker, not a standalone agent. The Worker operates in "UI adapter mode" when `ui_required=true`. This is intentional — UI work does not yet warrant a full agent with its own master prompt. The adapter model routes to the correct surface (local, Figma) while keeping execution within the Worker's existing envelope.
 
 ### Flow Updates
 
@@ -176,7 +176,7 @@ Worker (container_required=true) → CONTAINER_RUN artifact
 ### Enables
 
 - Dedicated DB governance with CTB registry enforcement
-- UI work routed to correct surface (local, Lovable.dev, Figma)
+- UI work routed to correct surface (local, Figma)
 - Auditor can enforce lane-specific rules (DB_CHANGESET rollback plan, UI_CHANGESET preview artifacts)
 - Container-based testing and builds as a certified execution surface
 - Backward compatibility preserved — V1 work packets still route through standard flow
