@@ -16,7 +16,7 @@
 | Reusable Fail-Closed Gate | `reusable-fail-closed-gate.yml` | workflow_call | Fail-closed governance gate (5 gates: side-door, executable, DDL, fail-open detection, governance CI adoption) |
 | Reusable CTB Drift Audit | `reusable-ctb-drift-audit.yml` | workflow_call | Live DB vs registry drift detection (6 drift classes, requires DATABASE_URL) |
 | CTB Governance Required | `ctb-governance-required.yml` | push/PR to master + dispatch | Mandatory enforcement — runs fail-closed gate + drift audit, blocks on any failure |
-| Agent Pipeline | `pipeline-trigger.yml` | push to master/main (inbox/**/*.json) + dispatch | Auto-dispatch agents when packets land in sys/runtime/inbox/ — cascading Orchestrator → Planner → Builder → DB Agent → Auditor |
+| Agent Pipeline (Fallback) | `pipeline-trigger.yml` | push to master/main (inbox/**/*.json) + dispatch | Fallback agent dispatch when Claude.ai is not in the loop. Primary path is Claude.ai → Composio → Claude Code. |
 
 ---
 

@@ -2,9 +2,10 @@
 # AGENT PIPELINE TRIGGER
 # ═══════════════════════════════════════════════════════════════════════════════
 # Authority: BAR-134
-# Purpose: When a packet lands in an agent's inbox, invoke that agent
-# Behavior: Detect new .json in inbox → run the agent → agent drops next packet
-# Flow: Foreman (Claude.ai via Composio) → Orchestrator → Planner → Builder → DB Agent → Auditor
+# Purpose: FALLBACK trigger when Claude.ai is not in the loop
+# Primary path: Claude.ai → Composio → Claude Code (no CI needed)
+# Fallback path: Push to GitHub → this workflow detects → invokes agent
+# Requires: ANTHROPIC_API_KEY in GitHub repo secrets (fallback only)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 name: Agent Pipeline
