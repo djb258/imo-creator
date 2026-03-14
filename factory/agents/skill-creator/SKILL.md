@@ -7,7 +7,7 @@ description: >
   quick_validate.py and can be executed by any LLM without prior context.
 ---
 
-## Layer 0 Doctrine
+## Tier 0 Doctrine
 
 This skill is a constant-extraction engine. Its purpose is to take a domain and extract
 every constant until the remaining variable space is within operational tolerance. The
@@ -224,7 +224,7 @@ Concrete example walks through cleanly. Proceed.
 **Governed by: CTB**
 
 **Constants:**
-- SKILL.md structure is always: Layer 0 Doctrine → IMO → Constants → Variables →
+- SKILL.md structure is always: Tier 0 Doctrine → IMO → Constants → Variables →
   Workflow → Rules → Reference Pointers.
 - The frontmatter description field is the primary trigger mechanism.
 - Every skill uses progressive disclosure: frontmatter → body → references as needed.
@@ -373,7 +373,7 @@ included. Proceed.
 - Input: Swap-tested skill from Block 7.
 - Middle: Run automated validation:
   ```bash
-  python skills/skill-creator/scripts/quick_validate.py <skill-name>
+  python factory/agents/skill-creator/scripts/quick_validate.py <skill-name>
   ```
 - Output: All checks passed OR specific errors to fix.
 

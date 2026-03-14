@@ -13,17 +13,17 @@ This is the **repo of repos**. All doctrine originates here. Downstream repos CO
 
 The following files are **LAW**. Claude Code may READ them. Claude Code may NEVER modify them.
 
-### Layer 0 — The Foundation (HUMAN AUTHORITY ONLY)
+### Tier 0 — The Foundation (HUMAN AUTHORITY ONLY)
 
 | File | Purpose | Write Authority |
 |------|---------|-----------------|
 | `CLAUDE.md` | This file. Master instruction set for all AI agents operating in this repo. LOCKED. | Human only — no LLM may modify. |
-| `law/doctrine/LAYER0_DOCTRINE.md` | Layer 0 Doctrine — the universal constant-extraction engine. Three validators (IMO, CTB, Circle), gate mechanism, two-phase altitude structure, fractal IMO, tolerance cascade. Everything in the system derives from this. LOCKED. | Human only — no LLM may modify. |
-| `factory/agents/skill-creator/SKILL.md` | Layer 0 Implementation Engine — 10-block constant-extraction pipeline. Extends three validators to five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle). Produces all skills. Defines the block format constant. LOCKED. | Human only — no LLM may modify. |
+| `law/doctrine/TIER0_DOCTRINE.md` | Tier 0 Doctrine — the universal constant-extraction engine. Three validators (IMO, CTB, Circle), gate mechanism, two-phase altitude structure, fractal IMO, tolerance cascade. Everything in the system derives from this. LOCKED. | Human only — no LLM may modify. |
+| `factory/agents/skill-creator/SKILL.md` | Tier 0 Implementation Engine — 10-block constant-extraction pipeline. Extends three validators to five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle). Produces all skills. Defines the block format constant. LOCKED. | Human only — no LLM may modify. |
 
 **These three files are the top of the hierarchy. They govern everything below. No AI agent — Claude Code, Copilot, or any other LLM — may modify them. Changes require the human operator (Dave) directly.**
 
-**Layer 0 is the engine. Everything below is fuel it processes.**
+**Tier 0 is the engine. Everything below is fuel it processes.**
 
 ### Doctrine (Constitutional Law)
 
@@ -103,10 +103,10 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|---------|
-| `factory/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules. All tiers conform to Layer 0 Doctrine. |
-| `factory/agents/skill-creator/SKILL.md` | Layer 0 implementation engine — 10-block constant-extraction pipeline. Registered above in Layer 0 section. Produces all other skills. |
+| `factory/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules. All tiers conform to Tier 0 Doctrine. |
+| `factory/agents/skill-creator/SKILL.md` | Tier 0 implementation engine — 10-block constant-extraction pipeline. Registered above in Tier 0 section. Produces all other skills. |
 
-**Chain of authority:** Layer 0 Doctrine → skill-creator (Layer 0 engine) → SKILLS_SYSTEM.md (governance) → all skills (agent, master, car).
+**Chain of authority:** Tier 0 Doctrine → skill-creator (Tier 0 engine) → SKILLS_SYSTEM.md (governance) → all skills (agent, master, car).
 
 ---
 
@@ -156,7 +156,7 @@ FORBIDDEN:
 
 ### What LOCKED Means
 
-**The three Layer 0 files (`CLAUDE.md`, `law/doctrine/LAYER0_DOCTRINE.md`, `factory/agents/skill-creator/SKILL.md`) are HUMAN AUTHORITY ONLY. No LLM may modify them under any circumstances. No ADR process — only the human operator.**
+**The three Tier 0 files (`CLAUDE.md`, `law/doctrine/TIER0_DOCTRINE.md`, `factory/agents/skill-creator/SKILL.md`) are HUMAN AUTHORITY ONLY. No LLM may modify them under any circumstances. No ADR process — only the human operator.**
 
 | Action | Permitted |
 |--------|-----------|
@@ -332,7 +332,7 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   ├── SNAP_ON_TOOLBOX.yaml             ← Master tool registry
 │   ├── IMO_CONTROL.json                 ← Control document
 │   ├── doctrine/                        ← LOCKED doctrine
-│   │   ├── LAYER0_DOCTRINE.md           ← THE FOUNDATION (HUMAN AUTHORITY ONLY)
+│   │   ├── TIER0_DOCTRINE.md            ← THE FOUNDATION (HUMAN AUTHORITY ONLY)
 │   │   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.1.0)
 │   │   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown (v1.5.0)
 │   │   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI (v1.1.0)
@@ -347,7 +347,7 @@ imo-creator (THIS REPO) ← SOVEREIGN
 ├── factory/                      ← SILO: ASSEMBLY LINE
 │   ├── SKILLS_SYSTEM.md                 ← Skills governance (three tiers, locked)
 │   ├── agents/                          ← Pipeline agent skills
-│   │   ├── skill-creator/SKILL.md       ← Layer 0 implementation (HUMAN AUTHORITY ONLY)
+│   │   ├── skill-creator/SKILL.md       ← Tier 0 implementation (HUMAN AUTHORITY ONLY)
 │   │   ├── agent-orchestrator/          ← Deterministic intake + ID minting
 │   │   ├── agent-planner/               ← WORK_PACKET generation
 │   │   ├── agent-builder/               ← Implementation execution
@@ -427,7 +427,7 @@ imo-creator (THIS REPO) ← SOVEREIGN
 | Create NEW templates (with human approval) | ✅ YES |
 | Create ADR drafts (for human review) | ✅ YES |
 | Modify CLAUDE.md | ❌ NO — HUMAN AUTHORITY ONLY |
-| Modify law/doctrine/LAYER0_DOCTRINE.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify law/doctrine/TIER0_DOCTRINE.md | ❌ NO — HUMAN AUTHORITY ONLY |
 | Modify factory/agents/skill-creator/SKILL.md | ❌ NO — HUMAN AUTHORITY ONLY |
 | Modify other locked files | ❌ NO |
 | Modify template structure | ❌ NO |
@@ -454,7 +454,7 @@ Drift is a child repo problem, not a template problem.
 
 ## GOLDEN RULES
 
-1. **Layer 0 is the engine. Everything else is fuel it processes.** Constants first. Variables are a last resort.
+1. **Tier 0 is the engine. Everything else is fuel it processes.** Constants first. Variables are a last resort.
 2. **This repo is the parent. It conforms to nothing.**
 3. **Locked files are law. Read, don't touch.**
 4. **Templates are structure. Fill in blanks, don't redesign.**

@@ -82,7 +82,7 @@ This is the step-by-step process for creating a skill using the refined skill-cr
 
 **Step 12:** Assemble SKILL.md as CTB:
 - [ ] Trunk: SKILL.md file.
-- [ ] Branches: Layer 0 Doctrine → IMO → Constants → Variables → Workflow → Rules → References.
+- [ ] Branches: Tier 0 Doctrine → IMO → Constants → Variables → Workflow → Rules → References.
 - [ ] Leaves: Content within sections.
 
 **Step 13:** Progressive disclosure:

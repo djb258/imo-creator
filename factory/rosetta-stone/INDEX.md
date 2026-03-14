@@ -1,8 +1,8 @@
 # Rosetta Stone — Universal IT Vocabulary Matrices
 
-## Layer 0 Reference: docs/LAYER0_DOCTRINE.md
+## Tier 0 Reference: law/doctrine/TIER0_DOCTRINE.md
 
-These matrices were produced by running the Layer 0 constant-extraction engine
+These matrices were produced by running the Tier 0 constant-extraction engine
 against eight IT domains. Each matrix maps universal root concepts (constants)
 to product-specific vocabulary (variables).
 
@@ -21,7 +21,7 @@ to product-specific vocabulary (variables).
 
 ## How These Were Built
 
-Each domain was run through the Layer 0 gate mechanism:
+Each domain was run through the Tier 0 gate mechanism:
 1. Extract constants (universal concepts that hold across all products)
 2. Validate with IMO/CTB/Circle
 3. Map constants to product-specific vocabulary

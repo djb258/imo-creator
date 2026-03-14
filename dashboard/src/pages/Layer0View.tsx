@@ -427,7 +427,7 @@ export function Layer0View() {
             letterSpacing: '-0.02em',
           }}
         >
-          Layer 0 Engine
+          Tier 0 Engine
         </h1>
         <a
           href={L0_API_BASE}
@@ -500,7 +500,7 @@ export function Layer0View() {
             marginBottom: 'var(--sp-4)',
           }}
         >
-          Layer 0 Engine offline
+          Tier 0 Engine offline
         </div>
       )}
 

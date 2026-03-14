@@ -1,6 +1,6 @@
 # Rosetta Stone — Domain 3: Networking
 
-## Layer 0 Reference: docs/LAYER0_DOCTRINE.md
+## Tier 0 Reference: law/doctrine/TIER0_DOCTRINE.md
 
 ---
 

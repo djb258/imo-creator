@@ -8,11 +8,11 @@ Single source of truth listing all authoritative doctrine documents. Reference o
 
 ---
 
-## Layer 0 — Foundation (Governs All)
+## Tier 0 — Foundation (Governs All)
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| Layer 0 Doctrine | law/doctrine/LAYER0_DOCTRINE.md | The four irreducible elements, gate mechanism, altitude test. Governs all operations. |
+| Tier 0 Doctrine | law/doctrine/TIER0_DOCTRINE.md | The four irreducible elements, gate mechanism, altitude test. Governs all operations. |
 
 ---
 

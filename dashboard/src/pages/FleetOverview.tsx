@@ -73,7 +73,7 @@ export function FleetOverview() {
               marginBottom: 'var(--sp-1)',
             }}
           >
-            {l0.error ? 'Layer 0 Engine: Offline' : 'Layer 0 Engine'}
+            {l0.error ? 'Tier 0 Engine: Offline' : 'Tier 0 Engine'}
           </div>
           <div
             style={{

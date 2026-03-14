@@ -100,9 +100,9 @@ For master skills: use the skill-creator skill directly (`factory/agents/skill-c
 7. Skills are NOT doctrine. They do not override CLAUDE.md, CONSTITUTION.md, or any
    locked file. Skills inform build decisions within doctrine's boundaries.
 
-## Layer 0 Governance
+## Tier 0 Governance
 
-All skills — agent, master, and car — conform to Layer 0 Doctrine (law/doctrine/LAYER0_DOCTRINE.md).
+All skills — agent, master, and car — conform to Tier 0 Doctrine (law/doctrine/TIER0_DOCTRINE.md).
 The skill-creator is domain-agnostic. Domain content is always the variable, never embedded
 in the tool. If you can look at the skill-creator SKILL.md and determine what domain it's
 being used for, it's broken.

@@ -8,7 +8,7 @@ interface NavGroup {
 const groups: NavGroup[] = [
   {
     label: 'Doctrine',
-    links: [{ to: '/layer0', label: 'Layer 0 Engine', icon: '◉' }],
+    links: [{ to: '/layer0', label: 'Tier 0 Engine', icon: '◉' }],
   },
   {
     label: 'Fleet',
