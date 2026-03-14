@@ -1,4 +1,4 @@
-# templates/modules/gatekeeper/
+# fleet/car-template/src/gatekeeper/
 
 **Authority**: imo-creator (Constitutional)
 **Purpose**: Application-level database write enforcement module

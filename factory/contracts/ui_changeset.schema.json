@@ -31,7 +31,7 @@
     },
     "ui_surface": {
       "type": "string",
-      "enum": ["local", "lovable", "figma"],
+      "enum": ["local", "figma"],
       "description": "UI execution surface. Must match WORK_PACKET.ui_surface."
     },
     "ui_target": {
@@ -54,7 +54,7 @@
           "action": {
             "type": "string",
             "enum": ["create", "modify", "delete", "export", "import"],
-            "description": "Type of change. Export/import for Lovable.dev and Figma surfaces."
+            "description": "Type of change. Export/import for external design surfaces."
           },
           "description": {
             "type": "string",

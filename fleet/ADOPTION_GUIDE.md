@@ -58,9 +58,9 @@ Every child repository MUST have these files at minimum:
 
 | File | Source | Purpose |
 |------|--------|---------|
-| `IMO_CONTROL.json` | `templates/child/IMO_CONTROL.json.template` | Governance contract |
-| `REGISTRY.yaml` | `templates/child/REGISTRY.yaml.template` | Hub identity declaration |
-| `DOCTRINE.md` | `templates/child/DOCTRINE.md.template` | Doctrine reference |
+| `IMO_CONTROL.json` | `fleet/car-template/IMO_CONTROL.json.template` | Governance contract |
+| `REGISTRY.yaml` | `fleet/car-template/REGISTRY.yaml.template` | Hub identity declaration |
+| `DOCTRINE.md` | `fleet/car-template/DOCTRINE.md.template` | Doctrine reference |
 | `doctrine/REPO_DOMAIN_SPEC.md` | AI_EMPLOYEE_OPERATING_CONTRACT.md stub | Domain bindings |
 | `README.md` | (Create new) | Repository overview |
 
@@ -121,9 +121,9 @@ Complete these steps in order when creating a new child repository.
 - [ ] Clone locally
 
 ### Phase 1: Copy Templates
-- [ ] Copy `templates/child/IMO_CONTROL.json.template` → `IMO_CONTROL.json`
-- [ ] Copy `templates/child/REGISTRY.yaml.template` → `REGISTRY.yaml`
-- [ ] Copy `templates/child/DOCTRINE.md.template` → `DOCTRINE.md`
+- [ ] Copy `fleet/car-template/IMO_CONTROL.json.template` → `IMO_CONTROL.json`
+- [ ] Copy `fleet/car-template/REGISTRY.yaml.template` → `REGISTRY.yaml`
+- [ ] Copy `fleet/car-template/DOCTRINE.md.template` → `DOCTRINE.md`
 
 ### Phase 2: Fill Placeholders
 

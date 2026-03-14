@@ -82,7 +82,7 @@ Post BAR-100, the fleet operates on a three-layer architecture:
 
 | Worker | Framework | Purpose | BAR Ticket | Replaced |
 |--------|-----------|---------|------------|----------|
-| `svgagency-api` | Hono | Unified API rim for all hubs | BAR-100 | Supabase Edge Functions, n8n @ Hostinger, Vercel serverless |
+| `svgagency-api` | Hono | Unified API rim for all hubs | BAR-100 | Legacy serverless functions, legacy orchestration VPS, legacy hosting serverless |
 
 **Endpoints implemented**:
 - `/health` and `/health/:db` -- database connectivity checks (all 7 Hyperdrive pipes)
@@ -104,10 +104,10 @@ Post BAR-100, the fleet operates on a three-layer architecture:
 | Neon (also working + archive) | Neon (vault-only) + Hyperdrive (sync) | Hyperdrive x7 | BAR-100, BAR-102 |
 | Vimeo (video hosting) | CF R2 + Workers (token-gated video) | R2 x1, Workers | BAR-103 |
 | Various cloud storage | CF R2 (zero egress) | R2 x1 | BAR-100 |
-| Supabase Edge Functions | CF Workers | Workers x1 | BAR-100 |
-| n8n @ Hostinger VPS | CF Workers + Queues | Workers x1, Queues x1 | BAR-100 |
-| Vercel serverless | CF Workers | Workers x1 | BAR-100 |
-| Lovable.dev (UI + edge functions) | Figma UI (design only) | N/A (UI layer, not CF) | BAR-100 |
+| Legacy serverless functions | CF Workers | Workers x1 | BAR-100 |
+| Legacy orchestration VPS | CF Workers + Queues | Workers x1, Queues x1 | BAR-100 |
+| Legacy hosting serverless | CF Workers | Workers x1 | BAR-100 |
+| Legacy UI platform (retired) | Figma UI (design only) | N/A (UI layer, not CF) | BAR-100 |
 | Instantly.ai (email outreach) | Mailgun (transactional email) | N/A (via Composio) | BAR-100 |
 | Zapier / Make (automations) | CF Workers + Queues + Composio | Workers, Queues | BAR-100 |
 

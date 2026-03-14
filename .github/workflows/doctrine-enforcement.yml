@@ -182,6 +182,23 @@ jobs:
           echo ""
 
   # ─────────────────────────────────────────────────────────────────
+  # STRUCTURE ENFORCEMENT GATE (BAR-135)
+  # ─────────────────────────────────────────────────────────────────
+
+  structure-gate:
+    name: Structure Enforcement Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run structure enforcement
+        run: |
+          chmod +x scripts/structure-enforce.sh
+          ./scripts/structure-enforce.sh .
+
+  # ─────────────────────────────────────────────────────────────────
   # PRESSURE TEST GATE (Architectural changes only)
   # ─────────────────────────────────────────────────────────────────
 

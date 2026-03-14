@@ -1,4 +1,4 @@
-# templates/migrations/
+# fleet/migrations/
 
 **Authority**: imo-creator (Constitutional)
 **Purpose**: PostgreSQL migration templates for CTB database governance
@@ -42,7 +42,7 @@ Child repos copy these templates during bootstrap:
 
 ```bash
 # During initial setup
-cp templates/migrations/*.sql migrations/
+cp fleet/migrations/*.sql migrations/
 
 # Apply in order
 psql -f migrations/001_ctb_table_registry.sql

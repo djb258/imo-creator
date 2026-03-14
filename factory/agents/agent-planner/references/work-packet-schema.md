@@ -33,8 +33,8 @@
 
 | Field | Rule |
 |-------|------|
-| `ui_required` | Set to `true` if user intent includes any UI scope: component changes, page modifications, Lovable.dev work, Figma exports. |
-| `ui_surface` | Required if `ui_required=true`. One of: `local`, `lovable`, `figma`. |
+| `ui_required` | Set to `true` if user intent includes any UI scope: component changes, page modifications, design tool exports. |
+| `ui_surface` | Required if `ui_required=true`. One of: `local`, `figma`. |
 | `ui_target` | Required if `ui_required=true`. Target component, page path, or artifact reference. |
 
 ## Container Routing Flags

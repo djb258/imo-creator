@@ -47,7 +47,7 @@ Orchestrator Intake Packet (or raw user intent)
 |-------------|---------------------|---------------|
 | Code-only change, no DB or UI | V2 with `db_required=false`, `ui_required=false`, `container_required=false` | Standard flow |
 | Database schema change | V2 with `db_required=true` | DB Agent lane activated |
-| UI change (local, Lovable, Figma) | V2 with `ui_required=true` | Builder UI adapter lane activated |
+| UI change (local, Figma) | V2 with `ui_required=true` | Builder UI adapter lane activated |
 | Containerized tests/builds needed | V2 with `container_required=true` | Container runner lane activated |
 | DB + UI change | V2 with `db_required=true`, `ui_required=true` | Both lanes activated |
 | Documentation update (PRD, OSAM, ERD) | V2 with `doc_required=true` | Documentation lane activated |

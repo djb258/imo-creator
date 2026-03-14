@@ -22,7 +22,7 @@ NEVER:
 Create table → hope to register later
 ```
 
-The `column_registry.yml` file (derived from `templates/child/column_registry.yml.template`) is the canonical schema spine. The `ctb.table_registry` database table is its runtime mirror. Both must agree.
+The `column_registry.yml` file (derived from `fleet/car-template/column_registry.yml.template`) is the canonical schema spine. The `ctb.table_registry` database table is its runtime mirror. Both must agree.
 
 ---
 
@@ -64,7 +64,7 @@ Each sub-hub MUST have exactly:
 
 ## 4. Database Gate
 
-**Migrations**: `templates/migrations/001-004`
+**Migrations**: `fleet/migrations/001-004`
 
 ### 4.1 Table Registration (`ctb.table_registry`)
 
@@ -96,7 +96,7 @@ Writes to CANONICAL tables require a registered promotion path in `ctb.promotion
 
 ## 5. Application Gate
 
-**Module**: `templates/modules/gatekeeper/`
+**Module**: `fleet/car-template/src/gatekeeper/`
 
 ### 5.1 Gatekeeper Client
 

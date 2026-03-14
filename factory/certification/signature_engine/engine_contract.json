@@ -48,7 +48,7 @@
     "key_format": "256-bit random key, base64 encoded."
   },
   "verification_handoff": {
-    "verifier_location": "sys/certification/validator/",
+    "verifier_location": "factory/certification/validator/",
     "verification_inputs": [
       "certification.json from .garage/ in child repo PR branch",
       "GARAGE_SIGNING_KEY (available to CI via Doppler)"

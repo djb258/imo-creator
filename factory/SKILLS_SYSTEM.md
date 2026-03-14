@@ -62,9 +62,6 @@ IMO-Creator/factory/              ← FACTORY
 │   ├── neon/
 │   │   ├── SKILL.md             ← Platform capabilities & constraints
 │   │   └── references/
-│   ├── lovable/
-│   │   ├── SKILL.md             ← Platform capabilities & constraints
-│   │   └── references/
 │   ├── bootstrap/               ← (existing skill)
 │   ├── process-creator/         ← (existing skill)
 │   └── skill-creator/           ← (existing skill)

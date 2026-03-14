@@ -137,7 +137,7 @@
     },
     "ui_surface": {
       "type": "string",
-      "enum": ["local", "lovable", "figma"],
+      "enum": ["local", "figma"],
       "description": "UI execution surface. Required if ui_required=true."
     },
     "ui_target": {

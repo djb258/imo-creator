@@ -27,8 +27,7 @@
 |------------|------|
 | Surface routing | Route to correct execution surface based on `WORK_PACKET.ui_surface`. |
 | `local` | Modify files within `src/ui/` in the mounted repo. Standard file operations. |
-| `lovable` | Integration with Lovable.dev branch. Document changes as export/import operations. |
-| `figma` | Figma export/import logic. Document-only for now (no live API calls). |
+| `figma` | Design tool export/import logic. Document-only for now (no live API calls). |
 | UI_CHANGESET | Produce UI_CHANGESET artifact with changes, preview_artifacts, and acceptance_checks. |
 | Preview required | At least one preview artifact must be produced. |
 | Acceptance checks | All checks must have `status: PASS` before handoff to Auditor. |

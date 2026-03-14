@@ -144,7 +144,7 @@ if [ -d "migrations" ]; then
         violation "migrations/ has only $MIGRATION_COUNT SQL files — need at least 11 (001-011)"
     fi
 else
-    violation "migrations/ directory missing — copy from imo-creator templates/migrations/"
+    violation "migrations/ directory missing — copy from imo-creator fleet/migrations/"
 fi
 echo ""
 

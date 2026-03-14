@@ -46,7 +46,7 @@ The following artifacts exist in imo-creator only. Child repos must not contain 
 | Taxonomy registry | `law/registry/taxonomy_registry.json` | Classification enums |
 | Audit rules | `law/registry/audit_rules.json` | Deterministic evaluation rules |
 | Execution contracts | `factory/runtime/` | Mount, runner, writer contracts |
-| Certification infrastructure | `sys/certification/` | Signature engine, validator |
+| Certification infrastructure | `factory/certification/` | Signature engine, validator |
 | Orchestration contract | `app/garage/orchestration_contract.json` | Pipeline definition |
 
 ### Car-Permitted Artifacts
