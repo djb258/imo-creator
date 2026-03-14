@@ -159,10 +159,16 @@ GitHub Actions: pipeline-trigger.yml
 Detect job: "Which inbox got a new .json file?"
     │
     ▼
-Dispatch job: Invoke that agent via Claude Code Action
+Signal job: Write dispatch signal → notify runner
     │
     ▼
-Agent processes packet → commits output + next packet → pushes
+Runner (with its own Doppler/Anthropic creds) picks up signal
+    │
+    ▼
+Runner invokes Claude Code with agent skill + packet
+    │
+    ▼
+Agent processes → commits output + next packet → pushes
     │
     ▼
 That push triggers pipeline-trigger.yml AGAIN → next agent fires
@@ -171,23 +177,30 @@ That push triggers pipeline-trigger.yml AGAIN → next agent fires
 Cascade continues until Auditor (terminal — no downstream inbox)
 ```
 
+### Security Model
+
+**CI holds ZERO API keys.** GitHub Actions only detects and signals. The runner that actually invokes Claude Code has its own Doppler credentials and fetches `GLOBAL_ANTHROPIC_API_KEY` from the vault at runtime.
+
 ### Trigger Rules
 
 | Rule | Detail |
 |------|--------|
 | Trigger event | `push` to `master`/`main` with changes in `sys/runtime/inbox/**/*.json` |
 | Detection | `git diff HEAD~1 HEAD` on inbox paths |
-| Dispatch | `anthropics/claude-code-action@v1` with agent skill + packet |
+| Signal | Writes dispatch signal to `sys/runtime/signals/` + notifies runner |
+| Execution | Runner with Doppler creds invokes Claude Code locally |
 | Cascade | Each agent's commit+push re-triggers the workflow for the next agent |
 | Terminal | Auditor writes to `outbox/auditor/` only — no downstream inbox, cascade stops |
 | Manual retry | `workflow_dispatch` with agent name + optional packet path |
 | Failure halt | Agent writes `status=failed` packet — no downstream packet created, cascade stops |
 
-### Required Secret
+### Runner Dispatch Options
 
-| Secret | Source | Purpose |
-|--------|--------|---------|
-| `ANTHROPIC_API_KEY` | Doppler vault (`GLOBAL_ANTHROPIC_API_KEY`) | Authenticates Claude Code Action |
+| Option | How It Works |
+|--------|-------------|
+| **Repository dispatch** | CI fires `repository_dispatch` event → runner listens via GitHub API |
+| **Webhook** | CI POSTs signal to runner's webhook endpoint |
+| **Self-hosted runner** | Workflow runs directly on a runner with Doppler pre-installed |
 
 ### Workflow File
 

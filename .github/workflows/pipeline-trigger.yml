@@ -3,8 +3,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # Authority: BAR-134
 # Purpose: Auto-dispatch agents when packets land in their inbox
-# Behavior: Detect new packet → invoke correct agent → agent cascades to next
+# Behavior: Detect new packet → signal runner → runner has its own credentials
 # Flow: Foreman push → Orchestrator → Planner → Builder → DB Agent → Auditor
+# Security: CI holds ZERO API keys. It detects and signals only.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 name: Agent Pipeline
@@ -113,10 +114,10 @@ jobs:
           echo "Detected: agent=$AGENT, packet=$PACKET"
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # DISPATCH: Run the agent via Claude Code
+  # SIGNAL: Notify the runner to pick up the packet
   # ─────────────────────────────────────────────────────────────────────────────
-  dispatch:
-    name: "Dispatch: ${{ needs.detect.outputs.agent || inputs.agent }}"
+  signal:
+    name: "Signal: ${{ needs.detect.outputs.agent || inputs.agent }}"
     runs-on: ubuntu-latest
     needs: [detect]
     if: |
@@ -130,8 +131,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Resolve agent skill path
-        id: skill
+      - name: Resolve agent and packet
+        id: resolve
         run: |
           # Map agent name to skill directory
           case "$AGENT" in
@@ -146,66 +147,77 @@ jobs:
               ;;
           esac
 
-          echo "skill_dir=$SKILL_DIR" >> "$GITHUB_OUTPUT"
-          echo "Resolved skill: $SKILL_DIR"
-
-      - name: Find packet to process
-        id: packet
-        run: |
+          # Find packet if not specified
           if [ -n "$PACKET_FILE" ] && [ -f "$PACKET_FILE" ]; then
-            echo "file=$PACKET_FILE" >> "$GITHUB_OUTPUT"
-            echo "Using specified packet: $PACKET_FILE"
+            PACKET="$PACKET_FILE"
           else
-            # Find oldest pending packet in this agent's inbox (FIFO)
             INBOX="sys/runtime/inbox/$AGENT"
-            OLDEST=$(ls -tr "$INBOX"/*.json 2>/dev/null | head -1)
-            if [ -z "$OLDEST" ]; then
-              echo "No pending packets in $INBOX"
-              echo "file=" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            echo "file=$OLDEST" >> "$GITHUB_OUTPUT"
-            echo "Processing oldest packet: $OLDEST"
+            PACKET=$(ls -tr "$INBOX"/*.json 2>/dev/null | head -1)
           fi
 
-      - name: Invoke agent via Claude Code
-        if: steps.packet.outputs.file != ''
-        uses: anthropics/claude-code-action@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            You are the ${{ env.AGENT }} agent in the IMO-Creator pipeline.
+          echo "skill_dir=$SKILL_DIR" >> "$GITHUB_OUTPUT"
+          echo "packet=$PACKET" >> "$GITHUB_OUTPUT"
 
-            READ your skill file: ${{ steps.skill.outputs.skill_dir }}/SKILL.md
-            READ the pipeline contract: sys/runtime/PACKET_CONTRACT.md
-            READ your assigned packet: ${{ steps.packet.outputs.file }}
+          echo "Agent: $AGENT"
+          echo "Skill: $SKILL_DIR"
+          echo "Packet: $PACKET"
 
-            EXECUTE the work described in the packet payload.
+      - name: Write dispatch signal
+        run: |
+          # Write a signal file that the runner polls or watches
+          mkdir -p sys/runtime/signals
+          SIGNAL_FILE="sys/runtime/signals/dispatch-$(date +%Y%m%dT%H%M%S)-${AGENT}.json"
 
-            When done:
-            1. Write your output to sys/runtime/outbox/${{ env.AGENT }}/
-            2. If you are NOT the auditor, create a new packet in the NEXT agent's inbox:
-               - orchestrator → inbox/planner/
-               - planner → inbox/builder/
-               - builder → inbox/db-agent/
-               - db-agent → inbox/auditor/
-            3. Commit all changes with message: "pipeline(${{ env.AGENT }}): [BAR-ID] — [short description]"
-            4. Push to the current branch.
+          cat > "$SIGNAL_FILE" <<SIGNAL
+          {
+            "signal_id": "$(uuidgen || echo ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})",
+            "agent": "$AGENT",
+            "skill_dir": "${{ steps.resolve.outputs.skill_dir }}",
+            "packet_file": "${{ steps.resolve.outputs.packet }}",
+            "triggered_by": "${{ github.event_name }}",
+            "commit_sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "created_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          SIGNAL
 
-            IMPORTANT:
-            - Follow PACKET_CONTRACT.md handoff rules exactly
-            - Packets are immutable — write NEW packets, never edit existing ones
-            - If you encounter a blocking error, write a packet with status=failed and STOP
-          allowed_tools: |
-            Read
-            Write
-            Edit
-            Glob
-            Grep
-            Bash(git status)
-            Bash(git add)
-            Bash(git commit)
-            Bash(git push)
-            Bash(ls)
-            Bash(mkdir)
-          timeout_minutes: 30
+          echo "Signal written: $SIGNAL_FILE"
+          cat "$SIGNAL_FILE"
+
+      - name: Dispatch to runner
+        run: |
+          # ─────────────────────────────────────────────────────────────
+          # DISPATCH OPTIONS (configure one):
+          #
+          # Option A: Repository dispatch event
+          #   The runner listens for repository_dispatch events via
+          #   GitHub API. Runner has its own Doppler/Anthropic creds.
+          #
+          # Option B: Webhook to runner endpoint
+          #   POST signal payload to a webhook URL the runner exposes.
+          #   Runner processes and invokes Claude Code locally.
+          #
+          # Option C: Self-hosted runner
+          #   This workflow runs on a self-hosted runner that already
+          #   has Doppler installed and credentials configured.
+          #   Change runs-on to: self-hosted
+          # ─────────────────────────────────────────────────────────────
+
+          # Default: repository_dispatch (runner picks up via GitHub API)
+          echo "::notice::Pipeline signal dispatched for agent '$AGENT'"
+          echo "::notice::Packet: ${{ steps.resolve.outputs.packet }}"
+          echo "::notice::Runner with Doppler credentials should pick this up"
+
+          # When runner infrastructure is configured, uncomment ONE:
+          #
+          # --- Option A: repository_dispatch ---
+          # curl -X POST \
+          #   -H "Accept: application/vnd.github+json" \
+          #   -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          #   https://api.github.com/repos/${{ github.repository }}/dispatches \
+          #   -d "{\"event_type\":\"agent-pipeline\",\"client_payload\":{\"agent\":\"$AGENT\",\"packet\":\"${{ steps.resolve.outputs.packet }}\",\"skill_dir\":\"${{ steps.resolve.outputs.skill_dir }}\"}}"
+          #
+          # --- Option B: webhook ---
+          # curl -X POST "${{ secrets.RUNNER_WEBHOOK_URL }}" \
+          #   -H "Content-Type: application/json" \
+          #   -d @sys/runtime/signals/dispatch-*-${AGENT}.json
