@@ -3,6 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
+**CTB Position**: LEAF (under DBA_ENFORCEMENT_DOCTRINE.md branch)
+**Chain**: TIER0_DOCTRINE.md → DBA_ENFORCEMENT_DOCTRINE.md → **this file**
 **Version**: 1.0.0
 **Change Protocol**: HUMAN APPROVAL REQUIRED — NO EXCEPTIONS
 

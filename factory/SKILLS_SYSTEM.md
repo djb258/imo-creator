@@ -1,5 +1,9 @@
 # Skills System — Master Toolbox & Car-Specific Skills
 
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
+**CTB Position**: LEAF (under skill-creator branch)
+**Chain**: TIER0_DOCTRINE.md → skill-creator/SKILL.md → **this file** → all agent/master/car skills
+
 ## Format
 
 Every skill — master or car-specific — is a skill-creator-compliant SKILL.md. Same YAML

@@ -4,6 +4,8 @@ metadata:
   version: 2.7.0
   tier: agent
   governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
+  ctb_position: "LEAF (under skill-creator branch)"
+  chain: "TIER0_DOCTRINE.md → skill-creator/SKILL.md → SKILLS_SYSTEM.md → this file"
 description: >
   Garage Control Plane compliance agent — evaluates Builder execution against doctrine
   registry and audit rules across all lanes, issues classification, and feeds certification.

@@ -232,6 +232,29 @@ Leaves (vendor/staging) → promotion gates → CANONICAL (read-only query surfa
 
 ---
 
+## CTB Chain of Command
+
+This document is the **TRUNK**. Everything below inherits from it.
+
+| Position | Document | What It Governs |
+|----------|----------|-----------------|
+| **TRUNK** | **This file (TIER0_DOCTRINE.md)** | The engine — constant-extraction, 3 validators |
+| CC-01 | `CLAUDE.md` | AI operating instructions |
+| CC-01 | `CONSTITUTION.md` | Human governance, invariants |
+| CC-01 | `OPERATOR_PROFILE.md` | Human operator constants |
+| BRANCH | `law/doctrine/ARCHITECTURE.md` | CTB structural law (Validator #2) |
+| BRANCH | `law/doctrine/PRD_CONSTITUTION.md` | Behavioral proof (CONST → VAR) |
+| BRANCH | `law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md` | DB enforcement (CQRS) |
+| BRANCH | `law/doctrine/TEMPLATE_IMMUTABILITY.md` | Immutability law |
+| BRANCH | `factory/agents/skill-creator/SKILL.md` | Tier 0 implementation engine |
+| BRANCH | `law/integrations/TOOLS.md` | Tool law (determinism first) |
+| BRANCH | `law/semantic/OSAM.md` | Semantic access contracts |
+| LEAF | All other doctrine, constitutional, and agent files | Enforcement + execution |
+
+**Rule**: Every document below this one MUST reference this file as its Governing Engine. If a document does not reference Tier 0, it is not in the chain and has no authority.
+
+---
+
 ## Governance
 
 1. This document is LOCKED. Changes require explicit human approval.

@@ -1,5 +1,9 @@
 ---
 name: skill-creator
+metadata:
+  governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
+  ctb_position: "BRANCH (Tier 0 implementation engine)"
+  chain: "TIER0_DOCTRINE.md → this file → SKILLS_SYSTEM.md → all skills"
 description: >
   Creates validated, swap-testable skill packages for LLM execution.
   Trigger: User requests a new skill, or requests modification of an existing skill.

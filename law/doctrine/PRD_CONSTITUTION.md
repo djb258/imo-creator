@@ -3,6 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL (Derived from CONSTITUTION.md)
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — PRD is a behavioral proof of CONST → VAR transformation
+**CTB Position**: BRANCH (under TIER0_DOCTRINE.md trunk)
+**Chain**: TIER0_DOCTRINE.md → **this file** → ERD_CONSTITUTION.md → PROCESS_DOCTRINE.md
 **Version**: 1.0.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 

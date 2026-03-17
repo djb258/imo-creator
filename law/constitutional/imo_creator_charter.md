@@ -2,6 +2,8 @@
 
 **Version: 1.0.0**
 **Governing Engine: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)**
+**CTB Position: LEAF (under CONSTITUTION.md)**
+**Chain: TIER0_DOCTRINE.md → CONSTITUTION.md → this file**
 **Status: Constitutional — LOCKED**
 
 ---

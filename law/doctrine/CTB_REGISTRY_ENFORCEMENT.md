@@ -2,6 +2,8 @@
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CQRS enforcement derives from Tier 0
+**CTB Position**: LEAF (under ARCHITECTURE.md branch)
+**Chain**: TIER0_DOCTRINE.md → ARCHITECTURE.md → **this file**
 **Status**: LOCKED
 **Version**: 1.5.0
 **Scope**: All child repositories

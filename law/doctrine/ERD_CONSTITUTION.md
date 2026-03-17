@@ -3,6 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL (Derived from CONSTITUTION.md)
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — ERD is a structural proof of CONST → VAR transformation
+**CTB Position**: LEAF (under PRD_CONSTITUTION.md branch)
+**Chain**: TIER0_DOCTRINE.md → PRD_CONSTITUTION.md → **this file** → PROCESS_DOCTRINE.md
 **Version**: 1.0.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 

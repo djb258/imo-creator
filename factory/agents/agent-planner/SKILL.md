@@ -4,6 +4,8 @@ metadata:
   version: 2.5.0
   tier: agent
   governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
+  ctb_position: "LEAF (under skill-creator branch)"
+  chain: "TIER0_DOCTRINE.md → skill-creator/SKILL.md → SKILLS_SYSTEM.md → this file"
 description: >
   Garage Control Plane planning agent — generates validated WORK_PACKET V2 envelopes and
   routes execution lanes. Trigger when: a Planner Intake Packet arrives from the

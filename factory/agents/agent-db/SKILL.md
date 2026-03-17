@@ -4,6 +4,8 @@ metadata:
   version: 2.1.0
   tier: agent
   governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
+  ctb_position: "LEAF (under skill-creator branch)"
+  chain: "TIER0_DOCTRINE.md → skill-creator/SKILL.md → SKILLS_SYSTEM.md → this file"
 description: >
   Garage Control Plane database governance agent — enforces database governance, produces
   DB_CHANGESET artifacts with migrations, rollback plans, and validation steps. Trigger

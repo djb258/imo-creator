@@ -4,6 +4,8 @@ metadata:
   version: 1.2.0
   tier: agent
   governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
+  ctb_position: "LEAF (under skill-creator branch)"
+  chain: "TIER0_DOCTRINE.md → skill-creator/SKILL.md → SKILLS_SYSTEM.md → this file"
 description: >
   Garage Control Plane intake agent — deterministic normalization, ID minting, ORBT
   classification, and routing to Planner. Trigger on any new work request entering the

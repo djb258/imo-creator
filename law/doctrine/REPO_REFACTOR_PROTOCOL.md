@@ -1,6 +1,8 @@
 # Repo Refactor Protocol
 
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
+**CTB Position**: LEAF (under TEMPLATE_IMMUTABILITY.md branch)
+**Chain**: TIER0_DOCTRINE.md → TEMPLATE_IMMUTABILITY.md → **this file**
 **Governs HOW repos are organized and refactored to conform to doctrine.**
 
 ## Conformance

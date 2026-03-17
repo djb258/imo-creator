@@ -3,6 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — immutability is a Tier 0 constant
+**CTB Position**: BRANCH (under TIER0_DOCTRINE.md trunk)
+**Chain**: TIER0_DOCTRINE.md → **this file** → REPO_REFACTOR_PROTOCOL.md
 **Version**: 1.1.0
 **Change Protocol**: HUMAN APPROVAL REQUIRED — NO EXCEPTIONS
 

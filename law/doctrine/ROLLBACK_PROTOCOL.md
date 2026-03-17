@@ -3,6 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
+**CTB Position**: LEAF (under ARCHITECTURE.md branch)
+**Chain**: TIER0_DOCTRINE.md → ARCHITECTURE.md → **this file**
 **Version**: 1.0.0
 
 ---

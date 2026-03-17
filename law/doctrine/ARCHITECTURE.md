@@ -4,7 +4,10 @@
 **Status**: LOCKED (CONSTITUTIONAL)
 **Authority**: IMO-Creator Sovereign
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CTB is Tier 0 Validator #2
+**CTB Position**: BRANCH (under TIER0_DOCTRINE.md trunk)
 **Change Protocol**: ADR + Human Approval ONLY
+
+**Chain**: TIER0_DOCTRINE.md → **this file** → CTB_REGISTRY_ENFORCEMENT.md, EXECUTION_SURFACE_LAW.md, FAIL_CLOSED_CI_CONTRACT.md, LEGACY_COLLAPSE_PLAYBOOK.md, ROLLBACK_PROTOCOL.md
 
 ---
 

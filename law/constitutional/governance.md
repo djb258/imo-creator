@@ -2,6 +2,8 @@
 
 **Authority**: IMO-Creator (Sovereign)
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
+**CTB Position**: LEAF (under CONSTITUTION.md)
+**Chain**: TIER0_DOCTRINE.md → CONSTITUTION.md → **this file**
 **Scope**: All child repos adopting the V1 Control Plane
 **Status**: CONSTITUTIONAL
 

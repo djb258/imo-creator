@@ -6,6 +6,8 @@
 |-------|-------|
 | **Doctrine Version** | 1.1.0 |
 | **Governing Engine** | Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — determinism first derives from Tier 0 |
+| **CTB Position** | BRANCH (under TIER0_DOCTRINE.md trunk) |
+| **Chain** | TIER0_DOCTRINE.md → **this file** → `law/SNAP_ON_TOOLBOX.yaml` |
 | **CC Layer** | CC-02 (Hub) |
 | **CTB Placement** | Declared per hub |
 
