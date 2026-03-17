@@ -28,64 +28,66 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 **Tier 0 is the engine. Everything below is fuel it processes.**
 
-### Doctrine (Constitutional Law)
+### Doctrine (Constitutional Law — ALL LOCKED)
 
 | File | Purpose |
 |------|---------|
 | `law/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
-| `law/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
+| `law/doctrine/PRD_CONSTITUTION.md` | Behavioral proof — CONST → VAR transformation declaration |
+| `law/doctrine/ERD_CONSTITUTION.md` | Structural proof — table validity, pressure test |
+| `law/doctrine/PROCESS_DOCTRINE.md` | Execution declaration — CONST → VAR execution, tool-agnostic |
+| `law/doctrine/ERD_DOCTRINE.md` | ERD doctrine principles — structural proof definition |
+| `law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md` | DBA enforcement — Type A/B classification, CQRS at DB layer |
+| `law/doctrine/DOCUMENTATION_ERD_DOCTRINE.md` | Documentation & ERD enforcement — Mermaid, column dictionary |
+| `law/doctrine/TEMPLATE_IMMUTABILITY.md` | Immutability law — AI non-modification, human approval |
+| `law/doctrine/REPO_REFACTOR_PROTOCOL.md` | Refactor protocol — CTB folders, file placement, refactor sequence |
+| `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + CQRS lockdown + vendor JSON containment (v1.5.0) |
 | `law/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
-| `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment + bootstrap enforcement (v1.5.0) |
 | `law/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract + bootstrap guarantees (v1.1.0) |
+| `law/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure — 6-step revert, version pinning |
 | `law/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
-| `law/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
+
+### Control Plane (ALL LOCKED)
+
+| File | Purpose |
+|------|---------|
+| `law/IMO_CONTROL.json` | Binding contract — repo structure, doctrine, Claude Code behavior |
+| `law/heir.yaml` | Garage sovereign identity (VIN) |
+| `law/orbt.yaml` | Garage operational status (OBD) |
+| `law/STRUCTURE_MANIFEST.yaml` | Canonical directory structure — allowed dirs, banned dirs, locked files. CI enforces. |
+
+### Semantic + Tools (ALL LOCKED)
+
+| File | Purpose |
+|------|---------|
+| `law/semantic/OSAM.md` | Operational Semantic Access Map — query-routing contract (between PRD and ERD) |
+| `law/integrations/TOOLS.md` | Tool law — determinism first, LLM as tail only |
+| `law/SNAP_ON_TOOLBOX.yaml` | Master tool registry — all approved tools, throttles, gates, banned list |
+
+### Constitutional (ALL LOCKED)
+
+| File | Purpose |
+|------|---------|
+| `law/constitutional/governance.md` | Agent governance — role isolation, pipeline protocol |
+| `law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | PSB governance — Transformation Law, factory intake |
+| `law/constitutional/backbone.md` | CTB Backbone Authority — parent governance over fleet |
+| `law/constitutional/garage.md` | Garage Constitution — control plane boundaries |
+| `law/constitutional/imo_creator_charter.md` | IMO-Creator Charter |
+| `law/constitutional/protected_assets.md` | Protected Assets — ecosystem doctrine |
 
 **Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 
-### PRD Template
+### Fleet Templates (LOCKED — structure immutable, content filled by child repos)
 
 | File | Purpose |
 |------|---------|
 | `fleet/car-template/docs/PRD_HUB.md` | Hub PRD format (15 sections) |
-
-### ADR Template
-
-| File | Purpose |
-|------|---------|
 | `fleet/adr-templates/ADR.md` | Architecture Decision Record format |
-
-### Checklist Template
-
-| File | Purpose |
-|------|---------|
 | `fleet/checklists/HUB_COMPLIANCE.md` | Hub compliance checklist format |
-
-### Semantic Access (CONSTITUTIONAL)
-
-| File | Purpose |
-|------|---------|
-| `law/semantic/OSAM.md` | Operational Semantic Access Map - authoritative query-routing contract |
-
-### PR Templates
-
-| File | Purpose |
-|------|---------|
 | `fleet/pr-templates/PULL_REQUEST_TEMPLATE_HUB.md` | Hub PR format |
 | `fleet/pr-templates/PULL_REQUEST_TEMPLATE_SPOKE.md` | Spoke PR format |
 
-### Snap-On Toolbox (CONSTITUTIONAL)
-
-| File | Purpose |
-|------|--------|
-| `law/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
-
-### Structure Manifest (CONSTITUTIONAL)
-
-| File | Purpose |
-|------|--------|
-| `law/STRUCTURE_MANIFEST.yaml` | Canonical directory structure declaration — allowed dirs, banned dirs, banned path references, required files. CI enforces this via scripts/structure-enforce.sh. |
-
-### Integration Specs
+### Integration Specs (LOCKED)
 
 | File | Purpose |
 |------|---------|

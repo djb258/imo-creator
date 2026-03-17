@@ -92,6 +92,64 @@ allowed_directories:
     subdirs: []
 
 # ─────────────────────────────────────────────────────────────────────────────
+# LOCKED FILES — CTB CHAIN OF COMMAND
+# ─────────────────────────────────────────────────────────────────────────────
+# These files are the governance chain. No LLM may modify them.
+# Changes require ADR + human approval (or HUMAN AUTHORITY ONLY for Tier 0 files).
+
+locked_files:
+  # TRUNK — Tier 0 (HUMAN AUTHORITY ONLY — no ADR process)
+  tier_0:
+    - CLAUDE.md
+    - law/doctrine/TIER0_DOCTRINE.md
+    - factory/agents/skill-creator/SKILL.md
+    - OPERATOR_PROFILE.md
+
+  # CC-01 — Governance
+  governance:
+    - CONSTITUTION.md
+    - law/STRUCTURE_MANIFEST.yaml
+    - law/IMO_CONTROL.json
+    - law/heir.yaml
+    - law/orbt.yaml
+
+  # BRANCHES — Doctrine
+  doctrine:
+    - law/doctrine/ARCHITECTURE.md
+    - law/doctrine/PRD_CONSTITUTION.md
+    - law/doctrine/ERD_CONSTITUTION.md
+    - law/doctrine/PROCESS_DOCTRINE.md
+    - law/doctrine/ERD_DOCTRINE.md
+    - law/doctrine/DBA_ENFORCEMENT_DOCTRINE.md
+    - law/doctrine/DOCUMENTATION_ERD_DOCTRINE.md
+    - law/doctrine/TEMPLATE_IMMUTABILITY.md
+    - law/doctrine/REPO_REFACTOR_PROTOCOL.md
+    - law/doctrine/CTB_REGISTRY_ENFORCEMENT.md
+    - law/doctrine/EXECUTION_SURFACE_LAW.md
+    - law/doctrine/FAIL_CLOSED_CI_CONTRACT.md
+    - law/doctrine/ROLLBACK_PROTOCOL.md
+    - law/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md
+
+  # BRANCHES — Semantic + Integrations + Tools
+  semantic_and_tools:
+    - law/semantic/OSAM.md
+    - law/integrations/TOOLS.md
+    - law/SNAP_ON_TOOLBOX.yaml
+
+  # BRANCHES — Constitutional
+  constitutional:
+    - law/constitutional/governance.md
+    - law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md
+    - law/constitutional/backbone.md
+    - law/constitutional/garage.md
+    - law/constitutional/imo_creator_charter.md
+    - law/constitutional/protected_assets.md
+
+  # BRANCHES — Factory governance
+  factory_governance:
+    - factory/SKILLS_SYSTEM.md
+
+# ─────────────────────────────────────────────────────────────────────────────
 # BANNED PATHS
 # ─────────────────────────────────────────────────────────────────────────────
 # These directories MUST NOT exist. If detected, CI fails immediately.
