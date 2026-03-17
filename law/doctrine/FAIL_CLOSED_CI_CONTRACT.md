@@ -1,6 +1,7 @@
 # Fail-Closed CI Contract
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CI gates enforce Tier 0 constants
 **Status**: LOCKED
 **Version**: 1.1.0
 **Scope**: All child repositories

@@ -1,6 +1,7 @@
 orbt_mode: "OPERATIONAL"
 hub_id: "GARAGE"
 sovereign_id: "imo-creator"
+governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
 classification: "sovereign"
 phase: "active"
 last_validated: "2026-03-14"

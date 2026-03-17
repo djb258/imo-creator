@@ -2,8 +2,10 @@
 # SNAP-ON TOOLBOX - MASTER REGISTRY
 # ═══════════════════════════════════════════════════════════════════════════════
 # Authority: imo-creator (Constitutional)
+# Governing Engine: Tier 0 Doctrine (law/doctrine/TIER0_DOCTRINE.md)
 # Status: LOCKED - Claude Code MUST read before suggesting any tool
 # Location: imo-creator/law/SNAP_ON_TOOLBOX.yaml
+# NOTE: "Tier 0/1/2" in this file = PRICING TIERS (free/cheap/surgical), NOT Tier 0 Doctrine
 # ═══════════════════════════════════════════════════════════════════════════════
 
 version: "2.0.0"

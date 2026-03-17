@@ -2,10 +2,13 @@
 
 ## IDENTITY
 
-This is the **repo of repos**. All doctrine originates here. Downstream repos CONFORM to this repo. This repo conforms to NOTHING.
+This is the **repo of repos** — the Garage. All doctrine originates here. Downstream repos CONFORM to this repo. This repo conforms to NOTHING except Tier 0.
 
 **Authority**: Sovereign (CC-01)
 **Purpose**: Define operating physics for all derived systems
+**Engine**: `law/doctrine/TIER0_DOCTRINE.md` — read immediately after this file
+
+*"Build constants until the decision makes itself."* — Tier 0 governs everything in this repo and all child repos. Three validators applied simultaneously: IMO (flow), CTB (hierarchy), Circle (feedback). Tier 0 is not a concept to understand — it is a process to execute.
 
 ---
 
@@ -127,9 +130,9 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 | Step | Action |
 |------|--------|
 | 1 | Check BANNED list → If banned, STOP, suggest alternative |
-| 2 | Check TIER 0 (FREE) → Prefer free tools first |
-| 3 | Check TIER 1 (CHEAP) → Use existing subscriptions |
-| 4 | Check TIER 2 (SURGICAL) → Gated, require conditions |
+| 2 | Check FREE TIER → Prefer free tools first |
+| 3 | Check CHEAP TIER → Use existing subscriptions |
+| 4 | Check SURGICAL TIER → Gated, require conditions |
 | 5 | If NOT LISTED → ASK, may need ADR |
 
 ### Core Rules
@@ -391,33 +394,30 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   ├── checklists/                      ← Compliance checklists
 │   └── pr-templates/                    ← PR format templates
 │
+├── workers/                      ← CF WORKERS (independent deploy units)
+│   ├── svgagency-api/                   ← Unified API rim (Hyperdrive, D1, KV, R2, Queue)
+│   ├── svg-brain/                       ← Knowledge layer (D1 + Vectorize, hybrid search)
+│   ├── layer0-engine/                   ← Tier 0 extraction engine (Monte Carlo, gates)
+│   └── barton-dev-box/                  ← Cloud dev box (CF Container + Claude Code)
+│
+├── dashboard/                    ← FLEET DASHBOARD
+│
 ├── docs/                         ← GARAGE-LEVEL DOCS
 │   ├── adr/                             ← Architecture Decision Records
-│   └── audit/                           ← Audit reports
+│   ├── audit/                           ← Audit reports
+│   └── processes/                       ← Process documentation (PROCESS-LCS.md, etc.)
 │
 ├── OPERATOR_PROFILE.md           ← Document of documents (HUMAN AUTHORITY ONLY)
 ├── CONSTITUTION.md               ← Human governance
 │
-├── barton-outreach-core (child repo)
-│   └── Conforms to imo-creator
-│
-├── client (child repo)
-│   └── Conforms to imo-creator
-│
-├── company-lifecycle-cl (child repo)
-│   └── Conforms to imo-creator
-│
-├── sales (child repo)
-│   └── Conforms to imo-creator
-│
-├── barton-storage (child repo)
-│   └── Conforms to imo-creator
-│
-├── barton-processes (child repo — NEW)
-│   └── Conforms to imo-creator
-│
-└── research (child repo — PLANNED)
-    └── Not yet bootstrapped
+├── FLEET (8 repos total):
+│   ├── Barton-Processes (Assembly Line — runtime pipeline execution)
+│   ├── barton-outreach-core (Blueprint — outreach ops)
+│   ├── company-lifecycle-cl (Blueprint — lifecycle)
+│   ├── client (Blueprint — client management)
+│   ├── ctb-sales-navigator (Blueprint — sales)
+│   ├── site-scout-pro (Blueprint — storage)
+│   └── kiddo-app-skeleton (Blueprint — educational app)
 ```
 
 **Parent defines. Children conform. Never the reverse.**
@@ -507,7 +507,7 @@ The Prompt and Skills Bay is a specialized bay inside the Garage. It is NOT a st
 It is the human-facing hub definition engine that produces doctrine-compliant hub definition artifacts
 for entry into the Garage pipeline.
 
-**SUPREME PRINCIPLE — THE TRANSFORMATION LAW:**
+**THE TRANSFORMATION LAW (a Tier 0 constant — derived from the engine, not above it):**
 Nothing may exist unless it transforms declared constants into declared variables.
 The factory intake MUST begin with: "What constants does this hub transform, and what variables does it produce?"
 
@@ -583,11 +583,26 @@ Requires ANTHROPIC_API_KEY in GitHub repo secrets.
 
 ---
 
+## Infrastructure
+
+All runtime execution follows Tier 0 — determinism first, LLM as tail only.
+
+| Layer | Technology | Role |
+|-------|-----------|------|
+| Compute | Cloudflare Workers | All runtime execution |
+| Vault | Neon PostgreSQL | Source of truth (via CF Hyperdrive) |
+| Secrets | Doppler | Single source — sovereign config flows down |
+| Integration | Composio (MCP) | Unified pipeline for all service calls |
+| Development | Claude Code | AI-assisted development + agent runtime |
+| CI/CD | GitHub Actions | Fail-closed governance pipelines |
+
+---
+
 ## Document Control
 
 | Field | Value |
 |-------|-------|
 | Created | 2026-01-06 |
-| Last Modified | 2026-03-14 |
+| Last Modified | 2026-03-17 |
 | Status | ACTIVE |
 | Authority | Human only |

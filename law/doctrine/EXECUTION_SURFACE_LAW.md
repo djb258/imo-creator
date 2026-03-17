@@ -1,6 +1,7 @@
 # Execution Surface Law
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Status**: LOCKED
 **Version**: 1.0.0
 **Scope**: All child repositories

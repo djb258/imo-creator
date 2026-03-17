@@ -1,5 +1,6 @@
 # Repo Refactor Protocol
 
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Governs HOW repos are organized and refactored to conform to doctrine.**
 
 ## Conformance

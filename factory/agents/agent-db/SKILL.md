@@ -3,6 +3,7 @@ name: agent-db
 metadata:
   version: 2.1.0
   tier: agent
+  governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
 description: >
   Garage Control Plane database governance agent — enforces database governance, produces
   DB_CHANGESET artifacts with migrations, rollback plans, and validation steps. Trigger

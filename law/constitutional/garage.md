@@ -2,6 +2,7 @@
 
 **Scope**: Garage control plane boundaries and governance centralization
 **Authority**: Subordinate to CONSTITUTION.md (Supreme Law)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Version**: 1.0.0
 **Status**: CONSTITUTIONAL
 

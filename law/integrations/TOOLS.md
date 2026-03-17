@@ -5,6 +5,7 @@
 | Field | Value |
 |-------|-------|
 | **Doctrine Version** | 1.1.0 |
+| **Governing Engine** | Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — determinism first derives from Tier 0 |
 | **CC Layer** | CC-02 (Hub) |
 | **CTB Placement** | Declared per hub |
 

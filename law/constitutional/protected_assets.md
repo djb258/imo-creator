@@ -1,6 +1,7 @@
 # Protected Assets — Ecosystem Doctrine
 
 **Authority**: IMO-Creator (Sovereign)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Scope**: All child repos in the fleet
 **Status**: CONSTITUTIONAL
 

@@ -5,6 +5,7 @@
 **Doctrine Version:** 1.0.0
 **Effective Date:** 2026-02-28
 **Authority:** Derives from and is subordinate to CONSTITUTION.md and ARCHITECTURE.md
+**Governing Engine:** Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Supersedes:** `IMO_CREATOR_DOCTRINE_BRIEFING.md` (session notes — retired)
 **DOCTRINE_INDEX Entry:** PSB-CONST-001 — Governs the Prompt and Skills Bay, its artifacts, its audit requirements, and its relationship to the Garage pipeline.
 

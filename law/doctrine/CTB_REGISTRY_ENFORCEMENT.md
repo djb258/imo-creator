@@ -1,6 +1,7 @@
 # CTB Registry Enforcement
 
 **Authority**: IMO-Creator (CC-01 Sovereign)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CQRS enforcement derives from Tier 0
 **Status**: LOCKED
 **Version**: 1.5.0
 **Scope**: All child repositories

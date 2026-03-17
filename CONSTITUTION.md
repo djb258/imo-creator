@@ -4,6 +4,8 @@
 
 It defines invariants, gates, and authority boundaries for all derived systems.
 
+**Governing Engine**: `law/doctrine/TIER0_DOCTRINE.md` — every invariant in this document was extracted using the Tier 0 constant-extraction engine. Three validators applied simultaneously: IMO (flow), CTB (hierarchy), Circle (feedback). If a rule survives all three → constitutional constant. If it fails any one → variable with guard rails, not constitutional status.
+
 ---
 
 ## What This Constitution Governs
@@ -12,7 +14,7 @@ It defines invariants, gates, and authority boundaries for all derived systems.
 - **Descent order** — CC layers define authority hierarchy
 - **Flow ownership** — IMO defines ingress/middle/egress within hubs
 - **Hub/Spoke geometry** — Hubs own logic, spokes carry data
-- **Enforcement mechanisms** — Pre-commit, CI, Claude Code, Figma UI
+- **Enforcement mechanisms** — Pre-commit, CI, Claude Code, CF Workers
 
 ---
 

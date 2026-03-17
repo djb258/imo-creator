@@ -1,6 +1,7 @@
 # IMO-CREATOR CHARTER
 
 **Version: 1.0.0**
+**Governing Engine: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)**
 **Status: Constitutional — LOCKED**
 
 ---

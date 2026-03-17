@@ -1,4 +1,5 @@
 doctrine_version: "3.5.0"
+governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
 sovereign_id: "imo-creator"
 hub_id: "GARAGE"
 ctb_placement: "trunk"

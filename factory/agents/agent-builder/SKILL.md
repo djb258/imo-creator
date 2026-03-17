@@ -3,6 +3,7 @@ name: agent-builder
 metadata:
   version: 2.8.0
   tier: agent
+  governing_engine: "law/doctrine/TIER0_DOCTRINE.md"
 description: >
   Garage Control Plane execution agent — executes approved WORK_PACKETs across standard,
   DB, UI, container, and documentation lanes against mounted child repository clones.

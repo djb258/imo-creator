@@ -1,6 +1,7 @@
 # Agent Governance — Parent Authority
 
 **Authority**: IMO-Creator (Sovereign)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
 **Scope**: All child repos adopting the V1 Control Plane
 **Status**: CONSTITUTIONAL
 

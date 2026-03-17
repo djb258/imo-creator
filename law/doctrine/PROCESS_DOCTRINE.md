@@ -2,6 +2,7 @@
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL (Derived from CONSTITUTION.md)
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — processes execute Tier 0 validated transformations
 **Version**: 1.0.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 

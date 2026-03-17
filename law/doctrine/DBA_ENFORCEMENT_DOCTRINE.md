@@ -2,6 +2,7 @@
 
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CQRS enforcement at the DB layer
 **Version**: 1.0.0
 **Change Protocol**: HUMAN APPROVAL REQUIRED — NO EXCEPTIONS
 

@@ -3,6 +3,7 @@
 **Doctrine Version**: 2.1.0
 **Status**: LOCKED (CONSTITUTIONAL)
 **Authority**: IMO-Creator Sovereign
+**Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — CTB is Tier 0 Validator #2
 **Change Protocol**: ADR + Human Approval ONLY
 
 ---
