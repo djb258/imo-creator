@@ -1,0 +1,80 @@
+{
+  "id": "wp-20260310-bar50-skeleton-v2",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "flow_contract": {
+    "ingress": [
+      "people.company_slot",
+      "people.people_master",
+      "coverage.v_service_agent_coverage_zips"
+    ],
+    "middle": [
+      "hubs/talent-flow/input/*",
+      "hubs/talent-flow/imo/middle/detection.py",
+      "hubs/talent-flow/run.py"
+    ],
+    "egress": [
+      "talent_flow.movements",
+      "people.person_movement_history",
+      "lcs.signal_queue"
+    ]
+  },
+  "allowed_paths": [
+    "hubs/talent-flow/input/",
+    "hubs/talent-flow/imo/middle/",
+    "hubs/talent-flow/output/",
+    "hubs/talent-flow/run.py",
+    "hubs/talent-flow/SCHEMA.md",
+    "hubs/talent-flow/pipeline.md"
+  ],
+  "summary": "BAR-50 skeleton v2: rebuild the existing Python talent-flow hub in barton-outreach-core using Option B sensor-only scope. Recreate talent_flow.movements and people.person_movement_history from SCHEMA.md, create people.talent_flow_snapshot and people.talent_flow_watch, implement Neon input capture plus T1/T2 comparison detection and signal emission under the existing IMO hub structure, and keep cross-repo CL signal category work in a separate packet.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-10T20:40:00Z",
+  "routed_by": "planner",
+  "routed_at": "2026-03-10T20:40:00Z",
+  "routing_notes": "Generated from planner intake bar50-skeleton-v2-0a3041d0-9064-445a-bf8e-04ff0b69723b.json. Planner resolved the PRD conflict in favor of Option B sensor-only scope. Cross-repo CL signal registry and signal_queue updates were split into wp-20260310-bar50-talent-flow-signal-categories.",
+  "payload": {
+    "task_id": "BAR-50-SKELETON-v2",
+    "related_tickets": [
+      "BAR-50",
+      "BAR-51"
+    ],
+    "operational_id": "0a3041d0-9064-445a-bf8e-04ff0b69723b",
+    "source_intake_packet": "/Users/employeeai/Documents/IMO-Creator/sys/runtime/inbox/planner/bar50-skeleton-v2-0a3041d0-9064-445a-bf8e-04ff0b69723b.json",
+    "planner_resolution": "Option B sensor-only. No cascade enrichment, no sovereign_id minting, and no UT orchestration logic in this packet.",
+    "depends_on": "wp-20260310-bar50-talent-flow-signal-categories",
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "No external HTTP calls — reads/writes Neon only",
+      "Follow existing IMO directory structure in hubs/talent-flow/",
+      "Do not rewrite hub_status.py — it already works",
+      "Execute before BAR-50-SMOKE-TEST",
+      "Sensor-only detection and movement logging only",
+      "Cross-repo CL database changes are out of scope for this packet"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "talent_flow.movements",
+    "people.person_movement_history",
+    "people.talent_flow_snapshot",
+    "people.talent_flow_watch",
+    "lcs.signal_queue"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": true,
+  "doc_targets": [
+    "hubs/talent-flow/SCHEMA.md",
+    "hubs/talent-flow/pipeline.md"
+  ],
+  "doc_surface": "repo_markdown",
+  "container_required": false
+}

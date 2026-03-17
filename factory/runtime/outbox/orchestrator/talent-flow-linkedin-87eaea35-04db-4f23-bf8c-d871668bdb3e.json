@@ -1,0 +1,48 @@
+{
+  "packet_type": "planner_intake",
+  "operational_id": "87eaea35-04db-4f23-bf8c-d871668bdb3e",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Integrate Field Monitor vendor tier into Talent Flow for LinkedIn public profile change detection. Bridge module at hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py reads from field_monitor.check_log vendor tier (current_title, current_company changes) and fires EVENT_TALENTFLOW_MOVE into existing movement engine. Seeds 100 LinkedIn URLs from people.people_master into field_monitor.url_registry. Sample-gated to 100 records. Depends on field_monitor schema being deployed (wp-20260305-field-monitor-phase1-bootstrap-r2). No modifications to existing movement engine. DB writes: seed INSERTs to field_monitor.url_registry and field_monitor.field_state. Doc updates to pipeline.md and SCHEMA.md.",
+  "source_packet": {
+    "task_id": "wp-20260306-talent-flow-linkedin-monitor",
+    "source": "claude_ai_foreman",
+    "timestamp": "2026-03-06T13:00:00Z",
+    "priority": "standard",
+    "pre_structured": true,
+    "note": "Source packet arrived pre-structured with allowed_paths, flow_contract, payload, and db_targets. Full context passed through to Planner."
+  },
+  "passthrough_context": {
+    "original_id": "wp-20260306-talent-flow-linkedin-monitor",
+    "change_type": "feature",
+    "allowed_paths": [
+      "hubs/people-intelligence/imo/middle/movement_engine/linkedin_monitor.py",
+      "hubs/people-intelligence/imo/middle/movement_engine/__init__.py",
+      "hubs/people-intelligence/scripts/seed_linkedin_urls.sql",
+      "hubs/people-intelligence/scripts/seed_linkedin_parsers.py",
+      "hubs/people-intelligence/pipeline.md",
+      "hubs/people-intelligence/SCHEMA.md"
+    ],
+    "flow_contract": {
+      "ingress": ["field_monitor.check_log (vendor tier — changed=true, current_title/current_company)", "people.people_master (seed source)"],
+      "middle": ["linkedin_monitor.py — bridge reads vendor tier, fires EVENT_TALENTFLOW_MOVE", "movement_engine.py — existing, NO MODIFICATIONS"],
+      "egress": ["people.person_movement_history — written by existing movement engine", "field_monitor.check_log — append-only, written by CF Workers"]
+    },
+    "db_required": true,
+    "doc_required": true,
+    "ui_required": false,
+    "container_required": false
+  },
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Do not modify existing movement engine (movement_engine.py, state_machine.py)",
+    "Sample-gated to 100 records",
+    "Depends on field_monitor schema being deployed first"
+  ],
+  "emitted_at": "2026-03-10T20:45:00Z",
+  "emitted_by": "orchestrator"
+}

@@ -178,6 +178,31 @@ The gate mechanism IS the promotion path. Canonical = constants that survived. E
 
 ---
 
+## CQRS — Command Query Responsibility Separation
+
+Every sub-hub has exactly **one CANONICAL table** (read/query) and **one ERROR table** (write/command failures). This is a Tier 0 constant — not a pattern choice.
+
+**Write path (Command):** Data enters ONLY from the leaves. Vendor/staging tables at the bottom of the CTB accept incoming data. It promotes upward through registered gates — VENDOR → STAGING → SUPPORTING → CANONICAL. No direct writes to CANONICAL. Ever. INSERT-only at the leaf level. Immutability triggers enforce this mechanically.
+
+**Read path (Query):** CANONICAL tables are the read surface. Views and downstream consumers read from CANONICAL only. Egress is read-only — no logic, no mutations.
+
+**Error path:** Any data that fails a gate lands in the ERROR table. Errors feed the Circle — the repair agent reads the error, the Garage certifies the repair, data re-enters the write path from the leaf.
+
+```
+Leaves (vendor/staging) → promotion gates → CANONICAL (read-only query surface)
+         ↓ (failures)
+      ERROR table → Circle → repair → re-enter at leaf
+```
+
+**Constants:**
+- One CANONICAL + one ERROR per sub-hub (ADR-001)
+- Data enters from leaves only — no sideways writes, no skipping levels
+- CANONICAL is read-only from the consumer's perspective
+- INSERT-only at the leaf level (immutability triggers)
+- The promotion path IS the gate mechanism
+
+---
+
 ## Vocabulary
 
 | Term | Definition |
@@ -200,6 +225,10 @@ The gate mechanism IS the promotion path. Canonical = constants that survived. E
 | **Altitude** | Position on CTB hierarchy (50,000ft=strategic → ground=implementation) |
 | **Monte Carlo** | Quantitative validation — simulation against locked constants at lower altitudes |
 | **Tolerance** | Acceptable range for a domesticated variable — within tolerance = safe to proceed |
+| **CQRS** | Command Query Responsibility Separation — write path (leaf→promote→canonical) vs read path (canonical→views) |
+| **CANONICAL** | The single trusted table per sub-hub — data that survived all gates |
+| **ERROR** | The single error table per sub-hub — data that failed gates, feeds the Circle |
+| **Promotion Path** | The registered route from leaf to canonical — IS the gate mechanism |
 
 ---
 

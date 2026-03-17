@@ -1,0 +1,61 @@
+{
+  "id": "wp-20260310-bar50-talent-flow-signal-categories",
+  "change_type": "feature",
+  "orbt_mode": "build",
+  "execution_type": "db_changeset",
+  "target_repo_alias": "company-lifecycle-cl",
+  "target_branch": "main",
+  "architectural_flag": false,
+  "requires_pressure_test": false,
+  "allowed_paths": [
+    "migrations/",
+    "column_registry.yml",
+    "src/sys/lcs/contracts/",
+    "changesets/outbox/"
+  ],
+  "summary": "BAR-50 cross-repo DB packet for the superseding v2 intake: register sensor-only Talent Flow signal categories in lcs.signal_registry and apply any required lcs.signal_queue contract or constraint updates so barton-outreach-core can emit movement-detection signals into CL without inline cross-repo migration scope.",
+  "doctrine_version": "3.5.0",
+  "timestamp": "2026-03-10T20:40:00Z",
+  "routed_by": "planner",
+  "routed_at": "2026-03-10T20:40:00Z",
+  "routing_notes": "Aligned to superseding planner intake bar50-skeleton-v2-0a3041d0-9064-445a-bf8e-04ff0b69723b.json. Cross-repo note explicitly identified CL database work for signal category registration and queue-side compatibility. Planner resolved the PRD conflict in favor of Option B sensor-only scope on the CL side and kept this as a separate company-lifecycle-cl packet to avoid mixing CL migrations into the barton-outreach-core skeleton packet.",
+  "payload": {
+    "task_id": "BAR-50-SKELETON-v2",
+    "related_tickets": [
+      "BAR-50",
+      "BAR-51"
+    ],
+    "operational_id": "0a3041d0-9064-445a-bf8e-04ff0b69723b",
+    "source_intake_packet": "/Users/employeeai/Documents/IMO-Creator/sys/runtime/inbox/planner/bar50-skeleton-v2-0a3041d0-9064-445a-bf8e-04ff0b69723b.json",
+    "target_system": "company-lifecycle-cl",
+    "lane": "db",
+    "agent": "db_agent",
+    "planner_resolution": "Option B sensor-only. CL scope is limited to signal category registration and queue compatibility for movement-detection emission. No cascade enrichment, sovereign_id minting, or UT orchestration logic belongs in this packet.",
+    "deliverables": [
+      "Register four new sensor-only Talent Flow signal categories in lcs.signal_registry",
+      "Add TALENT_FLOW to lcs.signal_queue source_hub validation if not already allowed",
+      "Update lcs.signal_queue constraints/contracts only if required for Talent Flow emission compatibility",
+      "Produce DB changeset artifacts and verification evidence in changesets/outbox"
+    ],
+    "constraints": [
+      "Do not expand scope",
+      "Do not infer missing fields",
+      "Do not bypass alias resolution",
+      "No external HTTP calls",
+      "CL packet covers only CL-side database work; no barton-outreach-core application code changes here",
+      "Must complete before BAR-50-SMOKE-TEST",
+      "Preserve by-value signal registry references in lcs.signal_queue",
+      "Do not implement cascade enrichment or sovereign_id minting in CL",
+      "Follow PRD sensor-only interpretation for this cross-repo DB scope"
+    ]
+  },
+  "db_required": true,
+  "db_targets": [
+    "lcs.signal_registry",
+    "lcs.signal_queue"
+  ],
+  "db_system": "neon",
+  "ui_required": false,
+  "doc_required": false,
+  "container_required": false
+}

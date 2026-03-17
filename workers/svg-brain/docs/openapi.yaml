@@ -1,0 +1,535 @@
+openapi: 3.0.3
+info:
+  title: svg-brain Knowledge Layer API
+  description: |
+    CF-native knowledge layer for doctrine search, glossary lookup,
+    decision tracking, and relationship graphing. Hybrid search
+    combines FTS5 BM25 + Vectorize cosine via Reciprocal Rank Fusion.
+  version: 1.0.0
+  contact:
+    name: SVG Agency
+    email: dbarton@svg.agency
+
+servers:
+  - url: https://svg-brain.svg-outreach.workers.dev
+    description: Production (Cloudflare Workers)
+
+security:
+  - apiKey: []
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      description: Returns service status and document count. No auth required.
+      security: []
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok, error]
+                  documents:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /query:
+    post:
+      operationId: hybridSearch
+      summary: Hybrid semantic + full-text search
+      description: |
+        Searches the knowledge base using hybrid RRF fusion of FTS5 BM25
+        and Vectorize cosine similarity. Returns ranked chunks with source metadata.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  description: Natural language search query
+                domain:
+                  type: string
+                  description: Filter by domain (e.g. doctrine, architecture, integration)
+                top_k:
+                  type: integer
+                  default: 10
+                  maximum: 50
+                  description: Number of results to return
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query:
+                    type: string
+                  domain:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/QueryResult'
+                  count:
+                    type: integer
+
+  /ingest:
+    post:
+      operationId: ingestDocument
+      summary: Ingest a document
+      description: |
+        Ingests a document into the knowledge base. Performs content-hash
+        deduplication, chunking (~512 chars), embedding (bge-large-en-v1.5),
+        and vector upsert.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [domain, source_path, title, content]
+              properties:
+                domain:
+                  type: string
+                  description: Knowledge domain (doctrine, architecture, integration, etc.)
+                source_path:
+                  type: string
+                  description: Original file path
+                title:
+                  type: string
+                  description: Document title
+                content:
+                  type: string
+                  description: Full document content (markdown)
+                doc_version:
+                  type: string
+                  default: '1.0.0'
+                  description: Document version
+      responses:
+        '201':
+          description: Document ingested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResult'
+        '200':
+          description: Document unchanged (skipped)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResult'
+
+  /lookup:
+    get:
+      operationId: lookupGlossaryTerm
+      summary: Look up a glossary term
+      description: Search the glossary by term name and optional domain filter.
+      parameters:
+        - name: term
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Term to look up
+        - name: domain
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by domain
+      responses:
+        '200':
+          description: Glossary results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  term:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GlossaryTerm'
+                  count:
+                    type: integer
+
+  /glossary:
+    post:
+      operationId: upsertGlossaryTerm
+      summary: Create or update a glossary term
+      description: Upserts a glossary term. Unique on (term, domain).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [term, definition, domain]
+              properties:
+                term:
+                  type: string
+                definition:
+                  type: string
+                domain:
+                  type: string
+                source_document_id:
+                  type: string
+      responses:
+        '201':
+          description: Term inserted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsertResult'
+        '200':
+          description: Term updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsertResult'
+
+  /documents:
+    get:
+      operationId: listDocuments
+      summary: List all documents
+      description: Returns all ingested documents, optionally filtered by domain.
+      parameters:
+        - name: domain
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by domain
+      responses:
+        '200':
+          description: Document list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+                  count:
+                    type: integer
+
+  /documents/{id}:
+    get:
+      operationId: getDocument
+      summary: Get a document by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Document UUID
+      responses:
+        '200':
+          description: Document found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '404':
+          description: Document not found
+
+  /decisions:
+    get:
+      operationId: listDecisions
+      summary: List all decisions (ADRs)
+      parameters:
+        - name: domain
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Decision list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  decisions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Decision'
+                  count:
+                    type: integer
+    post:
+      operationId: upsertDecision
+      summary: Create or update a decision
+      description: Upserts a decision record. Unique on adr_number.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [adr_number, title, domain, summary, decided_at]
+              properties:
+                adr_number:
+                  type: string
+                title:
+                  type: string
+                status:
+                  type: string
+                  default: accepted
+                domain:
+                  type: string
+                summary:
+                  type: string
+                source_document_id:
+                  type: string
+                decided_at:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Decision inserted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsertResult'
+
+  /decisions/{adr}:
+    get:
+      operationId: getDecision
+      summary: Get a decision by ADR number
+      parameters:
+        - name: adr
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ADR number (e.g. ADR-035)
+      responses:
+        '200':
+          description: Decision found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Decision'
+        '404':
+          description: Decision not found
+
+  /relationships:
+    post:
+      operationId: createRelationship
+      summary: Create a relationship between entities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [source_type, source_id, target_type, target_id, relation]
+              properties:
+                source_type:
+                  type: string
+                  description: Entity type (document, glossary_term, decision)
+                source_id:
+                  type: string
+                target_type:
+                  type: string
+                target_id:
+                  type: string
+                relation:
+                  type: string
+                  description: Relationship type (defines, references, supersedes, etc.)
+                weight:
+                  type: number
+                  default: 1.0
+      responses:
+        '201':
+          description: Relationship created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsertResult'
+
+  /relationships/{type}/{id}:
+    get:
+      operationId: getRelationships
+      summary: Get relationships for an entity
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source entity type
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source entity ID
+      responses:
+        '200':
+          description: Related entities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  relationships:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Relationship'
+                  count:
+                    type: integer
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    QueryResult:
+      type: object
+      properties:
+        chunk_id:
+          type: string
+        document_id:
+          type: string
+        content:
+          type: string
+        score:
+          type: number
+        source_path:
+          type: string
+        title:
+          type: string
+        domain:
+          type: string
+
+    IngestResult:
+      type: object
+      properties:
+        document_id:
+          type: string
+        action:
+          type: string
+          enum: [inserted, updated, skipped]
+        chunks_created:
+          type: integer
+        chunks_embedded:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: string
+
+    Document:
+      type: object
+      properties:
+        document_id:
+          type: string
+        domain:
+          type: string
+        source_path:
+          type: string
+        title:
+          type: string
+        content_hash:
+          type: string
+        doc_version:
+          type: string
+        ingested_at:
+          type: string
+        updated_at:
+          type: string
+
+    GlossaryTerm:
+      type: object
+      properties:
+        term_id:
+          type: string
+        term:
+          type: string
+        definition:
+          type: string
+        domain:
+          type: string
+        source_document_id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    Decision:
+      type: object
+      properties:
+        decision_id:
+          type: string
+        adr_number:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+        domain:
+          type: string
+        summary:
+          type: string
+        source_document_id:
+          type: string
+        decided_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    Relationship:
+      type: object
+      properties:
+        relationship_id:
+          type: string
+        source_type:
+          type: string
+        source_id:
+          type: string
+        target_type:
+          type: string
+        target_id:
+          type: string
+        relation:
+          type: string
+        weight:
+          type: number
+        created_at:
+          type: string
+
+    UpsertResult:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [inserted, updated, skipped]

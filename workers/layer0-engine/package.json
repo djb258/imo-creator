@@ -1,0 +1,16 @@
+{
+  "name": "layer0-engine",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "d1:init": "wrangler d1 execute layer0-engine --file=schema/d1-schema.sql",
+    "d1:init:local": "wrangler d1 execute layer0-engine --local --file=schema/d1-schema.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.91.0"
+  }
+}

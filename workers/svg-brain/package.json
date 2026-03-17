@@ -1,0 +1,21 @@
+{
+  "name": "svg-brain",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "d1:migrate:local": "wrangler d1 migrations apply svg-brain --local",
+    "d1:migrate:remote": "wrangler d1 migrations apply svg-brain --remote",
+    "seed": "npx tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250313.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.5.0"
+  }
+}

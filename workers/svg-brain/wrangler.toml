@@ -1,0 +1,30 @@
+# ═══════════════════════════════════════════════════════════════
+# svg-brain — CF-Native Knowledge Layer
+# ═══════════════════════════════════════════════════════════════
+# BAR-147 | CC-02 (Hub) | IMO: Ingress-Middle-Egress
+# 4 Sub-hubs: documents, glossary, decisions, graph
+# CTB: 1 CANONICAL + 1 ERROR per sub-hub (D1/SQLite)
+# ═══════════════════════════════════════════════════════════════
+
+name = "svg-brain"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[placement]
+mode = "smart"
+
+# ── D1 Database (SQLite) ──────────────────────────────────────
+[[d1_databases]]
+binding = "D1_BRAIN"
+database_name = "svg-brain"
+database_id = "a2e09d86-0dff-460e-bbbc-9b349416aacf"
+
+# ── Vectorize (1024-dim, cosine) ──────────────────────────────
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "svg-brain"
+
+# ── Workers AI (embeddings) ───────────────────────────────────
+[ai]
+binding = "AI"

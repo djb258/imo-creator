@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layer 0 Engine — Dashboard</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Layer 0 Engine</h1>
+    <p class="subtitle">Extraction Results Dashboard</p>
+    <nav>
+      <a href="/">New Session</a>
+      <a href="/dashboard.html" class="active">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Session Selector -->
+    <section id="session-selector">
+      <h2>Sessions</h2>
+      <div id="sessions-list">
+        <p class="loading">Loading sessions&hellip;</p>
+      </div>
+    </section>
+
+    <!-- Session Detail (hidden until session selected) -->
+    <section id="session-detail" class="hidden">
+      <div class="session-header">
+        <h2 id="detail-domain"></h2>
+        <span id="detail-status" class="badge"></span>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-value" id="stat-gates">0</span>
+          <span class="stat-label">Gates</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-constants">0</span>
+          <span class="stat-label">Constants</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-variables">0</span>
+          <span class="stat-label">Variables</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-sigma">—</span>
+          <span class="stat-label">Final &sigma;</span>
+        </div>
+      </div>
+
+      <!-- Gate Progress -->
+      <section id="gate-progress">
+        <h3>Gate-by-Gate Progress</h3>
+        <div id="gates-timeline"></div>
+      </section>
+
+      <!-- Locked Constants -->
+      <section id="constants-section">
+        <h3>Locked Constants</h3>
+        <table id="constants-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Constant</th>
+              <th>Definition</th>
+              <th>Gate</th>
+              <th>IMO</th>
+              <th>CTB</th>
+              <th>Circle</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Sigma Chart -->
+      <section id="sigma-section">
+        <h3>Sigma Progression</h3>
+        <div id="sigma-chart">
+          <canvas id="sigma-canvas" width="600" height="200"></canvas>
+        </div>
+      </section>
+
+      <!-- Export -->
+      <section id="export-section">
+        <h3>Export</h3>
+        <div class="export-buttons">
+          <button onclick="exportMarkdown()">Export Markdown</button>
+          <button onclick="exportJSON()">Export JSON</button>
+        </div>
+        <pre id="export-output" class="hidden"></pre>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>Layer 0 Engine v1.0.0 &mdash; Domain-agnostic constant extraction</p>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    // Dashboard-specific initialization
+    document.addEventListener('DOMContentLoaded', loadSessions);
+  </script>
+</body>
+</html>

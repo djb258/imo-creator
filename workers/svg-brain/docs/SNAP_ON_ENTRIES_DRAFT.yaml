@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════
+# DRAFT — Proposed SNAP_ON_TOOLBOX.yaml Additions
+# ═══════════════════════════════════════════════════════════════
+# These entries need human approval before adding to
+# imo-creator/law/SNAP_ON_TOOLBOX.yaml
+# BAR-147 | ADR-035, ADR-036
+# ═══════════════════════════════════════════════════════════════
+
+# Add to infrastructure section:
+infrastructure_additions:
+  vector_search: {name: "CF Vectorize", role: "Vector similarity search (BAR-147)", cost: "Included in Workers $5/mo"}
+  embeddings: {name: "CF Workers AI", role: "Text embeddings (BAR-147)", cost: "Free tier (10K neurons/day)"}
+  sqlite: {name: "CF D1", role: "Edge SQLite database (BAR-147)", cost: "Included in Workers $5/mo"}
+
+# Add to tools section:
+tool_additions:
+
+  CloudflareVectorize:
+    tool_id: "TOOL-019"
+    tier: 1
+    status: "active"
+    software:
+      primary: "Cloudflare Vectorize"
+      dependencies: []
+      vendor: "Cloudflare"
+      requires_api_key: false
+    purpose:
+      summary: "Vector similarity search for semantic retrieval"
+      what_it_does:
+        - "1024-dimensional vector storage and query"
+        - "Cosine similarity search with metadata filtering"
+        - "Co-located with Workers for sub-ms binding calls"
+    consumers:
+      - "svg-brain (hybrid search — vector leg)"
+    throttle:
+      rate_limits:
+        - {scope: "per_second", limit: 100}
+        - {scope: "vectors_max", limit: 5000000}
+      cost: {model: "monthly_fixed", estimated_cost_per_call: 0, monthly_budget_cap: 0}
+      backoff: {strategy: "none", initial_delay_ms: 0, max_retries: 0}
+    guardrails:
+      kill_switch: {trigger: "vector_count_exceeds_limit", action: "halt_and_alert"}
+
+  CloudflareWorkersAI:
+    tool_id: "TOOL-020"
+    tier: 0
+    status: "active"
+    software:
+      primary: "Cloudflare Workers AI"
+      dependencies: []
+      vendor: "Cloudflare"
+      requires_api_key: false
+      model: "@cf/baai/bge-large-en-v1.5"
+    purpose:
+      summary: "Text embedding generation (deterministic — same input, same vector)"
+      what_it_does:
+        - "Generate 1024-dim embeddings from text"
+        - "Batch embedding (10 texts per call)"
+        - "Used for ingestion and query-time embedding"
+    consumers:
+      - "svg-brain (ingestion pipeline + query embedding)"
+    throttle:
+      rate_limits:
+        - {scope: "per_day_neurons", limit: 10000}
+        - {scope: "per_call_texts", limit: 10}
+      cost: {model: "free", estimated_cost_per_call: 0, monthly_budget_cap: 0}
+      backoff: {strategy: "exponential", initial_delay_ms: 1000, max_retries: 2}
+    guardrails:
+      kill_switch: {trigger: "daily_neuron_limit_reached", action: "queue_for_next_day"}
+      firewall: {check_gate_before_call: false, log_all_calls: false}
+    accuracy: "N/A"
+    accuracy_notes: "Deterministic — same input always produces same embedding vector"

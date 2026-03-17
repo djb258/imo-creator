@@ -1,0 +1,50 @@
+{
+  "packet_type": "planner_intake",
+  "operational_id": "bcd090e8-97d9-453f-87d9-84774f5b0e4e",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Integrate Field Monitor vendor tier into Blog sub-hub (04.04.05) as 'Signal Sweep' — continuous URL monitoring for company press/about pages. Bridge module in hubs/blog-content/imo/middle/signal_sweep/ reads from field_monitor.check_log vendor tier and feeds detected content changes into existing blog pipeline via ingest_article(). Seeds 100 URLs from vendor.blog into field_monitor.url_registry. Sample-gated to 100 records. Depends on field_monitor schema being deployed (wp-20260305-field-monitor-phase1-bootstrap-r2). No modifications to existing blog pipeline. DB writes: seed INSERTs to field_monitor.url_registry and field_monitor.field_state. Doc updates to pipeline.md and SCHEMA.md.",
+  "source_packet": {
+    "task_id": "wp-20260306-signal-sweep-blog-monitor",
+    "source": "claude_ai_foreman",
+    "timestamp": "2026-03-06T13:00:00Z",
+    "priority": "standard",
+    "pre_structured": true,
+    "note": "Source packet arrived pre-structured with allowed_paths, flow_contract, payload, and db_targets. Full context passed through to Planner."
+  },
+  "passthrough_context": {
+    "original_id": "wp-20260306-signal-sweep-blog-monitor",
+    "change_type": "feature",
+    "allowed_paths": [
+      "hubs/blog-content/imo/middle/signal_sweep/__init__.py",
+      "hubs/blog-content/imo/middle/signal_sweep/url_seeder.py",
+      "hubs/blog-content/imo/middle/signal_sweep/change_bridge.py",
+      "hubs/blog-content/imo/middle/signal_sweep/parser_templates.py",
+      "hubs/blog-content/scripts/seed_blog_urls.sql",
+      "hubs/blog-content/scripts/seed_blog_parsers.py",
+      "hubs/blog-content/pipeline.md",
+      "hubs/blog-content/SCHEMA.md"
+    ],
+    "flow_contract": {
+      "ingress": ["field_monitor.check_log (vendor tier — changed=true)", "vendor.blog (seed source)"],
+      "middle": ["signal_sweep/change_bridge.py — bridge reads vendor tier, feeds ingest_article()", "blog_node_spoke.py — existing, NO MODIFICATIONS"],
+      "egress": ["outreach.blog — written by existing pipeline", "field_monitor.check_log — append-only, written by CF Workers"]
+    },
+    "db_required": true,
+    "doc_required": true,
+    "ui_required": false,
+    "container_required": false
+  },
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "Do not modify existing blog pipeline (blog_node_spoke.py, ingest_article.py)",
+    "Sample-gated to 100 records",
+    "Depends on field_monitor schema being deployed first"
+  ],
+  "emitted_at": "2026-03-10T20:45:00Z",
+  "emitted_by": "orchestrator"
+}

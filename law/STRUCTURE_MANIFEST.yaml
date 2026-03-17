@@ -64,11 +64,20 @@ allowed_directories:
       - validators
       - docs
 
+  workers:
+    purpose: "CF Workers — independent deployable units, each with own wrangler config"
+    subdirs:
+      - svgagency-api
+      - svg-brain
+      - layer0-engine
+      - barton-dev-box
+
   docs:
-    purpose: "Garage-level documentation (ADRs, audit reports)"
+    purpose: "Garage-level documentation (ADRs, audit reports, processes)"
     subdirs:
       - adr
       - audit
+      - processes
 
   scripts:
     purpose: "Garage-level operational scripts"

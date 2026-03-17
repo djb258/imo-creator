@@ -1,79 +1,110 @@
 import type { Process } from './types';
 
 export const processes: Process[] = [
-  // ── LCS — Full end-to-end pipeline: capture through lifecycle communication ──
+  // ── LCS — Full CID→SID→MID pipeline: signal intake through multi-channel delivery ──
   {
     id: 'PROC-LCS',
     name: 'Lifecycle Communication Spine',
     shortName: 'LCS',
-    description: 'End-to-end pipeline: company intake through identity minting, sub-hub activation, signal collection, intelligence assembly, frame matching, and multi-channel delivery (Mailgun, HeyReach, Sales Handoff).',
+    description: 'Three-phase pipeline: CID Compiler (signal→compiled communication ID), SID Worker (CID→message construction), MID Engine (SID→adapter delivery). 11 frames, 3 gates, ORBT 3-strike protocol, bidirectional ID addressing. Delivery via CF Worker → Mailgun (email) / HeyReach (LinkedIn) / Sales Handoff.',
     status: 'IN_PROGRESS',
     docs: [
-      { file: 'PROCESS.md', status: 'MISSING', template: 'templates/processes/PROCESS.md' },
+      { file: 'docs/processes/PROCESS-LCS.md', status: 'PRESENT', repo: 'imo-creator' },
       { file: 'docs/prd/PRD-LCS.md', status: 'PRESENT', repo: 'company-lifecycle-cl' },
       { file: 'doctrine/OSAM.md', status: 'PRESENT', repo: 'barton-outreach-core' },
-      { file: 'ERD.md', status: 'MISSING', template: 'templates/processes/ERD.md' },
+      { file: 'docs/processes/PROCESS-LCS.md#erd', status: 'PRESENT', repo: 'imo-creator' },
       { file: 'docs/lcs/DEPLOY_CHECKLIST.md', status: 'PRESENT', repo: 'company-lifecycle-cl' },
     ],
     heir: {
       repos: ['company-lifecycle-cl', 'barton-outreach-core', 'client'],
       subHubs: ['CL-INTAKE', 'CL-LCS', 'company_target', 'dol', 'people', 'blog', 'bit'],
       tools: ['Hunter', 'Clay', 'Apollo'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler', 'Mailgun', 'HeyReach', 'Calendly'],
+      services: ['CF Workers + Hyperdrive', 'Neon PostgreSQL', 'Doppler', 'Mailgun', 'HeyReach', 'Calendly'],
       skills: ['/bootstrap', '/feature-dev', '/process-creator'],
     },
     imo: {
       ingress: {
-        trigger: 'Source adapter loads company candidates into cl.company_candidate',
-        schema: 'cl.company_candidate (staging_id, source_company_id, source_system, company_name, company_domain, eligibility_status)',
+        trigger: 'Sub-hubs emit signals to lcs.signal_queue (PENDING). Sources: DOL enrichment, People slots, Blog detection, Talent Flow, Field Monitor movement.',
+        schema: 'lcs.signal_queue (sovereign_company_id, signal_set_hash, lifecycle_phase, priority, status)',
       },
       middle: {
         steps: [
-          'Verify candidate via verifyCandidate()',
-          'Mint sovereign_company_id in cl.company_identity',
-          'Bridge mapping: cl.company_identity_bridge',
-          'Activate outreach sub-hub (mint outreach_id)',
-          'Waterfall: CT → DOL → People → Blog enrichment',
-          'Signal queue ingress from sub-hubs',
-          'Intelligence assembly via v_company_intelligence',
-          'Frame matching by signal + intelligence tier',
-          'Adapter delivery (MG/HR/SH)',
+          // --- Phase 1: CID Compiler (cid-compiler.ts) — 8 gates ---
+          'CID-1: Fetch pending signals from signal_queue (batch, ordered by priority)',
+          'CID-2: Validate signal fields (sovereign_company_id, signal_set_hash, lifecycle_phase)',
+          'CID-3: CAPACITY GATE — check adapter + agent daily caps → BLOCK if over',
+          'CID-4: Collect intelligence from v_company_intelligence → determine tier (1-5)',
+          'CID-5: FRESHNESS GATE — validate data recency → DOWNGRADE tier or BLOCK',
+          'CID-6: Match frame from frame_registry (phase + active + tier <= intelligence_tier)',
+          'CID-7: Resolve entity_id from intelligence (CEO→CFO→HR priority); STRICT requires entity_id',
+          'CID-8: Mint communication_id (LCS-{PHASE}-{DATE}-{ULID}) → write lcs.cid (COMPILED|FAILED|BLOCKED)',
+          // --- Phase 2: SID Worker (sid-worker.ts) — message construction ---
+          'SID-1: Triggered by pg_notify on COMPILED CID insert (real-time) or cron batch',
+          'SID-2: Fetch frame template + collect intelligence for recipient resolution',
+          'SID-3: Resolve recipient (CEO email → CFO → HR priority), resolve sender identity',
+          'SID-4: Construct message: subject_line + body_plain + body_html → write lcs.sid_output (CONSTRUCTED)',
+          // --- Phase 3: MID Engine (mid-engine.ts) — delivery ---
+          'MID-1: Fetch CID context + determine channel + check sequence type (IMMEDIATE|DELAYED)',
+          'MID-2: CAPACITY GATE → BLOCK if adapter over capacity',
+          'MID-3: SUPPRESSION GATE → BLOCK if entity suppressed (never_contact, unsubscribed, hard_bounced)',
+          'MID-4: Mint message_run_id (RUN-{COMM_ID}-{CHANNEL}-{ATTEMPT})',
+          'MID-5: Resolve adapter → build payload → call adapter.send()',
+          'MID-6: Write lcs.mid_sequence_state + log CET event + ORBT err0 on failure',
         ],
         decisions: [
-          'Candidate eligibility (ELIGIBLE/PARTIAL/INELIGIBLE)',
-          'Intelligence tier (1-5) determines frame selection',
-          'BIT authorization band gates outreach intensity',
-          'ORBT 3-strike protocol on delivery failure',
-          'Lifecycle promotion (OUTREACH→SALES→CLIENT)',
+          'Intelligence tier (1-5) determines frame selection — lower tier = more data required',
+          'Compilation rule (STANDARD|LITE|STRICT) determines entity_id requirements',
+          'BIT authorization band gates outreach intensity (Band 0-5)',
+          'ORBT 3-strike protocol: Strike 1→AUTO_RETRY, Strike 2→ALT_CHANNEL (MG↔HR), Strike 3→HUMAN_ESCALATION',
+          'Sequence type: IMMEDIATE (send now) vs DELAYED (schedule mid_delay_hours)',
+          'Lifecycle promotion (OUTREACH→SALES→CLIENT) via lcs.event analysis',
         ],
-        stateTables: ['cl.company_candidate', 'cl.company_identity', 'cl.company_identity_bridge', 'lcs.signal_queue', 'lcs.event'],
+        stateTables: [
+          'lcs.signal_queue', 'lcs.cid', 'lcs.sid_output', 'lcs.mid_sequence_state',
+          'lcs.frame_registry', 'lcs.adapter_registry', 'lcs.event', 'lcs.err0',
+        ],
       },
       egress: {
-        outputs: ['lcs.event (Canonical Event Table)', 'v_company_lifecycle_status view', 'v_company_promotable view'],
+        outputs: [
+          'lcs.event (CET — append-only audit trail, every step logged)',
+          'lcs.mid_sequence_state (delivery status: DELIVERED|SENT|FAILED|BOUNCED)',
+          'v_company_lifecycle_status view',
+          'v_company_promotable view',
+        ],
         consumers: ['barton-outreach-core', 'sales', 'client'],
       },
     },
     erd: {
       tables: [
-        { table: 'cl.company_candidate', repo: 'company-lifecycle-cl', access: 'WRITE', order: 1 },
-        { table: 'cl.company_identity', repo: 'company-lifecycle-cl', access: 'READ/WRITE', order: 2 },
-        { table: 'cl.company_identity_bridge', repo: 'company-lifecycle-cl', access: 'WRITE', order: 3 },
-        { table: 'outreach.outreach', repo: 'barton-outreach-core', access: 'WRITE', order: 4 },
-        { table: 'outreach.company_target', repo: 'barton-outreach-core', access: 'READ/WRITE', order: 5 },
-        { table: 'lcs.signal_queue', repo: 'company-lifecycle-cl', access: 'READ/WRITE', order: 6 },
+        // Ingress
+        { table: 'lcs.signal_queue', repo: 'company-lifecycle-cl', access: 'READ/WRITE', order: 1 },
+        { table: 'lcs.frame_registry', repo: 'company-lifecycle-cl', access: 'READ', order: 2 },
+        // CID phase
+        { table: 'lcs.cid', repo: 'company-lifecycle-cl', access: 'WRITE', order: 3 },
+        // SID phase
+        { table: 'lcs.sid_output', repo: 'company-lifecycle-cl', access: 'WRITE', order: 4 },
+        // MID phase
+        { table: 'lcs.mid_sequence_state', repo: 'company-lifecycle-cl', access: 'WRITE', order: 5 },
+        { table: 'lcs.adapter_registry', repo: 'company-lifecycle-cl', access: 'READ', order: 6 },
+        // Egress / Audit
         { table: 'lcs.event', repo: 'company-lifecycle-cl', access: 'WRITE', order: 7 },
         { table: 'lcs.err0', repo: 'company-lifecycle-cl', access: 'WRITE', order: 8 },
+        // Cross-hub reads
+        { table: 'cl.company_identity', repo: 'company-lifecycle-cl', access: 'READ', order: 9 },
+        { table: 'outreach.outreach', repo: 'barton-outreach-core', access: 'READ', order: 10 },
+        { table: 'outreach.company_target', repo: 'barton-outreach-core', access: 'READ', order: 11 },
+        { table: 'lcs.signal_registry', repo: 'company-lifecycle-cl', access: 'READ', order: 12 },
       ],
     },
     orbt: {
       mode: 'BUILD',
       health: 'YELLOW',
-      notes: 'LCS v2.2.0 active — signal queue + frame registry wired, adapter delivery in integration testing',
+      notes: 'CID→SID→MID pipeline code complete. 11 frames in frame_registry, 2 CIDs compiled. Adapter routing still points to Lovable (NEEDS MIGRATION to CF Worker → direct Mailgun/HeyReach). Smoke test 2026-03-10: Rim endpoints live, Hyperdrive HD_CL verified, write-back circle closed.',
     },
     ctb: {
-      canonicalTables: ['cl.company_identity', 'lcs.event', 'outreach.outreach'],
-      errorTables: ['cl.company_lifecycle_error', 'lcs.err0'],
-      promotionPath: ['SOURCE', 'STAGING', 'CANONICAL'],
+      canonicalTables: ['cl.company_identity', 'lcs.event', 'lcs.cid', 'lcs.mid_sequence_state'],
+      errorTables: ['lcs.err0'],
+      promotionPath: ['SIGNAL', 'CID', 'SID', 'MID', 'CET'],
     },
   },
 
@@ -95,7 +126,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['people', 'company_target', 'bit'],
       tools: ['Hunter', 'Clay'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
+      services: ['Neon PostgreSQL', 'Doppler'],
       skills: ['/feature-dev'],
     },
     imo: {
@@ -162,7 +193,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['blog', 'company_target', 'bit'],
       tools: ['ScraperAPI'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
+      services: ['Neon PostgreSQL', 'Doppler'],
       skills: ['/feature-dev'],
     },
     imo: {
@@ -229,7 +260,7 @@ export const processes: Process[] = [
     heir: {
       repos: ['barton-outreach-core'],
       subHubs: ['dol', 'company_target', 'bit'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
+      services: ['Neon PostgreSQL', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {
@@ -299,7 +330,7 @@ export const processes: Process[] = [
       repos: ['barton-outreach-core'],
       subHubs: ['people', 'company_target', 'bit'],
       tools: ['Hunter', 'Clay', 'Apollo'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
+      services: ['Neon PostgreSQL', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {
@@ -369,7 +400,7 @@ export const processes: Process[] = [
     heir: {
       repos: ['barton-outreach-core'],
       subHubs: ['bit', 'people', 'dol', 'blog', 'company_target'],
-      services: ['CF D1/KV (working)', 'Neon (vault)', 'Doppler'],
+      services: ['Neon PostgreSQL', 'Doppler'],
       skills: ['/code-review'],
     },
     imo: {

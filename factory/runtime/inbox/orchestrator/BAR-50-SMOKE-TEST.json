@@ -1,0 +1,258 @@
+{
+  "packet_type": "orchestrator_intake",
+  "priority": "high",
+  "timestamp": "2026-03-10T19:50:00Z",
+  "source": "claude_ai_foreman",
+  "task_id": "BAR-50-SMOKE-TEST",
+  "related_tickets": ["BAR-50"],
+  "route_to": "planner",
+
+  "objective": "Build and execute a 3-tier smoke test for the Field Monitor data fetching waterfall. This is NOT a production build. This is an empirical validation of 3 strategies identified by multi-LLM pressure testing (6 LLMs, 2 rounds). The smoke test must produce hard numbers that convert 3 remaining unknowns into constants before we build the production Talent Flow engine.",
+
+  "context": {
+    "background": "Multi-LLM pressure test identified a 3-tier waterfall for detecting LinkedIn profile changes (Company Name + Title) on ~80k profiles/month at <$20/month. Round 1 (6 LLMs) designed the architecture. Round 2 (6 LLMs) validated two critical assumptions. Three unknowns remain that can ONLY be resolved by empirical testing against real endpoints.",
+
+    "locked_constants": {
+      "google_serp": "DEAD. Google requires JS to render search results since January 15, 2025. Confirmed by SerpApi, Nozzle.io, ExtractData. Do NOT attempt Google SERP scraping.",
+      "duckduckgo_html": "DDG maintains two non-JS endpoints: https://html.duckduckgo.com/html/ and https://duckduckgo.com/lite (confirmed by DDG official help pages). Returns parseable HTML with search result titles. BUT: rate-limits aggressively from datacenter/cloud IPs (HTTP 202 Ratelimit). Needs proxy routing.",
+      "linkedin_ssr": "LinkedIn uses Server-Side Rendering for public (logged-out) profiles. The <title> tag is populated server-side with format: 'Firstname Lastname - Title at Company | LinkedIn'. OG tags (og:title, twitter:title) mirror <title>. JSON-LD (application/ld+json) MAY contain jobTitle and worksFor.name but presence is uncertain (consensus: 3 LLMs say yes, 2 say maybe, 1 says low confidence).",
+      "head_only_viable": "CF Workers can use ReadableStream + reader.cancel() to abort after </head>. HTTP/2 RST_STREAM terminates upstream connection. Saves 60-75% bandwidth (head is 8-20KB vs 100-300KB full page). NOT 90% as originally claimed.",
+      "auth_wall_detection": "LinkedIn auth-wall detectable from <head> alone: <title> contains 'Sign Up', 'Login', or just 'LinkedIn' without person name. Also check for '/authwall' in response URL or body.",
+      "blog_solved": "Blog/sitemap crawling is confirmed free via CF Worker fetch(). Not part of this smoke test.",
+      "parsing_priority": "Parse in this order: (1) <title> tag regex split on ' - ' and ' at ', (2) og:title same parse, (3) JSON-LD jobTitle + worksFor.name if present. Do NOT rely on CSS selectors or DOM classes — they change constantly."
+    },
+
+    "unknowns_to_resolve": {
+      "unknown_1": "Does DDG HTML endpoint (https://html.duckduckgo.com/html/) serve LinkedIn profile search results when routed through Webshare datacenter proxy at ~100 requests/day? What percentage contain 'Title at Company' in the result title?",
+      "unknown_2": "Does LinkedIn public profile <head> actually contain Company Name + Title in <title> and/or OG tags when fetched logged-out through residential proxy? What percentage of profiles have parseable data?",
+      "unknown_3": "What is the actual auth-wall rate when fetching 1,000 LinkedIn public profiles through residential proxy at 1 request every 3-5 seconds?"
+    }
+  },
+
+  "deliverables": [
+    {
+      "name": "smoke-test-worker",
+      "type": "cloudflare_worker",
+      "description": "A single disposable CF Worker with 3 test endpoints. NOT production code. Delete after analytics collected.",
+      "deploy_to": "Existing svgagency-api Worker OR a new temporary worker (builder's choice).",
+      "endpoints": [
+        {
+          "path": "POST /test/ddg-serp",
+          "description": "Test 1: DDG HTML SERP scraping. Takes a LinkedIn slug. Constructs query 'site:linkedin.com/in/{slug}'. Hits https://html.duckduckgo.com/html/ through Webshare datacenter proxy. Parses result <a class='result__a'> for LinkedIn result title. Extracts Company Name and Title using regex on 'Name - Title at Company | LinkedIn' format.",
+          "input": { "slug": "string", "proxy_url": "string (Webshare gateway)" },
+          "output": {
+            "success": "boolean",
+            "http_status": "number",
+            "rate_limited": "boolean (true if HTTP 202 or 403)",
+            "result_title_raw": "string | null",
+            "parsed_name": "string | null",
+            "parsed_title": "string | null",
+            "parsed_company": "string | null",
+            "result_url": "string | null (the linkedin URL from the result)",
+            "response_ms": "number",
+            "error": "string | null"
+          }
+        },
+        {
+          "path": "POST /test/linkedin-head",
+          "description": "Test 2: LinkedIn head-only fetch. Takes a full LinkedIn profile URL. Fetches through residential proxy. Uses ReadableStream to read chunks, accumulates buffer, aborts via reader.cancel() once </head> is detected OR buffer exceeds 25KB safety limit. Parses all data sources from <head>.",
+          "input": { "url": "string (https://www.linkedin.com/in/{slug})", "proxy_url": "string (residential proxy gateway)" },
+          "output": {
+            "success": "boolean",
+            "is_authwall": "boolean",
+            "http_status": "number",
+            "title_tag": "string | null",
+            "og_title": "string | null",
+            "og_description": "string | null",
+            "twitter_title": "string | null",
+            "jsonld_present": "boolean",
+            "jsonld_job_title": "string | null",
+            "jsonld_company": "string | null",
+            "parsed_title": "string | null (best extraction from any source)",
+            "parsed_company": "string | null (best extraction from any source)",
+            "bytes_received": "number (actual bytes before abort)",
+            "head_complete": "boolean (did we find </head> before safety limit?)",
+            "response_ms": "number",
+            "error": "string | null"
+          },
+          "authwall_detection": "Check in order: (1) HTTP redirect to /authwall path, (2) <title> contains 'Sign Up' or 'Login' or equals 'LinkedIn' exactly, (3) no og:title or og:title missing person name"
+        },
+        {
+          "path": "POST /test/batch-authwall",
+          "description": "Test 3: Auth-wall rate measurement. Batch version of Test 2. Takes an array of LinkedIn URLs. Fetches each sequentially with randomized 3-5 second delay. Returns aggregate stats.",
+          "input": {
+            "urls": "string[] (array of LinkedIn profile URLs)",
+            "proxy_url": "string (residential proxy gateway)",
+            "delay_min_ms": "number (default 3000)",
+            "delay_max_ms": "number (default 5000)"
+          },
+          "output": {
+            "total_attempted": "number",
+            "total_success": "number",
+            "total_authwall": "number",
+            "total_rate_limited": "number",
+            "total_error": "number",
+            "success_pct": "number",
+            "authwall_pct": "number",
+            "avg_response_ms": "number",
+            "avg_bytes_received": "number",
+            "results": "array of individual Test 2 outputs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "test-runner-script",
+      "type": "node_script_or_n8n_workflow",
+      "description": "Orchestrates the 3 tests in sequence. Pulls sample LinkedIn slugs/URLs from Neon research DB. Calls the smoke test worker endpoints. Writes results to Neon analytics tables. Produces summary report.",
+      "test_plan": {
+        "test_1_ddg": {
+          "name": "DuckDuckGo HTML SERP Coverage",
+          "sample_size": 300,
+          "source_query": "SELECT linkedin_slug FROM research.people_enriched WHERE linkedin_slug IS NOT NULL ORDER BY RANDOM() LIMIT 300",
+          "proxy": "Webshare datacenter rotating proxy (need credentials from Doppler or provision trial at webshare.io — $5/month starter plan)",
+          "rate": "1 request every 5 seconds (720/hour max)",
+          "estimated_duration": "~25 minutes",
+          "go_criteria": ">50% of queries return a result with parseable Company + Title AND <10% rate-limited responses",
+          "no_go_criteria": "<30% parseable results OR >25% rate-limited"
+        },
+        "test_2_linkedin_head": {
+          "name": "LinkedIn Head-Only Parse Coverage",
+          "sample_size": 100,
+          "source_query": "SELECT linkedin_url FROM research.people_enriched WHERE linkedin_url IS NOT NULL ORDER BY RANDOM() LIMIT 100",
+          "proxy": "Residential proxy — IPRoyal ($1.75/GB PAYG) or Smartproxy trial. Need to provision. Approximately $0.50-1.00 for 100 requests at 15KB each.",
+          "rate": "1 request every 5 seconds",
+          "estimated_duration": "~8 minutes",
+          "go_criteria": ">80% of non-auth-walled responses have parseable Company + Title in <title> or og:title",
+          "no_go_criteria": "<60% parseable OR <title> consistently missing company data"
+        },
+        "test_3_authwall_rate": {
+          "name": "LinkedIn Auth-Wall Rate at Volume",
+          "sample_size": 1000,
+          "source_query": "SELECT linkedin_url FROM research.people_enriched WHERE linkedin_url IS NOT NULL ORDER BY RANDOM() LIMIT 1000",
+          "proxy": "Same residential proxy as Test 2",
+          "rate": "1 request every 3-5 seconds (randomized)",
+          "estimated_duration": "~60-80 minutes",
+          "estimated_proxy_cost": "$1.50-3.00 (1000 requests x 15KB = 15MB through residential proxy at $1.75/GB)",
+          "go_criteria": "Auth-wall rate <25%",
+          "no_go_criteria": "Auth-wall rate >35%"
+        }
+      }
+    },
+    {
+      "name": "analytics-tables",
+      "type": "neon_postgresql",
+      "database": "research",
+      "description": "Results stored in research database for analysis. These are smoke test tables — disposable after decision is made.",
+      "tables": [
+        {
+          "name": "research.fm_smoke_ddg",
+          "columns": {
+            "id": "serial primary key",
+            "linkedin_slug": "text not null",
+            "ddg_query": "text",
+            "http_status": "integer",
+            "rate_limited": "boolean default false",
+            "result_title_raw": "text",
+            "result_url": "text",
+            "parsed_name": "text",
+            "parsed_title": "text",
+            "parsed_company": "text",
+            "match_quality": "text (exact|partial|none|error)",
+            "response_ms": "integer",
+            "error": "text",
+            "tested_at": "timestamptz default now()"
+          }
+        },
+        {
+          "name": "research.fm_smoke_linkedin_head",
+          "columns": {
+            "id": "serial primary key",
+            "linkedin_url": "text not null",
+            "http_status": "integer",
+            "is_authwall": "boolean default false",
+            "title_tag": "text",
+            "og_title": "text",
+            "og_description": "text",
+            "twitter_title": "text",
+            "jsonld_present": "boolean default false",
+            "jsonld_job_title": "text",
+            "jsonld_company": "text",
+            "parsed_title": "text",
+            "parsed_company": "text",
+            "bytes_received": "integer",
+            "head_complete": "boolean",
+            "response_ms": "integer",
+            "proxy_type": "text (datacenter|residential)",
+            "error": "text",
+            "tested_at": "timestamptz default now()"
+          }
+        },
+        {
+          "name": "research.fm_smoke_summary",
+          "columns": {
+            "id": "serial primary key",
+            "test_name": "text not null",
+            "total_attempted": "integer",
+            "total_success": "integer",
+            "total_authwall": "integer",
+            "total_rate_limited": "integer",
+            "total_error": "integer",
+            "success_pct": "numeric(5,2)",
+            "authwall_pct": "numeric(5,2)",
+            "avg_response_ms": "integer",
+            "avg_bytes": "integer",
+            "go_no_go": "text (GO|NO-GO|CONDITIONAL)",
+            "notes": "text",
+            "run_at": "timestamptz default now()"
+          }
+        }
+      ]
+    }
+  ],
+
+  "dependencies": {
+    "must_provision_before_build": [
+      "Webshare.io datacenter proxy account ($5/month starter) — OR confirm existing proxy in SH-03 Proxy Router config",
+      "IPRoyal or Smartproxy residential proxy PAYG account (~$3-5 for this test) — check if Composio or existing SH-03 config has residential proxy access already"
+    ],
+    "must_exist_in_neon": [
+      "research.people_enriched table with linkedin_slug and linkedin_url columns populated (need at least 1,000 rows with valid LinkedIn data)"
+    ],
+    "must_be_available": [
+      "Doppler secrets for proxy credentials",
+      "Hyperdrive binding to research database from CF Worker"
+    ]
+  },
+
+  "constraints": {
+    "budget": "Under $10 total for entire smoke test (proxy trial costs only — CF Worker compute is free within existing plan)",
+    "no_production_writes": "ALL results go to research.fm_smoke_* tables ONLY. Do not touch sovereign, outreach, cl, client, sales, or storage databases.",
+    "no_login": "All LinkedIn fetches are public/logged-out. No credentials. No cookies. No session state.",
+    "disposable": "Smoke test worker and tables can be deleted after analytics are collected and decision is made. This is NOT the production Field Monitor.",
+    "pipeline_compliance": "This packet entered via orchestrator inbox. Route to planner for validation. Planner validates dependencies, sample data availability, and proxy provisioning. Planner produces builder packet. Builder builds. Auditor validates results against go/no-go criteria."
+  },
+
+  "decision_tree_after_results": {
+    "all_three_pass": {
+      "condition": "DDG >50% coverage AND head-only >80% parse rate AND authwall <25%",
+      "action": "Build 3-tier production waterfall: DDG SERP (Tier 1, ~$5/mo) -> Head-only residential (Tier 2, ~$3-6/mo) -> ScraperAPI (Tier 3, ~$3-6/mo). Total: $7-15/month.",
+      "next_ticket": "BAR-50 moves to In Progress for production build"
+    },
+    "ddg_fails_head_passes": {
+      "condition": "DDG <50% OR >25% rate-limited, BUT head-only and authwall pass",
+      "action": "Drop DDG. Build 2-tier: Head-only residential (Tier 1) -> ScraperAPI (Tier 2). Implement adaptive frequency scheduling to hit $20 budget.",
+      "next_ticket": "BAR-50 revised scope"
+    },
+    "ddg_passes_head_fails": {
+      "condition": "DDG passes BUT authwall >25% OR parse rate <80%",
+      "action": "Build 2-tier: DDG SERP (Tier 1) -> ScraperAPI (Tier 2). More expensive but viable.",
+      "next_ticket": "BAR-50 revised scope"
+    },
+    "all_fail": {
+      "condition": "Both DDG and head-only fail criteria",
+      "action": "ScraperAPI only with adaptive frequency scheduling. Budget likely $25-40/month. Reduce monitored profiles to 20-30k high-value only. Raise budget discussion.",
+      "next_ticket": "BAR-50 revised scope + budget review"
+    }
+  }
+}

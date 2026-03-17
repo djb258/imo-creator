@@ -1,0 +1,34 @@
+{
+  "packet_type": "planner_intake",
+  "operational_id": "0a3041d0-9064-445a-bf8e-04ff0b69723b",
+  "target_repo_alias": "barton-outreach-core",
+  "target_branch": "main",
+  "orbt_mode": "build",
+  "execution_type": "standard",
+  "intent_summary": "Rebuild Talent Flow engine skeleton inside EXISTING hub at barton-outreach-core/hubs/talent-flow/. Recreate 2 dropped tables (talent_flow.movements, people.person_movement_history) from SCHEMA.md. Create 2 new tables (people.talent_flow_snapshot, people.talent_flow_watch). Add TALENT_FLOW source_hub and 4 new signal categories to lcs.signal_queue/signal_registry (cl DB). Build IMO layers: input (capture from Neon), middle/detection.py (T1/T2 comparison engine), output (signal emission + movement logging). Build run.py runner. Hub scaffold exists (manifest, PRD, hub_status.py). Python, not TypeScript. Zero external HTTP calls. CRITICAL: PRD conflict must be resolved first — PRD says sensor-only, BAR-50 ticket says cascade enrichment. Recommend sensor-only (Option B). Supersedes v1 packet (wrong repo context).",
+  "source_packet": {
+    "task_id": "BAR-50-SKELETON-v2",
+    "related_tickets": ["BAR-50", "BAR-51"],
+    "source": "claude_ai_foreman",
+    "timestamp": "2026-03-10T20:30:00Z",
+    "priority": "urgent",
+    "supersedes": "BAR-50-SKELETON"
+  },
+  "critical_flags": [
+    "PRD_CONFLICT: PRD.md says sensor-only (no enrichment, no company minting). BAR-50 ticket says cascade enrichment + sovereign_id minting. Planner MUST resolve before Builder touches code. Recommend Option B: sensor-only, cascade lives in UT orchestrator (SH-04/SH-19).",
+    "CROSS_REPO: Signal category migration targets cl database (lcs.signal_registry, lcs.signal_queue constraint). Planner must determine separate WORK_PACKET or inline."
+  ],
+  "cross_repo_note": "Signal queue/registry constraint updates target cl database. Planner decides routing.",
+  "constraints": [
+    "Do not expand scope",
+    "Do not infer missing fields",
+    "Do not bypass alias resolution",
+    "No external HTTP calls — reads/writes Neon only",
+    "Follow existing IMO directory structure in hubs/talent-flow/",
+    "Do not rewrite hub_status.py — it already works",
+    "Execute before BAR-50-SMOKE-TEST",
+    "Resolve PRD conflict before any code generation"
+  ],
+  "emitted_at": "2026-03-10T20:40:00Z",
+  "emitted_by": "orchestrator"
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layer 0 Engine — Constant Extraction</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Layer 0 Engine</h1>
+    <p class="subtitle">Constant-extraction engine &mdash; extract what never changes from any domain</p>
+    <nav>
+      <a href="/" class="active">New Session</a>
+      <a href="/dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="extraction-form">
+      <div class="field">
+        <label for="domain-name">Domain Name</label>
+        <input
+          type="text"
+          id="domain-name"
+          name="domainName"
+          placeholder="e.g., Database, Networking, Security"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="domain-description">Domain Description / Context</label>
+        <textarea
+          id="domain-description"
+          name="domainDescription"
+          rows="6"
+          placeholder="Describe the domain at 50,000 feet. What is it? What does it do? The engine will extract universal constants from this context."
+          required
+        ></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="sigma-tolerance">Sigma Tolerance</label>
+          <input
+            type="number"
+            id="sigma-tolerance"
+            name="sigmaTolerance"
+            value="0.05"
+            step="0.01"
+            min="0.01"
+            max="1.0"
+          >
+          <span class="hint">Lower = more constants extracted (stricter)</span>
+        </div>
+
+        <div class="field">
+          <label for="max-gates">Max Gates</label>
+          <input
+            type="number"
+            id="max-gates"
+            name="maxGates"
+            value="10"
+            min="3"
+            max="20"
+          >
+          <span class="hint">Maximum extraction passes</span>
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn">Run Extraction</button>
+    </form>
+
+    <div id="status" class="hidden">
+      <div class="status-spinner"></div>
+      <p id="status-text">Running extraction&hellip; This may take a few minutes.</p>
+    </div>
+
+    <div id="results" class="hidden">
+      <h2>Results</h2>
+      <div id="results-summary"></div>
+      <a id="view-dashboard" href="/dashboard.html" class="btn">View Full Dashboard</a>
+    </div>
+
+    <div id="error" class="hidden">
+      <h2>Error</h2>
+      <pre id="error-text"></pre>
+    </div>
+  </main>
+
+  <footer>
+    <p>Layer 0 Engine v1.0.0 &mdash; Domain-agnostic constant extraction</p>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
