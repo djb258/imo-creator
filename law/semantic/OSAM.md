@@ -3,8 +3,8 @@
 **Status**: LOCKED
 **Authority**: CONSTITUTIONAL
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`)
-**CTB Position**: BRANCH (under TIER0_DOCTRINE.md trunk)
-**Chain**: TIER0_DOCTRINE.md → **this file**
+**CTB Position**: BRANCH (between PRD and ERD — drives structural proof)
+**Chain**: TIER0_DOCTRINE.md → PRD_CONSTITUTION.md → **this file** → ERD_CONSTITUTION.md → PROCESS_DOCTRINE.md
 **Version**: 1.1.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 

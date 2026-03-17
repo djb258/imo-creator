@@ -4,7 +4,7 @@
 **Authority**: CONSTITUTIONAL (Derived from CONSTITUTION.md)
 **Governing Engine**: Tier 0 Doctrine (`law/doctrine/TIER0_DOCTRINE.md`) — processes execute Tier 0 validated transformations
 **CTB Position**: LEAF (under PRD_CONSTITUTION.md → ERD_CONSTITUTION.md)
-**Chain**: TIER0_DOCTRINE.md → PRD_CONSTITUTION.md → ERD_CONSTITUTION.md → **this file**
+**Chain**: TIER0_DOCTRINE.md → PRD_CONSTITUTION.md → OSAM.md → ERD_CONSTITUTION.md → **this file**
 **Version**: 1.0.0
 **Change Protocol**: ADR + HUMAN APPROVAL REQUIRED
 
