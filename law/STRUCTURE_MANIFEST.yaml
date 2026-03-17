@@ -1,0 +1,150 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# STRUCTURE MANIFEST — IMO-Creator
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority: BAR-135
+# Purpose: Declares the canonical directory structure. CI enforces this.
+#          Any file outside declared paths FAILS the build.
+# Lock: This file is LOCKED. Changes require ADR + human approval.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "1.0.0"
+effective_date: "2026-03-14"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ALLOWED ROOT FILES
+# ─────────────────────────────────────────────────────────────────────────────
+root_files:
+  - CLAUDE.md
+  - CONSTITUTION.md
+  - OPERATOR_PROFILE.md
+  - README.md
+  - LICENSE
+  - .gitignore
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ALLOWED TOP-LEVEL DIRECTORIES
+# ─────────────────────────────────────────────────────────────────────────────
+# Any directory not listed here is FORBIDDEN at repo root.
+# Hidden dirs (.git, .github, .claude) are exempt from this check.
+
+allowed_directories:
+  law:
+    purpose: "Constants — doctrine, constitutional law, registries, integrations"
+    subdirs:
+      - doctrine
+      - constitutional
+      - registry
+      - integrations
+      - semantic
+
+  factory:
+    purpose: "Assembly line — agents, contracts, pipeline runtime, certification"
+    subdirs:
+      - agents
+      - contracts
+      - runtime
+      - certification
+      - examples
+      - operations
+      - rosetta-stone
+
+  fleet:
+    purpose: "Output to children — car template, scripts, migrations, snap-on"
+    subdirs:
+      - registry
+      - car-template
+      - scripts
+      - migrations
+      - snap-on
+      - prompts
+      - config
+      - adr-templates
+      - checklists
+      - pr-templates
+      - validators
+      - docs
+
+  docs:
+    purpose: "Garage-level documentation (ADRs, audit reports)"
+    subdirs:
+      - adr
+      - audit
+
+  scripts:
+    purpose: "Garage-level operational scripts"
+    subdirs: []
+
+  dashboard:
+    purpose: "Ops dashboard application"
+    subdirs: []
+
+  archive:
+    purpose: "Superseded files — not authoritative"
+    subdirs: []
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BANNED PATHS
+# ─────────────────────────────────────────────────────────────────────────────
+# These directories MUST NOT exist. If detected, CI fails immediately.
+# They represent the old structure that BAR-135 replaced.
+
+banned_directories:
+  - templates
+  - sys
+  - skills
+  - app
+  - commands
+  - audit_reports
+  - changesets
+  - work_packets
+  - ai
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BANNED PATH REFERENCES
+# ─────────────────────────────────────────────────────────────────────────────
+# These path prefixes MUST NOT appear in any non-archived, non-historical file.
+# CI greps for these and fails if found (excluding archive/, docs/adr/, docs/audit/,
+# factory/runtime/inbox/, factory/runtime/outbox/).
+
+banned_path_references:
+  - "templates/doctrine/"
+  - "templates/integrations/"
+  - "templates/semantic/"
+  - "templates/scripts/"
+  - "templates/prd/"
+  - "templates/adr/"
+  - "templates/checklists/"
+  - "templates/pr/"
+  - "templates/claude/"
+  - "templates/config/"
+  - "templates/child/"
+  - "templates/migrations/"
+  - "templates/modules/"
+  - "templates/SNAP_ON_TOOLBOX"
+  - "sys/contracts/"
+  - "sys/registry/"
+  - "sys/runtime/"
+  - "sys/certification/"
+  - "skills/agent-"
+  - "skills/skill-creator/"
+  - "skills/SKILLS_SYSTEM"
+  - "docs/constitutional/"
+  - "docs/OPERATOR_PROFILE"
+  - "docs/LAYER0_DOCTRINE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXEMPT FROM CHECKS
+# ─────────────────────────────────────────────────────────────────────────────
+# These paths are excluded from stale-reference scanning (historical records).
+
+scan_exclusions:
+  - "archive/"
+  - "docs/adr/"
+  - "docs/audit/"
+  - "factory/runtime/inbox/"
+  - "factory/runtime/outbox/"
+  - "factory/agents/skill-creator/SKILL.md"
+  - ".claude/"
+  - "dashboard/"
+  - ".git/"
+  - "node_modules/"

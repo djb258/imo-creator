@@ -63,12 +63,12 @@ body:
       label: Updated Components
       description: Which components are being updated?
       options:
-        - label: templates/doctrine/ (Doctrine documents)
-        - label: templates/prd/ (PRD templates)
-        - label: templates/adr/ (ADR templates)
-        - label: templates/pr/ (PR templates)
-        - label: templates/checklists/ (Compliance checklists)
-        - label: templates/integrations/ (Integration templates)
+        - label: law/doctrine/ (Doctrine documents)
+        - label: fleet/car-template/docs/ (PRD templates)
+        - label: fleet/adr-templates/ (ADR templates)
+        - label: fleet/pr-templates/ (PR templates)
+        - label: fleet/checklists/ (Compliance checklists)
+        - label: law/integrations/ (Integration templates)
         - label: .github/ (GitHub configuration)
 
   - type: checkboxes

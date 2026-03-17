@@ -1,25 +1,37 @@
 # archive/
 
-**Purpose**: Superseded doctrine files preserved for reference.
-
-Files in this directory were moved here during the CTB Hardening v2.0.0 consolidation. They are **not authoritative** and should not be referenced for current doctrine.
+**Purpose**: Superseded files preserved for reference. Nothing here is authoritative.
 
 ---
 
 ## Contents
 
-| File | Original Location | Superseded By |
-|------|--------------------|---------------|
-| `templates/doctrine/CANONICAL_ARCHITECTURE_DOCTRINE.md` | `templates/doctrine/` | `templates/doctrine/ARCHITECTURE.md` |
-| `templates/doctrine/HUB_SPOKE_ARCHITECTURE.md` | `templates/doctrine/` | `templates/doctrine/ARCHITECTURE.md` Part IV |
-| `templates/doctrine/ALTITUDE_DESCENT_MODEL.md` | `templates/doctrine/` | `templates/doctrine/ARCHITECTURE.md` Part VI |
+### agents_v0/ — First-generation agent prompts (superseded by skills system)
+### agents_v1/ — Second-generation agent prompts (superseded by skills system)
+### templates/ — Original doctrine redirect stubs (archived during v2.0.0 consolidation)
+### commands_v0/ — Legacy Claude Code slash commands (superseded by skills)
+### changesets_v0/ — Legacy changeset bus artifacts (moved to factory/runtime/)
+### work_packets_v0/ — Legacy work packet bus artifacts (moved to factory/runtime/)
+### audit_reports_v0/ — Legacy audit report bus artifacts (moved to factory/runtime/)
+### skills-legacy/ — Deprecated platform skills (lovable)
+### tas_legacy/ — TAS (Task Accountability System) docs — deprecated
+### SKILL.md.backup.2026-03-12 — Backup of skill-creator before v4 rewrite
+### templates_README.md — Original templates/ directory README
 
 ---
 
-## Why Archived
-
-During CTB Hardening v2.0.0, three separate architecture documents were consolidated into a single `ARCHITECTURE.md`. The originals were archived here, and redirect stubs were left in `templates/doctrine/` for backward compatibility.
-
 ## Current Doctrine
 
-All architecture doctrine now lives in `templates/doctrine/ARCHITECTURE.md` (v2.1.0).
+All architecture doctrine now lives in `law/doctrine/ARCHITECTURE.md` (v2.1.0).
+Agent skills live in `factory/agents/`.
+Pipeline runtime lives in `factory/runtime/`.
+Fleet templates live in `fleet/`.
+
+---
+
+## Archive Policy
+
+- Archived files are **not authoritative**
+- Do not reference archived files for current doctrine
+- Archive additions require noting the source location and what superseded them
+- No secrets should exist in archive — scan before archiving

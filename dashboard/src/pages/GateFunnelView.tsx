@@ -52,7 +52,7 @@ export function GateFunnelView() {
           }}
         />
         <span style={{ color: isOnline ? 'var(--green)' : 'var(--yellow)' }}>
-          {isOnline ? 'Layer 0 Engine connected' : 'Static view — Layer 0 Engine offline'}
+          {isOnline ? 'Tier 0 Engine connected' : 'Static view — Tier 0 Engine offline'}
         </span>
       </div>
 

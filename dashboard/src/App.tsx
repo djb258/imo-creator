@@ -58,7 +58,7 @@ function StatusBar() {
       <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
         <HealthDot loading={l0Health.loading} online={l0Online} />
         <span style={{ color: l0Health.loading ? 'var(--yellow)' : l0Online ? 'var(--green)' : 'var(--red)' }}>
-          Layer 0: {l0Health.loading ? '...' : l0Online ? 'OK' : 'OFF'}
+          Tier 0: {l0Health.loading ? '...' : l0Online ? 'OK' : 'OFF'}
         </span>
       </span>
       <span style={{ color: 'var(--text-muted)' }}>

@@ -35,10 +35,10 @@ jobs:
 
       - name: Make audit script executable
         run: |
-          if [ -f "templates/scripts/apply_doctrine_audit.sh" ]; then
-            chmod +x templates/scripts/apply_doctrine_audit.sh
+          if [ -f "fleet/scripts/apply_doctrine_audit.sh" ]; then
+            chmod +x fleet/scripts/apply_doctrine_audit.sh
           else
-            echo "::error::templates/scripts/apply_doctrine_audit.sh not found — cannot audit"
+            echo "::error::fleet/scripts/apply_doctrine_audit.sh not found — cannot audit"
             exit 1
           fi
 
@@ -70,7 +70,7 @@ jobs:
           echo ""
 
           # Run audit script
-          ./templates/scripts/apply_doctrine_audit.sh . || AUDIT_EXIT=$?
+          ./fleet/scripts/apply_doctrine_audit.sh . || AUDIT_EXIT=$?
 
           # Capture exit code
           if [ -z "$AUDIT_EXIT" ]; then
@@ -180,6 +180,23 @@ jobs:
           echo "Status: ${{ steps.audit.outputs.status }}"
           echo "Warnings: ${{ steps.audit.outputs.warnings }}"
           echo ""
+
+  # ─────────────────────────────────────────────────────────────────
+  # STRUCTURE ENFORCEMENT GATE (BAR-135)
+  # ─────────────────────────────────────────────────────────────────
+
+  structure-gate:
+    name: Structure Enforcement Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run structure enforcement
+        run: |
+          chmod +x scripts/structure-enforce.sh
+          ./scripts/structure-enforce.sh .
 
   # ─────────────────────────────────────────────────────────────────
   # PRESSURE TEST GATE (Architectural changes only)

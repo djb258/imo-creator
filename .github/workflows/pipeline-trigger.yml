@@ -16,7 +16,7 @@ on:
       - master
       - main
     paths:
-      - 'sys/runtime/inbox/**/*.json'
+      - 'factory/runtime/inbox/**/*.json'
 
   workflow_dispatch:
     inputs:
@@ -53,32 +53,32 @@ jobs:
             PACKET="${{ inputs.packet_file }}"
           else
             # Find which inbox got a new .json
-            CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'sys/runtime/inbox/' 2>/dev/null || echo "")
+            CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'factory/runtime/inbox/' 2>/dev/null || echo "")
             AGENT=""
             PACKET=""
             for file in $CHANGED; do
               case "$file" in
-                sys/runtime/inbox/orchestrator/*.json) AGENT="orchestrator"; PACKET="$file"; break ;;
-                sys/runtime/inbox/planner/*.json)      AGENT="planner";      PACKET="$file"; break ;;
-                sys/runtime/inbox/builder/*.json)      AGENT="builder";      PACKET="$file"; break ;;
-                sys/runtime/inbox/db-agent/*.json)     AGENT="db-agent";     PACKET="$file"; break ;;
-                sys/runtime/inbox/auditor/*.json)      AGENT="auditor";      PACKET="$file"; break ;;
+                factory/runtime/inbox/orchestrator/*.json) AGENT="orchestrator"; PACKET="$file"; break ;;
+                factory/runtime/inbox/planner/*.json)      AGENT="planner";      PACKET="$file"; break ;;
+                factory/runtime/inbox/builder/*.json)      AGENT="builder";      PACKET="$file"; break ;;
+                factory/runtime/inbox/db-agent/*.json)     AGENT="db-agent";     PACKET="$file"; break ;;
+                factory/runtime/inbox/auditor/*.json)      AGENT="auditor";      PACKET="$file"; break ;;
               esac
             done
           fi
 
           # If no specific packet, grab oldest in inbox
           if [ -z "$PACKET" ] && [ -n "$AGENT" ]; then
-            PACKET=$(ls -tr "sys/runtime/inbox/$AGENT"/*.json 2>/dev/null | head -1)
+            PACKET=$(ls -tr "factory/runtime/inbox/$AGENT"/*.json 2>/dev/null | head -1)
           fi
 
           # Map agent to skill
           case "$AGENT" in
-            orchestrator) SKILL="skills/agent-orchestrator/SKILL.md" ;;
-            planner)      SKILL="skills/agent-planner/SKILL.md" ;;
-            builder)      SKILL="skills/agent-builder/SKILL.md" ;;
-            db-agent)     SKILL="skills/agent-db/SKILL.md" ;;
-            auditor)      SKILL="skills/agent-auditor/SKILL.md" ;;
+            orchestrator) SKILL="factory/agents/agent-orchestrator/SKILL.md" ;;
+            planner)      SKILL="factory/agents/agent-planner/SKILL.md" ;;
+            builder)      SKILL="factory/agents/agent-builder/SKILL.md" ;;
+            db-agent)     SKILL="factory/agents/agent-db/SKILL.md" ;;
+            auditor)      SKILL="factory/agents/agent-auditor/SKILL.md" ;;
             *)            echo "No agent detected"; exit 0 ;;
           esac
 
@@ -96,11 +96,11 @@ jobs:
             You are the ${{ steps.detect.outputs.agent }} agent.
 
             READ your skill: ${{ steps.detect.outputs.skill }}
-            READ the contract: sys/runtime/PACKET_CONTRACT.md
+            READ the contract: factory/runtime/PACKET_CONTRACT.md
             READ your packet: ${{ steps.detect.outputs.packet }}
 
             Do the work. When done:
-            1. Write output to sys/runtime/outbox/${{ steps.detect.outputs.agent }}/
+            1. Write output to factory/runtime/outbox/${{ steps.detect.outputs.agent }}/
             2. Drop the next packet in the next agent's inbox:
                orchestrator → inbox/planner/
                planner → inbox/builder/

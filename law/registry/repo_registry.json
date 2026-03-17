@@ -1,0 +1,93 @@
+{
+  "doctrine_version": "3.5.0",
+  "updated_at": "2026-03-14T00:00:00Z",
+  "repos": [
+    {
+      "repo_alias": "client",
+      "display_name": "Client Management Hub",
+      "github_url": "https://github.com/djb258/client.git",
+      "local_path": "../client",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "https_token",
+      "workspace_slug": "client",
+      "enabled": true
+    },
+    {
+      "repo_alias": "universal-client-template",
+      "display_name": "Universal Client Template",
+      "github_url": "https://github.com/djb258/universal-client-template.git",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master"],
+      "auth_method": "https_token",
+      "workspace_slug": "universal-client-template",
+      "enabled": false
+    },
+    {
+      "repo_alias": "company-lifecycle-cl",
+      "display_name": "Company Lifecycle Management Hub",
+      "github_url": "https://github.com/djb258/company-lifecycle-cl.git",
+      "local_path": "../CL/company-lifecycle-cl",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "local",
+      "workspace_slug": "company-lifecycle-cl",
+      "enabled": true
+    },
+    {
+      "repo_alias": "imo-creator",
+      "display_name": "IMO-Creator Sovereign Repository",
+      "local_path": ".",
+      "default_branch": "master",
+      "allowed_branches": ["master"],
+      "auth_method": "local",
+      "workspace_slug": "imo-creator",
+      "enabled": true
+    },
+    {
+      "repo_alias": "barton-outreach-core",
+      "display_name": "Outreach Operations Hub",
+      "github_url": "https://github.com/djb258/barton-outreach-core.git",
+      "local_path": "../barton-outreach-core",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master", "develop"],
+      "auth_method": "local",
+      "workspace_slug": "barton-outreach-core",
+      "enabled": true
+    },
+    {
+      "repo_alias": "sales",
+      "display_name": "Sales Navigator Hub",
+      "github_url": "https://github.com/djb258/ctb-sales-navigator.git",
+      "local_path": "../Sales Process",
+      "default_branch": "master",
+      "allowed_branches": ["master", "main", "develop"],
+      "auth_method": "local",
+      "workspace_slug": "sales",
+      "enabled": true
+    },
+    {
+      "repo_alias": "barton-storage",
+      "display_name": "Storage Container Hub",
+      "github_url": "https://github.com/djb258/site-scout-pro.git",
+      "local_path": "../storage container go-nogo",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master"],
+      "auth_method": "local",
+      "workspace_slug": "barton-storage",
+      "enabled": true
+    },
+    {
+      "repo_alias": "barton-processes",
+      "display_name": "Process Engine — All Executable Code",
+      "github_url": "https://github.com/djb258/Barton-Processes.git",
+      "local_path": "../Barton-Processes",
+      "default_branch": "main",
+      "allowed_branches": ["main", "master"],
+      "auth_method": "local",
+      "workspace_slug": "barton-processes",
+      "enabled": true,
+      "repo_type": "process-engine"
+    }
+  ]
+}

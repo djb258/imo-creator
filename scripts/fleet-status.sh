@@ -38,7 +38,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 REGISTRY="$REPO_ROOT/FLEET_REGISTRY.yaml"
-MANIFEST="$REPO_ROOT/templates/TEMPLATES_MANIFEST.yaml"
+MANIFEST="$REPO_ROOT/fleet/TEMPLATES_MANIFEST.yaml"
 
 if [ ! -f "$REGISTRY" ]; then
     echo -e "${RED}[ERROR]${NC} FLEET_REGISTRY.yaml not found at $REGISTRY"

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui_changeset.v1.schema.json",
+  "title": "UI_CHANGESET",
+  "description": "UI lane artifact. Produced by Worker in UI adapter mode. Consumed by Auditor. ADR-021.",
+  "version": "1.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "type": "object",
+  "required": [
+    "changeset_id",
+    "work_packet_id",
+    "ui_surface",
+    "ui_target",
+    "changes",
+    "preview_artifacts",
+    "acceptance_checks",
+    "doctrine_version",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "changeset_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this UI changeset."
+    },
+    "work_packet_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the WORK_PACKET that initiated this UI lane."
+    },
+    "ui_surface": {
+      "type": "string",
+      "enum": ["local", "figma"],
+      "description": "UI execution surface. Must match WORK_PACKET.ui_surface."
+    },
+    "ui_target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Target UI component, page, or artifact path. Must match WORK_PACKET.ui_target."
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "action", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "File path relative to src/ui/ or external reference."
+          },
+          "action": {
+            "type": "string",
+            "enum": ["create", "modify", "delete", "export", "import"],
+            "description": "Type of change. Export/import for external design surfaces."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What this change does."
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "Ordered list of UI changes."
+    },
+    "preview_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "description": "Paths to preview artifacts (screenshots, component renders, export files). Auditor validates presence."
+    },
+    "acceptance_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "check": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Acceptance check description."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL", "PENDING"],
+            "description": "Check result. All must be PASS for audit to pass."
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "UI acceptance checks. All must be PASS for Auditor to classify PASS."
+    },
+    "doctrine_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must match WORK_PACKET.doctrine_version."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of UI changeset creation."
+    }
+  }
+}

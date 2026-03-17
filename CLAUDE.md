@@ -13,17 +13,29 @@ This is the **repo of repos**. All doctrine originates here. Downstream repos CO
 
 The following files are **LAW**. Claude Code may READ them. Claude Code may NEVER modify them.
 
+### Tier 0 — The Foundation (HUMAN AUTHORITY ONLY)
+
+| File | Purpose | Write Authority |
+|------|---------|-----------------|
+| `CLAUDE.md` | This file. Master instruction set for all AI agents operating in this repo. LOCKED. | Human only — no LLM may modify. |
+| `law/doctrine/TIER0_DOCTRINE.md` | Tier 0 Doctrine — the universal constant-extraction engine. Three validators (IMO, CTB, Circle), gate mechanism, two-phase altitude structure, fractal IMO, tolerance cascade. Everything in the system derives from this. LOCKED. | Human only — no LLM may modify. |
+| `factory/agents/skill-creator/SKILL.md` | Tier 0 Implementation Engine — 10-block constant-extraction pipeline. Extends three validators to five elements (C&V, IMO, CTB, Hub-and-Spoke, Circle). Produces all skills. Defines the block format constant. LOCKED. | Human only — no LLM may modify. |
+
+**These three files are the top of the hierarchy. They govern everything below. No AI agent — Claude Code, Copilot, or any other LLM — may modify them. Changes require the human operator (Dave) directly.**
+
+**Tier 0 is the engine. Everything below is fuel it processes.**
+
 ### Doctrine (Constitutional Law)
 
 | File | Purpose |
 |------|---------|
-| `templates/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
-| `templates/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
-| `templates/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
-| `templates/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment + bootstrap enforcement (v1.5.0) |
-| `templates/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract + bootstrap guarantees (v1.1.0) |
-| `templates/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
-| `templates/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
+| `law/doctrine/ARCHITECTURE.md` | CTB Constitutional Law - CTB, CC, Hub-Spoke, IMO, Descent, PID (v2.1.0) |
+| `law/doctrine/ROLLBACK_PROTOCOL.md` | Doctrine sync rollback procedure - when to use, 6-step revert, version pinning |
+| `law/doctrine/EXECUTION_SURFACE_LAW.md` | Execution surface containment (v1.0.0) |
+| `law/doctrine/CTB_REGISTRY_ENFORCEMENT.md` | Registry-first enforcement + batch-level RAW lockdown + vendor JSON containment + bootstrap enforcement (v1.5.0) |
+| `law/doctrine/FAIL_CLOSED_CI_CONTRACT.md` | Fail-closed CI contract + bootstrap guarantees (v1.1.0) |
+| `law/doctrine/LEGACY_COLLAPSE_PLAYBOOK.md` | Legacy collapse protocol (v1.0.0) |
+| `law/integrations/TOOLS.md` | Tool law - determinism first, LLM as tail only |
 
 **Note**: ARCHITECTURE.md consolidates CANONICAL_ARCHITECTURE_DOCTRINE.md, HUB_SPOKE_ARCHITECTURE.md, and ALTITUDE_DESCENT_MODEL.md (which now exist as redirects).
 
@@ -31,68 +43,76 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 | File | Purpose |
 |------|---------|
-| `templates/prd/PRD_HUB.md` | Hub PRD format (15 sections) |
+| `fleet/car-template/docs/PRD_HUB.md` | Hub PRD format (15 sections) |
 
 ### ADR Template
 
 | File | Purpose |
 |------|---------|
-| `templates/adr/ADR.md` | Architecture Decision Record format |
+| `fleet/adr-templates/ADR.md` | Architecture Decision Record format |
 
 ### Checklist Template
 
 | File | Purpose |
 |------|---------|
-| `templates/checklists/HUB_COMPLIANCE.md` | Hub compliance checklist format |
+| `fleet/checklists/HUB_COMPLIANCE.md` | Hub compliance checklist format |
 
 ### Semantic Access (CONSTITUTIONAL)
 
 | File | Purpose |
 |------|---------|
-| `templates/semantic/OSAM.md` | Operational Semantic Access Map - authoritative query-routing contract |
+| `law/semantic/OSAM.md` | Operational Semantic Access Map - authoritative query-routing contract |
 
 ### PR Templates
 
 | File | Purpose |
 |------|---------|
-| `templates/pr/PULL_REQUEST_TEMPLATE_HUB.md` | Hub PR format |
-| `templates/pr/PULL_REQUEST_TEMPLATE_SPOKE.md` | Spoke PR format |
+| `fleet/pr-templates/PULL_REQUEST_TEMPLATE_HUB.md` | Hub PR format |
+| `fleet/pr-templates/PULL_REQUEST_TEMPLATE_SPOKE.md` | Spoke PR format |
 
 ### Snap-On Toolbox (CONSTITUTIONAL)
 
 | File | Purpose |
 |------|--------|
-| `templates/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
+| `law/SNAP_ON_TOOLBOX.yaml` | Master tool registry - all approved tools, throttles, gates, banned list |
+
+### Structure Manifest (CONSTITUTIONAL)
+
+| File | Purpose |
+|------|--------|
+| `law/STRUCTURE_MANIFEST.yaml` | Canonical directory structure declaration — allowed dirs, banned dirs, banned path references, required files. CI enforces this via scripts/structure-enforce.sh. |
 
 ### Integration Specs
 
 | File | Purpose |
 |------|---------|
-| `templates/integrations/COMPOSIO.md` | Composio integration spec |
-| `templates/integrations/DOPPLER.md` | Doppler integration spec |
-| `templates/integrations/HEIR.md` | HEIR integration spec |
-| `templates/integrations/OBSIDIAN.md` | Obsidian integration spec |
-| `templates/integrations/doppler.yaml.template` | Doppler config template |
-| `templates/integrations/heir.doctrine.yaml.template` | HEIR config template |
+| `law/integrations/COMPOSIO.md` | Composio integration spec |
+| `law/integrations/DOPPLER.md` | Doppler integration spec |
+| `law/integrations/HEIR.md` | HEIR integration spec |
+| `law/integrations/OBSIDIAN.md` | Obsidian integration spec |
+| `law/integrations/doppler.yaml.template` | Doppler config template |
+| `law/integrations/heir.doctrine.yaml.template` | HEIR config template |
 
 ### Prompt and Skills Bay (CONSTITUTIONAL)
 
 | File | Purpose |
 |------|---------|
-| `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | Prompt and Skills Bay governance — Transformation Law, PSB artifacts, audit requirements, Garage relationship (v1.0.0) |
+| `law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md` | Prompt and Skills Bay governance — Transformation Law, PSB artifacts, audit requirements, Garage relationship (v1.0.0) |
 
 ### Operator Profile (HUMAN AUTHORITY ONLY)
 
 | File | Purpose |
 |------|---------|
-| `docs/OPERATOR_PROFILE.md` | Document of documents — operator constants, block format, five elements, compliance gate. HUMAN AUTHORITY ONLY — no LLM may modify. |
+| `OPERATOR_PROFILE.md` | Document of documents — operator constants, block format, five elements, compliance gate. HUMAN AUTHORITY ONLY — no LLM may modify. |
 
 ### Skills System Governance
 
 | File | Purpose |
 |------|---------|
-| `skills/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules |
-| `skills/skill-creator/SKILL.md` | Skill creation engine — 10-block constant-extraction pipeline for producing new skills |
+| `factory/SKILLS_SYSTEM.md` | Skills governance — three tiers (agent/master/car), directory layout, creation rules. All tiers conform to Tier 0 Doctrine. |
+| `factory/agents/skill-creator/SKILL.md` | Tier 0 implementation engine — 10-block constant-extraction pipeline. Registered above in Tier 0 section. Produces all other skills. |
+
+**Chain of authority:** Tier 0 Doctrine → skill-creator (Tier 0 engine) → SKILLS_SYSTEM.md (governance) → all skills (agent, master, car).
 
 ---
 
@@ -102,7 +122,7 @@ The following files are **LAW**. Claude Code may READ them. Claude Code may NEVE
 
 ### Snap-On Toolbox Authority
 
-`templates/SNAP_ON_TOOLBOX.yaml` is the **master tool registry**. Before suggesting ANY tool, library, or vendor:
+`law/SNAP_ON_TOOLBOX.yaml` is the **master tool registry**. Before suggesting ANY tool, library, or vendor:
 
 | Step | Action |
 |------|--------|
@@ -141,6 +161,8 @@ FORBIDDEN:
 ## ENFORCEMENT
 
 ### What LOCKED Means
+
+**The three Tier 0 files (`CLAUDE.md`, `law/doctrine/TIER0_DOCTRINE.md`, `factory/agents/skill-creator/SKILL.md`) are HUMAN AUTHORITY ONLY. No LLM may modify them under any circumstances. No ADR process — only the human operator.**
 
 | Action | Permitted |
 |--------|-----------|
@@ -229,16 +251,16 @@ Architectural and flow changes now require deterministic pressure proof artifact
 
 | Component | Purpose |
 |-----------|---------|
-| `sys/contracts/work_packet.schema.json` | Added `requires_pressure_test`, `flow_contract`, `if/then` constraint |
+| `factory/contracts/work_packet.schema.json` | Added `requires_pressure_test`, `flow_contract`, `if/then` constraint |
 | `archive/agents_v0/contracts/changeset.schema.json` | Added `requires_pressure_test` — carries forward from WORK_PACKET (archived) |
 | `archive/agents_v0/contracts/arch_pressure_report.schema.json` | 5 structural invariants: cantonal_cardinality, registry_first, id_authority, no_sideways_calls, contracts_declared (archived) |
 | `archive/agents_v0/contracts/flow_pressure_report.schema.json` | 5 flow invariants: ingress_contract_exists, egress_contract_exists, no_orphan_tables, no_unconsumed_events, id_propagation_intact (archived) |
-| `skills/agent-auditor/SKILL.md` | Constitutional Pressure Test section — HALT before standard checks |
-| `skills/agent-builder/SKILL.md` | Pressure test artifact production duty |
-| `skills/agent-planner/SKILL.md` | Pressure test classification rule + flow_contract enforcement |
-| `skills/agent-orchestrator/SKILL.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
+| `factory/agents/agent-auditor/SKILL.md` | Constitutional Pressure Test section — HALT before standard checks |
+| `factory/agents/agent-builder/SKILL.md` | Pressure test artifact production duty |
+| `factory/agents/agent-planner/SKILL.md` | Pressure test classification rule + flow_contract enforcement |
+| `factory/agents/agent-orchestrator/SKILL.md` | PRESSURE_TEST_REQUIRED + PRESSURE_TEST_PASSED signals |
 | `doctrine-enforcement.yml` | `pressure-test-gate` CI job — mechanical, no manual fallback |
-| `docs/constitutional/governance.md` | Pressure Test Bus Enforcement routing rules |
+| `law/constitutional/governance.md` | Pressure Test Bus Enforcement routing rules |
 
 **Pressure Test Law**: No architectural change can PASS without structural pressure proof. No new schema can PASS without cantonal proof. No new flow can PASS without flow proof. Auditor cannot override red invariants. All 10 gates are mechanical — zero advisory, zero interpretation.
 
@@ -274,12 +296,12 @@ Every repo that derives from imo-creator MUST:
 
    | Template | imo-creator Path | Version |
    |----------|------------------|---------|
-   | Architecture | templates/doctrine/ARCHITECTURE.md | 2.1.0 |
-   | Tools | templates/integrations/TOOLS.md | 1.1.0 |
-   | OSAM | templates/semantic/OSAM.md | 1.1.0 |
-   | PRD | templates/prd/PRD_HUB.md | 1.0.0 |
-   | ADR | templates/adr/ADR.md | 1.0.0 |
-   | Checklist | templates/checklists/HUB_COMPLIANCE.md | 1.0.0 |
+   | Architecture | law/doctrine/ARCHITECTURE.md | 2.1.0 |
+   | Tools | law/integrations/TOOLS.md | 1.1.0 |
+   | OSAM | law/semantic/OSAM.md | 1.1.0 |
+   | PRD | fleet/car-template/docs/PRD_HUB.md | 1.0.0 |
+   | ADR | fleet/adr-templates/ADR.md | 1.0.0 |
+   | Checklist | fleet/checklists/HUB_COMPLIANCE.md | 1.0.0 |
    ```
 
 2. **Match template structure exactly** - same sections, same order, same tables
@@ -311,26 +333,70 @@ Any change to a LOCKED FILE requires:
 ```
 imo-creator (THIS REPO) ← SOVEREIGN
 │
-├── templates/doctrine/     ← CONSTITUTIONAL LAW (locked)
-│   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.1.0)
-│   ├── CANONICAL_ARCHITECTURE_DOCTRINE.md  ← REDIRECT
-│   ├── HUB_SPOKE_ARCHITECTURE.md    ← REDIRECT
-│   ├── ALTITUDE_DESCENT_MODEL.md    ← REDIRECT
-│   ├── EXECUTION_SURFACE_LAW.md     ← Execution containment (v1.0.0)
-│   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown + vendor JSON + bootstrap (v1.5.0)
-│   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI + bootstrap guarantees (v1.1.0)
-│   └── LEGACY_COLLAPSE_PLAYBOOK.md  ← Legacy migration (v1.0.0)
+├── law/                          ← SILO: CONSTANTS
+│   ├── heir.yaml                        ← Garage sovereign identity (HEIR)
+│   ├── SNAP_ON_TOOLBOX.yaml             ← Master tool registry
+│   ├── IMO_CONTROL.json                 ← Control document
+│   ├── doctrine/                        ← LOCKED doctrine
+│   │   ├── TIER0_DOCTRINE.md            ← THE FOUNDATION (HUMAN AUTHORITY ONLY)
+│   │   ├── ARCHITECTURE.md              ← CTB Constitutional Law (v2.1.0)
+│   │   ├── CTB_REGISTRY_ENFORCEMENT.md  ← Registry-first + RAW lockdown (v1.5.0)
+│   │   ├── FAIL_CLOSED_CI_CONTRACT.md   ← Fail-closed CI (v1.1.0)
+│   │   ├── EXECUTION_SURFACE_LAW.md     ← Execution containment (v1.0.0)
+│   │   ├── ROLLBACK_PROTOCOL.md         ← Doctrine sync rollback
+│   │   └── LEGACY_COLLAPSE_PLAYBOOK.md  ← Legacy migration (v1.0.0)
+│   ├── constitutional/                  ← Governance, backbone, charter, PSB constitution
+│   ├── registry/                        ← audit_rules, doctrine_registry, repo_registry
+│   ├── integrations/                    ← TOOLS, COMPOSIO, DOPPLER, HEIR, OBSIDIAN
+│   └── semantic/                        ← OSAM
 │
-├── templates/integrations/TOOLS.md ← CONSTITUTIONAL LAW (locked)
+├── factory/                      ← SILO: ASSEMBLY LINE
+│   ├── SKILLS_SYSTEM.md                 ← Skills governance (three tiers, locked)
+│   ├── agents/                          ← Pipeline agent skills
+│   │   ├── skill-creator/SKILL.md       ← Tier 0 implementation (HUMAN AUTHORITY ONLY)
+│   │   ├── agent-orchestrator/          ← Deterministic intake + ID minting
+│   │   ├── agent-planner/               ← WORK_PACKET generation
+│   │   ├── agent-builder/               ← Implementation execution
+│   │   ├── agent-auditor/               ← Compliance verification
+│   │   ├── agent-db/                    ← Database change governance
+│   │   ├── cloudflare/                  ← Cloudflare platform skill
+│   │   └── neon/                        ← Neon platform skill
+│   ├── contracts/                       ← JSON schemas (work_packet, heir, orbt, etc.)
+│   ├── runtime/                         ← Live pipeline inbox/outbox
+│   │   ├── inbox/{orchestrator,planner,builder,db-agent,auditor}/
+│   │   ├── outbox/{orchestrator,planner,builder,db-agent,auditor}/
+│   │   └── completed/
+│   ├── certification/                   ← Signature engine + validator
+│   ├── examples/                        ← Example work packets
+│   ├── operations/                      ← Operational docs
+│   └── rosetta-stone/                   ← Domain translation guides
 │
-├── templates/semantic/     ← CONSTITUTIONAL LAW (locked)
-│   └── OSAM.md
+├── fleet/                        ← SILO: OUTPUT TO CHILDREN
+│   ├── registry/                        ← Fleet registry, HEIR/ORBT per child
+│   │   ├── FLEET_REGISTRY.yaml
+│   │   ├── heir/                        ← Child HEIR records
+│   │   └── orbt/                        ← Child ORBT tracking
+│   ├── car-template/                    ← THE MOLD — blueprint for every child repo
+│   │   ├── law/                         ← AI employee contracts, GUARDSPEC
+│   │   ├── factory/agents/              ← CAR_SKILL_TEMPLATE
+│   │   ├── src/                         ← Gatekeeper module
+│   │   ├── docs/                        ← PRD_HUB, ERD_METRICS
+│   │   └── log/                         ← Empty — child creates
+│   ├── scripts/                         ← Scripts children inherit
+│   ├── migrations/                      ← SQL templates (001-017)
+│   ├── snap-on/                         ← Optional modules (field-monitor, ultimate-tool)
+│   ├── prompts/                         ← Claude/GPT prompts
+│   ├── config/                          ← Shared configuration patterns
+│   ├── adr-templates/                   ← ADR format templates
+│   ├── checklists/                      ← Compliance checklists
+│   └── pr-templates/                    ← PR format templates
 │
-├── templates/prd/          ← TEMPLATE LAW (locked)
-├── templates/adr/          ← TEMPLATE LAW (locked)
-├── templates/checklists/   ← TEMPLATE LAW (locked)
-├── templates/pr/           ← TEMPLATE LAW (locked)
-├── templates/integrations/ ← SPEC LAW (locked)
+├── docs/                         ← GARAGE-LEVEL DOCS
+│   ├── adr/                             ← Architecture Decision Records
+│   └── audit/                           ← Audit reports
+│
+├── OPERATOR_PROFILE.md           ← Document of documents (HUMAN AUTHORITY ONLY)
+├── CONSTITUTION.md               ← Human governance
 │
 ├── barton-outreach-core (child repo)
 │   └── Conforms to imo-creator
@@ -345,6 +411,9 @@ imo-creator (THIS REPO) ← SOVEREIGN
 │   └── Conforms to imo-creator
 │
 ├── barton-storage (child repo)
+│   └── Conforms to imo-creator
+│
+├── barton-processes (child repo — NEW)
 │   └── Conforms to imo-creator
 │
 └── research (child repo — PLANNED)
@@ -363,7 +432,10 @@ imo-creator (THIS REPO) ← SOVEREIGN
 | Read templates | ✅ YES |
 | Create NEW templates (with human approval) | ✅ YES |
 | Create ADR drafts (for human review) | ✅ YES |
-| Modify locked files | ❌ NO |
+| Modify CLAUDE.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify law/doctrine/TIER0_DOCTRINE.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify factory/agents/skill-creator/SKILL.md | ❌ NO — HUMAN AUTHORITY ONLY |
+| Modify other locked files | ❌ NO |
 | Modify template structure | ❌ NO |
 | Reinterpret templates | ❌ NO |
 | Add concepts not in canonical | ❌ NO |
@@ -388,32 +460,31 @@ Drift is a child repo problem, not a template problem.
 
 ## GOLDEN RULES
 
-1. **This repo is the parent. It conforms to nothing.**
-2. **Locked files are law. Read, don't touch.**
-3. **Templates are structure. Fill in blanks, don't redesign.**
-4. **Children conform to parent. Never the reverse.**
-5. **Changes require ADR. No shortcuts.**
-6. **Drift is a bug. Templates are correct.**
-7. **Determinism first. LLM as tail only.**
-8. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**
-9. **Skills use the block format. Five elements validate every constant.**
+1. **Tier 0 is the engine. Everything else is fuel it processes.** Constants first. Variables are a last resort.
+2. **This repo is the parent. It conforms to nothing.**
+3. **Locked files are law. Read, don't touch.**
+4. **Templates are structure. Fill in blanks, don't redesign.**
+5. **Children conform to parent. Never the reverse.**
+6. **Changes require ADR. No shortcuts.**
+7. **Drift is a bug. Templates are correct.**
+8. **Determinism first. LLM as tail only.**
+9. **OPERATOR_PROFILE.md is the document of documents. It conforms to nothing. All other documents conform to it.**
+10. **Skills use the block format. Five elements validate every constant.**
 
 ---
 
-## Fleet Management Files (Repo Root)
+## Fleet Management Files
 
-These files live at the imo-creator repo root (NOT in templates/). They are operational files for managing the fleet of child repos.
+Fleet management files now live under `fleet/registry/` and `scripts/`:
 
 | File | Purpose | Maintained By |
 |------|---------|---------------|
-| `FLEET_REGISTRY.yaml` | All child repos, versions, sync status | Human |
-| `ADR_INDEX.md` | Fleet-wide ADR lookup table | Human + AI (after ADR creation) |
+| `fleet/registry/FLEET_REGISTRY.yaml` | All child repos, versions, sync status | Human |
+| `docs/adr/ADR_INDEX.md` | Fleet-wide ADR lookup table | Human + AI (after ADR creation) |
 | `scripts/fleet-status.sh` | Fleet health check (reads FLEET_REGISTRY.yaml) | Automated |
 | `scripts/fleet-status.ps1` | Fleet health check (Windows) | Automated |
 | `scripts/adr-check.sh` | ADR index audit (compares index vs repo files) | Automated |
 | `scripts/adr-check.ps1` | ADR index audit (Windows) | Automated |
-
-**Note**: These are NOT templates. They are not tracked in TEMPLATES_MANIFEST.yaml. They operate on imo-creator itself.
 
 ---
 
@@ -474,14 +545,14 @@ Any CRITICAL or HIGH violation blocks compliance. No exceptions. No "fix later."
 HEIR validates identity at mount → ORBT classifies operational mode → ERROR table records faults →
 repair agent reads fault code → Garage certifies repair → system returns to operational state
 
-Full constitutional document: `docs/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md`
+Full constitutional document: `law/constitutional/PROMPT_SKILLS_BAY_CONSTITUTION.md`
 Doctrine version: 1.0.0 | Effective: 2026-02-28 | Index: PSB-CONST-001
 
 ---
 
 ## Agent Pipeline Protocol
 
-All agent work flows through sys/runtime/ inbox/outbox pipeline.
+All agent work flows through factory/runtime/ inbox/outbox pipeline.
 
 ### Architecture
 - **Claude.ai** = Foreman (writes packets, reviews auditor reports)
@@ -491,7 +562,7 @@ All agent work flows through sys/runtime/ inbox/outbox pipeline.
 
 ### Flow
 1. Dave + Claude.ai (Foreman) write packet
-2. Composio commits packet to sys/runtime/inbox/orchestrator/ on GitHub
+2. Composio commits packet to factory/runtime/inbox/orchestrator/ on GitHub
 3. Claude.ai opens Claude Code → runs full chain autonomously
 4. Each agent: reads inbox → loads skill → does work → drops packet in next inbox
 5. Auditor does final QA → drops report in outbox/auditor/
@@ -504,7 +575,7 @@ All agent work flows through sys/runtime/ inbox/outbox pipeline.
 - Auditor is the quality gate, not the foreman
 - Any agent can halt pipeline with status=failed
 - Packets are immutable — never edit, write new ones
-- Packet format: see sys/runtime/PACKET_CONTRACT.md
+- Packet format: see factory/runtime/PACKET_CONTRACT.md
 
 ### Fallback
 GitHub Actions (pipeline-trigger.yml) can invoke agents if Claude.ai is not in the loop.

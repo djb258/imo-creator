@@ -18,7 +18,7 @@ export const fetchAPI = <T = unknown>(path: string, params?: Record<string, stri
 // Health
 export const getHealth = () => fetchAPI('/health');
 
-// Layer 0 Engine
+// Tier 0 Engine
 export const getL0Health = () => fetchFromBase(L0_API_BASE, '/health');
 export const getL0Sessions = () => fetchFromBase<{ sessions: L0Session[] }>(L0_API_BASE, '/api/sessions');
 export const getL0Session = (id: string) => fetchFromBase<{ gates: L0GateResult[]; constants: L0Constant[] }>(L0_API_BASE, `/api/sessions/${id}`);
@@ -33,7 +33,7 @@ export const getL0BackPropLog = (sessionId: string) =>
 export const getL0Variables = (sessionId: string) =>
   fetchFromBase<{ variables: L0Variable[] }>(L0_API_BASE, `/api/sessions/${sessionId}/variables`);
 
-// Layer 0 types
+// Tier 0 types
 export interface L0Session {
   id: string;
   domain_name: string;

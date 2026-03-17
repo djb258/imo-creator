@@ -1,0 +1,185 @@
+{
+  "contract_version": "1.2.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Garage orchestration contract. Defines the end-to-end flow from user intent to certified merge. This is the central coordination layer that binds agents, runtime, and certification into a single deterministic pipeline.",
+  "pipeline": {
+    "stage_1_intent": {
+      "name": "User declares intent",
+      "actor": "Human",
+      "output": "Natural language request",
+      "handoff_to": "Planner"
+    },
+    "stage_2_plan": {
+      "name": "Planner generates WORK_PACKET",
+      "actor": "factory/agents/agent-planner/",
+      "inputs": [
+        "User request",
+        "factory/contracts/doctrine_version.json",
+        "law/registry/doctrine_registry.json",
+        "law/registry/taxonomy_registry.json",
+        "fleet/registry/FLEET_REGISTRY.yaml"
+      ],
+      "output": "work_packets/outbox/{work_packet_id}.json",
+      "validation": "WORK_PACKET must validate against factory/contracts/work_packet.schema.json",
+      "handoff_to": "Execution Runner"
+    },
+    "stage_3_mount": {
+      "name": "Execution runner mounts target repo",
+      "actor": "factory/runtime/execution_runner/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "factory/runtime/repo_mount/mount_contract.json"
+      ],
+      "output": "Isolated repository clone with scope lock",
+      "validation": "Mount contract 5-step protocol",
+      "handoff_to": "DB Agent (if schema_impact) or Builder"
+    },
+    "stage_4_db_validation": {
+      "name": "DB Agent validates schema impact and produces DB_CHANGESET",
+      "actor": "factory/agents/agent-db/",
+      "condition": "WORK_PACKET.db_required=true OR WORK_PACKET.schema_impact=true",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Mounted repository with database access"
+      ],
+      "output": "changesets/outbox/{work_packet_id}/db/db_changeset.json",
+      "handoff_contract": {
+        "artifact_path": "changesets/outbox/{work_packet_id}/db/db_changeset.json",
+        "consumer": "Builder (stage 5, DB Lane)",
+        "sequencing": "Stage 4 must complete successfully before stage 5 begins",
+        "on_missing": "Builder DB Lane HALTs with FAIL_EXECUTION"
+      },
+      "on_failure": "Execution blocked. WORK_PACKET returned to Planner with failure details.",
+      "handoff_to": "Builder (if validation passes)"
+    },
+    "stage_5_execute": {
+      "name": "Builder executes against mounted repo",
+      "actor": "factory/agents/agent-builder/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Mounted repository (scope-locked to file_targets)"
+      ],
+      "output": "Modified files + required artifacts + execution log",
+      "constraints": "File modifications limited to file_targets. Timeout per execution_type.",
+      "handoff_to": "Artifact Writer"
+    },
+    "stage_6_collect": {
+      "name": "Artifact writer collects and hashes outputs",
+      "actor": "factory/runtime/artifact_writer/",
+      "inputs": [
+        "Modified files from Builder execution",
+        "Generated artifacts",
+        "Execution log"
+      ],
+      "output": "Hashed artifact bundle ready for audit",
+      "handoff_to": "Auditor"
+    },
+    "stage_7_audit": {
+      "name": "Auditor evaluates execution against doctrine",
+      "actor": "factory/agents/agent-auditor/",
+      "inputs": [
+        "work_packets/inbox/{work_packet_id}.json",
+        "Artifact bundle from Writer",
+        "law/registry/audit_rules.json",
+        "law/registry/doctrine_registry.json",
+        "Constitutional documents"
+      ],
+      "output": "Classification: PASS | FAIL_EXECUTION | FAIL_SCOPE",
+      "handoff_to": "Signature Engine (if PASS) or Human (if FAIL)"
+    },
+    "stage_7b_sanitation": {
+      "name": "Sanitation pass validates workspace cleanliness",
+      "actor": "factory/runtime/sanitation/",
+      "condition": "Audit classification is PASS. Sanitation runs ONLY after Auditor PASS.",
+      "inputs": [
+        "Mounted workspace state",
+        "WORK_PACKET (for allowed_paths reference)",
+        "factory/runtime/sanitation/sanitation_contract.json"
+      ],
+      "output": "changesets/outbox/<work_packet_id>/sanitation_report.json with status: CLEAN | PASS_WITH_WARNINGS | FAIL",
+      "on_failure": "sanitation_status === FAIL blocks certification. New WORK_PACKET required to remediate.",
+      "handoff_to": "Signature Engine (if CLEAN or PASS_WITH_WARNINGS) or Human (if FAIL)"
+    },
+    "stage_8_certify": {
+      "name": "Signature engine issues certification",
+      "actor": "factory/certification/signature_engine/",
+      "condition": "Audit classification is PASS AND sanitation_status is CLEAN or PASS_WITH_WARNINGS",
+      "inputs": [
+        "Audit classification",
+        "Sanitation report",
+        "Artifact hash from artifact_writer",
+        "GARAGE_SIGNING_KEY from Doppler"
+      ],
+      "output": ".garage/certification.json written to PR branch",
+      "handoff_to": "Child repo CI"
+    },
+    "stage_9_validate": {
+      "name": "Child repo CI validates certification",
+      "actor": "factory/certification/validator/ (runs in child repo CI)",
+      "inputs": [
+        ".garage/certification.json from PR branch",
+        "GARAGE_SIGNING_KEY"
+      ],
+      "output": "VALID (merge permitted) or INVALID (merge blocked)",
+      "handoff_to": "Human (merge decision)"
+    },
+    "stage_10_merge": {
+      "name": "Human merges certified PR",
+      "actor": "Human",
+      "condition": "Certification VALID + code review approved",
+      "output": "Code merged to target branch"
+    }
+  },
+  "failure_paths": {
+    "planner_halt": {
+      "trigger": "Ambiguous intent, missing target_repo, protected asset touched",
+      "resolution": "Human provides clarification. Planner generates new WORK_PACKET."
+    },
+    "mount_failure": {
+      "trigger": "Target repo fails structural validation",
+      "resolution": "Target repo must be brought into doctrine compliance before execution."
+    },
+    "db_validation_failure": {
+      "trigger": "Schema changes violate CTB registry, cardinality, or immutability rules",
+      "resolution": "Builder must not execute. Planner revises scope or human approves exception via ADR."
+    },
+    "scope_violation": {
+      "trigger": "Builder attempts to modify files outside file_targets",
+      "resolution": "Builder halts. New WORK_PACKET required with corrected scope."
+    },
+    "audit_fail_execution": {
+      "trigger": "Implementation incorrect or incomplete",
+      "resolution": "New WORK_PACKET. Builder re-executes with corrections."
+    },
+    "audit_fail_scope": {
+      "trigger": "Scope boundary violated, protected assets modified",
+      "resolution": "New WORK_PACKET. Planner must narrow or correct scope."
+    },
+    "sanitation_fail": {
+      "trigger": "Workspace has untracked files, temp files, scope leak, missing artifacts, or uncommitted generated files",
+      "resolution": "New WORK_PACKET required. Builder re-executes with cleanup. Sanitation re-runs after next Auditor PASS."
+    },
+    "certification_fail": {
+      "trigger": "Signature invalid, hash mismatch, doctrine version stale",
+      "resolution": "Re-run pipeline from appropriate stage. Stale doctrine requires doctrine update first."
+    },
+    "artifact_write_failure": {
+      "trigger": "File write to inbox, outbox, or changesets directory fails (disk full, permission denied, path not found)",
+      "resolution": "Pipeline HALTs at the failing stage. No silent data loss. The failing agent logs the write error with full path and error detail. Human must resolve the infrastructure issue (disk space, permissions, directory creation) before re-running the pipeline from the failed stage.",
+      "dead_letter_protocol": {
+        "detection": "Every file write operation must verify the written file exists and is non-empty after write",
+        "on_failure": "Agent records failure in execution_log with: attempted_path, error_message, stage, timestamp",
+        "retry": "No automatic retry. Infrastructure failures require human diagnosis.",
+        "recovery": "After infrastructure fix, re-run pipeline from the failed stage with the same WORK_PACKET"
+      }
+    }
+  },
+  "invariants": [
+    "One WORK_PACKET per pipeline run. No batching.",
+    "Artifacts are the only handoff mechanism between stages. No peer-to-peer agent communication.",
+    "Every stage is deterministic. Same inputs produce same outputs.",
+    "Human is sovereign at every decision point. Agents execute within declared boundaries.",
+    "No stage may be skipped. Pipeline is sequential from intent to merge.",
+    "Certification is the only path to merge. No uncertified merges."
+  ]
+}

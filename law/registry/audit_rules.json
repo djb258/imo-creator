@@ -1,0 +1,221 @@
+{
+  "registry_version": "2.0.0",
+  "authority": "imo-creator (CC-01 Sovereign)",
+  "description": "Deterministic audit rules evaluated by the auditor agent. Pipeline rules (RULE-xxx) are mechanical certification gates. Compliance rules (AUD-xxx) are artifact-level checks from the PSB Constitution (PSB-CONST-001). Both series are authoritative at their respective scopes.",
+  "pipeline_rules_scope": "Mechanical certification pipeline — evaluated during Garage stages 1-10. BLOCKING severity halts certification.",
+  "compliance_rules_scope": "Artifact compliance — evaluated by the Auditor agent (stage 8) against hub definition artifacts. CRITICAL/HIGH violations block compliance.",
+  "rules": [
+    {
+      "id": "RULE-001",
+      "name": "doctrine_version_match",
+      "description": "WORK_PACKET.doctrine_version must match factory/contracts/doctrine_version.json current_version.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "work_packet.doctrine_version === doctrine_version.current_version"
+    },
+    {
+      "id": "RULE-002",
+      "name": "file_target_containment",
+      "description": "All modified files must be within WORK_PACKET.file_targets. No files outside declared targets may be modified.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "modified_files ⊆ work_packet.file_targets"
+    },
+    {
+      "id": "RULE-003",
+      "name": "acceptance_criteria_met",
+      "description": "Every criterion in WORK_PACKET.acceptance_criteria must evaluate to true.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "∀ criterion ∈ work_packet.acceptance_criteria: criterion.met === true"
+    },
+    {
+      "id": "RULE-004",
+      "name": "required_artifacts_present",
+      "description": "Every artifact in WORK_PACKET.required_artifacts must exist in PR branch.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "∀ artifact ∈ work_packet.required_artifacts: exists(artifact)"
+    },
+    {
+      "id": "RULE-005",
+      "name": "schema_impact_ctb_validation",
+      "description": "When schema_impact=true, all CTB registry gates must pass: column_registry.yml updated, migration file present, sub-hub cardinality valid (1 CANONICAL + 1 ERROR per sub-hub).",
+      "severity": "BLOCKING",
+      "applies_to": ["build", "migrate"],
+      "evaluation": "if work_packet.schema_impact then ctb_registry_gate.status === PASS"
+    },
+    {
+      "id": "RULE-006",
+      "name": "ctb_branch_compliance",
+      "description": "All new files must reside within valid CTB branches (sys/, data/, app/, ai/, ui/) or approved support surfaces (docs/, scripts/, .github/workflows/, migrations/).",
+      "severity": "BLOCKING",
+      "applies_to": ["build", "refactor", "migrate"],
+      "evaluation": "∀ new_file: location(new_file) ∈ valid_surfaces"
+    },
+    {
+      "id": "RULE-007",
+      "name": "forbidden_folder_absence",
+      "description": "No files may exist in forbidden folders: utils/, helpers/, common/, shared/, lib/, misc/.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "¬∃ file: path_contains(file, forbidden_folders)"
+    },
+    {
+      "id": "RULE-008",
+      "name": "protected_asset_boundary",
+      "description": "Protected assets (doctrine files, constitutional docs, locked templates) must not be modified by worker execution. Modification requires architectural elevation.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "modified_files ∩ protected_assets === ∅"
+    },
+    {
+      "id": "RULE-009",
+      "name": "no_governance_in_car",
+      "description": "Child repos must not contain agent definitions, WORK_PACKET schema, audit taxonomy, doctrine registry, or execution contracts. Governance lives in the Garage only.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "¬∃ file ∈ target_repo: file ∈ garage_exclusive_artifacts"
+    },
+    {
+      "id": "RULE-010",
+      "name": "execution_type_consistency",
+      "description": "Actual changes must be consistent with declared execution_type. Audit must not modify files. Migrate must include migration SQL. Build may create new files. Refactor must not add capabilities.",
+      "severity": "HIGH",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "changes_consistent_with(work_packet.execution_type)"
+    },
+    {
+      "id": "RULE-011",
+      "name": "artifact_hash_integrity",
+      "description": "SHA-256 hash of required artifacts (sorted alphabetically, concatenated as bytes) must match certification.artifact_hash.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "sha256(concat(sorted(required_artifacts))) === certification.artifact_hash"
+    },
+    {
+      "id": "RULE-012",
+      "name": "signature_valid",
+      "description": "Certification auditor_signature must validate against garage signing key using HMAC-SHA256.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "verify_signature(certification.auditor_signature, certification_payload, GARAGE_SIGNING_KEY)"
+    },
+    {
+      "id": "RULE-013",
+      "name": "no_unregistered_repo_pull",
+      "description": "All repository mounts must resolve through repo_registry.json. Raw URL pulls are blocked unless repo_pull_policy.allow_raw_url=true. Unknown aliases, disabled repos, and disallowed branches are rejected. mount_receipt must be present and valid.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "mount_receipt.resolution_method === 'alias' AND mount_receipt.resolved_alias ∈ repo_registry.repos[enabled=true] AND mount_receipt.resolved_branch ∈ repo_registry.repos[alias].allowed_branches"
+    },
+    {
+      "id": "RULE-014",
+      "name": "mount_integrity_check",
+      "description": "Mount receipt must confirm commit-level integrity. mount_receipt must exist, detached_head must be false, and resolved_commit_sha must equal remote_head_sha. Any mismatch indicates a corrupted or stale clone.",
+      "severity": "BLOCKING",
+      "applies_to": ["audit", "refactor", "build", "migrate"],
+      "evaluation": "mount_receipt.detached_head === false AND mount_receipt.resolved_commit_sha === mount_receipt.remote_head_sha"
+    }
+  ],
+  "compliance_rules": [
+    {
+      "id": "AUD-001",
+      "name": "HEIR_COMPLETENESS",
+      "description": "All 8 HEIR fields must be present and valid: sovereign_ref, hub_id, ctb_placement, imo_topology, cc_layer, services, secrets_provider, acceptance_criteria.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (HEIR), Part VI"
+    },
+    {
+      "id": "AUD-002",
+      "name": "ORBT_MODE_DECLARED",
+      "description": "ORBT mode must be present and valid (Operate, Repair, Build, Troubleshoot, Train). Checked as Phase 0 before any other validation. No inference permitted.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (ORBT), Part VI"
+    },
+    {
+      "id": "AUD-003",
+      "name": "CTB_PLACEMENT_VALID",
+      "description": "All files must reside in valid CTB branches (sys/, data/, app/, ai/, ui/) or approved support surfaces.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-004",
+      "name": "TRANSFORMATION_LAW_SATISFIED",
+      "description": "Every artifact must be reducible to: 'This transforms X constants into Y variables.' If it cannot be stated in those terms, it may not exist.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part I, Part VI"
+    },
+    {
+      "id": "AUD-005",
+      "name": "IMO_VIOLATION",
+      "description": "No logic in Ingress (schema validation only). No logic in Egress (read-only views only). All logic in Middle only. Covers IMO-01 through IMO-06.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (IMO), Part VI"
+    },
+    {
+      "id": "AUD-006",
+      "name": "FORBIDDEN_FOLDER_PRESENT",
+      "description": "Forbidden folder names detected anywhere in repo: utils/, helpers/, common/, shared/, lib/, misc/.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-007",
+      "name": "PROHIBITED_EXECUTION_SURFACE",
+      "description": "Prohibited execution surfaces at repo root: bin/, tools/, lambda/, functions/, workers/, jobs/, cron/.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (CTB), Part VI"
+    },
+    {
+      "id": "AUD-008",
+      "name": "SCOPE_EXCEEDED",
+      "description": "Artifact execution modified files outside declared allowed_paths or scope boundaries.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI"
+    },
+    {
+      "id": "AUD-009",
+      "name": "PRD_STALE",
+      "description": "PRD or OSAM not updated within 30 days of src/ change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-010",
+      "name": "ERD_STALE",
+      "description": "ERD or SCHEMA.md not updated within 14 days of schema registry change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-011",
+      "name": "OSAM_STALE",
+      "description": "OSAM not updated within 30 days of data layer change.",
+      "severity": "HIGH",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-012",
+      "name": "COLUMN_REGISTRY_STALE",
+      "description": "column_registry not updated within 7 days of SQL change.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part VI, Part XII"
+    },
+    {
+      "id": "AUD-013",
+      "name": "DBA_GATE_BYPASSED",
+      "description": "Schema change merged without passing DBA Gate A (non-structural) and/or Gate B (structural) checks.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part III (DBA), Part VI"
+    },
+    {
+      "id": "AUD-014",
+      "name": "TEMPLATE_IMMUTABILITY_VIOLATED",
+      "description": "Locked template file was modified by an AI agent or without ADR approval.",
+      "severity": "CRITICAL",
+      "doctrine_ref": "PSB-CONST-001 Part VI"
+    }
+  ]
+}

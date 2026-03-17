@@ -41,15 +41,15 @@ jobs:
 
       - name: Make enforcement script executable
         run: |
-          if [ -f "templates/scripts/ctb_enforce.sh" ]; then
-            chmod +x templates/scripts/ctb_enforce.sh
+          if [ -f "fleet/scripts/ctb_enforce.sh" ]; then
+            chmod +x fleet/scripts/ctb_enforce.sh
           fi
 
       - name: Run CTB Enforcement
         id: enforcement
         run: |
-          if [ -f "templates/scripts/ctb_enforce.sh" ]; then
-            if bash templates/scripts/ctb_enforce.sh; then
+          if [ -f "fleet/scripts/ctb_enforce.sh" ]; then
+            if bash fleet/scripts/ctb_enforce.sh; then
               echo "status=PASSED" >> $GITHUB_OUTPUT
             else
               echo "::error::CTB enforcement script failed (exit $?)"

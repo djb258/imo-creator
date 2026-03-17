@@ -2,7 +2,7 @@
 
 This guide will help you set up GitHub Projects for doctrine-compliant repositories.
 
-**Doctrine Reference**: `templates/doctrine/ARCHITECTURE.md`
+**Doctrine Reference**: `law/doctrine/ARCHITECTURE.md`
 
 ## Quick Setup
 

@@ -10,7 +10,7 @@ These scripts operate on the **imo-creator repo** directly. They are NOT templat
 
 | Script | Purpose |
 |--------|---------|
-| `verify_templates_manifest.sh` | Verify `templates/TEMPLATES_MANIFEST.yaml` matches actual files on disk |
+| `verify_templates_manifest.sh` | Verify `fleet/TEMPLATES_MANIFEST.yaml` matches actual files on disk |
 | `fleet-status.sh` | Fleet health check — walks `FLEET_REGISTRY.yaml` and reports doctrine version status per child repo |
 | `fleet-status.ps1` | Fleet health check (Windows equivalent) |
 | `adr-check.sh` | ADR index audit — compares `ADR_INDEX.md` against actual ADR files found in fleet repos |
@@ -30,4 +30,4 @@ These scripts operate on the **imo-creator repo** directly. They are NOT templat
 
 ## Template Scripts (For Child Repos)
 
-Child repo scripts live in `templates/scripts/` and are copied to downstream repos during bootstrap. See `templates/scripts/README.md`.
+Child repo scripts live in `fleet/scripts/` and are copied to downstream repos during bootstrap. See `fleet/scripts/README.md`.
