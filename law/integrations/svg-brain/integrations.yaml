@@ -1,0 +1,256 @@
+# svg-brain Custom Integration for Composio
+# Tool ID: TOOL-021
+# BAR-147 | Hub: svg-brain | CC-02
+# Created: 2026-03-15
+
+name: svg_brain
+display_name: SVG Brain
+description: CF-native knowledge layer — hybrid semantic + full-text search over doctrine, glossary, decisions, and entity relationships
+version: "1.0.0"
+
+# Authentication Configuration
+auth:
+  type: api_key
+  header_name: X-API-Key
+  description: "SVG Brain API Key (Worker secret SVG_BRAIN_API_KEY)"
+
+# Base Configuration
+base_url: https://svg-brain.svg-outreach.workers.dev
+
+# Available Actions/Tools
+actions:
+  # Search
+  - name: SVG_BRAIN_QUERY
+    description: Hybrid semantic + full-text search across all ingested doctrine. Returns ranked chunks with source metadata.
+    method: POST
+    path: /query
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: Natural language search query
+      - name: domain
+        type: string
+        required: false
+        description: Filter by domain (doctrine, architecture, integration, etc.)
+      - name: top_k
+        type: integer
+        required: false
+        description: Number of results (default 10, max 50)
+
+  # Ingest
+  - name: SVG_BRAIN_INGEST
+    description: Ingest a document into the knowledge base. Chunks, embeds, and stores with content-hash dedup.
+    method: POST
+    path: /ingest
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        description: Knowledge domain (doctrine, architecture, integration, etc.)
+      - name: source_path
+        type: string
+        required: true
+        description: Original file path
+      - name: title
+        type: string
+        required: true
+        description: Document title
+      - name: content
+        type: string
+        required: true
+        description: Full document content (markdown)
+      - name: doc_version
+        type: string
+        required: false
+        description: Document version (default 1.0.0)
+
+  # Glossary
+  - name: SVG_BRAIN_LOOKUP
+    description: Look up a glossary term by name and optional domain
+    method: GET
+    path: /lookup
+    parameters:
+      - name: term
+        type: string
+        required: true
+        in: query
+        description: Term to look up
+      - name: domain
+        type: string
+        required: false
+        in: query
+        description: Filter by domain
+
+  - name: SVG_BRAIN_GLOSSARY_UPSERT
+    description: Create or update a glossary term definition
+    method: POST
+    path: /glossary
+    parameters:
+      - name: term
+        type: string
+        required: true
+        description: Term name
+      - name: definition
+        type: string
+        required: true
+        description: Term definition
+      - name: domain
+        type: string
+        required: true
+        description: Knowledge domain
+      - name: source_document_id
+        type: string
+        required: false
+        description: Source document UUID
+
+  # Documents
+  - name: SVG_BRAIN_LIST_DOCUMENTS
+    description: List all ingested documents, optionally filtered by domain
+    method: GET
+    path: /documents
+    parameters:
+      - name: domain
+        type: string
+        required: false
+        in: query
+        description: Filter by domain
+
+  - name: SVG_BRAIN_GET_DOCUMENT
+    description: Get a specific document by ID
+    method: GET
+    path: /documents/{id}
+    parameters:
+      - name: id
+        type: string
+        required: true
+        in: path
+        description: Document UUID
+
+  # Decisions
+  - name: SVG_BRAIN_LIST_DECISIONS
+    description: List all ADR decisions, optionally filtered by domain
+    method: GET
+    path: /decisions
+    parameters:
+      - name: domain
+        type: string
+        required: false
+        in: query
+        description: Filter by domain
+
+  - name: SVG_BRAIN_GET_DECISION
+    description: Get a specific ADR decision by number
+    method: GET
+    path: /decisions/{adr}
+    parameters:
+      - name: adr
+        type: string
+        required: true
+        in: path
+        description: ADR number (e.g. ADR-035)
+
+  - name: SVG_BRAIN_UPSERT_DECISION
+    description: Create or update an ADR decision record
+    method: POST
+    path: /decisions
+    parameters:
+      - name: adr_number
+        type: string
+        required: true
+        description: ADR number
+      - name: title
+        type: string
+        required: true
+        description: Decision title
+      - name: status
+        type: string
+        required: false
+        description: Decision status (default accepted)
+      - name: domain
+        type: string
+        required: true
+        description: Knowledge domain
+      - name: summary
+        type: string
+        required: true
+        description: Decision summary
+      - name: source_document_id
+        type: string
+        required: false
+        description: Source document UUID
+      - name: decided_at
+        type: string
+        required: true
+        description: Decision date (YYYY-MM-DD)
+
+  # Relationships
+  - name: SVG_BRAIN_CREATE_RELATIONSHIP
+    description: Create a relationship between two entities in the knowledge graph
+    method: POST
+    path: /relationships
+    parameters:
+      - name: source_type
+        type: string
+        required: true
+        description: Entity type (document, glossary_term, decision)
+      - name: source_id
+        type: string
+        required: true
+        description: Source entity UUID
+      - name: target_type
+        type: string
+        required: true
+        description: Target entity type
+      - name: target_id
+        type: string
+        required: true
+        description: Target entity UUID
+      - name: relation
+        type: string
+        required: true
+        description: Relationship type (defines, references, supersedes, etc.)
+      - name: weight
+        type: number
+        required: false
+        description: Relationship weight (default 1.0)
+
+  - name: SVG_BRAIN_GET_RELATIONSHIPS
+    description: Get all relationships for a given entity
+    method: GET
+    path: /relationships/{type}/{id}
+    parameters:
+      - name: type
+        type: string
+        required: true
+        in: path
+        description: Source entity type
+      - name: id
+        type: string
+        required: true
+        in: path
+        description: Source entity UUID
+
+  # Health
+  - name: SVG_BRAIN_HEALTH
+    description: Check service health and document count (no auth required)
+    method: GET
+    path: /health
+
+# Rate Limiting
+rate_limit:
+  requests_per_minute: 120
+  burst_limit: 20
+
+# Metadata
+metadata:
+  category: Knowledge/Search
+  tags:
+    - knowledge-base
+    - semantic-search
+    - doctrine
+    - glossary
+    - adr
+    - knowledge-graph
+  documentation_url: https://svg-brain.svg-outreach.workers.dev/health
+  openapi_spec: docs/openapi.yaml

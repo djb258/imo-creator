@@ -1,0 +1,100 @@
+# Anvil Custom Integration for Composio
+# Tool ID: TOOL-023
+# BAR-149 | Hub: document-automation | CC-02
+# Created: 2026-03-16
+
+name: anvil
+display_name: Anvil
+description: PDF filling, e-signature, and document workflow automation — fill templates, generate PDFs, collect signatures via Etch
+version: "1.0.0"
+
+# Authentication Configuration
+auth:
+  type: basic
+  username_field: api_key
+  password_field: ""
+  description: "Basic auth — API key as username, no password (append colon before base64 encoding)"
+
+# Base Configuration
+base_url: https://app.useanvil.com/api/v1
+
+# Available Actions/Tools
+actions:
+  # PDF Filling
+  - name: ANVIL_FILL_PDF
+    description: Fill an existing PDF template with data. Returns the filled PDF.
+    method: POST
+    path: /fill/{pdfTemplateEid}.pdf
+    parameters:
+      - name: pdfTemplateEid
+        type: string
+        required: true
+        in: path
+        description: The EID of the PDF template to fill
+      - name: data
+        type: object
+        required: true
+        description: Key-value pairs mapping template fields to values
+      - name: title
+        type: string
+        required: false
+        description: Title for the filled PDF
+
+  # PDF Generation
+  - name: ANVIL_GENERATE_PDF
+    description: Generate a new PDF from HTML or markdown content.
+    method: POST
+    path: /generate-pdf
+    parameters:
+      - name: title
+        type: string
+        required: true
+        description: PDF document title
+      - name: data
+        type: object
+        required: true
+        description: HTML/markdown content and styling for PDF generation
+      - name: type
+        type: string
+        required: false
+        description: "Content type: html or markdown"
+
+  # E-signature (Etch)
+  - name: ANVIL_CREATE_ETCH_PACKET
+    description: Create an e-signature packet. Sends documents to signers for electronic signature collection.
+    method: POST
+    path: /graphql
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: GraphQL mutation for createEtchPacket
+      - name: variables
+        type: object
+        required: true
+        description: Packet configuration — signers, documents, fields
+
+  # Current User
+  - name: ANVIL_GET_CURRENT_USER
+    description: Get details about the authenticated user/organization.
+    method: GET
+    path: /current-user
+    parameters: []
+
+# Rate Limiting
+rate_limit:
+  requests_per_minute: 240
+  burst_limit: 4
+  note: "Dev keys: 4 req/s. Production limits vary by plan."
+
+# Metadata
+metadata:
+  category: Document/Legal
+  tags:
+    - pdf-generation
+    - e-signatures
+    - document-automation
+    - form-filling
+    - etch
+  documentation_url: https://www.useanvil.com/docs/api/getting-started/
+  support_url: https://www.useanvil.com/support
